@@ -37,6 +37,15 @@ def postproc_instances(netlist):
         if not component.blueprint.composite_sources:
             continue
 
+        refdes_dict = {}
+        for subsheet in component.subsheets:
+            for potential_port in subsheet.components:
+                try:
+                    l = refdes_dict[potential_port.blueprint.refdes]
+                except KeyError:
+                    l = refdes_dict[potential_port.blueprint.refdes] = []
+                l.append(potential_port)
+
         for cpin in component.cpins:
             label = cpin.blueprint.get_attribute('pinlabel', None)
             if label is None:
@@ -46,18 +55,9 @@ def postproc_instances(netlist):
             dest_net = cpin.local_net.net
 
             # search for the matching port
-            ports = [potential_port for subsheet in component.subsheets
-                                    for potential_port in subsheet.components
-                     if potential_port.blueprint.refdes == label]
+            ports = []
 
-            if not ports:
-                cpin.warn(_("missing I/O symbol with refdes `%s' "
-                            "inside schematic") % label)
-            elif len(ports) > 1:
-                cpin.warn(_("multiple I/O symbols with refdes `%s' "
-                            "inside schematic") % label)
-
-            for port in ports:
+            for port in refdes_dict.get(label, []):
                 if xorn.geda.attrib.search_all(port.blueprint.ob, 'net'):
                     port.error(_("net= attribute can't be used "
                                  "on an I/O symbol"))
@@ -73,6 +73,16 @@ def postproc_instances(netlist):
                     port.error(_("multiple pins on I/O symbol"))
                     continue
 
+                ports.append(port)
+
+            if not ports:
+                cpin.warn(_("missing I/O symbol with refdes `%s' "
+                            "inside schematic") % label)
+            elif len(ports) > 1:
+                cpin.warn(_("multiple I/O symbols with refdes `%s' "
+                            "inside schematic") % label)
+
+            for port in ports:
                 src_net = port.cpins[0].local_net.net
 
                 # merge nets
