@@ -47,6 +47,7 @@ mostlyclean-local:
 TESTS = stack_1-geda.out \
 	hierarchy-geda.out \
 	hierarchy2-geda.out \
+	net_attr-geda.out \
 	regression/component_refdes-dumptext.out \
 	regression/duplicate_local_net-geda.out \
 	regression/missing_pinseq-geda.out \
@@ -473,6 +474,7 @@ testdata = \
 	hierarchy2-sources/under.sch \
 	hierarchy2-symbols/under.sym \
 	hierarchy2.sch \
+	net_attr.sch \
 	regression/component_refdes-sources/sub.sch \
 	regression/component_refdes-symbols/component.sym \
 	regression/component_refdes-symbols/sub.sym \
