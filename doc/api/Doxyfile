@@ -796,6 +796,7 @@ INPUT                  = .. \
                          ./xorn/geda/netlist/pp_graphical.py \
                          ./xorn/geda/netlist/pp_hierarchy.py \
                          ./xorn/geda/netlist/pp_netattrib.py \
+                         ./xorn/geda/netlist/pp_power.py \
                          ./xorn/geda/netlist/pp_slotting.py \
                          ./xorn/geda/netlist/slib.py
 

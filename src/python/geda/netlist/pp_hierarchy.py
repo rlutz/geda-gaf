@@ -94,6 +94,9 @@ def postproc_instances(netlist):
 
             for port in refdes_dict.get(label, []):
                 # found an old-style port
+                if port.blueprint.has_netname_attrib:
+                    port.error(_("netname= attribute can't be used "
+                                 "on an I/O symbol"))
                 if xorn.geda.attrib.search_all(port.blueprint.ob, 'net'):
                     port.error(_("net= attribute can't be used "
                                  "on an I/O symbol"))

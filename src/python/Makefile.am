@@ -48,6 +48,7 @@ nobase_pkgpython_PYTHON = \
 	geda/netlist/pp_graphical.py \
 	geda/netlist/pp_hierarchy.py \
 	geda/netlist/pp_netattrib.py \
+	geda/netlist/pp_power.py \
 	geda/netlist/pp_slotting.py \
 	geda/netlist/slib.py
 

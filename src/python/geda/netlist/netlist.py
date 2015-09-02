@@ -33,6 +33,7 @@ import xorn.geda.netlist.package
 import xorn.geda.netlist.pp_graphical
 import xorn.geda.netlist.pp_hierarchy
 import xorn.geda.netlist.pp_netattrib
+import xorn.geda.netlist.pp_power
 import xorn.geda.netlist.pp_slotting
 import xorn.geda.netlist.slib
 
@@ -178,6 +179,7 @@ class Netlist:
         for filename in toplevel_filenames:
             load_schematic(filename)
 
+        xorn.geda.netlist.pp_power.postproc_blueprints(self)
         xorn.geda.netlist.pp_hierarchy.postproc_blueprints(self)
         xorn.geda.netlist.pp_slotting.postproc_blueprints(self)
         xorn.geda.netlist.pp_netattrib.postproc_blueprints(self)
@@ -193,11 +195,22 @@ class Netlist:
                     component.warn(_("source= is set for graphical component"))
                     component.composite_sources = []
 
+                if component.has_netname_attrib and \
+                   component.has_portname_attrib:
+                    component.error(_("netname= and portname= attributes "
+                                      "are mutually exclusive"))
+
+                if component.has_netname_attrib and \
+                   component.composite_sources:
+                    component.error(_("power symbol can't be a subschematic"))
+                    component.composite_sources = []
                 if component.has_portname_attrib and \
                    component.composite_sources:
                     component.error(_("I/O symbol can't be a subschematic"))
                     component.composite_sources = []
 
+                if component.has_netname_attrib and component.is_graphical:
+                    component.error(_("power symbol can't be graphical"))
                 if component.has_portname_attrib and component.is_graphical:
                     component.error(_("I/O symbol can't be graphical"))
 

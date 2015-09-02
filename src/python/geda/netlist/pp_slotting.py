@@ -158,7 +158,8 @@ def postproc_blueprints(netlist):
             component.pins_by_number = {}
             for pin in component.pins:
                 if pin.number is None:
-                    if not component.has_portname_attrib:
+                    if not component.has_netname_attrib and \
+                       not component.has_portname_attrib:
                         pin.error(_("pinnumber missing"))
                 elif pin.number in component.pins_by_number:
                     if component.composite_sources:
