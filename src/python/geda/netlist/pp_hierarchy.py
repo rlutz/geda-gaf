@@ -21,6 +21,7 @@
 ## Post-processing: Hierarchy traversal.
 
 from gettext import gettext as _
+import xorn.geda.attrib
 
 ## Connect subsheet I/O ports to the instantiating component's pins.
 #
@@ -57,6 +58,9 @@ def postproc_instances(netlist):
                             "inside schematic") % label)
 
             for port in ports:
+                if xorn.geda.attrib.search_all(port.blueprint.ob, 'net'):
+                    port.error(_("net= attribute can't be used "
+                                 "on an I/O symbol"))
                 if port.blueprint.composite_sources:
                     port.error(_("I/O symbol can't be a subschematic"))
                 if port.blueprint.is_graphical:
