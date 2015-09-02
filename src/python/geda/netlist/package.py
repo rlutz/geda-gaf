@@ -256,6 +256,9 @@ def postproc_blueprints(netlist):
             if component.is_graphical:
                 # graphical components don't need a refdes -> ok
                 continue
+            if component.has_portname_attrib:
+                # component is a port -> ok
+                continue
 
             # Maybe the symbol isn't a component but a power/gnd symbol?
 

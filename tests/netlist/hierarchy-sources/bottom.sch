@@ -12,12 +12,12 @@ netname=rockB
 C 18000 38800 1 0 0 in-1.sym
 {
 T 18000 39100 5 10 1 1 0 0 1
-refdes=A
+portname=A
 }
 C 25400 40900 1 0 0 out-1.sym
 {
 T 25400 41200 5 10 1 1 0 0 1
-refdes=B
+portname=B
 }
 N 18600 38900 18900 38900 4
 {

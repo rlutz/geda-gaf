@@ -178,6 +178,7 @@ class Netlist:
         for filename in toplevel_filenames:
             load_schematic(filename)
 
+        xorn.geda.netlist.pp_hierarchy.postproc_blueprints(self)
         xorn.geda.netlist.pp_slotting.postproc_blueprints(self)
         xorn.geda.netlist.pp_netattrib.postproc_blueprints(self)
         xorn.geda.netlist.pp_graphical.postproc_blueprints(self)
@@ -191,6 +192,14 @@ class Netlist:
                     # has an graphical attribute attached to it.
                     component.warn(_("source= is set for graphical component"))
                     component.composite_sources = []
+
+                if component.has_portname_attrib and \
+                   component.composite_sources:
+                    component.error(_("I/O symbol can't be a subschematic"))
+                    component.composite_sources = []
+
+                if component.has_portname_attrib and component.is_graphical:
+                    component.error(_("I/O symbol can't be graphical"))
 
         # Traverse the schematic files and create the component objects
         # accordingly.

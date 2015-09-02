@@ -15,14 +15,14 @@ C 48600 47200 1 0 0 out-1.sym
 T 48600 47500 5 10 0 0 0 0 1
 device=OUTPUT
 T 48600 47500 5 10 1 1 0 0 1
-refdes=out
+portname=out
 }
 C 45300 47400 1 0 0 in-1.sym
 {
 T 45300 47700 5 10 0 0 0 0 1
 device=INPUT
 T 45300 47700 5 10 1 1 0 0 1
-refdes=in
+portname=in
 }
 N 48000 47300 48600 47300 4
 C 51100 45800 1 0 0 under.sym

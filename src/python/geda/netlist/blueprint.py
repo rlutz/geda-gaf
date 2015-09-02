@@ -54,6 +54,9 @@ class Schematic:
         self.components_by_ob = {}
         self.nets = []
 
+        # populated by xorn.geda.netlist.pp_hierarchy
+        self.ports = None
+
         for ob in rev.toplevel_objects():
             data = ob.data()
             if not isinstance(data, xorn.storage.Component):
@@ -127,6 +130,9 @@ class Component:
 
         # populated by schematic loader
         self.composite_sources = None
+
+        # set by xorn.geda.netlist.pp_hierarchy
+        self.has_portname_attrib = False
 
         # set by xorn.geda.netlist.pp_graphical
         self.is_graphical = False
