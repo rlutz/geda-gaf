@@ -214,6 +214,30 @@ class Netlist:
                 if component.has_portname_attrib and component.is_graphical:
                     component.error(_("I/O symbol can't be graphical"))
 
+        # collect parameters
+        for schematic in self.schematics:
+            for component in schematic.components:
+                component.parameters = {}
+
+                for func in [xorn.geda.attrib.search_inherited,
+                             xorn.geda.attrib.search_attached]:
+                    names = set()
+                    for val in func(component.ob, 'param'):
+                        try:
+                            name, value = xorn.geda.attrib.parse_string(val)
+                        except xorn.geda.attrib.MalformedAttributeError:
+                            component.error(
+                                _("malformed param= attribute: %s") % val)
+                            continue
+
+                        if name in names:
+                            component.error(
+                                _("duplicate param= attribute: %s") % name)
+                            continue
+
+                        component.parameters[name] = value
+                        names.add(name)
+
         # Traverse the schematic files and create the component objects
         # accordingly.
 

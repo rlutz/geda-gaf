@@ -144,6 +144,9 @@ class Component:
         self.pins_by_number = None
         self.slotdef = None
 
+        # populated by netlist ctor
+        self.parameters = None
+
         self.error = lambda msg: self.schematic.error_object(self.ob, msg)
         self.warn = lambda msg: self.schematic.warn_object(self.ob, msg)
 

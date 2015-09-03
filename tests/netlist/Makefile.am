@@ -49,6 +49,7 @@ TESTS = stack_1-geda.out \
 	hierarchy2-geda.out \
 	net_attr-geda.out \
 	netname_attr-geda.out \
+	param_attr-geda.out \
 	regression/component_refdes-dumptext.out \
 	regression/duplicate_local_net-geda.out \
 	regression/missing_pinseq-geda.out \
@@ -477,6 +478,10 @@ testdata = \
 	hierarchy2.sch \
 	net_attr.sch \
 	netname_attr.sch \
+	param_attr-sources/sub.sch \
+	param_attr-symbols/comp.sym \
+	param_attr-symbols/sub.sym \
+	param_attr.sch \
 	regression/component_refdes-sources/sub.sch \
 	regression/component_refdes-symbols/component.sym \
 	regression/component_refdes-symbols/sub.sym \

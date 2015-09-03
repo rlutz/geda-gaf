@@ -60,6 +60,12 @@ class Package:
             except KeyError:
                 l.append(None)
             else:
+                if component.sheet.instantiating_component is not None:
+                    for param_name, param_value in \
+                            component.sheet.instantiating_component \
+                                .blueprint.parameters.iteritems():
+                        value = value.replace(
+                            '$(%s)' % param_name, param_value)
                 l.append(value)
         return l
 
