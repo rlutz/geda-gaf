@@ -144,7 +144,7 @@ static int patch_parse(gschem_patch_state_t *st, FILE *f)
 		ST_STR
 	} state = ST_INIT;
 
-	st->lines = g_list_alloc();
+	st->lines = NULL;
 	lineno = 1;
 	reset_current();
 	do {
@@ -244,6 +244,42 @@ static void patch_list_free(GList *list)
 	
 }
 
+static char *op_names[] = {
+	"disconnect",
+	"connect",
+	"chnage attribute",
+	"net_info"
+};
+
+
+static void patch_list_print(gschem_patch_state_t *st)
+{
+	GList *i;
+	for (i = st->lines; i != NULL; i = g_list_next (i)) {
+		gschem_patch_line_t *l = i->data;
+		GList *p;
+		if (l == NULL) {
+			fprintf(stderr, "NULL data on list\n");
+			continue;
+		}
+		switch(l->op) {
+			case GSCHEM_PATCH_DEL_CONN:
+			case GSCHEM_PATCH_ADD_CONN:
+				printf("%s %s %s\n", op_names[l->op], l->id, l->arg1.net_name);
+				break;
+			case GSCHEM_PATCH_CHANGE_ATTRIB:
+				printf("%s %s %s=%s\n", op_names[l->op], l->id, l->arg1.attrib_name, l->arg2.attrib_val);
+				break;
+			case GSCHEM_PATCH_NET_INFO:
+				printf("%s %s", op_names[l->op], l->id);
+				for (p = l->arg1.ids; p != NULL; p = g_list_next (p))
+					printf(" %s", p->data);
+				printf("\n");
+				break;
+		}
+	}
+}
+
 int gschem_patch_state_init(gschem_patch_state_t *st, const char *fn)
 {
 	FILE *f;
@@ -255,6 +291,7 @@ int gschem_patch_state_init(gschem_patch_state_t *st, const char *fn)
 
 	res = patch_parse(st, f);
 
+patch_list_print(st);
 	fclose(f);
 	return res;
 }
