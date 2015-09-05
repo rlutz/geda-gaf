@@ -252,6 +252,7 @@ static char *op_names[] = {
 };
 
 
+#if DEBUG
 static void patch_list_print(gschem_patch_state_t *st)
 {
 	GList *i;
@@ -265,20 +266,21 @@ static void patch_list_print(gschem_patch_state_t *st)
 		switch(l->op) {
 			case GSCHEM_PATCH_DEL_CONN:
 			case GSCHEM_PATCH_ADD_CONN:
-				printf("%s %s %s\n", op_names[l->op], l->id, l->arg1.net_name);
+				fprintf(stderr, "%s %s %s\n", op_names[l->op], l->id, l->arg1.net_name);
 				break;
 			case GSCHEM_PATCH_CHANGE_ATTRIB:
-				printf("%s %s %s=%s\n", op_names[l->op], l->id, l->arg1.attrib_name, l->arg2.attrib_val);
+				fprintf(stderr, "%s %s %s=%s\n", op_names[l->op], l->id, l->arg1.attrib_name, l->arg2.attrib_val);
 				break;
 			case GSCHEM_PATCH_NET_INFO:
-				printf("%s %s", op_names[l->op], l->id);
+				fprintf(stderr, "%s %s", op_names[l->op], l->id);
 				for (p = l->arg1.ids; p != NULL; p = g_list_next (p))
-					printf(" %s", p->data);
-				printf("\n");
+					fprintf(stderr, " %s", p->data);
+				fprintf(stderr, "\n");
 				break;
 		}
 	}
 }
+#endif
 
 int gschem_patch_state_init(gschem_patch_state_t *st, const char *fn)
 {
@@ -291,8 +293,16 @@ int gschem_patch_state_init(gschem_patch_state_t *st, const char *fn)
 
 	res = patch_parse(st, f);
 
-patch_list_print(st);
+#if DEBUG
+	patch_list_print(st);
+#endif
+
 	fclose(f);
 	return res;
+}
+
+
+int gschem_patch_state_build(gschem_patch_state_t *st, OBJECT *o)
+{
 }
 
