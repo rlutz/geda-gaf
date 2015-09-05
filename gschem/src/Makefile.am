@@ -49,6 +49,7 @@ gschem_SOURCES = \
 	gschem_object_properties_widget.c \
 	gschem_options.c \
 	gschem_options_widget.c \
+	gschem_patch.c \
 	gschem_page_geometry.c \
 	gschem_page_view.c \
 	gschem_pin_type_combo.c \
