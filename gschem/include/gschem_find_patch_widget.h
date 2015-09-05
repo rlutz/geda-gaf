@@ -43,6 +43,7 @@ struct _GschemFindPatchWidget
 
   GtkTreeModel *find_type_model;
 
+  GtkWidget *label;
   GtkWidget *descend_button;
   GtkWidget *entry;
   GtkWidget *find_button;
