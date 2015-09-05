@@ -999,6 +999,27 @@ DEFINE_I_CALLBACK(edit_find)
  *  \par Function Description
  *
  */
+DEFINE_I_CALLBACK(edit_find_patch)
+{
+  GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
+
+  g_return_if_fail (w_current != NULL);
+
+  /* This is a new addition 3/15 to prevent this from executing
+   * inside an action */
+  if (w_current->inside_action)
+    return;
+
+#warning TODO
+#define find_patch_dialog find_text_dialog
+  find_patch_dialog(w_current);
+}
+
+/*! \todo Finish function documentation!!!
+ *  \brief
+ *  \par Function Description
+ *
+ */
 DEFINE_I_CALLBACK(edit_hide_text)
 {
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);

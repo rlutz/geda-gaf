@@ -74,6 +74,9 @@ static GSList*
 find_objects_using_substring (GSList *pages, const char *text);
 
 static GSList*
+find_objects_using_patch (GSList *pages, const char *text);
+
+static GSList*
 get_pages (GList *pages, gboolean descend);
 
 static void
@@ -133,6 +136,10 @@ gschem_find_text_state_find (GschemFindTextState *state, GList *pages, int type,
 
     case FIND_TYPE_REGEX:
       objects = find_objects_using_regex (all_pages, text, NULL);
+      break;
+
+    case FIND_TYPE_PATCH:
+      objects = find_objects_using_patch (all_pages, text);
       break;
 
     default:
@@ -570,6 +577,57 @@ find_objects_using_substring (GSList *pages, const char *text)
 
   return g_slist_reverse (object_list);
 }
+
+/*! \brief Find all objects that have outstanding patch mismatch
+ *
+ *  \param pages the list of pages to search
+ *  \param text ???
+ *  \return a list of objects that have mismatch
+ */
+static GSList*
+find_objects_using_patch (GSList *pages, const char *text)
+{
+  GSList *object_list = NULL;
+  GSList *page_iter = pages;
+
+  while (page_iter != NULL) {
+    const GList *object_iter;
+    PAGE *page = (PAGE*) page_iter->data;
+
+    page_iter = g_slist_next (page_iter);
+
+    if (page == NULL) {
+      g_warning ("NULL page encountered");
+      continue;
+    }
+
+    object_iter = s_page_objects (page);
+
+    while (object_iter != NULL) {
+      OBJECT *object = (OBJECT*) object_iter->data;
+      const char *str;
+
+      object_iter = g_list_next (object_iter);
+
+      if (object == NULL) {
+        g_warning ("NULL object encountered");
+        continue;
+      }
+
+/*      if (!(o_is_visible (page->toplevel, object) || page->toplevel->show_hidden_text)) {
+        continue;
+      }*/
+
+printf("str=%s\n", str);
+/*      if (g_pattern_match_string (pattern, str)) {
+        object_list = g_slist_prepend (object_list, object);
+      }*/
+    }
+  }
+
+  return g_slist_reverse (object_list);
+}
+
 
 
 /*! \brief obtain a list of pages for an operation
