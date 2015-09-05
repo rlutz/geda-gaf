@@ -29,6 +29,7 @@ static void patch_list_free(GList *list);
 #define error(...) \
 do { \
 	fprintf(stderr, __VA_ARGS__); \
+	fprintf(stderr, " in line %d\n", lineno); \
 	patch_list_free(st->lines); \
 	free(word); \
 	return -1; \
@@ -64,6 +65,7 @@ do { \
 
 #define END_OP() \
 do { \
+	append('\0'); \
 	if (strcmp(word, "add_conn") == 0) current.op = GSCHEM_PATCH_ADD_CONN; \
 	else if (strcmp(word, "del_conn") == 0) current.op = GSCHEM_PATCH_DEL_CONN; \
 	else if (strcmp(word, "change_attrib") == 0) current.op = GSCHEM_PATCH_CHANGE_ATTRIB; \
@@ -75,6 +77,7 @@ do { \
 
 #define END_STR() \
 do { \
+	append('\0'); \
 	if (*word != '\0') {\
 		switch(current.op) { \
 			case GSCHEM_PATCH_DEL_CONN: \
@@ -144,13 +147,15 @@ static int patch_parse(gschem_patch_state_t *st, FILE *f)
 	st->lines = g_list_alloc();
 	lineno = 1;
 	reset_current();
-	while((c = fgetc(f))) {
+	do {
+		c = fgetc(f);
 		switch(state) {
 			case ST_INIT:
 				switch(c) {
 					case '#': state = ST_COMMENT; break;
 					case '\r':
 					case '\n':
+					case EOF:
 					case ' ':
 					case '\t':
 						break;
@@ -158,6 +163,7 @@ static int patch_parse(gschem_patch_state_t *st, FILE *f)
 						restart(c);
 						state = ST_OP;
 				}
+				break;
 			case ST_OP:
 				switch(c) {
 					case '#': END_OP(); END_LINE(); state = ST_COMMENT; break;
@@ -168,6 +174,7 @@ static int patch_parse(gschem_patch_state_t *st, FILE *f)
 						break;
 					case '\r':
 					case '\n':
+					case EOF:
 						END_OP();
 						END_LINE();
 						state = ST_INIT;
@@ -185,11 +192,13 @@ static int patch_parse(gschem_patch_state_t *st, FILE *f)
 						break;
 					case '\r':
 					case '\n':
+					case EOF:
 						END_LINE();
 						state = ST_INIT;
 						break;
 					default:
-						append(c);
+						restart(c);
+						state = ST_STR;
 						break;
 				}
 				break;
@@ -203,6 +212,7 @@ static int patch_parse(gschem_patch_state_t *st, FILE *f)
 						break;
 					case '\r':
 					case '\n':
+					case EOF:
 						END_STR();
 						END_LINE();
 						state = ST_INIT;
@@ -216,6 +226,7 @@ static int patch_parse(gschem_patch_state_t *st, FILE *f)
 				switch(c) {
 					case '\r':
 					case '\n':
+					case EOF:
 						state = ST_INIT;
 						break;
 				}
@@ -223,7 +234,7 @@ static int patch_parse(gschem_patch_state_t *st, FILE *f)
 		}
 		if (c == '\n')
 			lineno++;
-	}
+	} while(c != EOF);
 	st->lines = g_list_reverse(st->lines);
 	return 0;
 }
