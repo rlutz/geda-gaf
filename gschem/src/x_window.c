@@ -220,6 +220,56 @@ x_window_find_text (GtkWidget *widget, gint response, GschemToplevel *w_current)
   }
 }
 
+static void
+x_window_find_patch (GtkWidget *widget, gint response, GschemToplevel *w_current)
+{
+  gint close = FALSE;
+  int count;
+
+  g_return_if_fail (w_current != NULL);
+  g_return_if_fail (w_current->toplevel != NULL);
+
+  switch (response) {
+  case GTK_RESPONSE_OK:
+    count = gschem_find_text_state_find (
+        w_current->find_text_state,
+        geda_list_get_glist (w_current->toplevel->pages),
+        FIND_TYPE_PATCH,
+        gschem_find_patch_widget_get_find_patch_string (GSCHEM_FIND_PATCH_WIDGET (w_current->find_patch_widget)),
+        gschem_find_patch_widget_get_descend (GSCHEM_FIND_PATCH_WIDGET (w_current->find_patch_widget)));
+    if (count > 0) {
+      /* switch the notebook page to the find results */
+      int page = gtk_notebook_page_num (GTK_NOTEBOOK (w_current->bottom_notebook),
+                                        GTK_WIDGET (w_current->find_text_state));
+
+      if (page >= 0) {
+        int current = gtk_notebook_get_current_page (GTK_NOTEBOOK (w_current->bottom_notebook));
+
+        if (page != current) {
+          gtk_notebook_set_current_page (GTK_NOTEBOOK (w_current->bottom_notebook), page);
+        }
+      }
+      gtk_widget_set_visible (GTK_WIDGET (w_current->bottom_notebook), TRUE);
+      close = TRUE;
+    };
+    break;
+
+  case GTK_RESPONSE_CANCEL:
+  case GTK_RESPONSE_DELETE_EVENT:
+    close = TRUE;
+    break;
+
+  default:
+    printf("x_window_find_patch(): strange signal %d\n", response);
+  }
+
+  if (close) {
+    gtk_widget_grab_focus (w_current->drawing_area);
+    gtk_widget_hide (GTK_WIDGET (widget));
+  }
+}
+
+
 
 static void
 x_window_hide_text (GtkWidget *widget, gint response, GschemToplevel *w_current)
@@ -590,6 +640,20 @@ void x_window_create_main(GschemToplevel *w_current)
   g_signal_connect (w_current->find_text_widget,
                     "response",
                     G_CALLBACK (&x_window_find_text),
+                    w_current);
+
+  /* find text box */
+  w_current->find_patch_widget = GTK_WIDGET (g_object_new (GSCHEM_TYPE_FIND_PATCH_WIDGET, NULL));
+
+  gtk_box_pack_start (GTK_BOX (work_box),
+                      w_current->find_patch_widget,
+                      FALSE,
+                      FALSE,
+                      0);
+
+  g_signal_connect (w_current->find_patch_widget,
+                    "response",
+                    G_CALLBACK (&x_window_find_patch),
                     w_current);
 
   /* hide text box */

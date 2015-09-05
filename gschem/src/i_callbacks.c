@@ -1010,8 +1010,6 @@ DEFINE_I_CALLBACK(edit_find_patch)
   if (w_current->inside_action)
     return;
 
-#warning TODO
-#define find_patch_dialog find_text_dialog
   find_patch_dialog(w_current);
 }
 
