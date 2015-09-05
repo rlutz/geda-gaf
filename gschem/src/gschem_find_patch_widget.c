@@ -175,13 +175,11 @@ void find_patch_dialog (GschemToplevel *w_current)
   g_return_if_fail (w_current != NULL);
   g_return_if_fail (w_current->toplevel != NULL);
 
-#warning todo
-/*  if ((object != NULL) && (object->type == OBJ_TEXT)) {
-    gschem_find_patch_widget_set_find_text_string(
-            GSCHEM_FIND_TEXT_WIDGET (w_current->find_patch_widget),
-            o_text_get_string (w_current->toplevel, object)
-            );
-  }*/
+  /* Unlike with text find, do not change the search text (file name) here:
+     it will retrain its previous value. It's likely that the same
+     file name is to be used over and over (the name of the project),
+     but with multi-page schematics it's hard to figure what that name
+     would be. */
 
   gtk_widget_show (GTK_WIDGET (w_current->find_patch_widget));
   gtk_widget_grab_focus (gschem_find_patch_widget_get_entry (GSCHEM_FIND_TEXT_WIDGET (w_current->find_patch_widget)));
@@ -352,11 +350,9 @@ gschem_find_patch_widget_init (GschemFindPatchWidget *widget)
 
   widget->find_type_model = GTK_TREE_MODEL (create_find_type_store ());
 
-/* TODO: file name label
-  widget->combo = gtk_combo_box_new_with_model (widget->find_type_model);
-  gtk_widget_set_visible (widget->combo, TRUE);
-  gtk_box_pack_start (GTK_BOX (content), widget->combo, FALSE, FALSE, 0);
-*/
+  widget->label = gtk_label_new ("Patch file name to load:");
+  gtk_widget_set_visible (widget->label, TRUE);
+  gtk_box_pack_start (GTK_BOX (content), widget->label, TRUE, TRUE, 0);
 
   widget->entry = gtk_entry_new ();
   gtk_widget_set_visible (widget->entry, TRUE);
