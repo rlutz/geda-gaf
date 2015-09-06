@@ -623,6 +623,8 @@ find_objects_using_patch (GSList *pages, const char *text)
     }
   }
 
+	gschem_patch_state_destroy(&st);
+
   return g_slist_reverse (object_list);
 }
 

@@ -360,3 +360,14 @@ int gschem_patch_state_build(gschem_patch_state_t *st, OBJECT *o)
 	}
 }
 
+static gboolean free_key(gpointer key, gpointer value, gpointer user_data)
+{
+	free(key);
+	return TRUE;
+}
+
+void gschem_patch_state_destroy(gschem_patch_state_t *st)
+{
+	g_hash_table_foreach_remove(st->pins, free_key, NULL);
+	patch_list_free(st->lines);
+}
