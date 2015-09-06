@@ -297,6 +297,10 @@ int gschem_patch_state_init(gschem_patch_state_t *st, const char *fn)
 	patch_list_print(st);
 #endif
 
+	if (res == 0) {
+		st->pins = g_hash_table_new (g_str_hash, g_str_equal);
+	}
+
 	fclose(f);
 	return res;
 }
@@ -304,5 +308,55 @@ int gschem_patch_state_init(gschem_patch_state_t *st, const char *fn)
 
 int gschem_patch_state_build(gschem_patch_state_t *st, OBJECT *o)
 {
+	GList *i;
+	gchar *refdes, *pin;
+	int refdes_len, pin_len;
+
+	switch(o->type) {
+		case OBJ_COMPLEX:
+			refdes = o_attrib_search_object_attribs_by_name (o, "refdes", 0);
+			if (refdes == NULL)
+				break;
+
+			refdes_len = strlen(refdes);
+			for(i = o->complex->prim_objs; i != NULL; i = g_list_next(i)) {
+				OBJECT *sub = i->data;
+				switch(sub->type) {
+					case OBJ_PIN:
+						pin = o_attrib_search_object_attribs_by_name (sub, "pinnumber", 0);
+						if (pin != NULL) {
+							char *full_name;
+							pin_len = strlen(pin);
+							full_name = malloc(refdes_len + pin_len + 2);
+							sprintf(full_name, "%s-%s", refdes, pin);
+/*							printf("add: '%s' -> '%p'\n", full_name, sub);*/
+							g_hash_table_insert(st->pins, full_name, pin);
+							g_free(pin);
+						}
+						break;
+				}
+			}
+			g_free(refdes);
+			break;
+
+		case OBJ_NET: /* what to do with nets? */
+/*			printf("type: '%c'\n", o->type);*/
+			break;
+
+		/* ignore floating pins */
+		case OBJ_PIN:
+			break;
+
+		/* ignore all graphical objects */
+		case OBJ_TEXT:
+		case OBJ_LINE:
+		case OBJ_PATH:
+		case OBJ_BOX:
+		case OBJ_CIRCLE:
+		case OBJ_PICTURE:
+		case OBJ_BUS:
+		case OBJ_ARC:
+			break;
+	}
 }
 

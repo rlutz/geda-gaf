@@ -589,6 +589,12 @@ find_objects_using_patch (GSList *pages, const char *text)
 {
   GSList *object_list = NULL;
   GSList *page_iter = pages;
+  gschem_patch_state_t st;
+
+  if (gschem_patch_state_init(&st, text) != 0) {
+    g_error("Unable to open patch file %s", text);
+    return NULL;
+  }
 
   while (page_iter != NULL) {
     const GList *object_iter;
@@ -613,10 +619,7 @@ find_objects_using_patch (GSList *pages, const char *text)
         continue;
       }
 
-#warning TODO: call to back annotation here
-/*      if (g_pattern_match_string (pattern, str)) {
-        object_list = g_slist_prepend (object_list, object);
-      }*/
+      gschem_patch_state_build(&st, object);
     }
   }
 
