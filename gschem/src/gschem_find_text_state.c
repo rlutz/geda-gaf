@@ -53,6 +53,9 @@ static void
 assign_store (GschemFindTextState *state, GSList *objects);
 
 static void
+assign_store_patch (GschemFindTextState *state, GSList *objects);
+
+static void
 class_init (GschemFindTextStateClass *klass);
 
 static void
@@ -148,7 +151,11 @@ gschem_find_text_state_find (GschemFindTextState *state, GList *pages, int type,
 
   g_slist_free (all_pages);
 
-  assign_store (state, objects);
+  if (type == FIND_TYPE_PATCH)
+    assign_store_patch (state, objects);
+  else
+    assign_store (state, objects);
+
   count = g_slist_length (objects);
   g_slist_free (objects);
 
@@ -265,6 +272,74 @@ assign_store (GschemFindTextState *state, GSList *objects)
                         -1);
 
     g_free (basename);
+  }
+}
+
+/*! \brief places object in the store so the user can see them
+ *
+ *  \param [in] state
+ *  \param [in] objects the list of objects to put in the store
+ */
+static void
+assign_store_patch (GschemFindTextState *state, GSList *objects)
+{
+  GSList *object_iter;
+
+  g_return_if_fail (state != NULL);
+  g_return_if_fail (state->store != NULL);
+
+  clear_store (state);
+
+  object_iter = objects;
+
+  while (object_iter != NULL) {
+    char *basename;
+    OBJECT *final_object;
+    gschem_patch_hit_t *hit = (gschem_patch_hit_t*) object_iter->data;
+    GtkTreeIter tree_iter;
+
+    s_object_weak_ref (hit->object, (NotifyFunc) object_weakref_cb, state);
+
+    gtk_list_store_append (state->store, &tree_iter);
+
+    /* TODO: this is an ugly workaround: can't put pins or objects
+       directly on the list because they have no object page; use
+       their complex object's first visible text instead 
+       Fix: be able to jump to any OBJECT
+       */
+ {
+      GList *i, *l = o_attrib_return_attribs (hit->object);
+      if (l == NULL) {
+        g_warning ("NULL attrib list");
+        continue;
+      }
+
+      for(i = l; i != NULL; i = g_list_next(i)) {
+        final_object = i->data;
+        if ((final_object->type == OBJ_TEXT) && (o_is_visible (final_object->page->toplevel, final_object)))
+           break;
+      }
+      g_list_free(l);
+
+      if (final_object == NULL) {
+        g_warning ("no text attrib?");
+        continue;
+      }
+      basename = g_path_get_basename (final_object->page->page_filename);
+
+ }
+
+    gtk_list_store_set (state->store,
+                        &tree_iter,
+                        COLUMN_FILENAME, basename,
+                        COLUMN_STRING, hit->text,
+                        COLUMN_OBJECT, final_object,
+                        -1);
+
+    g_free (basename);
+    free(hit);
+    object_iter->data = NULL;
+    object_iter = g_slist_next (object_iter);
   }
 }
 
@@ -623,7 +698,8 @@ find_objects_using_patch (GSList *pages, const char *text)
     }
   }
 
-	gschem_patch_state_destroy(&st);
+  object_list = gschem_patch_state_execute(&st, object_list);
+  gschem_patch_state_destroy(&st);
 
   return g_slist_reverse (object_list);
 }

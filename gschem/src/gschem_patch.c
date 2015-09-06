@@ -330,7 +330,9 @@ int gschem_patch_state_build(gschem_patch_state_t *st, OBJECT *o)
 							full_name = malloc(refdes_len + pin_len + 2);
 							sprintf(full_name, "%s-%s", refdes, pin);
 /*							printf("add: '%s' -> '%p'\n", full_name, sub);*/
-							g_hash_table_insert(st->pins, full_name, pin);
+/* TODO: once the jump-to code is fixed, this should be the "sub", not "o" so
+         we store the pin object to jump to */
+							g_hash_table_insert(st->pins, full_name, o);
 							g_free(pin);
 						}
 						break;
@@ -370,4 +372,46 @@ void gschem_patch_state_destroy(gschem_patch_state_t *st)
 {
 	g_hash_table_foreach_remove(st->pins, free_key, NULL);
 	patch_list_free(st->lines);
+}
+
+GSList *gschem_patch_state_execute(gschem_patch_state_t *st, GSList *diffs)
+{
+	GList *i;
+	OBJECT *pin;
+	gschem_patch_hit_t *hit;
+
+	for (i = st->lines; i != NULL; i = g_list_next (i)) {
+		gschem_patch_line_t *l = i->data;
+		GList *p;
+		if (l == NULL) {
+			fprintf(stderr, "NULL data on list\n");
+			continue;
+		}
+		switch(l->op) {
+			case GSCHEM_PATCH_DEL_CONN:
+				pin = g_hash_table_lookup(st->pins, l->id);
+				if (pin == NULL) {
+					fprintf(stderr, "Patch references to non-existing pin %s\n", l->id);
+					break;
+				}
+
+				hit = calloc(sizeof(gschem_patch_hit_t), 1);
+				hit->object = pin;
+				hit->text = strdup("(this will be the text that explains the change needed)");
+				diffs = g_slist_prepend(diffs, hit);
+				break;
+			case GSCHEM_PATCH_ADD_CONN:
+				pin = g_hash_table_lookup(st->pins, l->id);
+				if (pin == NULL) {
+					fprintf(stderr, "Patch references to non-existing pin %s\n", l->id);
+					break;
+				}
+				break;
+			case GSCHEM_PATCH_CHANGE_ATTRIB:
+				break;
+			case GSCHEM_PATCH_NET_INFO:
+				break;
+		}
+	}
+	return diffs;
 }
