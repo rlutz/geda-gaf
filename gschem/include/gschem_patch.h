@@ -32,6 +32,9 @@ typedef enum {
 	GSCHEM_PATCH_NET_INFO,
 } gschem_patch_op_t;
 
+/* this type of object should be only on a search list */
+#define OBJ_PATCH 'p'
+
 typedef struct gschem_patch_line_s gschem_patch_line_t;
 struct gschem_patch_line_s {
 	gschem_patch_op_t op;
@@ -44,12 +47,22 @@ struct gschem_patch_line_s {
 	union {
 		char *attrib_val;
 	} arg2;
+
 	gschem_patch_line_t *next;
 };
 
 typedef struct {
-	GList *lines; /* of gschem_patch_line_t * */
+	GList *lines;        /* an ordered list of patch lines (of gschem_patch_line_t *)  */
+	GHashTable *pins;    /* refdes-pinnumber -> pin object */
+	GHashTable *nets;    /* net_name -> GList* of pins as seen by the sender */
 } gschem_patch_state_t;
 
-int gschem_patch_state_init(gschem_patch_state_t *st, const char *fn);
+typedef struct {
+	OBJECT *object;
+	char *text;
+} gschem_patch_hit_t;
 
+int gschem_patch_state_init(gschem_patch_state_t *st, const char *fn);
+int gschem_patch_state_build(gschem_patch_state_t *st, OBJECT *o);
+GSList *gschem_patch_state_execute(gschem_patch_state_t *st, GSList *diffs);
+void gschem_patch_state_destroy(gschem_patch_state_t *st);
