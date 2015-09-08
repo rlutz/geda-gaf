@@ -505,11 +505,21 @@ static void exec_print_conns(GHashTable *connections)
 }
 #endif
 
+#define enlarge(to) \
+do { \
+	if (to > alloced) { \
+		alloced = to+256; \
+		free(buff); \
+		buff = malloc(to); \
+	} \
+} while(0)
 static GSList *exec_check_conn(GSList *diffs, gschem_patch_line_t *patch, OBJECT *pin, GList *net, int del)
 {
 	GList *np;
 	GHashTable *connections;
-	int connected;
+	int connected, len;
+	char *buff = NULL;
+	int alloced = 0;
 
 	printf("exec %d:\n", del);
 
@@ -517,11 +527,28 @@ static GSList *exec_check_conn(GSList *diffs, gschem_patch_line_t *patch, OBJECT
 	connections = exec_list_conns(pin);
 	exec_print_conns(connections);
 
-	/* check if we still have a connection to any of the pins */
-	for(np = net; np != NULL; np = g_list_next(np)) {
-		printf(" np=%s\n", (char *)np->data);
+	/* check if we are connected to the network */
+	len = strlen(patch->arg1.net_name);
+	enlarge(len+2);
+	*buff = OBJ_NET;
+	memcpy(buff+1, patch->arg1.net_name, len+1);
+	if (g_hash_table_lookup(connections, buff) != NULL) {
+		connected = 1;
 	}
 
+	/* check if we still have a connection to any of the pins */
+	for(np = net; np != NULL; np = g_list_next(np)) {
+		len = strlen(np->data);
+		enlarge(len+2);
+		*buff = OBJ_PIN;
+		memcpy(buff+1, np->data, len+1);
+		if (g_hash_table_lookup(connections, buff) != NULL) {
+			connected = 1;
+		}
+	}
+
+	if (buff != NULL)
+		free(buff);
 	exec_free_conns(connections);
 
 	if (del) {
@@ -534,6 +561,7 @@ static GSList *exec_check_conn(GSList *diffs, gschem_patch_line_t *patch, OBJECT
 	}
 	return diffs;
 }
+#undef enlarge
 
 GSList *gschem_patch_state_execute(gschem_patch_state_t *st, GSList *diffs)
 {
