@@ -368,6 +368,7 @@ int gschem_patch_state_build(gschem_patch_state_t *st, OBJECT *o)
 		case OBJ_ARC:
 			break;
 	}
+	return 0;
 }
 
 static gboolean free_key(gpointer key, gpointer value, gpointer user_data)
@@ -392,26 +393,136 @@ static GSList *add_hit(GSList *hits, OBJECT *obj, char *text)
 	return g_slist_prepend(hits, hit);
 }
 
+/*! \brief get a list of all objects connected to this one (recursively)
+ *
+ *  \par Function Description
+ *  This function gets an open list of objects to be checked and maps all connections
+ *  of all objects on the list. The resulting new open list is empty, while the
+ *  found hash is non-empty. For each new object on the found hash, the value
+ *  is determined by calling the user provided hashval() callback.
+ *
+ *  \param [in/out] found    (OBJECT*) -> (value) hash of all objects found
+ *  \param [in] open         GList of OBJECT's to start the sarch from
+ *  \param [in] hashval()    a callback that generates the value of the object; all object values are NULL if hashval() is NULL
+ *  \param [in] user_ctx     user context pointer for hashval()
+ *  \return the new open list (empty list)
+ *
+ *  \warning
+ *  Caller must g_list_free returned GList pointer.
+ *  Also free the found hash.
+ */
+static GList *s_conn_find_all(GHashTable *found, GList *open, void *(*hashval)(void *user_ctx, OBJECT *o), void *user_ctx)
+{
+	GList *i;
+
+	/* iterate by consuming the first element of the list */
+	for(i = open; i != NULL; i = open) {
+		OBJECT *o = i->data;
+
+		open = g_list_remove(open, o);
+
+		if (g_hash_table_lookup(found, o) == NULL) { /* ... check if it's not yet found */
+			void *val;
+			if (hashval != NULL)
+				val = hashval(user_ctx, o);
+			else
+				val = NULL;
+			g_hash_table_insert(found, o, val);
+			open = s_conn_return_others(open, o);
+		}
+	}
+	return open;
+}
+
+/* return the name of the object and add relevant objects to a name->obj hash in user_ctx */
+static void *exec_check_conn_hashval(void *user_ctx, OBJECT *o)
+{
+	gchar *name = NULL, *tmp;
+	GHashTable *name2obj = user_ctx;
+
+	switch(o->type) {
+		case OBJ_NET:
+			tmp = o_attrib_search_object_attribs_by_name (o, "netname", 0);
+			if (tmp != NULL) {
+				int len = strlen(tmp);
+				name = g_malloc(len+2);
+				*name = OBJ_NET;
+				memcpy(name+1, tmp, len+1);
+				g_free(tmp);
+				g_hash_table_insert(name2obj, name, o);
+			}
+			else
+				name = " "; /* anon net segments are not interesting at all; should be a static string as it doesn't end up on name2obj where we free these strings */
+			break;
+		case OBJ_PIN: 
+			if (o->parent != NULL) {
+				gchar *oname, *pname;
+
+				oname = o_attrib_search_object_attribs_by_name (o->parent, "refdes", 0);
+				pname = o_attrib_search_object_attribs_by_name (o, "pinnumber", 0);
+				name = g_malloc(strlen(oname) + strlen(pname) + 3);
+				sprintf(name, "%c%s-%s", OBJ_PIN, (char *)oname, (char *)pname);
+				g_free(oname);
+				g_free(pname);
+				g_hash_table_insert(name2obj, name, o);
+			}
+	}
+	return name;
+}
+
+/* Build a name->object hash of everything connected to a pin */
+static GHashTable *exec_list_conns(OBJECT *pin)
+{
+	GHashTable *found, *connections;
+	GList *open = NULL;
+
+	connections = g_hash_table_new(g_str_hash, g_str_equal);
+	found = g_hash_table_new(g_direct_hash, NULL);
+	open = g_list_prepend(open, pin);
+	open = s_conn_find_all(found, open, exec_check_conn_hashval, connections);
+
+	g_hash_table_destroy(found);
+	g_list_free(open);
+	return connections;
+}
+
+static void exec_free_conns(GHashTable *connections)
+{
+	g_hash_table_foreach_remove(connections, free_key, NULL);
+	g_hash_table_destroy(connections);
+}
+
+#define DEBUG
+#ifdef DEBUG
+static void exec_print_conns(GHashTable *connections)
+{
+	gpointer key, val;
+	GHashTableIter cni;
+
+	for(g_hash_table_iter_init(&cni, connections); g_hash_table_iter_next(&cni, &key, &val);) {
+		printf(" cn=%s %p\n", (char *)key, val);
+	}
+}
+#endif
+
 static GSList *exec_check_conn(GSList *diffs, gschem_patch_line_t *patch, OBJECT *pin, GList *net, int del)
 {
-	GList *np, *cn, *connections;
+	GList *np;
+	GHashTable *connections;
 	int connected;
 
 	printf("exec %d:\n", del);
 
-	connections = s_conn_return_others(NULL, pin);
 	connected = 0;
-	for(cn = connections; cn != NULL; cn = g_list_next(cn)) {
-		OBJECT *co = cn->data;
-		switch(co->type) {
-			case OBJ_NET: printf(" co=n/%p\n", co); break;
-			case OBJ_PIN: printf(" co=p/%p\n", co); break;
-		}
+	connections = exec_list_conns(pin);
+	exec_print_conns(connections);
+
+	/* check if we still have a connection to any of the pins */
+	for(np = net; np != NULL; np = g_list_next(np)) {
+		printf(" np=%s\n", (char *)np->data);
 	}
 
-	for(np = net; np != NULL; np = g_list_next(np)) {
-		printf(" np=%s\n", np->data);
-	}
+	exec_free_conns(connections);
 
 	if (del) {
 		if (connected)
@@ -431,7 +542,6 @@ GSList *gschem_patch_state_execute(gschem_patch_state_t *st, GSList *diffs)
 
 	for (i = st->lines; i != NULL; i = g_list_next (i)) {
 		gschem_patch_line_t *l = i->data;
-		GList *p;
 		if (l == NULL) {
 			fprintf(stderr, "NULL data on list\n");
 			continue;
