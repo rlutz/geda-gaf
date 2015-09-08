@@ -182,8 +182,8 @@ void find_patch_dialog (GschemToplevel *w_current)
      would be. */
 
   gtk_widget_show (GTK_WIDGET (w_current->find_patch_widget));
-  gtk_widget_grab_focus (gschem_find_patch_widget_get_entry (GSCHEM_FIND_TEXT_WIDGET (w_current->find_patch_widget)));
-  gtk_editable_select_region (GTK_EDITABLE (gschem_find_patch_widget_get_entry (GSCHEM_FIND_TEXT_WIDGET (w_current->find_patch_widget))), 0, -1);
+  gtk_widget_grab_focus (gschem_find_patch_widget_get_entry (GSCHEM_FIND_PATCH_WIDGET (w_current->find_patch_widget)));
+  gtk_editable_select_region (GTK_EDITABLE (gschem_find_patch_widget_get_entry (GSCHEM_FIND_PATCH_WIDGET (w_current->find_patch_widget))), 0, -1);
 }
 
 
@@ -519,7 +519,7 @@ notify_entry_patch (GtkWidget *entry, GParamSpec *pspec, GschemFindPatchWidget *
 static void
 set_property (GObject *object, guint param_id, const GValue *value, GParamSpec *pspec)
 {
-  GschemFindPatchWidget *widget = GSCHEM_FIND_TEXT_WIDGET (object);
+  GschemFindPatchWidget *widget = GSCHEM_FIND_PATCH_WIDGET (object);
 
   switch (param_id) {
     case PROP_DESCEND:
