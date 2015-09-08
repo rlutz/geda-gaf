@@ -517,13 +517,13 @@ static GSList *exec_check_conn(GSList *diffs, gschem_patch_line_t *patch, OBJECT
 {
 	GList *np;
 	GHashTable *connections;
-	int connected, len;
+	int len, pin_hdr;
 	char *buff = NULL;
 	int alloced = 0;
+	GString *msg = NULL;
 
 	printf("exec %d:\n", del);
 
-	connected = 0;
 	connections = exec_list_conns(pin);
 	exec_print_conns(connections);
 
@@ -533,17 +533,50 @@ static GSList *exec_check_conn(GSList *diffs, gschem_patch_line_t *patch, OBJECT
 	*buff = OBJ_NET;
 	memcpy(buff+1, patch->arg1.net_name, len+1);
 	if (g_hash_table_lookup(connections, buff) != NULL) {
-		connected = 1;
+		if (del) {
+			msg = g_string_new(": disconnect from net ");
+			g_string_append(msg, buff+1);
+		}
+	}
+	else {
+		if (!del) {
+			msg = g_string_new(": connect to net ");
+			g_string_append(msg, buff+1);
+		}
 	}
 
 	/* check if we still have a connection to any of the pins */
+	pin_hdr = 0;
 	for(np = net; np != NULL; np = g_list_next(np)) {
+		const char *action = NULL;
+		OBJECT *target;
 		len = strlen(np->data);
 		enlarge(len+2);
 		*buff = OBJ_PIN;
 		memcpy(buff+1, np->data, len+1);
-		if (g_hash_table_lookup(connections, buff) != NULL) {
-			connected = 1;
+		target = g_hash_table_lookup(connections, buff);
+		if (target == pin)
+			continue;
+		if (target != NULL) {
+			if (del)
+				action = "disconnect from pin ";
+		}
+		else {
+			if (!del)
+				action = "connect to pin ";
+		}
+		if (action != NULL) {
+			if (!pin_hdr) {
+				if (msg == NULL)
+					msg = g_string_new(": ");
+				else
+					g_string_append(msg, "; ");
+				g_string_append(msg, action);
+				pin_hdr = 1;
+			}
+			else
+				g_string_append(msg, ", ");
+			g_string_append(msg, buff+1);
 		}
 	}
 
@@ -551,14 +584,11 @@ static GSList *exec_check_conn(GSList *diffs, gschem_patch_line_t *patch, OBJECT
 		free(buff);
 	exec_free_conns(connections);
 
-	if (del) {
-		if (connected)
-			return add_hit(diffs, pin->parent, strdup("del (this will be the text that explains the change needed)"));
+	if (msg != NULL) {
+		g_string_prepend(msg, patch->id);
+		return add_hit(diffs, pin->parent, g_string_free(msg, FALSE));
 	}
-	else {
-		if (!connected)
-			return add_hit(diffs, pin->parent, strdup("add (this will be the text that explains the change needed)"));
-	}
+
 	return diffs;
 }
 #undef enlarge
