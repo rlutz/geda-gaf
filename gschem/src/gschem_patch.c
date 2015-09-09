@@ -301,8 +301,9 @@ int gschem_patch_state_init(gschem_patch_state_t *st, const char *fn)
 		GList *i;
 
 		/* Create hashes for faster lookups avoiding O(objects*patches) */
-		st->pins = g_hash_table_new (g_str_hash, g_str_equal);
-		st->nets = g_hash_table_new (g_str_hash, g_str_equal);
+		st->pins  = g_hash_table_new (g_str_hash, g_str_equal);
+		st->comps = g_hash_table_new (g_str_hash, g_str_equal);
+		st->nets  = g_hash_table_new (g_str_hash, g_str_equal);
 		for (i = st->lines; i != NULL; i = g_list_next (i)) {
 			gschem_patch_line_t *l = i->data;
 			if (l->op == GSCHEM_PATCH_NET_INFO)
@@ -335,6 +336,8 @@ int gschem_patch_state_build(gschem_patch_state_t *st, OBJECT *o)
 			refdes = o_attrib_search_object_attribs_by_name (o, "refdes", 0);
 			if (refdes == NULL)
 				break;
+
+			build_insert_hash_list(st->comps, refdes, o);
 
 			refdes_len = strlen(refdes);
 			for(i = o->complex->prim_objs; i != NULL; i = g_list_next(i)) {
@@ -397,8 +400,10 @@ static gboolean free_key_list(gpointer key, gpointer value, gpointer user_data)
 void gschem_patch_state_destroy(gschem_patch_state_t *st)
 {
 	g_hash_table_foreach_remove(st->pins, free_key_list, NULL);
+	g_hash_table_foreach_remove(st->comps, free_key_list, NULL);
 	g_hash_table_destroy(st->nets);
 	g_hash_table_destroy(st->pins);
+	g_hash_table_destroy(st->comps);
 	patch_list_free(st->lines);
 }
 
