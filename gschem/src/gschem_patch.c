@@ -616,10 +616,24 @@ static GSList *exec_check_conn(GSList *diffs, gschem_patch_line_t *patch, OBJECT
 }
 #undef enlarge
 
+static GSList *exec_check_attrib(GSList *diffs, gschem_patch_line_t *patch, OBJECT *comp)
+{
+	gchar *attr_val;
+	attr_val = o_attrib_search_object_attribs_by_name (comp, patch->arg1.attrib_name, 0);
+	if (attr_val == NULL)
+		return diffs;
+	if (strcmp(attr_val, patch->arg2.attrib_val) != 0) {
+		gchar *msg = g_strdup_printf("%s: change attribute %s from %s to %s\n", patch->id, patch->arg1.attrib_name, attr_val, patch->arg2.attrib_val);
+		diffs = add_hit(diffs, comp, msg);
+	}
+	g_free(attr_val);
+}
+
+
 GSList *gschem_patch_state_execute(gschem_patch_state_t *st, GSList *diffs)
 {
 	GList *i, *net;
-	GSList *pins;
+	GSList *pins, *comps;
 
 	for (i = st->lines; i != NULL; i = g_list_next (i)) {
 		gschem_patch_line_t *l = i->data;
@@ -644,8 +658,12 @@ GSList *gschem_patch_state_execute(gschem_patch_state_t *st, GSList *diffs)
 					diffs = exec_check_conn(diffs, l, (OBJECT *)pins->data, net, (l->op == GSCHEM_PATCH_DEL_CONN));
 				break;
 			case GSCHEM_PATCH_CHANGE_ATTRIB:
+				comps = g_hash_table_lookup(st->comps, l->id);
+				for(;comps != NULL; comps = g_slist_next(comps))
+					diffs = exec_check_attrib(diffs, l, (OBJECT *)comps->data);
 				break;
 			case GSCHEM_PATCH_NET_INFO:
+				/* just ignore them, we've already built data structs while parsing */
 				break;
 		}
 	}
