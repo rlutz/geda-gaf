@@ -321,6 +321,8 @@ static void build_insert_hash_list(GHashTable *hash, char *full_name, OBJECT *ob
 	GSList *lst;
 	
 	lst = g_hash_table_lookup(hash, full_name);
+	if (lst != NULL) /* key already exists, the new one won't end up in the hash and won't get free'd on hash destroy */
+		g_free(full_name);
 	lst = g_slist_prepend(lst, obj);
 	g_hash_table_insert(hash, full_name, lst);
 }
@@ -337,7 +339,7 @@ int gschem_patch_state_build(gschem_patch_state_t *st, OBJECT *o)
 			if (refdes == NULL)
 				break;
 
-			build_insert_hash_list(st->comps, refdes, o);
+			build_insert_hash_list(st->comps, g_strdup(refdes), o);
 
 			refdes_len = strlen(refdes);
 			for(i = o->complex->prim_objs; i != NULL; i = g_list_next(i)) {
@@ -348,7 +350,7 @@ int gschem_patch_state_build(gschem_patch_state_t *st, OBJECT *o)
 						if (pin != NULL) {
 							char *full_name;
 							pin_len = strlen(pin);
-							full_name = malloc(refdes_len + pin_len + 2);
+							full_name = g_malloc(refdes_len + pin_len + 2);
 							sprintf(full_name, "%s-%s", refdes, pin);
 /*						printf("add: '%s' -> '%p' o=%p at=%p p=%p\n", full_name, sub, o, sub->attached_to, sub->parent);
 						fflush(stdout);*/
@@ -393,7 +395,7 @@ static gboolean free_key_list(gpointer key, gpointer value, gpointer user_data)
 {
 	GSList *lst = value;
 	g_slist_free(lst);
-	free(key);
+	g_free(key);
 	return TRUE;
 }
 
