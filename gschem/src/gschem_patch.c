@@ -314,6 +314,15 @@ int gschem_patch_state_init(gschem_patch_state_t *st, const char *fn)
 	return res;
 }
 
+/* insert obj in a hash table of slists */
+static void build_insert_hash_list(GHashTable *hash, char *full_name, OBJECT *obj)
+{
+	GSList *lst;
+	
+	lst = g_hash_table_lookup(hash, full_name);
+	lst = g_slist_prepend(lst, obj);
+	g_hash_table_insert(hash, full_name, lst);
+}
 
 int gschem_patch_state_build(gschem_patch_state_t *st, OBJECT *o)
 {
@@ -340,7 +349,7 @@ int gschem_patch_state_build(gschem_patch_state_t *st, OBJECT *o)
 							sprintf(full_name, "%s-%s", refdes, pin);
 /*						printf("add: '%s' -> '%p' o=%p at=%p p=%p\n", full_name, sub, o, sub->attached_to, sub->parent);
 						fflush(stdout);*/
-							g_hash_table_insert(st->pins, full_name, sub);
+							build_insert_hash_list(st->pins, full_name, sub);
 							g_free(pin);
 						}
 						break;
@@ -377,10 +386,19 @@ static gboolean free_key(gpointer key, gpointer value, gpointer user_data)
 	return TRUE;
 }
 
+static gboolean free_key_list(gpointer key, gpointer value, gpointer user_data)
+{
+	GSList *lst = value;
+	g_slist_free(lst);
+	free(key);
+	return TRUE;
+}
+
 void gschem_patch_state_destroy(gschem_patch_state_t *st)
 {
-	g_hash_table_foreach_remove(st->pins, free_key, NULL);
+	g_hash_table_foreach_remove(st->pins, free_key_list, NULL);
 	g_hash_table_destroy(st->nets);
+	g_hash_table_destroy(st->pins);
 	patch_list_free(st->lines);
 }
 
@@ -596,7 +614,7 @@ static GSList *exec_check_conn(GSList *diffs, gschem_patch_line_t *patch, OBJECT
 GSList *gschem_patch_state_execute(gschem_patch_state_t *st, GSList *diffs)
 {
 	GList *i, *net;
-	OBJECT *pin;
+	GSList *pins;
 
 	for (i = st->lines; i != NULL; i = g_list_next (i)) {
 		gschem_patch_line_t *l = i->data;
@@ -607,8 +625,8 @@ GSList *gschem_patch_state_execute(gschem_patch_state_t *st, GSList *diffs)
 		switch(l->op) {
 			case GSCHEM_PATCH_DEL_CONN:
 			case GSCHEM_PATCH_ADD_CONN:
-				pin = g_hash_table_lookup(st->pins, l->id);
-				if (pin == NULL) {
+				pins = g_hash_table_lookup(st->pins, l->id);
+				if (pins == NULL) {
 					fprintf(stderr, "Patch references to non-existing pin %s\n", l->id);
 					break;
 				}
@@ -617,7 +635,8 @@ GSList *gschem_patch_state_execute(gschem_patch_state_t *st, GSList *diffs)
 					fprintf(stderr, "NULL net\n");
 					break;
 				}
-				diffs = exec_check_conn(diffs, l, pin, net, (l->op == GSCHEM_PATCH_DEL_CONN));
+				for(;pins != NULL; pins = g_slist_next(pins))
+					diffs = exec_check_conn(diffs, l, (OBJECT *)pins->data, net, (l->op == GSCHEM_PATCH_DEL_CONN));
 				break;
 			case GSCHEM_PATCH_CHANGE_ATTRIB:
 				break;
