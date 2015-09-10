@@ -611,7 +611,7 @@ static GSList *exec_check_conn(GSList *diffs, gschem_patch_line_t *patch, OBJECT
 
 	if (msg != NULL) {
 		g_string_prepend(msg, patch->id);
-		return add_hit(diffs, pin->parent, g_string_free(msg, FALSE));
+		return add_hit(diffs, pin, g_string_free(msg, FALSE));
 	}
 
 	return diffs;

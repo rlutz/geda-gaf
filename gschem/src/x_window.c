@@ -332,12 +332,14 @@ x_window_select_text (GschemFindTextState *state, OBJECT *object, GschemToplevel
 
   PAGE *page = gschem_page_view_get_page (view);
   g_return_if_fail (page != NULL);
+  OBJECT *page_obj;
 
   g_return_if_fail (object != NULL);
-  g_return_if_fail (object->page != NULL);
+  page_obj = gschem_page_get_page_object(object);
+  g_return_if_fail (page_obj != NULL);
 
-  if (page != object->page) {
-    gschem_page_view_set_page (view, object->page);
+  if (page != page_obj->page) {
+    gschem_page_view_set_page (view, page_obj->page);
   }
 
   gschem_page_view_zoom_text (view, object);

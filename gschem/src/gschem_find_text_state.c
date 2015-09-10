@@ -294,7 +294,7 @@ assign_store_patch (GschemFindTextState *state, GSList *objects)
 
   while (object_iter != NULL) {
     char *basename;
-    OBJECT *final_object;
+    OBJECT *final_object = NULL;
     gschem_patch_hit_t *hit = (gschem_patch_hit_t*) object_iter->data;
     GtkTreeIter tree_iter;
 
@@ -308,16 +308,22 @@ assign_store_patch (GschemFindTextState *state, GSList *objects)
        Fix: be able to jump to any OBJECT
        */
  {
+      OBJECT *page_obj;
       GList *i, *l = o_attrib_return_attribs (hit->object);
+
       if (l == NULL) {
         g_warning ("NULL attrib list");
         continue;
       }
 
+
       for(i = l; i != NULL; i = g_list_next(i)) {
         final_object = i->data;
-        if ((final_object->type == OBJ_TEXT) && (o_is_visible (final_object->page->toplevel, final_object)))
-           break;
+        if (final_object->type == OBJ_TEXT) {
+          page_obj = gschem_page_get_page_object(final_object);
+          if (o_is_visible (page_obj->page->toplevel, page_obj))
+            break;
+        }
       }
       g_list_free(l);
 
@@ -325,7 +331,7 @@ assign_store_patch (GschemFindTextState *state, GSList *objects)
         g_warning ("no text attrib?");
         continue;
       }
-      basename = g_path_get_basename (final_object->page->page_filename);
+      basename = g_path_get_basename (page_obj->page->page_filename);
 
  }
 
