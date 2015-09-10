@@ -54,6 +54,7 @@ struct gschem_patch_line_s {
 typedef struct {
 	GList *lines;        /* an ordered list of patch lines (of gschem_patch_line_t *)  */
 	GHashTable *pins;    /* refdes-pinnumber -> pin object */
+	GHashTable *comps;   /* refdes -> complex object */
 	GHashTable *nets;    /* net_name -> GList* of pins as seen by the sender */
 } gschem_patch_state_t;
 
