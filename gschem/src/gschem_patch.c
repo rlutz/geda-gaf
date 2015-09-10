@@ -315,16 +315,32 @@ int gschem_patch_state_init(gschem_patch_state_t *st, const char *fn)
 	return res;
 }
 
-/* insert obj in a hash table of slists */
-static void build_insert_hash_list(GHashTable *hash, char *full_name, OBJECT *obj)
+/* insert item in a hash table of slists */
+static void build_insert_hash_list(GHashTable *hash, char *full_name, void *item)
 {
 	GSList *lst;
 	
 	lst = g_hash_table_lookup(hash, full_name);
 	if (lst != NULL) /* key already exists, the new one won't end up in the hash and won't get free'd on hash destroy */
 		g_free(full_name);
-	lst = g_slist_prepend(lst, obj);
+	lst = g_slist_prepend(lst, item);
 	g_hash_table_insert(hash, full_name, lst);
+}
+
+static gschem_patch_pin_t *alloc_pin(OBJECT *pin_obj, char *net)
+{
+	gschem_patch_pin_t *p;
+	p = g_malloc(sizeof(gschem_patch_pin_t));
+	p->obj = pin_obj;
+	p->net = net;
+	return p;
+}
+
+static void free_pin(gschem_patch_pin_t *p)
+{
+	if (p->net != NULL)
+		g_free(p->net);
+	g_free(p);
 }
 
 int gschem_patch_state_build(gschem_patch_state_t *st, OBJECT *o)
@@ -356,7 +372,7 @@ int gschem_patch_state_build(gschem_patch_state_t *st, OBJECT *o)
 							sprintf(full_name, "%s-%s", refdes, pin);
 /*						printf("add: '%s' -> '%p' o=%p at=%p p=%p\n", full_name, sub, o, sub->attached_to, sub->parent);
 						fflush(stdout);*/
-							build_insert_hash_list(st->pins, full_name, sub);
+							build_insert_hash_list(st->pins, full_name, alloc_pin(sub, NULL));
 							g_free(pin);
 						}
 						break;
@@ -390,9 +406,13 @@ int gschem_patch_state_build(gschem_patch_state_t *st, OBJECT *o)
 							memcpy(net_name, net, net_len);
 							net_name[net_len] = '\0';
 						}
+						else
+							net_name = NULL;
 
 						sprintf(full_name, "%s-%s", refdes, pinno);
-						build_insert_hash_list(st->pins, full_name, o);
+/*						printf("add: '%s' -> '%p';'%s'\n", full_name, o, net_name);
+						fflush(stdout);*/
+						build_insert_hash_list(st->pins, full_name, alloc_pin(o, net_name));
 					}
 				}
 			}
@@ -577,18 +597,19 @@ do { \
 		buff = malloc(to); \
 	} \
 } while(0)
-static GSList *exec_check_conn(GSList *diffs, gschem_patch_line_t *patch, OBJECT *pin, GList *net, int del)
+static GSList *exec_check_conn(GSList *diffs, gschem_patch_line_t *patch, gschem_patch_pin_t *pin, GList *net, int del)
 {
 	GList *np;
-	GHashTable *connections;
-	int len, pin_hdr;
+	GHashTable *connections = NULL;
+	int len, pin_hdr, offs;
 	char *buff = NULL;
-	int alloced = 0;
+	int alloced = 0, connected;
 	GString *msg = NULL;
 
 	printf("exec %d:\n", del);
 
-	connections = exec_list_conns(pin);
+	if (pin->net == NULL) {
+	connections = exec_list_conns(pin->obj);
 	exec_print_conns(connections);
 
 	/* check if we are connected to the network */
@@ -596,19 +617,29 @@ static GSList *exec_check_conn(GSList *diffs, gschem_patch_line_t *patch, OBJECT
 	enlarge(len+2);
 	*buff = OBJ_NET;
 	memcpy(buff+1, patch->arg1.net_name, len+1);
-	if (g_hash_table_lookup(connections, buff) != NULL) {
+	connected = (g_hash_table_lookup(connections, buff) != NULL);
+	offs = 1;
+	}
+	else {
+		connected = (strcmp(patch->arg1.net_name, pin->net) == 0);
+		buff = g_strdup(pin->net);
+		offs = 0;
+	}
+
+	if (connected) {
 		if (del) {
 			msg = g_string_new(": disconnect from net ");
-			g_string_append(msg, buff+1);
+			g_string_append(msg, buff+offs);
 		}
 	}
 	else {
 		if (!del) {
 			msg = g_string_new(": connect to net ");
-			g_string_append(msg, buff+1);
+			g_string_append(msg, buff+offs);
 		}
 	}
 
+	if (connections != NULL) {
 	/* check if we still have a connection to any of the pins */
 	pin_hdr = 0;
 	for(np = net; np != NULL; np = g_list_next(np)) {
@@ -619,7 +650,7 @@ static GSList *exec_check_conn(GSList *diffs, gschem_patch_line_t *patch, OBJECT
 		*buff = OBJ_PIN;
 		memcpy(buff+1, np->data, len+1);
 		target = g_hash_table_lookup(connections, buff);
-		if (target == pin)
+		if (target == pin->obj)
 			continue;
 		if (target != NULL) {
 			if (del)
@@ -643,14 +674,15 @@ static GSList *exec_check_conn(GSList *diffs, gschem_patch_line_t *patch, OBJECT
 			g_string_append(msg, buff+1);
 		}
 	}
+	exec_free_conns(connections);
+	}
 
 	if (buff != NULL)
 		free(buff);
-	exec_free_conns(connections);
 
 	if (msg != NULL) {
 		g_string_prepend(msg, patch->id);
-		return add_hit(diffs, pin, g_string_free(msg, FALSE));
+		return add_hit(diffs, pin->obj, g_string_free(msg, FALSE));
 	}
 
 	return diffs;
@@ -691,12 +723,8 @@ GSList *gschem_patch_state_execute(gschem_patch_state_t *st, GSList *diffs)
 					break;
 				}
 				net = g_hash_table_lookup(st->nets, l->arg1.net_name);
-				if (net == NULL) {
-					fprintf(stderr, "NULL net\n");
-					break;
-				}
 				for(;pins != NULL; pins = g_slist_next(pins))
-					diffs = exec_check_conn(diffs, l, (OBJECT *)pins->data, net, (l->op == GSCHEM_PATCH_DEL_CONN));
+					diffs = exec_check_conn(diffs, l, (gschem_patch_pin_t *)pins->data, net, (l->op == GSCHEM_PATCH_DEL_CONN));
 				break;
 			case GSCHEM_PATCH_CHANGE_ATTRIB:
 				comps = g_hash_table_lookup(st->comps, l->id);
