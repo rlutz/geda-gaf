@@ -329,7 +329,7 @@ static void build_insert_hash_list(GHashTable *hash, char *full_name, OBJECT *ob
 
 int gschem_patch_state_build(gschem_patch_state_t *st, OBJECT *o)
 {
-	GList *i;
+	GList *i, *l;
 	gchar *refdes, *pin;
 	int refdes_len, pin_len;
 
@@ -339,8 +339,10 @@ int gschem_patch_state_build(gschem_patch_state_t *st, OBJECT *o)
 			if (refdes == NULL)
 				break;
 
+			/* map the component */
 			build_insert_hash_list(st->comps, g_strdup(refdes), o);
 
+			/* map pins */
 			refdes_len = strlen(refdes);
 			for(i = o->complex->prim_objs; i != NULL; i = g_list_next(i)) {
 				OBJECT *sub = i->data;
@@ -360,6 +362,43 @@ int gschem_patch_state_build(gschem_patch_state_t *st, OBJECT *o)
 						break;
 				}
 			}
+
+			/* map net attribute connections */
+			l = o_attrib_return_attribs (o);
+			for(i = l; i != NULL; i = g_list_next(i)) {
+				OBJECT *attrib = i->data;
+				/* I know, I know, I should use o_attrib_get_name_value(), but it'd be
+				   ridicolous to get everything strdup'd */
+				if (attrib->type != OBJ_TEXT)
+					continue;
+
+				if (strncmp(attrib->text->string, "net=", 4) == 0) {
+					char *net = attrib->text->string+4;
+					char *pinno = strchr(net, ':');
+					char *full_name;
+					if (pinno != NULL) {
+						int pin_len, net_len;
+						char *net_name = NULL;
+
+						net_len = pinno - net;
+						pinno++;
+						pin_len = strlen(pinno);
+						full_name = g_malloc(refdes_len + pin_len + 2);
+
+						if (net_len > 0) {
+							net_name = g_malloc(net_len+1);
+							memcpy(net_name, net, net_len);
+							net_name[net_len] = '\0';
+						}
+
+						sprintf(full_name, "%s-%s", refdes, pinno);
+						build_insert_hash_list(st->pins, full_name, o);
+					}
+				}
+			}
+			g_list_free(l);
+
+			/* clean up */
 			g_free(refdes);
 			break;
 
