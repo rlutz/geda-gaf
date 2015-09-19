@@ -298,9 +298,6 @@ assign_store_patch (GschemFindTextState *state, GSList *objects)
     gschem_patch_hit_t *hit = (gschem_patch_hit_t*) object_iter->data;
     GtkTreeIter tree_iter;
 
-    s_object_weak_ref (hit->object, (NotifyFunc) object_weakref_cb, state);
-
-    gtk_list_store_append (state->store, &tree_iter);
 
     /* TODO: this is an ugly workaround: can't put pins or objects
        directly on the list because they have no object page; use
@@ -343,6 +340,9 @@ assign_store_patch (GschemFindTextState *state, GSList *objects)
       basename = g_path_get_basename (page_obj->page->page_filename);
 
  }
+    s_object_weak_ref (hit->object, (NotifyFunc) object_weakref_cb, state);
+
+    gtk_list_store_append (state->store, &tree_iter);
 
     gtk_list_store_set (state->store,
                         &tree_iter,
