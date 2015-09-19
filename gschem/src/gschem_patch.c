@@ -618,16 +618,16 @@ static GSList *exec_check_conn(GSList *diffs, gschem_patch_line_t *patch, gschem
 	printf("exec %d:\n", del);
 
 	if (pin->net == NULL) {
-	connections = exec_list_conns(pin->obj);
-	exec_print_conns(connections);
+		connections = exec_list_conns(pin->obj);
+		exec_print_conns(connections);
 
-	/* check if we are connected to the network */
-	len = strlen(patch->arg1.net_name);
-	enlarge(len+2);
-	*buff = OBJ_NET;
-	memcpy(buff+1, patch->arg1.net_name, len+1);
-	connected = (g_hash_table_lookup(connections, buff) != NULL);
-	offs = 1;
+		/* check if we are connected to the network */
+		len = strlen(patch->arg1.net_name);
+		enlarge(len+2);
+		*buff = OBJ_NET;
+		memcpy(buff+1, patch->arg1.net_name, len+1);
+		connected = (g_hash_table_lookup(connections, buff) != NULL);
+		offs = 1;
 	}
 	else {
 		connected = (strcmp(patch->arg1.net_name, pin->net) == 0);
@@ -649,41 +649,41 @@ static GSList *exec_check_conn(GSList *diffs, gschem_patch_line_t *patch, gschem
 	}
 
 	if (connections != NULL) {
-	/* check if we still have a connection to any of the pins */
-	pin_hdr = 0;
-	for(np = net; np != NULL; np = g_list_next(np)) {
-		const char *action = NULL;
-		OBJECT *target;
-		len = strlen(np->data);
-		enlarge(len+2);
-		*buff = OBJ_PIN;
-		memcpy(buff+1, np->data, len+1);
-		target = g_hash_table_lookup(connections, buff);
-		if (target == pin->obj)
-			continue;
-		if (target != NULL) {
-			if (del)
-				action = "disconnect from pin ";
-		}
-		else {
-			if (!del)
-				action = "connect to pin ";
-		}
-		if (action != NULL) {
-			if (!pin_hdr) {
-				if (msg == NULL)
-					msg = g_string_new(": ");
-				else
-					g_string_append(msg, "; ");
-				g_string_append(msg, action);
-				pin_hdr = 1;
+		/* check if we still have a connection to any of the pins */
+		pin_hdr = 0;
+		for(np = net; np != NULL; np = g_list_next(np)) {
+			const char *action = NULL;
+			OBJECT *target;
+			len = strlen(np->data);
+			enlarge(len+2);
+			*buff = OBJ_PIN;
+			memcpy(buff+1, np->data, len+1);
+			target = g_hash_table_lookup(connections, buff);
+			if (target == pin->obj)
+				continue;
+			if (target != NULL) {
+				if (del)
+					action = "disconnect from pin ";
 			}
-			else
-				g_string_append(msg, ", ");
-			g_string_append(msg, buff+1);
+			else {
+				if (!del)
+					action = "connect to pin ";
+			}
+			if (action != NULL) {
+				if (!pin_hdr) {
+					if (msg == NULL)
+						msg = g_string_new(": ");
+					else
+						g_string_append(msg, "; ");
+					g_string_append(msg, action);
+					pin_hdr = 1;
+				}
+				else
+					g_string_append(msg, ", ");
+				g_string_append(msg, buff+1);
+			}
 		}
-	}
-	exec_free_conns(connections);
+		exec_free_conns(connections);
 	}
 
 	if (buff != NULL)
