@@ -319,12 +319,18 @@ int gschem_patch_state_init(gschem_patch_state_t *st, const char *fn)
 static void build_insert_hash_list(GHashTable *hash, char *full_name, void *item)
 {
 	GSList *lst;
+	int free_name;
 	
 	lst = g_hash_table_lookup(hash, full_name);
-	if (lst != NULL) /* key already exists, the new one won't end up in the hash and won't get free'd on hash destroy */
-		g_free(full_name);
+	free_name = (lst != NULL);
 	lst = g_slist_prepend(lst, item);
+
 	g_hash_table_insert(hash, full_name, lst);
+
+ /* key already exists, the new one won't end up in the hash and won't get free'd on hash destroy */
+	if (free_name)
+		g_free(full_name);
+
 }
 
 static gschem_patch_pin_t *alloc_pin(OBJECT *pin_obj, char *net)
