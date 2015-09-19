@@ -1331,7 +1331,7 @@ OBJECT *gschem_page_get_page_object(OBJECT *object)
  *  \param [in] object    The text object
  */
 void
-gschem_page_view_zoom_text (GschemPageView *view, OBJECT *object)
+gschem_page_view_zoom_text (GschemPageView *view, OBJECT *object, gboolean zoom_hidden)
 {
   OBJECT *page_obj;
   int success;
@@ -1339,6 +1339,7 @@ gschem_page_view_zoom_text (GschemPageView *view, OBJECT *object)
   int y[2];
   int viewport_center_x, viewport_center_y, viewport_width, viewport_height;
   double k;
+  int old_show_hidden;
 
   g_return_if_fail (view != NULL);
   GschemPageGeometry *geometry = gschem_page_view_get_page_geometry (view);
@@ -1352,12 +1353,19 @@ gschem_page_view_zoom_text (GschemPageView *view, OBJECT *object)
   g_return_if_fail (page_obj->page->toplevel != NULL);
   g_return_if_fail (object->text != NULL);
 
+  if (zoom_hidden) {
+    old_show_hidden = page_obj->page->toplevel->show_hidden_text;
+    page_obj->page->toplevel->show_hidden_text = 1;
+  }
+
   success = geda_object_calculate_visible_bounds (page_obj->page->toplevel,
                                                   object,
                                                   &x[0],
                                                   &y[0],
                                                   &x[1],
                                                   &y[1]);
+  if (zoom_hidden)
+    page_obj->page->toplevel->show_hidden_text = old_show_hidden;
 
   if (success) {
 

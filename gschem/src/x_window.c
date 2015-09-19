@@ -342,7 +342,7 @@ x_window_select_text (GschemFindTextState *state, OBJECT *object, GschemToplevel
     gschem_page_view_set_page (view, page_obj->page);
   }
 
-  gschem_page_view_zoom_text (view, object);
+  gschem_page_view_zoom_text (view, object, TRUE);
 }
 
 static void
