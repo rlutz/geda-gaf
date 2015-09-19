@@ -705,7 +705,7 @@ static GSList *exec_check_attrib(GSList *diffs, gschem_patch_line_t *patch, OBJE
 	if (attr_val == NULL)
 		return diffs;
 	if (strcmp(attr_val, patch->arg2.attrib_val) != 0) {
-		gchar *msg = g_strdup_printf("%s: change attribute %s from %s to %s\n", patch->id, patch->arg1.attrib_name, attr_val, patch->arg2.attrib_val);
+		gchar *msg = g_strdup_printf("%s: change attribute %s from %s to %s", patch->id, patch->arg1.attrib_name, attr_val, patch->arg2.attrib_val);
 		diffs = add_hit(diffs, comp, msg);
 	}
 	g_free(attr_val);
