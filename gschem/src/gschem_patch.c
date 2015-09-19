@@ -703,6 +703,7 @@ static GSList *exec_check_attrib(GSList *diffs, gschem_patch_line_t *patch, OBJE
 		diffs = add_hit(diffs, comp, msg);
 	}
 	g_free(attr_val);
+	return diffs;
 }
 
 
