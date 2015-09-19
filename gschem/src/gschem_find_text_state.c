@@ -310,6 +310,7 @@ assign_store_patch (GschemFindTextState *state, GSList *objects)
  {
       OBJECT *page_obj;
       GList *i, *l = o_attrib_return_attribs (hit->object);
+      int found_pin;
 
       if (l == NULL) {
         g_warning ("NULL attrib list");
@@ -317,15 +318,23 @@ assign_store_patch (GschemFindTextState *state, GSList *objects)
       }
 
 
+      found_pin = 0;
       for(i = l; i != NULL; i = g_list_next(i)) {
         final_object = i->data;
         if (final_object->type == OBJ_TEXT) {
           page_obj = gschem_page_get_page_object(final_object);
-          if (o_is_visible (page_obj->page->toplevel, page_obj))
+          if (o_is_visible (page_obj->page->toplevel, page_obj)) {
+            found_pin = 1;
             break;
+          }
         }
       }
       g_list_free(l);
+#warning TODO: do not continue; the message should be there and should not point to any object
+      if (!found_pin) {
+        g_warning ("no pin text to zoom to");
+        continue;
+      }
 
       if (final_object == NULL) {
         g_warning ("no text attrib?");
