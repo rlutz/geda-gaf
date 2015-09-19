@@ -606,7 +606,7 @@ do { \
 		buff = malloc(to); \
 	} \
 } while(0)
-static GSList *exec_check_conn(GSList *diffs, gschem_patch_line_t *patch, gschem_patch_pin_t *pin, GList *net, int del)
+static GSList *exec_check_conn(GSList *diffs, gschem_patch_line_t *patch, gschem_patch_pin_t *pin, GList **net, int del)
 {
 	GList *np;
 	GHashTable *connections = NULL;
@@ -651,7 +651,7 @@ static GSList *exec_check_conn(GSList *diffs, gschem_patch_line_t *patch, gschem
 	if (connections != NULL) {
 		/* check if we still have a connection to any of the pins */
 		pin_hdr = 0;
-		for(np = net; np != NULL; np = g_list_next(np)) {
+		for(np = *net; np != NULL; np = g_list_next(np)) {
 			const char *action = NULL;
 			OBJECT *target;
 			len = strlen(np->data);
@@ -689,6 +689,18 @@ static GSList *exec_check_conn(GSList *diffs, gschem_patch_line_t *patch, gschem
 	if (buff != NULL)
 		free(buff);
 
+	/* pretend that the item is resolved: update patch netlists */
+	if (del) {
+		for(np = *net; np != NULL;) {
+			const char *lname = np->data;
+			np = g_list_next(np);
+			if (strcmp(lname, patch->id) == 0)
+				*net = g_list_remove(*net, lname);
+		}
+	}
+	else
+		*net = g_list_prepend(*net, patch->id);
+
 	if (msg != NULL) {
 		g_string_prepend(msg, patch->id);
 		return add_hit(diffs, pin->obj, g_string_free(msg, FALSE));
@@ -715,7 +727,7 @@ static GSList *exec_check_attrib(GSList *diffs, gschem_patch_line_t *patch, OBJE
 
 GSList *gschem_patch_state_execute(gschem_patch_state_t *st, GSList *diffs)
 {
-	GList *i, *net;
+	GList *i, *onet, *net;
 	GSList *pins, *comps;
 
 	for (i = st->lines; i != NULL; i = g_list_next (i)) {
@@ -732,9 +744,13 @@ GSList *gschem_patch_state_execute(gschem_patch_state_t *st, GSList *diffs)
 					fprintf(stderr, "Patch references to non-existing pin %s\n", l->id);
 					break;
 				}
-				net = g_hash_table_lookup(st->nets, l->arg1.net_name);
+				net = onet = g_hash_table_lookup(st->nets, l->arg1.net_name);
+
 				for(;pins != NULL; pins = g_slist_next(pins))
-					diffs = exec_check_conn(diffs, l, (gschem_patch_pin_t *)pins->data, net, (l->op == GSCHEM_PATCH_DEL_CONN));
+					diffs = exec_check_conn(diffs, l, (gschem_patch_pin_t *)pins->data, &net, (l->op == GSCHEM_PATCH_DEL_CONN));
+
+				if (net != onet) /* executing a diff may update the list */
+					g_hash_table_insert(st->nets, l->arg1.net_name, net);
 				break;
 			case GSCHEM_PATCH_CHANGE_ATTRIB:
 				comps = g_hash_table_lookup(st->comps, l->id);
