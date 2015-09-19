@@ -635,16 +635,19 @@ static GSList *exec_check_conn(GSList *diffs, gschem_patch_line_t *patch, gschem
 		offs = 0;
 	}
 
-	if (connected) {
-		if (del) {
-			msg = g_string_new(": disconnect from net ");
-			g_string_append(msg, buff+offs);
+	/* Ugly hack: do not complain about (missing) connections to unnamed nets */
+	if (strncmp(buff+offs, "unnamed_net", 11) != 0) {
+		if (connected) {
+			if (del) {
+				msg = g_string_new(": disconnect from net ");
+				g_string_append(msg, buff+offs);
+			}
 		}
-	}
-	else {
-		if (!del) {
-			msg = g_string_new(": connect to net ");
-			g_string_append(msg, buff+offs);
+		else {
+			if (!del) {
+				msg = g_string_new(": connect to net ");
+				g_string_append(msg, buff+offs);
+			}
 		}
 	}
 
