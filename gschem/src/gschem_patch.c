@@ -731,6 +731,7 @@ GSList *gschem_patch_state_execute(gschem_patch_state_t *st, GSList *diffs)
 {
 	GList *i, *onet, *net;
 	GSList *pins, *comps;
+	int found;
 
 	for (i = st->lines; i != NULL; i = g_list_next (i)) {
 		gschem_patch_line_t *l = i->data;
@@ -756,8 +757,14 @@ GSList *gschem_patch_state_execute(gschem_patch_state_t *st, GSList *diffs)
 				break;
 			case GSCHEM_PATCH_CHANGE_ATTRIB:
 				comps = g_hash_table_lookup(st->comps, l->id);
-				for(;comps != NULL; comps = g_slist_next(comps))
+				for(found = 0;comps != NULL; comps = g_slist_next(comps)) {
 					diffs = exec_check_attrib(diffs, l, (OBJECT *)comps->data);
+					found++;
+				}
+				if (found == NULL) {
+					gchar *msg = g_strdup_printf("%s (NOT FOUND): change attribute %s to %s", l->id, l->arg1.attrib_name, l->arg2.attrib_val);
+					diffs = add_hit(diffs, NULL, msg);
+				}
 				break;
 			case GSCHEM_PATCH_NET_INFO:
 				/* just ignore them, we've already built data structs while parsing */
