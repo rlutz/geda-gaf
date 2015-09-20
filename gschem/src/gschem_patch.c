@@ -468,9 +468,8 @@ static gboolean free_key_list(gpointer key, gpointer value, gpointer user_data)
 
 void gschem_patch_state_destroy(gschem_patch_state_t *st)
 {
-#warning TODO: check why freeing the list causes double free
-//	g_hash_table_foreach_remove(st->pins, free_key_list, NULL);
-//	g_hash_table_foreach_remove(st->comps, free_key_list, NULL);
+	g_hash_table_foreach_remove(st->pins, free_key_list, NULL);
+	g_hash_table_foreach_remove(st->comps, free_key_list, NULL);
 	g_hash_table_destroy(st->nets);
 	g_hash_table_destroy(st->pins);
 	g_hash_table_destroy(st->comps);
