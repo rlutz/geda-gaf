@@ -284,6 +284,7 @@ static void
 assign_store_patch (GschemFindTextState *state, GSList *objects)
 {
   GSList *object_iter;
+	static const char *UNKNOWN_FILE_NAME = "N/A";
 
   g_return_if_fail (state != NULL);
   g_return_if_fail (state->store != NULL);
@@ -306,12 +307,23 @@ assign_store_patch (GschemFindTextState *state, GSList *objects)
        */
  {
       OBJECT *page_obj;
-      GList *i, *l = o_attrib_return_attribs (hit->object);
+      GList *i, *l;
       int found_pin;
 
+      if (hit->object != NULL)
+        l = o_attrib_return_attribs (hit->object);
+      else
+        l = NULL;
+
       if (l == NULL) {
-        g_warning ("NULL attrib list");
-        continue;
+        gtk_list_store_append (state->store, &tree_iter);
+        gtk_list_store_set (state->store,
+                            &tree_iter,
+                            COLUMN_FILENAME, UNKNOWN_FILE_NAME,
+                            COLUMN_STRING, hit->text,
+                            COLUMN_OBJECT, final_object,
+                            -1);
+        goto next;
       }
 
 
@@ -327,32 +339,43 @@ assign_store_patch (GschemFindTextState *state, GSList *objects)
         }
       }
       g_list_free(l);
-#warning TODO: do not continue; the message should be there and should not point to any object
       if (!found_pin) {
         g_warning ("no pin text to zoom to");
-        continue;
+        page_obj = final_object = NULL;
       }
 
       if (final_object == NULL) {
         g_warning ("no text attrib?");
-        continue;
+        page_obj = final_object = NULL;
       }
-      basename = g_path_get_basename (page_obj->page->page_filename);
-
+      if (page_obj != NULL)
+        basename = g_path_get_basename (page_obj->page->page_filename);
+      else
+        basename = NULL;
  }
     s_object_weak_ref (hit->object, (NotifyFunc) object_weakref_cb, state);
 
     gtk_list_store_append (state->store, &tree_iter);
 
-    gtk_list_store_set (state->store,
-                        &tree_iter,
-                        COLUMN_FILENAME, basename,
-                        COLUMN_STRING, hit->text,
-                        COLUMN_OBJECT, final_object,
-                        -1);
-
-    g_free (basename);
+    if (basename != NULL) {
+      gtk_list_store_set (state->store,
+                          &tree_iter,
+                          COLUMN_FILENAME, basename,
+                          COLUMN_STRING, hit->text,
+                          COLUMN_OBJECT, final_object,
+                          -1);
+      g_free (basename);
+    }
+    else {
+      gtk_list_store_set (state->store,
+                          &tree_iter,
+                          COLUMN_FILENAME, UNKNOWN_FILE_NAME,
+                          COLUMN_STRING, hit->text,
+                          COLUMN_OBJECT, final_object,
+                          -1);
+    }
     free(hit);
+    next:;
     object_iter->data = NULL;
     object_iter = g_slist_next (object_iter);
   }
