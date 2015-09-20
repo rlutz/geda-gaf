@@ -737,7 +737,7 @@ GSList *gschem_patch_state_execute(gschem_patch_state_t *st, GSList *diffs)
 {
 	GList *i, *onet, *net;
 	GSList *pins, *comps;
-	int found;
+	int found, del;
 
 	for (i = st->lines; i != NULL; i = g_list_next (i)) {
 		gschem_patch_line_t *l = i->data;
@@ -748,15 +748,20 @@ GSList *gschem_patch_state_execute(gschem_patch_state_t *st, GSList *diffs)
 		switch(l->op) {
 			case GSCHEM_PATCH_DEL_CONN:
 			case GSCHEM_PATCH_ADD_CONN:
+				del = (l->op == GSCHEM_PATCH_DEL_CONN);
+				net = onet = g_hash_table_lookup(st->nets, l->arg1.net_name);
 				pins = g_hash_table_lookup(st->pins, l->id);
 				if (pins == NULL) {
-					fprintf(stderr, "Patch references to non-existing pin %s\n", l->id);
-					break;
+					/* pin not found on open schematics */
+					gchar *msg = g_strdup_printf("%s pin %s (NOT FOUND) from net %s", (del ? "Disconnect" : "Connect"), l->id, l->arg1.net_name);
+					diffs = add_hit(diffs, NULL, msg);
+					exec_conn_pretend(l, &net, del);
 				}
-				net = onet = g_hash_table_lookup(st->nets, l->arg1.net_name);
-
-				for(;pins != NULL; pins = g_slist_next(pins))
-					diffs = exec_check_conn(diffs, l, (gschem_patch_pin_t *)pins->data, &net, (l->op == GSCHEM_PATCH_DEL_CONN));
+				else {
+					/* pin found */
+					for(;pins != NULL; pins = g_slist_next(pins))
+						diffs = exec_check_conn(diffs, l, (gschem_patch_pin_t *)pins->data, &net, del);
+				}
 
 				if (net != onet) /* executing a diff may update the list */
 					g_hash_table_insert(st->nets, l->arg1.net_name, net);
