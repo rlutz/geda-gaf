@@ -597,6 +597,21 @@ static void exec_print_conns(GHashTable *connections)
 }
 #endif
 
+static void exec_conn_pretend(gschem_patch_line_t *patch, GList **net, int del)
+{
+	if (del) {
+		GList *np;
+		for(np = *net; np != NULL;) {
+			const char *lname = np->data;
+			np = g_list_next(np);
+			if (strcmp(lname, patch->id) == 0)
+				*net = g_list_remove(*net, lname);
+		}
+	}
+	else
+		*net = g_list_prepend(*net, patch->id);
+}
+
 #define enlarge(to) \
 do { \
 	if (to > alloced) { \
@@ -692,16 +707,7 @@ static GSList *exec_check_conn(GSList *diffs, gschem_patch_line_t *patch, gschem
 		free(buff);
 
 	/* pretend that the item is resolved: update patch netlists */
-	if (del) {
-		for(np = *net; np != NULL;) {
-			const char *lname = np->data;
-			np = g_list_next(np);
-			if (strcmp(lname, patch->id) == 0)
-				*net = g_list_remove(*net, lname);
-		}
-	}
-	else
-		*net = g_list_prepend(*net, patch->id);
+	exec_conn_pretend(patch, net, del);
 
 	if (msg != NULL) {
 		g_string_prepend(msg, patch->id);
@@ -761,7 +767,7 @@ GSList *gschem_patch_state_execute(gschem_patch_state_t *st, GSList *diffs)
 					diffs = exec_check_attrib(diffs, l, (OBJECT *)comps->data);
 					found++;
 				}
-				if (found == NULL) {
+				if (found == 0) {
 					gchar *msg = g_strdup_printf("%s (NOT FOUND): change attribute %s to %s", l->id, l->arg1.attrib_name, l->arg2.attrib_val);
 					diffs = add_hit(diffs, NULL, msg);
 				}
