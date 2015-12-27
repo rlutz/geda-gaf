@@ -59,7 +59,7 @@ void m_polygon_append_point(GArray *points, int x, int y);
 
 
 /* o_arc_basic.c */
-OBJECT *o_arc_new(TOPLEVEL *toplevel, char type, int color, int x, int y, int radius, int start_angle, int end_angle);
+OBJECT *o_arc_new(TOPLEVEL *toplevel, char type, int color, int x, int y, int radius, int start_angle, int sweep_angle);
 OBJECT *o_arc_copy(TOPLEVEL *toplevel, OBJECT *o_current);
 void o_arc_modify(TOPLEVEL *toplevel, OBJECT *object, int x, int y, int whichone);
 void o_arc_translate_world(OBJECT *object, int dx, int dy);

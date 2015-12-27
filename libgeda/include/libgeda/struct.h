@@ -130,13 +130,13 @@ struct st_arc {
   int height;
 
   int start_angle;
-  int end_angle;
+  int sweep_angle;
 };
 
 #define ARC_CENTER 0
 #define ARC_RADIUS 1
 #define ARC_START_ANGLE 2
-#define ARC_END_ANGLE 3
+#define ARC_SWEEP_ANGLE 3
 
 struct st_bezier {
   int x[4];
