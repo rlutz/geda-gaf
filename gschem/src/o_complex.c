@@ -191,13 +191,12 @@ void o_complex_translate_all(GschemToplevel *w_current, int offset)
 
   if (offset == 0) {
     s_log_message(_("Translating schematic [%d %d]\n"), -x, -y);
-    o_glist_translate_world (toplevel, -x, -y,
-                             s_page_objects (toplevel->page_current));
+    o_glist_translate_world (s_page_objects (toplevel->page_current), -x, -y);
   } else {
     s_log_message(_("Translating schematic [%d %d]\n"),
                   offset, offset);
-    o_glist_translate_world (toplevel, offset, offset,
-                             s_page_objects (toplevel->page_current));
+    o_glist_translate_world (s_page_objects (toplevel->page_current),
+                             offset, offset);
   }
 
   for (iter = s_page_objects (toplevel->page_current);

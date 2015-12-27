@@ -612,7 +612,7 @@ OBJECT *o_complex_new(TOPLEVEL *toplevel,
       }
       
       o_glist_rotate_world (toplevel, 0, 0, angle, new_node->complex->prim_objs);
-      o_glist_translate_world (toplevel, x, y, new_node->complex->prim_objs);
+      o_glist_translate_world (new_node->complex->prim_objs, x, y);
     }
 
     g_free (buffer);
@@ -796,13 +796,11 @@ char *o_complex_save(TOPLEVEL *toplevel, OBJECT *object)
  *  \par Function Description
  *  This function changes the position of a complex \a object.
  *
- *  \param [in] toplevel     The TOPLEVEL object
+ *  \param [ref] object      The complex OBJECT to be moved
  *  \param [in] dx           The x-distance to move the object
  *  \param [in] dy           The y-distance to move the object
- *  \param [in] object       The complex OBJECT to be moved
  */
-void o_complex_translate_world(TOPLEVEL *toplevel, int dx, int dy,
-                               OBJECT *object)
+void o_complex_translate_world(OBJECT *object, int dx, int dy)
 {
   g_return_if_fail (object != NULL &&
                     (object->type == OBJ_COMPLEX ||
@@ -811,7 +809,7 @@ void o_complex_translate_world(TOPLEVEL *toplevel, int dx, int dy,
   object->complex->x = object->complex->x + dx;
   object->complex->y = object->complex->y + dy;
 
-  o_glist_translate_world (toplevel, dx, dy, object->complex->prim_objs);
+  o_glist_translate_world (object->complex->prim_objs, dx, dy);
 
   object->w_bounds_valid_for = NULL;
 }
@@ -903,15 +901,15 @@ void o_complex_rotate_world(TOPLEVEL *toplevel,
   x = newx + (centerx);
   y = newy + (centery);
 
-  o_complex_translate_world(toplevel,
+  o_complex_translate_world(object,
                             -object->complex->x,
-                            -object->complex->y, object);
+                            -object->complex->y);
   o_glist_rotate_world (toplevel, 0, 0, angle, object->complex->prim_objs);
 
   object->complex->x = 0;
   object->complex->y = 0;
 
-  o_complex_translate_world(toplevel, x, y, object);
+  o_complex_translate_world(object, x, y);
 
   object->complex->angle = ( object->complex->angle + angle ) % 360;
 }
@@ -936,9 +934,9 @@ void o_complex_mirror_world(TOPLEVEL *toplevel,
   x = 2 * world_centerx - object->complex->x;
   y = object->complex->y;
 
-  o_complex_translate_world(toplevel,
+  o_complex_translate_world(object,
                             -object->complex->x,
-                            -object->complex->y, object);
+                            -object->complex->y);
 
   o_glist_mirror_world (toplevel, 0, 0, object->complex->prim_objs);
 
@@ -955,7 +953,7 @@ void o_complex_mirror_world(TOPLEVEL *toplevel,
 
   object->complex->mirror = !object->complex->mirror;
 
-  o_complex_translate_world(toplevel, x, y, object);
+  o_complex_translate_world(object, x, y);
 }
 
 

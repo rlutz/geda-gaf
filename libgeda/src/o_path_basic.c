@@ -363,13 +363,11 @@ void o_path_modify (TOPLEVEL *toplevel, OBJECT *object,
  *  This function applies a translation of (<B>x1</B>,<B>y1</B>) to the path
  *  described by <B>*object</B>. <B>x1</B> and <B>y1</B> are in world unit.
  *
- *  \param [in]     toplevel  The TOPLEVEL object.
+ *  \param [in,out] object     Line OBJECT to translate.
  *  \param [in]     dx         x distance to move.
  *  \param [in]     dy         y distance to move.
- *  \param [in,out] object     Line OBJECT to translate.
  */
-void o_path_translate_world (TOPLEVEL *toplevel,
-                             int dx, int dy, OBJECT *object)
+void o_path_translate_world (OBJECT *object, int dx, int dy)
 {
   PATH_SECTION *section;
   int i;

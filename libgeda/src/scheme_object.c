@@ -2082,7 +2082,7 @@ SCM_DEFINE (translate_object_x, "%translate-object!", 3, 0, 0,
   int dy = scm_to_int (dy_s);
 
   o_emit_pre_change_notify (toplevel, obj);
-  o_translate_world (toplevel, dx, dy, obj);
+  o_translate_world (obj, dx, dy);
   o_emit_change_notify (toplevel, obj);
   o_page_changed (toplevel, obj);
 

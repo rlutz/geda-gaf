@@ -336,14 +336,13 @@ gboolean o_get_position (TOPLEVEL *toplevel, gint *x, gint *y, OBJECT *object)
  *  This function translates the object <B>object</B> by
  *  <B>dx</B> and <B>dy</B>.
  *
- *  \param [in] toplevel The toplevel environment.
+ *  \param [in] object   The object to translate.
  *  \param [in] dx       Amount to horizontally translate object
  *  \param [in] dy       Amount to vertically translate object
- *  \param [in] object   The object to translate.
  */
-void o_translate_world (TOPLEVEL *toplevel, gint dx, gint dy, OBJECT *object)
+void o_translate_world (OBJECT *object, gint dx, gint dy)
 {
-  void (*func) (TOPLEVEL*, int, int, OBJECT*) = NULL;
+  void (*func) (OBJECT*, int, int) = NULL;
 
   switch (object->type) {
       case OBJ_LINE:    func = o_line_translate_world;    break;
@@ -364,7 +363,7 @@ void o_translate_world (TOPLEVEL *toplevel, gint dx, gint dy, OBJECT *object)
   }
 
   if (func != NULL) {
-    (*func) (toplevel, dx, dy, object);
+    (*func) (object, dx, dy);
   }
 }
 

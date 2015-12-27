@@ -487,21 +487,19 @@ void o_text_recreate(TOPLEVEL *toplevel, OBJECT *o_current)
 
 /*! \brief move a text object
  *  \par Function Description
- *  This function changes the position of a text object \a o_current.
+ *  This function changes the position of a text object.
  *
- *  \param [in] toplevel     The TOPLEVEL object
+ *  \param [ref] object      The text OBJECT to be moved
  *  \param [in] dx           The x-distance to move the object
  *  \param [in] dy           The y-distance to move the object
- *  \param [in] o_current    The text OBJECT to be moved
  */
-void o_text_translate_world(TOPLEVEL *toplevel,
-                            int dx, int dy, OBJECT *o_current)
+void o_text_translate_world(OBJECT *object, int dx, int dy)
 {
-  o_current->text->x = o_current->text->x + dx;
-  o_current->text->y = o_current->text->y + dy;
+  object->text->x = object->text->x + dx;
+  object->text->y = object->text->y + dy;
 
   /* Update bounding box */
-  o_current->w_bounds_valid_for = NULL;
+  object->w_bounds_valid_for = NULL;
 }
 
 /*! \brief create a copy of a text object
@@ -560,7 +558,7 @@ void o_text_rotate_world(TOPLEVEL *toplevel,
   x = newx + (world_centerx);
   y = newy + (world_centery);
 
-  o_text_translate_world(toplevel, x-object->text->x, y-object->text->y, object);
+  o_text_translate_world(object, x-object->text->x, y-object->text->y);
 
   o_text_recreate(toplevel, object);
 }
