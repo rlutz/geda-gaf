@@ -345,9 +345,9 @@ char *o_arc_save(TOPLEVEL *toplevel, OBJECT *object)
  */
 void o_arc_translate_world(OBJECT *object, int dx, int dy)
 {
-  if (object == NULL) {
-    return;
-  }
+  g_return_if_fail (object != NULL);
+  g_return_if_fail (object->arc != NULL);
+  g_return_if_fail (object->type == OBJ_ARC);
 
   /* Do world coords */
   object->arc->x = object->arc->x + dx;
@@ -383,6 +383,10 @@ void o_arc_rotate_world(TOPLEVEL *toplevel,
 			OBJECT *object)
 {
   int x, y, newx, newy;
+
+  g_return_if_fail (object != NULL);
+  g_return_if_fail (object->arc != NULL);
+  g_return_if_fail (object->type == OBJ_ARC);
 
   /* translate object to origin */
   object->arc->x -= world_centerx;
@@ -433,6 +437,10 @@ void o_arc_mirror_world(TOPLEVEL *toplevel,
 			int world_centerx, int world_centery,
 			OBJECT *object)
 {
+  g_return_if_fail (object != NULL);
+  g_return_if_fail (object->arc != NULL);
+  g_return_if_fail (object->type == OBJ_ARC);
+
   /* translate object to origin */
   object->arc->x -= world_centerx;
   object->arc->y -= world_centery;

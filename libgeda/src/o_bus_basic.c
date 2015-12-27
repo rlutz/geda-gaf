@@ -193,6 +193,10 @@ char *o_bus_save(TOPLEVEL *toplevel, OBJECT *object)
  */
 void o_bus_translate_world(OBJECT *object, int dx, int dy)
 {
+  g_return_if_fail (object != NULL);
+  g_return_if_fail (object->line != NULL);
+  g_return_if_fail (object->type == OBJ_BUS);
+
   /* Update world coords */
   object->line->x[0] = object->line->x[0] + dx;
   object->line->y[0] = object->line->y[0] + dy;
@@ -245,6 +249,10 @@ void o_bus_rotate_world(TOPLEVEL *toplevel,
 {
   int newx, newy;
 
+  g_return_if_fail (object != NULL);
+  g_return_if_fail (object->line != NULL);
+  g_return_if_fail (object->type == OBJ_BUS);
+
   if (angle == 0)
   return;
 
@@ -279,6 +287,10 @@ void o_bus_rotate_world(TOPLEVEL *toplevel,
 void o_bus_mirror_world(TOPLEVEL *toplevel,
 			int world_centerx, int world_centery, OBJECT *object)
 {
+  g_return_if_fail (object != NULL);
+  g_return_if_fail (object->line != NULL);
+  g_return_if_fail (object->type == OBJ_BUS);
+
   /* translate object to origin */
   o_bus_translate_world(object, -world_centerx, -world_centery);
 

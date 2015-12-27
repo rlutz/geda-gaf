@@ -433,6 +433,10 @@ char *o_box_save(TOPLEVEL *toplevel, OBJECT *object)
  */
 void o_box_translate_world(OBJECT *object, int dx, int dy)
 {
+  g_return_if_fail (object != NULL);
+  g_return_if_fail (object->box != NULL);
+  g_return_if_fail (object->type == OBJ_BOX);
+
   /* Do world coords */
   object->box->upper_x = object->box->upper_x + dx;
   object->box->upper_y = object->box->upper_y + dy;
@@ -463,6 +467,10 @@ void o_box_rotate_world(TOPLEVEL *toplevel,
 {
   int newx1, newy1;
   int newx2, newy2;
+
+  g_return_if_fail (object != NULL);
+  g_return_if_fail (object->box != NULL);
+  g_return_if_fail (object->type == OBJ_BOX);
 
   /*! \note
    *  Only 90 degree multiple and positive angles are allowed.
@@ -528,6 +536,10 @@ void o_box_mirror_world(TOPLEVEL *toplevel,
 {
   int newx1, newy1;
   int newx2, newy2;
+
+  g_return_if_fail (object != NULL);
+  g_return_if_fail (object->box != NULL);
+  g_return_if_fail (object->type == OBJ_BOX);
 
   /* translate object to origin */
   object->box->upper_x -= world_centerx;

@@ -495,6 +495,10 @@ void o_text_recreate(TOPLEVEL *toplevel, OBJECT *o_current)
  */
 void o_text_translate_world(OBJECT *object, int dx, int dy)
 {
+  g_return_if_fail (object != NULL);
+  g_return_if_fail (object->text != NULL);
+  g_return_if_fail (object->type == OBJ_TEXT);
+
   object->text->x = object->text->x + dx;
   object->text->y = object->text->y + dy;
 
@@ -545,8 +549,9 @@ void o_text_rotate_world(TOPLEVEL *toplevel,
   int x, y;
   int newx, newy;
 
-  g_return_if_fail(object != NULL);
-  g_return_if_fail(object->type == OBJ_TEXT);
+  g_return_if_fail (object != NULL);
+  g_return_if_fail (object->text != NULL);
+  g_return_if_fail (object->type == OBJ_TEXT);
 
   object->text->angle = ( object->text->angle + angle ) % 360;
 
@@ -580,7 +585,11 @@ void o_text_mirror_world(TOPLEVEL *toplevel,
 {
   int origx, origy;
   int x, y;
-	
+
+  g_return_if_fail (object != NULL);
+  g_return_if_fail (object->text != NULL);
+  g_return_if_fail (object->type == OBJ_TEXT);
+
   origx = object->text->x;
   origy = object->text->y;
 

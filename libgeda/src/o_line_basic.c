@@ -332,6 +332,10 @@ char *o_line_save(TOPLEVEL *toplevel, OBJECT *object)
  */
 void o_line_translate_world(OBJECT *object, int dx, int dy)
 {
+  g_return_if_fail (object != NULL);
+  g_return_if_fail (object->line != NULL);
+  g_return_if_fail (object->type == OBJ_LINE);
+
   /* Update world coords */
   object->line->x[0] = object->line->x[0] + dx;
   object->line->y[0] = object->line->y[0] + dy;
@@ -360,7 +364,11 @@ void o_line_rotate_world(TOPLEVEL *toplevel,
 			 OBJECT *object)
 {
   int newx, newy;
-	
+
+  g_return_if_fail (object != NULL);
+  g_return_if_fail (object->line != NULL);
+  g_return_if_fail (object->type == OBJ_LINE);
+
   if (angle == 0) 
     return;
 
@@ -413,6 +421,10 @@ void o_line_rotate_world(TOPLEVEL *toplevel,
 void o_line_mirror_world(TOPLEVEL *toplevel, int world_centerx,
 			 int world_centery, OBJECT *object)
 {
+  g_return_if_fail (object != NULL);
+  g_return_if_fail (object->line != NULL);
+  g_return_if_fail (object->type == OBJ_LINE);
+
   /* translate object to origin */
   o_line_translate_world(object, -world_centerx, -world_centery);
 

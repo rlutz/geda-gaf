@@ -372,6 +372,10 @@ void o_path_translate_world (OBJECT *object, int dx, int dy)
   PATH_SECTION *section;
   int i;
 
+  g_return_if_fail (object != NULL);
+  g_return_if_fail (object->path != NULL);
+  g_return_if_fail (object->type == OBJ_PATH);
+
   for (i = 0; i < object->path->num_sections; i++) {
     section = &object->path->sections[i];
 
@@ -418,6 +422,10 @@ void o_path_rotate_world (TOPLEVEL *toplevel,
   PATH_SECTION *section;
   int i;
 
+  g_return_if_fail (object != NULL);
+  g_return_if_fail (object->path != NULL);
+  g_return_if_fail (object->type == OBJ_PATH);
+
   for (i = 0; i < object->path->num_sections; i++) {
     section = &object->path->sections[i];
 
@@ -462,6 +470,10 @@ void o_path_mirror_world (TOPLEVEL *toplevel, int world_centerx,
 {
   PATH_SECTION *section;
   int i;
+
+  g_return_if_fail (object != NULL);
+  g_return_if_fail (object->path != NULL);
+  g_return_if_fail (object->type == OBJ_PATH);
 
   for (i = 0; i < object->path->num_sections; i++) {
     section = &object->path->sections[i];
