@@ -123,7 +123,6 @@ void o_bus_consolidate(TOPLEVEL *toplevel);
 void o_bus_modify(TOPLEVEL *toplevel, OBJECT *object, int x, int y, int whichone);
 
 /* o_circle_basic.c */
-int dist(int x1, int y1, int x2, int y2);
 OBJECT *o_circle_new(TOPLEVEL *toplevel, char type, int color, int x, int y, int radius);
 OBJECT *o_circle_copy(TOPLEVEL *toplevel, OBJECT *o_current);
 void o_circle_modify(TOPLEVEL *toplevel, OBJECT *object, int x, int y, int whichone);
