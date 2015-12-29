@@ -118,7 +118,6 @@ OBJECT *o_bus_copy(TOPLEVEL *toplevel, OBJECT *o_current);
 void o_bus_rotate_world(TOPLEVEL *toplevel, int world_centerx, int world_centery, int angle, OBJECT *object);
 void o_bus_mirror_world(TOPLEVEL *toplevel, int world_centerx, int world_centery, OBJECT *object);
 int o_bus_orientation(OBJECT *object);
-void o_bus_consolidate(TOPLEVEL *toplevel);
 void o_bus_modify(TOPLEVEL *toplevel, OBJECT *object, int x, int y, int whichone);
 
 /* o_circle_basic.c */

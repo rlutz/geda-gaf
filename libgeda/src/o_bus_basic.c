@@ -419,16 +419,6 @@ static int o_bus_consolidate_segments (TOPLEVEL *toplevel, OBJECT *object)
   return(0);
 }
 
-/* \brief
- * \par Function Description
- *
- * \todo Not Implemented Yet 
- */
-void o_bus_consolidate(TOPLEVEL *toplevel)
-{
-
-}
-
 /*! \brief modify one point of a bus object
  *  \par Function Description
  *  This function modifies one point of a bus \a object. The point
