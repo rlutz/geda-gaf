@@ -164,11 +164,10 @@ OBJECT *o_bus_read (TOPLEVEL *toplevel, const char buf[],
  *  This function takes a bus \a object and return a string
  *  according to the file format definition.
  *
- *  \param [in] toplevel  a TOPLEVEL structure
  *  \param [in] object  a bus OBJECT
  *  \return the string representation of the bus OBJECT
  */
-char *o_bus_save(TOPLEVEL *toplevel, OBJECT *object)
+char *o_bus_save(OBJECT *object)
 {
   int x1, x2, y1, y2;
   char *buf;

@@ -439,11 +439,10 @@ OBJECT *o_text_read (TOPLEVEL *toplevel,
  *  This function takes a text \a object and return a string
  *  according to the file format definition.
  *
- *  \param [in] toplevel  a TOPLEVEL structure
  *  \param [in] object  a text OBJECT
  *  \return the string representation of the text OBJECT
  */
-char *o_text_save(TOPLEVEL *toplevel, OBJECT *object)
+char *o_text_save(OBJECT *object)
 {
   int x, y;
   int size;

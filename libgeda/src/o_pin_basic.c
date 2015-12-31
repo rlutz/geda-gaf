@@ -167,11 +167,10 @@ OBJECT *o_pin_read (TOPLEVEL *toplevel, const char buf[],
  *  This function takes a pin \a object and return a string
  *  according to the file format definition.
  *
- *  \param [in] toplevel  a TOPLEVEL structure
  *  \param [in] object  a pin OBJECT
  *  \return the string representation of the pin OBJECT
  */
-char *o_pin_save(TOPLEVEL *toplevel, OBJECT *object)
+char *o_pin_save(OBJECT *object)
 {
   int x1, x2, y1, y2;
   int pin_type, whichend;

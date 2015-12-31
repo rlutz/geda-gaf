@@ -292,7 +292,6 @@ OBJECT *o_circle_read (TOPLEVEL *toplevel, const char buf[],
  *  It follows the post-20000704 release file format that handle the line
  *  type and fill options.
  *
- *  \param [in] toplevel  a TOPLEVEL structure.
  *  \param [in] object  Circle OBJECT to create string from.
  *  \return A pointer to the circle OBJECT character string.
  *
@@ -300,7 +299,7 @@ OBJECT *o_circle_read (TOPLEVEL *toplevel, const char buf[],
  *  Caller must g_free returned character string.
  *
  */
-char *o_circle_save(TOPLEVEL *toplevel, OBJECT *object)
+char *o_circle_save(OBJECT *object)
 {
   int x,y;
   int radius;

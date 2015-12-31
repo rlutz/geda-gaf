@@ -252,7 +252,6 @@ OBJECT *o_path_read (TOPLEVEL *toplevel,
  *  The function formats a string in the buffer <B>*buff</B> to describe
  *  the path object <B>*object</B>.
  *
- *  \param [in] toplevel  a TOPLEVEL structure
  *  \param [in] object  path OBJECT to create string from.
  *  \return A pointer to the path OBJECT character string.
  *
@@ -260,7 +259,7 @@ OBJECT *o_path_read (TOPLEVEL *toplevel,
  *  Caller must g_free returned character string.
  *
  */
-char *o_path_save (TOPLEVEL *toplevel, OBJECT *object)
+char *o_path_save (OBJECT *object)
 {
   int line_width, line_space, line_length;
   char *buf;

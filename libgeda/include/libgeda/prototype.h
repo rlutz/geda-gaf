@@ -2,7 +2,7 @@ G_BEGIN_DECLS
 
 /* a_basic.c */
 const gchar *o_file_format_header();
-gchar *o_save_buffer (TOPLEVEL *toplevel, const GList *object_list);
+gchar *o_save_buffer (const GList *object_list);
 int o_save (TOPLEVEL *toplevel, const GList *object_list, const char *filename, GError **err);
 GList *o_read_buffer(TOPLEVEL *toplevel, GList *object_list, char *buffer, const int size, const char *name, GError **err);
 GList *o_read(TOPLEVEL *toplevel, GList *object_list, char *filename, GError **err);
@@ -200,7 +200,7 @@ void o_picture_rotate_world(TOPLEVEL *toplevel, int world_centerx, int world_cen
 void o_picture_mirror_world(TOPLEVEL *toplevel, int world_centerx, int world_centery, OBJECT *object);
 void o_picture_translate_world(OBJECT *object, int dx, int dy);
 OBJECT *o_picture_copy(TOPLEVEL *toplevel, OBJECT *o_current) G_GNUC_WARN_UNUSED_RESULT;
-gboolean o_picture_is_embedded (TOPLEVEL *toplevel, OBJECT *object);
+gboolean o_picture_is_embedded (OBJECT *object);
 GdkPixbuf *o_picture_get_pixbuf (TOPLEVEL *toplevel, OBJECT *object) G_GNUC_WARN_UNUSED_RESULT;
 const char *o_picture_get_data (TOPLEVEL *toplevel, OBJECT *object,
                                 size_t *len);
@@ -209,7 +209,7 @@ gboolean o_picture_set_from_buffer (TOPLEVEL *toplevel, OBJECT *object,
                                     size_t len, GError **error);
 gboolean o_picture_set_from_file (TOPLEVEL *toplevel, OBJECT *object,
                                   const gchar *filename, GError **error);
-const gchar *o_picture_get_filename (TOPLEVEL *toplevel, OBJECT *object);
+const gchar *o_picture_get_filename (OBJECT *object);
 GdkPixbuf *o_picture_get_fallback_pixbuf (TOPLEVEL *toplevel) G_GNUC_WARN_UNUSED_RESULT;
 
 /* o_pin_basic.c */
