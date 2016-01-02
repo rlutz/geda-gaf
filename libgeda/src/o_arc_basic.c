@@ -81,8 +81,7 @@ OBJECT *o_arc_new(TOPLEVEL *toplevel,
   /* World coordinates */
   new_node->arc->x      = x; 
   new_node->arc->y      = y; 
-  new_node->arc->width  = 2 * radius;
-  new_node->arc->height = 2 * radius;
+  new_node->arc->radius = radius;
 
   /* must check the sign of start_angle, sweep_angle ... */
   if(sweep_angle < 0) {
@@ -126,7 +125,7 @@ OBJECT *o_arc_copy(TOPLEVEL *toplevel, OBJECT *o_current)
 
   new_obj = o_arc_new (toplevel, OBJ_ARC, o_current->color,
                        o_current->arc->x, o_current->arc->y,
-                       o_current->arc->width / 2,
+                       o_current->arc->radius,
                        o_current->arc->start_angle,
                        o_current->arc->sweep_angle);
   o_set_line_options(toplevel, new_obj,
@@ -179,8 +178,7 @@ void o_arc_modify(TOPLEVEL *toplevel, OBJECT *object,
 		
 		case ARC_RADIUS:
 		/* modify the radius of arc object */
-		object->arc->width  = 2 * x;
-		object->arc->height = 2 * x;
+		object->arc->radius = x;
 		break;
 
 		case ARC_START_ANGLE:
@@ -313,7 +311,7 @@ char *o_arc_save(OBJECT *object)
   OBJECT_TYPE arc_type;
 
   /* radius, center and angles of the arc */
-  radius      = object->arc->width / 2;
+  radius      = object->arc->radius;
   x           = object->arc->x;
   y           = object->arc->y;
   start_angle = object->arc->start_angle;
@@ -491,7 +489,7 @@ void world_get_arc_bounds(TOPLEVEL *toplevel, OBJECT *object, int *left,
 
   halfwidth = object->line_width / 2;
 
-  radius      = object->arc->width / 2;
+  radius      = object->arc->radius;
   start_angle = object->arc->start_angle;
   sweep_angle = object->arc->sweep_angle;
 
@@ -586,7 +584,7 @@ double o_arc_shortest_distance (TOPLEVEL *toplevel, OBJECT *object,
 
   g_return_val_if_fail (object->arc != NULL, G_MAXDOUBLE);
 
-  radius = ((double)object->arc->width) / 2.0;
+  radius = (double)object->arc->radius;
 
   if (o_arc_within_sweep (object->arc, x, y)) {
     double distance_to_center;

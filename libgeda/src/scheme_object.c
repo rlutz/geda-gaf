@@ -1261,7 +1261,7 @@ SCM_DEFINE (arc_info, "%arc-info", 1, 0, 0,
 
   return scm_list_n (scm_from_int (obj->arc->x),
                      scm_from_int (obj->arc->y),
-                     scm_from_int (obj->arc->width / 2),
+                     scm_from_int (obj->arc->radius),
                      scm_from_int (obj->arc->start_angle),
                      scm_from_int (obj->arc->sweep_angle),
                      scm_from_int (obj->color),

@@ -126,8 +126,7 @@ struct st_path {
 struct st_arc {
   int x, y; /* world */
 
-  int width;
-  int height;
+  int radius;
 
   int start_angle;
   int sweep_angle;
