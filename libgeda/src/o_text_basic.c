@@ -204,9 +204,7 @@ int o_text_num_lines(const char *string)
   const gchar *aux;
   gunichar current_char;
 
-  if (string == NULL) {
-    return 0;
-  }
+  g_return_val_if_fail (string != NULL, 0);
   
   /* if it's not null, then we have at least one line */
   line_count++;

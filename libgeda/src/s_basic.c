@@ -375,8 +375,7 @@ char *remove_nl(char *string)
 {
   int i;
 
-  if (!string)
-    return NULL;
+  g_return_val_if_fail (string != NULL, NULL);
   
   i = 0;
   while(string[i] != '\0' && string[i] != '\n' && string[i] != '\r') {
@@ -398,8 +397,7 @@ char *remove_last_nl(char *string)
 {
   int len;
 
-  if (!string)
-    return NULL;		
+  g_return_val_if_fail (string != NULL, NULL);
 
   len = strlen(string);
   if (string[len-1] == '\n' || string[len-1] == '\r')
