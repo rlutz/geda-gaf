@@ -185,7 +185,11 @@ char *o_pin_save(OBJECT *object)
   int x1, x2, y1, y2;
   int pin_type, whichend;
   char *buf;
-  
+
+  g_return_val_if_fail (object != NULL, NULL);
+  g_return_val_if_fail (object->line != NULL, NULL);
+  g_return_val_if_fail (object->type == OBJ_PIN, NULL);
+
   x1 = object->line->x[0];
   y1 = object->line->y[0];
   x2 = object->line->x[1];
@@ -234,6 +238,10 @@ void o_pin_translate_world(OBJECT *object, int dx, int dy)
 OBJECT *o_pin_copy(TOPLEVEL *toplevel, OBJECT *o_current)
 {
   OBJECT *new_obj;
+
+  g_return_if_fail (o_current != NULL);
+  g_return_if_fail (o_current->line != NULL);
+  g_return_if_fail (o_current->type == OBJ_PIN);
 
   new_obj = o_pin_new (toplevel, OBJ_PIN, o_current->color,
                        o_current->line->x[0], o_current->line->y[0],
@@ -329,6 +337,12 @@ void o_pin_mirror_world(TOPLEVEL *toplevel,
 void o_pin_modify(TOPLEVEL *toplevel, OBJECT *object,
 		  int x, int y, int whichone)
 {
+  g_return_if_fail (object != NULL);
+  g_return_if_fail (object->line != NULL);
+  g_return_if_fail (object->type == OBJ_PIN);
+  g_return_if_fail (object->whichend >= 0);
+  g_return_if_fail (object->whichend < 2);
+
   object->line->x[whichone] = x;
   object->line->y[whichone] = y;
 
@@ -480,6 +494,9 @@ void o_pin_update_whichend(TOPLEVEL *toplevel,
  */
 void o_pin_set_type (TOPLEVEL *toplevel, OBJECT *o_current, int pin_type)
 {
+  g_return_if_fail (o_current != NULL);
+  g_return_if_fail (o_current->type == OBJ_PIN);
+
   o_emit_pre_change_notify (toplevel, o_current);
   switch (pin_type) {
     default:
