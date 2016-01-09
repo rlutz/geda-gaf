@@ -365,12 +365,14 @@ s_object_remove_weak_ptr (OBJECT *object,
                                             weak_pointer_loc);
 }
 
-/*! \todo Finish function documentation!!!
- *  \brief
- *  \par Function Description
+/*! \brief Gets the first line of the string
  *
+ *  This function modifies the string in place, so statically allocated strings
+ *  cannot be passed to this function.
+ *
+ *  \param [in,out] string the input string, NUL terminated
+ *  \return the first line of the string with no ending newline
  */
-/* used by o_text_read */
 char *remove_nl(char *string)
 {
   int i;
