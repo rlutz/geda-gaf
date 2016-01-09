@@ -387,12 +387,18 @@ char *remove_nl(char *string)
   return(string);
 }
 
-/*! \todo Finish function documentation!!!
- *  \brief
- *  \par Function Description
+/*! \brief Remove the ending newline
  *
+ *  This function removes the ending newline from the string. If no newline
+ *  exists at the end of the string, this function returns the passed in
+ *  string.
+ *
+ *  This function modifies the string in place, so statically allocated strings
+ *  cannot be passed to this function.
+ *
+ *  \param [in,out] string the input string
+ *  \return the string with no ending newline
  */
-/* used by o_text_read */
 char *remove_last_nl(char *string)
 {
   int len;
@@ -400,7 +406,7 @@ char *remove_last_nl(char *string)
   g_return_val_if_fail (string != NULL, NULL);
 
   len = strlen(string);
-  if (string[len-1] == '\n' || string[len-1] == '\r')
+  if (len != 0 && (string[len-1] == '\n' || string[len-1] == '\r'))
     string[len-1] = '\0';
      
   return(string);
