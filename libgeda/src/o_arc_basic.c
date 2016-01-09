@@ -439,11 +439,9 @@ void o_arc_mirror_world(TOPLEVEL *toplevel,
 
   /* translate object to origin */
   object->arc->x -= world_centerx;
-  object->arc->y -= world_centery;
 
   /* get center, and mirror it (vertical mirror) */
   object->arc->x = -object->arc->x;
-  object->arc->y =  object->arc->y;
 
   /* apply mirror to angles (vertical mirror) */
   object->arc->start_angle = (180 - object->arc->start_angle) % 360;
@@ -453,7 +451,6 @@ void o_arc_mirror_world(TOPLEVEL *toplevel,
 	
   /* translate object back to its previous position */
   object->arc->x += world_centerx;
-  object->arc->y += world_centery;
 
   /* update the screen coords and bounding box */
   object->w_bounds_valid_for = NULL;
