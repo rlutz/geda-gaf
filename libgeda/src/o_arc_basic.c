@@ -310,6 +310,10 @@ char *o_arc_save(OBJECT *object)
   OBJECT_END arc_end;
   OBJECT_TYPE arc_type;
 
+  g_return_val_if_fail (object != NULL, NULL);
+  g_return_val_if_fail (object->arc != NULL, NULL);
+  g_return_val_if_fail (object->type == OBJ_ARC, NULL);
+
   /* radius, center and angles of the arc */
   radius      = object->arc->radius;
   x           = object->arc->x;
