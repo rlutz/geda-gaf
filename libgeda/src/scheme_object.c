@@ -1173,8 +1173,7 @@ SCM_DEFINE (make_arc, "%make-arc", 0, 0, 0,
             (), "Create a new arc object.")
 {
   OBJECT *obj = o_arc_new (edascm_c_current_toplevel (),
-                              OBJ_ARC, DEFAULT_COLOR,
-                           0, 0, 1, 0, 0);
+                           DEFAULT_COLOR, 0, 0, 1, 0, 0);
 
   SCM result = edascm_from_object (obj);
 

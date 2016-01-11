@@ -48,7 +48,6 @@
  *  Now fixed for world coordinates.
  *
  *  \param [in] toplevel    The TOPLEVEL object.
- *  \param [in] type
  *  \param [in] color
  *  \param [in] x
  *  \param [in] y
@@ -58,13 +57,13 @@
  *  \return
  */
 OBJECT *o_arc_new(TOPLEVEL *toplevel,
-		  char type, int color,
+		  int color,
 		  int x, int y, int radius, int start_angle, int sweep_angle)
 {
 
   OBJECT *new_node;
 
-  new_node = s_basic_new_object(type, "arc");
+  new_node = s_basic_new_object(OBJ_ARC, "arc");
 
   new_node->color = color;
 
@@ -123,7 +122,7 @@ OBJECT *o_arc_copy(TOPLEVEL *toplevel, OBJECT *o_current)
 {
   OBJECT *new_obj;
 
-  new_obj = o_arc_new (toplevel, OBJ_ARC, o_current->color,
+  new_obj = o_arc_new (toplevel, o_current->color,
                        o_current->arc->x, o_current->arc->y,
                        o_current->arc->radius,
                        o_current->arc->start_angle,
@@ -280,7 +279,7 @@ OBJECT *o_arc_read (TOPLEVEL *toplevel, const char buf[],
   }
 
   /* Allocation and initialization */
-  new_obj = o_arc_new(toplevel, OBJ_ARC, color,
+  new_obj = o_arc_new(toplevel, color,
                       x1, y1, radius, start_angle, sweep_angle);
   o_set_line_options(toplevel, new_obj,
                      arc_end, arc_type, arc_width, arc_length,
