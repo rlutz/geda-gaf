@@ -122,6 +122,10 @@ OBJECT *o_arc_copy(TOPLEVEL *toplevel, OBJECT *o_current)
 {
   OBJECT *new_obj;
 
+  g_return_val_if_fail (o_current != NULL, NULL);
+  g_return_val_if_fail (o_current->arc != NULL, NULL);
+  g_return_val_if_fail (o_current->type == OBJ_ARC, NULL);
+
   new_obj = o_arc_new (toplevel, o_current->color,
                        o_current->arc->x, o_current->arc->y,
                        o_current->arc->radius,
