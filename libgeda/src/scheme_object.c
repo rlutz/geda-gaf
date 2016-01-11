@@ -1079,8 +1079,7 @@ SCM_DEFINE (make_circle, "%make-circle", 0, 0, 0,
             (), "Create a new circle object.")
 {
   OBJECT *obj = o_circle_new (edascm_c_current_toplevel (),
-                              OBJ_CIRCLE, DEFAULT_COLOR,
-                              0, 0, 1);
+                              DEFAULT_COLOR, 0, 0, 1);
 
   SCM result = edascm_from_object (obj);
 

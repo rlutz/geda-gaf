@@ -121,7 +121,7 @@ int o_bus_orientation(OBJECT *object);
 void o_bus_modify(TOPLEVEL *toplevel, OBJECT *object, int x, int y, int whichone);
 
 /* o_circle_basic.c */
-OBJECT *o_circle_new(TOPLEVEL *toplevel, char type, int color, int x, int y, int radius);
+OBJECT *o_circle_new(TOPLEVEL *toplevel, int color, int x, int y, int radius);
 OBJECT *o_circle_copy(TOPLEVEL *toplevel, OBJECT *o_current);
 void o_circle_modify(TOPLEVEL *toplevel, OBJECT *object, int x, int y, int whichone);
 void o_circle_translate_world(OBJECT *object, int dx, int dy);

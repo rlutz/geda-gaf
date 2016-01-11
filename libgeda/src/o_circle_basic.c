@@ -47,7 +47,6 @@
  *  with #o_set_line_options() and #o_set_fill_options().
  *
  *  \param [in]     toplevel     The TOPLEVEL object.
- *  \param [in]     type         Must be OBJ_CIRCLE.
  *  \param [in]     color        Circle line color.
  *  \param [in]     x            Center x coordinate.
  *  \param [in]     y            Center y coordinate.
@@ -55,13 +54,12 @@
  *  \return A pointer to the new end of the object list.
  */
 OBJECT *o_circle_new(TOPLEVEL *toplevel,
-		     char type, int color,
-		     int x, int y, int radius)
+		     int color, int x, int y, int radius)
 {
   OBJECT *new_node;	
 
   /* create the object */
-  new_node = s_basic_new_object(type, "circle");
+  new_node = s_basic_new_object(OBJ_CIRCLE, "circle");
   new_node->color  = color;
   
   new_node->circle = (CIRCLE *) g_malloc(sizeof(CIRCLE));
@@ -98,7 +96,7 @@ OBJECT *o_circle_copy(TOPLEVEL *toplevel, OBJECT *o_current)
 
   /* A new circle object is created with #o_circle_new().
    * Values for its fields are default and need to be modified. */
-  new_obj = o_circle_new (toplevel, OBJ_CIRCLE, o_current->color, 0, 0, 0);
+  new_obj = o_circle_new (toplevel, o_current->color, 0, 0, 0);
 
   /*
    * The parameters of the new circle are set with the ones of the original
@@ -275,7 +273,7 @@ OBJECT *o_circle_read (TOPLEVEL *toplevel, const char buf[],
    * Its filling and line type are set according to the values of the field
    * on the line.
    */
-  new_obj = o_circle_new(toplevel, type, color, x1, y1, radius);
+  new_obj = o_circle_new(toplevel, color, x1, y1, radius);
   o_set_line_options(toplevel, new_obj,
 		     circle_end, circle_type, circle_width, 
 		     circle_length, circle_space);
