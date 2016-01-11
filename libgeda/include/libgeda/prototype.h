@@ -152,7 +152,7 @@ void o_embed(TOPLEVEL *toplevel, OBJECT *o_current);
 void o_unembed(TOPLEVEL *toplevel, OBJECT *o_current);
 
 /* o_line_basic.c */
-OBJECT *o_line_new(TOPLEVEL *toplevel, char type, int color, int x1, int y1, int x2, int y2);
+OBJECT *o_line_new(TOPLEVEL *toplevel, int color, int x1, int y1, int x2, int y2);
 OBJECT *o_line_copy(TOPLEVEL *toplevel, OBJECT *o_current);
 void o_line_modify(TOPLEVEL *toplevel, OBJECT *object, int x, int y, int whichone);
 void o_line_translate_world(OBJECT *object, int dx, int dy);

@@ -58,13 +58,12 @@
  *  \return A pointer to the new end of the object list.
  */
 OBJECT *o_line_new(TOPLEVEL *toplevel,
-		   char type, int color, 
-		   int x1, int y1, int x2, int y2)
+		   int color, int x1, int y1, int x2, int y2)
 {
   OBJECT *new_node;
 
   /* create the object */
-  new_node = s_basic_new_object(type, "line");
+  new_node = s_basic_new_object(OBJ_LINE, "line");
   new_node->color = color;
   
   new_node->line  = (LINE *) g_malloc(sizeof(LINE));
@@ -102,7 +101,7 @@ OBJECT *o_line_copy(TOPLEVEL *toplevel, OBJECT *o_current)
 
   /* A new line object is created with #o_line_new().
    * Values for its fields are default and need to be modified. */
-  new_obj = o_line_new (toplevel, OBJ_LINE, o_current->color,
+  new_obj = o_line_new (toplevel, o_current->color,
                         o_current->line->x[0], o_current->line->y[0],
                         o_current->line->x[1], o_current->line->y[1]);
 
@@ -265,7 +264,7 @@ OBJECT *o_line_read (TOPLEVEL *toplevel, const char buf[],
    * type is set according to the values of the fields on the line.
    */
   /* create and add the line to the list */
-  new_obj = o_line_new (toplevel, type, color, x1, y1, x2, y2);
+  new_obj = o_line_new (toplevel, color, x1, y1, x2, y2);
   /* set its line options */
   o_set_line_options (toplevel, new_obj,
                       line_end, line_type, line_width, line_length,

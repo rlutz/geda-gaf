@@ -698,8 +698,7 @@ SCM_DEFINE (make_line, "%make-line", 0, 0, 0,
             (), "Create a new line object.")
 {
   OBJECT *obj = o_line_new (edascm_c_current_toplevel (),
-                            OBJ_LINE, DEFAULT_COLOR,
-                            0, 0, 0, 0);
+                            DEFAULT_COLOR, 0, 0, 0, 0);
 
   SCM result = edascm_from_object (obj);
 

@@ -107,7 +107,7 @@ void o_line_end(GschemToplevel *w_current, int w_x, int w_y)
        (w_current->first_wy != w_current->second_wy) ) {
 
     /* create the line object and draw it */
-    new_obj = o_line_new (toplevel, OBJ_LINE, GRAPHIC_COLOR,
+    new_obj = o_line_new (toplevel, GRAPHIC_COLOR,
                           w_current->first_wx, w_current->first_wy,
                           w_current->second_wx, w_current->second_wy);
     s_page_append (toplevel, page, new_obj);
