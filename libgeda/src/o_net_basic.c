@@ -159,16 +159,17 @@ OBJECT *o_net_read (TOPLEVEL *toplevel, const char buf[],
  */
 char *o_net_save(OBJECT *object)
 {
-  int x1, x2, y1, y2;
-  char *buf;
+  g_return_val_if_fail (object != NULL, NULL);
+  g_return_val_if_fail (object->line != NULL, NULL);
+  g_return_val_if_fail (object->type == OBJ_NET, NULL);
 
-  x1 = object->line->x[0];
-  y1 = object->line->y[0];
-  x2 = object->line->x[1];
-  y2 = object->line->y[1];
-
-  buf = g_strdup_printf("%c %d %d %d %d %d", object->type, x1, y1, x2, y2, object->color);
-  return (buf);
+  return g_strdup_printf ("%c %d %d %d %d %d",
+                          OBJ_NET,
+                          object->line->x[0],
+                          object->line->y[0],
+                          object->line->x[1],
+                          object->line->y[1],
+                          object->color);
 }
 
 /*! \brief move a net object
