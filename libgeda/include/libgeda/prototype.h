@@ -112,7 +112,7 @@ void o_box_rotate_world(TOPLEVEL *toplevel, int world_centerx, int world_centery
 void o_box_mirror_world(TOPLEVEL *toplevel, int world_centerx, int world_centery, OBJECT *object);
 
 /* o_bus_basic.c */
-OBJECT *o_bus_new(TOPLEVEL *toplevel, char type, int color, int x1, int y1, int x2, int y2, int bus_ripper_direction);
+OBJECT *o_bus_new(TOPLEVEL *toplevel, int color, int x1, int y1, int x2, int y2, int bus_ripper_direction);
 void o_bus_translate_world(OBJECT *object, int dx, int dy);
 OBJECT *o_bus_copy(TOPLEVEL *toplevel, OBJECT *o_current);
 void o_bus_rotate_world(TOPLEVEL *toplevel, int world_centerx, int world_centery, int angle, OBJECT *object);

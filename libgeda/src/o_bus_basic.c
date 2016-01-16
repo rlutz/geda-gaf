@@ -76,7 +76,6 @@ void world_get_bus_bounds(TOPLEVEL *toplevel, OBJECT *object, int *left, int *to
  *  This function creates and returns a new bus object.
  *  
  *  \param [in]     toplevel    The TOPLEVEL object.
- *  \param [in]     type        The OBJECT type (usually OBJ_BUS)
  *  \param [in]     color       The color of the bus
  *  \param [in]     x1          x-coord of the first point
  *  \param [in]     y1          y-coord of the first point
@@ -86,13 +85,13 @@ void world_get_bus_bounds(TOPLEVEL *toplevel, OBJECT *object, int *left, int *to
  *  \return A new bus OBJECT
  */
 OBJECT *o_bus_new(TOPLEVEL *toplevel,
-		  char type, int color,
+		  int color,
 		  int x1, int y1, int x2, int y2,
 		  int bus_ripper_direction)
 {
   OBJECT *new_node;
 
-  new_node = s_basic_new_object(type, "bus");
+  new_node = s_basic_new_object(OBJ_BUS, "bus");
   new_node->color = color;
 
   new_node->line = (LINE *) g_malloc(sizeof(LINE));
@@ -164,7 +163,7 @@ OBJECT *o_bus_read (TOPLEVEL *toplevel, const char buf[],
     ripper_dir = 0;
   }
 
-  new_obj = o_bus_new (toplevel, type, color, x1, y1, x2, y2, ripper_dir);
+  new_obj = o_bus_new (toplevel, color, x1, y1, x2, y2, ripper_dir);
 
   return new_obj;
 }
@@ -233,7 +232,7 @@ OBJECT *o_bus_copy(TOPLEVEL *toplevel, OBJECT *o_current)
   /* still doesn't work... you need to pass in the new values */
   /* or don't update and update later */
   /* I think for now I'll disable the update and manually update */
-  new_obj = o_bus_new (toplevel, OBJ_BUS, o_current->color,
+  new_obj = o_bus_new (toplevel, o_current->color,
                        o_current->line->x[0], o_current->line->y[0],
                        o_current->line->x[1], o_current->line->y[1],
                        o_current->bus_ripper_direction);
