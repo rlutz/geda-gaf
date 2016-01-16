@@ -223,18 +223,22 @@ void o_bus_translate_world(OBJECT *object, int dx, int dy)
  *  \param [in] o_current    The object that is copied
  *  \return a new bus object
  */
-OBJECT *o_bus_copy(TOPLEVEL *toplevel, OBJECT *o_current)
+OBJECT *o_bus_copy(TOPLEVEL *toplevel, OBJECT *object)
 {
   OBJECT *new_obj;
+
+  g_return_if_fail (object != NULL);
+  g_return_if_fail (object->line != NULL);
+  g_return_if_fail (object->type == OBJ_BUS);
 
   /* make sure you fix this in pin and bus as well */
   /* still doesn't work... you need to pass in the new values */
   /* or don't update and update later */
   /* I think for now I'll disable the update and manually update */
-  new_obj = o_bus_new (toplevel, o_current->color,
-                       o_current->line->x[0], o_current->line->y[0],
-                       o_current->line->x[1], o_current->line->y[1],
-                       o_current->bus_ripper_direction);
+  new_obj = o_bus_new (toplevel, object->color,
+                       object->line->x[0], object->line->y[0],
+                       object->line->x[1], object->line->y[1],
+                       object->bus_ripper_direction);
 
   return new_obj;
 }
@@ -260,9 +264,10 @@ void o_bus_rotate_world(TOPLEVEL *toplevel,
   g_return_if_fail (object != NULL);
   g_return_if_fail (object->line != NULL);
   g_return_if_fail (object->type == OBJ_BUS);
+  g_return_if_fail (angle % 90 == 0);
 
   if (angle == 0)
-  return;
+    return;
 
   /* translate object to origin */
   o_bus_translate_world(object, -world_centerx, -world_centery);
@@ -318,6 +323,10 @@ void o_bus_mirror_world(TOPLEVEL *toplevel,
  */
 int o_bus_orientation(OBJECT *object)
 {
+  g_return_val_if_fail (object != NULL, NEITHER);
+  g_return_val_if_fail (object->line != NULL, NEITHER);
+  g_return_val_if_fail (object->type == OBJ_BUS, NEITHER);
+
   if (object->line->y[0] == object->line->y[1]) {
     return(HORIZONTAL);
   }
@@ -344,6 +353,12 @@ int o_bus_orientation(OBJECT *object)
 void o_bus_modify(TOPLEVEL *toplevel, OBJECT *object,
 		  int x, int y, int whichone)
 {
+  g_return_if_fail (object != NULL);
+  g_return_if_fail (object->line != NULL);
+  g_return_if_fail (object->type == OBJ_BUS);
+  g_return_if_fail (whichone >= LINE_END1);
+  g_return_if_fail (whichone <= LINE_END2);
+
   object->line->x[whichone] = x;
   object->line->y[whichone] = y;
 
