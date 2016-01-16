@@ -67,7 +67,7 @@ void o_pin_end(GschemToplevel *w_current, int x, int y)
     return;
   }
 
-  new_obj = o_pin_new(toplevel, OBJ_PIN, PIN_COLOR,
+  new_obj = o_pin_new(toplevel, PIN_COLOR,
                       w_current->first_wx, w_current->first_wy,
                       w_current->second_wx, w_current->second_wy,
                       PIN_TYPE_NET, 0);

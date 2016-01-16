@@ -78,7 +78,6 @@ gboolean o_pin_get_position (OBJECT *object, gint *x, gint *y)
  *  This function creates and returns a new pin object.
  *  
  *  \param [in]     toplevel    The TOPLEVEL object.
- *  \param [in]     type        The OBJECT type (usually OBJ_PIN)
  *  \param [in]     color       The color of the pin
  *  \param [in]     x1          x-coord of the first point
  *  \param [in]     y1          y-coord of the first point
@@ -89,12 +88,12 @@ gboolean o_pin_get_position (OBJECT *object, gint *x, gint *y)
  *  \return A new pin OBJECT
  */
 OBJECT *o_pin_new(TOPLEVEL *toplevel,
-		  char type, int color,
+		  int color,
 		  int x1, int y1, int x2, int y2, int pin_type, int whichend)
 {
   OBJECT *new_node;
 
-  new_node = s_basic_new_object(type, "pin");
+  new_node = s_basic_new_object(OBJ_PIN, "pin");
   new_node->color = color;
 
   new_node->line = (LINE *) g_malloc(sizeof(LINE));
@@ -166,7 +165,7 @@ OBJECT *o_pin_read (TOPLEVEL *toplevel, const char buf[],
     color = DEFAULT_COLOR;
   }
 
-  new_obj = o_pin_new (toplevel, type, color, x1, y1, x2, y2,
+  new_obj = o_pin_new (toplevel, color, x1, y1, x2, y2,
                        pin_type, whichend);
 
   return new_obj;
@@ -242,7 +241,7 @@ OBJECT *o_pin_copy(TOPLEVEL *toplevel, OBJECT *o_current)
   g_return_val_if_fail (o_current->line != NULL, NULL);
   g_return_val_if_fail (o_current->type == OBJ_PIN, NULL);
 
-  new_obj = o_pin_new (toplevel, OBJ_PIN, o_current->color,
+  new_obj = o_pin_new (toplevel, o_current->color,
                        o_current->line->x[0], o_current->line->y[0],
                        o_current->line->x[1], o_current->line->y[1],
                        o_current->pin_type, o_current->whichend);

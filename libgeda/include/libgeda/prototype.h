@@ -213,7 +213,7 @@ const gchar *o_picture_get_filename (OBJECT *object);
 GdkPixbuf *o_picture_get_fallback_pixbuf (TOPLEVEL *toplevel) G_GNUC_WARN_UNUSED_RESULT;
 
 /* o_pin_basic.c */
-OBJECT *o_pin_new(TOPLEVEL *toplevel, char type, int color, int x1, int y1, int x2, int y2, int pin_type, int whichend);
+OBJECT *o_pin_new(TOPLEVEL *toplevel, int color, int x1, int y1, int x2, int y2, int pin_type, int whichend);
 void o_pin_translate_world(OBJECT *object, int dx, int dy);
 OBJECT *o_pin_copy(TOPLEVEL *toplevel, OBJECT *o_current);
 void o_pin_rotate_world(TOPLEVEL *toplevel, int world_centerx, int world_centery, int angle, OBJECT *object);
