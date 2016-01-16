@@ -89,31 +89,26 @@ OBJECT *o_circle_new(TOPLEVEL *toplevel,
  *  \param [in]  o_current  Circle OBJECT to copy.
  *  \return The new OBJECT
  */
-OBJECT *o_circle_copy(TOPLEVEL *toplevel, OBJECT *o_current)
+OBJECT *o_circle_copy(TOPLEVEL *toplevel, OBJECT *object)
 {
   OBJECT *new_obj;
 
-  /* A new circle object is created with #o_circle_new().
-   * Values for its fields are default and need to be modified. */
-  new_obj = o_circle_new (toplevel, o_current->color, 0, 0, 0);
+  g_return_val_if_fail (object != NULL, NULL);
+  g_return_val_if_fail (object->circle != NULL, NULL);
+  g_return_val_if_fail (object->type == OBJ_CIRCLE, NULL);
 
-  /*
-   * The parameters of the new circle are set with the ones of the original
-   * circle. The two circle have the same line type and the same filling
-   * options.
-   */
-  /* modify */
-  new_obj->circle->center_x = o_current->circle->center_x;
-  new_obj->circle->center_y = o_current->circle->center_y;
-  new_obj->circle->radius   = o_current->circle->radius;
+  new_obj = o_circle_new (toplevel, object->color,
+                                    object->circle->center_x,
+                                    object->circle->center_y,
+                                    object->circle->radius);
   
-  o_set_line_options(toplevel, new_obj, o_current->line_end,
-		     o_current->line_type, o_current->line_width,
-		     o_current->line_length, o_current->line_space);
+  o_set_line_options(toplevel, new_obj, object->line_end,
+		     object->line_type, object->line_width,
+		     object->line_length, object->line_space);
   o_set_fill_options(toplevel, new_obj,
-		     o_current->fill_type, o_current->fill_width,
-		     o_current->fill_pitch1, o_current->fill_angle1,
-		     o_current->fill_pitch2, o_current->fill_angle2);
+		     object->fill_type, object->fill_width,
+		     object->fill_pitch1, object->fill_angle1,
+		     object->fill_pitch2, object->fill_angle2);
   
   new_obj->w_bounds_valid_for = NULL;
 
@@ -511,7 +506,9 @@ double o_circle_shortest_distance (TOPLEVEL *toplevel, OBJECT *object,
 {
   int solid;
 
+  g_return_val_if_fail (object != NULL, FALSE);
   g_return_val_if_fail (object->circle != NULL, G_MAXDOUBLE);
+  g_return_val_if_fail (object->type == OBJ_CIRCLE, FALSE);
 
   solid = force_solid || object->fill_type != FILLING_HOLLOW;
 
