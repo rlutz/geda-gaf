@@ -389,7 +389,6 @@ SCM_DEFINE (page_to_string, "%page->string", 1, 0, 0,
               SCM_ARG1, s_page_to_string);
 
   PAGE *page = edascm_to_page (page_s);
-  TOPLEVEL *toplevel = edascm_c_current_toplevel ();
 
   gchar *buf = o_save_buffer (s_page_objects (page));
   scm_dynwind_begin (0);
