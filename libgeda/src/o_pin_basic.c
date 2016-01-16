@@ -187,23 +187,19 @@ OBJECT *o_pin_read (TOPLEVEL *toplevel, const char buf[],
  */
 char *o_pin_save(OBJECT *object)
 {
-  char *buffer;
-
   g_return_val_if_fail (object != NULL, NULL);
   g_return_val_if_fail (object->line != NULL, NULL);
   g_return_val_if_fail (object->type == OBJ_PIN, NULL);
 
-  buffer = g_strdup_printf ("%c %d %d %d %d %d %d %d",
-                            object->type,
-                            object->line->x[0],
-                            object->line->y[0],
-                            object->line->x[1],
-                            object->line->y[1],
-                            object->color,
-                            object->pin_type,
-                            object->whichend);
-
-  return buffer;
+  return g_strdup_printf ("%c %d %d %d %d %d %d %d",
+                          OBJ_PIN,
+                          object->line->x[0],
+                          object->line->y[0],
+                          object->line->x[1],
+                          object->line->y[1],
+                          object->color,
+                          object->pin_type,
+                          object->whichend);
 }
 
 /*! \brief move a pin object
