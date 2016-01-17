@@ -450,28 +450,24 @@ OBJECT *o_text_read (TOPLEVEL *toplevel,
  */
 char *o_text_save(OBJECT *object)
 {
-  int x, y;
-  int size;
-  char *string;
-  char *buf;
-  int num_lines;
-
-  x = object->text->x;
-  y = object->text->y;
-
-  string = object->text->string;
-  size = object->text->size;
+  g_return_val_if_fail (object != NULL, NULL);
+  g_return_val_if_fail (object->text != NULL, NULL);
+  g_return_val_if_fail (object->type == OBJ_TEXT, NULL);
 
   /* string can have multiple lines (seperated by \n's) */
-  num_lines = o_text_num_lines(string);
 
-  buf = g_strdup_printf ("%c %d %d %d %d %d %d %d %d %d\n%s", object->type,
-                         x, y, object->color, size,
-                         o_is_visible (object) ? VISIBLE : INVISIBLE,
-                         object->show_name_value, object->text->angle,
-                         object->text->alignment, num_lines, string);
-
-  return(buf);
+  return g_strdup_printf ("%c %d %d %d %d %d %d %d %d %d\n%s",
+                          OBJ_TEXT,
+                          object->text->x,
+                          object->text->y,
+                          object->color,
+                          object->text->size,
+                          o_is_visible (object) ? VISIBLE : INVISIBLE,
+                          object->show_name_value,
+                          object->text->angle,
+                          object->text->alignment,
+                          o_text_num_lines(object->text->string),
+                          object->text->string);
 }
 
 /*! \brief recreate the graphics of a text object
