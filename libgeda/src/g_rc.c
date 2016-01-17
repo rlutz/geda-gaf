@@ -230,7 +230,7 @@ g_rc_parse_system (TOPLEVEL *toplevel, const gchar *rcname, GError **err)
 {
   gchar *sysname = NULL;
   gchar *rcfile = NULL;
-  gboolean status;
+  gboolean status = TRUE;
 
   /* Default to gafrc */
   rcname = (rcname != NULL) ? rcname : "gafrc";
