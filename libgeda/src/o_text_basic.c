@@ -248,9 +248,7 @@ OBJECT *o_text_new(TOPLEVEL *toplevel,
   OBJECT *new_node=NULL;
   TEXT *text;
 
-  if (string == NULL) {
-    return(NULL);
-  }
+  g_return_val_if_fail (string != NULL, NULL);
 
   new_node = s_basic_new_object(OBJ_TEXT, "text");
 
