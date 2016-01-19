@@ -767,12 +767,13 @@ void o_text_set_rendered_bounds_func (TOPLEVEL *toplevel,
  *  function applies an appopriate scaling to return the
  *  font size in postscript points.
  *
- *  \param [in] toplevel  The TOPLEVEL object
  *  \param [in] object    The text OBJECT whos font size to return
  *  \return The font size converted to postscript points.
  */
-double o_text_get_font_size_in_points (TOPLEVEL *toplevel, OBJECT *object)
+double o_text_get_font_size_in_points (OBJECT *object)
 {
+  g_return_val_if_fail (object != NULL, 0.);
+  g_return_val_if_fail (object->text != NULL, 0.);
   g_return_val_if_fail (object->type == OBJ_TEXT, 0.);
 
   return object->text->size * GEDA_FONT_FACTOR;
