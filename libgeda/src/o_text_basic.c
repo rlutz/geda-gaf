@@ -450,6 +450,7 @@ char *o_text_save(OBJECT *object)
   g_return_val_if_fail (object != NULL, NULL);
   g_return_val_if_fail (object->text != NULL, NULL);
   g_return_val_if_fail (object->type == OBJ_TEXT, NULL);
+  g_return_val_if_fail (object->text->string != NULL, NULL);
 
   /* string can have multiple lines (seperated by \n's) */
 
