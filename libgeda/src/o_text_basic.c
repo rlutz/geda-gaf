@@ -551,8 +551,14 @@ void o_text_rotate_world(TOPLEVEL *toplevel,
   g_return_if_fail (object != NULL);
   g_return_if_fail (object->text != NULL);
   g_return_if_fail (object->type == OBJ_TEXT);
+  g_return_if_fail (angle % 90 == 0);
 
-  object->text->angle = ( object->text->angle + angle ) % 360;
+  object->text->angle += angle;
+
+  if (object->text->angle < 0)
+    object->text->angle = 360 - (-object->text->angle % 360);
+  if (object->text->angle >= 360)
+    object->text->angle %= 360;
 
   x = object->text->x + (-world_centerx);
   y = object->text->y + (-world_centery);
