@@ -117,7 +117,7 @@ void o_slot_end(GschemToplevel *w_current, OBJECT *object, const char *string)
   } else {
     /* here you need to do the add the slot
        attribute since it doesn't exist */
-    new_obj = o_text_new (toplevel, OBJ_TEXT, ATTRIBUTE_COLOR,
+    new_obj = o_text_new (toplevel, ATTRIBUTE_COLOR,
                           object->complex->x, object->complex->y,
                           LOWER_LEFT, 0, /* zero is angle */
                           string, 10, INVISIBLE, SHOW_NAME_VALUE);

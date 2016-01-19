@@ -353,7 +353,7 @@ s_object_attrib_add_attrib_in_object (TOPLEVEL *toplevel,
   printf("     show_name_value = %d \n", show_name_value);
 #endif
 
-  new_obj = o_text_new (toplevel, OBJ_TEXT, color, world_x, world_y,
+  new_obj = o_text_new (toplevel, color, world_x, world_y,
                         LOWER_LEFT, 0, /* zero is angle */
                         text_string, DEFAULT_TEXT_SIZE,
                         visibility, show_name_value);

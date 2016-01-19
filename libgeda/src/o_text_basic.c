@@ -242,7 +242,7 @@ int o_text_num_lines(const char *string)
  *  Caller is responsible for string; this function allocates its own copy.
  */
 OBJECT *o_text_new(TOPLEVEL *toplevel,
-		   char type, int color, int x, int y, int alignment,
+		   int color, int x, int y, int alignment,
 		   int angle, const char *string, int size, 
 		   int visibility, int show_name_value)
 {
@@ -253,7 +253,7 @@ OBJECT *o_text_new(TOPLEVEL *toplevel,
     return(NULL);
   }
 
-  new_node = s_basic_new_object(type, "text");
+  new_node = s_basic_new_object(OBJ_TEXT, "text");
 
   text = (TEXT *) g_malloc(sizeof(TEXT));
 
@@ -431,7 +431,7 @@ OBJECT *o_text_read (TOPLEVEL *toplevel,
     }
   }
   
-  new_obj = o_text_new(toplevel, type, color, x, y,
+  new_obj = o_text_new(toplevel, color, x, y,
                        alignment, angle, string,
                        size, visibility, show_name_value);
   g_free(string);
@@ -519,7 +519,7 @@ OBJECT *o_text_copy(TOPLEVEL *toplevel, OBJECT *o_current)
 {
   OBJECT *new_obj;
 
-  new_obj = o_text_new (toplevel, OBJ_TEXT, o_current->color,
+  new_obj = o_text_new (toplevel, o_current->color,
                         o_current->text->x, o_current->text->y,
                         o_current->text->alignment,
                         o_current->text->angle,

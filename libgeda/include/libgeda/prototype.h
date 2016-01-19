@@ -231,7 +231,7 @@ void o_selection_unselect(TOPLEVEL *toplevel, OBJECT *object) G_GNUC_DEPRECATED;
 
 /* o_text_basic.c */
 int o_text_num_lines(const char *string);
-OBJECT *o_text_new(TOPLEVEL *toplevel, char type, int color, int x, int y, int alignment, int angle, const char *string, int size, int visibility, int show_name_value);
+OBJECT *o_text_new(TOPLEVEL *toplevel, int color, int x, int y, int alignment, int angle, const char *string, int size, int visibility, int show_name_value);
 void o_text_recreate(TOPLEVEL *toplevel, OBJECT *o_current);
 void o_text_translate_world(OBJECT *object, int dx, int dy);
 OBJECT *o_text_copy(TOPLEVEL *toplevel, OBJECT *o_current);

@@ -123,7 +123,7 @@ void o_text_prepare_place(GschemToplevel *w_current, char *text, int color, int 
   /* here you need to add OBJ_TEXT when it's done */
   page->place_list =
     g_list_append(page->place_list,
-                  o_text_new (toplevel, OBJ_TEXT, color,
+                  o_text_new (toplevel, color,
                               0, 0, align, rotate, /* zero is angle */
                               text,
                               size,

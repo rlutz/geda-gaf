@@ -352,7 +352,7 @@ OBJECT *o_attrib_add_attrib(GschemToplevel *w_current,
   }
 
   /* first create text item */
-  new_obj = o_text_new(toplevel, OBJ_TEXT, color, world_x, world_y,
+  new_obj = o_text_new(toplevel, color, world_x, world_y,
                        align, angle, text_string,
                        w_current->text_size, /* current text size */
                        visibility, show_name_value);
