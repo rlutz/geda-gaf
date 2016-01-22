@@ -150,17 +150,19 @@ static void update_disp_string (OBJECT *object)
  *  \param [out] right     the right world coord
  *  \param [out] bottom    the bottom world coord
  */
-int world_get_text_bounds(TOPLEVEL *toplevel, OBJECT *o_current, int *left,
+int world_get_text_bounds(TOPLEVEL *toplevel, OBJECT *object, int *left,
                           int *top, int *right, int *bottom)
 {
-  if (toplevel->rendered_text_bounds_func != NULL) {
-    return
-      toplevel->rendered_text_bounds_func (toplevel->rendered_text_bounds_data,
-                                           o_current,
-                                           left, top, right, bottom);
-  }
+  g_return_val_if_fail (object != NULL, FALSE);
+  g_return_val_if_fail (object->text != NULL, FALSE);
+  g_return_val_if_fail (object->type == OBJ_TEXT, FALSE);
+  g_return_val_if_fail (toplevel != NULL, FALSE);
+  g_return_val_if_fail (toplevel->rendered_text_bounds_func != NULL, FALSE);
 
-  return FALSE;
+  return
+      toplevel->rendered_text_bounds_func (toplevel->rendered_text_bounds_data,
+                                           object,
+                                           left, top, right, bottom);
 }
 
 /*! \brief get the position of a text object
