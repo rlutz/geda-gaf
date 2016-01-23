@@ -35,6 +35,3 @@ libgeda/src/scheme_page.c
 libgeda/src/edascmhookproxy.c
 
 libgeda/scheme/geda/attrib.scm
-
-intl/plural.c
-
