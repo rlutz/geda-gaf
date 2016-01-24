@@ -7,6 +7,14 @@ Copyright (C) 1998-2015 gEDA Developers
 This file documents important user-visible changes in gEDA/gaf.  For
 more information, please consult the `ChangeLog' file.
 
+Notable changes in gEDA/gaf 1.9.2.1p
+====================================
+
+* The gEDA/gaf source tarball no longer includes libintl.  When
+  building gEDA/gaf with internationalisation support, a GNU
+  gettext-compatible libintl is now required.
+
+
 Notable changes in gEDA/gaf 1.9.2
 =================================
 * Build system changes:
