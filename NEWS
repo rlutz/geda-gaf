@@ -14,6 +14,10 @@ Notable changes in gEDA/gaf 1.9.2.1p
   building gEDA/gaf with internationalisation support, a GNU
   gettext-compatible libintl is now required.
 
+* A new Scheme API function, `log!`, has been added to the `(geda
+  log)` module.  It allows Scheme code to emit log messages in the
+  same way that the tools' C code does.
+
 
 Notable changes in gEDA/gaf 1.9.2
 =================================
