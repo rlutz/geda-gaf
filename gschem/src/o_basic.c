@@ -133,7 +133,7 @@ void o_redraw_rect (GschemToplevel *w_current,
                 NULL);
 
   /* Paint background */
-  COLOR *color = x_color_lookup (w_current->background_color);
+  COLOR *color = x_color_lookup (BACKGROUND_COLOR);
 
   cairo_set_source_rgba (cr,
                          color->r / 255.0,
