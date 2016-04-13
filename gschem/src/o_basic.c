@@ -72,9 +72,6 @@ void o_redraw_rect (GschemToplevel *w_current,
   cairo_save (cr);
   cairo_set_matrix (cr, gschem_page_geometry_get_world_to_screen_matrix (geometry));
 
-  x_repaint_background_region (w_current, cr, drawable, gc, rectangle->x, rectangle->y,
-                               rectangle->width, rectangle->height);
-
   grip_half_size = GRIP_SIZE / 2;
   cue_half_size = CUE_BOX_SIZE;
   cairo_user_to_device (cr, &cue_half_size, &dummy);
@@ -134,6 +131,22 @@ void o_redraw_rect (GschemToplevel *w_current,
                 "render-flags", render_flags,
                 "color-map", render_color_map,
                 NULL);
+
+  /* Paint background */
+  COLOR *color = x_color_lookup (w_current->background_color);
+
+  cairo_set_source_rgba (cr,
+                         color->r / 255.0,
+                         color->g / 255.0,
+                         color->b / 255.0,
+                         color->a / 255.0);
+
+  cairo_paint (cr);
+
+  /* Draw grid lines */
+  x_grid_draw_region (w_current, cr, drawable, gc,
+                      rectangle->x, rectangle->y,
+                      rectangle->width, rectangle->height);
 
   /* Determine whether we should draw the selection at all */
   draw_selected = !(w_current->inside_action &&
