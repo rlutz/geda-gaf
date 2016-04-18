@@ -183,6 +183,9 @@ AX_LIBGEDACAIRO([1:1:0])
 # Recurse into Xorn configuration
 #####################################################################
 
+export GEDADATADIR
+export GEDARCDIR
+
 AC_CONFIG_SUBDIRS([xorn])
 
 #####################################################################
