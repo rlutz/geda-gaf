@@ -285,7 +285,7 @@ int main(void)
 	assert_line(rev5, ob1b, true, 10., 11, 12, 13., 14.1);
 
 	memset(&fill, 0, sizeof fill);
-	fill.type = 20;
+	fill.type = 2;
 	fill.width = 21.;
 	fill.angle0 = 22;
 	fill.pitch0 = 23.;
@@ -304,15 +304,15 @@ int main(void)
 
 	assert(xornsch_set_fill(rev5, sel2, &fill) == 0);
 	assert_fill(rev5, ob0, false, 0, 0., 0, 0., 0, 0.);
-	assert_fill(rev5, ob1a, true, 20, 21., 22, 23., 24, 25.);
-	assert_fill(rev5, ob1b, true, 20, 21., 22, 23., 24, 25.);
+	assert_fill(rev5, ob1a, true, 2, 21., 22, 23., 24, 25.);
+	assert_fill(rev5, ob1b, true, 2, 21., 22, 23., 24, 25.);
 
 	fill.pitch1 = 25.1;
 
 	assert(xornsch_set_fill(rev5, sel3, &fill) == 0);
 	assert_fill(rev5, ob0, false, 0, 0., 0, 0., 0, 0.);
-	assert_fill(rev5, ob1a, true, 20, 21., 22, 23., 24, 25.);
-	assert_fill(rev5, ob1b, true, 20, 21., 22, 23., 24, 25.1);
+	assert_fill(rev5, ob1a, true, 2, 21., 22, 23., 24, 25.);
+	assert_fill(rev5, ob1b, true, 2, 21., 22, 23., 24, 25.1);
 
 	xorn_finalize_revision(rev5);
 

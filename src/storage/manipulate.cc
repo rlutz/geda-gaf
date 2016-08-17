@@ -42,9 +42,10 @@ static void set_object_data(xorn_revision_t rev, xorn_object_t ob,
  *
  * \a data must point to a data structure matching the object type
  * indicated by \a type (e.g., if \a type is \c xornsch_obtype_net,
- * then \a data must point to a \c xornsch_net structure).  The data
- * structure (including referenced strings) will not be accessed after
- * this function has returned.
+ * then \a data must point to a \c xornsch_net structure).  A copy of
+ * the data structure is made with all unused fields set to zero.  The
+ * original data structure (including referenced strings) will not be
+ * accessed after this function has returned.
  *
  * \return Returns the newly created object.  If the revision isn't
  * transient, \a type is not a valid Xorn object type, \a data is
@@ -107,9 +108,10 @@ xorn_object_t xorn_add_object(xorn_revision_t rev,
  * \param data Pointer to a data structure matching the object type
  *             indicated by \a type (e.g., if \a type is \c
  *             xornsch_obtype_net, a pointer to a \c xornsch_net
- *             structure).  The data structure (including referenced
- *             strings) will not be accessed after this function has
- *             returned.
+ *             structure).  A copy of the data structure is made with
+ *             all unused fields set to zero.  The original data
+ *             structure (including referenced strings) will not be
+ *             accessed after this function has returned.
  *
  * \return Returns \c 0 if the object has been changed.  Returns \c -1 if
  * - the revision isn't transient,

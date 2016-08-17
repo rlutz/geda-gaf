@@ -35,6 +35,7 @@ check_PROGRAMS = \
 	storage/invalid_obtype \
 	storage/is_selected \
 	storage/multiple_assignments \
+	storage/normalize \
 	storage/null \
 	storage/pointer \
 	storage/query_attached \
