@@ -565,6 +565,11 @@ template<typename Attr> static int set_attr(
 		    continue;
 		}
 
+		if (!data_is_valid(type, data)) {
+		    free(data);
+		    continue;
+		}
+
 		try {
 		    obstate *tmp = new obstate(type, data);
 		    try {

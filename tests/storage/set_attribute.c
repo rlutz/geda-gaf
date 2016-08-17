@@ -155,25 +155,25 @@ int main(void)
 	rev4 = xorn_new_revision(rev3);
 	assert(rev4 != NULL);
 
-	assert(xornsch_set_color(rev4, sel0, 70) == 0);
+	assert(xornsch_set_color(rev4, sel0, 20) == 0);
 	assert_color(rev4, ob0, true, 4);
 	assert_color(rev4, ob1a, false, 0);
 	assert_color(rev4, ob1b, true, 3);
 
-	assert(xornsch_set_color(rev4, sel1, 71) == 0);
-	assert_color(rev4, ob0, true, 71);
+	assert(xornsch_set_color(rev4, sel1, 21) == 0);
+	assert_color(rev4, ob0, true, 21);
 	assert_color(rev4, ob1a, false, 0);
 	assert_color(rev4, ob1b, true, 3);
 
-	assert(xornsch_set_color(rev4, sel2, 72) == 0);
-	assert_color(rev4, ob0, true, 72);
+	assert(xornsch_set_color(rev4, sel2, 22) == 0);
+	assert_color(rev4, ob0, true, 22);
 	assert_color(rev4, ob1a, false, 0);
-	assert_color(rev4, ob1b, true, 72);
+	assert_color(rev4, ob1b, true, 22);
 
-	assert(xornsch_set_color(rev4, sel3, 73) == 0);
-	assert_color(rev4, ob0, true, 73);
+	assert(xornsch_set_color(rev4, sel3, 23) == 0);
+	assert_color(rev4, ob0, true, 23);
 	assert_color(rev4, ob1a, false, 0);
-	assert_color(rev4, ob1b, true, 73);
+	assert_color(rev4, ob1b, true, 23);
 
 	assert(xornsch_set_line_width(rev4, sel0, 8.0) == 0);
 	assert_line_width(rev4, ob0, false, 0.);
@@ -257,8 +257,8 @@ int main(void)
 
 	memset(&line, 0, sizeof line);
 	line.width = 10.;
-	line.cap_style = 11;
-	line.dash_style = 12;
+	line.cap_style = 1;
+	line.dash_style = 2;
 	line.dash_length = 13.;
 	line.dash_space = 14.;
 
@@ -268,21 +268,21 @@ int main(void)
 	assert_line(rev5, ob1b, true, 1., 0, 0, 0., 0.);
 
 	assert(xornsch_set_line(rev5, sel1, &line) == 0);
-	assert_line(rev5, ob0, true, 10., 11, 12, 13., 14.);
+	assert_line(rev5, ob0, true, 10., 1, 2, 13., 14.);
 	assert_line(rev5, ob1a, true, 1., 0, 0, 0., 0.);
 	assert_line(rev5, ob1b, true, 1., 0, 0, 0., 0.);
 
 	assert(xornsch_set_line(rev5, sel2, &line) == 0);
-	assert_line(rev5, ob0, true, 10., 11, 12, 13., 14.);
-	assert_line(rev5, ob1a, true, 10., 11, 12, 13., 14.);
-	assert_line(rev5, ob1b, true, 10., 11, 12, 13., 14.);
+	assert_line(rev5, ob0, true, 10., 1, 2, 13., 14.);
+	assert_line(rev5, ob1a, true, 10., 1, 2, 13., 14.);
+	assert_line(rev5, ob1b, true, 10., 1, 2, 13., 14.);
 
 	line.dash_space = 14.1;
 
 	assert(xornsch_set_line(rev5, sel3, &line) == 0);
-	assert_line(rev5, ob0, true, 10., 11, 12, 13., 14.1);
-	assert_line(rev5, ob1a, true, 10., 11, 12, 13., 14.);
-	assert_line(rev5, ob1b, true, 10., 11, 12, 13., 14.1);
+	assert_line(rev5, ob0, true, 10., 1, 2, 13., 14.1);
+	assert_line(rev5, ob1a, true, 10., 1, 2, 13., 14.);
+	assert_line(rev5, ob1b, true, 10., 1, 2, 13., 14.1);
 
 	memset(&fill, 0, sizeof fill);
 	fill.type = 2;

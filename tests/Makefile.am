@@ -47,7 +47,8 @@ check_PROGRAMS = \
 	storage/set_obdata \
 	storage/stat \
 	storage/string \
-	storage/transient
+	storage/transient \
+	storage/validate
 
 TESTS = $(check_PROGRAMS)
 EXTRA_DIST = storage/Setup.h

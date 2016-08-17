@@ -48,8 +48,9 @@ static void set_object_data(xorn_revision_t rev, xorn_object_t ob,
  * accessed after this function has returned.
  *
  * \return Returns the newly created object.  If the revision isn't
- * transient, \a type is not a valid Xorn object type, \a data is
- * NULL, or there is not enough memory, returns \c NULL.
+ * transient, \a type is not a valid Xorn object type, \a data is NULL
+ * or contains an invalid value, or there is not enough memory,
+ * returns \c NULL.
  *
  * Example:
  * \snippet functions.c add object
@@ -62,6 +63,8 @@ xorn_object_t xorn_add_object(xorn_revision_t rev,
 			      xorn_obtype_t type, void const *data)
 {
 	if (!rev->is_transient)
+		return NULL;
+	if (!data_is_valid(type, data))
 		return NULL;
 
 	xorn_object_t ob = (xorn_object_t)++next_object_id;
@@ -116,7 +119,7 @@ xorn_object_t xorn_add_object(xorn_revision_t rev,
  * \return Returns \c 0 if the object has been changed.  Returns \c -1 if
  * - the revision isn't transient,
  * - \a type is not a valid Xorn object type,
- * - \a data is NULL,
+ * - \a data is NULL or contains an invalid value,
  * - \a ob is attached to an object but \a type doesn't permit
  *   attaching the object,
  * - there are objects attached to \a ob but \a type doesn't permit
@@ -134,6 +137,8 @@ int xorn_set_object_data(xorn_revision_t rev, xorn_object_t ob,
 			 xorn_obtype_t type, void const *data)
 {
 	if (!rev->is_transient)
+		return -1;
+	if (!data_is_valid(type, data))
 		return -1;
 
 	if (type != xornsch_obtype_net &&
