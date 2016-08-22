@@ -165,67 +165,67 @@ int main(void)
 	assert(rev = xorn_new_revision(NULL));
 
 	memset(&net_data, 0, sizeof net_data);
-	assert(N = xornsch_add_net(rev, &net_data));
+	assert(N = xornsch_add_net(rev, &net_data, NULL));
 
 	memset(&text_data, 0, sizeof text_data);
-	assert(a = xornsch_add_text(rev, &text_data));
-	assert(b = xornsch_add_text(rev, &text_data));
+	assert(a = xornsch_add_text(rev, &text_data, NULL));
+	assert(b = xornsch_add_text(rev, &text_data, NULL));
 
 	assert_attached_objects_3(rev, _, N, a, b);
 	assert_attached_objects_0(rev, N);
 	assert_attached_objects_0(rev, a);
 	assert_attached_objects_0(rev, b);
 
-	assert(xorn_relocate_object(rev, N, _, _) == 0);
+	assert(xorn_relocate_object(rev, N, _, _, NULL) == 0);
 
 	assert_attached_objects_3(rev, _, a, b, N);
 	assert_attached_objects_0(rev, N);
 	assert_attached_objects_0(rev, a);
 	assert_attached_objects_0(rev, b);
 
-	assert(xorn_relocate_object(rev, N, _, b) == 0);
+	assert(xorn_relocate_object(rev, N, _, b, NULL) == 0);
 
 	assert_attached_objects_3(rev, _, a, N, b);
 	assert_attached_objects_0(rev, N);
 	assert_attached_objects_0(rev, a);
 	assert_attached_objects_0(rev, b);
 
-	assert(xorn_relocate_object(rev, a, N, _) == 0);
+	assert(xorn_relocate_object(rev, a, N, _, NULL) == 0);
 
 	assert_attached_objects_2(rev, _, N, b);
 	assert_attached_objects_1(rev, N, a);
 	assert_attached_objects_0(rev, a);
 	assert_attached_objects_0(rev, b);
 
-	assert(xorn_relocate_object(rev, b, N, _) == 0);
+	assert(xorn_relocate_object(rev, b, N, _, NULL) == 0);
 
 	assert_attached_objects_1(rev, _, N);
 	assert_attached_objects_2(rev, N, a, b);
 	assert_attached_objects_0(rev, a);
 	assert_attached_objects_0(rev, b);
 
-	assert(xorn_relocate_object(rev, a, N, _) == 0);
+	assert(xorn_relocate_object(rev, a, N, _, NULL) == 0);
 
 	assert_attached_objects_1(rev, _, N);
 	assert_attached_objects_2(rev, N, b, a);
 	assert_attached_objects_0(rev, a);
 	assert_attached_objects_0(rev, b);
 
-	assert(xorn_relocate_object(rev, a, N, b) == 0);
+	assert(xorn_relocate_object(rev, a, N, b, NULL) == 0);
 
 	assert_attached_objects_1(rev, _, N);
 	assert_attached_objects_2(rev, N, a, b);
 	assert_attached_objects_0(rev, a);
 	assert_attached_objects_0(rev, b);
 
-	assert(xorn_delete_object(rev, b) == 0);
+	assert(xorn_delete_object(rev, b, NULL) == 0);
 
 	assert_attached_objects_1(rev, _, N);
 	assert_attached_objects_1(rev, N, a);
 	assert_attached_objects_0(rev, a);
 	assert_attached_objects_f(rev, b);
 
-	assert(xorn_delete_object(rev, N) == 0);
+	assert(xorn_delete_object(rev, N, NULL) == 0);
 
 	assert_attached_objects_0(rev, _);
 	assert_attached_objects_f(rev, N);

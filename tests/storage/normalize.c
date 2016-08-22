@@ -80,23 +80,23 @@ static void check_line_attr(xorn_revision_t rev, xorn_object_t ob,
 	line->dash_space = 74.;
 
 	line->dash_style = 0;
-	assert(xorn_set_object_data(rev, ob, type, data) == 0);
+	assert(xorn_set_object_data(rev, ob, type, data, NULL) == 0);
 	assert_line(rev, ob, 70., 1, 0, 0., 0.);
 
 	line->dash_style = 1;
-	assert(xorn_set_object_data(rev, ob, type, data) == 0);
+	assert(xorn_set_object_data(rev, ob, type, data, NULL) == 0);
 	assert_line(rev, ob, 70., 1, 1, 0., 74.);
 
 	line->dash_style = 2;
-	assert(xorn_set_object_data(rev, ob, type, data) == 0);
+	assert(xorn_set_object_data(rev, ob, type, data, NULL) == 0);
 	assert_line(rev, ob, 70., 1, 2, 73., 74.);
 
 	line->dash_style = 3;
-	assert(xorn_set_object_data(rev, ob, type, data) == 0);
+	assert(xorn_set_object_data(rev, ob, type, data, NULL) == 0);
 	assert_line(rev, ob, 70., 1, 3, 73., 74.);
 
 	line->dash_style = 4;
-	assert(xorn_set_object_data(rev, ob, type, data) == 0);
+	assert(xorn_set_object_data(rev, ob, type, data, NULL) == 0);
 	assert_line(rev, ob, 70., 1, 4, 73., 74.);
 }
 
@@ -114,23 +114,23 @@ static void check_fill_attr(xorn_revision_t rev, xorn_object_t ob,
 	fill->pitch1 = 85.;
 
 	fill->type = 0;
-	assert(xorn_set_object_data(rev, ob, type, data) == 0);
+	assert(xorn_set_object_data(rev, ob, type, data, NULL) == 0);
 	assert_fill(rev, ob, 0, 0., 0, 0., 0, 0.);
 
 	fill->type = 1;
-	assert(xorn_set_object_data(rev, ob, type, data) == 0);
+	assert(xorn_set_object_data(rev, ob, type, data, NULL) == 0);
 	assert_fill(rev, ob, 1, 0., 0, 0., 0, 0.);
 
 	fill->type = 2;
-	assert(xorn_set_object_data(rev, ob, type, data) == 0);
+	assert(xorn_set_object_data(rev, ob, type, data, NULL) == 0);
 	assert_fill(rev, ob, 2, 81., 82, 83., 84, 85.);
 
 	fill->type = 3;
-	assert(xorn_set_object_data(rev, ob, type, data) == 0);
+	assert(xorn_set_object_data(rev, ob, type, data, NULL) == 0);
 	assert_fill(rev, ob, 3, 81., 82, 83., 0, 0.);
 
 	fill->type = 4;
-	assert(xorn_set_object_data(rev, ob, type, data) == 0);
+	assert(xorn_set_object_data(rev, ob, type, data, NULL) == 0);
 	assert_fill(rev, ob, 4, 0., 0, 0., 0, 0.);
 }
 
@@ -145,7 +145,7 @@ static void check_string(xorn_revision_t rev, xorn_object_t ob,
 	in->s = "ABCDE";
 
 	in->len = 3;
-	assert(xorn_set_object_data(rev, ob, type, data) == 0);
+	assert(xorn_set_object_data(rev, ob, type, data, NULL) == 0);
 	out = xorn_get_object_data(rev, ob, type) + offset;
 	assert(out->s != NULL);
 	assert(out->s != in->s);
@@ -153,7 +153,7 @@ static void check_string(xorn_revision_t rev, xorn_object_t ob,
 	assert(out->len == 3);
 
 	in->len = 0;
-	assert(xorn_set_object_data(rev, ob, type, data) == 0);
+	assert(xorn_set_object_data(rev, ob, type, data, NULL) == 0);
 	out = xorn_get_object_data(rev, ob, type) + offset;
 	assert(out->s == NULL);
 	assert(out->len == 0);
@@ -168,7 +168,7 @@ int main(void)
 	rev = xorn_new_revision(NULL);
 	assert(rev != NULL);
 	memset(&net, 0, sizeof net);
-	ob = xornsch_add_net(rev, &net);
+	ob = xornsch_add_net(rev, &net, NULL);
 	assert(ob != NULL);
 
 	/* arc */

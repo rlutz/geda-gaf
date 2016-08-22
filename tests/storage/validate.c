@@ -20,6 +20,8 @@
 #include <math.h>
 #include <string.h>
 
+#define NO_ERROR ((xorn_error_t) -1)
+
 
 static size_t sizeof_data(xorn_obtype_t type)
 {
@@ -44,34 +46,47 @@ static void test(xorn_obtype_t type, const void *data, int expected_status)
 	size_t size = sizeof_data(type);
 	void *zero = alloca(size);
 	const void *out;
+	xorn_error_t err;
 
 	assert((rev = xorn_new_revision(NULL)) != NULL);
 	memset(zero, 0, size);
 
 	if (expected_status != 1) {
-		assert((ob = xorn_add_object(rev, type, data)) != NULL);
+		err = NO_ERROR;
+		assert((ob = xorn_add_object(rev, type, data, &err)) != NULL);
+		assert(err == NO_ERROR);
 		assert((out = xorn_get_object_data(rev, ob, type)) != NULL);
 		if (expected_status == 0)
 			assert(memcmp(data, out, size) == 0);
 		else
 			assert(memcmp(data, out, size) != 0);
 
-		assert((ob = xorn_add_object(rev, type, zero)) != NULL);
+		err = NO_ERROR;
+		assert((ob = xorn_add_object(rev, type, zero, &err)) != NULL);
+		assert(err == NO_ERROR);
 		assert((out = xorn_get_object_data(rev, ob, type)) != NULL);
 		assert(memcmp(zero, out, size) == 0);
-		assert(xorn_set_object_data(rev, ob, type, data) == 0);
+		err = NO_ERROR;
+		assert(xorn_set_object_data(rev, ob, type, data, &err) == 0);
+		assert(err == NO_ERROR);
 		assert((out = xorn_get_object_data(rev, ob, type)) != NULL);
 		if (expected_status == 0)
 			assert(memcmp(data, out, size) == 0);
 		else
 			assert(memcmp(data, out, size) != 0);
 	} else {
-		assert(xorn_add_object(rev, type, data) == NULL);
+		err = NO_ERROR;
+		assert(xorn_add_object(rev, type, data, &err) == NULL);
+		assert(err == xorn_error_invalid_object_data);
 
-		assert((ob = xorn_add_object(rev, type, zero)) != NULL);
+		err = NO_ERROR;
+		assert((ob = xorn_add_object(rev, type, zero, &err)) != NULL);
+		assert(err == NO_ERROR);
 		assert((out = xorn_get_object_data(rev, ob, type)) != NULL);
 		assert(memcmp(zero, out, size) == 0);
-		assert(xorn_set_object_data(rev, ob, type, data) == -1);
+		err = NO_ERROR;
+		assert(xorn_set_object_data(rev, ob, type, data, &err) == -1);
+		assert(err == xorn_error_invalid_object_data);
 	}
 
 	xorn_free_revision(rev);

@@ -145,6 +145,8 @@ int main(void)
 	struct xornsch_line_attr line;
 	struct xornsch_fill_attr fill;
 
+	xorn_error_t err;
+
 	setup(&rev0, &rev1, &rev2, &rev3, &ob0, &ob1a, &ob1b);
 
 	sel0 = xorn_select_all(rev0); assert(sel0 != NULL);
@@ -155,76 +157,82 @@ int main(void)
 	rev4 = xorn_new_revision(rev3);
 	assert(rev4 != NULL);
 
-	assert(xornsch_set_color(rev4, sel0, 20) == 0);
+	assert(xornsch_set_color(rev4, sel0, 20, NULL) == 0);
 	assert_color(rev4, ob0, true, 4);
 	assert_color(rev4, ob1a, false, 0);
 	assert_color(rev4, ob1b, true, 3);
 
-	assert(xornsch_set_color(rev4, sel1, 21) == 0);
+	assert(xornsch_set_color(rev4, sel1, 21, NULL) == 0);
 	assert_color(rev4, ob0, true, 21);
 	assert_color(rev4, ob1a, false, 0);
 	assert_color(rev4, ob1b, true, 3);
 
-	assert(xornsch_set_color(rev4, sel2, 22) == 0);
+	assert(xornsch_set_color(rev4, sel2, 22, NULL) == 0);
 	assert_color(rev4, ob0, true, 22);
 	assert_color(rev4, ob1a, false, 0);
 	assert_color(rev4, ob1b, true, 22);
 
-	assert(xornsch_set_color(rev4, sel3, 23) == 0);
+	assert(xornsch_set_color(rev4, sel3, 23, NULL) == 0);
 	assert_color(rev4, ob0, true, 23);
 	assert_color(rev4, ob1a, false, 0);
 	assert_color(rev4, ob1b, true, 23);
 
-	assert(xornsch_set_line_width(rev4, sel0, 8.0) == 0);
+	assert(xornsch_set_color(rev4, sel3, 24, NULL) == 0);
+	/* I'd prefer to have this raise an error */
+	assert_color(rev4, ob0, true, 23);
+	assert_color(rev4, ob1a, false, 0);
+	assert_color(rev4, ob1b, true, 23);
+
+	assert(xornsch_set_line_width(rev4, sel0, 8.0, NULL) == 0);
 	assert_line_width(rev4, ob0, false, 0.);
 	assert_line_width(rev4, ob1a, false, 0.);
 	assert_line_width(rev4, ob1b, true, 1.);
 
-	assert(xornsch_set_line_width(rev4, sel1, 8.1) == 0);
+	assert(xornsch_set_line_width(rev4, sel1, 8.1, NULL) == 0);
 	assert_line_width(rev4, ob0, false, 0.);
 	assert_line_width(rev4, ob1a, false, 0.);
 	assert_line_width(rev4, ob1b, true, 1.);
 
-	assert(xornsch_set_line_width(rev4, sel2, 8.2) == 0);
+	assert(xornsch_set_line_width(rev4, sel2, 8.2, NULL) == 0);
 	assert_line_width(rev4, ob0, false, 0.);
 	assert_line_width(rev4, ob1a, false, 0.);
 	assert_line_width(rev4, ob1b, true, 8.2);
 
-	assert(xornsch_set_line_width(rev4, sel3, 8.3) == 0);
+	assert(xornsch_set_line_width(rev4, sel3, 8.3, NULL) == 0);
 	assert_line_width(rev4, ob0, false, 0.);
 	assert_line_width(rev4, ob1a, false, 0.);
 	assert_line_width(rev4, ob1b, true, 8.3);
 
 	pos.x = 9.00; pos.y = 9.05;
-	assert(xornsch_set_pos(rev4, sel0, &pos) == 0);
+	assert(xornsch_set_pos(rev4, sel0, &pos, NULL) == 0);
 	assert_position(rev4, ob0, true, 0., 1.);
 	assert_position(rev4, ob1a, false, 0., 0.);
 	assert_position(rev4, ob1b, true, -1., -1.);
 
 	pos.x = 9.10; pos.y = 9.15;
-	assert(xornsch_set_pos(rev4, sel1, &pos) == 0);
+	assert(xornsch_set_pos(rev4, sel1, &pos, NULL) == 0);
 	assert_position(rev4, ob0, true, 9.10, 9.15);
 	assert_position(rev4, ob1a, false, 0., 0.);
 	assert_position(rev4, ob1b, true, -1., -1.);
 
 	pos.x = 9.20; pos.y = 9.25;
-	assert(xornsch_set_pos(rev4, sel2, &pos) == 0);
+	assert(xornsch_set_pos(rev4, sel2, &pos, NULL) == 0);
 	assert_position(rev4, ob0, true, 9.20, 9.25);
 	assert_position(rev4, ob1a, false, 0., 0.);
 	assert_position(rev4, ob1b, true, 9.20, 9.25);
 
 	pos.x = 9.30; pos.y = 9.35;
-	assert(xornsch_set_pos(rev4, sel3, &pos) == 0);
+	assert(xornsch_set_pos(rev4, sel3, &pos, NULL) == 0);
 	assert_position(rev4, ob0, true, 9.30, 9.35);
 	assert_position(rev4, ob1a, false, 0., 0.);
 	assert_position(rev4, ob1b, true, 9.30, 9.35);
 
-	assert(xornsch_set_pos_x(rev4, sel3, 9.40) == 0);
+	assert(xornsch_set_pos_x(rev4, sel3, 9.40, NULL) == 0);
 	assert_position(rev4, ob0, true, 9.40, 9.35);
 	assert_position(rev4, ob1a, false, 0., 0.);
 	assert_position(rev4, ob1b, true, 9.40, 9.35);
 
-	assert(xornsch_set_pos_y(rev4, sel3, 9.45) == 0);
+	assert(xornsch_set_pos_y(rev4, sel3, 9.45, NULL) == 0);
 	assert_position(rev4, ob0, true, 9.40, 9.45);
 	assert_position(rev4, ob1a, false, 0., 0.);
 	assert_position(rev4, ob1b, true, 9.40, 9.45);
@@ -232,7 +240,7 @@ int main(void)
 	memset(&text_data, 0, sizeof text_data);
 	text_data.text.s = "Hello world";
 	text_data.text.len = 11;
-	text_ob = xornsch_add_text(rev4, &text_data);
+	text_ob = xornsch_add_text(rev4, &text_data, NULL);
 	assert(text_ob != NULL);
 	text_sel = xorn_select_object(text_ob);
 	assert(text_sel != NULL);
@@ -243,7 +251,7 @@ int main(void)
 	assert_text(rev4, text_ob, true, "Hello world");
 
 	text_data.text.s = "dlrow olleH";
-	assert(xornsch_set_text(rev4, text_sel, &text_data.text) == 0);
+	assert(xornsch_set_text(rev4, text_sel, &text_data.text, NULL) == 0);
 
 	assert_text(rev4, ob0, false, "");
 	assert_text(rev4, ob1a, false, "");
@@ -262,24 +270,24 @@ int main(void)
 	line.dash_length = 13.;
 	line.dash_space = 14.;
 
-	assert(xornsch_set_line(rev5, sel0, &line) == 0);
+	assert(xornsch_set_line(rev5, sel0, &line, NULL) == 0);
 	assert_line(rev5, ob0, true, 1., 0, 0, 0., 0.);
 	assert_line(rev5, ob1a, true, 1., 0, 0, 0., 0.);
 	assert_line(rev5, ob1b, true, 1., 0, 0, 0., 0.);
 
-	assert(xornsch_set_line(rev5, sel1, &line) == 0);
+	assert(xornsch_set_line(rev5, sel1, &line, NULL) == 0);
 	assert_line(rev5, ob0, true, 10., 1, 2, 13., 14.);
 	assert_line(rev5, ob1a, true, 1., 0, 0, 0., 0.);
 	assert_line(rev5, ob1b, true, 1., 0, 0, 0., 0.);
 
-	assert(xornsch_set_line(rev5, sel2, &line) == 0);
+	assert(xornsch_set_line(rev5, sel2, &line, NULL) == 0);
 	assert_line(rev5, ob0, true, 10., 1, 2, 13., 14.);
 	assert_line(rev5, ob1a, true, 10., 1, 2, 13., 14.);
 	assert_line(rev5, ob1b, true, 10., 1, 2, 13., 14.);
 
 	line.dash_space = 14.1;
 
-	assert(xornsch_set_line(rev5, sel3, &line) == 0);
+	assert(xornsch_set_line(rev5, sel3, &line, NULL) == 0);
 	assert_line(rev5, ob0, true, 10., 1, 2, 13., 14.1);
 	assert_line(rev5, ob1a, true, 10., 1, 2, 13., 14.);
 	assert_line(rev5, ob1b, true, 10., 1, 2, 13., 14.1);
@@ -292,29 +300,37 @@ int main(void)
 	fill.angle1 = 24;
 	fill.pitch1 = 25.;
 
-	assert(xornsch_set_fill(rev5, sel0, &fill) == 0);
+	assert(xornsch_set_fill(rev5, sel0, &fill, NULL) == 0);
 	assert_fill(rev5, ob0, false, 0, 0., 0, 0., 0, 0.);
 	assert_fill(rev5, ob1a, true, 0, 0., 0, 0., 0, 0.);
 	assert_fill(rev5, ob1b, true, 1, 0., 0, 0., 0, 0.);
 
-	assert(xornsch_set_fill(rev5, sel1, &fill) == 0);
+	assert(xornsch_set_fill(rev5, sel1, &fill, NULL) == 0);
 	assert_fill(rev5, ob0, false, 0, 0., 0, 0., 0, 0.);
 	assert_fill(rev5, ob1a, true, 0, 0., 0, 0., 0, 0.);
 	assert_fill(rev5, ob1b, true, 1, 0., 0, 0., 0, 0.);
 
-	assert(xornsch_set_fill(rev5, sel2, &fill) == 0);
+	assert(xornsch_set_fill(rev5, sel2, &fill, NULL) == 0);
 	assert_fill(rev5, ob0, false, 0, 0., 0, 0., 0, 0.);
 	assert_fill(rev5, ob1a, true, 2, 21., 22, 23., 24, 25.);
 	assert_fill(rev5, ob1b, true, 2, 21., 22, 23., 24, 25.);
 
 	fill.pitch1 = 25.1;
 
-	assert(xornsch_set_fill(rev5, sel3, &fill) == 0);
+	assert(xornsch_set_fill(rev5, sel3, &fill, NULL) == 0);
 	assert_fill(rev5, ob0, false, 0, 0., 0, 0., 0, 0.);
 	assert_fill(rev5, ob1a, true, 2, 21., 22, 23., 24, 25.);
 	assert_fill(rev5, ob1b, true, 2, 21., 22, 23., 24, 25.1);
 
 	xorn_finalize_revision(rev5);
+
+	fill.pitch1 = 25.2;
+
+	assert(xornsch_set_fill(rev5, sel3, &fill, &err) == -1);
+	assert(err == xorn_error_revision_not_transient);
+	assert_fill(rev5, ob0, false, 0, 0., 0, 0., 0, 0.);
+	assert_fill(rev5, ob1a, true, 2, 21., 22, 23., 24, 25.);
+	assert_fill(rev5, ob1b, true, 2, 21., 22, 23., 24, 25.1);
 
 	xorn_free_selection(text_sel);
 	xorn_free_selection(sel3);

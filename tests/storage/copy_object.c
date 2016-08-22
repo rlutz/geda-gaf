@@ -17,6 +17,8 @@
 #include "Setup.h"
 #include <stdlib.h>
 
+#define NO_ERROR ((xorn_error_t) -1)
+
 
 int main(void)
 {
@@ -25,6 +27,7 @@ int main(void)
 
 	xorn_revision_t rev4;
 	xorn_object_t ob0copy;
+	xorn_error_t err;
 
 	xorn_object_t *objects;
 	size_t count;
@@ -37,8 +40,10 @@ int main(void)
 	rev4 = xorn_new_revision(rev3);
 	assert(rev4 != NULL);
 
-	ob0copy = xorn_copy_object(rev4, rev0, ob0);
+	err = NO_ERROR;
+	ob0copy = xorn_copy_object(rev4, rev0, ob0, &err);
 	assert(ob0copy == NULL);
+	assert(err == xorn_error_object_doesnt_exist);
 
 	xorn_finalize_revision(rev4);
 
@@ -57,8 +62,10 @@ int main(void)
 	rev4 = xorn_new_revision(rev3);
 	assert(rev4 != NULL);
 
-	ob0copy = xorn_copy_object(rev4, rev1, ob0);
+	err = NO_ERROR;
+	ob0copy = xorn_copy_object(rev4, rev1, ob0, &err);
 	assert(ob0copy != NULL);
+	assert(err == NO_ERROR);
 
 	xorn_finalize_revision(rev4);
 

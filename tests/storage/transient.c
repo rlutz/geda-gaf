@@ -18,6 +18,8 @@
 #include <assert.h>
 #include <string.h>
 
+#define NO_ERROR ((xorn_error_t) -1)
+
 static struct xornsch_line line_data;
 static struct xornsch_box box_data;
 
@@ -27,30 +29,46 @@ static void try_modify(xorn_revision_t rev, xorn_object_t existing_ob,
 {
 	xorn_object_t ob0, ob1;
 	xorn_selection_t sel0, sel1;
+	xorn_error_t err;
+	xorn_error_t expected_err = expected_result
+		? NO_ERROR : xorn_error_revision_not_transient;
 
-	ob0 = xornsch_add_line(rev, &line_data);
+	err = NO_ERROR;
+	ob0 = xornsch_add_line(rev, &line_data, &err);
 	assert((ob0 != NULL) == expected_result);
+	assert(err == expected_err);
 
-	assert((xornsch_set_box_data(rev, existing_ob, &box_data) == 0)
+	err = NO_ERROR;
+	assert((xornsch_set_box_data(rev, existing_ob, &box_data, &err) == 0)
 		   == expected_result);
+	assert(err == expected_err);
 
-	ob1 = xorn_copy_object(rev, rev, existing_ob);
+	err = NO_ERROR;
+	ob1 = xorn_copy_object(rev, rev, existing_ob, &err);
 	assert((ob1 != NULL) == expected_result);
+	assert(err == expected_err);
 
 	xorn_object_t del_ob = expected_result ? ob1 : existing_ob;
-	assert((xorn_delete_object(rev, del_ob) == 0) == expected_result);
+	err = NO_ERROR;
+	assert((xorn_delete_object(rev, del_ob, &err) == 0)
+		   == expected_result);
+	assert(err == expected_err);
 	assert(xorn_object_exists_in_revision(rev, del_ob)
 		   == !expected_result);
 
 	sel0 = xorn_select_all(rev);
 	assert(sel0 != NULL);
 
-	sel1 = xorn_copy_objects(rev, rev, sel0);
+	err = NO_ERROR;
+	sel1 = xorn_copy_objects(rev, rev, sel0, &err);
 	assert((sel1 != NULL) == expected_result);
+	assert(err == expected_err);
 	xorn_free_selection(sel1);
 
-	assert((xorn_delete_selected_objects(rev, sel0) == 0)
+	err = NO_ERROR;
+	assert((xorn_delete_selected_objects(rev, sel0, &err) == 0)
 		   == expected_result);
+	assert(err == expected_err);
 	assert(xorn_object_exists_in_revision(rev, existing_ob)
 		   == !expected_result);
 	xorn_free_selection(sel0);
@@ -87,7 +105,7 @@ int main(void)
 	assert(rev1 != NULL);
 	assert(xorn_revision_is_transient(rev1) == true);
 
-	ob = xornsch_add_line(rev1, &line_data);
+	ob = xornsch_add_line(rev1, &line_data, NULL);
 	assert(ob != NULL);
 
 	xorn_finalize_revision(rev1);

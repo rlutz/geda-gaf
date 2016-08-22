@@ -23,6 +23,7 @@ int main(void)
 {
     xorn_revision_t rev0, rev1, rev2, rev3;
     xorn_object_t line, box, circle;
+    xorn_error_t err;
 
     struct xornsch_line line_data;
     struct xornsch_box box_data;
@@ -62,7 +63,7 @@ int main(void)
 
     /* Add a line object with this data to the revision */
 
-    line = xornsch_add_line(rev1, &line_data);
+    line = xornsch_add_line(rev1, &line_data, &err);
 
     if (line == NULL)
         goto error2;
@@ -87,7 +88,7 @@ int main(void)
     box_data.color = 3;
     box_data.line.width = 1;
 
-    box = xornsch_add_box(rev2, &box_data);
+    box = xornsch_add_box(rev2, &box_data, &err);
     if (box == NULL)
         goto error3;
 
@@ -99,7 +100,7 @@ int main(void)
     circle_data.line.width = 1;
     circle_data.fill.type = 1;
 
-    circle = xornsch_add_circle(rev2, &circle_data);
+    circle = xornsch_add_circle(rev2, &circle_data, &err);
     if (circle == NULL)
         goto error3;
 
@@ -121,10 +122,10 @@ int main(void)
     net_data.size.y = 2;
     net_data.color = 4;
 
-    if (xornsch_set_net_data(rev3, line, &net_data) == -1)
+    if (xornsch_set_net_data(rev3, line, &net_data, &err) == -1)
         goto error4;
 
-    if (xorn_delete_object(rev3, box) == -1)
+    if (xorn_delete_object(rev3, box, &err) == -1)
         goto error4;
 
     xorn_finalize_revision(rev3);

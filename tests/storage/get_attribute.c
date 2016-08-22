@@ -151,12 +151,12 @@ int main(void)
 
 	text_data.text.s = "Hello world";
 	text_data.text.len = 11;
-	text0 = xornsch_add_text(rev4, &text_data);
+	text0 = xornsch_add_text(rev4, &text_data, NULL);
 	assert(text0 != NULL);
 
 	text_data.text.s = "dlrow olleH";
 	text_data.text.len = 11;
-	text1 = xornsch_add_text(rev4, &text_data);
+	text1 = xornsch_add_text(rev4, &text_data, NULL);
 	assert(text0 != NULL);
 
 	xorn_finalize_revision(rev4);
