@@ -68,7 +68,7 @@ int main(void)
 	assert(refcnt0 != 0);
 	assert(refcnt1 != 0);
 
-	xorn_delete_selected_objects(rev, sel1);
+	assert(xorn_delete_selected_objects(rev, sel1) == 0);
 	assert(refcnt0 == 1);
 	assert(refcnt1 == 0);
 	xorn_free_selection(sel1);

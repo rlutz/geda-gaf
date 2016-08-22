@@ -94,7 +94,7 @@ static void setup(
 
 	assert(xornsch_set_net_data(*rev3, *ob0, &net_data) == 0);
 
-	xorn_delete_object(*rev3, *ob1a);
+	assert(xorn_delete_object(*rev3, *ob1a) == 0);
 
 	xorn_finalize_revision(*rev3);
 }

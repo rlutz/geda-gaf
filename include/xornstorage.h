@@ -131,9 +131,8 @@ int xorn_set_object_data(xorn_revision_t rev, xorn_object_t ob,
 			 xorn_obtype_t type, const void *data);
 int xorn_relocate_object(xorn_revision_t rev, xorn_object_t ob,
 			 xorn_object_t attach_to, xorn_object_t insert_before);
-void xorn_delete_object(xorn_revision_t rev, xorn_object_t ob);
-void xorn_delete_selected_objects(xorn_revision_t rev,
-				  xorn_selection_t sel);
+int xorn_delete_object(xorn_revision_t rev, xorn_object_t ob);
+int xorn_delete_selected_objects(xorn_revision_t rev, xorn_selection_t sel);
 
 xorn_object_t xorn_copy_object(xorn_revision_t dest,
 			       xorn_revision_t src, xorn_object_t ob);

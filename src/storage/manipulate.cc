@@ -302,24 +302,26 @@ static void delete_object_but_leave_entry(
  * The deleted object(s) stay valid and can later be re-added using
  * \ref xorn_set_object_data or its type-safe equivalents.
  *
- * If the revision isn't transient or the object doesn't exist in the
- * revision, nothing is changed.  */
+ * \return Returns \c 0 if the object has been deleted.  Returns \c -1
+ * if the revision isn't transient or the object doesn't exist in the
+ * revision.  */
 
-void xorn_delete_object(xorn_revision_t rev, xorn_object_t ob)
+int xorn_delete_object(xorn_revision_t rev, xorn_object_t ob)
 {
 	if (!rev->is_transient)
-		return;
+		return -1;
 
 	std::map<xorn_object_t, xorn_object_t>::const_iterator i
 		= rev->parent.find(ob);
 	if (i == rev->parent.end())
-		return;
+		return -1;
 	xorn_object_t parent = i->second;
 
 	delete_object_but_leave_entry(rev, ob);
 
 	std::vector<xorn_object_t> &children = rev->children[parent];
 	children.erase(find(children.begin(), children.end(), ob));
+	return 0;
 }
 
 /** \brief Delete some objects from a transient revision.
@@ -329,17 +331,22 @@ void xorn_delete_object(xorn_revision_t rev, xorn_object_t ob)
  * The deleted objects stay valid and can later be re-added using \ref
  * xorn_set_object_data or its type-safe equivalents.
  *
- * Objects that don't exist in the revision are ignored.  If the
- * revision isn't transient, nothing is changed.  */
+ * Objects that don't exist in the revision are ignored.
+ *
+ * \return Returns \c 0 if the revision is transient (this doesn't
+ * necessarily mean that any objects have been deleted).  Otherwise,
+ * returns \c -1.  */
 
-void xorn_delete_selected_objects(xorn_revision_t rev, xorn_selection_t sel)
+int xorn_delete_selected_objects(xorn_revision_t rev, xorn_selection_t sel)
 {
 	if (!rev->is_transient)
-		return;
+		return -1;
 
 	for (std::set<xorn_object_t>::const_iterator i = sel->begin();
 	     i != sel->end(); ++i)
-		xorn_delete_object(rev, *i);
+		(void) xorn_delete_object(rev, *i);
+
+	return 0;
 }
 
 static xorn_object_t copy_object(
@@ -366,7 +373,7 @@ static xorn_object_t copy_object(
 	try {
 		copied.push_back(dest_ob);
 	} catch (std::bad_alloc const &) {
-		xorn_delete_object(dest, dest_ob);
+		(void) xorn_delete_object(dest, dest_ob);
 		throw;
 	}
 
@@ -415,7 +422,7 @@ xorn_object_t xorn_copy_object(xorn_revision_t dest,
 	} catch (std::bad_alloc const &) {
 		for (std::vector<xorn_object_t>::const_iterator i
 			     = copied.begin(); i != copied.end(); ++i)
-			xorn_delete_object(dest, *i);
+			(void) xorn_delete_object(dest, *i);
 		return NULL;
 	}
 }
@@ -468,7 +475,7 @@ xorn_selection_t xorn_copy_objects(xorn_revision_t dest,
 		} catch (std::bad_alloc const &) {
 			for (std::vector<xorn_object_t>::const_iterator i
 				     = copied.begin(); i != copied.end(); ++i)
-				xorn_delete_object(dest, *i);
+				(void) xorn_delete_object(dest, *i);
 			delete rsel;
 			return NULL;
 		}

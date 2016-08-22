@@ -98,7 +98,7 @@ int main(void)
 	relocate_and_assert_3(rev4, ob1a, ob1a,  0, ob0, ob1a, ob1b);
 	relocate_and_assert_3(rev4, ob1b, ob1b,  0, ob0, ob1a, ob1b);
 
-	xorn_delete_object(rev4, ob0);
+	assert(xorn_delete_object(rev4, ob0) == 0);
 
 	assert(xorn_get_objects(rev4, &objects, &count) == 0);
 	assert(objects != NULL);

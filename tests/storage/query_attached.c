@@ -218,14 +218,14 @@ int main(void)
 	assert_attached_objects_0(rev, a);
 	assert_attached_objects_0(rev, b);
 
-	xorn_delete_object(rev, b);
+	assert(xorn_delete_object(rev, b) == 0);
 
 	assert_attached_objects_1(rev, _, N);
 	assert_attached_objects_1(rev, N, a);
 	assert_attached_objects_0(rev, a);
 	assert_attached_objects_f(rev, b);
 
-	xorn_delete_object(rev, N);
+	assert(xorn_delete_object(rev, N) == 0);
 
 	assert_attached_objects_0(rev, _);
 	assert_attached_objects_f(rev, N);

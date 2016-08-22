@@ -124,7 +124,8 @@ int main(void)
     if (xornsch_set_net_data(rev3, line, &net_data) == -1)
         goto error4;
 
-    xorn_delete_object(rev3, box);
+    if (xorn_delete_object(rev3, box) == -1)
+        goto error4;
 
     xorn_finalize_revision(rev3);
 

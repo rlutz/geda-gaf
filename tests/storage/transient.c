@@ -38,7 +38,7 @@ static void try_modify(xorn_revision_t rev, xorn_object_t existing_ob,
 	assert((ob1 != NULL) == expected_result);
 
 	xorn_object_t del_ob = expected_result ? ob1 : existing_ob;
-	xorn_delete_object(rev, del_ob);
+	assert((xorn_delete_object(rev, del_ob) == 0) == expected_result);
 	assert(xorn_object_exists_in_revision(rev, del_ob)
 		   == !expected_result);
 
@@ -49,7 +49,8 @@ static void try_modify(xorn_revision_t rev, xorn_object_t existing_ob,
 	assert((sel1 != NULL) == expected_result);
 	xorn_free_selection(sel1);
 
-	xorn_delete_selected_objects(rev, sel0);
+	assert((xorn_delete_selected_objects(rev, sel0) == 0)
+		   == expected_result);
 	assert(xorn_object_exists_in_revision(rev, existing_ob)
 		   == !expected_result);
 	xorn_free_selection(sel0);

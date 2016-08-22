@@ -131,7 +131,7 @@ static void check_delete_0(xorn_revision_t rev, xorn_object_t del)
 	size_t count;
 
 	assert(r = xorn_new_revision(rev));
-	xorn_delete_object(r, del);
+	assert(xorn_delete_object(r, del) == 0);
 
 	assert(xorn_get_objects(r, &objects, &count) == 0);
 	assert(count == 0);
@@ -148,7 +148,7 @@ static void check_delete_1(xorn_revision_t rev, xorn_object_t del,
 	size_t count;
 
 	assert(r = xorn_new_revision(rev));
-	xorn_delete_object(r, del);
+	assert(xorn_delete_object(r, del) == 0);
 
 	assert(xorn_get_objects(r, &objects, &count) == 0);
 	assert(objects != NULL);
@@ -167,7 +167,7 @@ static void check_delete_2(xorn_revision_t rev, xorn_object_t del,
 	size_t count;
 
 	assert(r = xorn_new_revision(rev));
-	xorn_delete_object(r, del);
+	assert(xorn_delete_object(r, del) == 0);
 
 	assert(xorn_get_objects(r, &objects, &count) == 0);
 	assert(objects != NULL);
@@ -413,7 +413,8 @@ int main(void)
 
 	/* can't attach text to deleted object */
 
-	xorn_delete_object(rev1, N);
+	assert(xorn_delete_object(rev1, N) == 0);
+	assert(xorn_delete_object(rev1, N) == -1);
 	assert(xorn_relocate_object(rev1, b, N, NULL) == -1);
 
 	xorn_object_t *objects;

@@ -106,7 +106,7 @@ static void check_order(void)
 	assert_object_location(rev4, ob1b, NULL, 1);
 	assert_object_location(rev4, ob2, NULL, 3);
 
-	xorn_delete_object(rev4, ob0);
+	assert(xorn_delete_object(rev4, ob0) == 0);
 
 	assert_object_location_fails(rev4, ob0);
 	assert_object_location(rev4, ob1a, NULL, 1);

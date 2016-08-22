@@ -106,31 +106,31 @@ int main(void)
 
 	/* objects are re-added at the end */
 
-	xorn_delete_object(rev, ob0);
+	assert(xorn_delete_object(rev, ob0) == 0);
 	assert(xornsch_set_line_data(rev, ob0, &line_data) == 0);
 	check_not_attached(rev, ob1, ob0);
-	xorn_delete_object(rev, ob0);
+	assert(xorn_delete_object(rev, ob0) == 0);
 	assert(xornsch_set_line_data(rev, ob0, &line_data) == 0);
 	check_not_attached(rev, ob1, ob0);
 
-	xorn_delete_object(rev, ob1);
+	assert(xorn_delete_object(rev, ob1) == 0);
 	assert(xornsch_set_line_data(rev, ob1, &line_data) == 0);
 	check_not_attached(rev, ob0, ob1);
-	xorn_delete_object(rev, ob1);
+	assert(xorn_delete_object(rev, ob1) == 0);
 	assert(xornsch_set_line_data(rev, ob1, &line_data) == 0);
 	check_not_attached(rev, ob0, ob1);
 
-	xorn_delete_object(rev, ob0);
+	assert(xorn_delete_object(rev, ob0) == 0);
 	assert(xornsch_set_net_data(rev, ob0, &net_data) == 0);
 	check_not_attached(rev, ob1, ob0);
-	xorn_delete_object(rev, ob0);
+	assert(xorn_delete_object(rev, ob0) == 0);
 	assert(xornsch_set_net_data(rev, ob0, &net_data) == 0);
 	check_not_attached(rev, ob1, ob0);
 
-	xorn_delete_object(rev, ob1);
+	assert(xorn_delete_object(rev, ob1) == 0);
 	assert(xornsch_set_net_data(rev, ob1, &net_data) == 0);
 	check_not_attached(rev, ob0, ob1);
-	xorn_delete_object(rev, ob1);
+	assert(xorn_delete_object(rev, ob1) == 0);
 	assert(xornsch_set_net_data(rev, ob1, &net_data) == 0);
 	check_not_attached(rev, ob0, ob1);
 
