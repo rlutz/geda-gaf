@@ -411,6 +411,19 @@ int main(void)
 	assert(xornsch_set_component_data(rev1, N, &component_data) == 0);
 	do_it(rev1, a, N, _,  0, N, a, b, &check3, N, a, b);
 
+	/* can't attach text to deleted object */
+
+	xorn_delete_object(rev1, N);
+	assert(xorn_relocate_object(rev1, b, N, NULL) == -1);
+
+	xorn_object_t *objects;
+	size_t count;
+	assert(xorn_get_objects(rev1, &objects, &count) == 0);
+	assert(objects != NULL);
+	assert(count == 1);
+	assert(objects[0] == b);
+	free(objects);
+
 	xorn_free_revision(rev1);
 	xorn_free_revision(rev);
 	return 0;
