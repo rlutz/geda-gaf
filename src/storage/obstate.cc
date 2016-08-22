@@ -21,9 +21,6 @@
 
 void *copy_data(xorn_obtype_t type, void const *src)
 {
-	if (src == NULL)
-		throw std::bad_alloc();
-
 	size_t size;
 
 	switch (type) {

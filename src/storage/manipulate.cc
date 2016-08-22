@@ -62,6 +62,23 @@ static void set_object_data(xorn_revision_t rev, xorn_object_t ob,
 xorn_object_t xorn_add_object(xorn_revision_t rev,
 			      xorn_obtype_t type, void const *data)
 {
+	switch (type) {
+	case xornsch_obtype_arc:
+	case xornsch_obtype_box:
+	case xornsch_obtype_circle:
+	case xornsch_obtype_component:
+	case xornsch_obtype_line:
+	case xornsch_obtype_net:
+	case xornsch_obtype_path:
+	case xornsch_obtype_picture:
+	case xornsch_obtype_text:
+		break;
+	default:
+		return NULL;
+	}
+	if (data == NULL)
+		return NULL;
+
 	if (!rev->is_transient)
 		return NULL;
 	if (!data_is_valid(type, data))
@@ -136,6 +153,23 @@ xorn_object_t xorn_add_object(xorn_revision_t rev,
 int xorn_set_object_data(xorn_revision_t rev, xorn_object_t ob,
 			 xorn_obtype_t type, void const *data)
 {
+	switch (type) {
+	case xornsch_obtype_arc:
+	case xornsch_obtype_box:
+	case xornsch_obtype_circle:
+	case xornsch_obtype_component:
+	case xornsch_obtype_line:
+	case xornsch_obtype_net:
+	case xornsch_obtype_path:
+	case xornsch_obtype_picture:
+	case xornsch_obtype_text:
+		break;
+	default:
+		return -1;
+	}
+	if (data == NULL)
+		return -1;
+
 	if (!rev->is_transient)
 		return -1;
 	if (!data_is_valid(type, data))

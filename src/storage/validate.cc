@@ -65,9 +65,6 @@ static bool fill_is_valid(struct xornsch_fill_attr const &fill)
 
 bool data_is_valid(xorn_obtype_t type, void const *data)
 {
-	if (data == NULL)
-		return false;
-
 	switch (type) {
 	case xornsch_obtype_arc: {
 		xornsch_arc const &d = *(xornsch_arc const *)data;
