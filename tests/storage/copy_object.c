@@ -23,13 +23,36 @@ int main(void)
 	xorn_revision_t rev0, rev1, rev2, rev3;
 	xorn_object_t ob0, ob1a, ob1b;
 
-	xorn_object_t ob0copy;
 	xorn_revision_t rev4;
+	xorn_object_t ob0copy;
 
 	xorn_object_t *objects;
 	size_t count;
 
 	setup(&rev0, &rev1, &rev2, &rev3, &ob0, &ob1a, &ob1b);
+
+
+	/* can't copy object which doesn't exist in source revision */
+
+	rev4 = xorn_new_revision(rev3);
+	assert(rev4 != NULL);
+
+	ob0copy = xorn_copy_object(rev4, rev0, ob0);
+	assert(ob0copy == NULL);
+
+	xorn_finalize_revision(rev4);
+
+	assert(xorn_get_objects(rev4, &objects, &count) == 0);
+	assert(objects != NULL);
+	assert(count == 2);
+	assert(objects[0] == ob0);
+	assert(objects[1] == ob1b);
+	free(objects);
+
+	xorn_free_revision(rev4);
+
+
+	/* can copy object otherwise */
 
 	rev4 = xorn_new_revision(rev3);
 	assert(rev4 != NULL);
@@ -53,6 +76,8 @@ int main(void)
 	free(objects);
 
 	xorn_free_revision(rev4);
+
+
 	xorn_free_revision(rev3);
 	xorn_free_revision(rev2);
 	xorn_free_revision(rev1);
