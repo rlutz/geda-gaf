@@ -86,7 +86,7 @@ class Package:
                 values.append(value)
 
         if len(values) > 1:
-            self.error(_("attribute conflict for \"%s\": %s") % (
+            self.warn(_("attribute conflict for \"%s\": %s") % (
                 name, _(" vs. ").join(_("\"%s\"") % value
                                       for value in values)))
             values = False
