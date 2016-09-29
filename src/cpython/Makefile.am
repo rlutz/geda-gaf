@@ -50,7 +50,7 @@ m4output = \
 	data_fillattr.c
 
 data.h: include_h.m4 $(m4sources)
-	$(AM_V_M4)m4 -P $^ > $@
+	$(AM_V_M4)cd "$(srcdir)" && m4 -P include_h.m4 $(m4sources) > data.h
 
 .m4.c:
 	$(AM_V_M4)m4 -P $(srcdir)/include_c.m4 $< > $@
