@@ -17,9 +17,8 @@ make the file format more readable, and make working with the files a
 bit easier:
 
 * Symbols and pixmaps aren't embedded directly into the object but are
-  defined once at the beginning of the file and then referenced by ID.
-  This allows multiple component/picture objects to share the same
-  embedded symbol/pixmap.
+  defined once and referenced by ID.  This allows multiple
+  component/picture objects to share the same embedded symbol/pixmap.
 
 * Non-embedded symbols and pixmaps are optionally included in the
   file, as well.  This way, the file can be used without the original
