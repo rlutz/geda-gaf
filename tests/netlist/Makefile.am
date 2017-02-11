@@ -50,6 +50,7 @@ TESTS = stack_1-geda.out \
 	regression/component_refdes-dumptext.out \
 	regression/duplicate_local_net-geda.out \
 	regression/missing_pinseq-geda.out \
+	regression/named_unconnected_net-geda.out \
 	regression/override_netname-geda.out \
 	regression/refdes_promotion-geda.out \
 	regression/transform_symbols-geda.out \
@@ -481,6 +482,7 @@ testdata = \
 	regression/duplicate_local_net-symbols/sym.sym \
 	regression/duplicate_local_net.sch \
 	regression/missing_pinseq.sch \
+	regression/named_unconnected_net.sch \
 	regression/override_netname-symbols/component.sym \
 	regression/override_netname-symbols/power.sym \
 	regression/override_netname.sch \

@@ -258,5 +258,8 @@ def postproc_instances(netlist, flat_namespace, prefer_netname_attribute,
                 #for local_net in cpin.local_net.net.local_nets:
                 #    net._cpins += local_net.cpins
 
-    assert sorted(netlist.nets) == sorted(nets)
+    assert sorted(set(net for net in netlist.nets
+                          for local_net in net.local_nets
+                      if local_net.cpins)) \
+        == sorted(nets)
     netlist.nets = nets
