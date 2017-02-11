@@ -57,14 +57,17 @@ def postproc_instances(netlist):
                             "inside schematic") % label)
 
             for port in ports:
+                if port.blueprint.composite_sources:
+                    port.error(_("I/O symbol can't be a subschematic"))
+                if port.blueprint.is_graphical:
+                    port.error(_("I/O symbol can't be graphical"))
+
                 if not port.cpins:
                     port.error(_("I/O symbol doesn't have pins"))
                     continue
                 if len(port.cpins) > 1:
                     port.error(_("multiple pins on I/O symbol"))
                     continue
-                if port.blueprint.is_graphical:
-                    port.error(_("I/O symbol can't be graphical"))
 
                 src_net = port.cpins[0].local_net.net
 
