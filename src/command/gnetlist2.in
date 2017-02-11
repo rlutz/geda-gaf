@@ -1129,7 +1129,7 @@ GNU General Public License for more details.
     for backend_option in backend_options:
         cmd += ['-O', backend_option]
 
-    if guile_proc.startswith('drc'):
+    if guile_proc is not None and guile_proc.startswith('drc'):
         cmd.append('--ignore-errors')
 
     if not quiet_mode:
