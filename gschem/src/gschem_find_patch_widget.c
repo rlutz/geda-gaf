@@ -197,7 +197,7 @@ void find_patch_dialog (GschemToplevel *w_current)
 static void
 get_property (GObject *object, guint param_id, GValue *value, GParamSpec *pspec)
 {
-  GschemFindPatchWidget *widget = GSCHEM_FIND_TEXT_WIDGET (object);
+  GschemFindPatchWidget *widget = GSCHEM_FIND_PATCH_WIDGET (object);
 
   switch (param_id) {
     case PROP_DESCEND:
