@@ -244,6 +244,8 @@ static void patch_list_free(GList *list)
 	
 }
 
+
+#if DEBUG
 static char *op_names[] = {
 	"disconnect",
 	"connect",
@@ -251,8 +253,6 @@ static char *op_names[] = {
 	"net_info"
 };
 
-
-#if DEBUG
 static void patch_list_print(gschem_patch_state_t *st)
 {
 	GList *i;
