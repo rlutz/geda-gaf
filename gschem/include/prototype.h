@@ -630,6 +630,7 @@ int generic_confirm_dialog(const char *);
 char * generic_filesel_dialog(const char *, const char *, gint);
 
 void find_text_dialog(GschemToplevel *w_current);
+void find_patch_dialog(GschemToplevel *w_current);
 void hide_text_dialog(GschemToplevel *w_current);
 void show_text_dialog(GschemToplevel *w_current);
 void major_changed_dialog(GschemToplevel* w_current);
