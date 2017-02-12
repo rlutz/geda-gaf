@@ -705,7 +705,7 @@ find_objects_using_patch (GSList *pages, const char *text)
   gschem_patch_state_t st;
 
   if (gschem_patch_state_init(&st, text) != 0) {
-    g_error("Unable to open patch file %s", text);
+    g_warning("Unable to open patch file %s\n", text);
     return NULL;
   }
 
