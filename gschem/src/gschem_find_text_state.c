@@ -605,7 +605,6 @@ find_objects_using_patch (GSList *pages, const char *text)
 
     while (object_iter != NULL) {
       OBJECT *object = (OBJECT*) object_iter->data;
-      const char *str;
 
       object_iter = g_list_next (object_iter);
 
