@@ -551,6 +551,8 @@ static void *exec_check_conn_hashval(void *user_ctx, OBJECT *o)
 				gchar *oname, *pname;
 
 				oname = o_attrib_search_object_attribs_by_name (o->parent, "refdes", 0);
+				if (oname == NULL)
+					break;
 				pname = o_attrib_search_object_attribs_by_name (o, "pinnumber", 0);
 				name = g_malloc(strlen(oname) + strlen(pname) + 3);
 				sprintf(name, "%c%s-%s", OBJ_PIN, (char *)oname, (char *)pname);
