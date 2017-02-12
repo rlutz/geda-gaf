@@ -336,12 +336,14 @@ static gschem_patch_pin_t *alloc_pin(OBJECT *pin_obj, char *net)
 	return p;
 }
 
+/*
 static void free_pin(gschem_patch_pin_t *p)
 {
 	if (p->net != NULL)
 		g_free(p->net);
 	g_free(p);
 }
+*/
 
 int gschem_patch_state_build(gschem_patch_state_t *st, OBJECT *o)
 {
