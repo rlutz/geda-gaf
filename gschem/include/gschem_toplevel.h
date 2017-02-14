@@ -38,6 +38,7 @@ struct st_gschem_toplevel {
 
   /* Widgets at inside the bottom of the main view */
   GtkWidget *find_text_widget;
+  GtkWidget *find_patch_widget;
   GtkWidget *hide_text_widget;
   GtkWidget *show_text_widget;
   GtkWidget *macro_widget;

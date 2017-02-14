@@ -323,6 +323,9 @@
 (define-action-public (&edit-find-text #:label (_ "Find Specific Text") #:icon "gtk-find")
   (%edit-find-text))
 
+(define-action-public (&edit-find-patch #:label (_ "Import Patch And Find Mismatches") #:icon "gtk-find")
+  (%edit-find-patch))
+
 (define-action-public (&edit-hide-text #:label (_ "Hide Specific Text"))
   (%edit-hide-text))
 

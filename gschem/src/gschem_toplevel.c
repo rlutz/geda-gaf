@@ -160,6 +160,7 @@ GschemToplevel *gschem_toplevel_new ()
   w_current->menubar      = NULL;
   w_current->popup_menu   = NULL;
   w_current->find_text_widget = NULL;
+  w_current->find_patch_widget = NULL;
   w_current->macro_widget  = NULL;
   w_current->bottom_widget = NULL;
   w_current->translate_widget = NULL;

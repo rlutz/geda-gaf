@@ -53,6 +53,9 @@ static void
 assign_store (GschemFindTextState *state, GSList *objects);
 
 static void
+assign_store_patch (GschemFindTextState *state, GSList *objects);
+
+static void
 class_init (GschemFindTextStateClass *klass);
 
 static void
@@ -72,6 +75,9 @@ find_objects_using_regex (GSList *pages, const char *text, GError **error);
 
 static GSList*
 find_objects_using_substring (GSList *pages, const char *text);
+
+static GSList*
+find_objects_using_patch (GSList *pages, const char *text);
 
 static GSList*
 get_pages (GList *pages, gboolean descend);
@@ -135,13 +141,21 @@ gschem_find_text_state_find (GschemFindTextState *state, GList *pages, int type,
       objects = find_objects_using_regex (all_pages, text, NULL);
       break;
 
+    case FIND_TYPE_PATCH:
+      objects = find_objects_using_patch (all_pages, text);
+      break;
+
     default:
       break;
   }
 
   g_slist_free (all_pages);
 
-  assign_store (state, objects);
+  if (type == FIND_TYPE_PATCH)
+    assign_store_patch (state, objects);
+  else
+    assign_store (state, objects);
+
   count = g_slist_length (objects);
   g_slist_free (objects);
 
@@ -258,6 +272,112 @@ assign_store (GschemFindTextState *state, GSList *objects)
                         -1);
 
     g_free (basename);
+  }
+}
+
+/*! \brief places object in the store so the user can see them
+ *
+ *  \param [in] state
+ *  \param [in] objects the list of objects to put in the store
+ */
+static void
+assign_store_patch (GschemFindTextState *state, GSList *objects)
+{
+  GSList *object_iter;
+	static const char *UNKNOWN_FILE_NAME = "N/A";
+
+  g_return_if_fail (state != NULL);
+  g_return_if_fail (state->store != NULL);
+
+  clear_store (state);
+
+  object_iter = objects;
+
+  while (object_iter != NULL) {
+    char *basename;
+    OBJECT *final_object = NULL;
+    gschem_patch_hit_t *hit = (gschem_patch_hit_t*) object_iter->data;
+    GtkTreeIter tree_iter;
+
+
+    /* TODO: this is an ugly workaround: can't put pins or objects
+       directly on the list because they have no object page; use
+       their complex object's first visible text instead 
+       Fix: be able to jump to any OBJECT
+       */
+ {
+      OBJECT *page_obj;
+      GList *i, *l;
+      int found_pin;
+
+      if (hit->object != NULL)
+        l = o_attrib_return_attribs (hit->object);
+      else
+        l = NULL;
+
+      if (l == NULL) {
+        gtk_list_store_append (state->store, &tree_iter);
+        gtk_list_store_set (state->store,
+                            &tree_iter,
+                            COLUMN_FILENAME, UNKNOWN_FILE_NAME,
+                            COLUMN_STRING, hit->text,
+                            COLUMN_OBJECT, final_object,
+                            -1);
+        goto next;
+      }
+
+
+      found_pin = 0;
+      for(i = l; i != NULL; i = g_list_next(i)) {
+        final_object = i->data;
+        if (final_object->type == OBJ_TEXT) {
+          page_obj = gschem_page_get_page_object(final_object);
+          if (o_is_visible (page_obj->page->toplevel, page_obj)) {
+            found_pin = 1;
+            break;
+          }
+        }
+      }
+      g_list_free(l);
+      if (!found_pin) {
+        g_warning ("no pin text to zoom to");
+        page_obj = final_object = NULL;
+      }
+
+      if (final_object == NULL) {
+        g_warning ("no text attrib?");
+        page_obj = final_object = NULL;
+      }
+      if (page_obj != NULL)
+        basename = g_path_get_basename (page_obj->page->page_filename);
+      else
+        basename = NULL;
+ }
+    s_object_weak_ref (hit->object, (NotifyFunc) object_weakref_cb, state);
+
+    gtk_list_store_append (state->store, &tree_iter);
+
+    if (basename != NULL) {
+      gtk_list_store_set (state->store,
+                          &tree_iter,
+                          COLUMN_FILENAME, basename,
+                          COLUMN_STRING, hit->text,
+                          COLUMN_OBJECT, final_object,
+                          -1);
+      g_free (basename);
+    }
+    else {
+      gtk_list_store_set (state->store,
+                          &tree_iter,
+                          COLUMN_FILENAME, UNKNOWN_FILE_NAME,
+                          COLUMN_STRING, hit->text,
+                          COLUMN_OBJECT, final_object,
+                          -1);
+    }
+    free(hit);
+    next:;
+    object_iter->data = NULL;
+    object_iter = g_slist_next (object_iter);
   }
 }
 
@@ -570,6 +690,58 @@ find_objects_using_substring (GSList *pages, const char *text)
 
   return g_slist_reverse (object_list);
 }
+
+/*! \brief Find all objects that have outstanding patch mismatch
+ *
+ *  \param pages the list of pages to search
+ *  \param text ???
+ *  \return a list of objects that have mismatch
+ */
+static GSList*
+find_objects_using_patch (GSList *pages, const char *text)
+{
+  GSList *object_list = NULL;
+  GSList *page_iter = pages;
+  gschem_patch_state_t st;
+
+  if (gschem_patch_state_init(&st, text) != 0) {
+    g_warning("Unable to open patch file %s\n", text);
+    return NULL;
+  }
+
+  while (page_iter != NULL) {
+    const GList *object_iter;
+    PAGE *page = (PAGE*) page_iter->data;
+
+    page_iter = g_slist_next (page_iter);
+
+    if (page == NULL) {
+      g_warning ("NULL page encountered");
+      continue;
+    }
+
+    object_iter = s_page_objects (page);
+
+    while (object_iter != NULL) {
+      OBJECT *object = (OBJECT*) object_iter->data;
+
+      object_iter = g_list_next (object_iter);
+
+      if (object == NULL) {
+        g_warning ("NULL object encountered");
+        continue;
+      }
+
+      gschem_patch_state_build(&st, object);
+    }
+  }
+
+  object_list = gschem_patch_state_execute(&st, object_list);
+  gschem_patch_state_destroy(&st);
+
+  return g_slist_reverse (object_list);
+}
+
 
 
 /*! \brief obtain a list of pages for an operation
