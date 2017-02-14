@@ -1,7 +1,7 @@
 # xorn.geda.netlist - gEDA Netlist Extraction and Generation
 # Copyright (C) 1998-2010 Ales Hvezda
 # Copyright (C) 1998-2010 gEDA Contributors (see ChangeLog for details)
-# Copyright (C) 2013-2016 Roland Lutz
+# Copyright (C) 2013-2017 Roland Lutz
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -158,7 +158,9 @@ def postproc_blueprints(netlist):
             component.pins_by_number = {}
             for pin in component.pins:
                 if pin.number is None:
-                    pin.error(_("pinnumber missing"))
+                    if not component.has_netname_attrib and \
+                       not component.has_portname_attrib:
+                        pin.error(_("pinnumber missing"))
                 elif pin.number in component.pins_by_number:
                     if component.composite_sources:
                         pin.warn(_("duplicate pinnumber \"%s\"") % pin.number)

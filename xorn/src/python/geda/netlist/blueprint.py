@@ -1,7 +1,7 @@
 # xorn.geda.netlist - gEDA Netlist Extraction and Generation
 # Copyright (C) 1998-2010 Ales Hvezda
 # Copyright (C) 1998-2010 gEDA Contributors (see ChangeLog for details)
-# Copyright (C) 2013-2016 Roland Lutz
+# Copyright (C) 2013-2017 Roland Lutz
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -53,6 +53,9 @@ class Schematic:
         self.components = []
         self.components_by_ob = {}
         self.nets = []
+
+        # populated by xorn.geda.netlist.pp_hierarchy
+        self.ports = None
 
         for ob in rev.toplevel_objects():
             data = ob.data()
@@ -128,6 +131,11 @@ class Component:
         # populated by schematic loader
         self.composite_sources = None
 
+        # set by xorn.geda.netlist.pp_power
+        self.has_netname_attrib = False
+        # set by xorn.geda.netlist.pp_hierarchy
+        self.has_portname_attrib = False
+
         # set by xorn.geda.netlist.pp_graphical
         self.is_graphical = False
 
@@ -135,6 +143,9 @@ class Component:
         self.pins_by_pinseq = None
         self.pins_by_number = None
         self.slotdef = None
+
+        # populated by netlist ctor
+        self.parameters = None
 
         self.error = lambda msg: self.schematic.error_object(self.ob, msg)
         self.warn = lambda msg: self.schematic.warn_object(self.ob, msg)

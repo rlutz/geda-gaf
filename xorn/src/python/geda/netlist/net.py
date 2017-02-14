@@ -1,7 +1,7 @@
 # xorn.geda.netlist - gEDA Netlist Extraction and Generation
 # Copyright (C) 1998-2010 Ales Hvezda
 # Copyright (C) 1998-2010 gEDA Contributors (see ChangeLog for details)
-# Copyright (C) 2013-2016 Roland Lutz
+# Copyright (C) 2013-2017 Roland Lutz
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -258,5 +258,8 @@ def postproc_instances(netlist, flat_namespace, prefer_netname_attribute,
                 #for local_net in cpin.local_net.net.local_nets:
                 #    net._cpins += local_net.cpins
 
-    assert sorted(netlist.nets) == sorted(nets)
+    assert sorted(set(net for net in netlist.nets
+                          for local_net in net.local_nets
+                      if local_net.cpins)) \
+        == sorted(nets)
     netlist.nets = nets

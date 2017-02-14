@@ -17,6 +17,7 @@ src/python/geda/netlist/package.py
 src/python/geda/netlist/pp_graphical.py
 src/python/geda/netlist/pp_hierarchy.py
 src/python/geda/netlist/pp_netattrib.py
+src/python/geda/netlist/pp_power.py
 src/python/geda/netlist/pp_slotting.py
 src/command/xorn.in
 src/command/convert.py

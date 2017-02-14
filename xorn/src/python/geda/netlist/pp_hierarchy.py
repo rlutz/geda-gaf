@@ -1,7 +1,7 @@
 # xorn.geda.netlist - gEDA Netlist Extraction and Generation
 # Copyright (C) 1998-2010 Ales Hvezda
 # Copyright (C) 1998-2010 gEDA Contributors (see ChangeLog for details)
-# Copyright (C) 2013-2016 Roland Lutz
+# Copyright (C) 2013-2017 Roland Lutz
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -21,6 +21,39 @@
 ## Post-processing: Hierarchy traversal.
 
 from gettext import gettext as _
+import xorn.geda.attrib
+
+def postproc_blueprints(netlist):
+    for schematic in netlist.schematics:
+        schematic.ports = {}
+
+        for component in schematic.components:
+            portname = component.get_attribute('portname', None)
+            if portname is None:
+                continue
+
+            if component.refdes is not None:
+                component.error(_("refdes= and portname= attributes "
+                                  "are mutually exclusive"))
+            if xorn.geda.attrib.search_all(component.ob, 'net'):
+                component.error(_("portname= and net= attributes "
+                                  "are mutually exclusive"))
+
+            if not component.pins:
+                component.error(_("I/O symbol doesn't have pins"))
+            if len(component.pins) > 1:
+                component.error(_("multiple pins on I/O symbol"))
+            for pin in component.pins:
+                if pin.number is not None or pin.ob.attached_objects():
+                    pin.warn(_("pin attributes on I/O symbol are ignored"))
+
+            try:
+                ports = schematic.ports[portname]
+            except KeyError:
+                ports = schematic.ports[portname] = []
+            ports.append(component)
+
+            component.has_portname_attrib = True
 
 ## Connect subsheet I/O ports to the instantiating component's pins.
 #
@@ -36,6 +69,16 @@ def postproc_instances(netlist):
         if not component.blueprint.composite_sources:
             continue
 
+        # collect potential old-style ports
+        refdes_dict = {}
+        for subsheet in component.subsheets:
+            for potential_port in subsheet.components:
+                try:
+                    l = refdes_dict[potential_port.blueprint.refdes]
+                except KeyError:
+                    l = refdes_dict[potential_port.blueprint.refdes] = []
+                l.append(potential_port)
+
         for cpin in component.cpins:
             label = cpin.blueprint.get_attribute('pinlabel', None)
             if label is None:
@@ -45,27 +88,40 @@ def postproc_instances(netlist):
             dest_net = cpin.local_net.net
 
             # search for the matching port
-            ports = [potential_port for subsheet in component.subsheets
-                                    for potential_port in subsheet.components
-                     if potential_port.blueprint.refdes == label]
+            ports = [subsheet.components_by_blueprint[port]
+                     for subsheet in component.subsheets
+                     for port in subsheet.blueprint.ports.get(label, [])]
 
-            if not ports:
-                cpin.warn(_("missing I/O symbol with refdes `%s' "
-                            "inside schematic") % label)
-            elif len(ports) > 1:
-                cpin.warn(_("multiple I/O symbols with refdes `%s' "
-                            "inside schematic") % label)
+            for port in refdes_dict.get(label, []):
+                # found an old-style port
+                if port.blueprint.has_netname_attrib:
+                    port.error(_("netname= attribute can't be used "
+                                 "on an I/O symbol"))
+                if xorn.geda.attrib.search_all(port.blueprint.ob, 'net'):
+                    port.error(_("net= attribute can't be used "
+                                 "on an I/O symbol"))
+                if port.blueprint.composite_sources:
+                    port.error(_("I/O symbol can't be a subschematic"))
+                if port.blueprint.is_graphical:
+                    port.error(_("I/O symbol can't be graphical"))
 
-            for port in ports:
                 if not port.cpins:
                     port.error(_("I/O symbol doesn't have pins"))
                     continue
                 if len(port.cpins) > 1:
                     port.error(_("multiple pins on I/O symbol"))
                     continue
-                if port.blueprint.is_graphical:
-                    port.error(_("I/O symbol can't be graphical"))
 
+                ports.append(port)
+
+            if not ports:
+                cpin.warn(_("missing I/O symbol for port `%s' "
+                            "inside schematic") % label)
+            elif len(ports) > 1:
+                cpin.warn(_("multiple I/O symbols for port `%s' "
+                            "inside schematic") % label)
+
+            for port in ports:
                 src_net = port.cpins[0].local_net.net
 
                 # merge nets
@@ -93,3 +149,7 @@ def postproc_instances(netlist):
 
     netlist.components = [component for component in netlist.components
                           if component not in remove_components]
+
+    for component in netlist.components:
+        if component.blueprint.has_portname_attrib:
+            component.error(_("unmatched I/O symbol"))

@@ -1,7 +1,7 @@
 # xorn.geda.netlist - gEDA Netlist Extraction and Generation
 # Copyright (C) 1998-2010 Ales Hvezda
 # Copyright (C) 1998-2010 gEDA Contributors (see ChangeLog for details)
-# Copyright (C) 2013-2016 Roland Lutz
+# Copyright (C) 2013-2017 Roland Lutz
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -60,6 +60,12 @@ class Package:
             except KeyError:
                 l.append(None)
             else:
+                if component.sheet.instantiating_component is not None:
+                    for param_name, param_value in \
+                            component.sheet.instantiating_component \
+                                .blueprint.parameters.iteritems():
+                        value = value.replace(
+                            '$(%s)' % param_name, param_value)
                 l.append(value)
         return l
 
@@ -255,6 +261,9 @@ def postproc_blueprints(netlist):
                 continue
             if component.is_graphical:
                 # graphical components don't need a refdes -> ok
+                continue
+            if component.has_netname_attrib or component.has_portname_attrib:
+                # component is a power symbol or port -> ok
                 continue
 
             # Maybe the symbol isn't a component but a power/gnd symbol?

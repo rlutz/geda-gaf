@@ -1,7 +1,7 @@
 # xorn.geda.netlist - gEDA Netlist Extraction and Generation
 # Copyright (C) 1998-2010 Ales Hvezda
 # Copyright (C) 1998-2010 gEDA Contributors (see ChangeLog for details)
-# Copyright (C) 2013-2016 Roland Lutz
+# Copyright (C) 2013-2017 Roland Lutz
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -37,12 +37,6 @@ def postproc_blueprints(netlist):
 
             component.is_graphical = \
                 component.get_attribute('graphical', None) == '1'
-
-            if component.is_graphical and component.composite_sources:
-                # Do not bother traversing the hierarchy if the symbol
-                # has an graphical attribute attached to it.
-                component.warn(_("source= is set for graphical component"))
-                component.composite_sources = []
 
 def postproc_instances(netlist):
     for net in netlist.nets:

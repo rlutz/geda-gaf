@@ -1,7 +1,7 @@
 # xorn.geda.netlist - gEDA Netlist Extraction and Generation
 # Copyright (C) 1998-2010 Ales Hvezda
 # Copyright (C) 1998-2010 gEDA Contributors (see ChangeLog for details)
-# Copyright (C) 2013-2016 Roland Lutz
+# Copyright (C) 2013-2017 Roland Lutz
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -33,6 +33,7 @@ import xorn.geda.netlist.package
 import xorn.geda.netlist.pp_graphical
 import xorn.geda.netlist.pp_hierarchy
 import xorn.geda.netlist.pp_netattrib
+import xorn.geda.netlist.pp_power
 import xorn.geda.netlist.pp_slotting
 import xorn.geda.netlist.slib
 
@@ -178,10 +179,64 @@ class Netlist:
         for filename in toplevel_filenames:
             load_schematic(filename)
 
+        xorn.geda.netlist.pp_power.postproc_blueprints(self)
+        xorn.geda.netlist.pp_hierarchy.postproc_blueprints(self)
         xorn.geda.netlist.pp_slotting.postproc_blueprints(self)
         xorn.geda.netlist.pp_netattrib.postproc_blueprints(self)
         xorn.geda.netlist.pp_graphical.postproc_blueprints(self)
         xorn.geda.netlist.package.postproc_blueprints(self)
+
+        # look for component type conflicts
+        for schematic in self.schematics:
+            for component in schematic.components:
+                if component.composite_sources and component.is_graphical:
+                    # Do not bother traversing the hierarchy if the symbol
+                    # has an graphical attribute attached to it.
+                    component.warn(_("source= is set for graphical component"))
+                    component.composite_sources = []
+
+                if component.has_netname_attrib and \
+                   component.has_portname_attrib:
+                    component.error(_("netname= and portname= attributes "
+                                      "are mutually exclusive"))
+
+                if component.has_netname_attrib and \
+                   component.composite_sources:
+                    component.error(_("power symbol can't be a subschematic"))
+                    component.composite_sources = []
+                if component.has_portname_attrib and \
+                   component.composite_sources:
+                    component.error(_("I/O symbol can't be a subschematic"))
+                    component.composite_sources = []
+
+                if component.has_netname_attrib and component.is_graphical:
+                    component.error(_("power symbol can't be graphical"))
+                if component.has_portname_attrib and component.is_graphical:
+                    component.error(_("I/O symbol can't be graphical"))
+
+        # collect parameters
+        for schematic in self.schematics:
+            for component in schematic.components:
+                component.parameters = {}
+
+                for func in [xorn.geda.attrib.search_inherited,
+                             xorn.geda.attrib.search_attached]:
+                    names = set()
+                    for val in func(component.ob, 'param'):
+                        try:
+                            name, value = xorn.geda.attrib.parse_string(val)
+                        except xorn.geda.attrib.MalformedAttributeError:
+                            component.error(
+                                _("malformed param= attribute: %s") % val)
+                            continue
+
+                        if name in names:
+                            component.error(
+                                _("duplicate param= attribute: %s") % name)
+                            continue
+
+                        component.parameters[name] = value
+                        names.add(name)
 
         # Traverse the schematic files and create the component objects
         # accordingly.

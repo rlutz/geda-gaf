@@ -1,6 +1,6 @@
 # Guile example: A Logo-like tortoise drawer
 # Copyright (C) David Drysdale, Daniel Kraft
-# Copyright (C) 2013-2016 Roland Lutz
+# Copyright (C) 2013-2017 Roland Lutz
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by

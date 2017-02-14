@@ -12,12 +12,12 @@ netname=middleB
 C 5300 4400 1 0 0 in-1.sym
 {
 T 5300 4700 5 10 1 1 0 0 1
-refdes=A
+portname=A
 }
 C 9600 4400 1 0 0 out-1.sym
 {
 T 9900 4700 5 10 1 1 0 0 1
-refdes=B
+portname=B
 }
 C 6700 3900 1 0 0 bottom.sym
 {

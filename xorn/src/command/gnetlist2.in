@@ -2,7 +2,7 @@
 # gnetlist2 - wrapper script for invoking the gEDA netlister
 # Copyright (C) 1998-2010 Ales Hvezda
 # Copyright (C) 1998-2010 gEDA Contributors (see ChangeLog for details)
-# Copyright (C) 2013-2016 Roland Lutz
+# Copyright (C) 2013-2017 Roland Lutz
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -948,7 +948,7 @@ gEDA/gaf homepage: http://www.geda-project.org/
             sys.stdout.write('''\
 gnetlist2 (%s) - Wrapper script for invoking the gEDA netlister
 Copyright (C) 1998-2012 gEDA developers
-Copyright (C) 2016 Roland Lutz
+Copyright (C) 2017 Roland Lutz
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -1129,7 +1129,7 @@ GNU General Public License for more details.
     for backend_option in backend_options:
         cmd += ['-O', backend_option]
 
-    if guile_proc.startswith('drc'):
+    if guile_proc is not None and guile_proc.startswith('drc'):
         cmd.append('--ignore-errors')
 
     if not quiet_mode:

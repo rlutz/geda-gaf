@@ -1,4 +1,4 @@
-# Copyright (C) 2013-2016 Roland Lutz
+# Copyright (C) 2013-2017 Roland Lutz
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -48,6 +48,7 @@ nobase_pkgpython_PYTHON = \
 	geda/netlist/pp_graphical.py \
 	geda/netlist/pp_hierarchy.py \
 	geda/netlist/pp_netattrib.py \
+	geda/netlist/pp_power.py \
 	geda/netlist/pp_slotting.py \
 	geda/netlist/slib.py
 

@@ -1,7 +1,7 @@
 # xorn.geda.netlist - gEDA Netlist Extraction and Generation
 # Copyright (C) 1998-2010 Ales Hvezda
 # Copyright (C) 1998-2010 gEDA Contributors (see ChangeLog for details)
-# Copyright (C) 2013-2016 Roland Lutz
+# Copyright (C) 2013-2017 Roland Lutz
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -47,9 +47,13 @@ mostlyclean-local:
 TESTS = stack_1-geda.out \
 	hierarchy-geda.out \
 	hierarchy2-geda.out \
+	net_attr-geda.out \
+	netname_attr-geda.out \
+	param_attr-geda.out \
 	regression/component_refdes-dumptext.out \
 	regression/duplicate_local_net-geda.out \
 	regression/missing_pinseq-geda.out \
+	regression/named_unconnected_net-geda.out \
 	regression/override_netname-geda.out \
 	regression/refdes_promotion-geda.out \
 	regression/transform_symbols-geda.out \
@@ -474,6 +478,12 @@ testdata = \
 	hierarchy2-sources/under.sch \
 	hierarchy2-symbols/under.sym \
 	hierarchy2.sch \
+	net_attr.sch \
+	netname_attr.sch \
+	param_attr-sources/sub.sch \
+	param_attr-symbols/comp.sym \
+	param_attr-symbols/sub.sym \
+	param_attr.sch \
 	regression/component_refdes-sources/sub.sch \
 	regression/component_refdes-symbols/component.sym \
 	regression/component_refdes-symbols/sub.sym \
@@ -483,6 +493,7 @@ testdata = \
 	regression/duplicate_local_net-symbols/sym.sym \
 	regression/duplicate_local_net.sch \
 	regression/missing_pinseq.sch \
+	regression/named_unconnected_net.sch \
 	regression/override_netname-symbols/component.sym \
 	regression/override_netname-symbols/power.sym \
 	regression/override_netname.sch \
