@@ -1,4 +1,4 @@
-/* Copyright (C) 2013-2016 Roland Lutz
+/* Copyright (C) 2013-2017 Roland Lutz
 
    AUTOMATICALLY GENERATED FROM data_fillattr.m4 -- DO NOT EDIT
 
