@@ -183,6 +183,15 @@ class Netlist:
         xorn.geda.netlist.pp_graphical.postproc_blueprints(self)
         xorn.geda.netlist.package.postproc_blueprints(self)
 
+        # look for component type conflicts
+        for schematic in self.schematics:
+            for component in schematic.components:
+                if component.composite_sources and component.is_graphical:
+                    # Do not bother traversing the hierarchy if the symbol
+                    # has an graphical attribute attached to it.
+                    component.warn(_("source= is set for graphical component"))
+                    component.composite_sources = []
+
         # Traverse the schematic files and create the component objects
         # accordingly.
 
