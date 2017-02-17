@@ -1,3 +1,19 @@
+February 2017
+=============
+
+- Object data is now validated and invalid data rejected
+
+- Object data is normalized after copying; any stored object data is
+  guaranteed to be in a standard format
+
+- xorn_delete_object and xorn_delete_selected_objects now return 0 on
+  success and -1 on failure (no objects matching the specified
+  selection being considered success)
+
+- Object manipulation functions now have an additional parameter `err'
+  returning the error code
+
+
 March 2014
 ==========
 
