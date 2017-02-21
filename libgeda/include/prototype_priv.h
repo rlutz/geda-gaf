@@ -151,6 +151,10 @@ double o_text_shortest_distance(TOPLEVEL *toplevel, OBJECT *object, int x, int y
 int world_get_text_bounds(TOPLEVEL *toplevel, OBJECT *o_current, int *left, int *top, int *right, int *bottom);
 gboolean o_text_get_position(OBJECT *object, gint *x, gint *y);
 
+/* o_selection.c */
+void o_selection_select(TOPLEVEL *toplevel, OBJECT *object);
+void o_selection_unselect(TOPLEVEL *toplevel, OBJECT *object);
+
 /* s_clib.c */
 void s_clib_init (void);
 
