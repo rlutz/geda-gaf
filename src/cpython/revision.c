@@ -146,7 +146,7 @@ static PyObject *Revision_get_object_data(
 
 	switch (type) {
 	case xorn_obtype_none:
-		PyErr_SetNone(PyExc_KeyError);
+		PyErr_SetString(PyExc_KeyError, "object does not exist");
 		return NULL;
 	case xornsch_obtype_arc:
 		return construct_arc(xornsch_get_arc_data(self->rev, ob));
@@ -172,7 +172,7 @@ static PyObject *Revision_get_object_data(
 	}
 
 	char buf[BUFSIZ];
-	snprintf(buf, BUFSIZ, "Object type not supported (%d)", type);
+	snprintf(buf, BUFSIZ, "object type not supported (%d)", type);
 	PyErr_SetString(PyExc_ValueError, buf);
 	return NULL;
 }
@@ -193,7 +193,7 @@ static PyObject *Revision_get_object_location(
 
 	if (xorn_get_object_location(self->rev, ((Object *)ob_arg)->ob,
 				     &attached_to, &position) == -1) {
-		PyErr_SetString(PyExc_KeyError, "Object does not exist");
+		PyErr_SetString(PyExc_KeyError, "object does not exist");
 		return NULL;
 	}
 
@@ -235,7 +235,7 @@ static int prepare_data(PyObject *obj, xorn_obtype_t *type_return,
 static PyObject *not_transient(void)
 {
 	PyErr_SetString(PyExc_ValueError,
-			"Revision can only be changed while transient");
+			"revision can only be changed while transient");
 	return NULL;
 }
 
@@ -306,7 +306,7 @@ static PyObject *Revision_set_object_data(
 					     &attached_to, NULL) != -1 &&
 		    attached_to != NULL) {
 			PyErr_SetString(PyExc_ValueError,
-					"Cannot set attached object to "
+					"can't set attached object to "
 					"something other than text");
 			return NULL;
 		}
@@ -320,7 +320,7 @@ static PyObject *Revision_set_object_data(
 			    NULL, &count) != -1 && count != 0) {
 			PyErr_SetString(
 				PyExc_ValueError,
-				"Cannot set object with attached objects to "
+				"can't set object with attached objects to "
 				"something other than net or component");
 			return NULL;
 		}
@@ -373,14 +373,14 @@ static PyObject *Revision_relocate_object(
 	xorn_obtype_t ob_type = xorn_get_object_type(
 		self->rev, ((Object *)ob_arg)->ob);
 	if (ob_type == xorn_obtype_none) {
-		PyErr_SetString(PyExc_KeyError, "Object does not exist");
+		PyErr_SetString(PyExc_KeyError, "object does not exist");
 		return NULL;
 	}
 
 	if (attach_to_arg != Py_None) {
 		if (ob_type != xornsch_obtype_text) {
 			PyErr_SetString(PyExc_ValueError,
-					"Only text objects can be attached");
+					"only text objects can be attached");
 			return NULL;
 		}
 
@@ -388,14 +388,14 @@ static PyObject *Revision_relocate_object(
 					     ((Object *)attach_to_arg)->ob)) {
 		case xorn_obtype_none:
 			PyErr_SetString(PyExc_KeyError,
-					"Parent object does not exist");
+					"parent object does not exist");
 			return NULL;
 		case xornsch_obtype_net:
 		case xornsch_obtype_component:
 			break;
 		default:
 			PyErr_SetString(PyExc_ValueError,
-					"Can only attach to net and "
+					"can only attach to net and "
 					"component objects");
 			return NULL;
 		}
@@ -408,14 +408,14 @@ static PyObject *Revision_relocate_object(
 			    self->rev, ((Object *)insert_before_arg)->ob,
 			    &attached_to, NULL) == -1) {
 			PyErr_SetString(PyExc_KeyError,
-					"Reference object does not exist");
+					"reference object does not exist");
 			return NULL;
 		}
 
 		if (attached_to != (attach_to_arg == Py_None ? NULL :
 					((Object *)attach_to_arg)->ob)) {
 			PyErr_SetString(PyExc_ValueError,
-					"Invalid reference object");
+					"invalid reference object");
 			return NULL;
 		}
 	}
@@ -448,7 +448,7 @@ PyObject *Revision_copy_object(
 	if (!xorn_object_exists_in_revision(((Revision *)rev_arg)->rev,
 					    ((Object *)ob_arg)->ob)) {
 		PyErr_SetString(PyExc_KeyError,
-				"Object does not exist in source revision");
+				"object does not exist in source revision");
 		return NULL;
 	}
 
@@ -494,7 +494,7 @@ static PyObject *Revision_delete_object(
 
 	if (!xorn_object_exists_in_revision(self->rev,
 					    ((Object *)ob_arg)->ob)) {
-		PyErr_SetString(PyExc_KeyError, "Object does not exist");
+		PyErr_SetString(PyExc_KeyError, "object does not exist");
 		return NULL;
 	}
 
@@ -595,7 +595,7 @@ static int Revision_settransient(
 {
 	if (value == NULL) {
 		PyErr_SetString(PyExc_TypeError,
-				"Cannot delete transient attribute");
+				"can't delete transient attribute");
 		return -1;
 	}
 
@@ -608,7 +608,7 @@ static int Revision_settransient(
 		if (xorn_revision_is_transient(self->rev))
 			return 0;
 		PyErr_SetString(PyExc_ValueError,
-				"Cannot make revision transient again");
+				"can't make revision transient again");
 		return -1;
 	}
 
