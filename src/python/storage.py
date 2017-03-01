@@ -134,6 +134,7 @@ class Revision:
     #
     # \throw ValueError  if the revision isn't transient
     # \throw TypeError   if \a data doesn't have a valid type
+    # \throw ValueError  if \a data contains an invalid value
     # \throw MemoryError if there is not enough memory
     #
     # Example:
@@ -163,6 +164,7 @@ class Revision:
     #
     # \throw ValueError  if the revision isn't transient
     # \throw TypeError   if \a data doesn't have a valid type
+    # \throw ValueError  if \a data contains an invalid value
     # \throw ValueError  if \a ob is attached to an object but the new
     #                    object type wouldn't permit attaching the object
     # \throw ValueError  if there are objects attached to \a ob but
