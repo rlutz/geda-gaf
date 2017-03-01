@@ -376,6 +376,35 @@ def pin_update_whichend(rev, force_boundingbox, log):
     log.error(_("file is lacking pin orientation information"))
 
 
+## Construct a line attribute object.
+#
+# The line parameters which are not used for the specified dash style
+# are set to \c 0.
+
+def normalized_line(width, cap_style, dash_style, dash_length, dash_space):
+    if dash_style == 0 or dash_style == 1:
+        dash_length = 0.
+    if dash_style == 0:
+        dash_space = 0.
+    return xorn.storage.LineAttr(
+        width, cap_style, dash_style, dash_length, dash_space)
+
+## Construct a fill attribute object.
+#
+# The fill parameters which are not used for the specified fill type
+# are set to \c 0.
+
+def normalized_fill(type, width, angle0, pitch0, angle1, pitch1):
+    if type != 2 and type != 3:
+        width = 0.
+        angle0 = 0
+        pitch0 = 0.
+    if type != 2:
+        angle1 = 0
+        pitch1 = 0.
+    return xorn.storage.FillAttr(
+        type, width, angle0, pitch0, angle1, pitch1)
+
 ## Read a circle object from a string in gEDA format.
 #
 # \throw xorn.geda.read.ParseError if the string could not be parsed
@@ -425,13 +454,13 @@ def read_circle(buf, format, log):
         y = y1,
         radius = radius,
         color = color,
-        line = xorn.storage.LineAttr(
+        line = normalized_line(
             width = circle_width,
             cap_style = circle_end,
             dash_style = circle_type,
             dash_length = circle_length,
             dash_space = circle_space),
-        fill = xorn.storage.FillAttr(
+        fill = normalized_fill(
             type = circle_fill,
             width = fill_width,
             angle0 = angle1,
@@ -485,7 +514,7 @@ def read_arc(buf, format, log):
         startangle = start_angle,
         sweepangle = sweep_angle,
         color = color,
-        line = xorn.storage.LineAttr(
+        line = normalized_line(
             width = arc_width,
             cap_style = arc_end,
             dash_style = arc_type,
@@ -523,6 +552,8 @@ def read_box(buf, format, log):
         log.error(_("failed to parse box object"))
         return None
 
+
+
     if type != OBJ_BOX:
         raise ValueError
 
@@ -546,13 +577,13 @@ def read_box(buf, format, log):
         width = width,
         height = height,
         color = color,
-        line = xorn.storage.LineAttr(
+        line = normalized_line(
             width = box_width,
             cap_style = box_end,
             dash_style = box_type,
             dash_length = box_length,
             dash_space = box_space),
-        fill = xorn.storage.FillAttr(
+        fill = normalized_fill(
             type = box_filling,
             width = fill_width,
             angle0 = angle1,
@@ -689,7 +720,7 @@ def read_line(buf, format, log):
         width = x2 - x1,
         height = y2 - y1,
         color = color,
-        line = xorn.storage.LineAttr(
+        line = normalized_line(
             width = line_width,
             cap_style = line_end,
             dash_style = line_type,
@@ -777,13 +808,13 @@ def read_path(first_line, f, format, log):
     return xorn.storage.Path(
         pathdata = pathstr.encode('utf-8'),
         color = color,
-        line = xorn.storage.LineAttr(
+        line = normalized_line(
             width = line_width,
             cap_style = line_end,
             dash_style = line_type,
             dash_length = line_length,
             dash_space = line_space),
-        fill = xorn.storage.FillAttr(
+        fill = normalized_fill(
             type = fill_type,
             width = fill_width,
             angle0 = angle1,

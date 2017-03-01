@@ -447,12 +447,12 @@ class LoadContext:
             line.dash_length = self.parse_attribute(
                 attributes, 'dashlength', None, self.parse, 'dash length')
         else:
-            line.dash_length = -1
+            line.dash_length = 0.
         if line.dash_style != 0:
             line.dash_space = self.parse_attribute(
                 attributes, 'dashspace', None, self.parse, 'dash space')
         else:
-            line.dash_space = -1
+            line.dash_space = 0.
         return line
 
     def parse_fill(self, attributes):
@@ -467,17 +467,17 @@ class LoadContext:
             fill.pitch0 = self.parse_attribute(
                 attributes, 'pitch0', None, self.parse, 'first fill pitch')
         else:
-            fill.width = -1
-            fill.angle0 = -1
-            fill.pitch0 = -1
+            fill.width = 0.
+            fill.angle0 = 0
+            fill.pitch0 = 0.
         if fill.type == 2:
             fill.angle1 = self.parse_attribute(
                 attributes, 'angle1', None, int, 'second fill angle')
             fill.pitch1 = self.parse_attribute(
                 attributes, 'pitch1', None, self.parse, 'second fill pitch')
         else:
-            fill.angle1 = -1
-            fill.pitch1 = -1
+            fill.angle1 = 0
+            fill.pitch1 = 0.
         return fill
 
 class RootElementHandler(NullHandler):
