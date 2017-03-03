@@ -17,10 +17,10 @@
 ## \file storage.py
 ## Placeholder file for xorn.storage documentation.
 #
-# This file DOES NOT contain the actual source code of the
-# xorn.storage module.  It contains documented stubs of the code from
-# which the Doxygen documentation is generated.  For the actual
-# definition of the module, see the Python extension in \c src/cpython/.
+# This file DOES NOT contain the actual source code of the xorn.storage
+# module.  It contains documented stubs of the code from which the
+# Doxygen documentation is generated.  For the actual definition of
+# the module, see the Python extension in \c src/cpython/storage/.
 
 ## \namespace xorn.storage
 ## Xorn storage backend.
@@ -84,7 +84,7 @@ class Revision:
     # \throw MemoryError if there is not enough memory
     #
     # Example:
-    # \snippet functions.py get objects
+    # \snippet storage_funcs.py get objects
 
     def get_objects(self):
         pass
@@ -107,7 +107,7 @@ class Revision:
     # \throw MemoryError if there is not enough memory
     #
     # Example:
-    # \snippet functions.py get/set object data
+    # \snippet storage_funcs.py get/set object data
 
     def get_object_data(self, ob):
         pass
@@ -138,7 +138,7 @@ class Revision:
     # \throw MemoryError if there is not enough memory
     #
     # Example:
-    # \snippet functions.py add object
+    # \snippet storage_funcs.py add object
 
     def add_object(self, data):
         pass
@@ -173,7 +173,7 @@ class Revision:
     # \throw MemoryError if there is not enough memory
     #
     # Example:
-    # \snippet functions.py get/set object data
+    # \snippet storage_funcs.py get/set object data
 
     def set_object_data(self, ob, data):
         pass
@@ -216,7 +216,7 @@ class Revision:
     # \throw MemoryError if there is not enough memory
     #
     # Example:
-    # \snippet functions.py add attribute
+    # \snippet storage_funcs.py add attribute
 
     def relocate_object(self, ob, attach_to, insert_before):
         pass

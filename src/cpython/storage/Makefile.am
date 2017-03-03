@@ -79,6 +79,6 @@ storagemodule_la_SOURCES = \
 	object.c \
 	revision.c \
 	selection.c
-storagemodule_la_LIBADD = ../storage/libxornstorage.la
+storagemodule_la_LIBADD = ../../storage/libxornstorage.la
 storagemodule_la_LDFLAGS = -module -avoid-version \
 			   -export-symbols-regex '^initstorage$$'
