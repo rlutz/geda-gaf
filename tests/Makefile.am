@@ -73,6 +73,7 @@ pythontests = \
 	cpython/get_obtype.py \
 	cpython/is_selected.py \
 	cpython/module.py \
+	cpython/normalize.py \
 	cpython/ob_equality.py \
 	cpython/pointer.py \
 	cpython/query_attached.py \
@@ -83,6 +84,7 @@ pythontests = \
 	cpython/stat.py \
 	cpython/string.py \
 	cpython/transient.py \
+	cpython/validate.py \
 	cpython/guile.py \
 	python/snippets/xml_writer.py \
 	python/base64.py \
