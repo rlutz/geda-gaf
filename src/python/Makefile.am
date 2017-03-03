@@ -52,7 +52,7 @@ nobase_pkgpython_PYTHON = \
 	geda/netlist/pp_slotting.py \
 	geda/netlist/slib.py
 
-noinst_PYTHON = storage.py
+noinst_PYTHON = guile.py storage.py
 
 nodist_pkgpython_PYTHON = config.py
 EXTRA_DIST = config.py.in

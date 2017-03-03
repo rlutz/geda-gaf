@@ -490,6 +490,7 @@ testdata = \
 	regression/duplicate_local_net-symbols/sub.sym \
 	regression/duplicate_local_net-symbols/sym.sym \
 	regression/duplicate_local_net.sch \
+	regression/missing_pinseq-symbols/missing_pinseq.sym \
 	regression/missing_pinseq.sch \
 	regression/named_unconnected_net.sch \
 	regression/override_netname-symbols/component.sym \
