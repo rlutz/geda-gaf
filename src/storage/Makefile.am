@@ -27,5 +27,6 @@ libxornstorage_la_SOURCES = \
 	object.cc \
 	obstate.cc \
 	revision.cc \
-	selection.cc
+	selection.cc \
+	validate.cc
 libxornstorage_la_LDFLAGS = -export-symbols-regex '^xorn_'

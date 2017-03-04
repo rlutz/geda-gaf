@@ -46,7 +46,7 @@ int main(void)
 	component_data.symbol.incref = (void (*)(void *))inc;
 	component_data.symbol.decref = (void (*)(void *))dec;
 
-	assert(ob0 = xornsch_add_component(rev, &component_data));
+	assert(ob0 = xornsch_add_component(rev, &component_data, NULL));
 	assert(refcnt0 == 1);
 
 	memset(&picture_data, 0, sizeof picture_data);
@@ -54,21 +54,21 @@ int main(void)
 	picture_data.pixmap.incref = (void (*)(void *))inc;
 	picture_data.pixmap.decref = (void (*)(void *))dec;
 
-	assert(ob1 = xornsch_add_picture(rev, &picture_data));
+	assert(ob1 = xornsch_add_picture(rev, &picture_data, NULL));
 	assert(refcnt0 == 1);
 	assert(refcnt1 == 1);
 
 	assert(sel0 = xorn_select_all(rev));
-	assert(sel1 = xorn_copy_objects(rev, rev, sel0));
+	assert(sel1 = xorn_copy_objects(rev, rev, sel0, NULL));
 	assert(refcnt0 != 0);
 	assert(refcnt1 != 0);
 
 	memset(&picture_data, 0, sizeof picture_data);
-	assert(xornsch_set_picture_data(rev, ob1, &picture_data) == 0);
+	assert(xornsch_set_picture_data(rev, ob1, &picture_data, NULL) == 0);
 	assert(refcnt0 != 0);
 	assert(refcnt1 != 0);
 
-	xorn_delete_selected_objects(rev, sel1);
+	assert(xorn_delete_selected_objects(rev, sel1, NULL) == 0);
 	assert(refcnt0 == 1);
 	assert(refcnt1 == 0);
 	xorn_free_selection(sel1);

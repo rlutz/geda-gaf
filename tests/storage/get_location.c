@@ -92,13 +92,13 @@ static void check_order(void)
 	rev4 = xorn_new_revision(rev3);
 
 	memset(&arc_data, 0, sizeof arc_data);
-	assert(xornsch_set_arc_data(rev4, ob1a, &arc_data) == 0);
+	assert(xornsch_set_arc_data(rev4, ob1a, &arc_data, NULL) == 0);
 
 	assert_object_location(rev4, ob0, NULL, 0);
 	assert_object_location(rev4, ob1a, NULL, 2);
 	assert_object_location(rev4, ob1b, NULL, 1);
 
-	ob2 = xorn_copy_object(rev4, rev1, ob0);
+	ob2 = xorn_copy_object(rev4, rev1, ob0, NULL);
 	assert(ob2 != NULL);
 
 	assert_object_location(rev4, ob0, NULL, 0);
@@ -106,7 +106,7 @@ static void check_order(void)
 	assert_object_location(rev4, ob1b, NULL, 1);
 	assert_object_location(rev4, ob2, NULL, 3);
 
-	xorn_delete_object(rev4, ob0);
+	assert(xorn_delete_object(rev4, ob0, NULL) == 0);
 
 	assert_object_location_fails(rev4, ob0);
 	assert_object_location(rev4, ob1a, NULL, 1);
@@ -130,35 +130,35 @@ static void check_attach(void)
 	assert(rev = xorn_new_revision(NULL));
 
 	memset(&net_data, 0, sizeof net_data);
-	assert(N = xornsch_add_net(rev, &net_data));
+	assert(N = xornsch_add_net(rev, &net_data, NULL));
 
 	memset(&text_data, 0, sizeof text_data);
-	assert(a = xornsch_add_text(rev, &text_data));
-	assert(b = xornsch_add_text(rev, &text_data));
+	assert(a = xornsch_add_text(rev, &text_data, NULL));
+	assert(b = xornsch_add_text(rev, &text_data, NULL));
 
 	assert_object_location(rev, N, _, 0);
 	assert_object_location(rev, a, _, 1);
 	assert_object_location(rev, b, _, 2);
 
-	assert(xorn_relocate_object(rev, a, N, _) == 0);
+	assert(xorn_relocate_object(rev, a, N, _, NULL) == 0);
 
 	assert_object_location(rev, N, _, 0);
 	assert_object_location(rev, a, N, 0);
 	assert_object_location(rev, b, _, 1);
 
-	assert(xorn_relocate_object(rev, b, N, _) == 0);
+	assert(xorn_relocate_object(rev, b, N, _, NULL) == 0);
 
 	assert_object_location(rev, N, _, 0);
 	assert_object_location(rev, a, N, 0);
 	assert_object_location(rev, b, N, 1);
 
-	assert(xorn_relocate_object(rev, b, N, a) == 0);
+	assert(xorn_relocate_object(rev, b, N, a, NULL) == 0);
 
 	assert_object_location(rev, N, _, 0);
 	assert_object_location(rev, a, N, 1);
 	assert_object_location(rev, b, N, 0);
 
-	assert(xorn_relocate_object(rev, a, _, N) == 0);
+	assert(xorn_relocate_object(rev, a, _, N, NULL) == 0);
 
 	assert_object_location(rev, N, _, 1);
 	assert_object_location(rev, a, _, 0);

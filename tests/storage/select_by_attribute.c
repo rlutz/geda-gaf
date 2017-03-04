@@ -126,7 +126,7 @@ int main(void)
 	memset(&text_data, 0, sizeof text_data);
 	text_data.text.s = "Hello world";
 	text_data.text.len = 11;
-	text_ob = xornsch_add_text(rev4, &text_data);
+	text_ob = xornsch_add_text(rev4, &text_data, NULL);
 	assert(text_ob != NULL);
 	xorn_finalize_revision(rev4);
 

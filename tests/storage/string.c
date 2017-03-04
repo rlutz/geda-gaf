@@ -37,7 +37,7 @@ int main(void)
 
 	rev1 = xorn_new_revision(rev0);
 	assert(rev1 != NULL);
-	ob = xornsch_add_text(rev1, &text_data);
+	ob = xornsch_add_text(rev1, &text_data, NULL);
 	assert(ob != NULL);
 	xorn_finalize_revision(rev1);
 

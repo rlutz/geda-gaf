@@ -42,6 +42,7 @@ check_PROGRAMS = \
 	storage/invalid_obtype \
 	storage/is_selected \
 	storage/multiple_assignments \
+	storage/normalize \
 	storage/null \
 	storage/pointer \
 	storage/query_attached \
@@ -53,7 +54,8 @@ check_PROGRAMS = \
 	storage/set_obdata \
 	storage/stat \
 	storage/string \
-	storage/transient
+	storage/transient \
+	storage/validate
 
 pythontests = \
 	cpython/snippets/functions.py \

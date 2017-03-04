@@ -16,6 +16,8 @@
 
 #include "Setup.h"
 
+#define NO_ERROR ((xorn_error_t) -1)
+
 
 int main(void)
 {
@@ -23,14 +25,20 @@ int main(void)
 	xorn_object_t ob0, ob1a, ob1b;
 
 	xorn_revision_t rev4;
+	xorn_error_t err;
 
 	setup(&rev0, &rev1, &rev2, &rev3, &ob0, &ob1a, &ob1b);
 
 	rev4 = xorn_new_revision(rev3);
 	assert(rev4 != NULL);
 
-	assert(xornsch_add_line(rev4, NULL) == NULL);
-	assert(xornsch_set_line_data(rev4, ob0, NULL) == -1);
+	err = NO_ERROR;
+	assert(xornsch_add_line(rev4, NULL, &err) == NULL);
+	assert(err == xorn_error_invalid_argument);
+
+	err = NO_ERROR;
+	assert(xornsch_set_line_data(rev4, ob0, NULL, &err) == -1);
+	assert(err == xorn_error_invalid_argument);
 
 	xorn_finalize_revision(rev4);
 
