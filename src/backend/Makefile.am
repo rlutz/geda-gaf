@@ -21,6 +21,7 @@ backenddir = $(pkglibdir)/backends
 backend_PYTHON = \
 	util_alias.py \
 	util_getopt.py \
+	util_repackage.py \
 	util_wrap.py \
 	dump_common.py \
 	partslist_common.py \
