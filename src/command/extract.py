@@ -41,21 +41,19 @@ def main():
         elif option == '-l' or option == '--list':
             list_embedded = True
         elif option == '--help':
-            sys.stdout.write(_(
-"Usage: %s [OPTION]... SCHEMATIC [SYMBOL|PICTURE]...\n")
-                             % xorn.command.program_name)
-            sys.stdout.write(_(
-"Extract objects embedded in a schematic into a separate file\n"))
-            sys.stdout.write("\n")
-            sys.stdout.write(_(
-"  -a, --all             extract all embedded objects\n"
-"  -l, --list            list embedded object names\n"
-"      --help            give this help\n"
-"      --version         display version number\n"))
-            sys.stdout.write("\n")
-            sys.stdout.write(_("Report %s bugs to %s\n")
-                             % (xorn.config.PACKAGE_NAME,
-                                xorn.config.PACKAGE_BUGREPORT))
+            sys.stdout.write(_("""\
+Usage: %s [OPTION]... SCHEMATIC [SYMBOL|PICTURE]...
+Extract objects embedded in a schematic into a separate file
+
+  -a, --all             extract all embedded objects
+  -l, --list            list embedded object names
+      --help            give this help
+      --version         display version number
+
+Report %s bugs to %s
+""") % (xorn.command.program_name,
+        xorn.config.PACKAGE_NAME,
+        xorn.config.PACKAGE_BUGREPORT))
             sys.exit(0)
         elif option == '--version':
             xorn.command.core_version()
