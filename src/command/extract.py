@@ -26,20 +26,30 @@ import xorn.geda.read
 import xorn.geda.write
 
 def main():
+    extract_all = False
+    list_embedded = False
+
     try:
         options, args = getopt.getopt(
-            xorn.command.args, '', ['help', 'version'])
+            xorn.command.args, 'al', ['all', 'list', 'help', 'version'])
     except getopt.GetoptError as e:
         xorn.command.invalid_arguments(e.msg)
 
     for option, value in options:
-        if option == '--help':
+        if option == '-a' or option == '--all':
+            extract_all = True
+        elif option == '-l' or option == '--list':
+            list_embedded = True
+        elif option == '--help':
             sys.stdout.write(_(
-"Usage: %s SCHEMATIC SYMBOL|PICTURE...\n") % xorn.command.program_name)
+"Usage: %s [OPTION]... SCHEMATIC [SYMBOL|PICTURE]...\n")
+                             % xorn.command.program_name)
             sys.stdout.write(_(
 "Extract objects embedded in a schematic into a separate file\n"))
             sys.stdout.write("\n")
             sys.stdout.write(_(
+"  -a, --all             extract all embedded objects\n"
+"  -l, --list            list embedded object names\n"
 "      --help            give this help\n"
 "      --version         display version number\n"))
             sys.stdout.write("\n")
@@ -50,7 +60,15 @@ def main():
         elif option == '--version':
             xorn.command.core_version()
 
-    if len(args) < 2:
+    if extract_all and list_embedded:
+        xorn.command.invalid_arguments(_(
+            "options `--all' and `--list' are mutually exclusive"))
+    if extract_all or list_embedded:
+        if len(args) < 1:
+            xorn.command.invalid_arguments(_("missing argument"))
+        if len(args) > 1:
+            xorn.command.invalid_arguments(_("too many arguments"))
+    elif len(args) < 2:
         xorn.command.invalid_arguments(_("not enough arguments"))
 
     try:
@@ -79,12 +97,23 @@ def main():
         if isinstance(data, xorn.storage.Component) and data.symbol.embedded \
                 and not data.symbol.basename in embedded_symbols:
             embedded_symbols[data.symbol.basename.encode()] = ob
+            if list_embedded:
+                sys.stdout.write(data.symbol.basename + '\n')
         if isinstance(data, xorn.storage.Picture) and data.pixmap.embedded:
             filename = os.path.basename(data.pixmap.filename)
             if not filename in embedded_pixmaps:
                 embedded_pixmaps[filename.encode()] = ob
+            if list_embedded:
+                sys.stdout.write(filename + '\n')
 
-    for filename in args[1:]:
+    if extract_all:
+        filenames = list(set(embedded_symbols.keys() +
+                             embedded_pixmaps.keys()))
+        filenames.sort()
+    else:
+        filenames = args[1:]
+
+    for filename in filenames:
         basename = os.path.basename(filename)
         if basename not in embedded_symbols \
                 and basename not in embedded_pixmaps:
@@ -93,7 +122,7 @@ def main():
                              % (xorn.command.program_short_name, basename))
             sys.exit(1)
 
-    for filename in args[1:]:
+    for filename in filenames:
         basename = os.path.basename(filename)
         if basename in embedded_symbols:
             ob = embedded_symbols[basename]
