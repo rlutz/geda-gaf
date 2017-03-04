@@ -57,7 +57,7 @@ class Sheet:
         for component_blueprint in self.blueprint.components:
             Component(self, component_blueprint)
 
-## Component.
+## %Component.
 #
 # Represents a component in the netlist, either read from a toplevel
 # schematic or instantiated via a subschematic symbol.
