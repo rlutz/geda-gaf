@@ -16,7 +16,31 @@
 
 import xorn.storage, Setup
 
+def throws(fun, *args, **kwds):
+    try:
+        fun(*args, **kwds)
+    except Exception as e:
+        return type(e)
+
 rev0, rev1, rev2, rev3, ob0, ob1a, ob1b = Setup.setup()
+
+
+# can't copy object which doesn't exist in source revision
+
+rev4 = xorn.storage.Revision(rev3)
+assert rev4 is not None
+
+assert throws(rev4.copy_object, rev0, ob0) == KeyError
+
+rev4.finalize()
+
+objects = rev4.get_objects()
+assert type(objects) == list
+assert len(objects) == 2
+assert objects == [ob0, ob1b]
+
+
+# can copy object otherwise
 
 rev4 = xorn.storage.Revision(rev3)
 assert rev4 is not None

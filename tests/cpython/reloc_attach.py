@@ -307,3 +307,8 @@ do_it(rev1, a, N, _, ValueError, [N, a, b], check0, N, a, b)
 
 rev1.set_object_data(N, xorn.storage.Component())
 do_it(rev1, a, N, _, None, [N, a, b], check3, N, a, b)
+
+# can't attach text to deleted object
+
+rev1.delete_object(N)
+check(rev1, b, N, None, KeyError, [b])
