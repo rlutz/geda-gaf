@@ -59,22 +59,22 @@ def write_file(f, rev):
 
 ## Format a line style to a string.
 
-def format_line(data):
-    return '%d %d %d %d %d' % (data.width,
-                               data.cap_style,
-                               data.dash_style,
-                               data.dash_length,
-                               data.dash_space)
+def format_line(line):
+    return '%d %d %d %d %d' % (line.width,
+                               line.cap_style,
+                               line.dash_style,
+                               line.dash_length,
+                               line.dash_space)
 
 ## Format a fill style to a string.
 
-def format_fill(data):
-    return '%d %d %d %d %d %d' % (data.type,
-                                  data.width,
-                                  data.angle0,
-                                  data.pitch0,
-                                  data.angle1,
-                                  data.pitch1)
+def format_fill(fill):
+    return '%d %d %d %d %d %d' % (fill.type,
+                                  fill.width,
+                                  fill.angle0,
+                                  fill.pitch0,
+                                  fill.angle1,
+                                  fill.pitch1)
 
 ## Return the libgeda ripper direction of a bus object.
 #
