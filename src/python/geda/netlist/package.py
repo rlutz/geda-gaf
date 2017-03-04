@@ -114,36 +114,6 @@ class Package:
 
         raise KeyError
 
-    ## Return a sorted list of slots used by this package.
-    #
-    # It collects the slot attribute values of each symbol instance of
-    # this package.  As a result, slots may be repeated in the
-    # returned list.
-
-    def get_slots(self):
-        l = []
-        for slot in self.get_all_attributes('slot'):
-            if slot is None:
-                # no slot attribute, assume slot number is 1
-                l.append(1)
-                continue
-
-            # convert string attribute value to number
-            try:
-                l.append(int(slot))
-            except ValueError:
-                # conversion failed, invalid slot, ignore value
-                self.error(_("bad slot number: %s") % slot)
-        l.sort()
-        return l
-
-    ## Return a sorted list of unique slots used by this package.
-
-    def get_unique_slots(self):
-        l = list(set(self.get_slots()))
-        l.sort()
-        return l
-
     def get_attribute_names(self, search_inherited):
         # search outside the symbol (attached attributes only)
         l = []
