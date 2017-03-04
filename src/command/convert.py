@@ -231,6 +231,11 @@ def main():
                          % (xorn.command.program_short_name,
                             input_file, e.strerror))
         sys.exit(1)
+    except UnicodeDecodeError as e:
+        sys.stderr.write(_("%s: %s: %s\n")
+                         % (xorn.command.program_short_name,
+                            input_file, str(e)))
+        sys.exit(1)
     except xorn.geda.read.ParseError:
         sys.exit(1)
 

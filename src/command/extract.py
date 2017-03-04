@@ -55,6 +55,15 @@ def main():
 
     try:
         rev = xorn.geda.read.read(args[0])
+    except xorn.geda.fileformat.UnknownFormatError:
+        sys.stderr.write(_("%s: %s: unrecognized file name extension\n")
+                         % (xorn.command.program_short_name, args[0]))
+        sys.exit(1)
+    except IOError as e:
+        sys.stderr.write(_("%s: can't read %s: %s\n")
+                         % (xorn.command.program_short_name,
+                            args[0], e.strerror))
+        sys.exit(1)
     except UnicodeDecodeError as e:
         sys.stderr.write(_("%s: can't read %s: %s\n")
                          % (xorn.command.program_short_name, args[0], str(e)))

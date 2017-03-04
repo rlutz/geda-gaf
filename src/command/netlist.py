@@ -532,6 +532,12 @@ def main():
         if output_filename is None or output_filename == '-':
             write(sys.stdout)
         else:
-            xorn.fileutils.write(output_filename, write, backup = False)
+            try:
+                xorn.fileutils.write(output_filename, write, backup = False)
+            except (IOError, OSError) as e:
+                sys.stderr.write(_("%s: %s: %s\n") % (
+                    xorn.command.program_short_name,
+                    output_filename, e.strerror))
+                sys.exit(1)
     except NetlistFailedError:
         sys.exit(3)
