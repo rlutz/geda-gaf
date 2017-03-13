@@ -374,7 +374,8 @@
       (display "\" */\n")
       (if (file-exists? fname)
         (switcap:cat-file (open-input-file fname))
-        ((display (string-append "ERROR: Analysis file '" fname "' not found.\n"))
+        (begin
+         (display (string-append "ERROR: Analysis file '" fname "' not found.\n"))
          (primitive-exit 1))
         ))))
 
