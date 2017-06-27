@@ -33,14 +33,14 @@
 # It does *not* read the new-style configuration file \c geda.conf,
 # and it does *not* support Guile functions as a symbol library.
 
-pythondir = '@pythondir@'
+pyexecdir = '@pyexecdir@'
 XORN = '@XORN@'
 gedadatadir = '@gedadatadir@'
 gedasysconfdir = '@gedasysconfdir@'
 
 import getopt, gettext, os, sys
 from gettext import gettext as _
-sys.path.insert(0, pythondir)
+sys.path.insert(0, pyexecdir)
 import xorn.command
 import xorn.config
 import xorn.guile
