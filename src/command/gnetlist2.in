@@ -867,7 +867,7 @@ def main():
 
     try:
         options, args = getopt.getopt(
-            xorn.command.args, 'c:g:hil:L:m:o:O:qvV', [
+            xorn.command.args, 'c:g:hil:L:m:o:O:p:qvV', [
                 'quiet', 'verbose', 'interactive', 'list-backends',
                 'help', 'version'])
     except getopt.GetoptError as e:
@@ -876,7 +876,8 @@ def main():
     quiet_mode = False
     verbose_mode = False
     output_filename = 'output.net'
-    guile_proc = None           # netlist backend to use
+    guile_proc = None           # Guile netlist backend to use
+    python_backend = None       # Python netlist backend to use
     interactive_mode = False    # enter interactive Scheme REPL after loading
     backend_options = []        # option strings passed to backend
 
@@ -899,6 +900,8 @@ def main():
             extra_load_paths.append(value)
         elif option == '-g':
             guile_proc = value
+        elif option == '-p':
+            python_backend = value
         elif option == '-O':
             backend_options.append(value)
         elif option == '-l':
@@ -927,7 +930,8 @@ Generate a netlist from one or more gEDA schematic files.
   -v, --verbose         verbose mode
   -o FILE               filename for netlist data output
   -L DIR                add DIR to Scheme search path
-  -g BACKEND            specify netlist backend to use
+  -g BACKEND            specify Scheme netlist backend to use
+  -p BACKEND            specify Python netlist backend to use
   -O STRING             pass an option string to backend
   -l FILE               load Scheme file before loading backend
   -m FILE               load Scheme file after loading backend
@@ -962,7 +966,13 @@ GNU General Public License for more details.
 ''' % xorn.config.PACKAGE_STRING)
             return
 
-    if guile_proc is None and not interactive_mode and not list_backends_:
+    if guile_proc is not None and python_backend is not None:
+        sys.stderr.write(
+            _("Options `-g BACKEND' and `-p BACKEND' are mutually exclusive\n"))
+        sys.exit(1)
+
+    if guile_proc is None and python_backend is None \
+            and not interactive_mode and not list_backends_:
         sys.stderr.write(
             _("You gave neither backend to execute nor interactive mode!\n"))
         sys.exit(1)
@@ -1102,32 +1112,37 @@ GNU General Public License for more details.
     if hierarchy_netname_order != APPEND:
         cmd.append('--hierarchy-netname-order=prepend')
 
-    cmd += ['-g', 'guile']
+    if python_backend is None:
+        cmd += ['-g', 'guile']
 
-    for value in evaluate_at_startup:
-        cmd += ['-O', 'eval=' + value]
-    for value in extra_load_paths:
-        cmd += ['-O', 'add-to-load-path=' + value]
-    for value in guile_sources:
-        cmd += ['-O', 'load=' + value]
+        for value in evaluate_at_startup:
+            cmd += ['-O', 'eval=' + value]
+        for value in extra_load_paths:
+            cmd += ['-O', 'add-to-load-path=' + value]
+        for value in guile_sources:
+            cmd += ['-O', 'load=' + value]
 
-    if guile_proc is not None and not interactive_mode:
-        # if both `-i' and `-g' are specified, the backend is loaded
-        # but not executed (don't ask me, that's what gnetlist does)
-        cmd += ['-O', 'guile-proc=' + guile_proc]
+        if guile_proc is not None and not interactive_mode:
+            # if both `-i' and `-g' are specified, the backend is loaded
+            # but not executed (don't ask me, that's what gnetlist does)
+            cmd += ['-O', 'guile-proc=' + guile_proc]
 
-        if guile_proc.startswith('spice'):
-            cmd += ['-O', 'use-spice-netnames']
+            if guile_proc.startswith('spice'):
+                cmd += ['-O', 'use-spice-netnames']
 
-    if verbose_mode:
-        cmd += ['-O', 'verbosity=1']
-    elif quiet_mode:
-        cmd += ['-O', 'verbosity=-1']
+        if verbose_mode:
+            cmd += ['-O', 'verbosity=1']
+        elif quiet_mode:
+            cmd += ['-O', 'verbosity=-1']
 
-    if backend_options:
-        cmd += ['-O', '--']
-    for backend_option in backend_options:
-        cmd += ['-O', backend_option]
+        if backend_options:
+            cmd += ['-O', '--']
+        for backend_option in backend_options:
+            cmd += ['-O', backend_option]
+    else:
+        cmd += ['-g', python_backend]
+        for backend_option in backend_options:
+            cmd += ['-O', backend_option]
 
     if guile_proc is not None and guile_proc.startswith('drc'):
         cmd.append('--ignore-errors')
