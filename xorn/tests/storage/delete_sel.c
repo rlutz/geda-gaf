@@ -72,7 +72,7 @@ int main(void)
 	assert(sel != NULL);
 	rev2a = xorn_new_revision(rev2);
 	assert(rev2a != NULL);
-	xorn_delete_selected_objects(rev2a, sel);
+	assert(xorn_delete_selected_objects(rev2a, sel, NULL) == 0);
 	xorn_finalize_revision(rev2a);
 	xorn_free_selection(sel);
 
@@ -83,7 +83,7 @@ int main(void)
 	assert(sel != NULL);
 	rev2b = xorn_new_revision(rev2);
 	assert(rev2b != NULL);
-	xorn_delete_selected_objects(rev2b, sel);
+	assert(xorn_delete_selected_objects(rev2b, sel, NULL) == 0);
 	xorn_finalize_revision(rev2b);
 	xorn_free_selection(sel);
 
@@ -94,7 +94,7 @@ int main(void)
 	assert(sel != NULL);
 	rev2c = xorn_new_revision(rev2);
 	assert(rev2c != NULL);
-	xorn_delete_selected_objects(rev2c, sel);
+	assert(xorn_delete_selected_objects(rev2c, sel, NULL) == 0);
 	xorn_finalize_revision(rev2c);
 	xorn_free_selection(sel);
 
@@ -105,7 +105,7 @@ int main(void)
 	assert(sel != NULL);
 	rev2d = xorn_new_revision(rev2);
 	assert(rev2d != NULL);
-	xorn_delete_selected_objects(rev2d, sel);
+	assert(xorn_delete_selected_objects(rev2d, sel, NULL) == 0);
 	xorn_finalize_revision(rev2d);
 	xorn_free_selection(sel);
 

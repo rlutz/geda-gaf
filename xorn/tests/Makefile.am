@@ -42,6 +42,7 @@ check_PROGRAMS = \
 	storage/invalid_obtype \
 	storage/is_selected \
 	storage/multiple_assignments \
+	storage/normalize \
 	storage/null \
 	storage/pointer \
 	storage/query_attached \
@@ -53,34 +54,37 @@ check_PROGRAMS = \
 	storage/set_obdata \
 	storage/stat \
 	storage/string \
-	storage/transient
+	storage/transient \
+	storage/validate
 
 pythontests = \
-	cpython/snippets/functions.py \
+	cpython/snippets/storage_funcs.py \
 	cpython/snippets/guile.py \
-	cpython/copy_attached.py \
-	cpython/copy_object.py \
-	cpython/copy_objects.py \
-	cpython/data_ctors.py \
-	cpython/delete_sel.py \
-	cpython/exist.py \
-	cpython/get_loc_attach.py \
-	cpython/get_loc_order.py \
-	cpython/get_obdata.py \
-	cpython/get_objects.py \
-	cpython/get_obtype.py \
-	cpython/is_selected.py \
-	cpython/module.py \
-	cpython/ob_equality.py \
-	cpython/pointer.py \
-	cpython/query_attached.py \
-	cpython/reloc_attach.py \
-	cpython/reloc_order.py \
-	cpython/selection.py \
-	cpython/set_obdata.py \
-	cpython/stat.py \
-	cpython/string.py \
-	cpython/transient.py \
+	cpython/storage/copy_attached.py \
+	cpython/storage/copy_object.py \
+	cpython/storage/copy_objects.py \
+	cpython/storage/data_ctors.py \
+	cpython/storage/delete_sel.py \
+	cpython/storage/exist.py \
+	cpython/storage/get_loc_attach.py \
+	cpython/storage/get_loc_order.py \
+	cpython/storage/get_obdata.py \
+	cpython/storage/get_objects.py \
+	cpython/storage/get_obtype.py \
+	cpython/storage/is_selected.py \
+	cpython/storage/module.py \
+	cpython/storage/normalize.py \
+	cpython/storage/ob_equality.py \
+	cpython/storage/pointer.py \
+	cpython/storage/query_attached.py \
+	cpython/storage/reloc_attach.py \
+	cpython/storage/reloc_order.py \
+	cpython/storage/selection.py \
+	cpython/storage/set_obdata.py \
+	cpython/storage/stat.py \
+	cpython/storage/string.py \
+	cpython/storage/transient.py \
+	cpython/storage/validate.py \
 	cpython/guile.py \
 	python/snippets/xml_writer.py \
 	python/base64.py \
@@ -115,4 +119,7 @@ MOSTLYCLEANFILES = \
 
 TESTS = $(check_PROGRAMS) $(pythontests)
 
-EXTRA_DIST = storage/Setup.h cpython/Setup.py $(pythontests) $(testdata)
+EXTRA_DIST = \
+	storage/Setup.h \
+	cpython/storage/Setup.py \
+	$(pythontests) $(testdata)

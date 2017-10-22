@@ -126,6 +126,10 @@ class Netlist:
         ## Dictionary mapping filenames to schematic blueprints.
         self.schematics_by_filename = {}
 
+        ## Whether a common package namespace for all subsheets was used.
+        self.flat_package_namespace = flat_package_namespace
+        ## Function which was used for mangling package/component refdes's.
+        self.refdes_mangle_func = refdes_mangle_func
 
         def load_schematic(filename):
             if filename in self.schematics_by_filename:

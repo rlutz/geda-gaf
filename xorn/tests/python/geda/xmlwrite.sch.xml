@@ -17,7 +17,6 @@
     <line x0="0" y0="0" x1="0" y1="0" color="freestyle1" linewidth=".01" capstyle="square" dashstyle="dashed" dashlength="31.41" dashspace="59.26"/>
     <net x0="31.41" y0="59.26" x1="84.99" y1="157.19"/>
     <net x0="0" y0="0" x1="0" y1="0" color="freestyle1"/>
-    <net x0="0" y0="0" x1="0" y1="0"/>
     <net x0="0" y0="0" x1="0" y1="0" type="bus"/>
     <net x0="0" y0="0" x1="0" y1="0" color="freestyle1" type="bus"/>
     <pin x0="0" y0="0" x1="0" y1="0"/>

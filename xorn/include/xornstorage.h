@@ -50,6 +50,19 @@ typedef enum {
 	   editor, but don't show a value. */
 } xorn_attst_t;
 
+typedef enum {
+	xorn_error_invalid_argument,
+	xorn_error_out_of_memory,
+	xorn_error_revision_not_transient,
+	xorn_error_object_doesnt_exist,
+	xorn_error_invalid_object_data,
+	xorn_error_parent_doesnt_exist,
+	xorn_error_invalid_parent,
+	xorn_error_invalid_existing_child,
+	xorn_error_successor_doesnt_exist,
+	xorn_error_successor_not_sibling,
+} xorn_error_t;
+
 /* opaque types */
 typedef struct xorn_revision *xorn_revision_t;
 typedef struct xorn_object *xorn_object_t;
@@ -126,19 +139,25 @@ void xorn_free_selection(
 /* manipulation functions */
 
 xorn_object_t xorn_add_object(xorn_revision_t rev,
-			      xorn_obtype_t type, const void *data);
+			      xorn_obtype_t type, const void *data,
+			      xorn_error_t *err);
 int xorn_set_object_data(xorn_revision_t rev, xorn_object_t ob,
-			 xorn_obtype_t type, const void *data);
+			 xorn_obtype_t type, const void *data,
+			 xorn_error_t *err);
 int xorn_relocate_object(xorn_revision_t rev, xorn_object_t ob,
-			 xorn_object_t attach_to, xorn_object_t insert_before);
-void xorn_delete_object(xorn_revision_t rev, xorn_object_t ob);
-void xorn_delete_selected_objects(xorn_revision_t rev,
-				  xorn_selection_t sel);
+			 xorn_object_t attach_to, xorn_object_t insert_before,
+			 xorn_error_t *err);
+int xorn_delete_object(xorn_revision_t rev, xorn_object_t ob,
+		       xorn_error_t *err);
+int xorn_delete_selected_objects(xorn_revision_t rev, xorn_selection_t sel,
+				 xorn_error_t *err);
 
 xorn_object_t xorn_copy_object(xorn_revision_t dest,
-			       xorn_revision_t src, xorn_object_t ob);
+			       xorn_revision_t src, xorn_object_t ob,
+			       xorn_error_t *err);
 xorn_selection_t xorn_copy_objects(xorn_revision_t dest,
-				   xorn_revision_t src, xorn_selection_t sel);
+				   xorn_revision_t src, xorn_selection_t sel,
+				   xorn_error_t *err);
 
 /* object data definition */
 
@@ -255,9 +274,11 @@ struct xornsch_text {
 	const struct xornsch_##type *xornsch_get_##type##_data( \
 		xorn_revision_t rev, xorn_object_t ob); \
 	xorn_object_t xornsch_add_##type(xorn_revision_t rev, \
-					 const struct xornsch_##type *data); \
+					 const struct xornsch_##type *data, \
+					 xorn_error_t *err); \
 	int xornsch_set_##type##_data(xorn_revision_t rev, xorn_object_t ob, \
-				      const struct xornsch_##type *data);
+				      const struct xornsch_##type *data, \
+				      xorn_error_t *err);
 
 DECLARE_OBJECT_FUNCTIONS(arc)
 DECLARE_OBJECT_FUNCTIONS(box)
@@ -279,7 +300,7 @@ DECLARE_OBJECT_FUNCTIONS(text)
 		xorn_attst_t *state_return, outtype value_return);	\
 	int ns##_set_##name(						\
 		xorn_revision_t rev, xorn_selection_t sel,		\
-		intype value);						\
+		intype value, xorn_error_t *err);			\
 	xorn_selection_t ns##_select_by_##name(				\
 		xorn_revision_t rev, intype value);
 

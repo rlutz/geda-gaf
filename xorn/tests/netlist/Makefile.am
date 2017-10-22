@@ -426,12 +426,10 @@ XFAIL_TESTS = \
 	regression/missing_pinseq-geda.out \
 	common/SlottedOpamps-futurenet2.out \
 	common/SlottedOpamps-spice_noqsi.out \
-	common/SlottedOpamps-spice_sdb.out \
 	common/SlottedOpamps-switcap.out \
 	common/cascade-spice_noqsi.out \
 	common/netattrib-spice_noqsi.out \
-	common/singlenet-spice_noqsi.out \
-	common/singlenet-spice_sdb.out
+	common/singlenet-spice_noqsi.out
 
 testdata = \
 	common/JD-extras/models/openIP_5.cir \
@@ -492,6 +490,7 @@ testdata = \
 	regression/duplicate_local_net-symbols/sub.sym \
 	regression/duplicate_local_net-symbols/sym.sym \
 	regression/duplicate_local_net.sch \
+	regression/missing_pinseq-symbols/missing_pinseq.sym \
 	regression/missing_pinseq.sch \
 	regression/named_unconnected_net.sch \
 	regression/override_netname-symbols/component.sym \

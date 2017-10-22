@@ -35,7 +35,8 @@ line_data.size.y = 100;
 line_data.line.width = 1;
 
 xorn_object_t ob;
-ob = xorn_add_object(rev, xornsch_obtype_line, &line_data);
+xorn_error_t err;
+ob = xorn_add_object(rev, xornsch_obtype_line, &line_data, &err);
 if (ob == NULL)
     /* handle error */;
 /** [add object] */
@@ -55,7 +56,7 @@ if (data == NULL)
 	xorn_object_t ob;
 
 	memset(&net_data, 0, sizeof net_data);
-	ob = xornsch_add_net(rev, &net_data);
+	ob = xornsch_add_net(rev, &net_data, NULL);
 
 /** [set object data] */
 struct xornsch_line line_data;
@@ -66,7 +67,8 @@ line_data.size.x = 100;
 line_data.size.y = 100;
 line_data.line.width = 1;
 
-if (xorn_set_object_data(rev, ob, xornsch_obtype_line, &line_data) == -1)
+xorn_error_t err;
+if (xorn_set_object_data(rev, ob, xornsch_obtype_line, &line_data, &err) == -1)
     /* handle error */;
 /** [set object data] */
 	}
@@ -92,7 +94,7 @@ free(objects);
 	xorn_object_t component;
 
 	memset(&component_data, 0, sizeof component_data);
-	component = xornsch_add_component(rev, &component_data);
+	component = xornsch_add_component(rev, &component_data, NULL);
 
 /** [add attribute] */
 struct xornsch_text text_data;
@@ -101,11 +103,12 @@ text_data.text.s = "refdes=R1";
 text_data.text.len = strlen(text_data.text.s);
 
 xorn_object_t ob;
-ob = xornsch_add_text(rev, &text_data);
+xorn_error_t err;
+ob = xornsch_add_text(rev, &text_data, &err);
 if (ob == NULL)
     /* handle error */;
 
-if (xorn_relocate_object(rev, ob, component, NULL) == -1)
+if (xorn_relocate_object(rev, ob, component, NULL, &err) == -1)
     /* handle error */;
 /** [add attribute] */
 	}

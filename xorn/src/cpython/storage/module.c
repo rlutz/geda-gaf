@@ -66,7 +66,7 @@ static PyObject *get_objects_attached_to(
 	if (ob_arg != Py_None &&
 	    !xorn_object_exists_in_revision(((Revision *)rev_arg)->rev,
 					    ((Object *)ob_arg)->ob)) {
-		PyErr_SetString(PyExc_KeyError, "Object does not exist");
+		PyErr_SetString(PyExc_KeyError, "object does not exist");
 		return NULL;
 	}
 
@@ -219,7 +219,7 @@ static PyObject *select_attached_to(
 	if (ob_arg != Py_None &&
 	    !xorn_object_exists_in_revision(((Revision *)rev_arg)->rev,
 					    ((Object *)ob_arg)->ob)) {
-		PyErr_SetString(PyExc_KeyError, "Object does not exist");
+		PyErr_SetString(PyExc_KeyError, "object does not exist");
 		return NULL;
 	}
 

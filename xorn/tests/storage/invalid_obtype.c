@@ -18,12 +18,15 @@
 #include <assert.h>
 #include <string.h>
 
+#define NO_ERROR ((xorn_error_t) -1)
+
 
 int main(void)
 {
 	xorn_revision_t rev0, rev1, rev2;
 	struct xornsch_line line_data;
 	xorn_object_t ob;
+	xorn_error_t err;
 
 	rev0 = xorn_new_revision(NULL);
 	assert(rev0 != NULL);
@@ -40,21 +43,30 @@ int main(void)
 	line_data.color = 3;
 	line_data.line.width = 1;
 
-	ob = xorn_add_object(rev1, xorn_obtype_none, &line_data);
+	err = NO_ERROR;
+	ob = xorn_add_object(rev1, xorn_obtype_none, &line_data, &err);
 	assert(ob == NULL);
+	assert(err == xorn_error_invalid_argument);
 
-	ob = xorn_add_object(rev1, xornsch_obtype_line, &line_data);
+	err = NO_ERROR;
+	ob = xorn_add_object(rev1, xornsch_obtype_line, &line_data, &err);
 	assert(ob != NULL);
+	assert(err == NO_ERROR);
 
 	xorn_finalize_revision(rev1);
 
 	rev2 = xorn_new_revision(rev1);
 	assert(rev2 != NULL);
 
-	assert(xorn_set_object_data(rev2, ob,
-				    xorn_obtype_none, &line_data) == -1);
-	assert(xorn_set_object_data(rev2, ob,
-				    xornsch_obtype_line, &line_data) == 0);
+	err = NO_ERROR;
+	assert(xorn_set_object_data(
+		       rev2, ob, xorn_obtype_none, &line_data, &err) == -1);
+	assert(err == xorn_error_invalid_argument);
+
+	err = NO_ERROR;
+	assert(xorn_set_object_data(
+		       rev2, ob, xornsch_obtype_line, &line_data, &err) == 0);
+	assert(err == NO_ERROR);
 
 	xorn_finalize_revision(rev2);
 

@@ -22,6 +22,8 @@
 #include <vector>
 #include <set>
 
+bool data_is_valid(xorn_obtype_t type, void const *data);
+
 void *copy_data(xorn_obtype_t type, void const *src);
 
 class obstate {

@@ -19,7 +19,7 @@ AC_PREREQ([2.61])
 LT_PREREQ([2.4.2])
 
 AC_INIT([Xorn], [0.0], [bug-xorn@hedmen.org], [], [http://hedmen.org/xorn/])
-AC_CONFIG_SRCDIR([src/cpython/module.c])
+AC_CONFIG_SRCDIR([src/cpython/storage/module.c])
 AC_CONFIG_MACRO_DIR([m4])
 
 AM_INIT_AUTOMAKE([-Wall -Werror silent-rules subdir-objects])
@@ -31,9 +31,9 @@ AC_PROG_CXX
 AS_IF([test x$enable_xorn = xyes], [
     AM_PATH_PYTHON([2.7])
     PKG_CHECK_MODULES([PYTHON], [python2 >= 2.7])
-    PKG_CHECK_MODULES([GUILE], [guile-2.0])
+    PKG_CHECK_MODULES([GUILE], [guile-2.0 >= 2.0.10])
 ], [
-    AC_MSG_NOTICE([skipping package detection])
+    AC_MSG_NOTICE([skipping Python detection])
 ])
 
 AM_GNU_GETTEXT([external])
@@ -58,7 +58,7 @@ AC_CONFIG_FILES([
 	Makefile
 	po/Makefile.in
 	src/storage/Makefile
-	src/cpython/Makefile
+	src/cpython/storage/Makefile
 	src/cpython/guile/Makefile
 	src/python/Makefile
 	src/command/Makefile

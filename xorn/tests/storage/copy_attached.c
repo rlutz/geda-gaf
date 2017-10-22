@@ -139,35 +139,35 @@ int main(void)
 
 	memset(&net_data, 0, sizeof net_data);
 	net_data.color = 1;
-	assert(net0 = xornsch_add_net(src, &net_data));
+	assert(net0 = xornsch_add_net(src, &net_data, NULL));
 	net_data.color = 2;
-	assert(net1 = xornsch_add_net(src, &net_data));
+	assert(net1 = xornsch_add_net(src, &net_data, NULL));
 
 	memset(&text_data, 0, sizeof text_data);
 	text_data.color = 3;
-	assert(text0 = xornsch_add_text(src, &text_data));
+	assert(text0 = xornsch_add_text(src, &text_data, NULL));
 	text_data.color = 4;
-	assert(text1 = xornsch_add_text(src, &text_data));
+	assert(text1 = xornsch_add_text(src, &text_data, NULL));
 
-	assert(xorn_relocate_object(src, text1, net1, NULL) == 0);
+	assert(xorn_relocate_object(src, text1, net1, NULL, NULL) == 0);
 
 	xorn_finalize_revision(src);
 
 	/* text1 is attached to net1, text0 is not attached */
 
 	assert(dest = xorn_new_revision(NULL));
-	assert(copy = xorn_copy_object(dest, src, net0));
+	assert(copy = xorn_copy_object(dest, src, net0, NULL));
 	assert_this_net(dest, copy, 1);
 	xorn_free_revision(dest);
 
 	assert(dest = xorn_new_revision(NULL));
-	assert(copy = xorn_copy_object(dest, src, net1));
+	assert(copy = xorn_copy_object(dest, src, net1, NULL));
 	assert_this_net_with_text(dest, copy, 2, 4);
 	xorn_free_revision(dest);
 
 	assert(dest = xorn_new_revision(NULL));
 	assert(sel = xorn_select_object(net0));
-	assert(copies = xorn_copy_objects(dest, src, sel));
+	assert(copies = xorn_copy_objects(dest, src, sel, NULL));
 	assert_this_net(dest, get_only_selected_object(dest, copies), 1);
 	xorn_free_selection(copies);
 	xorn_free_selection(sel);
@@ -175,7 +175,7 @@ int main(void)
 
 	assert(dest = xorn_new_revision(NULL));
 	assert(sel = xorn_select_object(net1));
-	assert(copies = xorn_copy_objects(dest, src, sel));
+	assert(copies = xorn_copy_objects(dest, src, sel, NULL));
 	assert_this_net_with_text(
 		dest, get_only_selected_object(dest, copies), 2, 4);
 	xorn_free_selection(copies);
@@ -184,7 +184,7 @@ int main(void)
 
 	assert(dest = xorn_new_revision(NULL));
 	assert(sel = xorn_select_attached_to(src, NULL));
-	assert(copies = xorn_copy_objects(dest, src, sel));
+	assert(copies = xorn_copy_objects(dest, src, sel, NULL));
 	assert_four(dest, copies, 1, 2, 3, 4);
 	xorn_free_selection(copies);
 	xorn_free_selection(sel);

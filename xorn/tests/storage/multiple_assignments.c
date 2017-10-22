@@ -33,16 +33,16 @@ int main(void)
 
 	data.text.s = "Hello";
 	data.text.len = 5;
-	ob = xornsch_add_text(rev, &data);
+	ob = xornsch_add_text(rev, &data, NULL);
 
 	data.text.s = "World";
 	data.text.len = 5;
-	xornsch_set_text_data(rev, ob, &data);
+	xornsch_set_text_data(rev, ob, &data, NULL);
 
 	s = strdup("!");
 	data.text.s = s;
 	data.text.len = 1;
-	xornsch_set_text_data(rev, ob, &data);
+	xornsch_set_text_data(rev, ob, &data, NULL);
 	free(s);
 
 	xorn_free_revision(rev);

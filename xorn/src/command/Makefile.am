@@ -20,20 +20,20 @@ EXTRA_DIST = xorn.in gnetlist2.in
 
 xorn: $(srcdir)/xorn.in Makefile
 	$(AM_V_GEN)sed \
-	    -e 's,[@]pythondir[@],$(abs_top_builddir)/built-packages,g' \
+	    -e 's,[@]pyexecdir[@],$(abs_top_builddir)/built-packages,g' \
 	    -e 's,[@]commanddir[@],$(abs_srcdir),g' \
 		$(srcdir)/$@.in > $@; \
 	chmod +x $@
 
 xornT: $(srcdir)/xorn.in Makefile
 	$(AM_V_GEN)sed \
-	    -e 's,[@]pythondir[@],$(pythondir),g' \
+	    -e 's,[@]pyexecdir[@],$(pyexecdir),g' \
 	    -e 's,[@]commanddir[@],$(commanddir),g' \
 		$(srcdir)/xorn.in > $@
 
 gnetlist2: $(srcdir)/gnetlist2.in Makefile
 	$(AM_V_GEN)sed \
-	    -e 's,[@]pythondir[@],$(abs_top_builddir)/built-packages,g' \
+	    -e 's,[@]pyexecdir[@],$(abs_top_builddir)/built-packages,g' \
 	    -e 's,[@]XORN[@],$(abs_builddir)/xorn,g' \
 	    -e 's,[@]gedadatadir[@],$(gedadatadir),g' \
 	    -e 's,[@]gedasysconfdir[@],$(gedasysconfdir),g' \
@@ -42,7 +42,7 @@ gnetlist2: $(srcdir)/gnetlist2.in Makefile
 
 gnetlist2T: $(srcdir)/gnetlist2.in Makefile
 	$(AM_V_GEN)sed \
-	    -e 's,[@]pythondir[@],$(pythondir),g' \
+	    -e 's,[@]pyexecdir[@],$(pyexecdir),g' \
 	    -e 's,[@]XORN[@],$(bindir)/xorn,g' \
 	    -e 's,[@]gedadatadir[@],$(gedadatadir),g' \
 	    -e 's,[@]gedasysconfdir[@],$(gedasysconfdir),g' \

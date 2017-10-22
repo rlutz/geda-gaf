@@ -59,22 +59,40 @@ def write_file(f, rev):
 
 ## Format a line style to a string.
 
-def format_line(data):
-    return '%d %d %d %d %d' % (data.width,
-                               data.cap_style,
-                               data.dash_style,
-                               data.dash_length,
-                               data.dash_space)
+def format_line(line):
+    if line.dash_style == 0:
+        return '%d %d %d -1 -1' % (line.width,
+                                   line.cap_style,
+                                   line.dash_style)
+    if line.dash_style == 1:
+        return '%d %d %d -1 %d' % (line.width,
+                                   line.cap_style,
+                                   line.dash_style,
+                                   line.dash_space)
+
+    return '%d %d %d %d %d' % (line.width,
+                               line.cap_style,
+                               line.dash_style,
+                               line.dash_length,
+                               line.dash_space)
 
 ## Format a fill style to a string.
 
-def format_fill(data):
-    return '%d %d %d %d %d %d' % (data.type,
-                                  data.width,
-                                  data.angle0,
-                                  data.pitch0,
-                                  data.angle1,
-                                  data.pitch1)
+def format_fill(fill):
+    if fill.type == 2:
+        return '%d %d %d %d %d %d' % (fill.type,
+                                      fill.width,
+                                      fill.angle0,
+                                      fill.pitch0,
+                                      fill.angle1,
+                                      fill.pitch1)
+    if fill.type == 3:
+        return '%d %d %d %d -1 -1' % (fill.type,
+                                      fill.width,
+                                      fill.angle0,
+                                      fill.pitch0)
+
+    return '%d -1 -1 -1 -1 -1' % fill.type
 
 ## Return the libgeda ripper direction of a bus object.
 #

@@ -148,9 +148,9 @@ def transform(rev, delta_x, delta_y, angle, mirror):
             ob.x, ob.y = rotate(ob.x, ob.y)
             ob.x, ob.y = translate(ob.x, ob.y)
             if mirror:
-                ob.angle = -ob.angle
-            ob.angle += angle
-            ob.angle %= 360
+                ob.angle = (angle - ob.angle) % 360
+            else:
+                ob.angle = (angle + ob.angle) % 360
             ob.mirror ^= mirror
         elif isinstance(data, xorn.storage.Line):
             ob.x, ob.y = rotate(ob.x, ob.y)
@@ -167,9 +167,9 @@ def transform(rev, delta_x, delta_y, angle, mirror):
                 rotate_rect(ob.x, ob.y, ob.width, ob.height)
             ob.x, ob.y = translate(ob.x, ob.y)
             if mirror:
-                ob.angle = -ob.angle
-            ob.angle += angle
-            ob.angle %= 360
+                ob.angle = (angle - ob.angle) % 360
+            else:
+                ob.angle = (angle + ob.angle) % 360
             ob.mirror ^= mirror
         elif isinstance(data, xorn.storage.Text):
             ob.x, ob.y = rotate(ob.x, ob.y)
@@ -180,8 +180,7 @@ def transform(rev, delta_x, delta_y, angle, mirror):
                     ob.alignment = (ob.alignment - v_align) + (2 - v_align)
                 else:
                     ob.alignment = 6 - (ob.alignment - v_align) + v_align
-            ob.angle += angle
-            ob.angle %= 360
+            ob.angle = (ob.angle + angle) % 360
 
 ## Rotate/translate objects in an embedded symbol back to normal.
 
@@ -250,10 +249,10 @@ def untransform(rev, delta_x, delta_y, angle, mirror):
         elif isinstance(data, xorn.storage.Component):
             ob.x, ob.y = untranslate(ob.x, ob.y)
             ob.x, ob.y = unrotate(ob.x, ob.y)
-            ob.angle -= angle
             if mirror:
-                ob.angle = -ob.angle
-            ob.angle %= 360
+                ob.angle = (angle - ob.angle) % 360
+            else:
+                ob.angle = (ob.angle - angle) % 360
             ob.mirror ^= mirror
         elif isinstance(data, xorn.storage.Line):
             ob.x, ob.y = untranslate(ob.x, ob.y)
@@ -269,19 +268,18 @@ def untransform(rev, delta_x, delta_y, angle, mirror):
             ob.x, ob.y = untranslate(ob.x, ob.y)
             ob.x, ob.y, ob.width, ob.height = \
                 unrotate_rect(ob.x, ob.y, ob.width, ob.height)
-            ob.angle -= angle
             if mirror:
-                ob.angle = -ob.angle
-            ob.angle %= 360
+                ob.angle = (angle - ob.angle) % 360
+            else:
+                ob.angle = (ob.angle - angle) % 360
             ob.mirror ^= mirror
         elif isinstance(data, xorn.storage.Text):
             ob.x, ob.y = untranslate(ob.x, ob.y)
             ob.x, ob.y = unrotate(ob.x, ob.y)
-            ob.angle -= angle
             if mirror:
                 v_align = ob.alignment % 3
-                if ob.angle % 180 == 90:
+                if (ob.angle - angle) % 180 == 90:
                     ob.alignment = (ob.alignment - v_align) + (2 - v_align)
                 else:
                     ob.alignment = 6 - (ob.alignment - v_align) + v_align
-            ob.angle %= 360
+            ob.angle = (ob.angle - angle) % 360

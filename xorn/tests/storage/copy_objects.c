@@ -37,7 +37,7 @@ int main(void)
 	sel0 = xorn_select_all(rev3);
 	assert(sel0 != NULL);
 
-	sel1 = xorn_copy_objects(rev4, rev2, sel0);
+	sel1 = xorn_copy_objects(rev4, rev2, sel0, NULL);
 	assert(sel1 != NULL);
 
 	xorn_finalize_revision(rev4);

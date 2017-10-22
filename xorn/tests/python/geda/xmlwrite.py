@@ -91,7 +91,6 @@ for data in [
         xorn.storage.Net(x = 3141, y = 5926, width = 5358, height = 9793,
                          color = 4),
         xorn.storage.Net(color = 17),
-        xorn.storage.Net(color = 4, is_inverted = True),
         xorn.storage.Net(color = 10, is_bus = True),
         xorn.storage.Net(color = 17, is_bus = True),
         xorn.storage.Net(color = 1, is_pin = True),

@@ -46,7 +46,7 @@ static void setup(
 	line_data.color = 3;
 	line_data.line.width = 1;
 
-	*ob0 = xornsch_add_line(*rev1, &line_data);
+	*ob0 = xornsch_add_line(*rev1, &line_data, NULL);
 	assert(*ob0 != NULL);
 
 	xorn_finalize_revision(*rev1);
@@ -64,7 +64,7 @@ static void setup(
 	box_data.color = 3;
 	box_data.line.width = 1;
 
-	*ob1a = xornsch_add_box(*rev2, &box_data);
+	*ob1a = xornsch_add_box(*rev2, &box_data, NULL);
 	assert(*ob1a != NULL);
 
 	memset(&circle_data, 0, sizeof circle_data);
@@ -75,7 +75,7 @@ static void setup(
 	circle_data.line.width = 1;
 	circle_data.fill.type = 1;
 
-	*ob1b = xornsch_add_circle(*rev2, &circle_data);
+	*ob1b = xornsch_add_circle(*rev2, &circle_data, NULL);
 	assert(*ob1b != NULL);
 
 	xorn_finalize_revision(*rev2);
@@ -92,9 +92,9 @@ static void setup(
 	net_data.size.y = 2;
 	net_data.color = 4;
 
-	assert(xornsch_set_net_data(*rev3, *ob0, &net_data) == 0);
+	assert(xornsch_set_net_data(*rev3, *ob0, &net_data, NULL) == 0);
 
-	xorn_delete_object(*rev3, *ob1a);
+	assert(xorn_delete_object(*rev3, *ob1a, NULL) == 0);
 
 	xorn_finalize_revision(*rev3);
 }

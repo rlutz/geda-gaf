@@ -17,7 +17,7 @@
 SUBDIRS = \
 	po \
 	src/storage \
-	src/cpython \
+	src/cpython/storage \
 	src/cpython/guile \
 	src/python \
 	src/command \
@@ -31,7 +31,7 @@ nodist_noinst_PYTHON = built-packages/xorn.py
 all-local: $(nodist_noinst_PYTHON)
 built-packages/xorn.py: Makefile
 	$(AM_V_GEN)$(MKDIR_P) built-packages && { \
-	    echo '__path__ = ["$(abs_builddir)/src/cpython/.libs",'; \
+	    echo '__path__ = ["$(abs_builddir)/src/cpython/storage/.libs",'; \
 	    echo '            "$(abs_builddir)/src/cpython/guile/.libs",'; \
 	    echo '            "$(abs_builddir)/src/python",'; \
 	    echo '            "$(abs_srcdir)/src/python"]'; \
