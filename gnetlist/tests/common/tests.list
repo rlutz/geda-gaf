@@ -1,6 +1,6 @@
 # Format:
 #
-# test_name | input schematics | aux files (gafrc, symbols, etc) | \ 
+# test_name | input schematics | aux files (gafrc, symbols, etc) | \
 # extra flags to pass to gnetlist -g spice-sdb | \
 # variable which must be set for the test to run
 #

@@ -29,6 +29,6 @@ value=DC 1V
 T 26600 48200 9 10 1 0 0 0 4
 This test makes sure that
 attributes in the form:
-     name=name1=value1 
+     name=name1=value1
 work and get tested.
 C 27600 45200 1 0 0 gnd-1.sym

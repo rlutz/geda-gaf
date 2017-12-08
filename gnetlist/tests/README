@@ -5,10 +5,10 @@ Tests for gnetlist
 
 The tests in this directory are basically just diffs against known good
 output.  Fairly simplistic, but for now it's enough.  I have NOT verified
-that the known good output is correct. 
+that the known good output is correct.
 
 
-	You must install gnetlist before you can run these tests.  You 
+	You must install gnetlist before you can run these tests.  You
 must also run the tests with all of the gEDA packages in ../..
 
 To run the tests type:

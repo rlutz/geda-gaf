@@ -19,7 +19,7 @@
     ("g" . gnetlist-keymap)
     ("h" . help-keymap)
     ("i" . add-component)
-    ("l" . add-line-hotkey) 
+    ("l" . add-line-hotkey)
     ("m" . edit-move-hotkey)
     ("n" . add-net-hotkey)
     ("o" . options-keymap)
@@ -64,4 +64,3 @@
 (define vhdl-path (string-append examples-path "/vhdl/new-vhdl"))
 
 (display "loaded local gschemrc\n")
-
