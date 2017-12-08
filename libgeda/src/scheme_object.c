@@ -1197,7 +1197,7 @@ SCM_DEFINE (make_arc, "%make-arc", 0, 0, 0,
  * \param y_s           the new y-coordinate of the center of the arc.
  * \param r_s           the new radius of the arc.
  * \param start_angle_s the start angle of the arc.
- * \param end_angle_s   the start angle of the arc.
+ * \param sweep_angle_s the sweep angle of the arc.
  * \param color_s       the colormap index of the color to be used for
  *                      drawing the arc.
  *
@@ -1205,7 +1205,7 @@ SCM_DEFINE (make_arc, "%make-arc", 0, 0, 0,
  */
 SCM_DEFINE (set_arc_x, "%set-arc!", 7, 0, 0,
             (SCM arc_s, SCM x_s, SCM y_s, SCM r_s, SCM start_angle_s,
-             SCM end_angle_s, SCM color_s),
+             SCM sweep_angle_s, SCM color_s),
             "Set arc parameters")
 {
   SCM_ASSERT (edascm_is_object_type (arc_s, OBJ_ARC), arc_s,
@@ -1216,8 +1216,8 @@ SCM_DEFINE (set_arc_x, "%set-arc!", 7, 0, 0,
   SCM_ASSERT (scm_is_integer (color_s), color_s, SCM_ARG7, s_set_arc_x);
   SCM_ASSERT (scm_is_integer (start_angle_s),
                                   start_angle_s, SCM_ARG5, s_set_arc_x);
-  SCM_ASSERT (scm_is_integer (end_angle_s),
-                                  end_angle_s, SCM_ARG6, s_set_arc_x);
+  SCM_ASSERT (scm_is_integer (sweep_angle_s),
+                                  sweep_angle_s, SCM_ARG6, s_set_arc_x);
 
   TOPLEVEL *toplevel = edascm_c_current_toplevel ();
   OBJECT *obj = edascm_to_object (arc_s);
@@ -1225,7 +1225,7 @@ SCM_DEFINE (set_arc_x, "%set-arc!", 7, 0, 0,
                    ARC_CENTER);
   o_arc_modify (toplevel, obj, scm_to_int(r_s), 0, ARC_RADIUS);
   o_arc_modify (toplevel, obj, scm_to_int(start_angle_s), 0, ARC_START_ANGLE);
-  o_arc_modify (toplevel, obj, scm_to_int(end_angle_s), 0, ARC_SWEEP_ANGLE);
+  o_arc_modify (toplevel, obj, scm_to_int(sweep_angle_s), 0, ARC_SWEEP_ANGLE);
   o_set_color (toplevel, obj, scm_to_int (color_s));
 
   o_page_changed (toplevel, obj);
