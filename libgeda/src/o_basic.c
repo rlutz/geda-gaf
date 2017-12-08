@@ -296,10 +296,9 @@ gboolean o_get_fill_options(OBJECT *object,
  *  \par Function Description
  *  This function gets the position of an object in world coordinates.
  *
- *  \param [in] toplevel The toplevel environment.
+ *  \param [in] object   The object to get the position.
  *  \param [out] x       pointer to the x-position
  *  \param [out] y       pointer to the y-position
- *  \param [in] object   The object to get the position.
  *  \return TRUE if successfully determined the position, FALSE otherwise
  */
 gboolean o_get_position (OBJECT *object, gint *x, gint *y)
