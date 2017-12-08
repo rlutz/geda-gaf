@@ -36,14 +36,12 @@ extern COLOR display_outline_colors[MAX_COLORS];
  *  \par Function Description
  *
  */
-void o_redraw_rects (GschemToplevel *w_current,
-                     cairo_t *cr,
-                     GdkDrawable *drawable,
-                     GdkGC *gc,
-                     PAGE *page,
-                     GschemPageGeometry *geometry,
-                     GdkRectangle *rectangles,
-                     int n_rectangles)
+void o_redraw_rect (GschemToplevel *w_current,
+                    GdkDrawable *drawable,
+                    GdkGC *gc,
+                    PAGE *page,
+                    GschemPageGeometry *geometry,
+                    GdkRectangle *rectangle)
 {
   TOPLEVEL *toplevel = gschem_toplevel_get_toplevel (w_current);
   gboolean draw_selected;
@@ -51,7 +49,6 @@ void o_redraw_rects (GschemToplevel *w_current,
   double cue_half_size;
   int bloat;
   double dummy = 0.0;
-  int i;
   GList *obj_list;
   GList *iter;
   BOX *world_rect;
@@ -59,6 +56,7 @@ void o_redraw_rects (GschemToplevel *w_current,
   int render_flags;
   GArray *render_color_map = NULL;
   GArray *render_outline_color_map = NULL;
+  cairo_t *cr;
 
   g_return_if_fail (w_current != NULL);
   g_return_if_fail (toplevel != NULL);
@@ -66,13 +64,16 @@ void o_redraw_rects (GschemToplevel *w_current,
   g_return_if_fail (page != NULL);
   g_return_if_fail (geometry != NULL);
 
+  cr = gdk_cairo_create (drawable);
+
+  gdk_cairo_rectangle (cr, rectangle);
+  cairo_clip (cr);
+
   cairo_save (cr);
   cairo_set_matrix (cr, gschem_page_geometry_get_world_to_screen_matrix (geometry));
 
-  for (i = 0; i < n_rectangles; i++) {
-    x_repaint_background_region (w_current, cr, drawable, gc, rectangles[i].x, rectangles[i].y,
-                                 rectangles[i].width, rectangles[i].height);
-  }
+  x_repaint_background_region (w_current, cr, drawable, gc, rectangle->x, rectangle->y,
+                               rectangle->width, rectangle->height);
 
   grip_half_size = GRIP_SIZE / 2;
   cue_half_size = CUE_BOX_SIZE;
@@ -80,27 +81,25 @@ void o_redraw_rects (GschemToplevel *w_current,
   bloat = MAX (grip_half_size, (int)cue_half_size);
 
 
-  world_rect = g_new (BOX, n_rectangles);
+  world_rect = g_new (BOX, 1);
 
-  for (i = 0; i < n_rectangles; i++) {
-    double lower_x = rectangles[i].x - bloat;
-    double lower_y = rectangles[i].y + rectangles[i].height + bloat;
-    double upper_x = rectangles[i].x + rectangles[i].width + bloat;
-    double upper_y = rectangles[i].y - bloat;
+  double lower_x = rectangle->x - bloat;
+  double lower_y = rectangle->y + rectangle->height + bloat;
+  double upper_x = rectangle->x + rectangle->width + bloat;
+  double upper_y = rectangle->y - bloat;
 
-    cairo_device_to_user (cr, &lower_x, &lower_y);
-    cairo_device_to_user (cr, &upper_x, &upper_y);
+  cairo_device_to_user (cr, &lower_x, &lower_y);
+  cairo_device_to_user (cr, &upper_x, &upper_y);
 
-    world_rect[i].lower_x = floor (lower_x);
-    world_rect[i].lower_y = floor (lower_y);
-    world_rect[i].upper_x = ceil (upper_x);
-    world_rect[i].upper_y = ceil (upper_y);
-  }
+  world_rect->lower_x = floor (lower_x);
+  world_rect->lower_y = floor (lower_y);
+  world_rect->upper_x = ceil (upper_x);
+  world_rect->upper_y = ceil (upper_y);
 
   obj_list = s_page_objects_in_regions (toplevel,
                                         page,
                                         world_rect,
-                                        n_rectangles);
+                                        1);
 
   g_free (world_rect);
 
@@ -257,6 +256,8 @@ void o_redraw_rects (GschemToplevel *w_current,
   g_object_unref (G_OBJECT (renderer));
   g_array_free (render_color_map, TRUE);
   g_array_free (render_outline_color_map, TRUE);
+
+  cairo_destroy (cr);
 }
 
 
@@ -360,7 +361,7 @@ int o_redraw_cleanstates(GschemToplevel *w_current)
       i_set_state(w_current, SELECT);
 
       /* from i_callback_cancel() */
-      o_invalidate_all (w_current);
+      gschem_page_view_invalidate_all (gschem_toplevel_get_current_page_view (w_current));
       return TRUE;
 
     /* all remaining states without dc changes */
@@ -417,27 +418,6 @@ void o_invalidate_rect (GschemToplevel *w_current,
 }
 
 
-/*! \brief Invalidate the whole on-screen area
- *
- *  \par Function Description
- *  This function calls gdk_window_invalidate_rect() with a rect
- *  of NULL, causing the entire drawing area to be invalidated.
- *
- *  \param [in] w_current  The GschemToplevel object.
- */
-void o_invalidate_all (GschemToplevel *w_current)
-{
-  GschemPageView *page_view = gschem_toplevel_get_current_page_view (w_current);
-
-  /* this function can be called early during initialization */
-  if (page_view == NULL) {
-    return;
-  }
-
-  gschem_page_view_invalidate_all (page_view);
-}
-
-
 /*! \brief Invalidate on-screen area for an object
  *
  *  \par Function Description
@@ -483,10 +463,12 @@ void o_invalidate (GschemToplevel *w_current, OBJECT *object)
  */
 void o_invalidate_glist (GschemToplevel *w_current, GList *list)
 {
-  GschemPageView *page_view = gschem_toplevel_get_current_page_view (w_current);
-  PAGE *page = gschem_page_view_get_page (page_view);
   int left, top, bottom, right;
 
+  GschemPageView *page_view = gschem_toplevel_get_current_page_view (w_current);
+  g_return_if_fail (page_view != NULL);
+
+  PAGE *page = gschem_page_view_get_page (page_view);
   g_return_if_fail (page != NULL);
 
   if (world_get_object_glist_bounds (page->toplevel, list, &left,  &top,

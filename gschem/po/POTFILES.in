@@ -13,6 +13,7 @@ gschem/src/gschem.c
 gschem/src/gschemhotkeystore.c
 gschem/src/gschem_about_dialog.c
 gschem/src/gschem_accel_label.c
+gschem/src/gschem_alignment_combo.c
 gschem/src/gschem_arc_dialog.c
 gschem/src/gschem_bin.c
 gschem/src/gschem_binding.c
@@ -36,6 +37,8 @@ gschem/src/gschem_options_widget.c
 gschem/src/gschem_page_geometry.c
 gschem/src/gschem_page_view.c
 gschem/src/gschem_pin_type_combo.c
+gschem/src/gschem_preview.c
+gschem/src/gschem_rotation_combo.c
 gschem/src/gschem_selection_adapter.c
 gschem/src/gschem_show_hide_text_widget.c
 gschem/src/gschem_slot_edit_dialog.c
@@ -70,7 +73,6 @@ gschem/src/o_slot.c
 gschem/src/o_text.c
 gschem/src/o_undo.c
 gschem/src/parsecmd.c
-gschem/src/x_aligncb.c
 gschem/src/x_attribedit.c
 gschem/src/x_autonumber.c
 gschem/src/x_basic.c
@@ -91,7 +93,6 @@ gschem/src/x_misc.c
 gschem/src/x_multiattrib.c
 gschem/src/x_newtext.c
 gschem/src/x_pagesel.c
-gschem/src/x_preview.c
 gschem/src/x_print.c
 gschem/src/x_rc.c
 gschem/src/x_script.c

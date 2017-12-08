@@ -45,36 +45,7 @@ static int DOING_STROKE = FALSE;
 gint
 x_event_expose(GschemPageView *view, GdkEventExpose *event, GschemToplevel *w_current)
 {
-  GschemPageGeometry *geometry;
-  PAGE *page;
-
-#if DEBUG
-  printf("EXPOSE\n");
-#endif
-
-  g_return_val_if_fail (view != NULL, 0);
-  g_return_val_if_fail (w_current != NULL, 0);
-
-  page = gschem_page_view_get_page (view);
-  geometry = gschem_page_view_get_page_geometry (view);
-
-  if (page != NULL) {
-    cairo_t *cr = gdk_cairo_create (GTK_WIDGET (view)->window);
-
-    gdk_cairo_rectangle (cr, &(event->area));
-    cairo_clip (cr);
-
-    o_redraw_rects (w_current,
-                    cr,
-                    gtk_widget_get_window (GTK_WIDGET(view)),
-                    gschem_page_view_get_gc (view),
-                    page,
-                    geometry,
-                    &(event->area),
-                    1);
-
-    cairo_destroy (cr);
-  }
+  gschem_page_view_redraw (view, event, w_current);
 
   return(0);
 }
@@ -115,6 +86,10 @@ x_event_button_pressed(GschemPageView *page_view, GdkEventButton *event, GschemT
   int unsnapped_wx, unsnapped_wy;
 
   g_return_val_if_fail ((w_current != NULL), 0);
+
+  if (page == NULL) {
+    return TRUE; /* terminate event */
+  }
 
   if (!gtk_widget_has_focus (GTK_WIDGET (page_view))) {
     gtk_widget_grab_focus (GTK_WIDGET (page_view));
@@ -165,7 +140,7 @@ x_event_button_pressed(GschemPageView *page_view, GdkEventButton *event, GschemT
   if (event->button == 1) {
     if (w_current->inside_action) {
       /* End action */
-      if (page_view->page->place_list != NULL) {
+      if (page->place_list != NULL) {
         switch(w_current->event_state) {
           case (COMPMODE)   : o_place_end(w_current, w_x, w_y, w_current->continue_component_place,
                                 "%add-objects-hook"); break;
@@ -333,11 +308,16 @@ x_event_button_pressed(GschemPageView *page_view, GdkEventButton *event, GschemT
 gint
 x_event_button_released (GschemPageView *page_view, GdkEventButton *event, GschemToplevel *w_current)
 {
+  PAGE *page = gschem_page_view_get_page (page_view);
   int unsnapped_wx, unsnapped_wy;
   int w_x, w_y;
 
   g_return_val_if_fail ((page_view != NULL), 0);
   g_return_val_if_fail ((w_current != NULL), 0);
+
+  if (page == NULL) {
+    return TRUE; /* terminate event */
+  }
 
 #if DEBUG
   printf("released! %d \n", w_current->event_state);
@@ -361,7 +341,7 @@ x_event_button_released (GschemPageView *page_view, GdkEventButton *event, Gsche
   if (event->button == 1) {
 
     if (w_current->inside_action) {
-      if (page_view->page->place_list != NULL) {
+      if (page->place_list != NULL) {
         switch(w_current->event_state) {
           case (COPYMODE)  :
           case (MCOPYMODE) : o_copy_end(w_current); break;
@@ -414,7 +394,7 @@ x_event_button_released (GschemPageView *page_view, GdkEventButton *event, Gsche
 
     switch(w_current->middle_button) {
       case(ACTION):
-        if (w_current->inside_action && (page_view->page->place_list != NULL)) {
+        if (w_current->inside_action && (page->place_list != NULL)) {
           switch(w_current->event_state) {
             case (COPYMODE): o_copy_end(w_current); break;
             case (MOVEMODE): o_move_end(w_current); break;
@@ -430,13 +410,17 @@ x_event_button_released (GschemPageView *page_view, GdkEventButton *event, Gsche
 #endif /* HAVE_LIBSTROKE */
 
       case(MID_MOUSEPAN_ENABLED):
-      gschem_page_view_pan_end (page_view, w_current);
+        if (gschem_page_view_pan_end (page_view) && w_current->undo_panzoom) {
+          o_undo_savestate_old(w_current, UNDO_VIEWPORT_ONLY);
+        }
       break;
     }
 
   } else if (event->button == 3) {
       /* just for ending a mouse pan */
-      gschem_page_view_pan_end (page_view, w_current);
+      if (gschem_page_view_pan_end (page_view) && w_current->undo_panzoom) {
+        o_undo_savestate_old(w_current, UNDO_VIEWPORT_ONLY);
+      }
   }
  end_button_released:
   scm_dynwind_end ();
@@ -452,12 +436,17 @@ x_event_button_released (GschemPageView *page_view, GdkEventButton *event, Gsche
 gint
 x_event_motion (GschemPageView *page_view, GdkEventMotion *event, GschemToplevel *w_current)
 {
+  PAGE *page = gschem_page_view_get_page (page_view);
   int w_x, w_y;
   int unsnapped_wx, unsnapped_wy;
   int skip_event=0;
   GdkEvent *test_event;
 
   g_return_val_if_fail ((w_current != NULL), 0);
+
+  if (page == NULL) {
+    return TRUE; /* terminate event */
+  }
 
   w_current->SHIFTKEY   = (event->state & GDK_SHIFT_MASK  ) ? 1 : 0;
   w_current->CONTROLKEY = (event->state & GDK_CONTROL_MASK) ? 1 : 0;
@@ -498,7 +487,7 @@ x_event_motion (GschemPageView *page_view, GdkEventMotion *event, GschemToplevel
     coord_display_update(w_current, (int) event->x, (int) event->y);
   }
 
-  gschem_page_view_pan_motion (page_view, w_current, (int) event->x, (int) event->y);
+  gschem_page_view_pan_motion (page_view, w_current->mousepan_gain, (int) event->x, (int) event->y);
 
   /* Huge switch statement to evaluate state transitions. Jump to
    * end_motion label to escape the state evaluation rather
@@ -507,7 +496,7 @@ x_event_motion (GschemPageView *page_view, GdkEventMotion *event, GschemToplevel
   g_dynwind_window (w_current);
 
   if (w_current->inside_action) {
-    if (page_view->page->place_list != NULL) {
+    if (page->place_list != NULL) {
       switch(w_current->event_state) {
         case (COPYMODE)   :
         case (MCOPYMODE)  :
@@ -608,10 +597,6 @@ x_event_configure (GschemPageView    *page_view,
 
   gschem_page_view_set_page (page_view, p_current);
 
-  /* redraw the current page and update UI */
-  gschem_page_view_invalidate_all (page_view);
-  gschem_page_view_update_scroll_adjustments (page_view);
-
   return FALSE;
 }
 
@@ -645,6 +630,8 @@ x_event_key (GschemPageView *page_view, GdkEventKey *event, GschemToplevel *w_cu
   gboolean retval = FALSE;
   int pressed;
   gboolean special = FALSE;
+
+  g_return_val_if_fail (page_view != NULL, FALSE);
 
 #if DEBUG
   printf("x_event_key_pressed: Pressed key %i.\n", event->keyval);
@@ -682,7 +669,7 @@ x_event_key (GschemPageView *page_view, GdkEventKey *event, GschemToplevel *w_cu
   /* Special case to update the object being drawn or placed after
    * scrolling when Shift or Control were pressed */
   if (special) {
-    x_event_faked_motion (gschem_toplevel_get_current_page_view (w_current), event);
+    x_event_faked_motion (page_view, event);
   }
 
   if (pressed)
@@ -711,8 +698,19 @@ gint x_event_scroll (GtkWidget *widget, GdkEventScroll *event,
   gboolean zoom = FALSE;
   int pan_direction = 1;
   int zoom_direction = ZOOM_IN;
+  GschemPageView *view = NULL;
+  PAGE *page = NULL;
 
   g_return_val_if_fail ((w_current != NULL), 0);
+
+  view = GSCHEM_PAGE_VIEW (widget);
+  g_return_val_if_fail ((view != NULL), 0);
+
+  page = gschem_page_view_get_page (view);
+
+  if (page == NULL) {
+    return FALSE; /* we cannot zoom page if it doesn't exist :) */
+  }
 
   /* update the state of the modifiers */
   w_current->SHIFTKEY   = (event->state & GDK_SHIFT_MASK  ) ? 1 : 0;
@@ -785,7 +783,7 @@ gint x_event_scroll (GtkWidget *widget, GdkEventScroll *event,
     o_undo_savestate_old(w_current, UNDO_VIEWPORT_ONLY);
   }
 
-  x_event_faked_motion (gschem_toplevel_get_current_page_view (w_current), NULL);
+  x_event_faked_motion (view, NULL);
   /* Stop further processing of this signal */
   return TRUE;
 }
@@ -808,7 +806,6 @@ gint x_event_scroll (GtkWidget *widget, GdkEventScroll *event,
 gboolean
 x_event_get_pointer_position (GschemToplevel *w_current, gboolean snapped, gint *wx, gint *wy)
 {
-  GschemPageView *page_view = gschem_toplevel_get_current_page_view (w_current);
   int width;
   int height;
   int sx;
@@ -816,7 +813,9 @@ x_event_get_pointer_position (GschemToplevel *w_current, gboolean snapped, gint 
   int x;
   int y;
 
+  GschemPageView *page_view = gschem_toplevel_get_current_page_view (w_current);
   g_return_val_if_fail (page_view != NULL, FALSE);
+
   g_return_val_if_fail (GTK_WIDGET (page_view)->window != NULL, FALSE);
 
   /* \todo The following line is depricated in GDK 2.24 */

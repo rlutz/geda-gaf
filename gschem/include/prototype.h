@@ -394,11 +394,10 @@ void o_attrib_toggle_visibility(GschemToplevel *w_current, OBJECT *object);
 void o_attrib_toggle_show_name_value(GschemToplevel *w_current, OBJECT *object, int new_show_name_value);
 OBJECT *o_attrib_add_attrib(GschemToplevel *w_current, const char *text_string, int visibility, int show_name_value, OBJECT *object);
 /* o_basic.c */
-void o_redraw_rects(GschemToplevel *w_current, cairo_t *cr, GdkDrawable *drawable, GdkGC *gc, PAGE *page, GschemPageGeometry *geometry, GdkRectangle *rectangles, int n_rectangles);
+void o_redraw_rect (GschemToplevel *w_current, GdkDrawable *drawable, GdkGC *gc, PAGE *page, GschemPageGeometry *geometry, GdkRectangle *rectangle);
 int o_invalidate_rubber(GschemToplevel *w_current);
 int o_redraw_cleanstates(GschemToplevel *w_current);
 void o_invalidate_rect(GschemToplevel *w_current, int x1, int y1, int x2, int y2);
-void o_invalidate_all(GschemToplevel *w_current);
 void o_invalidate(GschemToplevel *w_current, OBJECT *object);
 void o_invalidate_glist(GschemToplevel *w_current, GList *list);
 /* o_box.c */
@@ -573,10 +572,10 @@ int parse_commandline(int argc, char *argv[]);
 GList *s_stretch_add(GList *list, OBJECT *object, int whichone);
 GList *s_stretch_remove(GList *list, OBJECT *object);
 void s_stretch_destroy_all(GList *list);
-/* x_aligncb.c */
-GtkWidget* x_aligncb_new ();
-int x_aligncb_get_align (GtkWidget *widget);
-void x_aligncb_set_align (GtkWidget *widget, int align);
+/* gschem_alignment_combo.c */
+GtkWidget* gschem_alignment_combo_new ();
+int gschem_alignment_combo_get_align (GtkWidget *widget);
+void gschem_alignment_combo_set_align (GtkWidget *widget, int align);
 /* x_attribedit.c */
 gint option_menu_get_history(GtkOptionMenu *option_menu);
 void attrib_edit_dialog_ok(GtkWidget *w, GschemToplevel *w_current);
@@ -661,7 +660,7 @@ int x_grid_query_drawn_spacing(GschemToplevel *w_current);
 void x_image_lowlevel(GschemToplevel *w_current, const char* filename,
 		      int desired_width, int desired_height, char *filetype);
 void x_image_setup(GschemToplevel *w_current);
-GdkPixbuf *x_image_get_pixbuf (GschemToplevel *w_current);
+GdkPixbuf *x_image_get_pixbuf (GschemToplevel *w_current, int width, int height);
 /* x_integerls.c */
 GtkListStore* x_integerls_new ();
 GtkListStore* x_integerls_new_with_values (const char *value[], int count);
@@ -706,9 +705,9 @@ void x_print (GschemToplevel *w_current);
 /* x_rc.c */
 void x_rc_parse_gschem (TOPLEVEL *toplevel, const gchar *rcfile);
 /* x_rotatecb.c */
-GtkWidget* x_rotatecb_new ();
-int x_rotatecb_get_angle (GtkWidget *widget);
-void x_rotatecb_set_angle (GtkWidget *widget, int angle);
+GtkWidget* gschem_rotation_combo_new ();
+int gschem_rotation_combo_get_angle (GtkWidget *widget);
+void gschem_rotation_combo_set_angle (GtkWidget *widget, int angle);
 /* x_script.c */
 void setup_script_selector(GschemToplevel *w_current);
 /* x_stroke.c */

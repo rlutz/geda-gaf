@@ -108,10 +108,13 @@ void
 gschem_page_view_pan_start(GschemPageView *page_view, int x, int y);
 
 void
-gschem_page_view_pan_motion(GschemPageView *page_view, GschemToplevel *w_current, int x, int y);
+gschem_page_view_pan_motion (GschemPageView *view, int mousepan_gain, int x, int y);
+
+gboolean
+gschem_page_view_pan_end(GschemPageView *page_view);
 
 void
-gschem_page_view_pan_end(GschemPageView *page_view, GschemToplevel *w_current);
+gschem_page_view_redraw (GschemPageView *view, GdkEventExpose *event, GschemToplevel *w_current);
 
 int
 gschem_page_view_SCREENabs(GschemPageView *view, int val);
@@ -128,9 +131,6 @@ gschem_page_view_set_page (GschemPageView *view, PAGE *page);
 void
 gschem_page_view_set_vadjustment (GschemPageView *view, GtkAdjustment *vadjustment);
 
-void
-gschem_page_view_update_scroll_adjustments (GschemPageView *view);
-
 int
 gschem_page_view_WORLDabs(GschemPageView *view, int val);
 
@@ -141,4 +141,4 @@ void
 gschem_page_view_zoom_extents (GschemPageView *view, const GList *list);
 
 void
-gschem_page_view_zoom_text (GschemPageView *view, OBJECT *object, GschemToplevel *w_current);
+gschem_page_view_zoom_text (GschemPageView *view, OBJECT *object);

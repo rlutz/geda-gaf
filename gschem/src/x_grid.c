@@ -45,13 +45,21 @@
  */
 static int query_dots_grid_spacing (GschemToplevel *w_current)
 {
-  GschemPageView *page_view = gschem_toplevel_get_current_page_view (w_current);
-  GschemPageGeometry *geometry = gschem_page_view_get_page_geometry (page_view);
   int incr, screen_incr;
+
+  g_assert (w_current != NULL);
+
   int snap_size = gschem_options_get_snap_size (w_current->options);
 
-  g_return_val_if_fail (geometry != NULL, -1);
+  GschemPageView *page_view = gschem_toplevel_get_current_page_view (w_current);
   g_return_val_if_fail (page_view != NULL, -1);
+
+  GschemPageGeometry *geometry = gschem_page_view_get_page_geometry (page_view);
+
+  /* geometry may be NULL if page_view has no underlying page */
+  if (geometry == NULL) {
+    return -1;
+  }
 
   if (w_current->dots_grid_mode == DOTS_GRID_VARIABLE_MODE) {
     /* In the variable mode around every (DOTS_VARIABLE_MODE_SPACING)'th
@@ -97,6 +105,8 @@ static void draw_dots_grid_region (GschemToplevel *w_current,
   int x_start, y_start, x_end, y_end;
   int count = 0;
   GdkPoint points[DOTS_POINTS_ARRAY_SIZE];
+
+  g_assert (w_current != NULL);
 
   int incr = query_dots_grid_spacing (w_current);
 
@@ -251,8 +261,10 @@ static void draw_mesh (GschemToplevel *w_current,
  */
 static int query_mesh_grid_spacing (GschemToplevel *w_current)
 {
-  GschemPageView *page_view = gschem_toplevel_get_current_page_view (w_current);
   int incr, screen_incr;
+
+  GschemPageView *page_view = gschem_toplevel_get_current_page_view (w_current);
+  g_return_val_if_fail (page_view != NULL, -1);
 
   incr = gschem_options_get_snap_size (w_current->options);
   screen_incr = gschem_page_view_SCREENabs (page_view, incr);

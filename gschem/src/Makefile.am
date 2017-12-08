@@ -27,6 +27,7 @@ gschem_SOURCES = \
 	gschem_about_dialog.c \
 	gschem_accel_label.c \
 	gschem_action.c \
+	gschem_alignment_combo.c \
 	gschem_arc_dialog.c \
 	gschem_bin.c \
 	gschem_binding.c \
@@ -50,6 +51,8 @@ gschem_SOURCES = \
 	gschem_page_geometry.c \
 	gschem_page_view.c \
 	gschem_pin_type_combo.c \
+	gschem_preview.c \
+	gschem_rotation_combo.c \
 	gschem_selection_adapter.c \
 	gschem_show_hide_text_widget.c \
 	gschem_slot_edit_dialog.c \
@@ -87,7 +90,6 @@ gschem_SOURCES = \
 	o_undo.c \
 	parsecmd.c \
 	s_stretch.c \
-	x_aligncb.c \
 	x_attribedit.c \
 	x_autonumber.c \
 	x_basic.c \
@@ -109,10 +111,8 @@ gschem_SOURCES = \
 	x_multiattrib.c \
 	x_newtext.c \
 	x_pagesel.c \
-	x_preview.c \
 	x_print.c \
 	x_rc.c \
-	x_rotatecb.c \
 	x_script.c \
 	x_stroke.c \
 	x_window.c

@@ -68,6 +68,8 @@ DEFINE_I_CALLBACK(file_new)
 
   /* create a new page */
   page = x_window_open_page (w_current, NULL);
+  g_return_if_fail (page != NULL);
+
   x_window_set_current_page (w_current, page);
   s_log_message (_("New page created [%s]\n"), page->page_filename);
 }
@@ -92,12 +94,18 @@ void i_callback_toolbar_file_new(GtkWidget* widget, gpointer data)
  */
 DEFINE_I_CALLBACK(file_new_window)
 {
-  GschemToplevel *w_current;
-  w_current = x_window_new (NULL);
-  x_window_set_current_page (w_current, x_window_open_page (w_current, NULL));
+  GschemToplevel *w_current = NULL;
+  PAGE *page = NULL;
 
-  s_log_message (_("New Window created [%s]\n"),
-      w_current->toplevel->page_current->page_filename);
+  w_current = x_window_new (NULL);
+  g_return_if_fail (w_current != NULL);
+
+  page = x_window_open_page (w_current, NULL);
+  g_return_if_fail (page != NULL);
+
+  x_window_set_current_page (w_current, page);
+
+  s_log_message (_("New Window created [%s]\n"), page->page_filename);
 }
 
 /*! \todo Finish function documentation!!!
@@ -166,6 +174,10 @@ DEFINE_I_CALLBACK(file_save)
   g_return_if_fail (w_current != NULL);
 
   page = gschem_toplevel_get_toplevel (w_current)->page_current;
+
+  if (page == NULL) {
+    return;
+  }
 
   /*! \bug This is a dreadful way of figuring out whether a page is
    *  newly-created or not. */
@@ -331,9 +343,13 @@ DEFINE_I_CALLBACK(edit_undo)
     i_callback_cancel (w_current, 0, NULL);
   } else {
     GschemPageView *page_view = gschem_toplevel_get_current_page_view (w_current);
+    g_return_if_fail (page_view != NULL);
+
     PAGE *page = gschem_page_view_get_page (page_view);
 
-    o_undo_callback (w_current, page, UNDO_ACTION);
+    if (page != NULL) {
+      o_undo_callback (w_current, page, UNDO_ACTION);
+    }
   }
 }
 
@@ -358,10 +374,16 @@ void i_callback_toolbar_edit_undo(GtkWidget* widget, gpointer data)
 DEFINE_I_CALLBACK(edit_redo)
 {
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
+  g_return_if_fail (w_current != NULL);
+
   GschemPageView *page_view = gschem_toplevel_get_current_page_view (w_current);
+  g_return_if_fail (page_view != NULL);
+
   PAGE *page = gschem_page_view_get_page (page_view);
 
-  o_undo_callback (w_current, page, REDO_ACTION);
+  if (page != NULL) {
+    o_undo_callback (w_current, page, REDO_ACTION);
+  }
 }
 
 /*! \todo Finish function documentation!!!
@@ -640,14 +662,25 @@ DEFINE_I_CALLBACK(edit_color)
  */
 DEFINE_I_CALLBACK(edit_rotate_90)
 {
-  GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
   gint wx, wy;
   GList *object_list;
+  GschemToplevel *w_current = NULL;
+  GschemPageView *view = NULL;
+  PAGE* page = NULL;
 
+  w_current = GSCHEM_TOPLEVEL (data);
   g_return_if_fail (w_current != NULL);
 
-  if (w_current->inside_action &&
-      (gschem_toplevel_get_current_page_view (w_current)->page->place_list != NULL)) {
+  view = (gschem_toplevel_get_current_page_view (w_current));
+  g_return_if_fail (view != NULL);
+
+  page = (gschem_page_view_get_page (view));
+
+  if (page == NULL) {
+    return;
+  }
+
+  if (w_current->inside_action && (page->place_list != NULL)) {
     o_place_rotate (w_current);
     return;
   }
@@ -677,14 +710,25 @@ DEFINE_I_CALLBACK(edit_rotate_90)
  */
 DEFINE_I_CALLBACK(edit_mirror)
 {
-  GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
   gint wx, wy;
   GList *object_list;
+  GschemToplevel *w_current = NULL;
+  GschemPageView *view = NULL;
+  PAGE* page = NULL;
 
+  w_current = GSCHEM_TOPLEVEL (data);
   g_return_if_fail (w_current != NULL);
 
-  if (w_current->inside_action &&
-      (gschem_toplevel_get_current_page_view (w_current)->page->place_list != NULL)) {
+  view = (gschem_toplevel_get_current_page_view (w_current));
+  g_return_if_fail (view != NULL);
+
+  page = (gschem_page_view_get_page (view));
+
+  if (page == NULL) {
+    return;
+  }
+
+  if (w_current->inside_action && (page->place_list != NULL)) {
     o_place_mirror (w_current);
     return;
   }
@@ -1075,9 +1119,9 @@ DEFINE_I_CALLBACK(view_status)
 DEFINE_I_CALLBACK(view_redraw)
 {
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
-
   g_return_if_fail (w_current != NULL);
-  o_invalidate_all (w_current);
+
+  gschem_page_view_invalidate_all (gschem_toplevel_get_current_page_view (w_current));
 }
 
 /*! \todo Finish function documentation!!!
@@ -1090,9 +1134,9 @@ DEFINE_I_CALLBACK(view_redraw)
 DEFINE_I_CALLBACK(view_zoom_full)
 {
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
-  GschemPageView *page_view = gschem_toplevel_get_current_page_view (w_current);
-
   g_return_if_fail (w_current != NULL);
+
+  GschemPageView *page_view = gschem_toplevel_get_current_page_view (w_current);
   g_return_if_fail (page_view != NULL);
 
   /* scroll bar stuff */
@@ -1113,9 +1157,9 @@ DEFINE_I_CALLBACK(view_zoom_full)
 DEFINE_I_CALLBACK(view_zoom_extents)
 {
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
-  GschemPageView *page_view = gschem_toplevel_get_current_page_view (w_current);
-
   g_return_if_fail (w_current != NULL);
+
+  GschemPageView *page_view = gschem_toplevel_get_current_page_view (w_current);
   g_return_if_fail (page_view != NULL);
 
   gschem_page_view_zoom_extents (page_view, NULL);
@@ -1158,9 +1202,9 @@ DEFINE_I_CALLBACK(view_zoom_box)
 DEFINE_I_CALLBACK(view_zoom_in)
 {
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
-  GschemPageView *page_view = gschem_toplevel_get_current_page_view (w_current);
-
   g_return_if_fail (w_current != NULL);
+
+  GschemPageView *page_view = gschem_toplevel_get_current_page_view (w_current);
   g_return_if_fail (page_view != NULL);
 
   a_zoom (w_current,
@@ -1183,9 +1227,9 @@ DEFINE_I_CALLBACK(view_zoom_in)
 DEFINE_I_CALLBACK(view_zoom_out)
 {
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
-  GschemPageView *page_view = gschem_toplevel_get_current_page_view (w_current);
-
   g_return_if_fail (w_current != NULL);
+
+  GschemPageView *page_view = gschem_toplevel_get_current_page_view (w_current);
   g_return_if_fail (page_view != NULL);
 
   a_zoom(w_current,
@@ -1205,11 +1249,12 @@ DEFINE_I_CALLBACK(view_zoom_out)
  */
 DEFINE_I_CALLBACK(view_pan)
 {
-  GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
-  GschemPageView *page_view = gschem_toplevel_get_current_page_view (w_current);
   gint wx, wy;
 
+  GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
   g_return_if_fail (w_current != NULL);
+
+  GschemPageView *page_view = gschem_toplevel_get_current_page_view (w_current);
   g_return_if_fail (page_view != NULL);
 
   i_update_middle_button(w_current, i_callback_view_pan, _("Pan"));
@@ -1233,9 +1278,9 @@ DEFINE_I_CALLBACK(view_pan)
 DEFINE_I_CALLBACK(view_pan_left)
 {
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
-  GschemPageView *page_view = gschem_toplevel_get_current_page_view (w_current);
-
   g_return_if_fail (w_current != NULL);
+
+  GschemPageView *page_view = gschem_toplevel_get_current_page_view (w_current);
   g_return_if_fail (page_view != NULL);
 
   gschem_page_view_pan_mouse (page_view, w_current->keyboardpan_gain, 0);
@@ -1248,9 +1293,9 @@ DEFINE_I_CALLBACK(view_pan_left)
 DEFINE_I_CALLBACK(view_pan_right)
 {
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
-  GschemPageView *page_view = gschem_toplevel_get_current_page_view (w_current);
-
   g_return_if_fail (w_current != NULL);
+
+  GschemPageView *page_view = gschem_toplevel_get_current_page_view (w_current);
   g_return_if_fail (page_view != NULL);
 
   /* yes, that's a negative sign there */
@@ -1264,9 +1309,9 @@ DEFINE_I_CALLBACK(view_pan_right)
 DEFINE_I_CALLBACK(view_pan_up)
 {
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
-  GschemPageView *page_view = gschem_toplevel_get_current_page_view (w_current);
-
   g_return_if_fail (w_current != NULL);
+
+  GschemPageView *page_view = gschem_toplevel_get_current_page_view (w_current);
   g_return_if_fail (page_view != NULL);
 
   gschem_page_view_pan_mouse (page_view, 0, w_current->keyboardpan_gain);
@@ -1279,9 +1324,9 @@ DEFINE_I_CALLBACK(view_pan_up)
 DEFINE_I_CALLBACK(view_pan_down)
 {
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
-  GschemPageView *page_view = gschem_toplevel_get_current_page_view (w_current);
-
   g_return_if_fail (w_current != NULL);
+
+  GschemPageView *page_view = gschem_toplevel_get_current_page_view (w_current);
   g_return_if_fail (page_view != NULL);
 
   /* yes, that's a negative sign there */
@@ -1302,7 +1347,7 @@ DEFINE_I_CALLBACK (view_dark_colors)
   g_scm_c_eval_string_protected ("(load (build-path geda-rc-path \"gschem-colormap-darkbg\"))");
   x_color_allocate ();
 
-  o_invalidate_all (w_current);
+  gschem_page_view_invalidate_all (gschem_toplevel_get_current_page_view (w_current));
 }
 
 /*! \todo Finish function documentation!!!
@@ -1319,7 +1364,7 @@ DEFINE_I_CALLBACK (view_light_colors)
   g_scm_c_eval_string_protected ("(load (build-path geda-rc-path \"gschem-colormap-lightbg\"))");
   x_color_allocate ();
 
-  o_invalidate_all (w_current);
+  gschem_page_view_invalidate_all (gschem_toplevel_get_current_page_view (w_current));
 }
 
 /*! \todo Finish function documentation!!!
@@ -1336,7 +1381,7 @@ DEFINE_I_CALLBACK (view_bw_colors)
   g_scm_c_eval_string_protected ("(load (build-path geda-rc-path \"gschem-colormap-bw\"))");
   x_color_allocate ();
 
-  o_invalidate_all (w_current);
+  gschem_page_view_invalidate_all (gschem_toplevel_get_current_page_view (w_current));
 }
 
 /*! \section page-menu Page Menu Callback Functions */
@@ -1410,8 +1455,6 @@ DEFINE_I_CALLBACK(page_prev)
   if ( iter == NULL  )
     return;
 
-  p_new = (PAGE *)iter->data;
-
   if (w_current->enforce_hierarchy) {
     p_new = s_hierarchy_find_prev_page(toplevel->pages, p_current);
   } else {
@@ -1433,14 +1476,20 @@ DEFINE_I_CALLBACK(page_prev)
 DEFINE_I_CALLBACK(page_close)
 {
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
-
   g_return_if_fail (w_current != NULL);
 
-  if (gschem_toplevel_get_toplevel (w_current)->page_current->CHANGED
-      && !x_dialog_close_changed_page (w_current, gschem_toplevel_get_toplevel (w_current)->page_current))
-    return;
+  PAGE *page = gschem_toplevel_get_toplevel (w_current)->page_current;
 
-  x_window_close_page (w_current, gschem_toplevel_get_toplevel (w_current)->page_current);
+  if (page == NULL) {
+    return;
+  }
+
+  if (page->CHANGED
+      && !x_dialog_close_changed_page (w_current, page)) {
+    return;
+  }
+
+  x_window_close_page (w_current, page);
 }
 
 /*! \todo Finish function documentation!!!
@@ -1452,7 +1501,8 @@ DEFINE_I_CALLBACK(page_close)
 DEFINE_I_CALLBACK(page_revert)
 {
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
-  PAGE *page;
+  PAGE *page_current = NULL;
+  PAGE *page = NULL;
   gchar *filename;
   int page_control;
   int up;
@@ -1460,6 +1510,8 @@ DEFINE_I_CALLBACK(page_revert)
   GtkWidget* dialog;
 
   g_return_if_fail (w_current != NULL);
+
+  page_current = gschem_toplevel_get_toplevel (w_current)->page_current;
 
   dialog = gtk_message_dialog_new ((GtkWindow*) w_current->main_window,
                                    GTK_DIALOG_DESTROY_WITH_PARENT,
@@ -1480,15 +1532,15 @@ DEFINE_I_CALLBACK(page_revert)
     return;
 
   /* save this for later */
-  filename = g_strdup (gschem_toplevel_get_toplevel (w_current)->page_current->page_filename);
-  page_control = gschem_toplevel_get_toplevel (w_current)->page_current->page_control;
-  up = gschem_toplevel_get_toplevel (w_current)->page_current->up;
+  filename = g_strdup (page_current->page_filename);
+  page_control = page_current->page_control;
+  up = page_current->up;
 
   /* delete the page, then re-open the file as a new page */
-  s_page_delete (gschem_toplevel_get_toplevel (w_current), gschem_toplevel_get_toplevel (w_current)->page_current);
-  gschem_toplevel_page_changed (w_current);
+  x_window_close_page (w_current, page_current);
 
   page = x_window_open_page (w_current, filename);
+  g_return_if_fail (page != NULL);
 
   /* make sure we maintain the hierarchy info */
   page->page_control = page_control;
@@ -2196,20 +2248,24 @@ DEFINE_I_CALLBACK(hierarchy_down_symbol)
   }
 }
 
-/*! \todo Finish function documentation!!!
- *  \brief
+/*! \brief Go to the upper hierarchy level page
  *  \par Function Description
- *
+ * Return to the page which is parent for the current page in the
+ * hierarchy of schematics.
  */
 DEFINE_I_CALLBACK(hierarchy_up)
 {
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
-  PAGE *page;
-  PAGE *up_page;
+  PAGE *page = NULL;
+  PAGE *up_page = NULL;
 
   g_return_if_fail (w_current != NULL);
 
   page = gschem_toplevel_get_toplevel (w_current)->page_current;
+
+  if (page == NULL) {
+    return;
+  }
 
   up_page = s_hierarchy_find_up_page (gschem_toplevel_get_toplevel (w_current)->pages, page);
   if (up_page == NULL) {
@@ -2217,8 +2273,8 @@ DEFINE_I_CALLBACK(hierarchy_up)
   } else {
     if (page->CHANGED && !x_dialog_close_changed_page (w_current, page))
       return;
-    x_window_set_current_page(w_current, up_page);
     x_window_close_page (w_current, page);
+    x_window_set_current_page(w_current, up_page);
   }
 }
 
@@ -2762,7 +2818,7 @@ DEFINE_I_CALLBACK(cancel)
   /* clear the key guile command-sequence */
   g_keys_reset (w_current);
 
-  o_invalidate_all (w_current);
+  gschem_page_view_invalidate_all (gschem_toplevel_get_current_page_view (w_current));
 
   i_action_stop (w_current);
 }

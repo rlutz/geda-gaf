@@ -52,11 +52,11 @@ enum
   PROP_HADJUSTMENT,
   PROP_PAGE,
   PROP_PAGE_GEOMETRY,
-  PROP_TOPLEVEL,
   PROP_VADJUSTMENT
 };
 
 
+typedef void (*NotifyFunction) (void*,void*);
 
 static void
 dispose (GObject *object);
@@ -78,6 +78,9 @@ gschem_page_view_update_hadjustment (GschemPageView *view);
 
 static void
 gschem_page_view_update_vadjustment (GschemPageView *view);
+
+static void
+gschem_page_view_update_scroll_adjustments (GschemPageView *view);
 
 static void
 hadjustment_value_changed (GtkAdjustment *vadjustment, GschemPageView *view);
@@ -162,12 +165,11 @@ dispose (GObject *object)
   g_hash_table_foreach (view->geometry_table, (GHFunc)remove_page_weak_reference, view);
   g_hash_table_remove_all (view->geometry_table);
 
-  /* According to the GObject Manual the dispose function might be
-   * called several times. We don't want to call
-   * gschem_page_view_set_page twice here  */
-  if (view->page != NULL) {
-    gschem_page_view_set_page (view, NULL);
-  }
+  /* We aren't bothering about invoking
+   *   gschem_page_view_set_page (view, NULL)
+   * directly here since the current page itself must use its weak
+   * reference to call cleanup closure (page_deleted) for this
+   * view */
 
   if (view->gc != NULL) {
     g_object_unref (view->gc);
@@ -399,8 +401,6 @@ gschem_page_view_get_page (GschemPageView *view)
 GschemPageGeometry*
 gschem_page_view_get_page_geometry (GschemPageView *view)
 {
-  typedef void (*NotifyFunction) (void*,void*);
-
   PAGE *page = NULL;
   GschemPageGeometry *geometry = NULL;
   int screen_width;
@@ -431,7 +431,6 @@ gschem_page_view_get_page_geometry (GschemPageView *view)
                                                      view->page->toplevel->init_bottom);
 
     g_hash_table_insert (view->geometry_table, page, geometry);
-    s_page_weak_ref (page, (NotifyFunction) page_deleted, view);
 
     gschem_page_geometry_zoom_extents (geometry,
                                        view->page->toplevel,
@@ -439,6 +438,7 @@ gschem_page_view_get_page_geometry (GschemPageView *view)
   }
   else {
     gschem_page_geometry_set_values (geometry,
+                                     max (abs ((double)(gschem_page_geometry_get_viewport_right (geometry) - gschem_page_geometry_get_viewport_left (geometry)) / screen_width), (abs ((double)(gschem_page_geometry_get_viewport_top (geometry) - gschem_page_geometry_get_viewport_bottom (geometry)) / screen_height))),
                                      screen_width,
                                      screen_height,
                                      gschem_page_geometry_get_viewport_left (geometry),
@@ -504,7 +504,10 @@ gschem_page_view_invalidate_all (GschemPageView *view)
 {
   GdkWindow *window;
 
-  g_return_if_fail (view != NULL);
+  /* this function can be called early during initialization */
+  if (view == NULL) {
+    return;
+  }
 
   window = gtk_widget_get_window (GTK_WIDGET (view));
 
@@ -532,14 +535,16 @@ gschem_page_view_invalidate_object (GschemPageView *view, OBJECT *object)
     return;
   }
 
-  if (view->page != NULL) {
+  PAGE *page = gschem_page_view_get_page (view);
+
+  if (page != NULL) {
     gboolean success;
     int world_bottom;
     int world_right;
     int world_left;
     int world_top;
 
-    success = world_get_single_object_bounds (view->page->toplevel,
+    success = world_get_single_object_bounds (page->toplevel,
                                               object,
                                               &world_left,
                                               &world_top,
@@ -671,13 +676,29 @@ gschem_page_view_init (GschemPageView *view)
 
 
 /*! \brief Create a new instance of the GschemPageView
+ *  \par Function Description
+ *  This function creates a new instance of the GschemPageView
+ *  structure. The resulting view becomes a "viewport" for the
+ *  given \a page. If the page is not NULL, a weak reference
+ *  callback is added for \a page so that it can do necessary
+ *  clean-up for the view when the page is deleted (e.g. due to
+ *  using close-page! Scheme function).
+ *
+ *  \param [in] page The page to refer to.
  *
  *  \return A new instance of the GschemPageView
  */
 GschemPageView*
 gschem_page_view_new_with_page (PAGE *page)
 {
-  return GSCHEM_PAGE_VIEW (g_object_new (GSCHEM_TYPE_PAGE_VIEW, "page", page, NULL));
+  GschemPageView *view = GSCHEM_PAGE_VIEW (g_object_new (GSCHEM_TYPE_PAGE_VIEW,
+                                                         "page", page,
+                                                         NULL));
+  if (page) {
+    s_page_weak_ref (page, (NotifyFunction) page_deleted, view);
+  }
+
+  return view;
 }
 
 
@@ -723,6 +744,9 @@ gschem_page_view_pan (GschemPageView *view, int w_x, int w_y)
   /* Trigger a motion event to update the objects being drawn */
   /* This works e.g. if the view is centered at the mouse pointer position */
   x_event_faked_motion (view, NULL);
+
+  gschem_page_view_update_scroll_adjustments (view);
+  gschem_page_view_invalidate_all (view);
 }
 
 
@@ -793,17 +817,16 @@ void gschem_page_view_pan_start (GschemPageView *view, int x, int y)
  *  \par Function Description
  *  In the view pan mode, this function calculates displacement of
  *  the mouse pointer relative to its previous position and repans
- *  the view taking in account the mousepan_gain setting of
- *  w_current. Then it replaces pan_x and pan_y with the new
- *  coordinates.
+ *  the view taking into account the given mouse pan gain setting.
+ *  Then it replaces pan_x and pan_y with the new coordinates.
  *
- *  \param [in,out] view      This GschemPageView
- *  \param [in]     w_current The GschemToplevel
- *  \param [in]     x         The new screen x coordinate
- *  \param [in]     y         The new screen y coordinate
+ *  \param [in,out] view            This GschemPageView
+ *  \param [in]     mousepan_gain   Mouse pan gain
+ *  \param [in]     x               The new screen x coordinate
+ *  \param [in]     y               The new screen y coordinate
  */
 void
-gschem_page_view_pan_motion (GschemPageView *view, GschemToplevel *w_current, int x, int y)
+gschem_page_view_pan_motion (GschemPageView *view, int mousepan_gain, int x, int y)
 {
   int pdiff_x, pdiff_y;
 
@@ -813,8 +836,8 @@ gschem_page_view_pan_motion (GschemPageView *view, GschemToplevel *w_current, in
 
     if (!(view->throttle % 5)) {
       gschem_page_view_pan_mouse(view,
-                                 pdiff_x*w_current->mousepan_gain,
-                                 pdiff_y*w_current->mousepan_gain);
+                                 pdiff_x * mousepan_gain,
+                                 pdiff_y * mousepan_gain);
 
       view->pan_x = x;
       view->pan_y = y;
@@ -826,23 +849,20 @@ gschem_page_view_pan_motion (GschemPageView *view, GschemToplevel *w_current, in
 /*! \brief End mouse panning in the view
  *  \par Function Description
  *  This function resets the view pan mode and invalidates the
- *  view.  If undo_panzoom is enabled, the current viewport
- *  data are saved for undo.
+ *  view after panning.
  *
  *  \param [in,out] view      This GschemPageView
- *  \param [in]     w_current The GschemToplevel
+ *  \returns TRUE if panning has been finished, or FALSE if there was no panning
  */
-void
-gschem_page_view_pan_end (GschemPageView *view, GschemToplevel *w_current)
+gboolean
+gschem_page_view_pan_end (GschemPageView *view)
 {
   if (view->doing_pan) {
     gschem_page_view_invalidate_all (view);
-
-    if (w_current->undo_panzoom) {
-      o_undo_savestate_old(w_current, UNDO_VIEWPORT_ONLY);
-    }
-
     view->doing_pan = FALSE;
+    return TRUE;
+  } else {
+    return FALSE;
   }
 }
 
@@ -912,8 +932,7 @@ gschem_page_view_set_hadjustment (GschemPageView *view, GtkAdjustment *hadjustme
 /*! \brief Set the page for this view
  *
  *  The toplevel property must be set and the page must belong to that
- *  toplevel. Currently, the codebase does not allow the page to be
- *  NULL.
+ *  toplevel.
  *
  *  \param [in,out] view The view
  *  \param [in]     page The page
@@ -924,16 +943,35 @@ gschem_page_view_set_page (GschemPageView *view, PAGE *page)
   g_return_if_fail (view != NULL);
   g_return_if_fail (view->geometry_table != NULL);
 
-  view->page = page;
+  if (page != view->page) {
 
-  if (page != NULL) {
-    g_return_if_fail (page->toplevel != NULL);
-    s_page_goto (page->toplevel, page);
+    view->page = page;
+
+    if (page) {
+      s_page_weak_ref (page, (NotifyFunction) page_deleted, view);
+
+      g_return_if_fail (page->toplevel != NULL);
+      s_page_goto (page->toplevel, page);
+
+      /* redraw the current page and update UI */
+      gschem_page_view_invalidate_all (view);
+      gschem_page_view_update_scroll_adjustments (view);
+
+      g_object_notify (G_OBJECT (view), "page");
+      g_object_notify (G_OBJECT (view), "page-geometry");
+      g_signal_emit_by_name (view, "update-grid-info");
+
+    } else {
+      if (view->hadjustment != NULL) {
+        gtk_adjustment_set_page_size (view->hadjustment,
+                                      gtk_adjustment_get_upper (view->hadjustment));
+      }
+      if (view->vadjustment != NULL) {
+        gtk_adjustment_set_page_size (view->vadjustment,
+                                      gtk_adjustment_get_upper (view->vadjustment));
+      }
+    }
   }
-
-  g_object_notify (G_OBJECT (view), "page");
-  g_object_notify (G_OBJECT (view), "page-geometry");
-  g_signal_emit_by_name (view, "update-grid-info");
 }
 
 
@@ -980,9 +1018,8 @@ hadjustment_value_changed (GtkAdjustment *hadjustment, GschemPageView *view)
   g_return_if_fail (view != NULL);
 
   GschemPageGeometry *geometry = gschem_page_view_get_page_geometry (view);
-  g_return_if_fail (geometry != NULL);
 
-  if (view->hadjustment != NULL) {
+  if (view->hadjustment != NULL && geometry != NULL) {
     int current_left;
     int new_left;
 
@@ -1027,15 +1064,19 @@ set_property (GObject *object, guint param_id, const GValue *value, GParamSpec *
 
 
 
-/*! \brief Get absolute SCREEN coordinate.
+/*! \brief Get absolute SCREEN value
  *
- *  A temporary function until a GschemToplevel is not required for coordinate
- *  conversions. See the function SCREENabs.
+ *  \par Function Description
+ *  Converts WORLD value \a val to absolute SCREEN value.
+ *
+ *  \param [in]     view       This GschemPageView
+ *  \param [in]     val        The value to convert
+ *  \return The converted value in SCREEN pixels
  */
 int
 gschem_page_view_SCREENabs(GschemPageView *view, int val)
 {
-  double f0,f1,f;
+  double f0,f1;
   double i;
   int j;
   GschemPageGeometry *geometry = gschem_page_view_get_page_geometry (view);
@@ -1046,8 +1087,7 @@ gschem_page_view_SCREENabs(GschemPageView *view, int val)
 
   f0 = gschem_page_geometry_get_viewport_left  (geometry);
   f1 = gschem_page_geometry_get_viewport_right (geometry);
-  f = gschem_page_view_get_page_geometry (view)->screen_width / (f1 - f0);
-  i = f * (double)(val);
+  i = (double)(geometry->screen_width) * (double)(val) / (f1 - f0);
 
 #ifdef HAS_RINT
   j = rint(i);
@@ -1067,10 +1107,9 @@ gschem_page_view_update_hadjustment (GschemPageView *view)
 {
   g_return_if_fail (view != NULL);
 
-  if (view->hadjustment != NULL) {
+  GschemPageGeometry *geometry = gschem_page_view_get_page_geometry (view);
 
-    GschemPageGeometry *geometry = gschem_page_view_get_page_geometry (view);
-    g_return_if_fail (geometry != NULL);
+  if (view->hadjustment != NULL && geometry != NULL) {
 
     gtk_adjustment_set_page_increment (view->hadjustment,
                                        fabs (geometry->viewport_right - geometry->viewport_left) - 100.0);
@@ -1095,7 +1134,7 @@ gschem_page_view_update_hadjustment (GschemPageView *view)
 
 /*! \brief Update the scroll adjustments
  */
-void
+static void
 gschem_page_view_update_scroll_adjustments (GschemPageView *view)
 {
   g_return_if_fail (view != NULL);
@@ -1113,10 +1152,9 @@ gschem_page_view_update_vadjustment (GschemPageView *view)
 {
   g_return_if_fail (view != NULL);
 
-  if (view->vadjustment != NULL) {
+  GschemPageGeometry *geometry = gschem_page_view_get_page_geometry (view);
 
-    GschemPageGeometry *geometry = gschem_page_view_get_page_geometry (view);
-    g_return_if_fail (geometry != NULL);
+  if (view->vadjustment != NULL && geometry != NULL) {
 
     gtk_adjustment_set_page_increment(view->vadjustment,
                                       fabs (geometry->viewport_bottom - geometry->viewport_top) - 100.0);
@@ -1202,6 +1240,7 @@ page_deleted (PAGE *page, GschemPageView *view)
   g_return_if_fail (view->geometry_table != NULL);
 
   g_hash_table_remove (view->geometry_table, page);
+  gschem_page_view_set_page (view, NULL);
 }
 
 
@@ -1228,14 +1267,13 @@ vadjustment_value_changed (GtkAdjustment *vadjustment, GschemPageView *view)
   g_return_if_fail (vadjustment != NULL);
   g_return_if_fail (view != NULL);
 
-  if (view->vadjustment != NULL) {
+  GschemPageGeometry *geometry = gschem_page_view_get_page_geometry (view);
+
+  if (view->vadjustment != NULL && geometry != NULL) {
     int current_bottom;
     int new_bottom;
 
     g_return_if_fail (view->vadjustment == vadjustment);
-
-    GschemPageGeometry *geometry = gschem_page_view_get_page_geometry (view);
-    g_return_if_fail (geometry != NULL);
 
     current_bottom = geometry->viewport_bottom;
     new_bottom = geometry->world_bottom - (int) vadjustment->value;
@@ -1250,9 +1288,6 @@ vadjustment_value_changed (GtkAdjustment *vadjustment, GschemPageView *view)
 
 
 /*! \brief Transform WORLD coordinates to SCREEN coordinates
- *
- *  A temporary function until a GschemToplevel is not required for coordinate
- *  conversions. See the function WORLDtoSCREEN.
  */
 void
 gschem_page_view_WORLDtoSCREEN (GschemPageView *view, int x, int y, int *px, int *py)
@@ -1279,9 +1314,13 @@ void
 gschem_page_view_zoom_extents (GschemPageView *view, const GList *objects)
 {
   GschemPageGeometry *geometry = NULL;
+  PAGE *page = NULL;
   const GList *temp = objects;
 
   g_return_if_fail (view != NULL);
+
+  page = gschem_page_view_get_page (view);
+  g_return_if_fail (page != NULL);
 
   geometry = gschem_page_view_get_page_geometry (view);
   g_return_if_fail (geometry != NULL);
@@ -1290,7 +1329,7 @@ gschem_page_view_zoom_extents (GschemPageView *view, const GList *objects)
     temp = s_page_objects (gschem_page_view_get_page (view));
   }
 
-  gschem_page_geometry_zoom_extents (geometry, view->page->toplevel, temp);
+  gschem_page_geometry_zoom_extents (geometry, page->toplevel, temp);
 
   /* Trigger a motion event to update the objects being drawn */
   x_event_faked_motion (view, NULL);
@@ -1305,14 +1344,19 @@ gschem_page_view_zoom_extents (GschemPageView *view, const GList *objects)
  *
  *  \param [in] view      This GschemPageView
  *  \param [in] object    The text object
- *  \param [in] w_current The GschemToplevel
  */
 void
-gschem_page_view_zoom_text (GschemPageView *view, OBJECT *object, GschemToplevel *w_current)
+gschem_page_view_zoom_text (GschemPageView *view, OBJECT *object)
 {
   int success;
   int x[2];
   int y[2];
+  int viewport_center_x, viewport_center_y, viewport_width, viewport_height;
+  double k;
+
+  g_return_if_fail (view != NULL);
+  GschemPageGeometry *geometry = gschem_page_view_get_page_geometry (view);
+  g_return_if_fail (geometry != NULL);
 
   g_return_if_fail (object != NULL);
   g_return_if_fail (object->page != NULL);
@@ -1327,21 +1371,59 @@ gschem_page_view_zoom_text (GschemPageView *view, OBJECT *object, GschemToplevel
                                             &y[1]);
 
   if (success) {
-    int text_screen_height;
 
-    a_zoom (w_current, view, ZOOM_FULL, DONTCARE);
-
-    text_screen_height = gschem_page_view_SCREENabs (view, y[1] - y[0]);
-
-    /* this code will zoom/pan till the text screen height is about */
+    /* Here we are trying to make the text screen height to be about */
     /* 50 pixels high, perhaps a future enhancement will be to make */
     /* this number configurable */
-    while (text_screen_height < 50) {
-      a_zoom (w_current, view, ZOOM_IN, DONTCARE);
-      text_screen_height = gschem_page_view_SCREENabs (view, y[1] - y[0]);
-    }
+    viewport_center_x = (x[1] + x[0]) / 2;
+    viewport_center_y = (y[1] + y[0]) / 2;
+    k = ((y[1] - y[0]) / 50);
+    viewport_height = geometry->screen_height * k;
+    viewport_width  = geometry->screen_width  * k;
 
-    gschem_page_view_pan (view, object->text->x, object->text->y);
+    gschem_page_geometry_set_values (geometry,
+                                     k,
+                                     geometry->screen_width,
+                                     geometry->screen_height,
+                                     viewport_center_x - viewport_width / 2,
+                                     viewport_center_y - viewport_height / 2,
+                                     viewport_center_x + viewport_width / 2,
+                                     viewport_center_y + viewport_height / 2);
+
+    gschem_page_view_invalidate_all (view);
   }
+}
 
+
+/*! \brief Redraw page on the view
+ *
+ *  \param [in] view      The GschemPageView object which page to redraw
+ */
+void
+gschem_page_view_redraw (GschemPageView *view, GdkEventExpose *event, GschemToplevel *w_current)
+{
+  GschemPageGeometry *geometry;
+  PAGE *page;
+
+#if DEBUG
+  printf("EXPOSE\n");
+#endif
+
+  g_return_val_if_fail (view != NULL, 0);
+  g_return_val_if_fail (w_current != NULL, 0);
+
+  page = gschem_page_view_get_page (view);
+
+  if (page != NULL) {
+    geometry = gschem_page_view_get_page_geometry (view);
+
+    g_return_val_if_fail (view != NULL, 0);
+
+    o_redraw_rect (w_current,
+                   gtk_widget_get_window (GTK_WIDGET(view)),
+                   gschem_page_view_get_gc (view),
+                   page,
+                   geometry,
+                   &(event->area));
+  }
 }
