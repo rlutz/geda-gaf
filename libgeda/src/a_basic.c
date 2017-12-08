@@ -54,7 +54,6 @@ const gchar *o_file_format_header()
  *  This function saves a whole schematic into a buffer in libgeda
  *  format. The buffer should be freed when no longer needed.
  *
- *  \param [in] toplevel    The current TOPLEVEL.
  *  \param [in] object_list The head of a GList of OBJECTs to save.
  *  \returns a buffer containing schematic data or NULL on failure.
  */
@@ -83,7 +82,6 @@ gchar *o_save_buffer (const GList *object_list)
  *  we recurse for saving out those attributes, the function must be called
  *  with save_attribs passed as TRUE.
  *
- *  \param [in] toplevel      A TOPLEVEL structure.
  *  \param [in] object_list   The head of a GList of objects to save.
  *  \param [in] save_attribs  Should attribute objects encounterd be saved?
  *  \returns a buffer containing schematic data or NULL on failure.
