@@ -409,7 +409,7 @@ find_objects_using_pattern (GSList *pages, const char *text)
         continue;
       }
 
-      if (!(o_is_visible (page->toplevel, object) || page->toplevel->show_hidden_text)) {
+      if (!(o_is_visible (object) || page->toplevel->show_hidden_text)) {
         continue;
       }
 
@@ -486,7 +486,7 @@ find_objects_using_regex (GSList *pages, const char *text, GError **error)
         continue;
       }
 
-      if (!(o_is_visible (page->toplevel, object) || page->toplevel->show_hidden_text)) {
+      if (!(o_is_visible (object) || page->toplevel->show_hidden_text)) {
         continue;
       }
 
@@ -551,7 +551,7 @@ find_objects_using_substring (GSList *pages, const char *text)
         continue;
       }
 
-      if (!(o_is_visible (page->toplevel, object) || page->toplevel->show_hidden_text)) {
+      if (!(o_is_visible (object) || page->toplevel->show_hidden_text)) {
         continue;
       }
 

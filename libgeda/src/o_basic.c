@@ -720,12 +720,11 @@ o_emit_change_notify (TOPLEVEL *toplevel, OBJECT *object)
  *  \par Function Description
  *  Attribute getter for the visible field within the object.
  *
- *  \param toplevel The TOPLEVEL structure
  *  \param object   The OBJECT structure to be queried
  *  \return TRUE when VISIBLE, FALSE otherwise
  */
 gboolean
-o_is_visible (TOPLEVEL *toplevel, OBJECT *object)
+o_is_visible (OBJECT *object)
 {
   g_return_val_if_fail (object != NULL, FALSE);
   return object->visibility == VISIBLE;

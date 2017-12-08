@@ -401,7 +401,7 @@ void o_select_box_search(GschemToplevel *w_current)
   while (iter != NULL) {
     o_current = iter->data;
     /* only select visible objects */
-    if (o_is_visible (toplevel, o_current) || toplevel->show_hidden_text) {
+    if (o_is_visible (o_current) || toplevel->show_hidden_text) {
       int cleft, ctop, cright, cbottom;
 
       if ( world_get_single_object_bounds(toplevel, o_current,
@@ -603,7 +603,7 @@ o_select_visible_unlocked (GschemToplevel *w_current)
     OBJECT *obj = (OBJECT *) iter->data;
 
     /* Skip invisible objects. */
-    if (!o_is_visible (toplevel, obj) && !toplevel->show_hidden_text)
+    if (!o_is_visible (obj) && !toplevel->show_hidden_text)
       continue;
 
     /* Skip locked objects. */
