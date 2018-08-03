@@ -49,7 +49,6 @@
  *  #o_set_fill_options().
  *
  *  \param [in]     toplevel     The TOPLEVEL object.
- *  \param [in]     type         Must be OBJ_LINE.
  *  \param [in]     color        Circle line color.
  *  \param [in]     x1           Upper x coordinate.
  *  \param [in]     y1           Upper y coordinate.
