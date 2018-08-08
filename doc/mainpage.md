@@ -10,6 +10,10 @@ following components:
 
 - \ref xorn "Xorn", a Python library for high-level object manipulation
 
+- \ref gaf, the part of the gEDA/gaf codebase based on the Xorn libraries
+
+- \ref gaf.netlist "gaf.netlist", the gEDA/gaf netlister
+
 For more general information about this project, see
 http://hedmen.org/xorn/.
 
