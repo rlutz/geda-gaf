@@ -69,8 +69,8 @@ pixmaps referenced by the schematic are included in the XML file by
 default.  In order to make this possible, you'll need to specify the
 symbol library directories:
 
-    $ xorn convert --symbol-library=sym/
-                   --symbol-library-search=/path/to/library/
+    $ xorn convert --symbol-library=sym/ \
+                   --symbol-library-search=/path/to/library/ \
         example.sch example.sch.xml
 
 When using the default library included with gEDA, you can't use
