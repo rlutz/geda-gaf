@@ -89,6 +89,7 @@ AC_CONFIG_FILES([
 	src/cpython/storage/Makefile
 	src/cpython/guile/Makefile
 	src/python/Makefile
+	src/gaf/Makefile
 	src/command/Makefile
 	src/backend/Makefile
 	tests/Makefile

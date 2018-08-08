@@ -1,4 +1,4 @@
-# xorn.geda - Python library for manipulating gEDA files
+# gaf - Python library for manipulating gEDA files
 #**********************************************************************
 #                   _     _                     __   _  _
 #   __ _ _ __   ___| |_  | |__   __ _ ___  ___ / /_ | or |

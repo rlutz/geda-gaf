@@ -1,4 +1,4 @@
-# xorn.geda - Python library for manipulating gEDA files
+# gaf.netlist - gEDA Netlist Extraction and Generation
 # Copyright (C) 1998-2010 Ales Hvezda
 # Copyright (C) 1998-2010 gEDA Contributors (see ChangeLog for details)
 # Copyright (C) 2013-2018 Roland Lutz
@@ -30,16 +30,17 @@
 # --                    pass all further options to the Scheme backend
 
 import os.path, sys
-import xorn.geda.netlist.guile
+import xorn.guile
+import gaf.netlist.guile
 
 def get_package_attribute(refdes, name):
-    xorn.geda.netlist.guile.check_argument_type(
+    gaf.netlist.guile.check_argument_type(
         'gnetlist:get-package-attribute', 1, refdes, basestring)
-    xorn.geda.netlist.guile.check_argument_type(
+    gaf.netlist.guile.check_argument_type(
         'gnetlist:get-package-attribute', 2, name, basestring)
 
     try:
-        return xorn.geda.netlist.guile.the_netlist \
+        return gaf.netlist.guile.the_netlist \
             .packages_by_refdes[refdes].get_attribute(name)
     except KeyError:
         return 'unknown'
@@ -89,10 +90,10 @@ def run(f, netlist, args):
                           % option)
             return
 
-    xorn.geda.netlist.guile.the_netlist = netlist
-    xorn.geda.netlist.guile.the_backend_arguments = passed_args
-    xorn.geda.netlist.guile.the_verbosity = verbosity
-    xorn.geda.netlist.guile.the_spice_mode = use_spice_netnames
+    gaf.netlist.guile.the_netlist = netlist
+    gaf.netlist.guile.the_backend_arguments = passed_args
+    gaf.netlist.guile.the_verbosity = verbosity
+    gaf.netlist.guile.the_spice_mode = use_spice_netnames
 
     # Define the module "(geda deprecated)" so it can be included by
     # gnetlist.scm, but don't provide any actual functionality.

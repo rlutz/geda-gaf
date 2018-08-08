@@ -21,21 +21,21 @@ from gettext import gettext as _
 import xorn.command
 import xorn.config
 import xorn.storage
-import xorn.geda.attrib
-import xorn.geda.read
+import gaf.attrib
+import gaf.read
 
 def find_pins_by_attribute(rev, name, value):
     found = []
     for pin in rev.toplevel_objects():
         data = pin.data()
         if isinstance(data, xorn.storage.Net) and data.is_pin and value in \
-                xorn.geda.attrib.search_attached(pin, name):
+                gaf.attrib.search_attached(pin, name):
             found += [pin]
     return found
 
 def has_pin(rev, number, label):
     for pin in find_pins_by_attribute(rev, 'pinnumber', number):
-        if label in xorn.geda.attrib.search_attached(pin, 'pinlabel'):
+        if label in gaf.attrib.search_attached(pin, 'pinlabel'):
             return True
     return False
 
@@ -47,13 +47,13 @@ def find_symbols(root, pinout):
                 continue
             path = os.path.join(dirpath, filename)
             try:
-                rev = xorn.geda.read.read(path)
+                rev = gaf.read.read(path)
             except UnicodeDecodeError as e:
                 sys.stderr.write(_("%s: can't read %s: %s\n")
                                  % (xorn.command.program_short_name,
                                     path, str(e)))
                 continue
-            except xorn.geda.read.ParseError:
+            except gaf.read.ParseError:
                 continue
 
             ok = True

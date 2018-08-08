@@ -1,4 +1,4 @@
-# xorn.geda.netlist - gEDA Netlist Extraction and Generation
+# gaf.netlist - gEDA Netlist Extraction and Generation
 # Copyright (C) 1998-2010 Ales Hvezda
 # Copyright (C) 1998-2010 gEDA Contributors (see ChangeLog for details)
 # Copyright (C) 2013-2018 Roland Lutz
@@ -22,7 +22,7 @@
 
 # Generic element list
 
-import xorn.geda.attrib
+import gaf.attrib
 
 # Custom function to append ".${SLOT}" where a component has a
 # "slot=${SLOT}" attribute attached.
@@ -31,7 +31,7 @@ def get_refdes(component):
     # Replicate buggy behavior of "get-attrib-value-by-attrib-name":
     # if there is no "slot" attribute attached to the component, treat
     # it as non-slotted even if it inherits a "slot" attribute.
-    if not xorn.geda.attrib.search_attached(component.blueprint.ob, 'slot'):
+    if not gaf.attrib.search_attached(component.blueprint.ob, 'slot'):
         return component.refdes
 
     try:

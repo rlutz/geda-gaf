@@ -771,34 +771,34 @@ INPUT                  = .. \
                          ./xorn/proxy.py \
                          ./xorn/storage.py \
                          ./xorn/xml_writer.py \
-                         ./xorn/geda/__init__.py \
-                         ./xorn/geda/attrib.py \
-                         ./xorn/geda/clib.py \
-                         ./xorn/geda/fileformat.py \
-                         ./xorn/geda/plainformat.py \
-                         ./xorn/geda/plainread.py \
-                         ./xorn/geda/plainwrite.py \
-                         ./xorn/geda/read.py \
-                         ./xorn/geda/ref.py \
-                         ./xorn/geda/write.py \
-                         ./xorn/geda/xmlformat.py \
-                         ./xorn/geda/xmlread.py \
-                         ./xorn/geda/xmlwrite.py \
-                         ./xorn/geda/netlist/__init__.py \
-                         ./xorn/geda/netlist/backend.py \
-                         ./xorn/geda/netlist/blueprint.py \
-                         ./xorn/geda/netlist/conn.py \
-                         ./xorn/geda/netlist/guile.py \
-                         ./xorn/geda/netlist/instance.py \
-                         ./xorn/geda/netlist/net.py \
-                         ./xorn/geda/netlist/netlist.py \
-                         ./xorn/geda/netlist/package.py \
-                         ./xorn/geda/netlist/pp_graphical.py \
-                         ./xorn/geda/netlist/pp_hierarchy.py \
-                         ./xorn/geda/netlist/pp_netattrib.py \
-                         ./xorn/geda/netlist/pp_power.py \
-                         ./xorn/geda/netlist/pp_slotting.py \
-                         ./xorn/geda/netlist/slib.py
+                         ./gaf/__init__.py \
+                         ./gaf/attrib.py \
+                         ./gaf/clib.py \
+                         ./gaf/fileformat.py \
+                         ./gaf/plainformat.py \
+                         ./gaf/plainread.py \
+                         ./gaf/plainwrite.py \
+                         ./gaf/read.py \
+                         ./gaf/ref.py \
+                         ./gaf/write.py \
+                         ./gaf/xmlformat.py \
+                         ./gaf/xmlread.py \
+                         ./gaf/xmlwrite.py \
+                         ./gaf/netlist/__init__.py \
+                         ./gaf/netlist/backend.py \
+                         ./gaf/netlist/blueprint.py \
+                         ./gaf/netlist/conn.py \
+                         ./gaf/netlist/guile.py \
+                         ./gaf/netlist/instance.py \
+                         ./gaf/netlist/net.py \
+                         ./gaf/netlist/netlist.py \
+                         ./gaf/netlist/package.py \
+                         ./gaf/netlist/pp_graphical.py \
+                         ./gaf/netlist/pp_hierarchy.py \
+                         ./gaf/netlist/pp_netattrib.py \
+                         ./gaf/netlist/pp_power.py \
+                         ./gaf/netlist/pp_slotting.py \
+                         ./gaf/netlist/slib.py
 
 # This tag can be used to specify the character encoding of the source files
 # that doxygen parses. Internally doxygen uses the UTF-8 encoding. Doxygen uses

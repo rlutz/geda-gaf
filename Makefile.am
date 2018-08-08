@@ -20,6 +20,7 @@ SUBDIRS = \
 	src/cpython/storage \
 	src/cpython/guile \
 	src/python \
+	src/gaf \
 	src/command \
 	src/backend \
 	tests \
@@ -27,7 +28,7 @@ SUBDIRS = \
 
 include_HEADERS = include/xornstorage.h
 
-nodist_noinst_PYTHON = built-packages/xorn.py
+nodist_noinst_PYTHON = built-packages/xorn.py built-packages/gaf.py
 all-local: $(nodist_noinst_PYTHON)
 built-packages/xorn.py: Makefile
 	$(AM_V_GEN)$(MKDIR_P) built-packages && { \
@@ -36,10 +37,16 @@ built-packages/xorn.py: Makefile
 	    echo '            "$(abs_builddir)/src/python",'; \
 	    echo '            "$(abs_srcdir)/src/python"]'; \
 	} > $@
+built-packages/gaf.py: Makefile
+	$(AM_V_GEN)$(MKDIR_P) built-packages && { \
+	    echo '__path__ = ["$(abs_srcdir)/src/gaf"]'; \
+	} > $@
 
 CLEANFILES = \
 	built-packages/xorn.py \
-	built-packages/xorn.pyc
+	built-packages/xorn.pyc \
+	built-packages/gaf.py \
+	built-packages/gaf.pyc
 
 ACLOCAL_AMFLAGS = -I m4
 
