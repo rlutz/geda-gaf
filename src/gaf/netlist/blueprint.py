@@ -170,6 +170,11 @@ class Component:
                 self.warn(_("Found uref=%s. uref= is deprecated, please use "
                             "refdes=%s") % (self.refdes, self.refdes))
 
+        if self.refdes is not None and self.refdes.endswith('?'):
+            self.error(_("placeholder attribute `refdes=%s' left in "
+                         "schematic; please renumber component(s) before "
+                         "generating netlist") % self.refdes)
+
         # collect pins
 
         data = ob.data()
