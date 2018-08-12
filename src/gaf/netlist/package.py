@@ -212,13 +212,26 @@ class PackagePin:
         return values[0]
 
     def error(self, msg):
-        sys.stderr.write(_("package `%s', pin `%s': error: %s\n") % (
-            self.package.refdes, self.number, msg))
+        if self.package.refdes is not None:
+            sys.stderr.write(
+                _("package `%s', pin `%s': error: %s\n") % (
+                    self.package.refdes, self.number, msg))
+        else:
+            sys.stderr.write(
+                _("package `%s' (unmangled), pin `%s': error: %s\n") % (
+                    self.package.unmangled_refdes, self.number, msg))
+
         self.package.netlist.failed = True
 
     def warn(self, msg):
-        sys.stderr.write(_("package `%s', pin `%s': warning: %s\n") % (
-            self.package.refdes, self.number, msg))
+        if self.package.refdes is not None:
+            sys.stderr.write(
+                _("package `%s', pin `%s': warning: %s\n") % (
+                    self.package.refdes, self.number, msg))
+        else:
+            sys.stderr.write(
+                _("package `%s' (unmangled), pin `%s': warning: %s\n") % (
+                    self.package.unmangled_refdes, self.number, msg))
 
 # ============================================================================
 
