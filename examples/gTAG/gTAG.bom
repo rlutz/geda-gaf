@@ -1,4 +1,4 @@
-package	refdes	device	footprint	
+refdes	refdes	device	footprint	
 R34	R34	RESISTOR	sm0805	
 R32	R32	RESISTOR	sm0805	
 R33	R33	RESISTOR	sm0805	
