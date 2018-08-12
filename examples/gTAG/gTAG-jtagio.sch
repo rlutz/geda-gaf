@@ -61,7 +61,7 @@ net=jtag_power:14
 T 53000 52600 5 10 1 0 0 0 1
 net=GND:7
 T 53100 54000 5 10 0 1 0 0 1
-footprint=so14
+footprint=SO14
 T 53300 53200 5 10 1 1 0 0 1
 device=7414
 }
@@ -76,7 +76,7 @@ net=jtag_power:14
 T 53000 50800 5 10 1 0 0 0 1
 net=GND:7
 T 53200 52200 5 10 0 1 0 0 1
-footprint=so14
+footprint=SO14
 T 53300 51400 5 10 1 1 0 0 1
 device=7414
 }
@@ -91,7 +91,7 @@ net=jtag_power:14
 T 53000 49100 5 10 1 0 0 0 1
 net=GND:7
 T 53300 50500 5 10 0 1 0 0 1
-footprint=so14
+footprint=SO14
 T 53300 49700 5 10 1 1 0 0 1
 device=7414
 }
@@ -106,7 +106,7 @@ net=jtag_power:14
 T 53000 47500 5 10 1 0 0 0 1
 net=GND:7
 T 53200 48800 5 10 0 1 0 0 1
-footprint=so14
+footprint=SO14
 T 53300 48000 5 10 1 1 0 0 1
 device=7414
 }
