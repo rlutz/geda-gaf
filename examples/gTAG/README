@@ -36,12 +36,23 @@ The distribution of the schematics of gTAG should consist of:
   - sn75240pw.sym - Surge supressor for USB
   - copyleft.sym - Symbol with GPL text for all schematics.
 * Five schematics with four symbols:
-  - gTAG.sch.sch - Toplevel schematic for gTAG
+  - gTAG.sch - Toplevel schematic for gTAG
   - gTAG-jtagio.[sym/sch]
   - gTAG-ucont.[sym/sch]
   - gTAG-consio.[sym/sch]
   - gTAG-psu.[sym/sch]
 * gEDA rc-files for this project:
-  - commonrc - contains common declarations for both gschem and gnetlist
-  - gnetlistrc - gnetlist specific and and calls commonrc
-  - gschemrc   - gschem specific and and calls commonrc
+  - gafrc - contains common declarations for both gschem and gnetlist
+  - gnetlistrc - gnetlist specific hierarchy options
+* attribs - attribute list for BOM creation
+
+The repository also contains the following generated files:
+* Netlists:
+  - gTAG.bom
+  - gTAG-pcb.net
+* PostScript exports of the schematics:
+  - gTAG.ps
+  - gTAG-jtagio.ps
+  - gTAG-ucont.ps
+  - gTAG-consio.ps
+  - gTAG-psu.ps
