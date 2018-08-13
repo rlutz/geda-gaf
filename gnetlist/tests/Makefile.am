@@ -1,163 +1,374 @@
-## Process this file with automake to produce Makefile.in
+TEST_EXTENSIONS = .out
 
-SUBDIRS = hierarchy hierarchy2 drc2 common
+AM_TESTS_ENVIRONMENT = \
+	srcdir='$(srcdir)'; export srcdir; \
+	abs_builddir='$(abs_builddir)'; export abs_builddir; \
+	abs_top_builddir='$(abs_top_builddir)'; export abs_top_builddir; \
+	abs_srcdir='$(abs_srcdir)'; export abs_srcdir; \
+	abs_top_srcdir='$(abs_top_srcdir)'; export abs_top_srcdir;
+OUT_LOG_COMPILER = $(srcdir)/run-test
 
-EXTRA_DIST = runtest.sh \
-	     7447.vhdl README amp.spice cascade.sch cascade.cascade \
-	     darlington.spice netattrib.geda \
-	     netattrib.sch powersupply.PCB powersupply.allegro \
-             powersupply.bae powersupply.geda powersupply.maxascii \
-             powersupply.pads powersupply.protelII powersupply.sch \
-             powersupply.tango singlenet.PCB singlenet.geda singlenet.pads \
-	     powersupply.liquidpcb \
-             singlenet.pcbpins \
-             singlenet.protelII singlenet.sch stack_1.geda amp.spice-sdb \
-	     singlenet.liquidpcb \
-	     darlington.spice-sdb skt.switcap test.ana multiequal.sch \
-	     multiequal.spice-sdb gnetlistrc.vhdl gnetlistrc.orig
+dist_check_SCRIPTS = run-test
+EXTRA_DIST = $(input_files) $(TESTS) README gschemrc common/gschemrc
+# dist_check_DATA would be more appropriate for $(input_files) and $(TESTS)
+# but triggers a lot of "Nothing to be done for '...'" messages.
 
-check_SCRIPTS = tests
+mostlyclean-local:
+	rm -rf run.*
 
-BUILDDIR=$(builddir)
-SRCDIR=$(srcdir)
-GNETLIST=$(builddir)/../src/gnetlist
+input_files = \
+	stack_1.sch \
+	hierarchy-sources/bottom.sch \
+	hierarchy-sources/middle.sch \
+	hierarchy-sources/rock.sch \
+	hierarchy-symbols/bottom.sym \
+	hierarchy-symbols/middle.sym \
+	hierarchy-symbols/rock.sym \
+	hierarchy.sch \
+	hierarchy2-sources/under.sch \
+	hierarchy2-symbols/under.sym \
+	hierarchy2.sch \
+	stack-torture.sch \
+	drc2/connected-noconnects.sch \
+	drc2/duplicated-refdes.sch \
+	drc2/duplicated_slot.sch \
+	drc2/gnd-with-nc-directive.sch \
+	drc2/gnd-without-nc-directive.sch \
+	drc2/net-not-driven-with-dont-check-if-driven-directive.sch \
+	drc2/net-not-driven-with-nc-directive.sch \
+	drc2/net-not-driven.sch \
+	drc2/net-with-only-one-connection.sch \
+	drc2/numslots-is-not-an-integer.sch \
+	drc2/numslots-not-defined.sch \
+	drc2/output-connected-to-output.sch \
+	drc2/pin-without-pintype-attrib.sch \
+	drc2/refdes-not-numbered.sch \
+	drc2/slot-is-not-an-integer.sch \
+	drc2/slot-not-defined.sch \
+	drc2/slot_out_of_range.sch \
+	drc2/unconnected-pin-with-drc-directive.sch \
+	drc2/unconnected-pin.sch \
+	drc2/unused-slot.sch \
+	common/JD-extras/openIP_5.cir \
+	common/JD-symbols/LVD.sym \
+	common/JD.sch \
+	common/SlottedOpamps-symbols/LM324_slotted-1.sym \
+	common/SlottedOpamps.sch \
+	common/TwoStageAmp-extras/2N3904.mod \
+	common/TwoStageAmp-extras/Simulation.cmd \
+	common/TwoStageAmp-symbols/transistor.sym \
+	common/TwoStageAmp.sch \
+	common/cascade.sch \
+	common/multiequal.sch \
+	common/netattrib.sch \
+	common/powersupply.sch \
+	common/singlenet.sch
 
-tests:
+XFAIL_TESTS = \
+	common/SlottedOpamps-futurenet2.out \
+	common/SlottedOpamps-switcap.out
 
-# cleanup
-	rm -f $(BUILDDIR)/new_*
-	rm -rf $(BUILDDIR)/devfiles
-	mkdir $(BUILDDIR)/devfiles
-	cp -f $(srcdir)/gnetlistrc.orig $(builddir)/gnetlistrc
-
-# netattrib gEDA
-	$(SRCDIR)/runtest.sh $(SRCDIR)/netattrib.sch geda \
-		$(BUILDDIR) $(SRCDIR)
-
-# stack gEDA
-	$(SRCDIR)/runtest.sh $(SRCDIR)/../examples/stack_1.sch geda \
-		$(BUILDDIR) $(SRCDIR)
-
-# singlenet gEDA
-	$(SRCDIR)/runtest.sh $(SRCDIR)/singlenet.sch geda \
-		$(BUILDDIR) $(SRCDIR)
-
-# singlenet PCB
-	$(SRCDIR)/runtest.sh $(SRCDIR)/singlenet.sch PCB \
-		$(BUILDDIR) $(SRCDIR)
-
-# singlenet pcbpins
-	$(SRCDIR)/runtest.sh $(SRCDIR)/singlenet.sch pcbpins \
-		$(BUILDDIR) $(SRCDIR)
-
-# singlenet PADS
-	$(SRCDIR)/runtest.sh $(SRCDIR)/singlenet.sch pads \
-		$(BUILDDIR) $(SRCDIR)
-
-# singlenet protelII
-	$(SRCDIR)/runtest.sh $(SRCDIR)/singlenet.sch protelII \
-		$(BUILDDIR) $(SRCDIR)
-
-# singlenet liquidpcb
-	$(SRCDIR)/runtest.sh $(SRCDIR)/singlenet.sch liquidpcb \
-		$(BUILDDIR) $(SRCDIR)
-
-# powersupply PCB
-	$(SRCDIR)/runtest.sh $(SRCDIR)/powersupply.sch PCB \
-		$(BUILDDIR) $(SRCDIR)
-
-# powersupply Allegro
-	$(SRCDIR)/runtest.sh $(SRCDIR)/powersupply.sch allegro \
-		$(BUILDDIR) $(SRCDIR)
-
-# powersupply bae
-	$(SRCDIR)/runtest.sh $(SRCDIR)/powersupply.sch bae \
-		$(BUILDDIR) $(SRCDIR)
-
-# powersupply gEDA
-	$(SRCDIR)/runtest.sh $(SRCDIR)/powersupply.sch geda \
-		$(BUILDDIR) $(SRCDIR)
-
-# powersupply maxascii
-	$(SRCDIR)/runtest.sh $(SRCDIR)/powersupply.sch maxascii \
-		$(BUILDDIR) $(SRCDIR)
-
-# powersupply pads
-	$(SRCDIR)/runtest.sh $(SRCDIR)/powersupply.sch pads \
-		$(BUILDDIR) $(SRCDIR)
-
-# powersupply protelII
-	$(SRCDIR)/runtest.sh $(SRCDIR)/powersupply.sch protelII \
-		$(BUILDDIR) $(SRCDIR)
-
-# powersupply tango
-	$(SRCDIR)/runtest.sh $(SRCDIR)/powersupply.sch tango \
-		$(BUILDDIR) $(SRCDIR)
-
-# powersupply liquidpcb
-	$(SRCDIR)/runtest.sh $(SRCDIR)/powersupply.sch liquidpcb \
-		$(BUILDDIR) $(SRCDIR)
-
-# multiple equals in attributes SPICE-SDB
-	$(SRCDIR)/runtest.sh $(SRCDIR)/multiequal.sch spice-sdb \
-		$(BUILDDIR) $(SRCDIR)
-
-# cascade backend
-	$(SRCDIR)/runtest.sh $(SRCDIR)/cascade.sch cascade \
-		$(BUILDDIR) $(SRCDIR)
-
-# Cleanup
-	rm -f $(BUILDDIR)/new_*
-	rm -rf $(BUILDDIR)/devfiles
-	rm -f $(builddir)/gnetlistrc
-
-
-# These tests are internal to Ales and will not work without the schematics
-# which I am unable to distribute (due to copyright laws).
-tests_ales:
-
-# cleanup
-	rm -f $(BUILDDIR)/new_*
-	rm -rf $(BUILDDIR)/devfiles
-	mkdir $(BUILDDIR)/devfiles
-
-# amp SPICE
-	$(SRCDIR)/runtest.sh $(HOME)/gEDA/alesch/amp.sch spice \
-		$(BUILDDIR) $(SRCDIR)
-
-# darlington SPICE
-	$(SRCDIR)/runtest.sh $(HOME)/gEDA/alesch/darlington.sch spice \
-		$(BUILDDIR) $(SRCDIR)
-
-# amp SPICE SDB
-	$(SRCDIR)/runtest.sh $(HOME)/gEDA/alesch/amp.sch spice-sdb \
-		$(BUILDDIR) $(SRCDIR)
-
-# darlington SPICE SDB
-	$(SRCDIR)/runtest.sh $(HOME)/gEDA/alesch/darlington.sch spice-sdb \
-		$(BUILDDIR) $(SRCDIR)
-
-# switcap (does not work with make distcheck due to local test.ana file)
-	$(GNETLIST) -L $(top_srcdir)/libgeda/scheme \
-		-L $(top_builddir)/libgeda/scheme \
-		-o $(BUILDDIR)/new_skt.switcap -g switcap \
-		$(SRCDIR)/../examples/switcap/ckt.sch \
-		$(SRCDIR)/../examples/switcap/clocks.sch \
-		$(SRCDIR)/../examples/switcap/analysis.sch
-	diff $(SRCDIR)/skt.switcap $(BUILDDIR)/new_skt.switcap
-	diff $(SRCDIR)/../examples/switcap/example.scn $(SRCDIR)/new_skt.switcap
-
-# 7447 VHDL
-	cp -f $(SRCDIR)/gnetlistrc.vhdl $(BUILDDIR)/gnetlistrc
-	$(SRCDIR)/runtest.sh $(SRCDIR)/../examples/7447.sch vhdl \
-		$(BUILDDIR) $(SRCDIR)
-	rm -f $(BUILDDIR)/gnetlistrc
-
-# cleanup
-	rm -f $(BUILDDIR)/new_*
-	rm -rf $(BUILDDIR)/devfiles
-
-MOSTLYCLEANFILES = new_* core *.log FILE *.ps *~
-CLEANFILES = new_* core *.log FILE *.ps *~
-DISTCLEANFILES = new_* *.log core FILE *.ps *~
-MAINTAINERCLEANFILES = new_* core *.log FILE *.ps *~ Makefile.in
+TESTS = stack_1-geda.out \
+	hierarchy-geda.out \
+	hierarchy2-geda.out \
+	stack-torture-geda.out \
+	drc2/connected-noconnects-drc2.out \
+	drc2/duplicated-refdes-drc2.out \
+	drc2/duplicated_slot-drc2.out \
+	drc2/gnd-with-nc-directive-drc2.out \
+	drc2/gnd-without-nc-directive-drc2.out \
+	drc2/net-not-driven-drc2.out \
+	drc2/net-not-driven-with-dont-check-if-driven-directive-drc2.out \
+	drc2/net-not-driven-with-nc-directive-drc2.out \
+	drc2/net-with-only-one-connection-drc2.out \
+	drc2/numslots-is-not-an-integer-drc2.out \
+	drc2/numslots-not-defined-drc2.out \
+	drc2/output-connected-to-output-drc2.out \
+	drc2/pin-without-pintype-attrib-drc2.out \
+	drc2/refdes-not-numbered-drc2.out \
+	drc2/slot-is-not-an-integer-drc2.out \
+	drc2/slot-not-defined-drc2.out \
+	drc2/slot_out_of_range-drc2.out \
+	drc2/unconnected-pin-drc2.out \
+	drc2/unconnected-pin-with-drc-directive-drc2.out \
+	drc2/unused-slot-drc2.out \
+	common/JD-PCB.out \
+	common/JD-allegro.out \
+	common/JD-bae.out \
+	common/JD-bom.out \
+	common/JD-bom2.out \
+	common/JD-calay.out \
+	common/JD-drc.out \
+	common/JD-drc2.out \
+	common/JD-eagle.out \
+	common/JD-ewnet.out \
+	common/JD-futurenet2.out \
+	common/JD-geda.out \
+	common/JD-gossip.out \
+	common/JD-gsch2pcb.out \
+	common/JD-liquidpcb.out \
+	common/JD-mathematica.out \
+	common/JD-maxascii.out \
+	common/JD-osmond.out \
+	common/JD-pads.out \
+	common/JD-partslist1.out \
+	common/JD-partslist2.out \
+	common/JD-partslist3.out \
+	common/JD-pcbpins.out \
+	common/JD-protelII.out \
+	common/JD-redac.out \
+	common/JD-spice-sdb-include-nomunge.out \
+	common/JD-spice-sdb-include.out \
+	common/JD-spice-sdb-nomunge.out \
+	common/JD-spice-sdb-sort-nomunge.out \
+	common/JD-spice-sdb-sort.out \
+	common/JD-spice-sdb.out \
+	common/JD-spice.out \
+	common/JD-switcap.out \
+	common/JD-systemc.out \
+	common/JD-tango.out \
+	common/JD-vams.out \
+	common/JD-verilog.out \
+	common/JD-vhdl.out \
+	common/JD-vipec.out \
+	common/SlottedOpamps-PCB.out \
+	common/SlottedOpamps-allegro.out \
+	common/SlottedOpamps-bae.out \
+	common/SlottedOpamps-bom.out \
+	common/SlottedOpamps-bom2.out \
+	common/SlottedOpamps-calay.out \
+	common/SlottedOpamps-drc.out \
+	common/SlottedOpamps-drc2.out \
+	common/SlottedOpamps-eagle.out \
+	common/SlottedOpamps-ewnet.out \
+	common/SlottedOpamps-futurenet2.out \
+	common/SlottedOpamps-geda.out \
+	common/SlottedOpamps-gossip.out \
+	common/SlottedOpamps-gsch2pcb.out \
+	common/SlottedOpamps-liquidpcb.out \
+	common/SlottedOpamps-mathematica.out \
+	common/SlottedOpamps-maxascii.out \
+	common/SlottedOpamps-osmond.out \
+	common/SlottedOpamps-pads.out \
+	common/SlottedOpamps-partslist1.out \
+	common/SlottedOpamps-partslist2.out \
+	common/SlottedOpamps-partslist3.out \
+	common/SlottedOpamps-pcbpins.out \
+	common/SlottedOpamps-protelII.out \
+	common/SlottedOpamps-redac.out \
+	common/SlottedOpamps-spice-sdb.out \
+	common/SlottedOpamps-spice.out \
+	common/SlottedOpamps-switcap.out \
+	common/SlottedOpamps-systemc.out \
+	common/SlottedOpamps-tango.out \
+	common/SlottedOpamps-vams.out \
+	common/SlottedOpamps-verilog.out \
+	common/SlottedOpamps-vhdl.out \
+	common/SlottedOpamps-vipec.out \
+	common/TwoStageAmp-PCB.out \
+	common/TwoStageAmp-allegro.out \
+	common/TwoStageAmp-bae.out \
+	common/TwoStageAmp-bom.out \
+	common/TwoStageAmp-bom2.out \
+	common/TwoStageAmp-calay.out \
+	common/TwoStageAmp-drc.out \
+	common/TwoStageAmp-drc2.out \
+	common/TwoStageAmp-eagle.out \
+	common/TwoStageAmp-ewnet.out \
+	common/TwoStageAmp-futurenet2.out \
+	common/TwoStageAmp-geda.out \
+	common/TwoStageAmp-gossip.out \
+	common/TwoStageAmp-gsch2pcb.out \
+	common/TwoStageAmp-liquidpcb.out \
+	common/TwoStageAmp-mathematica.out \
+	common/TwoStageAmp-maxascii.out \
+	common/TwoStageAmp-osmond.out \
+	common/TwoStageAmp-pads.out \
+	common/TwoStageAmp-partslist1.out \
+	common/TwoStageAmp-partslist2.out \
+	common/TwoStageAmp-partslist3.out \
+	common/TwoStageAmp-pcbpins.out \
+	common/TwoStageAmp-protelII.out \
+	common/TwoStageAmp-redac.out \
+	common/TwoStageAmp-spice-sdb-include.out \
+	common/TwoStageAmp-spice-sdb-sort.out \
+	common/TwoStageAmp-spice-sdb.out \
+	common/TwoStageAmp-spice.out \
+	common/TwoStageAmp-switcap.out \
+	common/TwoStageAmp-systemc.out \
+	common/TwoStageAmp-tango.out \
+	common/TwoStageAmp-vams.out \
+	common/TwoStageAmp-verilog.out \
+	common/TwoStageAmp-vhdl.out \
+	common/TwoStageAmp-vipec.out \
+	common/cascade-PCB.out \
+	common/cascade-allegro.out \
+	common/cascade-bae.out \
+	common/cascade-bom.out \
+	common/cascade-bom2.out \
+	common/cascade-calay.out \
+	common/cascade-cascade.out \
+	common/cascade-drc.out \
+	common/cascade-drc2.out \
+	common/cascade-eagle.out \
+	common/cascade-ewnet.out \
+	common/cascade-futurenet2.out \
+	common/cascade-geda.out \
+	common/cascade-gossip.out \
+	common/cascade-gsch2pcb.out \
+	common/cascade-liquidpcb.out \
+	common/cascade-mathematica.out \
+	common/cascade-maxascii.out \
+	common/cascade-osmond.out \
+	common/cascade-pads.out \
+	common/cascade-partslist1.out \
+	common/cascade-partslist2.out \
+	common/cascade-partslist3.out \
+	common/cascade-pcbpins.out \
+	common/cascade-protelII.out \
+	common/cascade-redac.out \
+	common/cascade-spice-sdb.out \
+	common/cascade-spice.out \
+	common/cascade-switcap.out \
+	common/cascade-systemc.out \
+	common/cascade-tango.out \
+	common/cascade-vams.out \
+	common/cascade-verilog.out \
+	common/cascade-vhdl.out \
+	common/cascade-vipec.out \
+	common/multiequal-PCB.out \
+	common/multiequal-allegro.out \
+	common/multiequal-bae.out \
+	common/multiequal-bom.out \
+	common/multiequal-bom2.out \
+	common/multiequal-calay.out \
+	common/multiequal-drc.out \
+	common/multiequal-drc2.out \
+	common/multiequal-eagle.out \
+	common/multiequal-ewnet.out \
+	common/multiequal-futurenet2.out \
+	common/multiequal-geda.out \
+	common/multiequal-gossip.out \
+	common/multiequal-gsch2pcb.out \
+	common/multiequal-liquidpcb.out \
+	common/multiequal-mathematica.out \
+	common/multiequal-maxascii.out \
+	common/multiequal-osmond.out \
+	common/multiequal-pads.out \
+	common/multiequal-partslist1.out \
+	common/multiequal-partslist2.out \
+	common/multiequal-partslist3.out \
+	common/multiequal-pcbpins.out \
+	common/multiequal-protelII.out \
+	common/multiequal-redac.out \
+	common/multiequal-spice-sdb.out \
+	common/multiequal-spice.out \
+	common/multiequal-switcap.out \
+	common/multiequal-systemc.out \
+	common/multiequal-tango.out \
+	common/multiequal-vams.out \
+	common/multiequal-verilog.out \
+	common/multiequal-vhdl.out \
+	common/multiequal-vipec.out \
+	common/netattrib-PCB.out \
+	common/netattrib-allegro.out \
+	common/netattrib-bae.out \
+	common/netattrib-bom.out \
+	common/netattrib-bom2.out \
+	common/netattrib-calay.out \
+	common/netattrib-drc.out \
+	common/netattrib-drc2.out \
+	common/netattrib-eagle.out \
+	common/netattrib-ewnet.out \
+	common/netattrib-futurenet2.out \
+	common/netattrib-geda.out \
+	common/netattrib-gossip.out \
+	common/netattrib-gsch2pcb.out \
+	common/netattrib-liquidpcb.out \
+	common/netattrib-mathematica.out \
+	common/netattrib-maxascii.out \
+	common/netattrib-osmond.out \
+	common/netattrib-pads.out \
+	common/netattrib-partslist1.out \
+	common/netattrib-partslist2.out \
+	common/netattrib-partslist3.out \
+	common/netattrib-pcbpins.out \
+	common/netattrib-protelII.out \
+	common/netattrib-redac.out \
+	common/netattrib-spice-sdb.out \
+	common/netattrib-spice.out \
+	common/netattrib-switcap.out \
+	common/netattrib-systemc.out \
+	common/netattrib-tango.out \
+	common/netattrib-vams.out \
+	common/netattrib-verilog.out \
+	common/netattrib-vhdl.out \
+	common/netattrib-vipec.out \
+	common/powersupply-PCB.out \
+	common/powersupply-allegro.out \
+	common/powersupply-bae.out \
+	common/powersupply-bom.out \
+	common/powersupply-bom2.out \
+	common/powersupply-calay.out \
+	common/powersupply-drc.out \
+	common/powersupply-drc2.out \
+	common/powersupply-eagle.out \
+	common/powersupply-ewnet.out \
+	common/powersupply-futurenet2.out \
+	common/powersupply-geda.out \
+	common/powersupply-gossip.out \
+	common/powersupply-gsch2pcb.out \
+	common/powersupply-liquidpcb.out \
+	common/powersupply-mathematica.out \
+	common/powersupply-maxascii.out \
+	common/powersupply-osmond.out \
+	common/powersupply-pads.out \
+	common/powersupply-partslist1.out \
+	common/powersupply-partslist2.out \
+	common/powersupply-partslist3.out \
+	common/powersupply-pcbpins.out \
+	common/powersupply-protelII.out \
+	common/powersupply-redac.out \
+	common/powersupply-spice-sdb.out \
+	common/powersupply-spice.out \
+	common/powersupply-switcap.out \
+	common/powersupply-systemc.out \
+	common/powersupply-tango.out \
+	common/powersupply-vams.out \
+	common/powersupply-verilog.out \
+	common/powersupply-vhdl.out \
+	common/powersupply-vipec.out \
+	common/singlenet-PCB.out \
+	common/singlenet-allegro.out \
+	common/singlenet-bae.out \
+	common/singlenet-bom.out \
+	common/singlenet-bom2.out \
+	common/singlenet-calay.out \
+	common/singlenet-drc.out \
+	common/singlenet-drc2.out \
+	common/singlenet-eagle.out \
+	common/singlenet-ewnet.out \
+	common/singlenet-futurenet2.out \
+	common/singlenet-geda.out \
+	common/singlenet-gossip.out \
+	common/singlenet-gsch2pcb.out \
+	common/singlenet-liquidpcb.out \
+	common/singlenet-mathematica.out \
+	common/singlenet-maxascii.out \
+	common/singlenet-osmond.out \
+	common/singlenet-pads.out \
+	common/singlenet-partslist1.out \
+	common/singlenet-partslist2.out \
+	common/singlenet-partslist3.out \
+	common/singlenet-pcbpins.out \
+	common/singlenet-protelII.out \
+	common/singlenet-redac.out \
+	common/singlenet-spice-sdb.out \
+	common/singlenet-spice.out \
+	common/singlenet-switcap.out \
+	common/singlenet-systemc.out \
+	common/singlenet-tango.out \
+	common/singlenet-vams.out \
+	common/singlenet-verilog.out \
+	common/singlenet-vhdl.out \
+	common/singlenet-vipec.out
