@@ -28,14 +28,10 @@ LT_INIT([])
 
 AC_PROG_CXX
 
-AS_IF([test x$enable_xorn = xyes], [
-    AM_PATH_PYTHON([2.7])
-    AC_CHECK_HEADERS(
+AM_PATH_PYTHON([2.7])
+AC_CHECK_HEADERS(
 	[python${PYTHON_VERSION}/Python.h], [],
 	[AC_MSG_ERROR([python headers not found])])
-], [
-    AC_MSG_NOTICE([skipping Python detection])
-])
 
 AM_GNU_GETTEXT([external])
 AM_GNU_GETTEXT_VERSION([0.18.2])
