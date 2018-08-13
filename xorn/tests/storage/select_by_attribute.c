@@ -1,4 +1,4 @@
-/* Copyright (C) 2013-2015 Roland Lutz
+/* Copyright (C) 2013-2018 Roland Lutz
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -18,7 +18,7 @@
 #include <stdlib.h>
 
 
-int main()
+int main(void)
 {
 	xorn_revision_t rev0, rev1, rev2, rev3;
 	xorn_object_t ob0, ob1a, ob1b;
@@ -126,7 +126,7 @@ int main()
 	memset(&text_data, 0, sizeof text_data);
 	text_data.text.s = "Hello world";
 	text_data.text.len = 11;
-	text_ob = xornsch_add_text(rev4, &text_data);
+	text_ob = xornsch_add_text(rev4, &text_data, NULL);
 	assert(text_ob != NULL);
 	xorn_finalize_revision(rev4);
 

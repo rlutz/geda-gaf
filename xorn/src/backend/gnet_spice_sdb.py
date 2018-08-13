@@ -1,7 +1,7 @@
-# xorn.geda.netlist - gEDA Netlist Extraction and Generation
+# gaf.netlist - gEDA Netlist Extraction and Generation
 # Copyright (C) 1998-2010 Ales Hvezda
 # Copyright (C) 1998-2010 gEDA Contributors (see ChangeLog for details)
-# Copyright (C) 2013-2015 Roland Lutz
+# Copyright (C) 2013-2018 Roland Lutz
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -122,6 +122,7 @@
 
 import os.path, sys
 from util_getopt import *
+from util_repackage import repackage
 
 # Common functions for the `spice' and `spice-sdb' backends
 import spice_common
@@ -136,19 +137,15 @@ def debug_spew(debug_string):
 
 # Custom get-uref function to append ".${SLOT}" where a component has
 # a "slot=${SLOT}" attribute attached.
-#
-# NOTE: Original test for appending the ".<SLOT>" was this:
-#   (let ((numslots netlist.get-package-attribute(package, "numslots"))
-#        (slot-count (length netlist.get-unique-slots(package)))
-#     (if (or (string=? numslots "unknown") (string=? numslots "0"))
 
-def get_uref(netlist, object):
-    real_uref = netlist.get_uref(object)
-    x = get_attrib_value_by_attrib_name(object, 'slot')
-    if x is None:
-        return real_uref
+def get_refdes(component):
+    try:
+        slot = component.blueprint.get_attribute(
+            'slot', search_inherited = False)
+    except KeyError:
+        return component.blueprint.refdes
     else:
-        return real_uref + '.' + x[0]
+        return component.blueprint.refdes + '.' + slot
 
 ############ Program housekeeping, handling calling flags, etc. ############
 
@@ -203,7 +200,7 @@ def handle_spice_file(f, file_name):
 def insert_text_file(f, model_filename):
     if not os.path.isfile(model_filename):
         sys.stderr.write("ERROR: File '%s' not found.\n" % model_filename)
-        sys.exit(1)
+        sys.exit(3)
 
     model_file = open(model_filename)
     try:
@@ -224,8 +221,8 @@ def insert_text_file(f, model_filename):
 # somewhere on the schematic.  If it is a .SUBCKT, return ".SUBCKT
 # model-name".
 
-def get_schematic_type(netlist):
-    for package in reversed(netlist.packages):
+def get_schematic_type(packages):
+    for package in reversed(packages):
         if package.get_attribute('device', None) == 'spice-subcircuit-LL':
             # look for subcircuit label
             return '.SUBCKT ' + package.get_attribute('model-name', 'unknown')
@@ -243,9 +240,9 @@ def get_subcircuit_modelname(schematic_type):
 # spice-IO pins found.  This is used when writing out a .SUBCKT lower
 # level netlist.
 
-def get_spice_IO_pins(netlist):
+def get_spice_IO_pins(packages):
     spice_io_package_list = []
-    for package in reversed(netlist.packages):
+    for package in reversed(packages):
         # look for subcircuit label
         if package.get_attribute('device', None) == 'spice-IO':
             # we have found a spice-IO pin.
@@ -282,7 +279,7 @@ def get_IO_nets(package_list):
 def get_file_type(model_filename):
     if not os.path.isfile(model_filename):
         sys.stderr.write("ERROR: File '%s' not found.\n" % model_filename)
-        sys.exit(1)
+        sys.exit(3)
 
     model_file = open(model_filename)
     try:
@@ -1054,9 +1051,9 @@ def write_netlist(f, file_info_list, ls):
 # file info & uses it to build the file-info-list.  When done, it
 # returns the file_info_list.
 
-def create_file_info_list(netlist):
+def create_file_info_list(packages):
     file_info_list = []
-    for package in reversed(netlist.packages):
+    for package in reversed(packages):
         model = package.get_attribute('model-name', 'unknown')
         model_file = package.get_attribute('file', None)
 
@@ -1175,10 +1172,14 @@ def run(f, netlist, args):
     # Redefine write_net_names_on_component
     spice_common.write_net_names_on_component = write_net_names_on_component
 
+    # Re-group components into packages using a custom refdes function
+    # in order to treat slots as individual packages
+    packages = repackage(netlist, get_refdes)
+
     # First find out if this is a .SUBCKT lower level,
     # or if it is a regular schematic.
 
-    schematic_type = get_schematic_type(netlist)
+    schematic_type = get_schematic_type(packages)
     model_name = get_subcircuit_modelname(schematic_type)
 
     sys.stderr.write("Using SPICE backend by SDB -- Version of 2007-04-28\n")
@@ -1186,7 +1187,7 @@ def run(f, netlist, args):
 
     if schematic_type != 'normal schematic':
         # we have found a .SUBCKT type schematic.
-        io_pin_packages = get_spice_IO_pins(netlist)
+        io_pin_packages = get_spice_IO_pins(packages)
         io_pin_packages_ordered = sort_spice_IO_pins(io_pin_packages)
         io_nets_list = get_IO_nets(io_pin_packages_ordered)
         debug_spew("found .SUBCKT type schematic\n")
@@ -1209,7 +1210,7 @@ def run(f, netlist, args):
     #
     debug_spew("Make first pass through design and "
                "create list of all model files referenced.\n")
-    file_info_list = create_file_info_list(netlist)
+    file_info_list = create_file_info_list(packages)
     debug_spew("Done creating file_info_list.\n\n")
 
     # Moved this loop before the next one to get numparam to work with
@@ -1238,11 +1239,10 @@ def run(f, netlist, args):
         '*==============  Begin SPICE netlist of main design ============\n')
     if 'sort_mode' in calling_flags:
         # sort on refdes
-        write_netlist(f, file_info_list, sorted(
-            netlist.packages, cmp = packsort))
+        write_netlist(f, file_info_list, sorted(packages, cmp = packsort))
     else:
         # don't sort.
-        write_netlist(f, file_info_list, reversed(netlist.packages))
+        write_netlist(f, file_info_list, reversed(packages))
     debug_spew("Done writing SPICE cards . . .\n\n")
 
     # Now write out .END(S) of netlist, depending upon whether this

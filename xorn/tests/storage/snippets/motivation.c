@@ -1,4 +1,4 @@
-/* Copyright (C) 2013-2015 Roland Lutz
+/* Copyright (C) 2013-2018 Roland Lutz
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -18,7 +18,7 @@
 #include <xornstorage.h>
 
 
-int main()
+int main(void)
 {
 	xorn_revision_t rev;
 	rev = xorn_new_revision(NULL);
@@ -35,11 +35,11 @@ for (i = 0; i < count; i++) {
 
     if (type == xornsch_obtype_circle &&
         xornsch_get_circle_data(rev, objects[i])->radius == 0.)
-        xorn_delete_object(rev, objects[i]);
+        xorn_delete_object(rev, objects[i], NULL);
 
     if (type == xornsch_obtype_arc &&
         xornsch_get_arc_data(rev, objects[i])->radius == 0.)
-        xorn_delete_object(rev, objects[i]);
+        xorn_delete_object(rev, objects[i], NULL);
 }
 
 free(objects);
@@ -47,7 +47,7 @@ free(objects);
 
 /** [integrated] */
 xorn_selection_t sel = xornsch_select_by_radius(rev, 0.);
-xorn_delete_selected_objects(rev, sel);
+xorn_delete_selected_objects(rev, sel, NULL);
 xorn_free_selection(sel);
 /** [integrated] */
 

@@ -1,7 +1,7 @@
-# xorn.geda.netlist - gEDA Netlist Extraction and Generation
+# gaf.netlist - gEDA Netlist Extraction and Generation
 # Copyright (C) 1998-2010 Ales Hvezda
 # Copyright (C) 1998-2010 gEDA Contributors (see ChangeLog for details)
-# Copyright (C) 2013-2015 Roland Lutz
+# Copyright (C) 2013-2018 Roland Lutz
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -26,7 +26,7 @@
 # Questions? Contact matt@ettus.com
 # This software is released under the terms of the GNU GPL
 
-import collections
+import collections, errno
 from util_getopt import *
 
 BOMEntry = collections.namedtuple('BOMEntry', ['refdes_list', 'attribs'])
@@ -67,7 +67,8 @@ ERROR: Attribute file '%s' not found. You must do one of the following:
 """ % filename)
             else:
                 sys.stderr.write("%s\n" % str(e))
-            sys.exit(1)
+            netlist.failed = True
+            return
         try:
             attriblist = list(strtok(g.read(), ' \n\t'))
         finally:

@@ -1,4 +1,4 @@
-/* Copyright (C) 2013-2015 Roland Lutz
+/* Copyright (C) 2013-2018 Roland Lutz
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -58,7 +58,7 @@ static void assert_objects_3(
 	free(objects);
 }
 
-int main()
+int main(void)
 {
 	xorn_revision_t rev0, rev1, rev2, rev3;
 	xorn_object_t ob0, ob1a, ob1b;
@@ -72,7 +72,7 @@ int main()
 	assert(sel != NULL);
 	rev2a = xorn_new_revision(rev2);
 	assert(rev2a != NULL);
-	xorn_delete_selected_objects(rev2a, sel);
+	assert(xorn_delete_selected_objects(rev2a, sel, NULL) == 0);
 	xorn_finalize_revision(rev2a);
 	xorn_free_selection(sel);
 
@@ -83,7 +83,7 @@ int main()
 	assert(sel != NULL);
 	rev2b = xorn_new_revision(rev2);
 	assert(rev2b != NULL);
-	xorn_delete_selected_objects(rev2b, sel);
+	assert(xorn_delete_selected_objects(rev2b, sel, NULL) == 0);
 	xorn_finalize_revision(rev2b);
 	xorn_free_selection(sel);
 
@@ -94,7 +94,7 @@ int main()
 	assert(sel != NULL);
 	rev2c = xorn_new_revision(rev2);
 	assert(rev2c != NULL);
-	xorn_delete_selected_objects(rev2c, sel);
+	assert(xorn_delete_selected_objects(rev2c, sel, NULL) == 0);
 	xorn_finalize_revision(rev2c);
 	xorn_free_selection(sel);
 
@@ -105,7 +105,7 @@ int main()
 	assert(sel != NULL);
 	rev2d = xorn_new_revision(rev2);
 	assert(rev2d != NULL);
-	xorn_delete_selected_objects(rev2d, sel);
+	assert(xorn_delete_selected_objects(rev2d, sel, NULL) == 0);
 	xorn_finalize_revision(rev2d);
 	xorn_free_selection(sel);
 

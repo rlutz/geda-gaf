@@ -1,4 +1,4 @@
-# Copyright (C) 2013-2015 Roland Lutz
+# Copyright (C) 2013-2018 Roland Lutz
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -14,40 +14,31 @@
 # along with this program; if not, write to the Free Software Foundation,
 # Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
-nobase_pkgpython_PYTHON = \
+# Normally, Python sources should be installed to `pkgpythondir'.
+# However, the Python interpreter only looks for submodules in the
+# package's directory, so for platforms which use a separate
+# exec_prefix, the compiled extension modules wouldn't be found.
+# Instead of doing some magic with the package's load path, just do
+# the easy thing and install everything to `pkgpyexecdir'.
+
+nobase_pkgpyexec_PYTHON = \
 	__init__.py \
 	base64.py \
 	command.py \
 	fileutils.py \
+	fixednum.py \
+	hybridnum.py \
 	proxy.py \
-	geda/__init__.py \
-	geda/attrib.py \
-	geda/clib.py \
-	geda/fileformat.py \
-	geda/read.py \
-	geda/write.py \
-	geda/netlist/__init__.py \
-	geda/netlist/backend.py \
-	geda/netlist/blueprint.py \
-	geda/netlist/conn.py \
-	geda/netlist/instance.py \
-	geda/netlist/net.py \
-	geda/netlist/netlist.py \
-	geda/netlist/package.py \
-	geda/netlist/pp_graphical.py \
-	geda/netlist/pp_hierarchy.py \
-	geda/netlist/pp_netattrib.py \
-	geda/netlist/pp_slotting.py \
-	geda/netlist/slib.py
+	xml_writer.py
 
-noinst_PYTHON = storage.py
+noinst_PYTHON = guile.py storage.py
 
-nodist_pkgpython_PYTHON = config.py
+nodist_pkgpyexec_PYTHON = config.py
 EXTRA_DIST = config.py.in
 CLEANFILES = config.py config.pyc
 
 # Make sure config.py is available when running from builddir
-all-local: $(nodist_pkgpython_PYTHON)
+all-local: $(nodist_pkgpyexec_PYTHON)
 
 config.py: $(srcdir)/config.py.in Makefile
 	$(AM_V_GEN)sed \

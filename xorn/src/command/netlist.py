@@ -1,7 +1,7 @@
-# xorn.geda.netlist - gEDA Netlist Extraction and Generation
+# gaf.netlist - gEDA Netlist Extraction and Generation
 # Copyright (C) 1998-2010 Ales Hvezda
 # Copyright (C) 1998-2010 gEDA Contributors (see ChangeLog for details)
-# Copyright (C) 2013-2015 Roland Lutz
+# Copyright (C) 2013-2018 Roland Lutz
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -23,10 +23,10 @@ from gettext import gettext as _
 import xorn.command
 import xorn.config
 import xorn.fileutils
-import xorn.geda.clib
-import xorn.geda.netlist.backend
-import xorn.geda.netlist.netlist
-import xorn.geda.netlist.slib
+import gaf.clib
+import gaf.netlist.backend
+import gaf.netlist.netlist
+import gaf.netlist.slib
 
 APPEND, PREPEND = xrange(2)
 
@@ -50,119 +50,19 @@ def parse_order(value):
         sys.exit(1)
 
 
-## Expand environment variables in a string.
-#
-# This function returns the passed string with environment variables
-# expanded.
-#
-# The invocations of environment variables MUST be in the form
-# '${variable_name}'; '$variable_name' is not valid here.  Environment
-# variable names can consist solely of letters, digits and '_'.  It is
-# possible to escape a '$' character in the string as '$$'.
-#
-# Prints error messages to stderr and leaves the malformed and bad
-# variable names in the returned string.
+## Add a directory to the symbol library.
 
-def expand_env_variables(s):
-    result = ''
-    i = 0
-
-    while True:
-        try:
-            # look for next variable name
-            j = s.index('$', i)
-        except ValueError:
-            # no variable left
-            result += s[i:]
-            return result
-
-        result += s[i:j]
-
-        if j + 1 >= len(s):     # '$' is the last character in the string
-            result += '$'
-            return result
-        if s[j + 1] == '$':     # an escaped '$'
-            result += s[j + 1]
-            i = j + 2
-            continue
-        if s[j + 1] != '{':     # an isolated '$', put it in output
-            result += '$'
-            i = j + 1
-            continue
-
-        # discard "${"
-        i = j + 2
-
-        # look for the end of the variable name
-        try:
-            j = s.index('}', i)
-        except ValueError:
-            # problem: no closing '}' to variable
-            sys.stderr.write(_("Found malformed environment variable "
-                               "in '%s'\n") % s)
-            result += s[i - 2:]  # include "${"
-            return result
-
-        # test characters of variable name
-        bad_characters = [ch for ch in s[i:j]
-                          if not ch.isalnum() and ch != '_']
-        if bad_characters:
-            # illegal character detected in variable name
-            sys.stderr.write(_("Found bad character(s) [%s] "
-                               "in variable name.\n") % ''.join(bad_characters))
-            result += s[i - 2:j + 1]  # include "${" and "}"
-            i = j + 1
-            continue
-
-        # extract variable name from string and expand it
-        try:
-            result += os.environ[s[i:j]]
-        except KeyError:
-            pass
-        i = j + 1
-
-# \param [in] name  optional descriptive name for library directory
-
-def symbol_library(path):
-    # take care of any shell variables
-    path = expand_env_variables(path)
-
+def symbol_library(path, recursive, option_name):
     # invalid path?
     if not os.path.isdir(path):
         sys.stderr.write(_("%s: \"%s\" is not a directory (passed to %s)\n")
                          % (xorn.command.program_short_name, path,
-                            '--symbol-library'))
+                            option_name))
         sys.exit(1)
 
-    xorn.geda.clib.add_source(
-        xorn.geda.clib.DirectorySource(path),
-        xorn.geda.clib.uniquify_source_name(os.path.basename(path)))
-
-## Add all symbol libraries found below \a rootdir to be searched for
-## symbols, naming them with an optional \a prefix.
-
-def symbol_library_search(rootdir, prefix = None):
-    dht = []
-    rootdir = expand_env_variables(rootdir)
-
-    # Build symbol directory list
-    for dirpath, dirnames, filenames in os.walk(rootdir):
-        for filename in filenames:
-            if filename.lower().endswith('.sym') and \
-                   os.path.isfile(os.path.join(dirpath, filename)):
-                dht.append(dirpath)
-                break
-
-    # Fill symbol library tree
-    dht.sort()
-    dht.reverse()
-    for path in dht:
-        name = path[len(rootdir):]
-        if prefix is not None:
-            name = prefix + name
-        xorn.geda.clib.add_source(
-            xorn.geda.clib.DirectorySource(path),
-            xorn.geda.clib.uniquify_source_name(name))
+    gaf.clib.add_source(
+        gaf.clib.DirectorySource(path, recursive),
+        gaf.clib.uniquify_source_name(os.path.basename(path)))
 
 ## Add a command to the symbol library.
 #
@@ -179,18 +79,10 @@ def symbol_library_command(value):
         sys.exit(1)
     listcmd, getcmd, name = tokens
 
-    # take care of any shell variables
-    # \bug this may be a security risk!
-    listcmd = expand_env_variables(listcmd)
-    getcmd = expand_env_variables(getcmd)
-
-    xorn.geda.clib.add_source(xorn.geda.clib.CommandSource(listcmd, getcmd),
-                              xorn.geda.clib.uniquify_source_name(name))
+    gaf.clib.add_source(gaf.clib.CommandSource(listcmd, getcmd),
+                        gaf.clib.uniquify_source_name(name))
 
 def source_library(path):
-    # take care of any shell variables
-    path = expand_env_variables(path)
-
     # invalid path?
     if not os.path.isdir(path):
         sys.stderr.write(_("%s: \"%s\" is not a directory (passed to %s)\n")
@@ -198,12 +90,9 @@ def source_library(path):
                             '--source-library'))
         sys.exit(1)
 
-    xorn.geda.netlist.slib.slib.append(path)
+    gaf.netlist.slib.slib.append(path)
 
 def source_library_search(path):
-    # take care of any shell variables
-    path = expand_env_variables(path)
-
     # invalid path?
     if not os.path.isdir(path):
         sys.stderr.write(_("%s: \"%s\" is not a directory (passed to %s)\n")
@@ -332,7 +221,7 @@ Miscellaneous options:
 def version():
     sys.stdout.write("%s - gEDA netlister\n" % xorn.config.PACKAGE_STRING)
     sys.stdout.write(_("Copyright (C) 1998-2012 gEDA developers\n"))
-    sys.stdout.write(_("Copyright (C) 2015 Roland Lutz\n"))
+    sys.stdout.write(_("Copyright (C) 2018 Roland Lutz\n"))
     sys.stdout.write("\n")
     sys.stdout.write(_(
 "This program is free software; you can redistribute it and/or\n"
@@ -354,11 +243,11 @@ def main():
     if dirname.endswith('/command'):
         # not installed
         # exploiting a bug in os.path.dirname
-        xorn.geda.netlist.backend.load_path.insert(
+        gaf.netlist.backend.load_path.insert(
             0, os.path.dirname(dirname) + '/backend')
     else:
         # installed
-        xorn.geda.netlist.backend.load_path.insert(
+        gaf.netlist.backend.load_path.insert(
             0, dirname + '/backends')
 
     # command line arguments
@@ -465,7 +354,7 @@ def main():
             backend_name = value
         elif option == '-L':
             # Argument is a directory to add to the backend load path.
-            xorn.geda.netlist.backend.load_path.insert(0, value)
+            gaf.netlist.backend.load_path.insert(0, value)
         elif option == '-O':
             backend_params.append(value)
         elif option == '-c':
@@ -481,22 +370,22 @@ def main():
                   "executing scheme code is not supported") % option)
 
         elif option == '--symbol-library':
-            symbol_library(value)
+            symbol_library(value, False, '--symbol-library')
         elif option == '--symbol-library-search':
-            symbol_library_search(value)
+            symbol_library(value, True, '--symbol-library-search')
         elif option == '--symbol-library-command':
             symbol_library_command(value)
         elif option == '--symbol-library-funcs':
             symbol_library_funcs(value)
         elif option == '--reset-symbol-library':
-            xorn.geda.clib.reset()
+            gaf.clib.reset()
 
         elif option == '--source-library':
             source_library(value)
         elif option == '--source-library-search':
             source_library_search(value)
         elif option == '--reset-source-library':
-            del xorn.geda.netlist.slib.slib[:]
+            del gaf.netlist.slib.slib[:]
 
         elif option == '--net-naming-priority':
             if value == 'net-attribute':
@@ -545,7 +434,7 @@ def main():
 
     if list_backends:
         sys.stdout.write(_("List of available backends:\n\n"))
-        for name in xorn.geda.netlist.backend.list_backends():
+        for name in gaf.netlist.backend.list_backends():
             sys.stdout.write("    %s\n" % name)
         sys.stdout.write("\n")
         sys.exit(0)
@@ -562,7 +451,7 @@ def main():
         xorn.command.invalid_arguments(_(
             "Specified an output filename but no backend"))
 
-    netlist = xorn.geda.netlist.netlist.Netlist(
+    netlist = gaf.netlist.netlist.Netlist(
         toplevel_filenames = args,
         traverse_hierarchy = traverse_hierarchy,
         verbose_mode = verbose_mode,
@@ -585,7 +474,7 @@ def main():
 
     if backend_name is not None:
         try:
-            m = xorn.geda.netlist.backend.load(backend_name)
+            m = gaf.netlist.backend.load(backend_name)
         except ImportError:
             sys.stderr.write(
                 _("%s: Could not find backend `%s' in load path.\n")
@@ -643,6 +532,12 @@ def main():
         if output_filename is None or output_filename == '-':
             write(sys.stdout)
         else:
-            xorn.fileutils.write(output_filename, write, backup = False)
+            try:
+                xorn.fileutils.write(output_filename, write, backup = False)
+            except (IOError, OSError) as e:
+                sys.stderr.write(_("%s: %s: %s\n") % (
+                    xorn.command.program_short_name,
+                    output_filename, e.strerror))
+                sys.exit(1)
     except NetlistFailedError:
         sys.exit(3)

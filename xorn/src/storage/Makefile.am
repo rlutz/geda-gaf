@@ -1,4 +1,4 @@
-# Copyright (C) 2013-2015 Roland Lutz
+# Copyright (C) 2013-2018 Roland Lutz
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -27,5 +27,6 @@ libxornstorage_la_SOURCES = \
 	object.cc \
 	obstate.cc \
 	revision.cc \
-	selection.cc
+	selection.cc \
+	validate.cc
 libxornstorage_la_LDFLAGS = -export-symbols-regex '^xorn_'

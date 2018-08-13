@@ -1,5 +1,5 @@
 #!/usr/bin/env python2
-# Copyright (C) 2013-2015 Roland Lutz
+# Copyright (C) 2013-2018 Roland Lutz
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -15,12 +15,12 @@
 # along with this program; if not, write to the Free Software Foundation,
 # Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
-pythondir = '@pythondir@'
+pyexecdir = '@pyexecdir@'
 commanddir = '@commanddir@'
 
 import getopt, gettext, imp, os, sys
 from gettext import gettext as _
-sys.path.insert(0, pythondir)
+sys.path.insert(0, pyexecdir)
 import xorn.command
 import xorn.config
 
@@ -36,16 +36,20 @@ def main():
 
     for option, value in options:
         if option == '--help':
-	    sys.stdout.write(_(
+            sys.stdout.write(_(
 "Usage: %s COMMAND [ARGS]...\n"
 "       %s --help\n"
 "       %s --version\n")
                              % (xorn.command.program_name,
                                 xorn.command.program_name,
                                 xorn.command.program_name))
-	    sys.stdout.write("\n")
+            sys.stdout.write("\n")
             sys.stdout.write(_(
 "  Valid commands are:\n"))
+            sys.stdout.write("\n")
+            sys.stdout.write(_(
+"    convert\n"
+"        Convert files from one file format to another.\n"))
             sys.stdout.write("\n")
             sys.stdout.write(_(
 "    extract\n"
@@ -63,12 +67,12 @@ def main():
 "    For more information about an individual command, type:\n"
 "      `%s COMMAND --help'\n") % xorn.command.program_name)
             sys.stdout.write("\n")
-	    sys.stdout.write(_(
+            sys.stdout.write(_(
 "  Command-line options:\n"
 "      --help            give this help\n"
 "      --version         display version number\n"))
-	    sys.stdout.write("\n")
-	    sys.stdout.write(_("Report %s bugs to %s\n")
+            sys.stdout.write("\n")
+            sys.stdout.write(_("Report %s bugs to %s\n")
                              % (xorn.config.PACKAGE_NAME,
                                 xorn.config.PACKAGE_BUGREPORT))
             sys.exit(0)

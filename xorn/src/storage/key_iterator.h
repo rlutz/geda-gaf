@@ -1,4 +1,4 @@
-/* Copyright (C) 2013-2015 Roland Lutz
+/* Copyright (C) 2013-2018 Roland Lutz
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -33,21 +33,21 @@ public:
 	key_iterator(I i) : i(i) {
 	}
 	key_iterator &operator++() {
-		i.operator++();
+		i++;
 		return *this;
 	}
 	key_iterator &operator--() {
-		i.operator--();
+		i--;
 		return *this;
 	}
 	bool operator==(key_iterator x) {
-		return i.operator==(x.i);
+		return i == x.i;
 	}
 	bool operator!=(key_iterator x) {
-		return i.operator!=(x.i);
+		return i != x.i;
 	}
 	value_type operator*() {
-		return i.operator*().first;
+		return i->first;
 	}
 };
 

@@ -1,4 +1,4 @@
-/* Copyright (C) 2013-2015 Roland Lutz
+/* Copyright (C) 2013-2018 Roland Lutz
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -126,7 +126,7 @@ static void assert_fill(xorn_revision_t rev, xorn_selection_t sel,
 	assert(memcmp(&expected_fill, &real_fill, sizeof expected_fill) == 0);
 }
 
-int main()
+int main(void)
 {
 	xorn_revision_t rev0, rev1, rev2, rev3;
 	xorn_object_t ob0, ob1a, ob1b;
@@ -151,12 +151,12 @@ int main()
 
 	text_data.text.s = "Hello world";
 	text_data.text.len = 11;
-	text0 = xornsch_add_text(rev4, &text_data);
+	text0 = xornsch_add_text(rev4, &text_data, NULL);
 	assert(text0 != NULL);
 
 	text_data.text.s = "dlrow olleH";
 	text_data.text.len = 11;
-	text1 = xornsch_add_text(rev4, &text_data);
+	text1 = xornsch_add_text(rev4, &text_data, NULL);
 	assert(text0 != NULL);
 
 	xorn_finalize_revision(rev4);

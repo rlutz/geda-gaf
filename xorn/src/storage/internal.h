@@ -1,4 +1,4 @@
-/* Copyright (C) 2013-2015 Roland Lutz
+/* Copyright (C) 2013-2018 Roland Lutz
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -21,6 +21,8 @@
 #include <map>
 #include <vector>
 #include <set>
+
+bool data_is_valid(xorn_obtype_t type, void const *data);
 
 void *copy_data(xorn_obtype_t type, void const *src);
 

@@ -1,4 +1,4 @@
-/* Copyright (C) 2013-2015 Roland Lutz
+/* Copyright (C) 2013-2018 Roland Lutz
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -65,7 +65,7 @@ static void assert_object_location(xorn_revision_t rev, xorn_object_t ob,
 	assert(position == assert_position);
 }
 
-static void check_order()
+static void check_order(void)
 {
 	xorn_revision_t rev0, rev1, rev2, rev3, rev4;
 	xorn_object_t ob0, ob1a, ob1b, ob2;
@@ -92,13 +92,13 @@ static void check_order()
 	rev4 = xorn_new_revision(rev3);
 
 	memset(&arc_data, 0, sizeof arc_data);
-	assert(xornsch_set_arc_data(rev4, ob1a, &arc_data) == 0);
+	assert(xornsch_set_arc_data(rev4, ob1a, &arc_data, NULL) == 0);
 
 	assert_object_location(rev4, ob0, NULL, 0);
 	assert_object_location(rev4, ob1a, NULL, 2);
 	assert_object_location(rev4, ob1b, NULL, 1);
 
-	ob2 = xorn_copy_object(rev4, rev1, ob0);
+	ob2 = xorn_copy_object(rev4, rev1, ob0, NULL);
 	assert(ob2 != NULL);
 
 	assert_object_location(rev4, ob0, NULL, 0);
@@ -106,7 +106,7 @@ static void check_order()
 	assert_object_location(rev4, ob1b, NULL, 1);
 	assert_object_location(rev4, ob2, NULL, 3);
 
-	xorn_delete_object(rev4, ob0);
+	assert(xorn_delete_object(rev4, ob0, NULL) == 0);
 
 	assert_object_location_fails(rev4, ob0);
 	assert_object_location(rev4, ob1a, NULL, 1);
@@ -120,7 +120,7 @@ static void check_order()
 	xorn_free_revision(rev0);
 }
 
-static void check_attach()
+static void check_attach(void)
 {
 	xorn_revision_t rev;
 	xorn_object_t N, a, b;
@@ -130,35 +130,35 @@ static void check_attach()
 	assert(rev = xorn_new_revision(NULL));
 
 	memset(&net_data, 0, sizeof net_data);
-	assert(N = xornsch_add_net(rev, &net_data));
+	assert(N = xornsch_add_net(rev, &net_data, NULL));
 
 	memset(&text_data, 0, sizeof text_data);
-	assert(a = xornsch_add_text(rev, &text_data));
-	assert(b = xornsch_add_text(rev, &text_data));
+	assert(a = xornsch_add_text(rev, &text_data, NULL));
+	assert(b = xornsch_add_text(rev, &text_data, NULL));
 
 	assert_object_location(rev, N, _, 0);
 	assert_object_location(rev, a, _, 1);
 	assert_object_location(rev, b, _, 2);
 
-	assert(xorn_relocate_object(rev, a, N, _) == 0);
+	assert(xorn_relocate_object(rev, a, N, _, NULL) == 0);
 
 	assert_object_location(rev, N, _, 0);
 	assert_object_location(rev, a, N, 0);
 	assert_object_location(rev, b, _, 1);
 
-	assert(xorn_relocate_object(rev, b, N, _) == 0);
+	assert(xorn_relocate_object(rev, b, N, _, NULL) == 0);
 
 	assert_object_location(rev, N, _, 0);
 	assert_object_location(rev, a, N, 0);
 	assert_object_location(rev, b, N, 1);
 
-	assert(xorn_relocate_object(rev, b, N, a) == 0);
+	assert(xorn_relocate_object(rev, b, N, a, NULL) == 0);
 
 	assert_object_location(rev, N, _, 0);
 	assert_object_location(rev, a, N, 1);
 	assert_object_location(rev, b, N, 0);
 
-	assert(xorn_relocate_object(rev, a, _, N) == 0);
+	assert(xorn_relocate_object(rev, a, _, N, NULL) == 0);
 
 	assert_object_location(rev, N, _, 1);
 	assert_object_location(rev, a, _, 0);
@@ -167,7 +167,7 @@ static void check_attach()
 	xorn_free_revision(rev);
 }
 
-int main()
+int main(void)
 {
 	check_order();
 	check_attach();

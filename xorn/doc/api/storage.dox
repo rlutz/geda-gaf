@@ -1,4 +1,4 @@
-/* Copyright (C) 2013-2015 Roland Lutz
+/* Copyright (C) 2013-2018 Roland Lutz
  *
  * Permission is granted to copy, distribute and/or modify this document
  * under the terms of the GNU Free Documentation License, Version 1.2 or
@@ -59,6 +59,43 @@
  * There are different values of this attribute between the selected
  * objects.  Show this attribute in the property editor, but don't
  * show a value.  */
+
+/** \enum xorn_error_t
+ *  \brief Error codes returned by object manipulation functions.
+ *
+ * \var xorn_error_t xorn_error_invalid_argument
+ * The type isn't a valid Xorn object type, or the object data is \c NULL.
+ *
+ * \var xorn_error_t xorn_error_out_of_memory
+ * There is not enough memory for this operation.
+ *
+ * \var xorn_error_t xorn_error_revision_not_transient
+ * The revision to be changed isn't transient.
+ *
+ * \var xorn_error_t xorn_error_object_doesnt_exist
+ * The object doesn't exist in the revision.
+ *
+ * \var xorn_error_t xorn_error_invalid_object_data
+ * The passed object data contains one or more invalid values.
+ *
+ * \var xorn_error_t xorn_error_parent_doesnt_exist
+ * A parent object has been specified, but it doesn't exist in the
+ * revision.
+ *
+ * \var xorn_error_t xorn_error_invalid_parent
+ * An object of this type can't be attached to this parent.
+ *
+ * \var xorn_error_t xorn_error_invalid_existing_child
+ * There are objects attached to the object, but the specified object
+ * type wouldn't permit attaching those objects.
+ *
+ * \var xorn_error_t xorn_error_successor_doesnt_exist
+ * A successor object has been specified but doesn't exist in the
+ * revision.
+ *
+ * \var xorn_error_t xorn_error_successor_not_sibling
+ * A successor object has been specified but isn't attached to the
+ * same parent.  */
 
 /** \typedef typedef struct xorn_revision *xorn_revision_t
  *  \brief Opaque type representing the contents of a file.

@@ -1,3 +1,112 @@
+August 2018
+===========
+
+- Renamed package `xorn.geda' to `gaf'
+
+
+October 2017
+============
+
+- Python backends can now be invoked using `gnetlist2'
+
+
+July 2017
+=========
+
+- Added netlist backend for Igor2's tEDAx format
+
+
+March 2017
+==========
+
+- Added options -l and -a to `xorn extract'
+
+
+February 2017
+=============
+
+- Power symbols can now be defined using a netname=NAME attribute
+  instead of the old net=NAME:1
+
+- Port symbols can now be defined using a portname=NAME attribute
+  instead of the old refdes=NAME
+
+- Implemented parameter substitution for subschematics
+
+- Object data is now validated by the storage library and invalid data
+  rejected
+
+- Object data is normalized after copying; any stored object data is
+  guaranteed to be in a standard format
+
+- Storage library: xorn_delete_object and xorn_delete_selected_objects
+  now return 0 on success and -1 on failure (no objects matching the
+  specified selection being considered success)
+
+- Storage library: Object manipulation functions now have an
+  additional parameter `err' returning the error code
+
+
+July 2016
+=========
+
+- Missing symbols are now handled properly
+
+- Added python module `xorn.xml_writer' which provides general-purpose
+  XML writing functionality
+
+- Added python modules `xorn.fixednum' and `xorn.hybridnum' which
+  implement a fixed-point number format without and with a hexadecimal
+  floating-point part, respectively
+
+- Added XML schematic/symbol file format
+
+- Added subcommand `xorn convert' which allows converting a schematic
+  or symbol file from one format to another
+
+- When reading a schematic file which contains fallback versions of
+  symbols or pixmaps and a symbol or pixmap can't be found, a warning
+  is now issued (instead of an error) and the fallback version used
+
+- Duplicate pinseq= values are no longer considered an error as long
+  as they aren't relevant for slotting
+
+
+June 2016
+=========
+
+- Fixed a bug which caused a net segment to be internally listed twice
+
+- Added regression tests for fixed bugs
+
+- A pin which occurs in the slot definition of a slotted component but
+  is missing from the symbol is now considered an error
+
+- Errors while reading a file are now reported to a callback object
+  and don't cause the state to become invalid
+
+
+April 2016
+==========
+
+- Added Python module `xorn.guile' which allows adding Guile as a
+  script interpreter to a Python application
+
+- Added gnetlist Guile API to the netlister
+
+- Added `guile' backend which allows using backends written in Scheme
+  with the new netlister
+
+- Added wrapper script `gnetlist2' as a drop-in replacement for
+  gnetlist
+
+
+January 2016
+============
+
+- Directory sources can now be recursive
+
+
 September 2015
 ==============
 
@@ -92,7 +201,7 @@ March 2014
 
 --------------------------------------------------------------------------------
 
-Copyright (C) 2013-2015 Roland Lutz
+Copyright (C) 2013-2018 Roland Lutz
 
 Permission is granted to copy, distribute and/or modify this document
 under the terms of the GNU Free Documentation License, Version 1.2 or

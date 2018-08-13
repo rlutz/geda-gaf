@@ -1,4 +1,4 @@
-/* Copyright (C) 2013-2015 Roland Lutz
+/* Copyright (C) 2013-2018 Roland Lutz
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -42,13 +42,20 @@ static void set_object_data(xorn_revision_t rev, xorn_object_t ob,
  *
  * \a data must point to a data structure matching the object type
  * indicated by \a type (e.g., if \a type is \c xornsch_obtype_net,
- * then \a data must point to a \c xornsch_net structure).  The data
- * structure (including referenced strings) will not be accessed after
- * this function has returned.
+ * then \a data must point to a \c xornsch_net structure).  A copy of
+ * the data structure is made with all unused fields set to zero.  The
+ * original data structure (including referenced strings) will not be
+ * accessed after this function has returned.
  *
- * \return Returns the newly created object.  If the revision isn't
- * transient, \a type is not a valid Xorn object type, \a data is
- * NULL, or there is not enough memory, returns \c NULL.
+ * \return Returns the newly created object.  Returns \c NULL and sets
+ * the error code
+ * - to \ref xorn_error_revision_not_transient if the revision isn't
+ *   transient,
+ * - to \ref xorn_error_invalid_argument if \a type is not a valid
+ *   Xorn object type or \a data is NULL,
+ * - to \ref xorn_error_invalid_object_data if \a data contains an
+ *   invalid value, or
+ * - to \ref xorn_error_out_of_memory if there is not enough memory.
  *
  * Example:
  * \snippet functions.c add object
@@ -58,21 +65,56 @@ static void set_object_data(xorn_revision_t rev, xorn_object_t ob,
  * functionality but are type-safe.  */
 
 xorn_object_t xorn_add_object(xorn_revision_t rev,
-			      xorn_obtype_t type, void const *data)
+			      xorn_obtype_t type, void const *data,
+			      xorn_error_t *err)
 {
-	if (!rev->is_transient)
+	switch (type) {
+	case xornsch_obtype_arc:
+	case xornsch_obtype_box:
+	case xornsch_obtype_circle:
+	case xornsch_obtype_component:
+	case xornsch_obtype_line:
+	case xornsch_obtype_net:
+	case xornsch_obtype_path:
+	case xornsch_obtype_picture:
+	case xornsch_obtype_text:
+		break;
+	default:
+		if (err != NULL)
+			*err = xorn_error_invalid_argument;
 		return NULL;
+	}
+	if (data == NULL) {
+		if (err != NULL)
+			*err = xorn_error_invalid_argument;
+		return NULL;
+	}
+
+	if (!rev->is_transient) {
+		if (err != NULL)
+			*err = xorn_error_revision_not_transient;
+		return NULL;
+	}
+	if (!data_is_valid(type, data)) {
+		if (err != NULL)
+			*err = xorn_error_invalid_object_data;
+		return NULL;
+	}
 
 	xorn_object_t ob = (xorn_object_t)++next_object_id;
 	try {
 		rev->children[NULL].push_back(ob);
 	} catch (std::bad_alloc const &) {
+		if (err != NULL)
+			*err = xorn_error_out_of_memory;
 		return NULL;
 	}
 	try {
 		rev->parent[ob] = NULL;
 	} catch (std::bad_alloc const &) {
 		rev->children[NULL].pop_back();
+		if (err != NULL)
+			*err = xorn_error_out_of_memory;
 		return NULL;
 	}
 	try {
@@ -80,6 +122,8 @@ xorn_object_t xorn_add_object(xorn_revision_t rev,
 	} catch (std::bad_alloc const &) {
 		rev->parent.erase(rev->parent.find(ob));
 		rev->children[NULL].pop_back();
+		if (err != NULL)
+			*err = xorn_error_out_of_memory;
 		return NULL;
 	}
 	return ob;
@@ -107,19 +151,29 @@ xorn_object_t xorn_add_object(xorn_revision_t rev,
  * \param data Pointer to a data structure matching the object type
  *             indicated by \a type (e.g., if \a type is \c
  *             xornsch_obtype_net, a pointer to a \c xornsch_net
- *             structure).  The data structure (including referenced
- *             strings) will not be accessed after this function has
- *             returned.
+ *             structure).  A copy of the data structure is made with
+ *             all unused fields set to zero.  The original data
+ *             structure (including referenced strings) will not be
+ *             accessed after this function has returned.
  *
- * \return Returns \c 0 if the object has been changed.  Returns \c -1 if
- * - the revision isn't transient,
- * - \a type is not a valid Xorn object type,
- * - \a data is NULL,
- * - \a ob is attached to an object but \a type doesn't permit
- *   attaching the object,
- * - there are objects attached to \a ob but \a type doesn't permit
- *   attaching objects, or
- * - there is not enough memory.
+ * \param err  Pointer to a variable of type \c xorn_error_t which, if
+ *             an error occurs, will be set to the appropriate error
+ *             code.  May be \c NULL if the caller is not interested
+ *             in the error code.
+ *
+ * \return Returns \c 0 if the object has been changed.  Returns \c -1
+ * and sets the error code
+ * - to \ref xorn_error_revision_not_transient if the revision isn't
+ *   transient,
+ * - to \ref xorn_error_invalid_argument if \a type is not a valid
+ *   Xorn object type or \a data is NULL,
+ * - to \ref xorn_error_invalid_object_data if \a data contains an
+ *   invalid value,
+ * - to \ref xorn_error_invalid_parent if \a ob is attached to an
+ *   object but \a type doesn't permit attaching the object,
+ * - to \ref xorn_error_invalid_existing_child if there are objects
+ *   attached to \a ob but \a type doesn't permit attaching objects, or
+ * - to \ref xorn_error_out_of_memory if there is not enough memory.
  *
  * Example:
  * \snippet functions.c set object data
@@ -129,37 +183,78 @@ xorn_object_t xorn_add_object(xorn_revision_t rev,
  * same functionality but are type-safe.  */
 
 int xorn_set_object_data(xorn_revision_t rev, xorn_object_t ob,
-			 xorn_obtype_t type, void const *data)
+			 xorn_obtype_t type, void const *data,
+			 xorn_error_t *err)
 {
-	if (!rev->is_transient)
+	switch (type) {
+	case xornsch_obtype_arc:
+	case xornsch_obtype_box:
+	case xornsch_obtype_circle:
+	case xornsch_obtype_component:
+	case xornsch_obtype_line:
+	case xornsch_obtype_net:
+	case xornsch_obtype_path:
+	case xornsch_obtype_picture:
+	case xornsch_obtype_text:
+		break;
+	default:
+		if (err != NULL)
+			*err = xorn_error_invalid_argument;
 		return -1;
+	}
+	if (data == NULL) {
+		if (err != NULL)
+			*err = xorn_error_invalid_argument;
+		return -1;
+	}
+
+	if (!rev->is_transient) {
+		if (err != NULL)
+			*err = xorn_error_revision_not_transient;
+		return -1;
+	}
+	if (!data_is_valid(type, data)) {
+		if (err != NULL)
+			*err = xorn_error_invalid_object_data;
+		return -1;
+	}
 
 	if (type != xornsch_obtype_net &&
 	    type != xornsch_obtype_component) {
 		std::map<xorn_object_t,
 			 std::vector<xorn_object_t> >::const_iterator i
 			= rev->children.find(ob);
-		if (i != rev->children.end() && !i->second.empty())
+		if (i != rev->children.end() && !i->second.empty()) {
+			if (err != NULL)
+				*err = xorn_error_invalid_existing_child;
 			return -1;
+		}
 	}
 
 	std::map<xorn_object_t, xorn_object_t>::const_iterator i
 		= rev->parent.find(ob);
 	if (type != xornsch_obtype_text &&
-	    i != rev->parent.end() && i->second != NULL)
+	    i != rev->parent.end() && i->second != NULL) {
+		if (err != NULL)
+			*err = xorn_error_invalid_parent;
 		return -1;
+	}
 
 	bool add = i == rev->parent.end();
 	if (add) {
 		try {
 			rev->children[NULL].push_back(ob);
 		} catch (std::bad_alloc const &) {
+			if (err != NULL)
+				*err = xorn_error_out_of_memory;
 			return -1;
 		}
 		try {
 			rev->parent[ob] = NULL;
 		} catch (std::bad_alloc const &) {
 			rev->children[NULL].pop_back();
+			if (err != NULL)
+				*err = xorn_error_out_of_memory;
 			return -1;
 		}
 	}
@@ -171,6 +266,8 @@ int xorn_set_object_data(xorn_revision_t rev, xorn_object_t ob,
 			rev->parent.erase(rev->parent.find(ob));
 			rev->children[NULL].pop_back();
 		}
+		if (err != NULL)
+			*err = xorn_error_out_of_memory;
 		return -1;
 	}
 	return 0;
@@ -202,35 +299,71 @@ int xorn_set_object_data(xorn_revision_t rev, xorn_object_t ob,
  * \param insert_before  An object already attached to \a attach_to
  *                       before which \a ob should be inserted, or \c
  *                       NULL to append it at the end.
+ * \param err            Pointer to a variable of type \c xorn_error_t
+ *                       which, if an error occurs, will be set to the
+ *                       appropriate error code.  May be \c NULL if the
+ *                       caller is not interested in the error code.
  *
- * \return Returns \c 0 on success.  Returns \c -1 if
- * - the revision isn't transient,
- * - \a ob or (if not \c NULL) \a attach_to or \a insert_before don't
- *   exist in the revision,
- * - \a attach_to is not \c NULL and
+ * \return Returns \c 0 on success.  Returns \c -1 and sets the
+ * error code
+ * - to \ref xorn_error_revision_not_transient if the revision isn't
+ *   transient,
+ * - to \ref xorn_error_object_doesnt_exist if \a ob doesn't exist in
+ *   the revision,
+ * - to \ref xorn_error_parent_doesnt_exist if \a attach_to is not \c
+ *   NULL and doesn't exist in the revision,
+ * - to \ref xorn_error_successor_doesnt_exist if \a insert_before is
+ *   not \c NULL and doesn't exist in the revision,
+ * - to \ref xorn_error_invalid_parent if \a attach_to is not \c NULL and
  *   - \a ob is not a schematic text or
  *   - \a attach_to is not a schematic net or schematic component,
- * - \a insert_before is not \c NULL and not attached to \a attach_to, or
- * - there is not enough memory.
+ * - to \ref xorn_error_successor_not_sibling if \a insert_before is
+ *   not \c NULL and not attached to \a attach_to, or
+ * - to \ref xorn_error_out_of_memory if there is not enough memory.
  *
  * Example:
  * \snippet functions.c add attribute  */
 
 int xorn_relocate_object(xorn_revision_t rev, xorn_object_t ob,
-			 xorn_object_t attach_to, xorn_object_t insert_before)
+			 xorn_object_t attach_to, xorn_object_t insert_before,
+			 xorn_error_t *err)
 {
-	if (!rev->is_transient)
+	if (!rev->is_transient) {
+		if (err != NULL)
+			*err = xorn_error_revision_not_transient;
 		return -1;
+	}
 
 	if (attach_to != NULL) {
-		if (xorn_get_object_type(rev, ob) != xornsch_obtype_text)
+		switch (xorn_get_object_type(rev, ob)) {
+		case xorn_obtype_none:
+			if (err != NULL)
+				*err = xorn_error_object_doesnt_exist;
 			return -1;
+		case xornsch_obtype_text:
+			break;  /* ok */
+		default:
+			if (err != NULL)
+				*err = xorn_error_invalid_parent;
+			return -1;
+		}
 		xorn_obtype_t type = xorn_get_object_type(rev, attach_to);
-		if (type != xornsch_obtype_net &&
-		    type != xornsch_obtype_component)
+		if (type == xorn_obtype_none) {
+			if (err != NULL)
+				*err = xorn_error_parent_doesnt_exist;
 			return -1;
-	} else if (!xorn_object_exists_in_revision(rev, ob))
+		}
+		if (type != xornsch_obtype_net &&
+		    type != xornsch_obtype_component) {
+			if (err != NULL)
+				*err = xorn_error_invalid_parent;
+			return -1;
+		}
+	} else if (!xorn_object_exists_in_revision(rev, ob)) {
+		if (err != NULL)
+			*err = xorn_error_object_doesnt_exist;
 		return -1;
+	}
 
 	xorn_object_t &parent = rev->parent[ob];
 	std::vector<xorn_object_t> &old_children = rev->children[parent];
@@ -250,13 +383,23 @@ int xorn_relocate_object(xorn_revision_t rev, xorn_object_t ob,
 			std::vector<xorn_object_t>::iterator j =
 				find(new_children.begin(),
 				     new_children.end(), insert_before);
-			if (j == new_children.end())
-				return -1;
+			if (j == new_children.end()) {
+			    if (err != NULL) {
+				if (xorn_object_exists_in_revision(
+					    rev, insert_before))
+				    *err = xorn_error_successor_not_sibling;
+				else
+				    *err = xorn_error_successor_doesnt_exist;
+			    }
+			    return -1;
+			}
 			if (&new_children == &old_children && j <= i)
 				++pos;
 			new_children.insert(j, ob);
 		}
 	} catch (std::bad_alloc const &) {
+		if (err != NULL)
+			*err = xorn_error_out_of_memory;
 		return -1;
 	}
 
@@ -295,24 +438,36 @@ static void delete_object_but_leave_entry(
  * The deleted object(s) stay valid and can later be re-added using
  * \ref xorn_set_object_data or its type-safe equivalents.
  *
- * If the revision isn't transient or the object doesn't exist in the
- * revision, nothing is changed.  */
+ * \return Returns \c 0 if the object has been deleted.  Returns \c -1
+ * and sets the error code
+ * - to \ref xorn_error_revision_not_transient if the revision isn't
+ *   transient or
+ * - to \ref xorn_error_object_doesnt_exist if the object doesn't
+ *   exist in the revision.  */
 
-void xorn_delete_object(xorn_revision_t rev, xorn_object_t ob)
+int xorn_delete_object(xorn_revision_t rev, xorn_object_t ob,
+		       xorn_error_t *err)
 {
-	if (!rev->is_transient)
-		return;
+	if (!rev->is_transient) {
+		if (err != NULL)
+			*err = xorn_error_revision_not_transient;
+		return -1;
+	}
 
 	std::map<xorn_object_t, xorn_object_t>::const_iterator i
 		= rev->parent.find(ob);
-	if (i == rev->parent.end())
-		return;
+	if (i == rev->parent.end()) {
+		if (err != NULL)
+			*err = xorn_error_object_doesnt_exist;
+		return -1;
+	}
 	xorn_object_t parent = i->second;
 
 	delete_object_but_leave_entry(rev, ob);
 
 	std::vector<xorn_object_t> &children = rev->children[parent];
 	children.erase(find(children.begin(), children.end(), ob));
+	return 0;
 }
 
 /** \brief Delete some objects from a transient revision.
@@ -322,17 +477,27 @@ void xorn_delete_object(xorn_revision_t rev, xorn_object_t ob)
  * The deleted objects stay valid and can later be re-added using \ref
  * xorn_set_object_data or its type-safe equivalents.
  *
- * Objects that don't exist in the revision are ignored.  If the
- * revision isn't transient, nothing is changed.  */
+ * Objects that don't exist in the revision are ignored.
+ *
+ * \return Returns \c 0 if the revision is transient (this doesn't
+ * necessarily mean that any objects have been deleted).  Otherwise,
+ * returns \c -1 and sets the error code to \ref
+ * xorn_error_revision_not_transient.  */
 
-void xorn_delete_selected_objects(xorn_revision_t rev, xorn_selection_t sel)
+int xorn_delete_selected_objects(xorn_revision_t rev, xorn_selection_t sel,
+				 xorn_error_t *err)
 {
-	if (!rev->is_transient)
-		return;
+	if (!rev->is_transient) {
+		if (err != NULL)
+			*err = xorn_error_revision_not_transient;
+		return -1;
+	}
 
 	for (std::set<xorn_object_t>::const_iterator i = sel->begin();
 	     i != sel->end(); ++i)
-		xorn_delete_object(rev, *i);
+		(void) xorn_delete_object(rev, *i, NULL);
+
+	return 0;
 }
 
 static xorn_object_t copy_object(
@@ -359,7 +524,7 @@ static xorn_object_t copy_object(
 	try {
 		copied.push_back(dest_ob);
 	} catch (std::bad_alloc const &) {
-		xorn_delete_object(dest, dest_ob);
+		(void) xorn_delete_object(dest, dest_ob, NULL);
 		throw;
 	}
 
@@ -382,24 +547,39 @@ static xorn_object_t copy_object(
  * of the object list.
  *
  * \param dest Destination revision (must be transient)
- * \param src Source revision (does not need to be transient)
- * \param ob Object in the source revision which should be copied
+ * \param src  Source revision (does not need to be transient)
+ * \param ob   Object in the source revision which should be copied
+ * \param err  Pointer to a variable of type \c xorn_error_t which, if
+ *             an error occurs, will be set to the appropriate error
+ *             code.  May be \c NULL if the caller is not interested
+ *             in the error code.
  *
- * \return Returns the copy of \a ob.  If the destination revision
- * isn't transient, \a ob doesn't exist in the source revision, or
- * there is not enough memory, returns \c NULL.  */
+ * \return Returns the copy of \a ob.  Returns \c NULL and sets the
+ * error code
+ * - to \ref xorn_error_revision_not_transient if the destination
+ *   revision isn't transient,
+ * - to \ref xorn_error_object_doesnt_exist if \a ob doesn't exist in
+ *   the source revision, or
+ * - to \ref xorn_error_out_of_memory if there is not enough memory.  */
 
 xorn_object_t xorn_copy_object(xorn_revision_t dest,
-			       xorn_revision_t src, xorn_object_t ob)
+			       xorn_revision_t src, xorn_object_t ob,
+			       xorn_error_t *err)
 {
-	if (!dest->is_transient)
+	if (!dest->is_transient) {
+		if (err != NULL)
+			*err = xorn_error_revision_not_transient;
 		return NULL;
+	}
 
 	std::map<xorn_object_t, obstate *>::const_iterator i
 		= src->obstates.find(ob);
 
-	if (i == src->obstates.end())
+	if (i == src->obstates.end()) {
+		if (err != NULL)
+			*err = xorn_error_object_doesnt_exist;
 		return NULL;
+	}
 
 	std::vector<xorn_object_t> copied;
 
@@ -408,7 +588,9 @@ xorn_object_t xorn_copy_object(xorn_revision_t dest,
 	} catch (std::bad_alloc const &) {
 		for (std::vector<xorn_object_t>::const_iterator i
 			     = copied.begin(); i != copied.end(); ++i)
-			xorn_delete_object(dest, *i);
+			(void) xorn_delete_object(dest, *i, NULL);
+		if (err != NULL)
+			*err = xorn_error_out_of_memory;
 		return NULL;
 	}
 }
@@ -420,26 +602,39 @@ xorn_object_t xorn_copy_object(xorn_revision_t dest,
  * to the end of the object list in an unspecified order.
  *
  * \param dest Destination revision (must be transient)
- * \param src Source revision (does not need to be transient)
- * \param sel Objects in the source revision which should be copied
+ * \param src  Source revision (does not need to be transient)
+ * \param sel  Objects in the source revision which should be copied
+ * \param err  Pointer to a variable of type \c xorn_error_t which, if
+ *             an error occurs, will be set to the appropriate error
+ *             code.  May be \c NULL if the caller is not interested
+ *             in the error code.
  *
  * \return Returns a selection containing the copied objects,
- * excluding attached objects.  If the destination revision isn't
- * transient or there is not enough memory, returns \c NULL.
+ * excluding attached objects.  Returns \c NULL and sets
+ * the error code
+ * - to \ref xorn_error_revision_not_transient if the destination
+ *   revision isn't transient or
+ * - to \ref xorn_error_out_of_memory if there is not enough memory.
  *
  * \note You should free the returned selection using \ref
  * xorn_free_selection once it isn't needed any more.  */
 
 xorn_selection_t xorn_copy_objects(xorn_revision_t dest,
-				   xorn_revision_t src, xorn_selection_t sel)
+				   xorn_revision_t src, xorn_selection_t sel,
+				   xorn_error_t *err)
 {
-	if (!dest->is_transient)
+	if (!dest->is_transient) {
+		if (err != NULL)
+			*err = xorn_error_revision_not_transient;
 		return NULL;
+	}
 
 	xorn_selection_t rsel;
 	try {
 		rsel = new xorn_selection();
 	} catch (std::bad_alloc const &) {
+		if (err != NULL)
+			*err = xorn_error_out_of_memory;
 		return NULL;
 	}
 
@@ -461,8 +656,10 @@ xorn_selection_t xorn_copy_objects(xorn_revision_t dest,
 		} catch (std::bad_alloc const &) {
 			for (std::vector<xorn_object_t>::const_iterator i
 				     = copied.begin(); i != copied.end(); ++i)
-				xorn_delete_object(dest, *i);
+				(void) xorn_delete_object(dest, *i, NULL);
 			delete rsel;
+			if (err != NULL)
+				*err = xorn_error_out_of_memory;
 			return NULL;
 		}
 		++i;

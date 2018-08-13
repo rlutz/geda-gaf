@@ -1,7 +1,7 @@
-# xorn.geda.netlist - gEDA Netlist Extraction and Generation
+# gaf.netlist - gEDA Netlist Extraction and Generation
 # Copyright (C) 1998-2010 Ales Hvezda
 # Copyright (C) 1998-2010 gEDA Contributors (see ChangeLog for details)
-# Copyright (C) 2013-2015 Roland Lutz
+# Copyright (C) 2013-2018 Roland Lutz
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -32,7 +32,8 @@ attribs:
 all-local: attribs
 
 dist_check_SCRIPTS = run-test
-EXTRA_DIST = $(TESTS) $(testdata) gschemrc common/gschemrc
+EXTRA_DIST = $(TESTS) $(testdata) gnet-apitest.scm run-test.gnetlist \
+             gschemrc regression/gschemrc drc2/gschemrc common/gschemrc
 # dist_check_DATA would be more appropriate for $(TESTS) and $(testdata)
 # but triggers a lot of "Nothing to be done for '...'" messages.
 
@@ -46,6 +47,17 @@ mostlyclean-local:
 TESTS = stack_1-geda.out \
 	hierarchy-geda.out \
 	hierarchy2-geda.out \
+	net_attr-geda.out \
+	netname_attr-geda.out \
+	param_attr-geda.out \
+	regression/component_refdes-dumptext.out \
+	regression/duplicate_local_net-geda.out \
+	regression/missing_pinseq-geda.out \
+	regression/named_unconnected_net-geda.out \
+	regression/override_netname-geda.out \
+	regression/refdes_promotion-geda.out \
+	regression/transform_symbols-geda.out \
+	regression/unnumbered_component-geda.out \
 	drc2/connected_noconnects-drc2.out \
 	drc2/duplicated_refdes-drc2.out \
 	drc2/duplicated_slot-drc2.out \
@@ -85,6 +97,7 @@ TESTS = stack_1-geda.out \
 	common/JD-geda.out \
 	common/JD-gossip.out \
 	common/JD-gsch2pcb.out \
+	common/JD-guile.out \
 	common/JD-liquidpcb.out \
 	common/JD-mathematica.out \
 	common/JD-maxascii.out \
@@ -131,6 +144,7 @@ TESTS = stack_1-geda.out \
 	common/SlottedOpamps-geda.out \
 	common/SlottedOpamps-gossip.out \
 	common/SlottedOpamps-gsch2pcb.out \
+	common/SlottedOpamps-guile.out \
 	common/SlottedOpamps-liquidpcb.out \
 	common/SlottedOpamps-mathematica.out \
 	common/SlottedOpamps-maxascii.out \
@@ -172,6 +186,7 @@ TESTS = stack_1-geda.out \
 	common/TwoStageAmp-geda.out \
 	common/TwoStageAmp-gossip.out \
 	common/TwoStageAmp-gsch2pcb.out \
+	common/TwoStageAmp-guile.out \
 	common/TwoStageAmp-liquidpcb.out \
 	common/TwoStageAmp-mathematica.out \
 	common/TwoStageAmp-maxascii.out \
@@ -216,6 +231,7 @@ TESTS = stack_1-geda.out \
 	common/cascade-geda.out \
 	common/cascade-gossip.out \
 	common/cascade-gsch2pcb.out \
+	common/cascade-guile.out \
 	common/cascade-liquidpcb.out \
 	common/cascade-mathematica.out \
 	common/cascade-maxascii.out \
@@ -257,6 +273,7 @@ TESTS = stack_1-geda.out \
 	common/multiequal-geda.out \
 	common/multiequal-gossip.out \
 	common/multiequal-gsch2pcb.out \
+	common/multiequal-guile.out \
 	common/multiequal-liquidpcb.out \
 	common/multiequal-mathematica.out \
 	common/multiequal-maxascii.out \
@@ -298,6 +315,7 @@ TESTS = stack_1-geda.out \
 	common/netattrib-geda.out \
 	common/netattrib-gossip.out \
 	common/netattrib-gsch2pcb.out \
+	common/netattrib-guile.out \
 	common/netattrib-liquidpcb.out \
 	common/netattrib-mathematica.out \
 	common/netattrib-maxascii.out \
@@ -339,6 +357,7 @@ TESTS = stack_1-geda.out \
 	common/powersupply-geda.out \
 	common/powersupply-gossip.out \
 	common/powersupply-gsch2pcb.out \
+	common/powersupply-guile.out \
 	common/powersupply-liquidpcb.out \
 	common/powersupply-mathematica.out \
 	common/powersupply-maxascii.out \
@@ -380,6 +399,7 @@ TESTS = stack_1-geda.out \
 	common/singlenet-geda.out \
 	common/singlenet-gossip.out \
 	common/singlenet-gsch2pcb.out \
+	common/singlenet-guile.out \
 	common/singlenet-liquidpcb.out \
 	common/singlenet-mathematica.out \
 	common/singlenet-maxascii.out \
@@ -404,6 +424,8 @@ TESTS = stack_1-geda.out \
 	common/singlenet-vipec.out
 
 XFAIL_TESTS = \
+	regression/missing_pinseq-geda.out \
+	regression/unnumbered_component-geda.out \
 	common/SlottedOpamps-futurenet2.out \
 	common/SlottedOpamps-spice_noqsi.out \
 	common/SlottedOpamps-switcap.out \
@@ -456,6 +478,32 @@ testdata = \
 	hierarchy2-sources/under.sch \
 	hierarchy2-symbols/under.sym \
 	hierarchy2.sch \
+	net_attr.sch \
+	netname_attr.sch \
+	param_attr-sources/sub.sch \
+	param_attr-symbols/comp.sym \
+	param_attr-symbols/sub.sym \
+	param_attr.sch \
+	regression/component_refdes-sources/sub.sch \
+	regression/component_refdes-symbols/component.sym \
+	regression/component_refdes-symbols/sub.sym \
+	regression/component_refdes.sch \
+	regression/duplicate_local_net-sources/sub.sch \
+	regression/duplicate_local_net-symbols/sub.sym \
+	regression/duplicate_local_net-symbols/sym.sym \
+	regression/duplicate_local_net.sch \
+	regression/missing_pinseq-symbols/missing_pinseq.sym \
+	regression/missing_pinseq.sch \
+	regression/named_unconnected_net.sch \
+	regression/override_netname-symbols/component.sym \
+	regression/override_netname-symbols/power.sym \
+	regression/override_netname.sch \
+	regression/refdes_promotion-symbols/named-power.sym \
+	regression/refdes_promotion.sch \
+	regression/transform_symbols-symbols/L.sym \
+	regression/transform_symbols.sch \
+	regression/unnumbered_component-symbols/component.sym \
+	regression/unnumbered_component.sch \
 	stack_1.sch \
 	std-symbols/74/7400-1.sym \
 	std-symbols/74/7404-1.sym \

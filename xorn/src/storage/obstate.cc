@@ -1,4 +1,4 @@
-/* Copyright (C) 2013-2015 Roland Lutz
+/* Copyright (C) 2013-2018 Roland Lutz
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -21,9 +21,6 @@
 
 void *copy_data(xorn_obtype_t type, void const *src)
 {
-	if (src == NULL)
-		throw std::bad_alloc();
-
 	size_t size;
 
 	switch (type) {
@@ -49,6 +46,11 @@ void *copy_data(xorn_obtype_t type, void const *src)
 
 static void duplicate_string(xorn_string &str)
 {
+	if (str.len == 0) {
+		str.s = NULL;
+		return;
+	}
+
 	char *buf = (char *)malloc(str.len);
 	if (buf == NULL)
 		throw std::bad_alloc();
@@ -68,18 +70,66 @@ static void decref_pointer(xorn_pointer &pointer)
 		pointer.decref(pointer.ptr);
 }
 
+static void normalize_line_attr(xornsch_line_attr &line)
+{
+	if (line.dash_style == 0 || line.dash_style == 1)
+		line.dash_length = 0.;
+	if (line.dash_style == 0)
+		line.dash_space = 0.;
+}
+
+static void normalize_fill_attr(xornsch_fill_attr &fill)
+{
+	if (fill.type != 2 && fill.type != 3) {
+		fill.width = 0.;
+		fill.angle0 = 0;
+		fill.pitch0 = 0.;
+	}
+	if (fill.type != 2) {
+		fill.angle1 = 0;
+		fill.pitch1 = 0.;
+	}
+}
+
 obstate::obstate(xorn_obtype_t type, void const *data)
 	: refcnt(1), type(type), data(copy_data(type, data))
 {
 	try {
 		switch(type) {
+		case xornsch_obtype_arc:
+			normalize_line_attr(
+				((xornsch_arc *)this->data)->line);
+			break;
+		case xornsch_obtype_box:
+			normalize_line_attr(
+				((xornsch_box *)this->data)->line);
+			normalize_fill_attr(
+				((xornsch_box *)this->data)->fill);
+			break;
+		case xornsch_obtype_circle:
+			normalize_line_attr(
+				((xornsch_circle *)this->data)->line);
+			normalize_fill_attr(
+				((xornsch_circle *)this->data)->fill);
+			break;
 		case xornsch_obtype_component:
 			incref_pointer(
 				((xornsch_component *)this->data)->symbol);
 			break;
+		case xornsch_obtype_line:
+			normalize_line_attr(
+				((xornsch_line *)this->data)->line);
+			break;
+		case xornsch_obtype_net:
+			/* nothing to do */
+			break;
 		case xornsch_obtype_path:
 			duplicate_string(
 				((xornsch_path *)this->data)->pathdata);
+			normalize_line_attr(
+				((xornsch_path *)this->data)->line);
+			normalize_fill_attr(
+				((xornsch_path *)this->data)->fill);
 			break;
 		case xornsch_obtype_picture:
 			incref_pointer(
@@ -89,7 +139,7 @@ obstate::obstate(xorn_obtype_t type, void const *data)
 			duplicate_string(((xornsch_text *)this->data)->text);
 			break;
 		default:
-			/* do nothing */;
+			throw std::bad_alloc();  /* bad object type */
 		}
 	} catch (std::bad_alloc const &) {
 		free(this->data);

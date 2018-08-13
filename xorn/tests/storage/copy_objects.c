@@ -1,4 +1,4 @@
-/* Copyright (C) 2013-2015 Roland Lutz
+/* Copyright (C) 2013-2018 Roland Lutz
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -18,7 +18,7 @@
 #include <stdlib.h>
 
 
-int main()
+int main(void)
 {
 	xorn_revision_t rev0, rev1, rev2, rev3;
 	xorn_object_t ob0, ob1a, ob1b;
@@ -37,7 +37,7 @@ int main()
 	sel0 = xorn_select_all(rev3);
 	assert(sel0 != NULL);
 
-	sel1 = xorn_copy_objects(rev4, rev2, sel0);
+	sel1 = xorn_copy_objects(rev4, rev2, sel0, NULL);
 	assert(sel1 != NULL);
 
 	xorn_finalize_revision(rev4);

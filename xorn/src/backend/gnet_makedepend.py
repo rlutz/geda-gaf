@@ -1,7 +1,7 @@
-# xorn.geda.netlist - gEDA Netlist Extraction and Generation
+# gaf.netlist - gEDA Netlist Extraction and Generation
 # Copyright (C) 1998-2010 Ales Hvezda
 # Copyright (C) 1998-2010 gEDA Contributors (see ChangeLog for details)
-# Copyright (C) 2013-2015 Roland Lutz
+# Copyright (C) 2013-2018 Roland Lutz
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -113,7 +113,8 @@ def run(f, netlist):
     if match is None:
         sys.stderr.write("ERROR: Schematic file name must take the form: "
                          "BASE-PAGENUM.EXT\n")
-        sys.exit(1)
+        netlist.failed = True
+        return
     base = match.group(1)
     # page = match.group(2)
     # ext = match.group(3)

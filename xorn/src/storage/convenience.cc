@@ -1,4 +1,4 @@
-/* Copyright (C) 2013-2015 Roland Lutz
+/* Copyright (C) 2013-2018 Roland Lutz
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -24,13 +24,16 @@
 		    xorn_get_object_data(rev, ob, xornsch_obtype_##type)); \
 	} \
 	xorn_object_t xornsch_add_##type(xorn_revision_t rev, \
-					 const struct xornsch_##type *data) { \
-		return xorn_add_object(rev, xornsch_obtype_##type, data); \
+					 const struct xornsch_##type *data, \
+					 xorn_error_t *err) { \
+		return xorn_add_object( \
+			rev, xornsch_obtype_##type, data, err); \
 	} \
 	int xornsch_set_##type##_data(xorn_revision_t rev, xorn_object_t ob, \
-				      const struct xornsch_##type *data) { \
+				      const struct xornsch_##type *data, \
+				      xorn_error_t *err) { \
 		return xorn_set_object_data( \
-			rev, ob, xornsch_obtype_##type, data); \
+			rev, ob, xornsch_obtype_##type, data, err); \
 	}
 
 OBJMETHODS(arc)

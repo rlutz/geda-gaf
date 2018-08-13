@@ -1,4 +1,4 @@
-/* Copyright (C) 2013-2015 Roland Lutz
+/* Copyright (C) 2013-2018 Roland Lutz
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -17,25 +17,55 @@
 #include "Setup.h"
 #include <stdlib.h>
 
+#define NO_ERROR ((xorn_error_t) -1)
 
-int main()
+
+int main(void)
 {
 	xorn_revision_t rev0, rev1, rev2, rev3;
 	xorn_object_t ob0, ob1a, ob1b;
 
-	xorn_object_t ob0copy;
 	xorn_revision_t rev4;
+	xorn_object_t ob0copy;
+	xorn_error_t err;
 
 	xorn_object_t *objects;
 	size_t count;
 
 	setup(&rev0, &rev1, &rev2, &rev3, &ob0, &ob1a, &ob1b);
 
+
+	/* can't copy object which doesn't exist in source revision */
+
 	rev4 = xorn_new_revision(rev3);
 	assert(rev4 != NULL);
 
-	ob0copy = xorn_copy_object(rev4, rev1, ob0);
+	err = NO_ERROR;
+	ob0copy = xorn_copy_object(rev4, rev0, ob0, &err);
+	assert(ob0copy == NULL);
+	assert(err == xorn_error_object_doesnt_exist);
+
+	xorn_finalize_revision(rev4);
+
+	assert(xorn_get_objects(rev4, &objects, &count) == 0);
+	assert(objects != NULL);
+	assert(count == 2);
+	assert(objects[0] == ob0);
+	assert(objects[1] == ob1b);
+	free(objects);
+
+	xorn_free_revision(rev4);
+
+
+	/* can copy object otherwise */
+
+	rev4 = xorn_new_revision(rev3);
+	assert(rev4 != NULL);
+
+	err = NO_ERROR;
+	ob0copy = xorn_copy_object(rev4, rev1, ob0, &err);
 	assert(ob0copy != NULL);
+	assert(err == NO_ERROR);
 
 	xorn_finalize_revision(rev4);
 
@@ -53,6 +83,8 @@ int main()
 	free(objects);
 
 	xorn_free_revision(rev4);
+
+
 	xorn_free_revision(rev3);
 	xorn_free_revision(rev2);
 	xorn_free_revision(rev1);

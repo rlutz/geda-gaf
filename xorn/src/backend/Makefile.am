@@ -1,7 +1,7 @@
-# xorn.geda.netlist - gEDA Netlist Extraction and Generation
+# gaf.netlist - gEDA Netlist Extraction and Generation
 # Copyright (C) 1998-2010 Ales Hvezda
 # Copyright (C) 1998-2010 gEDA Contributors (see ChangeLog for details)
-# Copyright (C) 2013-2015 Roland Lutz
+# Copyright (C) 2013-2018 Roland Lutz
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -21,6 +21,7 @@ backenddir = $(pkglibdir)/backends
 backend_PYTHON = \
 	util_alias.py \
 	util_getopt.py \
+	util_repackage.py \
 	util_wrap.py \
 	dump_common.py \
 	partslist_common.py \
@@ -45,6 +46,7 @@ backend_PYTHON = \
 	gnet_geda.py \
 	gnet_gossip.py \
 	gnet_gsch2pcb.py \
+	gnet_guile.py \
 	gnet_liquidpcb.py \
 	gnet_makedepend.py \
 	gnet_mathematica.py \

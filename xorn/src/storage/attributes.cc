@@ -1,4 +1,4 @@
-/* Copyright (C) 2013-2015 Roland Lutz
+/* Copyright (C) 2013-2018 Roland Lutz
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -511,15 +511,20 @@ template<typename Attr> static void get_attr(
 
 template<typename Attr> static int set_attr(
     xorn_revision_t rev, xorn_selection_t sel,
-    typename Attr::basic_type const &value)
+    typename Attr::basic_type const &value, xorn_error_t *err)
 {
-    if (!rev->is_transient)
+    if (!rev->is_transient) {
+	if (err != NULL)
+	    *err = xorn_error_revision_not_transient;
 	return -1;
+    }
 
     std::map<xorn_object_t, obstate *> new_obstates;
     try {
 	new_obstates = rev->obstates;
     } catch (std::bad_alloc const &) {
+	if (err != NULL)
+	    *err = xorn_error_out_of_memory;
 	return -1;
     }
     for (std::map<xorn_object_t, obstate *>::const_iterator i
@@ -565,6 +570,11 @@ template<typename Attr> static int set_attr(
 		    continue;
 		}
 
+		if (!data_is_valid(type, data)) {
+		    free(data);
+		    continue;
+		}
+
 		try {
 		    obstate *tmp = new obstate(type, data);
 		    try {
@@ -587,6 +597,8 @@ template<typename Attr> static int set_attr(
 		 i = new_obstates.begin();
 	     i != new_obstates.end(); ++i)
 	    i->second->dec_refcnt();
+	if (err != NULL)
+	    *err = xorn_error_out_of_memory;
 	return -1;
     }
 
@@ -657,9 +669,10 @@ template<typename Attr> static xorn_selection_t select_by_attr(
 	get_attr<Attr_##name>(rev, sel, state_return, value_return);	\
     }									\
     int ns##_set_##name(						\
-	xorn_revision_t rev, xorn_selection_t sel, intype value)	\
+	xorn_revision_t rev, xorn_selection_t sel, intype value,	\
+	xorn_error_t *err)						\
     {									\
-	return set_attr<Attr_##name>(rev, sel, ast value);		\
+	return set_attr<Attr_##name>(rev, sel, ast value, err);		\
     }									\
     xorn_selection_t ns##_select_by_##name(				\
 	xorn_revision_t rev, intype value)				\

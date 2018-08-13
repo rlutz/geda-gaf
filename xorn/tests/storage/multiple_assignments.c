@@ -1,4 +1,4 @@
-/* Copyright (C) 2013-2015 Roland Lutz
+/* Copyright (C) 2013-2018 Roland Lutz
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -21,7 +21,7 @@
 
 /* This test is only meaningful when being run under memcheck. */
 
-int main()
+int main(void)
 {
 	xorn_revision_t rev;
 	struct xornsch_text data;
@@ -33,16 +33,16 @@ int main()
 
 	data.text.s = "Hello";
 	data.text.len = 5;
-	ob = xornsch_add_text(rev, &data);
+	ob = xornsch_add_text(rev, &data, NULL);
 
 	data.text.s = "World";
 	data.text.len = 5;
-	xornsch_set_text_data(rev, ob, &data);
+	xornsch_set_text_data(rev, ob, &data, NULL);
 
 	s = strdup("!");
 	data.text.s = s;
 	data.text.len = 1;
-	xornsch_set_text_data(rev, ob, &data);
+	xornsch_set_text_data(rev, ob, &data, NULL);
 	free(s);
 
 	xorn_free_revision(rev);

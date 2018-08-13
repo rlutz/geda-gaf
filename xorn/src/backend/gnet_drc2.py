@@ -1,7 +1,7 @@
-# xorn.geda.netlist - gEDA Netlist Extraction and Generation
+# gaf.netlist - gEDA Netlist Extraction and Generation
 # Copyright (C) 1998-2010 Ales Hvezda
 # Copyright (C) 1998-2010 gEDA Contributors (see ChangeLog for details)
-# Copyright (C) 2013-2015 Roland Lutz
+# Copyright (C) 2013-2018 Roland Lutz
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -256,7 +256,36 @@ def get_drc_matrix_element(row, column):
     except KeyError:
         sys.stderr.write("INTERNAL ERROR: DRC matrix has unknown value "
                          "on position %s,%s\n" % (row, column))
-        sys.exit(1)
+        sys.exit(3)
+
+## Return a sorted list of slots used by a package.
+#
+# It collects the slot attribute values of each symbol instance of a
+# package.  As a result, slots may be repeated in the returned list.
+
+def get_slots(package):
+    l = []
+    for slot in package.get_all_attributes('slot'):
+        if slot is None:
+            # no slot attribute, assume slot number is 1
+            l.append(1)
+            continue
+
+        # convert string attribute value to number
+        try:
+            l.append(int(slot))
+        except ValueError:
+            # conversion failed, invalid slot, ignore value
+            package.error("bad slot number: %s" % slot)
+    l.sort()
+    return l
+
+## Return a sorted list of unique slots used by a package.
+
+def get_unique_slots(package):
+    l = list(set(get_slots(package)))
+    l.sort()
+    return l
 
 # ======================== Symbol checking functions =========================
 
@@ -275,7 +304,7 @@ def check_non_numbered_items(f, netlist, packages):
 def check_duplicated_slots(f, netlist):
     for package in reversed(netlist.packages):
         slots = set()
-        for slot in package.get_slots():
+        for slot in get_slots(package):
             if slot in slots:
                 error(f, "duplicated slot %d of uref %s"
                          % (slot, package.refdes))
@@ -294,7 +323,7 @@ def check_unused_slots(f, netlist):
         except ValueError:
             continue
 
-        slots_list = package.get_unique_slots()
+        slots_list = get_unique_slots(package)
 
         for slot_number in xrange(numslots):
             if slot_number + 1 in slots_list:
@@ -355,7 +384,7 @@ def check_slots(f, netlist):
                      "has no slot attribute defined." % package.refdes)
             continue
 
-        for this_slot in package.get_unique_slots():
+        for this_slot in get_unique_slots(package):
             if this_slot > numslots or this_slot < 1:
                 # If slot is not between 1 and numslots,
                 # then report an error.
@@ -380,7 +409,7 @@ def check_duplicated_references(f, netlist, packages):
                 if component.refdes == package.refdes:
                     count += 1
 
-        if count > len(package.get_unique_slots()):
+        if count > len(get_unique_slots(package)):
             error(f, "Duplicated reference %s." % package.refdes)
 
 # ========================== Net checking functions ==========================
@@ -567,7 +596,7 @@ def run(f, netlist, args):
                  if not isinstance(x, int) or x not in [0, 1]), True):
         sys.stderr.write("INTERNAL ERROR: List of pins which can drive a net "
                          "bad specified.\n")
-        sys.exit(1)
+        sys.exit(3)
 
     # Perform DRC-matrix sanity checks.
     # See if all elements of the matrix are chars
@@ -578,12 +607,12 @@ def run(f, netlist, args):
             if not isinstance(c, basestring) or len(c) != 1:
                 sys.stderr.write("INTERNAL ERROR: DRC matrix has unknown "
                                  "value on position %s,%s\n" % (row, column))
-                sys.exit(1)
+                sys.exit(3)
 
     if action_unused_slots not in 'wce':
         sys.stderr.write("INTERNAL ERROR: Action when unused slots are found "
                          "has a wrong value.\n")
-        sys.exit(1)
+        sys.exit(3)
 
     # Check non-numbered symbols
     if not dont_check_non_numbered_parts:

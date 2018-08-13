@@ -1,7 +1,7 @@
-# xorn.geda.netlist - gEDA Netlist Extraction and Generation
+# gaf.netlist - gEDA Netlist Extraction and Generation
 # Copyright (C) 1998-2010 Ales Hvezda
 # Copyright (C) 1998-2010 gEDA Contributors (see ChangeLog for details)
-# Copyright (C) 2013-2015 Roland Lutz
+# Copyright (C) 2013-2018 Roland Lutz
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -105,7 +105,8 @@ def run(f, netlist):
         if status != 0:
             sys.stderr.write("%s returned exit status %d\n"
                              % (pcb_m4_command, status))
-            sys.exit(1)
+            netlist.failed = True
+            return
     else:
         sys.stderr.write("Skipping the m4 processor for pcb footprints\n")
         for package in reversed(netlist.packages):
