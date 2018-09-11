@@ -2,8 +2,8 @@ Makefile
 Makefile.in
 html
 latex
-gnetlist.1
-gnetlist.html
+gnetlist-legacy.1
+gnetlist-legacy.html
 mk_verilog_syms.1
 mk_verilog_syms.html
 *~

@@ -169,8 +169,8 @@ void main_prog(void *closure, int argc, char *argv[])
     s_log_init ("gnetlist");
 
     s_log_message(_(
-        "gEDA/gnetlist version %s%s.%s\n"
-        "gEDA/gnetlist comes with ABSOLUTELY NO WARRANTY; see COPYING for more details.\n"
+        "gEDA/gnetlist-legacy version %s%s.%s\n"
+        "gEDA/gnetlist-legacy comes with ABSOLUTELY NO WARRANTY; see COPYING for more details.\n"
         "This is free software, and you are welcome to redistribute it under certain\n"
         "conditions; please see the COPYING file for more details.\n\n"),
         PREPEND_VERSION_STRING, PACKAGE_DOTTED_VERSION, PACKAGE_DATE_VERSION);
@@ -302,7 +302,7 @@ void main_prog(void *closure, int argc, char *argv[])
     scm_primitive_load_path (scm_from_utf8_string ("gnetlist-post.scm"));
 
     if (interactive_mode) {
-        scm_c_eval_string ("(set-repl-prompt! \"gnetlist> \")");
+        scm_c_eval_string ("(set-repl-prompt! \"gnetlist-legacy> \")");
         scm_shell (0, NULL);
     } else if (guile_proc) {
         /* check size here hack */
@@ -325,9 +325,9 @@ int main(int argc, char *argv[])
 #if ENABLE_NLS
     setlocale (LC_ALL, "");
     setlocale (LC_NUMERIC, "C");
-    bindtextdomain ("geda-gnetlist", LOCALEDIR);
-    textdomain ("geda-gnetlist");
-    bind_textdomain_codeset("geda-gnetlist", "UTF-8");
+    bindtextdomain ("geda-gnetlist-legacy", LOCALEDIR);
+    textdomain ("geda-gnetlist-legacy");
+    bind_textdomain_codeset("geda-gnetlist-legacy", "UTF-8");
 #endif
     scm_boot_guile (argc, argv, main_prog, 0);
     return 0;

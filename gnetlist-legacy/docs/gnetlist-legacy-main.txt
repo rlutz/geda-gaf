@@ -1,0 +1,7 @@
+/*! \mainpage gnetlist-legacy - The GPL Electronic Design Automation netlister for the schematic capture tool.
+\image html logo.png
+\section geda-intro gEDA Introduction
+    \htmlinclude what-is-geda.html
+\section gattrib-intro gnetlist-legacy Introduction
+    \htmlinclude what-is-gnetlist-legacy.html
+*/

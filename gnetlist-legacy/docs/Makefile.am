@@ -2,15 +2,16 @@
 SUBDIRS = vams
 
 EXTRA_DIST = $(html_man_files) logo.png \
-	     gnetlist-main.txt what-is-geda.html what-is-gnetlist.html \
-	     gnetlist.dox gnetlist.1.in mk_verilog_syms.1.in
+	     gnetlist-legacy-main.txt what-is-geda.html \
+	     what-is-gnetlist-legacy.html gnetlist-legacy.dox \
+	     gnetlist-legacy.1.in mk_verilog_syms.1.in
 
 docsreadmedir = $(docdir)/readmes
 dist_docsreadme_DATA = \
 	README.bom README.pcb README.switcap README.verilog \
 	README.vhdl README.sysc README.eagle
 
-dist_man_MANS = gnetlist.1
+dist_man_MANS = gnetlist-legacy.1
 noinst_MANS = mk_verilog_syms.1
 
 .1.in.1:
@@ -38,10 +39,10 @@ else
 	@! :
 endif
 
-doxygen: gnetlist.dox
-	@echo 'Creating doxygen documentation for gnetlist...'
+doxygen: gnetlist-legacy.dox
+	@echo 'Creating doxygen documentation for gnetlist-legacy...'
 if ENABLE_DOXYGEN
-	$(DOXYGEN) gnetlist.dox
+	$(DOXYGEN) gnetlist-legacy.dox
 else
 	@echo 'configure was not run with the --enable-doxygen switch.'
 	@echo 'The documentation cannot be built from the sources.'

@@ -1,0 +1,17 @@
+# List of translatable files
+gnetlist-legacy/src/globals.c
+gnetlist-legacy/src/g_netlist.c
+gnetlist-legacy/src/gnetlist.c
+gnetlist-legacy/src/g_rc.c
+gnetlist-legacy/src/g_register.c
+gnetlist-legacy/src/i_vars.c
+gnetlist-legacy/src/parsecmd.c
+gnetlist-legacy/src/s_cpinlist.c
+gnetlist-legacy/src/s_hierarchy.c
+gnetlist-legacy/src/s_misc.c
+gnetlist-legacy/src/s_netattrib.c
+gnetlist-legacy/src/s_net.c
+gnetlist-legacy/src/s_netlist.c
+gnetlist-legacy/src/s_rename.c
+gnetlist-legacy/src/s_traverse.c
+gnetlist-legacy/src/vams_misc.c

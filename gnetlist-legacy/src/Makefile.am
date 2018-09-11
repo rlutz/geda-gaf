@@ -1,9 +1,9 @@
 ## Process this file with automake to produce Makefile.in
 
-bin_PROGRAMS = gnetlist
+bin_PROGRAMS = gnetlist-legacy
 
 # don't forget all *.h files */
-gnetlist_SOURCES = \
+gnetlist_legacy_SOURCES = \
 	g_netlist.c \
 	g_rc.c \
 	g_register.c \
@@ -21,12 +21,12 @@ gnetlist_SOURCES = \
 	s_traverse.c \
 	vams_misc.c
 
-gnetlist_CPPFLAGS = -I$(top_srcdir)/libgeda/include -I$(srcdir)/../include \
-	-I$(top_srcdir) -I$(includedir)
-gnetlist_CFLAGS = $(GCC_CFLAGS) $(MINGW_CFLAGS) $(GLIB_CFLAGS) \
+gnetlist_legacy_CPPFLAGS = -I$(top_srcdir)/libgeda/include \
+	-I$(srcdir)/../include -I$(top_srcdir) -I$(includedir)
+gnetlist_legacy_CFLAGS = $(GCC_CFLAGS) $(MINGW_CFLAGS) $(GLIB_CFLAGS) \
 	$(GUILE_CFLAGS) $(GDK_PIXBUF_CFLAGS)
-gnetlist_LDFLAGS = $(GLIB_LIBS) $(GUILE_LIBS) $(GDK_PIXBUF_LIBS)
-gnetlist_LDADD = $(top_builddir)/libgeda/src/libgeda.la
+gnetlist_legacy_LDFLAGS = $(GLIB_LIBS) $(GUILE_LIBS) $(GDK_PIXBUF_LIBS)
+gnetlist_legacy_LDADD = $(top_builddir)/libgeda/src/libgeda.la
 
 localedir = @datadir@/locale
 DEFS = -DLOCALEDIR=\"$(localedir)\" @DEFS@

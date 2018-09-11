@@ -2,7 +2,7 @@ if ENABLE_GATTRIB
 GATTRIB_DIR=gattrib
 endif
 SUBDIRS = libgeda libgedacairo gaf gschem ${GATTRIB_DIR} \
-	gsymcheck gnetlist utils symbols docs examples contrib xorn
+	gsymcheck gnetlist-legacy utils symbols docs examples contrib xorn
 
 ACLOCAL_AMFLAGS = -I m4
 
@@ -60,7 +60,7 @@ endif HAVE_GIT_REPO
 
 doxygen:
 if ENABLE_DOXYGEN
-	@for subdir in gattrib/docs gschem/docs gnetlist/docs \
+	@for subdir in gattrib/docs gschem/docs gnetlist-legacy/docs \
 	  libgeda/docs gsymcheck/docs utils/docs ; do \
 	  (cd $$subdir; $(MAKE) doxygen) || exit 1; \
         done

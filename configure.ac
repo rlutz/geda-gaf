@@ -244,27 +244,27 @@ AC_CONFIG_FILES([Makefile
                  gsymcheck/tests/Makefile
                  gsymcheck/Makefile
 
-                 gnetlist/Makefile
-                 gnetlist/po/Makefile.in
-                 gnetlist/src/Makefile
-                 gnetlist/include/Makefile
-                 gnetlist/scheme/Makefile
-                 gnetlist/examples/Makefile
-                 gnetlist/tests/Makefile
-                 gnetlist/docs/Makefile
-                 gnetlist/docs/vams/Makefile
-                 gnetlist/examples/vams/Makefile
-                 gnetlist/examples/vams/vhdl/Makefile
-                 gnetlist/examples/vams/vhdl/basic-vhdl/Makefile
-                 gnetlist/examples/vams/vhdl/new-vhdl/Makefile
-                 gnetlist/examples/switcap/Makefile
-                 gnetlist/lib/Makefile
-                 gnetlist/utils/Makefile
-                 gnetlist/scripts/Makefile
-                 gnetlist/scripts/annotate.sh
-                 gnetlist/scripts/bom_xref.sh
-                 gnetlist/scripts/bompp.sh
-                 gnetlist/lib/system-gnetlistrc
+                 gnetlist-legacy/Makefile
+                 gnetlist-legacy/po/Makefile.in
+                 gnetlist-legacy/src/Makefile
+                 gnetlist-legacy/include/Makefile
+                 gnetlist-legacy/scheme/Makefile
+                 gnetlist-legacy/examples/Makefile
+                 gnetlist-legacy/tests/Makefile
+                 gnetlist-legacy/docs/Makefile
+                 gnetlist-legacy/docs/vams/Makefile
+                 gnetlist-legacy/examples/vams/Makefile
+                 gnetlist-legacy/examples/vams/vhdl/Makefile
+                 gnetlist-legacy/examples/vams/vhdl/basic-vhdl/Makefile
+                 gnetlist-legacy/examples/vams/vhdl/new-vhdl/Makefile
+                 gnetlist-legacy/examples/switcap/Makefile
+                 gnetlist-legacy/lib/Makefile
+                 gnetlist-legacy/utils/Makefile
+                 gnetlist-legacy/scripts/Makefile
+                 gnetlist-legacy/scripts/annotate.sh
+                 gnetlist-legacy/scripts/bom_xref.sh
+                 gnetlist-legacy/scripts/bompp.sh
+                 gnetlist-legacy/lib/system-gnetlistrc
 
                  utils/Makefile
                  utils/docs/Makefile

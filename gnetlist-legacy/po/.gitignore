@@ -7,7 +7,7 @@ POTFILES
 *.sed
 *.header
 *.sin
-geda-gnetlist.pot
+geda-gnetlist-legacy.pot
 Rules-quot
 Makevars.template
 stamp-po

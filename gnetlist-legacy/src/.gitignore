@@ -2,7 +2,7 @@ Makefile
 Makefile.in
 .deps
 .libs
-gnetlist
-gnetlist.exe
+gnetlist-legacy
+gnetlist-legacy.exe
 *.o
 *~
