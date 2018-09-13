@@ -1,5 +1,5 @@
 #!/usr/bin/env python2
-# gnetlist2 - wrapper script for invoking the gEDA netlister
+# gnetlist - wrapper script for invoking the gEDA netlister
 # Copyright (C) 1998-2010 Ales Hvezda
 # Copyright (C) 1998-2010 gEDA Contributors (see ChangeLog for details)
 # Copyright (C) 2013-2018 Roland Lutz
@@ -18,17 +18,16 @@
 # along with this program; if not, write to the Free Software Foundation,
 # Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
-## \file gnetlist2.in
+## \file gnetlist.in
 ## Wrapper script for invoking the gEDA netlister.
 #
-# As opposed to the <tt>gnetlist</tt> command, <tt>xorn netlist</tt>
-# doesn't read the old-style Guile configuration files \c gafrc and \c
-# gnetlistrc and doesn't support the Guile-specific command line
-# options \c -l, \c -m, and \c -c.  This wrapper script runs the
-# configuration files, detects the Guile-specific command line options
-# and translates them into a <tt>xorn netlist</tt> invocation and can
-# be used as a drop-in replacement for <tt>gnetlist</tt> in most
-# situations.
+# <tt>xorn netlist</tt> doesn't read the old-style Guile configuration
+# files \c gafrc and \c gnetlistrc and doesn't support the
+# Guile-specific command line options \c -l, \c -m, and \c -c.
+# This wrapper script runs the configuration files, detects the
+# Guile-specific command line options and translates them into a
+# <tt>xorn netlist</tt> invocation and can be used as a drop-in
+# replacement for the old <tt>gnetlist</tt> binary in most situations.
 #
 # It does *not* read the new-style configuration file \c geda.conf,
 # and it does *not* support Guile functions as a symbol library.
@@ -37,6 +36,7 @@ pyexecdir = '@pyexecdir@'
 XORN = '@XORN@'
 gedadatadir = '@gedadatadir@'
 gedasysconfdir = '@gedasysconfdir@'
+backenddir = '@backenddir@'
 
 import getopt, gettext, os, sys
 from gettext import gettext as _
@@ -901,7 +901,7 @@ def main():
         elif option == '-g':
             guile_proc = value
         elif option == '-p':
-            python_backend = value
+            python_backend = value.replace('-', '_')
         elif option == '-O':
             backend_options.append(value)
         elif option == '-l':
@@ -950,7 +950,7 @@ gEDA/gaf homepage: http://www.geda-project.org/
 
         elif option == '-V' or option == '--version':
             sys.stdout.write('''\
-gnetlist2 (%s) - Wrapper script for invoking the gEDA netlister
+gnetlist (%s) - Wrapper script for invoking the gEDA netlister
 Copyright (C) 1998-2012 gEDA developers
 Copyright (C) 2018 Roland Lutz
 
@@ -1030,9 +1030,20 @@ GNU General Public License for more details.
 
     # 4. Print a list of available netlist backends if requested.
     if list_backends_:
+        import gaf.netlist.backend
+        gaf.netlist.backend.load_path.insert(0, backenddir)
+        for extra_load_path in extra_load_paths[1:]:
+            gaf.netlist.backend.load_path.insert(0, extra_load_path)
+
+        python_backends = set(name.replace('_', '-')
+                              for name in gaf.netlist.backend.list_backends())
+        guile_backends = set(list_backends())
+
         sys.stdout.write(_("List of available backends:\n\n"))
-        for name in list_backends():
-            sys.stdout.write("    %s\n" % name)
+        for name in sorted(set.union(guile_backends, python_backends)):
+            sys.stdout.write("  [%s%s]\t%s\n" % (
+                'P' if name in python_backends else ' ',
+                'G' if name in guile_backends else ' ', name))
         sys.stdout.write("\n")
         sys.exit(0)
 
@@ -1123,8 +1134,9 @@ GNU General Public License for more details.
             cmd += ['-O', 'load=' + value]
 
         if guile_proc is not None and not interactive_mode:
-            # if both `-i' and `-g' are specified, the backend is loaded
-            # but not executed (don't ask me, that's what gnetlist does)
+            # if both `-i' and `-g' are specified, the backend is
+            # loaded but not executed (don't ask me, that's what the
+            # old gnetlist code does)
             cmd += ['-O', 'guile-proc=' + guile_proc]
 
             if guile_proc.startswith('spice'):
@@ -1140,6 +1152,8 @@ GNU General Public License for more details.
         for backend_option in backend_options:
             cmd += ['-O', backend_option]
     else:
+        for extra_load_path in extra_load_paths[1:]:
+            cmd += ['-L', extra_load_path]
         cmd += ['-g', python_backend]
         for backend_option in backend_options:
             cmd += ['-O', backend_option]

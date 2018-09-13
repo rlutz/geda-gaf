@@ -269,7 +269,7 @@ class Netlist:
         # now that all the sheets have been read, go through and do the
         # post processing work
 
-        # List the components in the same order as gnetlist.
+        # List the components in the same order as the old gnetlist code.
 
         def collect_components(sheet):
             for component in sheet.components:

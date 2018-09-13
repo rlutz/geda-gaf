@@ -20,17 +20,17 @@
 ## \namespace gaf.netlist.guile
 ## Scheme API for retrieving netlist information.
 #
-# This module mirrors the gnetlist Scheme API which exposes the
+# This module mirrors the old gnetlist Scheme API which exposes the
 # results of a netlister run to a netlist backend written in Scheme.
 # For each gnetlist API function, this module contains an equivalent
 # Python function and makes it available by creating a top-level
 # Scheme binding.
 #
-# The gnetlist API included a function \c gnetlist:get-renamed-nets
-# which returned a list of "renamed nets" and could be used to unit
-# test the internals of the netlister.  Due to the way nets are
-# handled, the concept of a "renamed net" isn't applicable and this
-# function isn't supported any more.
+# The old gnetlist API included a function \c
+# gnetlist:get-renamed-nets which returned a list of "renamed nets"
+# and could be used to unit test the internals of the netlister.  Due
+# to the way nets are handled, the concept of a "renamed net" isn't
+# applicable and this function isn't supported any more.
 #
 # Some functions take a dummy argument "level" which must be a string
 # but is otherwise ignored.
@@ -75,9 +75,9 @@ def check_argument_type(fun, i, arg, t):
 ## Return the net name visible through the API.
 #
 # If the name of the invoked backend starts with \c "spice", \c
-# gnetlist omits the \c "unnamed_net" net name prefix.  Here, however,
-# the generated netlist is independent of the backend, so the API
-# needs to fix up the net name before passing it to the backend.
+# gnetlist used to omit the \c "unnamed_net" net name prefix.  Here,
+# however, the generated netlist is independent of the backend, so the
+# API needs to fix up the net name before passing it to the backend.
 #
 # If \ref the_spice_mode isn't true when evaluated in a boolean
 # context, this function just returns \a net.name.

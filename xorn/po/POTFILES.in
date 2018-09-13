@@ -23,6 +23,6 @@ src/command/xorn.in
 src/command/convert.py
 src/command/extract.py
 src/command/find-symbol-by-pinout.py
-src/command/gnetlist2.in
+src/command/gnetlist.in
 src/command/netlist.py
 src/backend/util_alias.py
