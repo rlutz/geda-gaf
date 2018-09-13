@@ -36,6 +36,7 @@ pyexecdir = '@pyexecdir@'
 XORN = '@XORN@'
 gedadatadir = '@gedadatadir@'
 gedasysconfdir = '@gedasysconfdir@'
+backenddir = '@backenddir@'
 
 import getopt, gettext, os, sys
 from gettext import gettext as _
@@ -1029,9 +1030,19 @@ GNU General Public License for more details.
 
     # 4. Print a list of available netlist backends if requested.
     if list_backends_:
+        import gaf.netlist.backend
+        gaf.netlist.backend.load_path.insert(0, backenddir)
+        for extra_load_path in extra_load_paths[1:]:
+            gaf.netlist.backend.load_path.insert(0, extra_load_path)
+
+        python_backends = set(gaf.netlist.backend.list_backends())
+        guile_backends = set(list_backends())
+
         sys.stdout.write(_("List of available backends:\n\n"))
-        for name in list_backends():
-            sys.stdout.write("    %s\n" % name)
+        for name in sorted(set.union(guile_backends, python_backends)):
+            sys.stdout.write("  [%s%s]\t%s\n" % (
+                'P' if name in python_backends else ' ',
+                'G' if name in guile_backends else ' ', name))
         sys.stdout.write("\n")
         sys.exit(0)
 

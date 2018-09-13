@@ -37,6 +37,7 @@ gnetlist: $(srcdir)/gnetlist.in Makefile
 	    -e 's,[@]XORN[@],$(abs_builddir)/xorn,g' \
 	    -e 's,[@]gedadatadir[@],$(gedadatadir),g' \
 	    -e 's,[@]gedasysconfdir[@],$(gedasysconfdir),g' \
+	    -e 's,[@]backenddir[@],$(abs_top_srcdir)/src/backend,g' \
 		$(srcdir)/$@.in > $@; \
 	chmod +x $@
 
@@ -46,6 +47,7 @@ gnetlistT: $(srcdir)/gnetlist.in Makefile
 	    -e 's,[@]XORN[@],$(bindir)/xorn,g' \
 	    -e 's,[@]gedadatadir[@],$(gedadatadir),g' \
 	    -e 's,[@]gedasysconfdir[@],$(gedasysconfdir),g' \
+	    -e 's,[@]backenddir[@],$(pkglibdir)/backends,g' \
 		$(srcdir)/gnetlist.in > $@
 
 install-exec-local: xornT gnetlistT
