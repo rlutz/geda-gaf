@@ -7,12 +7,12 @@ files.  To run the tests, type:
 
     make check
 
-Since xorn-netlist produces slightly different output than the
-original gnetlist, the reference output files have been modified to
+Since xorn-netlist produces slightly different output than the old
+gnetlist binary, the reference output files have been modified to
 accomodate these differences.
 
-- The original order in which the pins on a net are listed in gnetlist
-  is hard to predict and depends on gnetlist's internal connectivity
+- The original order in which the pins on a net used to be listed in
+  gnetlist is hard to predict and depends on the internal connectivity
   checking algorithm.  Since it's *almost* the order of the pins in
   the file, they are now sorted in that order.
 

@@ -1,5 +1,5 @@
 #!/usr/bin/env python2
-# gnetlist2 - wrapper script for invoking the gEDA netlister
+# gnetlist - wrapper script for invoking the gEDA netlister
 # Copyright (C) 1998-2010 Ales Hvezda
 # Copyright (C) 1998-2010 gEDA Contributors (see ChangeLog for details)
 # Copyright (C) 2013-2018 Roland Lutz
@@ -18,17 +18,16 @@
 # along with this program; if not, write to the Free Software Foundation,
 # Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
-## \file gnetlist2.in
+## \file gnetlist.in
 ## Wrapper script for invoking the gEDA netlister.
 #
-# As opposed to the <tt>gnetlist</tt> command, <tt>xorn netlist</tt>
-# doesn't read the old-style Guile configuration files \c gafrc and \c
-# gnetlistrc and doesn't support the Guile-specific command line
-# options \c -l, \c -m, and \c -c.  This wrapper script runs the
-# configuration files, detects the Guile-specific command line options
-# and translates them into a <tt>xorn netlist</tt> invocation and can
-# be used as a drop-in replacement for <tt>gnetlist</tt> in most
-# situations.
+# <tt>xorn netlist</tt> doesn't read the old-style Guile configuration
+# files \c gafrc and \c gnetlistrc and doesn't support the
+# Guile-specific command line options \c -l, \c -m, and \c -c.
+# This wrapper script runs the configuration files, detects the
+# Guile-specific command line options and translates them into a
+# <tt>xorn netlist</tt> invocation and can be used as a drop-in
+# replacement for the old <tt>gnetlist</tt> binary in most situations.
 #
 # It does *not* read the new-style configuration file \c geda.conf,
 # and it does *not* support Guile functions as a symbol library.
@@ -950,7 +949,7 @@ gEDA/gaf homepage: http://www.geda-project.org/
 
         elif option == '-V' or option == '--version':
             sys.stdout.write('''\
-gnetlist2 (%s) - Wrapper script for invoking the gEDA netlister
+gnetlist (%s) - Wrapper script for invoking the gEDA netlister
 Copyright (C) 1998-2012 gEDA developers
 Copyright (C) 2018 Roland Lutz
 
@@ -1123,8 +1122,9 @@ GNU General Public License for more details.
             cmd += ['-O', 'load=' + value]
 
         if guile_proc is not None and not interactive_mode:
-            # if both `-i' and `-g' are specified, the backend is loaded
-            # but not executed (don't ask me, that's what gnetlist does)
+            # if both `-i' and `-g' are specified, the backend is
+            # loaded but not executed (don't ask me, that's what the
+            # old gnetlist code does)
             cmd += ['-O', 'guile-proc=' + guile_proc]
 
             if guile_proc.startswith('spice'):

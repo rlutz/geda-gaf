@@ -93,7 +93,7 @@ pre_backend_scm="${buildsubdir}/${basename%.out}.scm"
 	echo "(component-library \"${symbol_library}\")"
 } > "${pre_backend_scm}"
 
-gnetlist -l "${pre_backend_scm}" \
+gnetlist-legacy -l "${pre_backend_scm}" \
     -o "${output}" -g "${backend}" ${backend_options} "${input}"
 status=$?
 rm "${pre_backend_scm}"

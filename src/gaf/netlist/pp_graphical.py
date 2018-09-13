@@ -26,10 +26,10 @@ import gaf.attrib
 def postproc_blueprints(netlist):
     for schematic in netlist.schematics:
         for component in schematic.components:
-            # gnetlist once checks for the existence of a "graphical="
-            # attribute and once checks whether the first value is 1,
-            # so if these tests give different results, gnetlist has
-            # an inconsistent internal state.  -> warn about this
+            # gnetlist used to once check if a "graphical=" attribute
+            # is present and once check whether its first value is 1,
+            # so if these tests give different results, it used to
+            # have an inconsistent internal state.  -> warn about this
             graphical_attribs = \
                 gaf.attrib.search_all(component.ob, 'graphical')
             if graphical_attribs and graphical_attribs[0] != '1':
