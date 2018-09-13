@@ -1152,6 +1152,8 @@ GNU General Public License for more details.
         for backend_option in backend_options:
             cmd += ['-O', backend_option]
     else:
+        for extra_load_path in extra_load_paths[1:]:
+            cmd += ['-L', extra_load_path]
         cmd += ['-g', python_backend]
         for backend_option in backend_options:
             cmd += ['-O', backend_option]
