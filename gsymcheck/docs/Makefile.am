@@ -33,7 +33,7 @@ endif
 doxygen: gsymcheck.dox
 	@echo 'Creating doxygen documentation for gsymcheck...'
 if ENABLE_DOXYGEN
-	$(DOXYGEN) gsymcheck.dox
+	cd $(srcdir) && $(DOXYGEN) gsymcheck.dox
 else
 	@echo 'configure was not run with the --enable-doxygen switch.'
 	@echo 'The documentation cannot be built from the sources.'

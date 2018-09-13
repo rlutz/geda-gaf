@@ -18,13 +18,13 @@ all:
 images: $(png_images) $(pdf_images)
 
 clean-local:
-	rm -rf $(png_images) $(pdf_images)
+	cd $(srcdir) && rm -rf $(png_images) $(pdf_images)
 
 .svg.png:
-	if [ -x "`which inkscape`" ]; then inkscape -e $@ $< ; else  convert $< $@; fi
+	cd $(srcdir) && if [ -x "`which inkscape`" ]; then inkscape -e $@ $< ; else  convert $< $@; fi
 
 .svg.pdf:
-	if [ -x "`which inkscape`" ]; then inkscape -A $@ $< ; else  convert $< $@; fi
+	cd $(srcdir) && if [ -x "`which inkscape`" ]; then inkscape -A $@ $< ; else  convert $< $@; fi
 
 SUFFIXES = .svg .pdf .png
 

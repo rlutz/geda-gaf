@@ -42,7 +42,7 @@ endif
 doxygen: gnetlist-legacy.dox
 	@echo 'Creating doxygen documentation for gnetlist-legacy...'
 if ENABLE_DOXYGEN
-	$(DOXYGEN) gnetlist-legacy.dox
+	cd $(srcdir) && $(DOXYGEN) gnetlist-legacy.dox
 else
 	@echo 'configure was not run with the --enable-doxygen switch.'
 	@echo 'The documentation cannot be built from the sources.'

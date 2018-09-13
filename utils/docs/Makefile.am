@@ -18,7 +18,7 @@ docsreadme_DATA = README.gsch2pcb README.tragesym README.grenum
 doxygen: utils.dox
 	@echo 'Creating doxygen documentation for utils...'
 if ENABLE_DOXYGEN
-	$(DOXYGEN) utils.dox
+	cd $(srcdir) && $(DOXYGEN) utils.dox
 else
 	@echo 'configure was not run with the --enable-doxygen switch.'
 	@echo 'The documentation cannot be built from the sources.'
