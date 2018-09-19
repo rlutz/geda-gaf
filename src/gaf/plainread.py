@@ -473,7 +473,7 @@ def read_circle(buf, format, log):
 # A negative or null radius is not allowed.
 #
 # \throw gaf.read.ParseError if the string could not be parsed
-# \throw ValueError          if \a buf doesn't describe a arc object
+# \throw ValueError          if \a buf doesn't describe an arc object
 
 def read_arc(buf, format, log):
     try:
