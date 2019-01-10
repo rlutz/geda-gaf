@@ -70,6 +70,7 @@ static struct BuiltinInfo builtins[] = {
   { "%edit-update",               0, 0, 0, g_keys_edit_update },
   { "%edit-show-hidden",          0, 0, 0, g_keys_edit_show_hidden },
   { "%edit-find-text",            0, 0, 0, g_keys_edit_find },
+  { "%edit-find-patch",           0, 0, 0, g_keys_edit_find_patch },
   { "%edit-show-text",            0, 0, 0, g_keys_edit_show_text },
   { "%edit-hide-text",            0, 0, 0, g_keys_edit_hide_text },
   { "%edit-autonumber",           0, 0, 0, g_keys_edit_autonumber_text },

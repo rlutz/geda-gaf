@@ -1312,6 +1312,18 @@ gschem_page_view_zoom_extents (GschemPageView *view, const GList *objects)
   gschem_page_view_invalidate_all (view);
 }
 
+/*! \brief utility function to find the first parent that has a ->page
+ *
+ *  \param [in] object    The object
+ *  \return the parent object that had a non-NULL ->page
+ */
+OBJECT *gschem_page_get_page_object(OBJECT *object)
+{
+  OBJECT *page_obj = object;
+  while((page_obj != NULL) && (page_obj->page == NULL))
+    page_obj = page_obj->parent;
+  return page_obj;
+}
 
 /*! \brief Zoom in on a single text object
  *
@@ -1319,29 +1331,41 @@ gschem_page_view_zoom_extents (GschemPageView *view, const GList *objects)
  *  \param [in] object    The text object
  */
 void
-gschem_page_view_zoom_text (GschemPageView *view, OBJECT *object)
+gschem_page_view_zoom_text (GschemPageView *view, OBJECT *object, gboolean zoom_hidden)
 {
+  OBJECT *page_obj;
   int success;
   int x[2];
   int y[2];
   int viewport_center_x, viewport_center_y, viewport_width, viewport_height;
   double k;
+  int old_show_hidden;
 
   g_return_if_fail (view != NULL);
   GschemPageGeometry *geometry = gschem_page_view_get_page_geometry (view);
   g_return_if_fail (geometry != NULL);
 
   g_return_if_fail (object != NULL);
-  g_return_if_fail (object->page != NULL);
-  g_return_if_fail (object->page->toplevel != NULL);
+
+  page_obj = gschem_page_get_page_object(object);
+
+  g_return_if_fail (page_obj->page != NULL);
+  g_return_if_fail (page_obj->page->toplevel != NULL);
   g_return_if_fail (object->text != NULL);
 
-  success = world_get_single_object_bounds (object->page->toplevel,
+  if (zoom_hidden) {
+    old_show_hidden = page_obj->page->toplevel->show_hidden_text;
+    page_obj->page->toplevel->show_hidden_text = 1;
+  }
+
+  success = world_get_single_object_bounds (page_obj->page->toplevel,
                                             object,
                                             &x[0],
                                             &y[0],
                                             &x[1],
                                             &y[1]);
+  if (zoom_hidden)
+    page_obj->page->toplevel->show_hidden_text = old_show_hidden;
 
   if (success) {
 

@@ -70,6 +70,7 @@ SCM g_keys_edit_unembed(SCM rest);
 SCM g_keys_edit_update(SCM rest);
 SCM g_keys_edit_show_hidden(SCM rest);
 SCM g_keys_edit_find(SCM rest);
+SCM g_keys_edit_find_patch(SCM rest);
 SCM g_keys_edit_show_text(SCM rest);
 SCM g_keys_edit_hide_text(SCM rest);
 SCM g_keys_edit_autonumber_text(SCM rest);
@@ -283,6 +284,7 @@ void i_callback_edit_unembed(gpointer data, guint callback_action, GtkWidget *wi
 void i_callback_edit_update(gpointer data, guint callback_action, GtkWidget *widget);
 void i_callback_edit_show_hidden(gpointer data, guint callback_action, GtkWidget *widget);
 void i_callback_edit_find(gpointer data, guint callback_action, GtkWidget *widget);
+void i_callback_edit_find_patch(gpointer data, guint callback_action, GtkWidget *widget);
 void i_callback_edit_hide_text(gpointer data, guint callback_action, GtkWidget *widget);
 void i_callback_edit_show_text(gpointer data, guint callback_action, GtkWidget *widget);
 void i_callback_edit_autonumber_text(gpointer data, guint callback_action, GtkWidget *widget);
@@ -622,6 +624,7 @@ int generic_confirm_dialog(const char *);
 char * generic_filesel_dialog(const char *, const char *, gint);
 
 void find_text_dialog(GschemToplevel *w_current);
+void find_patch_dialog(GschemToplevel *w_current);
 void hide_text_dialog(GschemToplevel *w_current);
 void show_text_dialog(GschemToplevel *w_current);
 void major_changed_dialog(GschemToplevel* w_current);

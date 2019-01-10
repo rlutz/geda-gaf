@@ -135,5 +135,8 @@ gschem_page_view_WORLDtoSCREEN (GschemPageView *view, int x, int y, int *px, int
 void
 gschem_page_view_zoom_extents (GschemPageView *view, const GList *list);
 
+OBJECT*
+gschem_page_get_page_object(OBJECT *object);
+
 void
-gschem_page_view_zoom_text (GschemPageView *view, OBJECT *object);
+gschem_page_view_zoom_text (GschemPageView *view, OBJECT *object, gboolean zoom_hidden);
