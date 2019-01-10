@@ -332,7 +332,7 @@ assign_store_patch (GschemFindTextState *state, GSList *objects)
         final_object = i->data;
         if (final_object->type == OBJ_TEXT) {
           page_obj = gschem_page_get_page_object(final_object);
-          if (o_is_visible (page_obj->page->toplevel, page_obj)) {
+          if (o_is_visible (page_obj)) {
             found_pin = 1;
             break;
           }
