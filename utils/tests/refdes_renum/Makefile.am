@@ -1,4 +1,6 @@
-AM_TESTS_ENVIRONMENT = PERL=${PERL} top_srcdir=${srcdir}/../..
+PERL = perl
+
+AM_TESTS_ENVIRONMENT = REFDES_RENUM='$(PERL) -w $(abs_srcdir)/../../scripts/refdes_renum'
 
 check-local:
 	$(AM_TESTS_ENVIRONMENT) srcdir=$(srcdir) $(SHELL) $(srcdir)/run_tests.sh

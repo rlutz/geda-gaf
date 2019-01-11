@@ -88,12 +88,6 @@ here=`pwd`
 srcdir=${srcdir:-$here}
 srcdir=`cd $srcdir && pwd`
 
-top_srcdir=${top_srcdir:-$here/../..}
-top_srcdir=`cd $top_srcdir && pwd`
-
-# the perl program
-PERL=${PERL:-perl}
-
 GOLDEN_DIR=${srcdir}/outputs
 INPUT_DIR=${srcdir}/inputs
 
@@ -121,7 +115,6 @@ cat << EOF
 
 Starting tests in $here
 srcdir:     $srcdir
-top_srcdir: $top_srcdir
 INPUT_DIR:  ${INPUT_DIR}
 GOLDEN_DIR: ${GOLDEN_DIR}
 all_tests:

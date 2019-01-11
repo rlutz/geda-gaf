@@ -1,4 +1,6 @@
-AM_TESTS_ENVIRONMENT= PERL=${PERL} top_srcdir=${srcdir}/../..
+PERL = perl
+
+AM_TESTS_ENVIRONMENT = GXYRS='$(PERL) -I $(abs_srcdir)/../../gxyrs -w $(abs_builddir)/../../gxyrs/gxyrs'
 
 check-local:
 	$(AM_TESTS_ENVIRONMENT) srcdir=$(srcdir) $(SHELL) $(srcdir)/run_tests.sh

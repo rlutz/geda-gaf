@@ -3,20 +3,10 @@
 t=`basename "$1" .out`
 here=`pwd`
 
-top_srcdir=${top_srcdir:-$here/../..}
-top_srcdir=`cd $top_srcdir && pwd`
-top_builddir=${top_builddir:-$here/../..}
-top_builddir=`cd $top_builddir && pwd`
-gxyrs_srcdir=`cd $top_srcdir/gxyrs && pwd`
-
-# the perl program
-PERL=${PERL:-perl}
-
 GOLDEN_DIR=${srcdir}/outputs
 INPUT_DIR=${srcdir}/inputs
 
 TESTLIST=${srcdir}/tests.list
-GXYRS_SCRIPT=${top_builddir}/gxyrs/gxyrs
 
 rundir=${here}/${t}.run
 
@@ -51,9 +41,9 @@ fi
 #
 
 if test "X$adjust_file" = "X" -o "X$adjust_file" = "X " ; then
-    command="cd ${rundir} && ${PERL} -I${gxyrs_srcdir} -w ${GXYRS_SCRIPT} $args $files --output $out_file 2> $error_file"
+    command="cd ${rundir} && ${GXYRS} $args $files --output $out_file 2> $error_file"
 else
-    command="cd ${rundir} && ${PERL} -I${gxyrs_srcdir} -w ${GXYRS_SCRIPT} $args $files --adjust $adjust_file --output $out_file 2> $error_file"
+    command="cd ${rundir} && ${GXYRS} $args $files --adjust $adjust_file --output $out_file 2> $error_file"
 fi
 echo "Running test ${t}"
 echo $command

@@ -3,12 +3,6 @@
 t="$1"
 here=`pwd`
 
-top_srcdir=${top_srcdir:-$here/../..}
-top_srcdir=`cd $top_srcdir && pwd`
-
-# the perl program
-PERL=${PERL:-perl}
-
 GOLDEN_DIR=${srcdir}/outputs
 INPUT_DIR=${srcdir}/inputs
 
@@ -43,8 +37,8 @@ fi
 # run refdes_renum
 #
 
-echo "${PERL} -w ${top_srcdir}/scripts/refdes_renum $args $files"
-cd ${rundir} && ${PERL} -w ${top_srcdir}/scripts/refdes_renum $args $files
+echo "${REFDES_RENUM} $args $files"
+cd ${rundir} && ${REFDES_RENUM} $args $files
 rc=$?
 if test $rc -ne $code ; then
     echo "FAILED:  refdes_renum returned $rc which did not match the expected $code"
