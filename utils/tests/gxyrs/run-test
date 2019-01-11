@@ -18,7 +18,7 @@ INPUT_DIR=${srcdir}/inputs
 TESTLIST=${srcdir}/tests.list
 GXYRS_SCRIPT=${top_builddir}/gxyrs/gxyrs
 
-rundir=${here}/run
+rundir=${here}/${t}.run
 
 
 # figure out what files we need to copy for this test and what
