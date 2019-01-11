@@ -64,36 +64,34 @@ if test $rc -ne $code ; then
     exit 1
 fi
 
-for f in ${files} ; do
-    ref=${GOLDEN_DIR}/${t}-${f}
-    out=${rundir}/$out_file
-    ref_error=${GOLDEN_DIR}/${t}-${f}-error
-    error=${rundir}/$error_file
+ref=${GOLDEN_DIR}/${t}.out
+out=${rundir}/$out_file
+ref_error=${GOLDEN_DIR}/${t}.err
+error=${rundir}/$error_file
 
-    if test "X$regen" = "Xyes" ; then
-	cp ${out} ${ref}
-	echo "Regenerated ${ref}"
-	cp ${error} ${ref_error}
-	echo "Regenerated ${ref_error}"
-	status=0
-    elif test -f ${ref} ; then
-	if diff -w ${ref} ${out} >/dev/null ; then
-	    if diff -w ${ref_error} ${error} >/dev/null ; then
-		echo "PASS"
-		status=0
-	    else
-		echo "FAILED:  See diff -w ${ref_error} ${error}"
-		status=1
-	    fi
+if test "X$regen" = "Xyes" ; then
+    cp ${out} ${ref}
+    echo "Regenerated ${ref}"
+    cp ${error} ${ref_error}
+    echo "Regenerated ${ref_error}"
+    status=0
+elif test -f ${ref} ; then
+    if diff -w ${ref} ${out} >/dev/null ; then
+	if diff -w ${ref_error} ${error} >/dev/null ; then
+	    echo "PASS"
+	    status=0
 	else
-	    echo "FAILED:  See diff -w ${ref} ${out}"
+	    echo "FAILED:  See diff -w ${ref_error} ${error}"
 	    status=1
 	fi
     else
-	echo "No reference file.  Skipping"
-	status=77
+	echo "FAILED:  See diff -w ${ref} ${out}"
+	status=1
     fi
-done
+else
+    echo "No reference file.  Skipping"
+    status=77
+fi
 
 cd $here
 
