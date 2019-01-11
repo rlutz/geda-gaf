@@ -6,4 +6,3 @@ it is allowed to be fixed.
 If you require additional input files, add them in the inputs/ directory.
 Reference output files go in outputs/.  Add the test description to
 tests.list.
-
