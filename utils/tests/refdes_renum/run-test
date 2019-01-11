@@ -69,5 +69,5 @@ for f in ${files} ; do
     fi
 done
 
-rm -fr "${rundir}"
+test ${status} -ne 0 || rm -fr "${rundir}"
 exit ${status}

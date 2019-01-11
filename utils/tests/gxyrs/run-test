@@ -63,15 +63,15 @@ ref_out="${GOLDEN_DIR}/${t}.out"
 ref_err="${GOLDEN_DIR}/${t}.err"
 gen_out="${rundir}/stdout"
 gen_err="${rundir}/stderr"
-status=0
 
 if test "X${REGEN}" = "X1" ; then
     cp "${gen_out}" "${ref_out}"
     cp "${gen_err}" "${ref_err}"
 else
+    status=0
     diff -wu "${ref_out}" "${gen_out}" || status=1
     diff -wu "${ref_err}" "${gen_err}" || status=1
+    test ${status} = 0 || exit 1
 fi
 
 rm -fr "${rundir}"
-exit ${status}
