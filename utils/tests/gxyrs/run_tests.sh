@@ -158,7 +158,7 @@ for t in $all_tests ; do
 
     tot=`expr $tot + 1`
 
-    REGEN="${REGEN}" ${srcdir}/run-test "${t}"
+    REGEN="${REGEN}" ${srcdir}/run-test "${GOLDEN_DIR}/${t}.out"
 
     case "$?" in
 	0) pass=`expr $pass + 1` ;;

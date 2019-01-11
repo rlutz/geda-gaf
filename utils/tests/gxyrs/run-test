@@ -1,6 +1,6 @@
 #!/bin/sh
 
-t="$1"
+t=`basename "$1" .out`
 here=`pwd`
 
 top_srcdir=${top_srcdir:-$here/../..}
