@@ -3,61 +3,61 @@
 t=`basename "$1"`
 here=`pwd`
 
-GOLDEN_DIR=${srcdir}/outputs
-INPUT_DIR=${srcdir}/inputs
+GOLDEN_DIR="${srcdir}/outputs"
+INPUT_DIR="${srcdir}/inputs"
 
-TESTLIST=${srcdir}/tests.list
+TESTLIST="${srcdir}/tests.list"
 
-rundir=${here}/${t}.run
+rundir="${here}/${t}.run"
 
 
 # figure out what files we need to copy for this test and what
 # arguments to feed refdes_renum
-files=`grep "^[ \t]*${t}[ \t]*|" $TESTLIST | awk 'BEGIN{FS="|"} {print $2}'`
-args=`grep "^[ \t]*${t}[ \t]*|" $TESTLIST | awk 'BEGIN{FS="|"} {print $3}'`
-code=`grep "^[ \t]*${t}[ \t]*|" $TESTLIST | awk 'BEGIN{FS="|"} {print $4}'`
-if test "X$code" = "X" ; then
+files=`grep "^[ \t]*${t}[ \t]*|" "${TESTLIST}" | awk 'BEGIN{FS="|"} {print $2}'`
+args=`grep "^[ \t]*${t}[ \t]*|" "${TESTLIST}" | awk 'BEGIN{FS="|"} {print $3}'`
+code=`grep "^[ \t]*${t}[ \t]*|" "${TESTLIST}" | awk 'BEGIN{FS="|"} {print $4}'`
+if test "X${code}" = "X" ; then
     code=0
 fi
 
 
 # create temporary run directory
-if test ! -d $rundir ; then
-    mkdir -p $rundir
+if test ! -d "${rundir}" ; then
+    mkdir -p "${rundir}"
 fi
 
 # Create the files needed
-if test ! -z "$files" ; then
-    for f in $files ; do
-	cp ${INPUT_DIR}/${f} ${rundir}
-	chmod 644 ${rundir}/${f}
+if test ! -z "${files}" ; then
+    for f in ${files} ; do
+	cp "${INPUT_DIR}/${f}" "${rundir}"
+	chmod 644 "${rundir}/${f}"
     done
 fi
 
 # run refdes_renum
 #
 
-echo "${REFDES_RENUM} $args $files"
-cd ${rundir} && ${REFDES_RENUM} $args $files
+echo "${REFDES_RENUM} ${args} ${files}"
+cd "${rundir}" && ${REFDES_RENUM} ${args} ${files}
 rc=$?
-if test $rc -ne $code ; then
-    echo "FAILED:  refdes_renum returned $rc which did not match the expected $code"
+if test ${rc} -ne "${code}" ; then
+    echo "FAILED:  refdes_renum returned ${rc} which did not match the expected ${code}"
     exit 1
 fi
 
-cd $here
+cd "${here}"
 
 status=0
 
 for f in ${files} ; do
-    ref=${GOLDEN_DIR}/${t}/${f}
-    out=${rundir}/${f}
+    ref="${GOLDEN_DIR}/${t}/${f}"
+    out="${rundir}/${f}"
 
-    if test "X$REGEN" = "X1" ; then
-	cp ${out} ${ref}
+    if test "X${REGEN}" = "X1" ; then
+	cp "${out}" "${ref}"
 	echo "Regenerated ${ref}"
-    elif test -f ${ref} ; then
-	if diff -w ${ref} ${out} >/dev/null ; then
+    elif test -f "${ref}" ; then
+	if diff -w "${ref}" "${out}" >/dev/null ; then
 	    echo "PASS"
 	else
 	    echo "FAILED:  See diff -w ${ref} ${out}"
@@ -70,6 +70,6 @@ for f in ${files} ; do
 done
 
 # clean up the rundirectory
-rm -fr ${rundir}
+rm -fr "${rundir}"
 
 exit ${status}
