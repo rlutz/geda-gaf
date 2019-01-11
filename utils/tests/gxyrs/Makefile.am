@@ -243,10 +243,10 @@ output_files = \
 	outputs/translate_bad_col_num1.err \
 	outputs/translate_bad_col_num2.out \
 	outputs/translate_bad_col_num2.err \
-	outputs/translate_col_chg_all_val_plus_k.out \
-	outputs/translate_col_chg_all_val_plus_k.err \
 	outputs/translate_col_change_R10_value.out \
 	outputs/translate_col_change_R10_value.err \
+	outputs/translate_col_chg_all_val_plus_k.out \
+	outputs/translate_col_chg_all_val_plus_k.err \
 	outputs/translate_col_no_match1.out \
 	outputs/translate_col_no_match1.err \
 	outputs/translate_col_no_match2.out \
