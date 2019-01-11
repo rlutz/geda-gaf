@@ -57,7 +57,7 @@ for f in ${files} ; do
     ref=${GOLDEN_DIR}/${t}/${f}
     out=${rundir}/${f}
 
-    if test "X$regen" = "Xyes" ; then
+    if test "X$REGEN" = "X1" ; then
 	cp ${out} ${ref}
 	echo "Regenerated ${ref}"
     elif test -f ${ref} ; then

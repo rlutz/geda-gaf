@@ -69,7 +69,7 @@ out=${rundir}/$out_file
 ref_error=${GOLDEN_DIR}/${t}.err
 error=${rundir}/$error_file
 
-if test "X$regen" = "Xyes" ; then
+if test "X$REGEN" = "X1" ; then
     cp ${out} ${ref}
     echo "Regenerated ${ref}"
     cp ${error} ${ref_error}

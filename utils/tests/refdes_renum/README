@@ -6,3 +6,11 @@ it is allowed to be fixed.
 If you require additional input files, add them in the inputs/ directory.
 Reference output files go in outputs/.  Add the test description to
 tests.list.
+
+To regenerate the reference files, type:
+
+	make check REGEN=1
+
+Use this with caution. In particular, all differences should be noted
+and understood. You must hand verify the results before committing to
+the repository.

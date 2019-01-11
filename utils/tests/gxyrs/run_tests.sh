@@ -22,8 +22,6 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  
 # 02110-1301, USA.
 
-regen=no
-
 usage() {
 cat << EOF
 
@@ -68,7 +66,7 @@ do
     -r|--regen)
 	# regenerate the 'golden' output files.  Use this with caution.
 	# In particular, all differences should be noted and understood.
-	regen=yes
+	REGEN=1
 	shift
 	;;
 
@@ -160,7 +158,7 @@ for t in $all_tests ; do
 
     tot=`expr $tot + 1`
 
-    regen="${regen}" ${srcdir}/run-test "${t}"
+    REGEN="${REGEN}" ${srcdir}/run-test "${t}"
 
     case "$?" in
 	0) pass=`expr $pass + 1` ;;
