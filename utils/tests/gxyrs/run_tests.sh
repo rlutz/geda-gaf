@@ -101,8 +101,6 @@ gxyrs_srcdir=`cd $top_srcdir/gxyrs && pwd`
 # the perl program
 PERL=${PERL:-perl}
 
-rundir=${here}/run
-
 GOLDEN_DIR=${srcdir}/outputs
 INPUT_DIR=${srcdir}/inputs
 
@@ -160,101 +158,15 @@ for t in $all_tests ; do
     # strip any leading garbage
     t=`echo $t | sed 's;^\*;;g'`
 
-    # figure out what files we need to copy for this test and what
-    # arguments to feed refdes_renum
-    files=`grep "^[ \t]*${t}[ \t]*|" $TESTLIST | awk 'BEGIN{FS="|"} {print $2}'`
-    adjust_file=`grep "^[ \t]*${t}[ \t]*|" $TESTLIST | awk 'BEGIN{FS="|"} {print $3}'`
-    args=`grep "^[ \t]*${t}[ \t]*|" $TESTLIST | awk 'BEGIN{FS="|"} {print $4}'`
-    code=`grep "^[ \t]*${t}[ \t]*|" $TESTLIST | awk 'BEGIN{FS="|"} {print $5}'`
-    out_file='out.txt'
-    error_file='error.txt'
-    if test "X$code" = "X" ; then
-	code=0
-    fi
-
-
     tot=`expr $tot + 1`
 
-    # create temporary run directory
-    if test ! -d $rundir ; then
-	mkdir -p $rundir
-    fi
+    regen="${regen}" ${srcdir}/run-test "${t}"
 
-    # Create the files needed
-    if test ! -z "$files" ; then
-	for f in $files $adjust_file; do
-	    cp ${INPUT_DIR}/${f} ${rundir}
-	    chmod 644 ${rundir}/${f}
-	done
-    fi
-    
-    # run gxyrs
-    #
-    
-    if test "X$adjust_file" = "X" -o "X$adjust_file" = "X " ; then
-	command="cd ${rundir} && ${PERL} -I${gxyrs_srcdir} -w ${GXYRS_SCRIPT} $args $files --output $out_file 2> $error_file"
-    else
-	command="cd ${rundir} && ${PERL} -I${gxyrs_srcdir} -w ${GXYRS_SCRIPT} $args $files --adjust $adjust_file --output $out_file 2> $error_file"
-    fi
-    echo "Running test ${t}"
-    echo $command
-    eval $command
-    rc=$?
-    if test $rc -ne $code ; then
-	echo "FAILED:  gxyrs returned $rc which did not match the expected $code"
-	fail=`expr $fail + 1`
-	continue
-    fi
-
-    good=1
-    bad=0
-    soso=0
-    for f in ${files} ; do
-	ref=${GOLDEN_DIR}/${t}-${f}
-	out=${rundir}/$out_file
-	ref_error=${GOLDEN_DIR}/${t}-${f}-error
-	error=${rundir}/$error_file
-
-	if test "X$regen" = "Xyes" ; then
-	    cp ${out} ${ref}
-	    echo "Regenerated ${ref}"
-	    cp ${error} ${ref_error}
-	    echo "Regenerated ${ref_error}"
-	elif test -f ${ref} ; then
-	    if diff -w ${ref} ${out} >/dev/null ; then
-		if diff -w ${ref_error} ${error} >/dev/null ; then
-		    echo "PASS"
-		else
-		    echo "FAILED:  See diff -w ${ref_error} ${error}"
-		    fail=`expr $fail + 1`
-		    bad=1
-		    good=0
-	    fi
-	    else
-		echo "FAILED:  See diff -w ${ref} ${out}"
-		fail=`expr $fail + 1`
-		bad=1
-		good=0
-	    fi
-	else
-	    echo "No reference file.  Skipping"
-	    good=0
-	    soso=1
-	fi
-    done
-    if test $soso -ne 0 ; then
-	good=0
-	bad=0
-    fi
-    pass=`expr $pass + $good`
-    fail=`expr $fail + $bad`
-    skip=`expr $skip + $soso`
-
-    cd $here
-    
-    # clean up the rundirectory
-    rm -fr ${rundir}
-
+    case "$?" in
+	0) pass=`expr $pass + 1` ;;
+	1) fail=`expr $fail + 1` ;;
+	77) skip=`expr $skip + 1` ;;
+    esac
 done
 
 echo "Passed $pass, failed $fail, skipped $skip out of $tot tests."
