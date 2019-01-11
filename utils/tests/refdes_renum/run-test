@@ -1,32 +1,31 @@
 #!/bin/sh
 
 t=`basename "$1"`
-here=`pwd`
-
-GOLDEN_DIR="${srcdir}/outputs"
-INPUT_DIR="${srcdir}/inputs"
 
 TESTLIST="${srcdir}/tests.list"
+INPUT_DIR="${srcdir}/inputs"
+GOLDEN_DIR="${srcdir}/outputs"
 
-rundir="${here}/${t}.run"
+rundir="${t}.run"
 
 
 # figure out what files we need to copy for this test and what
 # arguments to feed refdes_renum
+
 files=`grep "^[ \t]*${t}[ \t]*|" "${TESTLIST}" | awk 'BEGIN{FS="|"} {print $2}'`
 args=`grep "^[ \t]*${t}[ \t]*|" "${TESTLIST}" | awk 'BEGIN{FS="|"} {print $3}'`
 code=`grep "^[ \t]*${t}[ \t]*|" "${TESTLIST}" | awk 'BEGIN{FS="|"} {print $4}'`
+
 if test "X${code}" = "X" ; then
     code=0
 fi
 
 
-# create temporary run directory
-if test ! -d "${rundir}" ; then
-    mkdir -p "${rundir}"
-fi
+# create temporary run directory with the needed files
 
-# Create the files needed
+rm -fr "${rundir}"
+mkdir -p "${rundir}"
+
 if test ! -z "${files}" ; then
     for f in ${files} ; do
 	cp "${INPUT_DIR}/${f}" "${rundir}"
@@ -34,18 +33,25 @@ if test ! -z "${files}" ; then
     done
 fi
 
+
 # run refdes_renum
-#
+
+here=`pwd`
+cd "${rundir}"
 
 echo "${REFDES_RENUM} ${args} ${files}"
-cd "${rundir}" && ${REFDES_RENUM} ${args} ${files}
+${REFDES_RENUM} ${args} ${files}
+
 rc=$?
 if test ${rc} -ne "${code}" ; then
-    echo "FAILED:  refdes_renum returned ${rc} which did not match the expected ${code}"
+    echo "refdes_renum returned ${rc} which did not match the expected ${code}"
     exit 1
 fi
 
 cd "${here}"
+
+
+# check output and clean up
 
 status=0
 
@@ -55,21 +61,13 @@ for f in ${files} ; do
 
     if test "X${REGEN}" = "X1" ; then
 	cp "${out}" "${ref}"
-	echo "Regenerated ${ref}"
     elif test -f "${ref}" ; then
-	if diff -w "${ref}" "${out}" >/dev/null ; then
-	    echo "PASS"
-	else
-	    echo "FAILED:  See diff -w ${ref} ${out}"
-	    status=1
-	fi
+	diff -wu "${ref}" "${out}" || status=1
     else
 	echo "No reference file.  Skipping"
-	status=77
+	test ${status} -ne 0 || status=77
     fi
 done
 
-# clean up the rundirectory
 rm -fr "${rundir}"
-
 exit ${status}

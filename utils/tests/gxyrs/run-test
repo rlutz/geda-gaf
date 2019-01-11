@@ -1,35 +1,32 @@
 #!/bin/sh
 
 t=`basename "$1" .out`
-here=`pwd`
-
-GOLDEN_DIR="${srcdir}/outputs"
-INPUT_DIR="${srcdir}/inputs"
 
 TESTLIST="${srcdir}/tests.list"
+INPUT_DIR="${srcdir}/inputs"
+GOLDEN_DIR="${srcdir}/outputs"
 
-rundir="${here}/${t}.run"
+rundir="${t}.run"
 
 
 # figure out what files we need to copy for this test and what
 # arguments to feed refdes_renum
+
 files=`grep "^[ \t]*${t}[ \t]*|" "${TESTLIST}" | awk 'BEGIN{FS="|"} {print $2}'`
 adjust_file=`grep "^[ \t]*${t}[ \t]*|" "${TESTLIST}" | awk 'BEGIN{FS="|"} {print $3}'`
 args=`grep "^[ \t]*${t}[ \t]*|" "${TESTLIST}" | awk 'BEGIN{FS="|"} {print $4}'`
 code=`grep "^[ \t]*${t}[ \t]*|" "${TESTLIST}" | awk 'BEGIN{FS="|"} {print $5}'`
-out_file='out.txt'
-error_file='error.txt'
+
 if test "X${code}" = "X" ; then
     code=0
 fi
 
 
-# create temporary run directory
-if test ! -d "${rundir}" ; then
-    mkdir -p "${rundir}"
-fi
+# create temporary run directory with the needed files
 
-# Create the files needed
+rm -fr "${rundir}"
+mkdir -p "${rundir}"
+
 if test ! -z "${files}" ; then
     for f in ${files} ${adjust_file}; do
 	cp "${INPUT_DIR}/${f}" "${rundir}"
@@ -37,55 +34,44 @@ if test ! -z "${files}" ; then
     done
 fi
 
+
 # run gxyrs
-#
+
+here=`pwd`
+cd "${rundir}"
 
 if test "X${adjust_file}" = "X" -o "X${adjust_file}" = "X " ; then
-    command="cd '${rundir}' && ${GXYRS} ${args} ${files} --output ${out_file} 2> ${error_file}"
+    command="${GXYRS} ${args} ${files} --output stdout 2> stderr"
 else
-    command="cd '${rundir}' && ${GXYRS} ${args} ${files} --adjust ${adjust_file} --output ${out_file} 2> ${error_file}"
+    command="${GXYRS} ${args} ${files} --adjust ${adjust_file} --output stdout 2> stderr"
 fi
-echo "Running test ${t}"
 echo "${command}"
 eval "${command}"
+
 rc=$?
 if test ${rc} -ne "${code}" ; then
-    echo "FAILED:  gxyrs returned ${rc} which did not match the expected ${code}"
+    echo "gxyrs returned ${rc} which did not match the expected ${code}"
     exit 1
 fi
 
 cd "${here}"
 
-ref="${GOLDEN_DIR}/${t}.out"
-out="${rundir}/${out_file}"
-ref_error="${GOLDEN_DIR}/${t}.err"
-error="${rundir}/${error_file}"
+
+# check output and clean up
+
+ref_out="${GOLDEN_DIR}/${t}.out"
+ref_err="${GOLDEN_DIR}/${t}.err"
+gen_out="${rundir}/stdout"
+gen_err="${rundir}/stderr"
+status=0
 
 if test "X${REGEN}" = "X1" ; then
-    cp "${out}" "${ref}"
-    echo "Regenerated ${ref}"
-    cp "${error}" "${ref_error}"
-    echo "Regenerated ${ref_error}"
-    status=0
-elif test -f "${ref}" ; then
-    if diff -w "${ref}" "${out}" >/dev/null ; then
-	if diff -w "${ref_error}" "${error}" >/dev/null ; then
-	    echo "PASS"
-	    status=0
-	else
-	    echo "FAILED:  See diff -w ${ref_error} ${error}"
-	    status=1
-	fi
-    else
-	echo "FAILED:  See diff -w ${ref} ${out}"
-	status=1
-    fi
+    cp "${gen_out}" "${ref_out}"
+    cp "${gen_err}" "${ref_err}"
 else
-    echo "No reference file.  Skipping"
-    status=77
+    diff -wu "${ref_out}" "${gen_out}" || status=1
+    diff -wu "${ref_err}" "${gen_err}" || status=1
 fi
 
-# clean up the rundirectory
 rm -fr "${rundir}"
-
 exit ${status}
