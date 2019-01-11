@@ -1,11 +1,15 @@
 PERL = perl
 
+TEST_EXTENSIONS = .out
+
 AM_TESTS_ENVIRONMENT = GXYRS='$(PERL) -I $(abs_srcdir)/../../gxyrs -w $(abs_builddir)/../../gxyrs/gxyrs'
+OUT_LOG_COMPILER = $(srcdir)/run-test
 
-check-local:
-	$(AM_TESTS_ENVIRONMENT) srcdir=$(srcdir) $(SHELL) $(srcdir)/run_tests.sh
+dist_check_SCRIPTS = run-test
+EXTRA_DIST = $(input_files) $(TESTS) $(error_files) tests.list README
 
-EXTRA_DIST = $(input_files) $(output_files) run_tests.sh tests.list README
+mostlyclean-local:
+	rm -rf *.run
 
 input_files = \
 	inputs/do_nothing.pl \
@@ -16,246 +20,247 @@ input_files = \
 	inputs/report1.txt \
 	inputs/report2.txt
 
-output_files = \
-	outputs/chunits_2mm_6col_tab_notit.out \
-	outputs/chunits_2mm_6col_tab_notit.err \
+TESTS = outputs/chunits_2mm_6col_tab_notit.out \
 	outputs/chunits_already_done.out \
-	outputs/chunits_already_done.err \
 	outputs/chunits_bad_col_num1.out \
-	outputs/chunits_bad_col_num1.err \
 	outputs/chunits_bad_col_num2.out \
-	outputs/chunits_bad_col_num2.err \
 	outputs/chunits_col_num_too_high.out \
-	outputs/chunits_col_num_too_high.err \
 	outputs/chunits_done_notitle.out \
-	outputs/chunits_done_notitle.err \
 	outputs/chunits_negative_col_num.out \
-	outputs/chunits_negative_col_num.err \
 	outputs/chunits_no_units.out \
-	outputs/chunits_no_units.err \
 	outputs/chunits_to_mil_2cols.out \
-	outputs/chunits_to_mil_2cols.err \
 	outputs/chunits_to_mil.out \
-	outputs/chunits_to_mil.err \
 	outputs/chunits_to_mm_2cols.out \
-	outputs/chunits_to_mm_2cols.err \
 	outputs/chunits_to_mm_6col_tab.out \
-	outputs/chunits_to_mm_6col_tab.err \
 	outputs/chunits_to_mm_no_title.out \
-	outputs/chunits_to_mm_no_title.err \
 	outputs/chunits_to_mm.out \
-	outputs/chunits_to_mm.err \
 	outputs/chunits_units_not_supported.out \
-	outputs/chunits_units_not_supported.err \
 	outputs/del_case_insens1.out \
-	outputs/del_case_insens1.err \
 	outputs/del_case_insens2.out \
-	outputs/del_case_insens2.err \
 	outputs/del_case_sens1.out \
-	outputs/del_case_sens1.err \
 	outputs/del_case_sens2.out \
-	outputs/del_case_sens2.err \
 	outputs/del_case_sens3.out \
-	outputs/del_case_sens3.err \
 	outputs/del_case_sens4.out \
-	outputs/del_case_sens4.err \
 	outputs/del_check_cols_no_match.out \
-	outputs/del_check_cols_no_match.err \
 	outputs/del_check_cols_return_minus1.out \
-	outputs/del_check_cols_return_minus1.err \
 	outputs/do_nothing.out \
-	outputs/do_nothing.err \
 	outputs/do_nothing_tabulated.out \
-	outputs/do_nothing_tabulated.err \
 	outputs/footprint_pcb1.out \
-	outputs/footprint_pcb1.err \
 	outputs/footprint_protel1.out \
-	outputs/footprint_protel1.err \
 	outputs/footprint_report1.out \
-	outputs/footprint_report1.err \
 	outputs/insert_col_bad_col_num1.out \
-	outputs/insert_col_bad_col_num1.err \
 	outputs/insert_col_bad_col_num2.out \
-	outputs/insert_col_bad_col_num2.err \
 	outputs/insert_col_col_num_too_high.out \
-	outputs/insert_col_col_num_too_high.err \
 	outputs/insert_col_first_pos.out \
-	outputs/insert_col_first_pos.err \
 	outputs/insert_col_negative_col_num.out \
-	outputs/insert_col_negative_col_num.err \
 	outputs/insert_col_second_pos.out \
-	outputs/insert_col_second_pos.err \
 	outputs/match_col_insens1.out \
-	outputs/match_col_insens1.err \
 	outputs/match_col_insens2.out \
-	outputs/match_col_insens2.err \
 	outputs/match_col_insens3.out \
-	outputs/match_col_insens3.err \
 	outputs/match_col_insens4.out \
-	outputs/match_col_insens4.err \
 	outputs/match_col_is_negative.out \
-	outputs/match_col_is_negative.err \
 	outputs/match_col_is_not_num2.out \
-	outputs/match_col_is_not_num2.err \
 	outputs/match_col_is_not_num.out \
-	outputs/match_col_is_not_num.err \
 	outputs/match_col_is_real.out \
-	outputs/match_col_is_real.err \
 	outputs/match_col_is_too_high.out \
-	outputs/match_col_is_too_high.err \
 	outputs/match_col_sens1.out \
-	outputs/match_col_sens1.err \
 	outputs/match_col_sens2.out \
-	outputs/match_col_sens2.err \
 	outputs/match_col_sens3.out \
-	outputs/match_col_sens3.err \
 	outputs/match_col_sens4.out \
-	outputs/match_col_sens4.err \
 	outputs/match_no_args.out \
-	outputs/match_no_args.err \
 	outputs/multiply_bad_col_num1.out \
-	outputs/multiply_bad_col_num1.err \
 	outputs/multiply_bad_col_num2.out \
-	outputs/multiply_bad_col_num2.err \
 	outputs/multiply_col_num_too_high.out \
-	outputs/multiply_col_num_too_high.err \
 	outputs/multiply_integer_factor.out \
-	outputs/multiply_integer_factor.err \
 	outputs/multiply_negative_col_num.out \
-	outputs/multiply_negative_col_num.err \
 	outputs/multiply_negative_integer_factor.out \
-	outputs/multiply_negative_integer_factor.err \
 	outputs/multiply_negative_real_factor.out \
-	outputs/multiply_negative_real_factor.err \
 	outputs/multiply_real_factor.out \
-	outputs/multiply_real_factor.err \
 	outputs/multiply_with_checklist.out \
-	outputs/multiply_with_checklist.err \
 	outputs/offset_bad_col_num1.out \
-	outputs/offset_bad_col_num1.err \
 	outputs/offset_bad_col_num2.out \
-	outputs/offset_bad_col_num2.err \
 	outputs/offset_check_cols_match.out \
-	outputs/offset_check_cols_match.err \
 	outputs/offset_check_cols_no_match.out \
-	outputs/offset_check_cols_no_match.err \
 	outputs/offset_check_cols_return_minus1.out \
-	outputs/offset_check_cols_return_minus1.err \
 	outputs/offset_col_num_too_high.out \
-	outputs/offset_col_num_too_high.err \
 	outputs/offset_match_negative_offset.out \
-	outputs/offset_match_negative_offset.err \
 	outputs/offset_match_negative_real_offset.out \
-	outputs/offset_match_negative_real_offset.err \
 	outputs/offset_match_no_units_in_file.out \
-	outputs/offset_match_no_units_in_file.err \
 	outputs/offset_match_real_offset.out \
-	outputs/offset_match_real_offset.err \
 	outputs/offset_negative_col_num.out \
-	outputs/offset_negative_col_num.err \
 	outputs/output_delimiter.out \
-	outputs/output_delimiter.err \
 	outputs/panelize_bad_ref_col_num1.out \
-	outputs/panelize_bad_ref_col_num1.err \
 	outputs/panelize_bad_ref_col_num2.out \
-	outputs/panelize_bad_ref_col_num2.err \
 	outputs/panelize_bad_x_col_num1.out \
-	outputs/panelize_bad_x_col_num1.err \
 	outputs/panelize_bad_x_col_num2.out \
-	outputs/panelize_bad_x_col_num2.err \
 	outputs/panelize_bad_y_col_num1.out \
-	outputs/panelize_bad_y_col_num1.err \
 	outputs/panelize_bad_y_col_num2.out \
-	outputs/panelize_bad_y_col_num2.err \
 	outputs/panelize_negative_ref_col_num.out \
-	outputs/panelize_negative_ref_col_num.err \
 	outputs/panelize_negative_x_col_num.out \
-	outputs/panelize_negative_x_col_num.err \
 	outputs/panelize_negative_y_col_num.out \
-	outputs/panelize_negative_y_col_num.err \
 	outputs/panelize_ref_col_num_too_high.out \
-	outputs/panelize_ref_col_num_too_high.err \
 	outputs/panelize_tabulate.out \
-	outputs/panelize_tabulate.err \
 	outputs/panelize_x_col_num_too_high.out \
-	outputs/panelize_x_col_num_too_high.err \
 	outputs/panelize_y_col_num_too_high.out \
-	outputs/panelize_y_col_num_too_high.err \
 	outputs/process_comment.out \
-	outputs/process_comment.err \
 	outputs/rotate_bad_col_num1.out \
-	outputs/rotate_bad_col_num1.err \
 	outputs/rotate_bad_col_num2.out \
-	outputs/rotate_bad_col_num2.err \
 	outputs/rotate_case_insens.out \
-	outputs/rotate_case_insens.err \
 	outputs/rotate_case_sens.out \
-	outputs/rotate_case_sens.err \
 	outputs/rotate_check_cols_no_match.out \
-	outputs/rotate_check_cols_no_match.err \
 	outputs/rotate_check_cols_return_minus1.out \
-	outputs/rotate_check_cols_return_minus1.err \
 	outputs/rotate_col_num_too_high.out \
-	outputs/rotate_col_num_too_high.err \
 	outputs/rotate_negative_angle.out \
-	outputs/rotate_negative_angle.err \
 	outputs/rotate_negative_col_num.out \
-	outputs/rotate_negative_col_num.err \
 	outputs/rotate_negative_real_angle.out \
-	outputs/rotate_negative_real_angle.err \
 	outputs/rotate_real_angle.out \
-	outputs/rotate_real_angle.err \
 	outputs/subst_bad_col_num1.out \
-	outputs/subst_bad_col_num1.err \
 	outputs/subst_bad_col_num2.out \
-	outputs/subst_bad_col_num2.err \
 	outputs/subst_check_cols_match.out \
-	outputs/subst_check_cols_match.err \
 	outputs/subst_check_cols_no_match.out \
-	outputs/subst_check_cols_no_match.err \
 	outputs/subst_check_cols_return_minus1.out \
-	outputs/subst_check_cols_return_minus1.err \
 	outputs/subst_col_num_too_high.out \
-	outputs/subst_col_num_too_high.err \
 	outputs/subst_negative_col_num.out \
-	outputs/subst_negative_col_num.err \
 	outputs/swap_cols_bad_col1_num1.out \
-	outputs/swap_cols_bad_col1_num1.err \
 	outputs/swap_cols_bad_col1_num2.out \
-	outputs/swap_cols_bad_col1_num2.err \
 	outputs/swap_cols_bad_col2_num1.out \
-	outputs/swap_cols_bad_col2_num1.err \
 	outputs/swap_cols_bad_col2_num2.out \
-	outputs/swap_cols_bad_col2_num2.err \
 	outputs/swap_cols_col1_num_too_high.out \
-	outputs/swap_cols_col1_num_too_high.err \
 	outputs/swap_cols_col2_num_too_high.out \
-	outputs/swap_cols_col2_num_too_high.err \
 	outputs/swap_cols_negative_col1_num.out \
-	outputs/swap_cols_negative_col1_num.err \
 	outputs/swap_cols_negative_col2_num.out \
-	outputs/swap_cols_negative_col2_num.err \
 	outputs/swap_cols_no_matchlist.out \
-	outputs/swap_cols_no_matchlist.err \
 	outputs/swap_cols_no_match.out \
-	outputs/swap_cols_no_match.err \
 	outputs/swap_cols_with_match.out \
-	outputs/swap_cols_with_match.err \
 	outputs/translate_bad_col_num1.out \
-	outputs/translate_bad_col_num1.err \
 	outputs/translate_bad_col_num2.out \
-	outputs/translate_bad_col_num2.err \
 	outputs/translate_col_change_R10_value.out \
-	outputs/translate_col_change_R10_value.err \
 	outputs/translate_col_chg_all_val_plus_k.out \
-	outputs/translate_col_chg_all_val_plus_k.err \
 	outputs/translate_col_no_match1.out \
-	outputs/translate_col_no_match1.err \
 	outputs/translate_col_no_match2.out \
-	outputs/translate_col_no_match2.err \
 	outputs/translate_col_num_too_high.out \
-	outputs/translate_col_num_too_high.err \
 	outputs/translate_col_R10_value_case_insens.out \
+	outputs/translate_negative_col_num.out
+
+error_files = \
+	outputs/chunits_2mm_6col_tab_notit.err \
+	outputs/chunits_already_done.err \
+	outputs/chunits_bad_col_num1.err \
+	outputs/chunits_bad_col_num2.err \
+	outputs/chunits_col_num_too_high.err \
+	outputs/chunits_done_notitle.err \
+	outputs/chunits_negative_col_num.err \
+	outputs/chunits_no_units.err \
+	outputs/chunits_to_mil_2cols.err \
+	outputs/chunits_to_mil.err \
+	outputs/chunits_to_mm_2cols.err \
+	outputs/chunits_to_mm_6col_tab.err \
+	outputs/chunits_to_mm_no_title.err \
+	outputs/chunits_to_mm.err \
+	outputs/chunits_units_not_supported.err \
+	outputs/del_case_insens1.err \
+	outputs/del_case_insens2.err \
+	outputs/del_case_sens1.err \
+	outputs/del_case_sens2.err \
+	outputs/del_case_sens3.err \
+	outputs/del_case_sens4.err \
+	outputs/del_check_cols_no_match.err \
+	outputs/del_check_cols_return_minus1.err \
+	outputs/do_nothing.err \
+	outputs/do_nothing_tabulated.err \
+	outputs/footprint_pcb1.err \
+	outputs/footprint_protel1.err \
+	outputs/footprint_report1.err \
+	outputs/insert_col_bad_col_num1.err \
+	outputs/insert_col_bad_col_num2.err \
+	outputs/insert_col_col_num_too_high.err \
+	outputs/insert_col_first_pos.err \
+	outputs/insert_col_negative_col_num.err \
+	outputs/insert_col_second_pos.err \
+	outputs/match_col_insens1.err \
+	outputs/match_col_insens2.err \
+	outputs/match_col_insens3.err \
+	outputs/match_col_insens4.err \
+	outputs/match_col_is_negative.err \
+	outputs/match_col_is_not_num2.err \
+	outputs/match_col_is_not_num.err \
+	outputs/match_col_is_real.err \
+	outputs/match_col_is_too_high.err \
+	outputs/match_col_sens1.err \
+	outputs/match_col_sens2.err \
+	outputs/match_col_sens3.err \
+	outputs/match_col_sens4.err \
+	outputs/match_no_args.err \
+	outputs/multiply_bad_col_num1.err \
+	outputs/multiply_bad_col_num2.err \
+	outputs/multiply_col_num_too_high.err \
+	outputs/multiply_integer_factor.err \
+	outputs/multiply_negative_col_num.err \
+	outputs/multiply_negative_integer_factor.err \
+	outputs/multiply_negative_real_factor.err \
+	outputs/multiply_real_factor.err \
+	outputs/multiply_with_checklist.err \
+	outputs/offset_bad_col_num1.err \
+	outputs/offset_bad_col_num2.err \
+	outputs/offset_check_cols_match.err \
+	outputs/offset_check_cols_no_match.err \
+	outputs/offset_check_cols_return_minus1.err \
+	outputs/offset_col_num_too_high.err \
+	outputs/offset_match_negative_offset.err \
+	outputs/offset_match_negative_real_offset.err \
+	outputs/offset_match_no_units_in_file.err \
+	outputs/offset_match_real_offset.err \
+	outputs/offset_negative_col_num.err \
+	outputs/output_delimiter.err \
+	outputs/panelize_bad_ref_col_num1.err \
+	outputs/panelize_bad_ref_col_num2.err \
+	outputs/panelize_bad_x_col_num1.err \
+	outputs/panelize_bad_x_col_num2.err \
+	outputs/panelize_bad_y_col_num1.err \
+	outputs/panelize_bad_y_col_num2.err \
+	outputs/panelize_negative_ref_col_num.err \
+	outputs/panelize_negative_x_col_num.err \
+	outputs/panelize_negative_y_col_num.err \
+	outputs/panelize_ref_col_num_too_high.err \
+	outputs/panelize_tabulate.err \
+	outputs/panelize_x_col_num_too_high.err \
+	outputs/panelize_y_col_num_too_high.err \
+	outputs/process_comment.err \
+	outputs/rotate_bad_col_num1.err \
+	outputs/rotate_bad_col_num2.err \
+	outputs/rotate_case_insens.err \
+	outputs/rotate_case_sens.err \
+	outputs/rotate_check_cols_no_match.err \
+	outputs/rotate_check_cols_return_minus1.err \
+	outputs/rotate_col_num_too_high.err \
+	outputs/rotate_negative_angle.err \
+	outputs/rotate_negative_col_num.err \
+	outputs/rotate_negative_real_angle.err \
+	outputs/rotate_real_angle.err \
+	outputs/subst_bad_col_num1.err \
+	outputs/subst_bad_col_num2.err \
+	outputs/subst_check_cols_match.err \
+	outputs/subst_check_cols_no_match.err \
+	outputs/subst_check_cols_return_minus1.err \
+	outputs/subst_col_num_too_high.err \
+	outputs/subst_negative_col_num.err \
+	outputs/swap_cols_bad_col1_num1.err \
+	outputs/swap_cols_bad_col1_num2.err \
+	outputs/swap_cols_bad_col2_num1.err \
+	outputs/swap_cols_bad_col2_num2.err \
+	outputs/swap_cols_col1_num_too_high.err \
+	outputs/swap_cols_col2_num_too_high.err \
+	outputs/swap_cols_negative_col1_num.err \
+	outputs/swap_cols_negative_col2_num.err \
+	outputs/swap_cols_no_matchlist.err \
+	outputs/swap_cols_no_match.err \
+	outputs/swap_cols_with_match.err \
+	outputs/translate_bad_col_num1.err \
+	outputs/translate_bad_col_num2.err \
+	outputs/translate_col_change_R10_value.err \
+	outputs/translate_col_chg_all_val_plus_k.err \
+	outputs/translate_col_no_match1.err \
+	outputs/translate_col_no_match2.err \
+	outputs/translate_col_num_too_high.err \
 	outputs/translate_col_R10_value_case_insens.err \
-	outputs/translate_negative_col_num.out \
 	outputs/translate_negative_col_num.err

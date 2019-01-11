@@ -1,11 +1,13 @@
 PERL = perl
 
 AM_TESTS_ENVIRONMENT = REFDES_RENUM='$(PERL) -w $(abs_srcdir)/../../scripts/refdes_renum'
+LOG_COMPILER = $(srcdir)/run-test
 
-check-local:
-	$(AM_TESTS_ENVIRONMENT) srcdir=$(srcdir) $(SHELL) $(srcdir)/run_tests.sh
+dist_check_SCRIPTS = run-test
+EXTRA_DIST = $(input_files) $(output_files) tests.list README
 
-EXTRA_DIST = $(input_files) $(output_files) run_tests.sh tests.list README
+mostlyclean-local:
+	rm -rf *.run
 
 input_files = \
 	inputs/allnew.sch \
@@ -54,3 +56,21 @@ output_files = \
 	outputs/some_old_refdeses/someold1.sch \
 	outputs/some_old_refdeses1/someold1.sch \
 	outputs/some_old_refdeses2/someold1.sch
+
+TESTS = outputs/single_renum \
+	outputs/single_clear \
+	outputs/single_pgskip1 \
+	outputs/single_pgskip2 \
+	outputs/single_pgskip3 \
+	outputs/multi_renum \
+	outputs/multi_clear \
+	outputs/multi_pgskip1 \
+	outputs/multi_pgskip2 \
+	outputs/all_new_refdeses1 \
+	outputs/all_new_refdeses2 \
+	outputs/some_old_refdeses1 \
+	outputs/some_old_refdeses2 \
+	outputs/all_old_refdeses1 \
+	outputs/all_old_refdeses2 \
+	outputs/some_new_pgskip1 \
+	outputs/some_new_pgskip2

@@ -1,6 +1,6 @@
 #!/bin/sh
 
-t="$1"
+t=`basename "$1"`
 here=`pwd`
 
 GOLDEN_DIR=${srcdir}/outputs
