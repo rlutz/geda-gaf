@@ -244,8 +244,3 @@ EXTRA_DIST= \
 	translate_col_R10_value_case_insens-pcb_example1.xy-error \
 	translate_negative_col_num-pcb_example1.xy \
 	translate_negative_col_num-pcb_example1.xy-error
-
-MOSTLYCLEANFILES = *.log core FILE *~
-CLEANFILES = *.log core FILE *~
-DISTCLEANFILES = *.log core FILE *~
-MAINTAINERCLEANFILES = *.log core FILE *~ Makefile.in

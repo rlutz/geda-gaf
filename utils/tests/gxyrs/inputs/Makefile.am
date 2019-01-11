@@ -7,9 +7,3 @@ EXTRA_DIST= \
 	protel_example1_mm.txt \
 	report1.txt \
 	report2.txt
-
-MOSTLYCLEANFILES = *.log core FILE *~
-CLEANFILES = *.log core FILE *~
-DISTCLEANFILES = *.log core FILE *~
-MAINTAINERCLEANFILES = *.log core FILE *~ Makefile.in
-
