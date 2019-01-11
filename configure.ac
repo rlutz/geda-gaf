@@ -279,7 +279,6 @@ AC_CONFIG_FILES([Makefile
                  utils/lib/system-gschlasrc
                  utils/scripts/Makefile
                  utils/src/Makefile
-                 utils/tests/Makefile
                  utils/tests/gxyrs/Makefile
                  utils/tests/refdes_renum/Makefile
 
