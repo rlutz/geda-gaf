@@ -85,8 +85,6 @@ done
 # make sure we have the right paths when running this from inside the
 # source tree and also from outside the source tree.
 here=`pwd`
-srcdir=${srcdir:-$here}
-srcdir=`cd $srcdir && pwd`
 
 GOLDEN_DIR=${srcdir}/outputs
 INPUT_DIR=${srcdir}/inputs

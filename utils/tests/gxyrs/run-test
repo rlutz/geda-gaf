@@ -54,6 +54,8 @@ if test $rc -ne $code ; then
     exit 1
 fi
 
+cd $here
+
 ref=${GOLDEN_DIR}/${t}.out
 out=${rundir}/$out_file
 ref_error=${GOLDEN_DIR}/${t}.err
@@ -82,8 +84,6 @@ else
     echo "No reference file.  Skipping"
     status=77
 fi
-
-cd $here
 
 # clean up the rundirectory
 rm -fr ${rundir}

@@ -45,6 +45,8 @@ if test $rc -ne $code ; then
     exit 1
 fi
 
+cd $here
+
 status=0
 
 for f in ${files} ; do
@@ -66,8 +68,6 @@ for f in ${files} ; do
 	status=77
     fi
 done
-
-cd $here
 
 # clean up the rundirectory
 rm -fr ${rundir}
