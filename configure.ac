@@ -281,11 +281,7 @@ AC_CONFIG_FILES([Makefile
                  utils/src/Makefile
                  utils/tests/Makefile
                  utils/tests/gxyrs/Makefile
-                 utils/tests/gxyrs/inputs/Makefile
-                 utils/tests/gxyrs/outputs/Makefile
                  utils/tests/refdes_renum/Makefile
-                 utils/tests/refdes_renum/inputs/Makefile
-                 utils/tests/refdes_renum/outputs/Makefile
 
                  symbols/Makefile
                  symbols/documentation/Makefile
