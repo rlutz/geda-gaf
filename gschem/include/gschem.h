@@ -16,7 +16,6 @@ typedef struct st_gschem_toplevel GschemToplevel;
 #include "gschem_find_text_state.h"
 #include "gschem_find_text_widget.h"
 #include "gschem_find_patch_widget.h"
-#include "gschem_log_widget.h"
 #include "gschem_macro_widget.h"
 #include "gschem_page_geometry.h"
 #include "gschem_page_view.h"

@@ -18,7 +18,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 /*!
- * \file gschem_log_widget.c
+ * \file gschem_log_dockable.c
  *
  * \brief GType class and functions to support the gschem log window.
  */
@@ -43,21 +43,26 @@
 
 #include "gschem.h"
 
+#include "../include/gschem_log_dockable.h"
+
 
 static void
-changed_cb (GtkTextBuffer *buffer, GschemLogWidget *widget);
+changed_cb (GtkTextBuffer *buffer, GschemLogDockable *dockable);
 
 static void
-class_init (GschemLogWidgetClass *class);
+class_init (GschemLogDockableClass *class);
 
 static GtkTextBuffer*
 create_text_buffer();
 
-static void
-instance_init (GschemLogWidget *log);
+static GtkWidget *
+create_widget (GschemDockable *parent);
 
 static void
-log_message (GschemLogWidgetClass *klass, const gchar *message, const gchar *style);
+x_log_message (const gchar *log_domain, GLogLevelFlags log_level, const gchar *message);
+
+static void
+log_message (GschemLogDockableClass *klass, const gchar *message, const gchar *style);
 
 
 /*!
@@ -70,41 +75,30 @@ log_message (GschemLogWidgetClass *klass, const gchar *message, const gchar *sty
  * \returns the type identifier for the Log class
  */
 GType
-gschem_log_widget_get_type ()
+gschem_log_dockable_get_type ()
 {
   static GType type = 0;
 
   if (type == 0) {
     static const GTypeInfo info = {
-      sizeof(GschemLogWidgetClass),
+      sizeof(GschemLogDockableClass),
       NULL,                                 /* base_init */
       NULL,                                 /* base_finalize */
       (GClassInitFunc) class_init,
       NULL,                                 /* class_finalize */
       NULL,                                 /* class_data */
-      sizeof(GschemLogWidget),
+      sizeof(GschemLogDockable),
       0,                                    /* n_preallocs */
-      (GInstanceInitFunc) instance_init,
+      NULL,                                 /* instance_init */
     };
 
-    type = g_type_register_static (GSCHEM_TYPE_BIN,
-                                   "GschemLogWidget",
+    type = g_type_register_static (GSCHEM_TYPE_DOCKABLE,
+                                   "GschemLogDockable",
                                    &info,
                                    0);
   }
 
   return type;
-}
-
-
-/*! \brief create a new status log widget
- *
- *  \return a new status log widget
- */
-GschemLogWidget*
-gschem_log_widget_new ()
-{
-  return GSCHEM_LOG_WIDGET (g_object_new (GSCHEM_TYPE_LOG_WIDGET, NULL));
 }
 
 
@@ -114,10 +108,10 @@ gschem_log_widget_new ()
  *  \param [in] log_level The severity of the message
  *  \param [in] message   The message to be displayed
  */
-void
+static void
 x_log_message (const gchar *log_domain, GLogLevelFlags log_level, const gchar *message)
 {
-  GschemLogWidgetClass *klass = GSCHEM_LOG_WIDGET_CLASS (g_type_class_peek_static (GSCHEM_TYPE_LOG_WIDGET));
+  GschemLogDockableClass *klass = GSCHEM_LOG_DOCKABLE_CLASS (g_type_class_peek_static (GSCHEM_TYPE_LOG_DOCKABLE));
   gchar *style;
 
   if (log_level & (G_LOG_LEVEL_CRITICAL | G_LOG_LEVEL_ERROR)) {
@@ -133,33 +127,6 @@ x_log_message (const gchar *log_domain, GLogLevelFlags log_level, const gchar *m
 
 
 /*!
- *  \brief Open the Log window
- *
- *  Selects the notebook tab that contains the status log widget
- */
-void
-x_log_open (GschemToplevel *w_current)
-{
-  int page;
-
-  g_return_if_fail (w_current != NULL);
-  g_return_if_fail (w_current->bottom_notebook != NULL);
-  g_return_if_fail (w_current->log_widget != NULL);
-
-  page = gtk_notebook_page_num (GTK_NOTEBOOK (w_current->bottom_notebook),
-                                GTK_WIDGET (w_current->log_widget));
-
-  if (page >= 0) {
-    int current = gtk_notebook_get_current_page (GTK_NOTEBOOK (w_current->bottom_notebook));
-
-    if (page != current) {
-      gtk_notebook_set_current_page (GTK_NOTEBOOK (w_current->bottom_notebook), page);
-    }
-  }
-}
-
-
-/*!
  *  \brief Add a message to the log window
  *
  *  \par Function Description
@@ -168,7 +135,7 @@ x_log_open (GschemToplevel *w_current)
  *  \param [in] style   The style to use in the text rendering
  */
 static void
-log_message (GschemLogWidgetClass *klass, const gchar *message, const gchar *style)
+log_message (GschemLogDockableClass *klass, const gchar *message, const gchar *style)
 {
   GtkTextIter iter;
 
@@ -200,26 +167,26 @@ log_message (GschemLogWidgetClass *klass, const gchar *message, const gchar *sty
  *  to the bottom.
  *
  *  \param [in] buffer the text buffer triggering the event
- *  \param [in] widget the widget to scroll to the bottom
+ *  \param [in] dockable the dockable to scroll to the bottom
  */
 static void
-changed_cb (GtkTextBuffer *buffer, GschemLogWidget *widget)
+changed_cb (GtkTextBuffer *buffer, GschemLogDockable *dockable)
 {
   GtkTextIter iter;
 
   g_return_if_fail (buffer != NULL);
-  g_return_if_fail (widget != NULL);
-  g_return_if_fail (widget->viewer != NULL);
+  g_return_if_fail (dockable != NULL);
+  g_return_if_fail (dockable->viewer != NULL);
 
   gtk_text_buffer_get_end_iter (buffer, &iter);
-  gtk_text_view_scroll_to_iter (widget->viewer, &iter, 0.0, TRUE, 0.0, 1.0);
+  gtk_text_view_scroll_to_iter (dockable->viewer, &iter, 0.0, TRUE, 0.0, 1.0);
 }
 
 
 /*! \brief initialize class
  */
 static void
-class_init (GschemLogWidgetClass *klass)
+class_init (GschemLogDockableClass *klass)
 {
   gchar *contents;
 /*   GObjectClass *gobject_class = G_OBJECT_CLASS (klass); */
@@ -237,6 +204,8 @@ class_init (GschemLogWidgetClass *klass)
 
     x_log_update_func = x_log_message;
   }
+
+  GSCHEM_DOCKABLE_CLASS (klass)->create_widget = create_widget;
 }
 
 
@@ -288,37 +257,40 @@ create_text_buffer()
 }
 
 
-/*! \brief initialize instance
+/*! \brief create widgets
  *
- *  \param [in] widget an instance of the widget
+ *  \param [in] parent an instance of the dockable
  */
-static void
-instance_init (GschemLogWidget *widget)
+static GtkWidget *
+create_widget (GschemDockable *parent)
 {
+  GschemLogDockable *dockable = GSCHEM_LOG_DOCKABLE (parent);
   GtkTextIter iter;
-  GschemLogWidgetClass *klass = GSCHEM_LOG_WIDGET_GET_CLASS (widget);
+  GschemLogDockableClass *klass = GSCHEM_LOG_DOCKABLE_GET_CLASS (dockable);
   GtkWidget *scrolled;
 
-  g_return_if_fail (klass != NULL);
-  g_return_if_fail (klass->buffer != NULL);
-  g_return_if_fail (widget != NULL);
+  g_return_val_if_fail (klass != NULL, NULL);
+  g_return_val_if_fail (klass->buffer != NULL, NULL);
+  g_return_val_if_fail (dockable != NULL, NULL);
 
   scrolled = gtk_scrolled_window_new (NULL, NULL);
-  gtk_container_add (GTK_CONTAINER (widget), scrolled);
 
-  widget->viewer = GTK_TEXT_VIEW (g_object_new (GTK_TYPE_TEXT_VIEW,
-                                                /* GtkTextView */
-                                                "buffer",   klass->buffer,
-                                                "editable", FALSE,
-                                                NULL));
+  dockable->viewer = GTK_TEXT_VIEW (g_object_new (GTK_TYPE_TEXT_VIEW,
+                                                  /* GtkTextView */
+                                                  "buffer",   klass->buffer,
+                                                  "editable", FALSE,
+                                                  NULL));
 
-  gtk_container_add (GTK_CONTAINER (scrolled), GTK_WIDGET (widget->viewer));
+  gtk_container_add (GTK_CONTAINER (scrolled), GTK_WIDGET (dockable->viewer));
 
   g_signal_connect (klass->buffer,
                     "changed",
                     G_CALLBACK (&changed_cb),
-                    widget);
+                    dockable);
 
   gtk_text_buffer_get_end_iter (klass->buffer, &iter);
-  gtk_text_view_scroll_to_iter (widget->viewer, &iter, 0.0, TRUE, 0.0, 1.0);
+  gtk_text_view_scroll_to_iter (dockable->viewer, &iter, 0.0, TRUE, 0.0, 1.0);
+
+  gtk_widget_show_all (scrolled);
+  return scrolled;
 }

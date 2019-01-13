@@ -174,7 +174,6 @@ GschemToplevel *gschem_toplevel_new ()
   w_current->right_notebook  = NULL;
 
   w_current->find_text_state = NULL;
-  w_current->log_widget      = NULL;
 
   w_current->keyaccel_string = NULL;
   w_current->keyaccel_string_source_id = FALSE;
@@ -204,6 +203,7 @@ GschemToplevel *gschem_toplevel_new ()
   w_current->object_properties_dockable = NULL;
   w_current->text_properties_dockable   = NULL;
   w_current->options_dockable           = NULL;
+  w_current->log_dockable               = NULL;
 
   /* -------------------------------------- */
   /* Models for widgets inside dialog boxes */

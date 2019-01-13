@@ -18,36 +18,28 @@
  * MA 02111-1301 USA.
  */
 
-#define GSCHEM_TYPE_LOG_WIDGET           (gschem_log_widget_get_type())
-#define GSCHEM_LOG_WIDGET(obj)           (G_TYPE_CHECK_INSTANCE_CAST ((obj), GSCHEM_TYPE_LOG_WIDGET, GschemLogWidget))
-#define GSCHEM_LOG_WIDGET_CLASS(klass)   (G_TYPE_CHECK_CLASS_CAST ((klass),  GSCHEM_TYPE_LOG_WIDGET, GschemLogWidgetClass))
-#define GSCHEM_IS_LOG_WIDGET(obj)        (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GSCHEM_TYPE_LOG_WIDGET))
-#define GSCHEM_LOG_WIDGET_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), GSCHEM_TYPE_LOG_WIDGET, GschemLogWidgetClass))
+#define GSCHEM_TYPE_LOG_DOCKABLE           (gschem_log_dockable_get_type())
+#define GSCHEM_LOG_DOCKABLE(obj)           (G_TYPE_CHECK_INSTANCE_CAST ((obj), GSCHEM_TYPE_LOG_DOCKABLE, GschemLogDockable))
+#define GSCHEM_LOG_DOCKABLE_CLASS(klass)   (G_TYPE_CHECK_CLASS_CAST ((klass),  GSCHEM_TYPE_LOG_DOCKABLE, GschemLogDockableClass))
+#define GSCHEM_IS_LOG_DOCKABLE(obj)        (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GSCHEM_TYPE_LOG_DOCKABLE))
+#define GSCHEM_LOG_DOCKABLE_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), GSCHEM_TYPE_LOG_DOCKABLE, GschemLogDockableClass))
 
 
-typedef enum {
-  LOG_RESPONSE_CLOSE  = 1
-} LogResponseType;
+typedef struct _GschemLogDockableClass GschemLogDockableClass;
+typedef struct _GschemLogDockable      GschemLogDockable;
 
-
-typedef struct _GschemLogWidgetClass GschemLogWidgetClass;
-typedef struct _GschemLogWidget      GschemLogWidget;
-
-struct _GschemLogWidgetClass {
-  GschemBinClass parent_class;
+struct _GschemLogDockableClass {
+  GschemDockableClass parent_class;
 
   GtkTextBuffer *buffer;
 };
 
-struct _GschemLogWidget {
-  GschemBin parent_instance;
+struct _GschemLogDockable {
+  GschemDockable parent_instance;
 
   GtkTextView *viewer;
 };
 
 
 GType
-gschem_log_widget_get_type (void);
-
-GschemLogWidget*
-gschem_log_widget_new ();
+gschem_log_dockable_get_type (void);

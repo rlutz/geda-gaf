@@ -2772,7 +2772,7 @@ DEFINE_I_CALLBACK(options_show_log_window)
 
   g_return_if_fail (w_current != NULL);
 
-  x_log_open (w_current);
+  gschem_dockable_present (w_current->log_dockable);
 }
 
 

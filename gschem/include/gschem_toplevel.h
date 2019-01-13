@@ -56,7 +56,6 @@ struct st_gschem_toplevel {
 
   /* Widgets inside notebook at bottom of window */
   GschemFindTextState *find_text_state;
-  GschemLogWidget     *log_widget;
 
 
   gchar *keyaccel_string;               /* visual feedback when pressing
@@ -88,6 +87,7 @@ struct st_gschem_toplevel {
   GschemDockable *object_properties_dockable;
   GschemDockable *text_properties_dockable;
   GschemDockable *options_dockable;     /* snap size dialog */
+  GschemDockable *log_dockable;
 
   /* -------------------------------------- */
   /* Models for widgets inside dialog boxes */

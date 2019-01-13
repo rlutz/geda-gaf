@@ -44,7 +44,7 @@ gschem_SOURCES = \
 	gschem_find_patch_widget.c \
 	gschem_hotkey_dialog.c \
 	gschem_integer_combo_box.c \
-	gschem_log_widget.c \
+	gschem_log_dockable.c \
 	gschem_macro_widget.c \
 	gschem_main_window.c \
 	gschem_object_properties_dockable.c \

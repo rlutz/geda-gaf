@@ -22,7 +22,7 @@ noinst_HEADERS = \
 	gschem_find_text_state.h \
 	gschem_find_text_widget.h \
 	gschem_integer_combo_box.h \
-	gschem_log_widget.h \
+	gschem_log_dockable.h \
 	gschem_macro_widget.h \
 	gschem_main_window.h \
 	gschem_object_properties_dockable.h \

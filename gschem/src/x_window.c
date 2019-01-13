@@ -26,6 +26,7 @@
 #include "gschem_object_properties_dockable.h"
 #include "gschem_text_properties_dockable.h"
 #include "gschem_options_dockable.h"
+#include "gschem_log_dockable.h"
 
 #define GSCHEM_THEME_ICON_NAME "geda-gschem"
 
@@ -868,13 +869,6 @@ void x_window_create_main(GschemToplevel *w_current)
                     w_current);
 
 
-  w_current->log_widget = gschem_log_widget_new ();
-
-  gtk_notebook_append_page (GTK_NOTEBOOK (w_current->bottom_notebook),
-                            GTK_WIDGET (w_current->log_widget),
-                            gtk_label_new (_("Status")));
-
-
   w_current->object_properties_dockable = g_object_new (
     GSCHEM_TYPE_OBJECT_PROPERTIES_DOCKABLE,
     "title", _("Object"),
@@ -902,6 +896,16 @@ void x_window_create_main(GschemToplevel *w_current)
     "initial-state", GSCHEM_DOCKABLE_STATE_HIDDEN,
     "initial-width", 320,
     "initial-height", 350,
+    "gschem-toplevel", w_current,
+    NULL);
+
+  w_current->log_dockable = g_object_new (
+    GSCHEM_TYPE_LOG_DOCKABLE,
+    "title", _("Status"),
+    "settings-name", "log",
+    "initial-state", GSCHEM_DOCKABLE_STATE_DOCKED_BOTTOM,
+    "initial-width", 600,
+    "initial-height", 300,
     "gschem-toplevel", w_current,
     NULL);
 
