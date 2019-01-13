@@ -25,6 +25,7 @@
 
 #include "gschem_object_properties_dockable.h"
 #include "gschem_text_properties_dockable.h"
+#include "gschem_options_dockable.h"
 
 #define GSCHEM_THEME_ICON_NAME "geda-gschem"
 
@@ -843,13 +844,6 @@ void x_window_create_main(GschemToplevel *w_current)
                     G_CALLBACK (&x_window_translate_response),
                     w_current);
 
-  /* options editor */
-  w_current->options_widget = gschem_options_widget_new (w_current);
-
-  gtk_notebook_append_page (GTK_NOTEBOOK (w_current->right_notebook),
-                            GTK_WIDGET (w_current->options_widget),
-                            gtk_label_new (_("Options")));
-
   /* status notebook */
   w_current->bottom_notebook = gtk_notebook_new ();
   gtk_paned_pack2 (GTK_PANED (vpaned),
@@ -898,6 +892,16 @@ void x_window_create_main(GschemToplevel *w_current)
     "initial-state", GSCHEM_DOCKABLE_STATE_DOCKED_RIGHT,
     "initial-width", 400,
     "initial-height", 450,
+    "gschem-toplevel", w_current,
+    NULL);
+
+  w_current->options_dockable = g_object_new (
+    GSCHEM_TYPE_OPTIONS_DOCKABLE,
+    "title", _("Options"),
+    "settings-name", "options",  /* snap-size */
+    "initial-state", GSCHEM_DOCKABLE_STATE_HIDDEN,
+    "initial-width", 320,
+    "initial-height", 350,
     "gschem-toplevel", w_current,
     NULL);
 

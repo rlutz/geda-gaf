@@ -49,7 +49,7 @@ gschem_SOURCES = \
 	gschem_main_window.c \
 	gschem_object_properties_dockable.c \
 	gschem_options.c \
-	gschem_options_widget.c \
+	gschem_options_dockable.c \
 	gschem_patch.c \
 	gschem_page_geometry.c \
 	gschem_page_view.c \

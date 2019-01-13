@@ -2596,7 +2596,7 @@ DEFINE_I_CALLBACK(options_snap_size)
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
 
   g_return_if_fail (w_current != NULL);
-  snap_size_dialog(w_current);
+  gschem_dockable_present (w_current->options_dockable);
 }
 
 /*! \brief Multiply by two the snap grid size.

@@ -47,8 +47,6 @@ typedef struct st_gschem_toplevel GschemToplevel;
 #include "gschem_integer_combo_box.h"
 #include "gschem_binding.h"
 #include "gschem_binding_integer.h"
-
-#include "gschem_options_widget.h"
 #include "gschem_translate_widget.h"
 
 /* Gettext translation */

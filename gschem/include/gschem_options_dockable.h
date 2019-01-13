@@ -18,28 +18,26 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 /*!
- * \file gschem_options_widget.h
+ * \file gschem_options_dockable.h
  *
- * \brief A widget for editing options
+ * \brief A dockable for editing options
  */
 
-#define GSCHEM_TYPE_OPTIONS_WIDGET           (gschem_options_widget_get_type())
-#define GSCHEM_OPTIONS_WIDGET(obj)           (G_TYPE_CHECK_INSTANCE_CAST ((obj), GSCHEM_TYPE_OPTIONS_WIDGET, GschemOptionsWidget))
-#define GSCHEM_OPTIONS_WIDGET_CLASS(klass)   (G_TYPE_CHECK_CLASS_CAST ((klass),  GSCHEM_TYPE_OPTIONS_WIDGET, GschemOptionsWidgetClass))
-#define IS_GSCHEM_OPTIONS_WIDGET(obj)        (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GSCHEM_TYPE_OPTIONS_WIDGET))
-#define GSCHEM_OPTIONS_WIDGET_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj),  GSCHEM_TYPE_OPTIONS_WIDGET, GschemOptionsWidgetClass))
+#define GSCHEM_TYPE_OPTIONS_DOCKABLE           (gschem_options_dockable_get_type())
+#define GSCHEM_OPTIONS_DOCKABLE(obj)           (G_TYPE_CHECK_INSTANCE_CAST ((obj), GSCHEM_TYPE_OPTIONS_DOCKABLE, GschemOptionsDockable))
+#define GSCHEM_OPTIONS_DOCKABLE_CLASS(klass)   (G_TYPE_CHECK_CLASS_CAST ((klass),  GSCHEM_TYPE_OPTIONS_DOCKABLE, GschemOptionsDockableClass))
+#define GSCHEM_IS_OPTIONS_DOCKABLE(obj)        (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GSCHEM_TYPE_OPTIONS_DOCKABLE))
+#define GSCHEM_OPTIONS_DOCKABLE_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj),  GSCHEM_TYPE_OPTIONS_DOCKABLE, GschemOptionsDockableClass))
 
-typedef struct _GschemOptionsWidgetClass GschemOptionsWidgetClass;
-typedef struct _GschemOptionsWidget GschemOptionsWidget;
+typedef struct _GschemOptionsDockableClass GschemOptionsDockableClass;
+typedef struct _GschemOptionsDockable GschemOptionsDockable;
 
-struct _GschemOptionsWidgetClass {
-  GschemBinClass parent_class;
+struct _GschemOptionsDockableClass {
+  GschemDockableClass parent_class;
 };
 
-struct _GschemOptionsWidget {
-  GschemBin parent;
-
-  GschemToplevel *w_current;
+struct _GschemOptionsDockable {
+  GschemDockable parent;
 
   GschemOptions *options;
 
@@ -53,12 +51,5 @@ struct _GschemOptionsWidget {
   GtkWidget *snap_radio[SNAP_STATE_COUNT];
 };
 
-void
-gschem_options_widget_adjust_focus (GschemOptionsWidget *dialog);
-
 GType
-gschem_options_widget_get_type ();
-
-GtkWidget*
-gschem_options_widget_new (GschemToplevel *w_current);
-
+gschem_options_dockable_get_type ();

@@ -58,9 +58,6 @@ struct st_gschem_toplevel {
   GschemFindTextState *find_text_state;
   GschemLogWidget     *log_widget;
 
-  /* Widgets inside the notebook at the right of the window */
-  GtkWidget *options_widget;
-
 
   gchar *keyaccel_string;               /* visual feedback when pressing
                                            keyboard accelerators */
@@ -90,6 +87,7 @@ struct st_gschem_toplevel {
 
   GschemDockable *object_properties_dockable;
   GschemDockable *text_properties_dockable;
+  GschemDockable *options_dockable;     /* snap size dialog */
 
   /* -------------------------------------- */
   /* Models for widgets inside dialog boxes */
