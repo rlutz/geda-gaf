@@ -392,6 +392,12 @@ x_window_save_geometry (GschemToplevel *w_current)
   }
 
   /* save dock area geometry */
+  gtk_widget_get_allocation (w_current->left_notebook, &allocation);
+  if (allocation.width > 0)
+    eda_config_set_int (eda_config_get_user_context (),
+                        "gschem.dock-geometry.left",
+                        "size", allocation.width);
+
   gtk_widget_get_allocation (w_current->bottom_notebook, &allocation);
   if (allocation.height > 0)
     eda_config_set_int (eda_config_get_user_context (),
@@ -436,6 +442,12 @@ x_window_restore_geometry (GschemToplevel *w_current)
 
   /* restore docking area dimensions */
   dock_size = eda_config_get_int (eda_config_get_user_context (),
+                                  "gschem.dock-geometry.left", "size", NULL);
+  if (dock_size <= 0)
+    dock_size = 300;
+  gtk_widget_set_size_request (w_current->left_notebook, dock_size, 0);
+
+  dock_size = eda_config_get_int (eda_config_get_user_context (),
                                   "gschem.dock-geometry.bottom", "size", NULL);
   if (dock_size <= 0)
     dock_size = 200;
@@ -467,7 +479,7 @@ void x_window_create_main(GschemToplevel *w_current)
   GtkAdjustment *hadjustment;
   GtkAdjustment *vadjustment;
   char *right_button_text;
-  GtkWidget *hpaned;
+  GtkWidget *left_hpaned, *right_hpaned;
   GtkWidget *vpaned;
   GtkWidget *work_box;
   GtkToolButton *button = NULL;
@@ -672,20 +684,34 @@ void x_window_create_main(GschemToplevel *w_current)
   vpaned = gtk_vpaned_new ();
   gtk_container_add(GTK_CONTAINER(main_box), vpaned);
 
-  hpaned = gtk_hpaned_new ();
+  left_hpaned = gtk_hpaned_new ();
   gtk_paned_pack1 (GTK_PANED (vpaned),
-                   hpaned,
+                   left_hpaned,
+                   TRUE,
+                   TRUE);
+
+  w_current->left_notebook = gtk_notebook_new ();
+  gtk_paned_pack1 (GTK_PANED (left_hpaned),
+                   w_current->left_notebook,
+                   FALSE,
+                   TRUE);
+  gtk_container_set_border_width (GTK_CONTAINER (w_current->left_notebook),
+                                  DIALOG_BORDER_SPACING);
+
+  right_hpaned = gtk_hpaned_new ();
+  gtk_paned_pack2 (GTK_PANED (left_hpaned),
+                   right_hpaned,
                    TRUE,
                    TRUE);
 
   work_box = gtk_vbox_new (FALSE, 0);
-  gtk_paned_pack1 (GTK_PANED (hpaned),
+  gtk_paned_pack1 (GTK_PANED (right_hpaned),
                    work_box,
                    TRUE,
                    TRUE);
 
   w_current->right_notebook = gtk_notebook_new ();
-  gtk_paned_pack2 (GTK_PANED (hpaned),
+  gtk_paned_pack2 (GTK_PANED (right_hpaned),
                    w_current->right_notebook,
                    FALSE,
                    TRUE);
@@ -886,6 +912,14 @@ void x_window_create_main(GschemToplevel *w_current)
                     G_CALLBACK (x_window_state_event), w_current);
 
   gtk_widget_show_all (w_current->main_window);
+
+  /* hide unused notebooks */
+  if (gtk_notebook_get_n_pages (GTK_NOTEBOOK (w_current->left_notebook)) == 0)
+    gtk_widget_hide (w_current->left_notebook);
+  if (gtk_notebook_get_n_pages (GTK_NOTEBOOK (w_current->bottom_notebook)) == 0)
+    gtk_widget_hide (w_current->bottom_notebook);
+  if (gtk_notebook_get_n_pages (GTK_NOTEBOOK (w_current->right_notebook)) == 0)
+    gtk_widget_hide (w_current->right_notebook);
 }
 
 /*! \todo Finish function documentation!!!

@@ -50,13 +50,13 @@ struct st_gschem_toplevel {
   GtkWidget *toolbar_net;
   GtkWidget *toolbar_bus;
 
+  GtkWidget *left_notebook;
   GtkWidget *bottom_notebook;
+  GtkWidget *right_notebook;
 
   /* Widgets inside notebook at bottom of window */
   GschemFindTextState *find_text_state;
   GschemLogWidget     *log_widget;
-
-  GtkWidget *right_notebook;
 
   /* Widgets inside the notebook at the right of the window */
   GtkWidget *object_properties;
