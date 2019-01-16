@@ -740,9 +740,11 @@ SCM g_rc_window_size(SCM width, SCM height)
 {
   SCM_ASSERT (scm_is_integer (width),  width,  SCM_ARG1, "window-size");
   SCM_ASSERT (scm_is_integer (height), height, SCM_ARG2, "window-size");
-  
-  default_width  = scm_to_int (width);
-  default_height = scm_to_int (height);
+
+  /* no effect--window geometry is now saved/restored automatically */
+
+  (void) scm_to_int (width);
+  (void) scm_to_int (height);
 
   return SCM_BOOL_T;
 }

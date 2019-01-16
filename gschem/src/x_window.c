@@ -68,10 +68,6 @@ void x_window_create_drawing(GtkWidget *scrolled, GschemToplevel *w_current)
    * 1.3333333 is the desired aspect ratio!
    */
 
-  gtk_widget_set_size_request (w_current->drawing_area,
-                               default_width,
-                               default_height);
-
   gtk_container_add(GTK_CONTAINER(scrolled), w_current->drawing_area);
 
   GTK_WIDGET_SET_FLAGS (w_current->drawing_area, GTK_CAN_FOCUS );
@@ -355,6 +351,74 @@ x_window_translate_response (GschemTranslateWidget *widget, gint response, Gsche
   i_set_state (w_current, SELECT);
   gtk_widget_grab_focus (w_current->drawing_area);
   gtk_widget_hide (GTK_WIDGET (widget));
+}
+
+
+static gboolean
+x_window_state_event (GtkWidget *widget,
+                      GdkEventWindowState *event,
+                      gpointer user_data)
+{
+  eda_config_set_string (
+    eda_config_get_user_context (),
+    "gschem.window-geometry", "state",
+    (event->new_window_state &
+       GDK_WINDOW_STATE_FULLSCREEN) ? "fullscreen" :
+    (event->new_window_state &
+       GDK_WINDOW_STATE_MAXIMIZED) ? "maximized" : "normal");
+
+  return FALSE;  /* propagate the event further */
+}
+
+static void
+x_window_save_geometry (GschemToplevel *w_current)
+{
+  gchar *window_state;
+
+  /* save window geometry */
+  window_state = eda_config_get_string (eda_config_get_user_context (),
+                                        "gschem.window-geometry",
+                                        "state", NULL);
+  if (window_state != NULL && strcmp (window_state, "normal") == 0) {
+    gint width = -1, height = -1;
+    gtk_window_get_size (GTK_WINDOW (w_current->main_window), &width, &height);
+    if (width > 0 && height > 0) {
+      eda_config_set_int (eda_config_get_user_context (),
+                          "gschem.window-geometry", "width", width);
+      eda_config_set_int (eda_config_get_user_context (),
+                          "gschem.window-geometry", "height", height);
+    }
+  }
+}
+
+static void
+x_window_restore_geometry (GschemToplevel *w_current)
+{
+  gint width, height;
+  gchar *window_state;
+
+  /* restore main window size */
+  width = eda_config_get_int (eda_config_get_user_context (),
+                              "gschem.window-geometry", "width", NULL);
+  height = eda_config_get_int (eda_config_get_user_context (),
+                               "gschem.window-geometry", "height", NULL);
+  if (width <= 0 || height <= 0) {
+    width = 1200;
+    height = 900;
+  }
+  g_object_set (w_current->main_window,
+                "default-width", width,
+                "default-height", height,
+                NULL);
+
+  /* restore main window state */
+  window_state = eda_config_get_string (eda_config_get_user_context (),
+                                        "gschem.window-geometry",
+                                        "state", NULL);
+  if (window_state != NULL && strcmp (window_state, "fullscreen") == 0)
+    gtk_window_fullscreen (GTK_WINDOW (w_current->main_window));
+  else if (window_state != NULL && strcmp (window_state, "maximized") == 0)
+    gtk_window_maximize (GTK_WINDOW (w_current->main_window));
 }
 
 
@@ -756,10 +820,6 @@ void x_window_create_main(GschemToplevel *w_current)
                             GTK_WIDGET (w_current->find_text_state),
                             gtk_label_new (_("Find Text")));
 
-  gtk_widget_set_size_request (GTK_WIDGET (w_current->find_text_state),
-                               default_width,
-                               default_height / 4);
-
   g_signal_connect (w_current->find_text_state,
                     "select-object",
                     G_CALLBACK (&x_window_select_text),
@@ -794,6 +854,10 @@ void x_window_create_main(GschemToplevel *w_current)
 
   gtk_box_pack_start (GTK_BOX (main_box), w_current->bottom_widget, FALSE, FALSE, 0);
 
+  x_window_restore_geometry (w_current);
+  g_signal_connect (G_OBJECT (w_current->main_window), "window-state-event",
+                    G_CALLBACK (x_window_state_event), w_current);
+
   gtk_widget_show_all (w_current->main_window);
 }
 
@@ -826,6 +890,9 @@ void x_window_close(GschemToplevel *w_current)
 #endif
 
   w_current->dont_invalidate = TRUE;
+
+  /* save window geometry */
+  x_window_save_geometry (w_current);
 
   /* close all the dialog boxes */
   if (w_current->sowindow)
