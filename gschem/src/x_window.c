@@ -374,6 +374,7 @@ static void
 x_window_save_geometry (GschemToplevel *w_current)
 {
   gchar *window_state;
+  GtkAllocation allocation;
 
   /* save window geometry */
   window_state = eda_config_get_string (eda_config_get_user_context (),
@@ -389,12 +390,25 @@ x_window_save_geometry (GschemToplevel *w_current)
                           "gschem.window-geometry", "height", height);
     }
   }
+
+  /* save dock area geometry */
+  gtk_widget_get_allocation (w_current->bottom_notebook, &allocation);
+  if (allocation.height > 0)
+    eda_config_set_int (eda_config_get_user_context (),
+                        "gschem.dock-geometry.bottom",
+                        "size", allocation.height);
+
+  gtk_widget_get_allocation (w_current->right_notebook, &allocation);
+  if (allocation.width > 0)
+    eda_config_set_int (eda_config_get_user_context (),
+                        "gschem.dock-geometry.right",
+                        "size", allocation.width);
 }
 
 static void
 x_window_restore_geometry (GschemToplevel *w_current)
 {
-  gint width, height;
+  gint width, height, dock_size;
   gchar *window_state;
 
   /* restore main window size */
@@ -419,6 +433,19 @@ x_window_restore_geometry (GschemToplevel *w_current)
     gtk_window_fullscreen (GTK_WINDOW (w_current->main_window));
   else if (window_state != NULL && strcmp (window_state, "maximized") == 0)
     gtk_window_maximize (GTK_WINDOW (w_current->main_window));
+
+  /* restore docking area dimensions */
+  dock_size = eda_config_get_int (eda_config_get_user_context (),
+                                  "gschem.dock-geometry.bottom", "size", NULL);
+  if (dock_size <= 0)
+    dock_size = 200;
+  gtk_widget_set_size_request (w_current->bottom_notebook, 0, dock_size);
+
+  dock_size = eda_config_get_int (eda_config_get_user_context (),
+                                  "gschem.dock-geometry.right", "size", NULL);
+  if (dock_size <= 0)
+    dock_size = 300;
+  gtk_widget_set_size_request (w_current->right_notebook, dock_size, 0);
 }
 
 
