@@ -38,6 +38,8 @@
 
 #include "gschem.h"
 
+#include "../include/gschem_find_text_dockable.h"
+
 
 
 /*! \brief The columns in the GtkListStore

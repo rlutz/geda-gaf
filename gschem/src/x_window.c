@@ -27,6 +27,7 @@
 #include "gschem_text_properties_dockable.h"
 #include "gschem_options_dockable.h"
 #include "gschem_log_dockable.h"
+#include "gschem_find_text_dockable.h"
 
 #define GSCHEM_THEME_ICON_NAME "geda-gschem"
 
@@ -182,25 +183,14 @@ x_window_find_text (GtkWidget *widget, gint response, GschemToplevel *w_current)
 
   switch (response) {
   case GTK_RESPONSE_OK:
-    count = gschem_find_text_state_find (
-        w_current->find_text_state,
+    count = gschem_find_text_dockable_find (
+        GSCHEM_FIND_TEXT_DOCKABLE (w_current->find_text_dockable),
         geda_list_get_glist (w_current->toplevel->pages),
         gschem_find_text_widget_get_find_type (GSCHEM_FIND_TEXT_WIDGET (w_current->find_text_widget)),
         gschem_find_text_widget_get_find_text_string (GSCHEM_FIND_TEXT_WIDGET (w_current->find_text_widget)),
         gschem_find_text_widget_get_descend (GSCHEM_FIND_TEXT_WIDGET (w_current->find_text_widget)));
     if (count > 0) {
-      /* switch the notebook page to the find results */
-      int page = gtk_notebook_page_num (GTK_NOTEBOOK (w_current->bottom_notebook),
-                                        GTK_WIDGET (w_current->find_text_state));
-
-      if (page >= 0) {
-        int current = gtk_notebook_get_current_page (GTK_NOTEBOOK (w_current->bottom_notebook));
-
-        if (page != current) {
-          gtk_notebook_set_current_page (GTK_NOTEBOOK (w_current->bottom_notebook), page);
-        }
-      }
-      gtk_widget_set_visible (GTK_WIDGET (w_current->bottom_notebook), TRUE);
+      gschem_dockable_present (w_current->find_text_dockable);
       close = TRUE;
     };
     break;
@@ -231,25 +221,14 @@ x_window_find_patch (GtkWidget *widget, gint response, GschemToplevel *w_current
 
   switch (response) {
   case GTK_RESPONSE_OK:
-    count = gschem_find_text_state_find (
-        w_current->find_text_state,
+    count = gschem_find_text_dockable_find (
+        GSCHEM_FIND_TEXT_DOCKABLE (w_current->find_text_dockable),
         geda_list_get_glist (w_current->toplevel->pages),
         FIND_TYPE_PATCH,
         gschem_find_patch_widget_get_find_patch_string (GSCHEM_FIND_PATCH_WIDGET (w_current->find_patch_widget)),
         gschem_find_patch_widget_get_descend (GSCHEM_FIND_PATCH_WIDGET (w_current->find_patch_widget)));
     if (count > 0) {
-      /* switch the notebook page to the find results */
-      int page = gtk_notebook_page_num (GTK_NOTEBOOK (w_current->bottom_notebook),
-                                        GTK_WIDGET (w_current->find_text_state));
-
-      if (page >= 0) {
-        int current = gtk_notebook_get_current_page (GTK_NOTEBOOK (w_current->bottom_notebook));
-
-        if (page != current) {
-          gtk_notebook_set_current_page (GTK_NOTEBOOK (w_current->bottom_notebook), page);
-        }
-      }
-      gtk_widget_set_visible (GTK_WIDGET (w_current->bottom_notebook), TRUE);
+      gschem_dockable_present (w_current->find_text_dockable);
       close = TRUE;
     };
     break;
@@ -325,7 +304,7 @@ x_window_invoke_macro (GschemMacroWidget *widget, int response, GschemToplevel *
 }
 
 static void
-x_window_select_text (GschemFindTextState *state, OBJECT *object, GschemToplevel *w_current)
+x_window_select_text (GschemFindTextDockable *dockable, OBJECT *object, GschemToplevel *w_current)
 {
   GschemPageView *view = gschem_toplevel_get_current_page_view (w_current);
   g_return_if_fail (view != NULL);
@@ -857,17 +836,6 @@ void x_window_create_main(GschemToplevel *w_current)
   gtk_notebook_set_group_name (GTK_NOTEBOOK (w_current->bottom_notebook),
                                "gschem-dock");
 
-  w_current->find_text_state = gschem_find_text_state_new ();
-
-  gtk_notebook_append_page (GTK_NOTEBOOK (w_current->bottom_notebook),
-                            GTK_WIDGET (w_current->find_text_state),
-                            gtk_label_new (_("Find Text")));
-
-  g_signal_connect (w_current->find_text_state,
-                    "select-object",
-                    G_CALLBACK (&x_window_select_text),
-                    w_current);
-
 
   w_current->object_properties_dockable = g_object_new (
     GSCHEM_TYPE_OBJECT_PROPERTIES_DOCKABLE,
@@ -908,6 +876,20 @@ void x_window_create_main(GschemToplevel *w_current)
     "initial-height", 300,
     "gschem-toplevel", w_current,
     NULL);
+
+  w_current->find_text_dockable = g_object_new (
+    GSCHEM_TYPE_FIND_TEXT_DOCKABLE,
+    "title", _("Search results"),
+    "settings-name", "find-text",
+    "initial-state", GSCHEM_DOCKABLE_STATE_HIDDEN,
+    "initial-width", 500,
+    "initial-height", 300,
+    "gschem-toplevel", w_current,
+    NULL);
+  g_signal_connect (w_current->find_text_dockable,
+                    "select-object",
+                    G_CALLBACK (&x_window_select_text),
+                    w_current);
 
   gschem_dockable_initialize_toplevel (w_current);
 

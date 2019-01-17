@@ -561,9 +561,6 @@ get_dockable_by_widget (GschemToplevel *w_current, GtkWidget *widget)
 {
   g_return_val_if_fail (widget != NULL, NULL);
 
-  if (widget == GTK_WIDGET (w_current->find_text_state))
-    return NULL;
-
   GValue value = G_VALUE_INIT;
   g_value_init (&value, G_TYPE_POINTER);
   g_object_get_property (G_OBJECT (widget), "user-data", &value);
@@ -577,9 +574,6 @@ get_settings_name_for_widget (GschemToplevel *w_current,
 {
   g_return_val_if_fail (widget != NULL, NULL);
 
-  if (widget == GTK_WIDGET (w_current->find_text_state))
-    return "find-text-state";
-
   GschemDockable *dockable = get_dockable_by_widget (w_current, widget);
   g_return_val_if_fail (dockable != NULL, NULL);
 
@@ -592,9 +586,6 @@ get_widget_by_settings_name (GschemToplevel *w_current,
                              const gchar *settings_name)
 {
   g_return_val_if_fail (settings_name != NULL, NULL);
-
-  if (strcmp (settings_name, "find-text-state") == 0)
-    return GTK_WIDGET (w_current->find_text_state);
 
   for (GList *l = w_current->dockables; l != NULL; l = l->next) {
     GschemDockable *dockable = GSCHEM_DOCKABLE (l->data);

@@ -18,7 +18,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 /*!
- * \file gschem_find_text_state.c
+ * \file gschem_find_text_dockable.c
  *
  * \brief Stores state of a find text operation
  */
@@ -35,6 +35,8 @@
 
 #include "gschem.h"
 
+#include "../include/gschem_find_text_dockable.h"
+
 
 enum
 {
@@ -49,16 +51,16 @@ typedef void (*NotifyFunc)(void*, void*);
 
 
 static void
-assign_store (GschemFindTextState *state, GSList *objects);
+assign_store (GschemFindTextDockable *state, GSList *objects);
 
 static void
-assign_store_patch (GschemFindTextState *state, GSList *objects);
+assign_store_patch (GschemFindTextDockable *state, GSList *objects);
 
 static void
-class_init (GschemFindTextStateClass *klass);
+class_init (GschemFindTextDockableClass *klass);
 
 static void
-clear_store (GschemFindTextState *state);
+clear_store (GschemFindTextDockable *state);
 
 static void
 dispose (GObject *object);
@@ -88,22 +90,25 @@ static GList*
 get_subpages (PAGE *page);
 
 static void
-instance_init (GschemFindTextState *state);
+instance_init (GschemFindTextDockable *state);
+
+static GtkWidget *
+create_widget (GschemDockable *parent);
 
 static void
-object_weakref_cb (OBJECT *object, GschemFindTextState *state);
+object_weakref_cb (OBJECT *object, GschemFindTextDockable *state);
 
 static void
-remove_object (GschemFindTextState *state, OBJECT *object);
+remove_object (GschemFindTextDockable *state, OBJECT *object);
 
 static void
-select_cb (GtkTreeSelection *selection, GschemFindTextState *state);
+select_cb (GtkTreeSelection *selection, GschemFindTextDockable *state);
 
 static void
 set_property (GObject *object, guint param_id, const GValue *value, GParamSpec *pspec);
 
 
-static GObjectClass *gschem_find_text_state_parent_class = NULL;
+static GObjectClass *gschem_find_text_dockable_parent_class = NULL;
 
 
 /*! \brief find instances of a given string
@@ -119,7 +124,7 @@ static GObjectClass *gschem_find_text_state_parent_class = NULL;
  *  \return the number of objects found
  */
 int
-gschem_find_text_state_find (GschemFindTextState *state, GList *pages, int type, const char *text, gboolean descend)
+gschem_find_text_dockable_find (GschemFindTextDockable *state, GList *pages, int type, const char *text, gboolean descend)
 {
   int count;
   GSList *objects = NULL;
@@ -162,45 +167,33 @@ gschem_find_text_state_find (GschemFindTextState *state, GList *pages, int type,
 }
 
 
-/*! \brief Get/register GschemFindTextState type.
+/*! \brief Get/register GschemFindTextDockable type.
  */
 GType
-gschem_find_text_state_get_type ()
+gschem_find_text_dockable_get_type ()
 {
   static GType type = 0;
 
   if (type == 0) {
     static const GTypeInfo info = {
-      sizeof(GschemFindTextStateClass),
+      sizeof(GschemFindTextDockableClass),
       NULL,                                /* base_init */
       NULL,                                /* base_finalize */
       (GClassInitFunc) class_init,
       NULL,                                /* class_finalize */
       NULL,                                /* class_data */
-      sizeof(GschemFindTextState),
+      sizeof(GschemFindTextDockable),
       0,                                   /* n_preallocs */
       (GInstanceInitFunc) instance_init,
     };
 
-    type = g_type_register_static (GSCHEM_TYPE_BIN,
-                                   "GschemFindTextState",
+    type = g_type_register_static (GSCHEM_TYPE_DOCKABLE,
+                                   "GschemFindTextDockable",
                                    &info,
                                    0);
   }
 
   return type;
-}
-
-
-/*! \brief create a new widget for showing the find text state
- *
- *  \return the new find text state widget
- */
-GschemFindTextState*
-gschem_find_text_state_new ()
-{
-  return GSCHEM_FIND_TEXT_STATE (g_object_new (GSCHEM_TYPE_FIND_TEXT_STATE,
-                                               NULL));
 }
 
 
@@ -216,7 +209,7 @@ gschem_find_text_state_new ()
  *  \param [in] objects the list of objects to put in the store
  */
 static void
-assign_store (GschemFindTextState *state, GSList *objects)
+assign_store (GschemFindTextDockable *state, GSList *objects)
 {
   GSList *object_iter;
 
@@ -280,7 +273,7 @@ assign_store (GschemFindTextState *state, GSList *objects)
  *  \param [in] objects the list of objects to put in the store
  */
 static void
-assign_store_patch (GschemFindTextState *state, GSList *objects)
+assign_store_patch (GschemFindTextDockable *state, GSList *objects)
 {
   GSList *object_iter;
 	static const char *UNKNOWN_FILE_NAME = "N/A";
@@ -386,9 +379,11 @@ assign_store_patch (GschemFindTextState *state, GSList *objects)
  *  \param [in] klass The class for initialization
  */
 static void
-class_init (GschemFindTextStateClass *klass)
+class_init (GschemFindTextDockableClass *klass)
 {
-  gschem_find_text_state_parent_class = G_OBJECT_CLASS (g_type_class_peek_parent (klass));
+  gschem_find_text_dockable_parent_class = G_OBJECT_CLASS (g_type_class_peek_parent (klass));
+
+  GSCHEM_DOCKABLE_CLASS (klass)->create_widget = create_widget;
 
   G_OBJECT_CLASS (klass)->dispose  = dispose;
   G_OBJECT_CLASS (klass)->finalize = finalize;
@@ -418,7 +413,7 @@ class_init (GschemFindTextStateClass *klass)
  *  \param [in] state
  */
 static void
-clear_store (GschemFindTextState *state)
+clear_store (GschemFindTextDockable *state)
 {
   GtkTreeIter iter;
   gboolean valid;
@@ -456,7 +451,7 @@ clear_store (GschemFindTextState *state)
 static void
 dispose (GObject *object)
 {
-  GschemFindTextState *state = GSCHEM_FIND_TEXT_STATE (object);
+  GschemFindTextDockable *state = GSCHEM_FIND_TEXT_DOCKABLE (object);
 
   if (state->store) {
     clear_store (state);
@@ -466,8 +461,8 @@ dispose (GObject *object)
 
   /* lastly, chain up to the parent dispose */
 
-  g_return_if_fail (gschem_find_text_state_parent_class != NULL);
-  gschem_find_text_state_parent_class->dispose (object);
+  g_return_if_fail (gschem_find_text_dockable_parent_class != NULL);
+  gschem_find_text_dockable_parent_class->dispose (object);
 }
 
 
@@ -478,8 +473,8 @@ finalize (GObject *object)
 {
   /* lastly, chain up to the parent finalize */
 
-  g_return_if_fail (gschem_find_text_state_parent_class != NULL);
-  gschem_find_text_state_parent_class->finalize (object);
+  g_return_if_fail (gschem_find_text_dockable_parent_class != NULL);
+  gschem_find_text_dockable_parent_class->finalize (object);
 }
 
 
@@ -799,7 +794,7 @@ get_pages (GList *pages, gboolean descend)
 static void
 get_property (GObject *object, guint param_id, GValue *value, GParamSpec *pspec)
 {
-  /* GschemFindTextState *state = GSCHEM_FIND_TEXT_STATE (object); */
+  /* GschemFindTextDockable *state = GSCHEM_FIND_TEXT_DOCKABLE (object); */
 
   switch (param_id) {
     default:
@@ -882,23 +877,26 @@ get_subpages (PAGE *page)
  *  \param [in] state the new instance
  */
 static void
-instance_init (GschemFindTextState *state)
+instance_init (GschemFindTextDockable *state)
 {
+  state->store = gtk_list_store_new(COLUMN_COUNT,
+                                    G_TYPE_STRING,
+                                    G_TYPE_STRING,
+                                    G_TYPE_POINTER);
+}
+
+static GtkWidget *
+create_widget (GschemDockable *parent)
+{
+  GschemFindTextDockable *state = GSCHEM_FIND_TEXT_DOCKABLE (parent);
+
   GtkTreeViewColumn *column;
   GtkCellRenderer *renderer;
   GtkWidget *scrolled;
   GtkTreeSelection *selection;
   GtkWidget *tree_widget;
 
-  g_return_if_fail (state != NULL);
-
-  state->store = gtk_list_store_new(COLUMN_COUNT,
-                                    G_TYPE_STRING,
-                                    G_TYPE_STRING,
-                                    G_TYPE_POINTER);
-
   scrolled = gtk_scrolled_window_new (NULL, NULL);
-  gtk_container_add (GTK_CONTAINER (state), scrolled);
 
   tree_widget = gtk_tree_view_new_with_model (GTK_TREE_MODEL (state->store));
   gtk_container_add (GTK_CONTAINER (scrolled), tree_widget);
@@ -931,6 +929,9 @@ instance_init (GschemFindTextState *state)
 
   selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (tree_widget));
   g_signal_connect (selection, "changed", G_CALLBACK (select_cb), state);
+
+  gtk_widget_show_all (scrolled);
+  return scrolled;
 }
 
 
@@ -940,7 +941,7 @@ instance_init (GschemFindTextState *state)
  *  \param [in] state
  */
 static void
-object_weakref_cb (OBJECT *object, GschemFindTextState *state)
+object_weakref_cb (OBJECT *object, GschemFindTextDockable *state)
 {
   g_return_if_fail (state != NULL);
 
@@ -960,7 +961,7 @@ object_weakref_cb (OBJECT *object, GschemFindTextState *state)
  *  \param [in] object the object to remove from the store
  */
 static void
-remove_object (GschemFindTextState *state, OBJECT *object)
+remove_object (GschemFindTextDockable *state, OBJECT *object)
 {
   GtkTreeIter iter;
   gboolean valid;
@@ -1001,7 +1002,7 @@ remove_object (GschemFindTextState *state, OBJECT *object)
  *  \param [in] state
  */
 static void
-select_cb (GtkTreeSelection *selection, GschemFindTextState *state)
+select_cb (GtkTreeSelection *selection, GschemFindTextDockable *state)
 {
   GtkTreeIter iter;
   gboolean success;
@@ -1044,7 +1045,7 @@ select_cb (GtkTreeSelection *selection, GschemFindTextState *state)
 static void
 set_property (GObject *object, guint param_id, const GValue *value, GParamSpec *pspec)
 {
-  /* GschemFindTextState *state = GSCHEM_FIND_TEXT_STATE (object); */
+  /* GschemFindTextDockable *state = GSCHEM_FIND_TEXT_DOCKABLE (object); */
 
   switch (param_id) {
     default:

@@ -25,7 +25,7 @@ gschem/src/gschem_dialog.c
 gschem/src/gschem_dialog_misc.c
 gschem/src/gschem_dockable.c
 gschem/src/gschem_fill_swatch_cell_renderer.c
-gschem/src/gschem_find_text_state.c
+gschem/src/gschem_find_text_dockable.c
 gschem/src/gschem_find_text_widget.c
 gschem/src/gschem_hotkey_dialog.c
 gschem/src/gschem_integer_combo_box.c

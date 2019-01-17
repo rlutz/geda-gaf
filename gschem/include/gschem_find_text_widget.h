@@ -74,3 +74,7 @@ gschem_find_text_widget_set_find_text_string (GschemFindTextWidget *widget, cons
 
 void
 gschem_find_text_widget_set_find_type (GschemFindTextWidget *widget, int type);
+
+
+void
+find_text_dialog(GschemToplevel *w_current);
