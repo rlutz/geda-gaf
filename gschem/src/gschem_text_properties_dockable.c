@@ -18,9 +18,9 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 /*!
- * \file gschem_text_properties_widget.c
+ * \file gschem_text_properties_dockable.c
  *
- * \brief A widget for editing text properties
+ * \brief A dockable for editing text properties
  */
 
 #include <config.h>
@@ -36,64 +36,53 @@
 #include "gschem.h"
 #include <gdk/gdkkeysyms.h>
 
-
-enum
-{
-  PROP_0,
-  PROP_GSCHEM_TOPLEVEL
-};
+#include "../include/gschem_text_properties_dockable.h"
 
 
 static void
-class_init (GschemTextPropertiesWidgetClass *klass);
+adjust_focus (GschemDockable *parent);
+
+static void
+class_init (GschemTextPropertiesDockableClass *klass);
 
 static GtkWidget*
-create_text_content_section (GschemTextPropertiesWidget *widget);
+create_text_content_section (GschemTextPropertiesDockable *widget);
 
 static GtkWidget*
-create_text_property_section (GschemTextPropertiesWidget *widget);
+create_text_property_section (GschemTextPropertiesDockable *widget);
 
 static void
 dispose (GObject *object);
 
-static void
-get_property (GObject *object, guint param_id, GValue *value, GParamSpec *pspec);
+static GtkWidget *
+create_widget (GschemDockable *parent);
 
 static void
-instance_init (GschemTextPropertiesWidget *widget);
+set_selection_adapter (GschemTextPropertiesDockable *widget, GschemSelectionAdapter *adapter);
 
 static void
-notify_gschem_toplevel (GschemTextPropertiesWidget *widget);
+update_text_alignment_model (GschemTextPropertiesDockable *widget);
 
 static void
-set_property (GObject *object, guint param_id, const GValue *value, GParamSpec *pspec);
+update_text_alignment_widget (GschemTextPropertiesDockable *widget);
 
 static void
-set_selection_adapter (GschemTextPropertiesWidget *widget, GschemSelectionAdapter *adapter);
+update_text_color_model (GschemTextPropertiesDockable *widget);
 
 static void
-update_text_alignment_model (GschemTextPropertiesWidget *widget);
+update_text_color_widget (GschemTextPropertiesDockable *widget);
 
 static void
-update_text_alignment_widget (GschemTextPropertiesWidget *widget);
+update_text_content_model (GschemTextPropertiesDockable *widget);
 
 static void
-update_text_color_model (GschemTextPropertiesWidget *widget);
+update_text_content_widget (GschemTextPropertiesDockable *widget);
 
 static void
-update_text_color_widget (GschemTextPropertiesWidget *widget);
+update_text_rotation_model (GschemTextPropertiesDockable *widget);
 
 static void
-update_text_content_model (GschemTextPropertiesWidget *widget);
-
-static void
-update_text_content_widget (GschemTextPropertiesWidget *widget);
-
-static void
-update_text_rotation_model (GschemTextPropertiesWidget *widget);
-
-static void
-update_text_rotation_widget (GschemTextPropertiesWidget *widget);
+update_text_rotation_widget (GschemTextPropertiesDockable *widget);
 
 
 
@@ -105,9 +94,12 @@ update_text_rotation_widget (GschemTextPropertiesWidget *widget);
  *
  *  \param [in] widget This text properties widget
  */
-void
-gschem_text_properties_widget_adjust_focus (GschemTextPropertiesWidget *widget)
+static void
+adjust_focus (GschemDockable *parent)
 {
+  GschemTextPropertiesDockable *widget =
+    GSCHEM_TEXT_PROPERTIES_DOCKABLE (parent);
+
   g_return_if_fail (widget != NULL);
   g_return_if_fail (widget->text_view != NULL);
   g_return_if_fail (widget->colorcb != NULL);
@@ -126,78 +118,30 @@ gschem_text_properties_widget_adjust_focus (GschemTextPropertiesWidget *widget)
 /*! \brief Get/register text properties widget type.
  */
 GType
-gschem_text_properties_widget_get_type ()
+gschem_text_properties_dockable_get_type ()
 {
   static GType type = 0;
 
   if (type == 0) {
     static const GTypeInfo info = {
-      sizeof(GschemTextPropertiesWidgetClass),
+      sizeof(GschemTextPropertiesDockableClass),
       NULL,                                       /* base_init */
       NULL,                                       /* base_finalize */
       (GClassInitFunc) class_init,
       NULL,                                       /* class_finalize */
       NULL,                                       /* class_data */
-      sizeof(GschemTextPropertiesWidget),
+      sizeof(GschemTextPropertiesDockable),
       0,                                          /* n_preallocs */
-      (GInstanceInitFunc) instance_init,
+      NULL,                                       /* instance_init */
     };
 
-    type = g_type_register_static (GSCHEM_TYPE_BIN,
-                                   "GschemTextPropertiesWidget",
+    type = g_type_register_static (GSCHEM_TYPE_DOCKABLE,
+                                   "GschemTextPropertiesDockable",
                                    &info,
                                    0);
   }
 
   return type;
-}
-
-
-
-/*! \brief Create a new text properties widget
- *
- *  \param [in] w_current The GschemToplevel structure
- */
-GtkWidget*
-gschem_text_properties_widget_new (GschemToplevel *w_current)
-{
-    return g_object_new (GSCHEM_TYPE_TEXT_PROPERTIES_WIDGET,
-                         "gschem-toplevel",  w_current,
-                         NULL);
-}
-
-
-
-/*! \brief Open the widget box to edit text
- *
- *  \par Function Description
- *  This function creates or raises the modal text properties widget
- *
- *  \param [in] w_current The gschem toplevel
- */
-void
-text_edit_dialog (GschemToplevel *w_current)
-{
-  int page;
-
-  g_return_if_fail (w_current != NULL);
-  g_return_if_fail (w_current->right_notebook != NULL);
-  g_return_if_fail (w_current->text_properties != NULL);
-
-  page = gtk_notebook_page_num (GTK_NOTEBOOK (w_current->right_notebook),
-                                GTK_WIDGET (w_current->text_properties));
-
-  if (page >= 0) {
-    int current = gtk_notebook_get_current_page (GTK_NOTEBOOK (w_current->right_notebook));
-
-    if (page != current) {
-      gtk_notebook_set_current_page (GTK_NOTEBOOK (w_current->right_notebook), page);
-    }
-
-    gtk_widget_set_visible (GTK_WIDGET (w_current->right_notebook), TRUE);
-  }
-
-  gschem_text_properties_widget_adjust_focus(GSCHEM_TEXT_PROPERTIES_WIDGET(w_current->text_properties));
 }
 
 
@@ -208,28 +152,20 @@ text_edit_dialog (GschemToplevel *w_current)
  *  \param [in] klass
  */
 static void
-class_init (GschemTextPropertiesWidgetClass *klass)
+class_init (GschemTextPropertiesDockableClass *klass)
 {
   GObjectClass *object_class;
 
   g_return_if_fail (klass != NULL);
+
+  GSCHEM_DOCKABLE_CLASS (klass)->create_widget = create_widget;
+  GSCHEM_DOCKABLE_CLASS (klass)->post_present = adjust_focus;
 
   object_class = G_OBJECT_CLASS (klass);
 
   g_return_if_fail (object_class != NULL);
 
   object_class->dispose = dispose;
-
-  object_class->get_property = get_property;
-  object_class->set_property = set_property;
-
-  g_object_class_install_property (
-    object_class,
-    PROP_GSCHEM_TOPLEVEL,
-    g_param_spec_pointer ("gschem-toplevel",
-                          "",
-                          "",
-                          G_PARAM_CONSTRUCT_ONLY | G_PARAM_READWRITE));
 }
 
 
@@ -241,7 +177,7 @@ class_init (GschemTextPropertiesWidgetClass *klass)
  *  \return The new text content section widget
  */
 static GtkWidget*
-create_text_content_section (GschemTextPropertiesWidget *widget)
+create_text_content_section (GschemTextPropertiesDockable *widget)
 {
   GtkWidget *bbox = gtk_hbutton_box_new ();
   GtkWidget *scrolled = gtk_scrolled_window_new (NULL, NULL);
@@ -303,7 +239,7 @@ create_text_content_section (GschemTextPropertiesWidget *widget)
  *  \return The new text property section widget
  */
 static GtkWidget*
-create_text_property_section (GschemTextPropertiesWidget *widget)
+create_text_property_section (GschemTextPropertiesDockable *widget)
 {
   GtkWidget *label[4];
   GtkWidget *table;
@@ -340,11 +276,6 @@ create_text_property_section (GschemTextPropertiesWidget *widget)
                             G_CALLBACK (update_text_rotation_model),
                             widget);
 
-  g_signal_connect (G_OBJECT (gschem_integer_combo_box_get_entry (widget->textsizecb)),
-                    "activate",
-                    G_CALLBACK (gschem_dialog_misc_entry_activate),
-                    widget);
-
   return gschem_dialog_misc_create_section_widget (_("<b>Text Properties</b>"), table);
 }
 
@@ -358,13 +289,13 @@ create_text_property_section (GschemTextPropertiesWidget *widget)
 static void
 dispose (GObject *object)
 {
-  GschemTextPropertiesWidget *widget;
-  GschemTextPropertiesWidgetClass *klass;
+  GschemTextPropertiesDockable *widget;
+  GschemTextPropertiesDockableClass *klass;
   GObjectClass *parent_class;
 
   g_return_if_fail (object != NULL);
 
-  widget = GSCHEM_TEXT_PROPERTIES_WIDGET (object);
+  widget = GSCHEM_TEXT_PROPERTIES_DOCKABLE (object);
 
   set_selection_adapter (widget, NULL);
 
@@ -374,7 +305,7 @@ dispose (GObject *object)
 
   /* lastly, chain up to the parent dispose */
 
-  klass = GSCHEM_TEXT_PROPERTIES_WIDGET_GET_CLASS (object);
+  klass = GSCHEM_TEXT_PROPERTIES_DOCKABLE_GET_CLASS (object);
   g_return_if_fail (klass != NULL);
   parent_class = g_type_class_peek_parent (klass);
   g_return_if_fail (parent_class != NULL);
@@ -383,48 +314,24 @@ dispose (GObject *object)
 
 
 
-/*! \brief Get a property
- *
- *  \param [in]     object
- *  \param [in]     param_id
- *  \param [in,out] value
- *  \param [in]     pspec
- */
-static void
-get_property (GObject *object, guint param_id, GValue *value, GParamSpec *pspec)
-{
-  GschemTextPropertiesWidget *widget = GSCHEM_TEXT_PROPERTIES_WIDGET (object);
-
-  switch (param_id) {
-    case PROP_GSCHEM_TOPLEVEL:
-      g_value_set_pointer (value, widget->w_current);
-      break;
-
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
-  }
-}
-
-
 /*! \private
- *  \brief Initialize a text property widget instance
+ *  \brief Create text property widgets and set up property change
+ *         notifications
  *
- *  \param [in,out] widget The text property widget
+ *  \param [in,out] parent This dockable
  */
-static void
-instance_init (GschemTextPropertiesWidget *widget)
+static GtkWidget *
+create_widget (GschemDockable *parent)
 {
+  GschemTextPropertiesDockable *widget =
+    GSCHEM_TEXT_PROPERTIES_DOCKABLE (parent);
+  GschemToplevel *w_current = parent->w_current;
+
   GtkWidget *scrolled;
   GtkWidget *vbox;
   GtkWidget *viewport;
 
-  g_signal_connect (G_OBJECT (widget),
-                    "notify::gschem-toplevel",
-                    G_CALLBACK (notify_gschem_toplevel),
-                    NULL);
-
   scrolled = gtk_scrolled_window_new (NULL, NULL);
-  gtk_container_add (GTK_CONTAINER (widget), scrolled);
 
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled),
                                   GTK_POLICY_NEVER,
@@ -440,7 +347,7 @@ instance_init (GschemTextPropertiesWidget *widget)
                                 GTK_SHADOW_NONE);
 
   vbox = gtk_vbox_new (FALSE, DIALOG_V_SPACING);
-  //gtk_container_set_border_width (GTK_CONTAINER (vbox), DIALOG_V_SPACING);
+  gtk_container_set_border_width (GTK_CONTAINER (vbox), DIALOG_BORDER_SPACING);
   gtk_container_add (GTK_CONTAINER (viewport), vbox);
 
   gtk_box_pack_start (GTK_BOX (vbox),                          /* box     */
@@ -454,53 +361,19 @@ instance_init (GschemTextPropertiesWidget *widget)
                       FALSE,                                   /* expand  */
                       FALSE,                                   /* fill    */
                       0);                                      /* padding */
-}
 
-
-
-/*! \private
- *  \brief Property change notification from the base class
- *
- *  Handles property change notification from the base class to update members
- *  and signal handlers in the this derived class.
- *
- *  \param [in,out] widget    This widget
- *  \param [in]     selection The selection to manipulate
- */
-static void
-notify_gschem_toplevel (GschemTextPropertiesWidget *widget)
-{
-    GschemToplevel *w_current;
-
-    g_return_if_fail (widget != NULL);
-
-    g_object_get (widget, "gschem-toplevel", &w_current, NULL);
 
     gschem_integer_combo_box_set_model (widget->textsizecb,
                                         gschem_toplevel_get_text_size_list_store (w_current));
 
     set_selection_adapter (widget,
                            gschem_toplevel_get_selection_adapter (w_current));
+
+
+  gtk_widget_show_all (scrolled);
+  return scrolled;
 }
 
-
-
-/*! \brief Set a gobject property
- */
-static void
-set_property (GObject *object, guint param_id, const GValue *value, GParamSpec *pspec)
-{
-  GschemTextPropertiesWidget *widget = GSCHEM_TEXT_PROPERTIES_WIDGET (object);
-
-  switch (param_id) {
-    case PROP_GSCHEM_TOPLEVEL:
-      widget->w_current = g_value_get_pointer (value);
-      break;
-
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
-  }
-}
 
 
 /*! \private
@@ -510,7 +383,7 @@ set_property (GObject *object, guint param_id, const GValue *value, GParamSpec *
  *  \param [in]     selection The selection to manipulate
  */
 static void
-set_selection_adapter (GschemTextPropertiesWidget *widget, GschemSelectionAdapter *adapter)
+set_selection_adapter (GschemTextPropertiesDockable *widget, GschemSelectionAdapter *adapter)
 {
   g_return_if_fail (widget != NULL);
 
@@ -578,7 +451,7 @@ set_selection_adapter (GschemTextPropertiesWidget *widget, GschemSelectionAdapte
  *  \param [in,out] widget This widget
  */
 static void
-update_text_alignment_model (GschemTextPropertiesWidget *widget)
+update_text_alignment_model (GschemTextPropertiesDockable *widget)
 {
   g_return_if_fail (widget != NULL);
   g_return_if_fail (widget->aligncb != NULL);
@@ -600,7 +473,7 @@ update_text_alignment_model (GschemTextPropertiesWidget *widget)
  *  \param [in,out] widget This widget
  */
 static void
-update_text_alignment_widget (GschemTextPropertiesWidget *widget)
+update_text_alignment_widget (GschemTextPropertiesDockable *widget)
 {
   g_return_if_fail (widget != NULL);
   g_return_if_fail (widget->aligncb != NULL);
@@ -630,7 +503,7 @@ update_text_alignment_widget (GschemTextPropertiesWidget *widget)
  *  \param [in,out] widget This widget
  */
 static void
-update_text_color_model (GschemTextPropertiesWidget *widget)
+update_text_color_model (GschemTextPropertiesDockable *widget)
 {
   g_return_if_fail (widget != NULL);
   g_return_if_fail (widget->colorcb != NULL);
@@ -652,7 +525,7 @@ update_text_color_model (GschemTextPropertiesWidget *widget)
  *  \param [in,out] widget This widget
  */
 static void
-update_text_color_widget (GschemTextPropertiesWidget *widget)
+update_text_color_widget (GschemTextPropertiesDockable *widget)
 {
   g_return_if_fail (widget != NULL);
   g_return_if_fail (widget->colorcb != NULL);
@@ -682,7 +555,7 @@ update_text_color_widget (GschemTextPropertiesWidget *widget)
  *  \param [in,out] widget This widget
  */
 static void
-update_text_content_model (GschemTextPropertiesWidget *widget)
+update_text_content_model (GschemTextPropertiesDockable *widget)
 {
   g_return_if_fail (widget != NULL);
   g_return_if_fail (widget->text_view != NULL);
@@ -698,7 +571,7 @@ update_text_content_model (GschemTextPropertiesWidget *widget)
     string =  gtk_text_iter_get_text (&start, &end);
 
     if (string != NULL) {
-      gschem_selection_adapter_set_text_string (widget->adapter, string, widget->w_current);
+      gschem_selection_adapter_set_text_string (widget->adapter, string, widget->parent.w_current);
     }
   }
 }
@@ -711,7 +584,7 @@ update_text_content_model (GschemTextPropertiesWidget *widget)
  *  \param [in,out] widget This widget
  */
 static void
-update_text_content_widget (GschemTextPropertiesWidget *widget)
+update_text_content_widget (GschemTextPropertiesDockable *widget)
 {
   g_return_if_fail (widget != NULL);
   g_return_if_fail (widget->text_view != NULL);
@@ -752,7 +625,7 @@ update_text_content_widget (GschemTextPropertiesWidget *widget)
  *  \param [in,out] widget This widget
  */
 static void
-update_text_rotation_model (GschemTextPropertiesWidget *widget)
+update_text_rotation_model (GschemTextPropertiesDockable *widget)
 {
   g_return_if_fail (widget != NULL);
   g_return_if_fail (widget->rotatecb != NULL);
@@ -774,7 +647,7 @@ update_text_rotation_model (GschemTextPropertiesWidget *widget)
  *  \param [in,out] widget This widget
  */
 static void
-update_text_rotation_widget (GschemTextPropertiesWidget *widget)
+update_text_rotation_widget (GschemTextPropertiesDockable *widget)
 {
   g_return_if_fail (widget != NULL);
   g_return_if_fail (widget->rotatecb != NULL);

@@ -60,7 +60,6 @@ struct st_gschem_toplevel {
 
   /* Widgets inside the notebook at the right of the window */
   GtkWidget *options_widget;
-  GtkWidget *text_properties;
 
 
   gchar *keyaccel_string;               /* visual feedback when pressing
@@ -90,6 +89,7 @@ struct st_gschem_toplevel {
   GList *dockables;
 
   GschemDockable *object_properties_dockable;
+  GschemDockable *text_properties_dockable;
 
   /* -------------------------------------- */
   /* Models for widgets inside dialog boxes */

@@ -60,7 +60,7 @@ gschem_SOURCES = \
 	gschem_show_hide_text_widget.c \
 	gschem_slot_edit_dialog.c \
 	gschem_swatch_column_renderer.c \
-	gschem_text_properties_widget.c \
+	gschem_text_properties_dockable.c \
 	gschem_translate_widget.c \
 	gschem_toplevel.c \
 	i_basic.c \

@@ -202,6 +202,7 @@ GschemToplevel *gschem_toplevel_new ()
   w_current->dockables = NULL;
 
   w_current->object_properties_dockable = NULL;
+  w_current->text_properties_dockable   = NULL;
 
   /* -------------------------------------- */
   /* Models for widgets inside dialog boxes */

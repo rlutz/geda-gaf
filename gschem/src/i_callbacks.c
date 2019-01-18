@@ -612,7 +612,7 @@ DEFINE_I_CALLBACK(edit_text)
 
   i_update_middle_button(w_current, i_callback_edit_text, _("Edit Text"));
 
-  text_edit_dialog (w_current);
+  gschem_dockable_present (w_current->text_properties_dockable);
 }
 
 /*! \todo Finish function documentation!!!
@@ -2583,7 +2583,7 @@ DEFINE_I_CALLBACK(options_text_size)
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
 
   g_return_if_fail (w_current != NULL);
-  text_edit_dialog (w_current);
+  gschem_dockable_present (w_current->text_properties_dockable);
 }
 
 /*! \todo Finish function documentation!!!

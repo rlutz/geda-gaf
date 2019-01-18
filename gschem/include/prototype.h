@@ -607,7 +607,6 @@ void x_colorcb_set_index (GtkWidget *widget, int color_index);
 int text_view_calculate_real_tab_width(GtkTextView *textview, int tab_size);
 void select_all_text_in_textview(GtkTextView *textview);
 void text_input_dialog(GschemToplevel *w_current);
-void text_edit_dialog(GschemToplevel *w_current);
 void arc_angle_dialog(GschemToplevel *w_current, OBJECT *arc_object);
 void snap_size_dialog(GschemToplevel *w_current);
 void slot_edit_dialog(GschemToplevel *w_current, const char *count, const char *string);

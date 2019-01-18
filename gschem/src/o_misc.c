@@ -81,7 +81,7 @@ void o_edit(GschemToplevel *w_current, GList *list)
         o_text_num_lines (str) == 1) {
         attrib_edit_dialog(w_current,o_current, FROM_MENU);
     } else {
-      text_edit_dialog (w_current);
+      gschem_dockable_present (w_current->text_properties_dockable);
     }
     break;
   }
