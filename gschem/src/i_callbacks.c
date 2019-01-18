@@ -596,9 +596,7 @@ DEFINE_I_CALLBACK(edit_pin_type)
 
   i_update_middle_button (w_current, i_callback_edit_pin_type, _("Edit pin type"));
 
-  x_dialog_edit_pin_type (w_current,
-                          geda_list_get_glist (gschem_toplevel_get_toplevel (w_current)->
-                                                 page_current->selection_list));
+  gschem_dockable_present (w_current->object_properties_dockable);
 }
 
 /*! \todo Finish function documentation!!!
@@ -651,7 +649,7 @@ DEFINE_I_CALLBACK(edit_color)
   i_update_middle_button(w_current, i_callback_edit_color, _("Color"));
 
   /* dialogs have been merged */
-  line_type_dialog(w_current);
+  gschem_dockable_present (w_current->object_properties_dockable);
 }
 
 /*! \todo Finish function documentation!!!
@@ -1082,7 +1080,7 @@ DEFINE_I_CALLBACK(edit_linetype)
   g_return_if_fail (w_current != NULL);
 
   /* dialogs have been merged */
-  line_type_dialog(w_current);
+  gschem_dockable_present (w_current->object_properties_dockable);
 }
 
 /*! \todo Finish function documentation!!!
@@ -1097,7 +1095,7 @@ DEFINE_I_CALLBACK(edit_filltype)
   g_return_if_fail (w_current != NULL);
 
   /* dialogs have been merged */
-  line_type_dialog(w_current);
+  gschem_dockable_present (w_current->object_properties_dockable);
 }
 
 /*! \section view-menu View Menu Callback Functions */

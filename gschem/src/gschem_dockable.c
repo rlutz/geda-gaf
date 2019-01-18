@@ -561,8 +561,7 @@ get_dockable_by_widget (GschemToplevel *w_current, GtkWidget *widget)
 {
   g_return_val_if_fail (widget != NULL, NULL);
 
-  if (widget == w_current->object_properties ||
-      widget == w_current->text_properties ||
+  if (widget == w_current->text_properties ||
       widget == w_current->options_widget ||
       widget == GTK_WIDGET (w_current->find_text_state) ||
       widget == GTK_WIDGET (w_current->log_widget))
@@ -581,8 +580,6 @@ get_settings_name_for_widget (GschemToplevel *w_current,
 {
   g_return_val_if_fail (widget != NULL, NULL);
 
-  if (widget == w_current->object_properties)
-    return "object-properties";
   if (widget == w_current->text_properties)
     return "text-properties";
   if (widget == w_current->options_widget)
@@ -605,8 +602,6 @@ get_widget_by_settings_name (GschemToplevel *w_current,
 {
   g_return_val_if_fail (settings_name != NULL, NULL);
 
-  if (strcmp (settings_name, "object-properties") == 0)
-    return w_current->object_properties;
   if (strcmp (settings_name, "text-properties") == 0)
     return w_current->text_properties;
   if (strcmp (settings_name, "options-widget") == 0)

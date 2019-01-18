@@ -182,7 +182,7 @@ text_edit_dialog (GschemToplevel *w_current)
 
   g_return_if_fail (w_current != NULL);
   g_return_if_fail (w_current->right_notebook != NULL);
-  g_return_if_fail (w_current->object_properties != NULL);
+  g_return_if_fail (w_current->text_properties != NULL);
 
   page = gtk_notebook_page_num (GTK_NOTEBOOK (w_current->right_notebook),
                                 GTK_WIDGET (w_current->text_properties));

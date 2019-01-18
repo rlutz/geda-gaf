@@ -59,7 +59,6 @@ struct st_gschem_toplevel {
   GschemLogWidget     *log_widget;
 
   /* Widgets inside the notebook at the right of the window */
-  GtkWidget *object_properties;
   GtkWidget *options_widget;
   GtkWidget *text_properties;
 
@@ -89,6 +88,8 @@ struct st_gschem_toplevel {
   /* Dockables */
   /* --------- */
   GList *dockables;
+
+  GschemDockable *object_properties_dockable;
 
   /* -------------------------------------- */
   /* Models for widgets inside dialog boxes */

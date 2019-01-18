@@ -18,32 +18,30 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 /*!
- * \file gschem_object_properties_widget.h
+ * \file gschem_object_properties_dockable.h
  *
  * \brief A dialog box for editing an object's line properties.
  */
 
-#define GSCHEM_TYPE_OBJECT_PROPERTIES_WIDGET           (gschem_object_properties_widget_get_type())
-#define GSCHEM_OBJECT_PROPERTIES_WIDGET(obj)           (G_TYPE_CHECK_INSTANCE_CAST ((obj), GSCHEM_TYPE_OBJECT_PROPERTIES_WIDGET, GschemObjectPropertiesWidget))
-#define GSCHEM_OBJECT_PROPERTIES_WIDGET_CLASS(klass)   (G_TYPE_CHECK_CLASS_CAST ((klass),  GSCHEM_TYPE_OBJECT_PROPERTIES_WIDGET, GschemObjectPropertiesWidgetClass))
-#define IS_GSCHEM_OBJECT_PROPERTIES_WIDGET(obj)        (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GSCHEM_TYPE_OBJECT_PROPERTIES_WIDGET))
-#define GSCHEM_OBJECT_PROPERTIES_WIDGET_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj),  GSCHEM_TYPE_OBJECT_PROPERTIES_WIDGET, GschemObjectPropertiesWidgetClass))
+#define GSCHEM_TYPE_OBJECT_PROPERTIES_DOCKABLE           (gschem_object_properties_dockable_get_type())
+#define GSCHEM_OBJECT_PROPERTIES_DOCKABLE(obj)           (G_TYPE_CHECK_INSTANCE_CAST ((obj), GSCHEM_TYPE_OBJECT_PROPERTIES_DOCKABLE, GschemObjectPropertiesDockable))
+#define GSCHEM_OBJECT_PROPERTIES_DOCKABLE_CLASS(klass)   (G_TYPE_CHECK_CLASS_CAST ((klass),  GSCHEM_TYPE_OBJECT_PROPERTIES_DOCKABLE, GschemObjectPropertiesDockableClass))
+#define GSCHEM_IS_OBJECT_PROPERTIES_DOCKABLE(obj)        (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GSCHEM_TYPE_OBJECT_PROPERTIES_DOCKABLE))
+#define GSCHEM_OBJECT_PROPERTIES_DOCKABLE_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj),  GSCHEM_TYPE_OBJECT_PROPERTIES_DOCKABLE, GschemObjectPropertiesDockableClass))
 
-typedef struct _GschemObjectPropertiesWidgetClass GschemObjectPropertiesWidgetClass;
-typedef struct _GschemObjectPropertiesWidget GschemObjectPropertiesWidget;
+typedef struct _GschemObjectPropertiesDockableClass GschemObjectPropertiesDockableClass;
+typedef struct _GschemObjectPropertiesDockable GschemObjectPropertiesDockable;
 
-struct _GschemObjectPropertiesWidgetClass
+struct _GschemObjectPropertiesDockableClass
 {
-  GschemBinClass parent_class;
+  GschemDockableClass parent_class;
 };
 
-struct _GschemObjectPropertiesWidget
+struct _GschemObjectPropertiesDockable
 {
-  GschemBin parent;
+  GschemDockable parent;
 
   GschemSelectionAdapter *adapter;
-
-  GschemToplevel *w_current;
 
   GSList *bindings;
 
@@ -71,7 +69,4 @@ struct _GschemObjectPropertiesWidget
 };
 
 GType
-gschem_object_properties_widget_get_type();
-
-GtkWidget*
-gschem_object_properties_widget_new (GschemToplevel *w_current);
+gschem_object_properties_dockable_get_type();

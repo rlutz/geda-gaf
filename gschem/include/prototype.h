@@ -608,7 +608,6 @@ int text_view_calculate_real_tab_width(GtkTextView *textview, int tab_size);
 void select_all_text_in_textview(GtkTextView *textview);
 void text_input_dialog(GschemToplevel *w_current);
 void text_edit_dialog(GschemToplevel *w_current);
-void line_type_dialog(GschemToplevel *w_current);
 void arc_angle_dialog(GschemToplevel *w_current, OBJECT *arc_object);
 void snap_size_dialog(GschemToplevel *w_current);
 void slot_edit_dialog(GschemToplevel *w_current, const char *count, const char *string);
@@ -631,7 +630,6 @@ void major_changed_dialog(GschemToplevel* w_current);
 gboolean x_dialog_close_changed_page (GschemToplevel *w_current, PAGE *page);
 gboolean x_dialog_close_window (GschemToplevel *w_current);
 int x_dialog_validate_attribute(GtkWindow* parent, char *attribute);
-void x_dialog_edit_pin_type(GschemToplevel *w_current, const GList *obj_list);
 /* x_event.c */
 gint x_event_expose(GschemPageView *widget, GdkEventExpose *event, GschemToplevel *w_current);
 gint x_event_raise_dialog_boxes (GschemPageView *view, GdkEventExpose *event, GschemToplevel *w_current);

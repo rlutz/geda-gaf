@@ -23,6 +23,8 @@
 
 #include "gschem.h"
 
+#include "gschem_object_properties_dockable.h"
+
 #define GSCHEM_THEME_ICON_NAME "geda-gschem"
 
 /*! \todo Finish function documentation!!!
@@ -840,13 +842,6 @@ void x_window_create_main(GschemToplevel *w_current)
                     G_CALLBACK (&x_window_translate_response),
                     w_current);
 
-  /* object properties editor */
-  w_current->object_properties = gschem_object_properties_widget_new (w_current);
-
-  gtk_notebook_append_page (GTK_NOTEBOOK (w_current->right_notebook),
-                            GTK_WIDGET (w_current->object_properties),
-                            gtk_label_new (_("Object")));
-
   /* text properties editor */
   w_current->text_properties = gschem_text_properties_widget_new (w_current);
 
@@ -891,6 +886,16 @@ void x_window_create_main(GschemToplevel *w_current)
                             GTK_WIDGET (w_current->log_widget),
                             gtk_label_new (_("Status")));
 
+
+  w_current->object_properties_dockable = g_object_new (
+    GSCHEM_TYPE_OBJECT_PROPERTIES_DOCKABLE,
+    "title", _("Object"),
+    "settings-name", "object-properties",  /* line-type */
+    "initial-state", GSCHEM_DOCKABLE_STATE_DOCKED_RIGHT,
+    "initial-width", 400,
+    "initial-height", 600,
+    "gschem-toplevel", w_current,
+    NULL);
 
   gschem_dockable_initialize_toplevel (w_current);
 
