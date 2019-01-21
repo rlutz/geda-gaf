@@ -19,31 +19,31 @@
  */
 
 
-#ifndef __X_MULTIATTRIB_H__
-#define __X_MULTIATTRIB_H__
+#ifndef GSCHEM_MULTIATTRIB_DOCKABLE_H
+#define GSCHEM_MULTIATTRIB_DOCKABLE_H
 
 
 /*
- * Multiattrib
+ * GschemMultiattribDockable
  */
 
-#define TYPE_MULTIATTRIB         (multiattrib_get_type())
-#define MULTIATTRIB(obj)         (G_TYPE_CHECK_INSTANCE_CAST ((obj), TYPE_MULTIATTRIB, Multiattrib))
-#define MULTIATTRIB_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), TYPE_MULTIATTRIB, MultiattribClass))
-#define IS_MULTIATTRIB(obj)      (G_TYPE_CHECK_INSTANCE_TYPE ((obj), TYPE_MULTIATTRIB))
+#define GSCHEM_TYPE_MULTIATTRIB_DOCKABLE         (gschem_multiattrib_dockable_get_type())
+#define GSCHEM_MULTIATTRIB_DOCKABLE(obj)         (G_TYPE_CHECK_INSTANCE_CAST ((obj), GSCHEM_TYPE_MULTIATTRIB_DOCKABLE, GschemMultiattribDockable))
+#define GSCHEM_MULTIATTRIB_DOCKABLE_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), GSCHEM_TYPE_MULTIATTRIB_DOCKABLE, GschemMultiattribDockableClass))
+#define GSCHEM_IS_MULTIATTRIB_DOCKABLE(obj)      (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GSCHEM_TYPE_MULTIATTRIB_DOCKABLE))
 
 
-typedef struct _MultiattribClass MultiattribClass;
-typedef struct _Multiattrib      Multiattrib;
+typedef struct _GschemMultiattribDockableClass GschemMultiattribDockableClass;
+typedef struct _GschemMultiattribDockable      GschemMultiattribDockable;
 
 
-struct _MultiattribClass {
-  GschemDialogClass parent_class;
+struct _GschemMultiattribDockableClass {
+  GschemDockableClass parent_class;
 
 };
 
-struct _Multiattrib {
-  GschemDialog parent_instance;
+struct _GschemMultiattribDockable {
+  GschemDockable parent;
 
   GedaList *object_list;
   int       total_num_in_list;
@@ -73,7 +73,7 @@ struct _Multiattrib {
 };
 
 
-GType multiattrib_get_type (void);
+GType gschem_multiattrib_dockable_get_type (void);
 
 
 /*
@@ -136,4 +136,4 @@ struct _CellRendererMultiLineText {
 GType cellrenderermultilinetext_get_type (void);
 
 
-#endif /* __X_MULTIATTRIB_H__ */
+#endif /* GSCHEM_MULTIATTRIB_DOCKABLE_H */

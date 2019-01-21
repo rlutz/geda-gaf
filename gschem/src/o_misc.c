@@ -65,7 +65,7 @@ void o_edit(GschemToplevel *w_current, GList *list)
     case(OBJ_NET):
     case(OBJ_PIN):
     case(OBJ_BUS):
-    x_multiattrib_open (w_current);
+    gschem_dockable_present (w_current->multiattrib_dockable);
     break;
 
     case(OBJ_PICTURE):

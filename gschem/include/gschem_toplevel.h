@@ -69,7 +69,6 @@ struct st_gschem_toplevel {
   GtkWidget *tiwindow;                  /* text input */
   GtkWidget *sewindow;                  /* slot edit */
   GtkWidget *aawindow;                  /* arc attribs */
-  GtkWidget *mawindow;                  /* multi attribute */
   GtkWidget *aewindow;                  /* attribute edit */
   GtkWidget *hkwindow;                  /* Help/Hotkeys... dialog*/
   GtkWidget *cowindow;                  /* Coordinate window */
@@ -83,6 +82,7 @@ struct st_gschem_toplevel {
 
   GschemDockable *object_properties_dockable;
   GschemDockable *text_properties_dockable;
+  GschemDockable *multiattrib_dockable;
   GschemDockable *options_dockable;     /* snap size dialog */
   GschemDockable *log_dockable;
   GschemDockable *find_text_dockable;

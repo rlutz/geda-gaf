@@ -25,6 +25,7 @@
 
 #include "gschem_object_properties_dockable.h"
 #include "gschem_text_properties_dockable.h"
+#include "gschem_multiattrib_dockable.h"
 #include "gschem_options_dockable.h"
 #include "gschem_log_dockable.h"
 #include "gschem_find_text_dockable.h"
@@ -857,6 +858,16 @@ void x_window_create_main(GschemToplevel *w_current)
     "gschem-toplevel", w_current,
     NULL);
 
+  w_current->multiattrib_dockable = g_object_new (
+    GSCHEM_TYPE_MULTIATTRIB_DOCKABLE,
+    "title", _("Attributes"),
+    "settings-name", "multiattrib",
+    "initial-state", GSCHEM_DOCKABLE_STATE_DOCKED_RIGHT,
+    "initial-width", 450,
+    "initial-height", 450,
+    "gschem-toplevel", w_current,
+    NULL);
+
   w_current->options_dockable = g_object_new (
     GSCHEM_TYPE_OPTIONS_DOCKABLE,
     "title", _("Options"),
@@ -976,8 +987,6 @@ void x_window_close(GschemToplevel *w_current)
 
   if (w_current->aawindow)
   gtk_widget_destroy(w_current->aawindow);
-
-  x_multiattrib_close (w_current);
 
   if (w_current->aewindow)
   gtk_widget_destroy(w_current->aewindow);

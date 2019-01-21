@@ -28,11 +28,11 @@
 #endif
 
 #include "gschem.h"
-#include "x_multiattrib.h"
+#include "../include/gschem_multiattrib_dockable.h"
 #include <gdk/gdkkeysyms.h>
 
 
-static void multiattrib_update (Multiattrib *multiattrib);
+static void multiattrib_update (GschemMultiattribDockable *multiattrib);
 
 static gboolean
 snv_shows_name (int snv)
@@ -44,81 +44,6 @@ static gboolean
 snv_shows_value (int snv)
 {
   return snv == SHOW_NAME_VALUE || snv == SHOW_VALUE;
-}
-
-/*! \brief Process the response returned by the multi-attribte dialog.
- *  \par Function Description
- *  This function handles the response <B>arg1</B> of the multi-attribute
- *  editor dialog <B>dialog</B>.
- *
- *  \param [in] dialog    The multi-attribute editor dialog.
- *  \param [in] arg1      The response ID.
- *  \param [in] user_data A pointer on the GschemToplevel environment.
- */
-static void
-multiattrib_callback_response (GtkDialog *dialog,
-                               gint arg1,
-                               gpointer user_data)
-{
-  GschemToplevel *w_current = GSCHEM_TOPLEVEL (user_data);
-
-  switch (arg1) {
-      case GTK_RESPONSE_CLOSE:
-      case GTK_RESPONSE_DELETE_EVENT:
-        gtk_widget_destroy (GTK_WIDGET (dialog));
-        w_current->mawindow = NULL;
-        break;
-  }
-}
-
-/*! \brief Open multiple attribute editor dialog.
- *  \par Function Description
- *  Opens the multiple attribute editor dialog for objects in this <B>toplevel</B>.
- *
- *  \param [in] w_current  The GschemToplevel object.
- */
-void
-x_multiattrib_open (GschemToplevel *w_current)
-{
-  if ( w_current->mawindow == NULL ) {
-    w_current->mawindow =
-      GTK_WIDGET (g_object_new (TYPE_MULTIATTRIB,
-                                "object_list", w_current->toplevel->page_current->selection_list,
-                                /* GschemDialog */
-                                "settings-name", "multiattrib",
-                                "gschem-toplevel", w_current,
-                                NULL));
-
-    gtk_window_set_transient_for (GTK_WINDOW(w_current->mawindow),
-                                  GTK_WINDOW(w_current->main_window));
-
-    g_signal_connect (w_current->mawindow,
-                      "response",
-                      G_CALLBACK (multiattrib_callback_response),
-                      w_current);
-
-    gtk_widget_show (w_current->mawindow);
-  } else {
-    gtk_window_present (GTK_WINDOW(w_current->mawindow));
-  }
-}
-
-
-/*! \brief Close the multiattrib dialog.
- *
- *  \par Function Description
- *
- *  Closes the multiattrib dialog associated with <B>w_current</B>.
- *
- *  \param [in] w_current  The GschemToplevel object.
- */
-void
-x_multiattrib_close (GschemToplevel *w_current)
-{
-  if (w_current->mawindow != NULL) {
-    gtk_widget_destroy (w_current->mawindow);
-    w_current->mawindow = NULL;
-  }
 }
 
 /*! \brief Update the multiattrib editor dialog for a GschemToplevel.
@@ -133,10 +58,8 @@ x_multiattrib_close (GschemToplevel *w_current)
 void
 x_multiattrib_update (GschemToplevel *w_current)
 {
-  if (w_current->mawindow != NULL) {
-    g_object_set (G_OBJECT (w_current->mawindow), "object_list",
-                  w_current->toplevel->page_current->selection_list, NULL);
-  }
+  g_object_set (G_OBJECT (w_current->multiattrib_dockable), "object_list",
+                w_current->toplevel->page_current->selection_list, NULL);
 }
 
 
@@ -514,8 +437,8 @@ enum {
 
 static GObjectClass *multiattrib_parent_class = NULL;
 
-static void multiattrib_class_init (MultiattribClass *class);
-static void multiattrib_init       (Multiattrib *multiattrib);
+static void multiattrib_class_init (GschemMultiattribDockableClass *class);
+static GtkWidget *multiattrib_create_widget (GschemDockable *dockable);
 static void multiattrib_set_property (GObject *object,
                                       guint property_id,
                                       const GValue *value,
@@ -525,7 +448,7 @@ static void multiattrib_get_property (GObject *object,
                                       GValue *value,
                                       GParamSpec *pspec);
 
-static void multiattrib_popup_menu (Multiattrib *multiattrib,
+static void multiattrib_popup_menu (GschemMultiattribDockable *multiattrib,
                                     GdkEventButton *event);
 
 
@@ -557,20 +480,30 @@ static gboolean is_multiattrib_object (OBJECT *object)
  *
  */
 static void
-multiattrib_action_add_attribute (Multiattrib *multiattrib,
+multiattrib_action_add_attribute (GschemMultiattribDockable *multiattrib,
                                   const gchar *name,
                                   const gchar *value,
                                   gint visible,
                                   gint show_name_value)
 {
   OBJECT *object;
+  GtkWidget *parent_window;
   gchar *newtext;
   GList *iter;
-  GschemToplevel *w_current = GSCHEM_DIALOG (multiattrib)->w_current;
+  GschemToplevel *w_current = multiattrib->parent.w_current;
+
+  switch (gschem_dockable_get_state (GSCHEM_DOCKABLE (multiattrib))) {
+  case GSCHEM_DOCKABLE_STATE_DIALOG:
+  case GSCHEM_DOCKABLE_STATE_WINDOW:
+    parent_window = multiattrib->parent.window;
+    break;
+  default:
+    parent_window = w_current->main_window;
+  }
 
   newtext = g_strdup_printf ("%s=%s", name, value);
 
-  if (!x_dialog_validate_attribute(GTK_WINDOW(multiattrib), newtext)) {
+  if (!x_dialog_validate_attribute (GTK_WINDOW (parent_window), newtext)) {
     g_free(newtext);
     return;
   }
@@ -600,10 +533,10 @@ multiattrib_action_add_attribute (Multiattrib *multiattrib,
  *
  */
 static void
-multiattrib_action_duplicate_attributes (Multiattrib *multiattrib,
+multiattrib_action_duplicate_attributes (GschemMultiattribDockable *multiattrib,
                                          GList *attr_list)
 {
-  GschemToplevel *w_current = GSCHEM_DIALOG (multiattrib)->w_current;
+  GschemToplevel *w_current = multiattrib->parent.w_current;
   GList *iter;
 
   for (iter = attr_list;
@@ -629,10 +562,10 @@ multiattrib_action_duplicate_attributes (Multiattrib *multiattrib,
  *
  */
 static void
-multiattrib_action_promote_attributes (Multiattrib *multiattrib,
+multiattrib_action_promote_attributes (GschemMultiattribDockable *multiattrib,
                                        GList *attr_list)
 {
-  GschemToplevel *w_current = GSCHEM_DIALOG (multiattrib)->w_current;
+  GschemToplevel *w_current = multiattrib->parent.w_current;
   TOPLEVEL *toplevel = w_current->toplevel;
   OBJECT *o_new;
   GList *iter;
@@ -672,10 +605,10 @@ multiattrib_action_promote_attributes (Multiattrib *multiattrib,
  *
  */
 static void
-multiattrib_action_delete_attributes (Multiattrib *multiattrib,
+multiattrib_action_delete_attributes (GschemMultiattribDockable *multiattrib,
                                       GList *attr_list)
 {
-  GschemToplevel *w_current = GSCHEM_DIALOG (multiattrib)->w_current;
+  GschemToplevel *w_current = multiattrib->parent.w_current;
   GList *a_iter;
   OBJECT *o_attrib;
 
@@ -695,10 +628,10 @@ multiattrib_action_delete_attributes (Multiattrib *multiattrib,
  *
  */
 static void
-multiattrib_action_copy_attribute_to_all (Multiattrib *multiattrib,
+multiattrib_action_copy_attribute_to_all (GschemMultiattribDockable *multiattrib,
                                           GList *attr_list)
 {
-  GschemToplevel *w_current = GSCHEM_DIALOG (multiattrib)->w_current;
+  GschemToplevel *w_current = multiattrib->parent.w_current;
   GList *iter;
   GList *objects_needing_add;
 
@@ -748,7 +681,7 @@ multiattrib_column_set_data_name (GtkTreeViewColumn *tree_column,
                                   GtkTreeIter *iter,
                                   gpointer data)
 {
-  Multiattrib *dialog = (Multiattrib *) data;
+  GschemMultiattribDockable *dialog = GSCHEM_MULTIATTRIB_DOCKABLE (data);
   gchar *name;
   gboolean present_in_all;
   int inherited;
@@ -780,7 +713,7 @@ multiattrib_column_set_data_value (GtkTreeViewColumn *tree_column,
                                    GtkTreeIter *iter,
                                    gpointer data)
 {
-  Multiattrib *dialog = (Multiattrib *) data;
+  GschemMultiattribDockable *dialog = GSCHEM_MULTIATTRIB_DOCKABLE (data);
   gchar *value;
   gboolean identical_value;
   int inherited;
@@ -901,26 +834,37 @@ multiattrib_callback_edited_name (GtkCellRendererText *cellrenderertext,
                                   gchar *new_name,
                                   gpointer user_data)
 {
-  Multiattrib *multiattrib = (Multiattrib*)user_data;
+  GschemMultiattribDockable *multiattrib =
+    GSCHEM_MULTIATTRIB_DOCKABLE (user_data);
   GtkTreeModel *model;
   GtkTreeIter iter;
   GedaList *attr_list;
   GList *a_iter;
   OBJECT *o_attrib;
   GschemToplevel *w_current;
+  GtkWidget *parent_window;
   gchar *value, *newtext;
   int visibility;
 
   model = gtk_tree_view_get_model (multiattrib->treeview);
-  w_current = GSCHEM_DIALOG (multiattrib)->w_current;
+  w_current = multiattrib->parent.w_current;
 
   if (!gtk_tree_model_get_iter_from_string (model, &iter, arg1)) {
     return;
   }
 
+  switch (gschem_dockable_get_state (GSCHEM_DOCKABLE (multiattrib))) {
+  case GSCHEM_DOCKABLE_STATE_DIALOG:
+  case GSCHEM_DOCKABLE_STATE_WINDOW:
+    parent_window = multiattrib->parent.window;
+    break;
+  default:
+    parent_window = w_current->main_window;
+  }
+
   if (g_ascii_strcasecmp (new_name, "") == 0) {
     GtkWidget *dialog = gtk_message_dialog_new (
-      GTK_WINDOW (multiattrib),
+      GTK_WINDOW (parent_window),
       GTK_DIALOG_MODAL,
       GTK_MESSAGE_ERROR,
       GTK_BUTTONS_OK,
@@ -938,7 +882,7 @@ multiattrib_callback_edited_name (GtkCellRendererText *cellrenderertext,
 
   newtext = g_strdup_printf ("%s=%s", new_name, value);
 
-  if (!x_dialog_validate_attribute(GTK_WINDOW(multiattrib), newtext)) {
+  if (!x_dialog_validate_attribute (GTK_WINDOW (parent_window), newtext)) {
     g_free (value);
     g_free(newtext);
     return;
@@ -980,7 +924,8 @@ multiattrib_callback_edited_value (GtkCellRendererText *cell_renderer,
                                    gchar *new_value,
                                    gpointer user_data)
 {
-  Multiattrib *multiattrib = (Multiattrib*)user_data;
+  GschemMultiattribDockable *multiattrib =
+    GSCHEM_MULTIATTRIB_DOCKABLE (user_data);
   GtkTreeModel *model;
   GtkTreeIter iter;
   GedaList *attr_list;
@@ -989,11 +934,12 @@ multiattrib_callback_edited_value (GtkCellRendererText *cell_renderer,
   GschemToplevel *w_current;
   char *name;
   char *old_value;
+  GtkWidget *parent_window;
   char *newtext;
   int visibility;
 
   model = gtk_tree_view_get_model (multiattrib->treeview);
-  w_current = GSCHEM_DIALOG (multiattrib)->w_current;
+  w_current = multiattrib->parent.w_current;
 
   if (!gtk_tree_model_get_iter_from_string (model, &iter, arg1)) {
     return;
@@ -1009,9 +955,18 @@ multiattrib_callback_edited_value (GtkCellRendererText *cell_renderer,
   if (strcmp (old_value, new_value) == 0)
     return;
 
+  switch (gschem_dockable_get_state (GSCHEM_DOCKABLE (multiattrib))) {
+  case GSCHEM_DOCKABLE_STATE_DIALOG:
+  case GSCHEM_DOCKABLE_STATE_WINDOW:
+    parent_window = multiattrib->parent.window;
+    break;
+  default:
+    parent_window = w_current->main_window;
+  }
+
   newtext = g_strdup_printf ("%s=%s", name, new_value);
 
-  if (!x_dialog_validate_attribute(GTK_WINDOW(multiattrib), newtext)) {
+  if (!x_dialog_validate_attribute (GTK_WINDOW (parent_window), newtext)) {
     g_free (name);
     g_free(newtext);
     return;
@@ -1054,7 +1009,8 @@ multiattrib_callback_toggled_visible (GtkCellRendererToggle *cell_renderer,
                                       gchar *path,
                                       gpointer user_data)
 {
-  Multiattrib *multiattrib = (Multiattrib*)user_data;
+  GschemMultiattribDockable *multiattrib =
+    GSCHEM_MULTIATTRIB_DOCKABLE (user_data);
   GtkTreeModel *model;
   GtkTreeIter iter;
   OBJECT *o_attrib;
@@ -1064,7 +1020,7 @@ multiattrib_callback_toggled_visible (GtkCellRendererToggle *cell_renderer,
   GList *a_iter;
 
   model = gtk_tree_view_get_model (multiattrib->treeview);
-  w_current = GSCHEM_DIALOG (multiattrib)->w_current;
+  w_current = multiattrib->parent.w_current;
 
   if (!gtk_tree_model_get_iter_from_string (model, &iter, path)) {
     return;
@@ -1109,7 +1065,8 @@ multiattrib_callback_toggled_show_name (GtkCellRendererToggle *cell_renderer,
                                         gchar *path,
                                         gpointer user_data)
 {
-  Multiattrib *multiattrib = (Multiattrib*)user_data;
+  GschemMultiattribDockable *multiattrib =
+    GSCHEM_MULTIATTRIB_DOCKABLE (user_data);
   GtkTreeModel *model;
   GtkTreeIter iter;
   GschemToplevel *w_current;
@@ -1119,7 +1076,7 @@ multiattrib_callback_toggled_show_name (GtkCellRendererToggle *cell_renderer,
   gint new_snv;
 
   model = gtk_tree_view_get_model (multiattrib->treeview);
-  w_current = GSCHEM_DIALOG (multiattrib)->w_current;
+  w_current = multiattrib->parent.w_current;
 
   if (!gtk_tree_model_get_iter_from_string (model, &iter, path)) {
     return;
@@ -1173,7 +1130,8 @@ multiattrib_callback_toggled_show_value (GtkCellRendererToggle *cell_renderer,
                                          gchar *path,
                                          gpointer user_data)
 {
-  Multiattrib *multiattrib = (Multiattrib*)user_data;
+  GschemMultiattribDockable *multiattrib =
+    GSCHEM_MULTIATTRIB_DOCKABLE (user_data);
   GtkTreeModel *model;
   GtkTreeIter iter;
   GschemToplevel *w_current;
@@ -1183,7 +1141,7 @@ multiattrib_callback_toggled_show_value (GtkCellRendererToggle *cell_renderer,
   gint new_snv;
 
   model = gtk_tree_view_get_model (multiattrib->treeview);
-  w_current = GSCHEM_DIALOG (multiattrib)->w_current;
+  w_current = multiattrib->parent.w_current;
 
   if (!gtk_tree_model_get_iter_from_string (model, &iter, path)) {
     return;
@@ -1237,7 +1195,8 @@ multiattrib_callback_key_pressed (GtkWidget *widget,
                                   GdkEventKey *event,
                                   gpointer user_data)
 {
-  Multiattrib *multiattrib = (Multiattrib*)user_data;
+  GschemMultiattribDockable *multiattrib =
+    GSCHEM_MULTIATTRIB_DOCKABLE (user_data);
 
   if (event->state == 0 &&
       (event->keyval == GDK_Delete || event->keyval == GDK_KP_Delete)) {
@@ -1284,12 +1243,13 @@ multiattrib_callback_key_pressed (GtkWidget *widget,
  * NB: The coordinates must be relative to the tree view's bin window, IE.. have
  *     come from en event where event->window == gtk_tree_view_get_bin_window ().
  *
- *  \param [in] multiattrib  The Multiattrib object.
+ *  \param [in] multiattrib  The GschemMultiattribDockable object.
  *  \param [in] x            The x coordinate of the mouse event.
  *  \param [in] y            The y coordinate of the mouse event.
  */
 static void
-multiattrib_edit_cell_at_pos (Multiattrib *multiattrib, gint x, gint y)
+multiattrib_edit_cell_at_pos (GschemMultiattribDockable *multiattrib,
+                              gint x, gint y)
 {
   GtkTreePath *path;
   GtkTreeViewColumn *column;
@@ -1313,7 +1273,8 @@ multiattrib_callback_button_pressed (GtkWidget *widget,
                                      GdkEventButton *event,
                                      gpointer user_data)
 {
-  Multiattrib *multiattrib = (Multiattrib*)user_data;
+  GschemMultiattribDockable *multiattrib =
+    GSCHEM_MULTIATTRIB_DOCKABLE (user_data);
   gboolean ret = FALSE;
 
   /* popup menu on right click */
@@ -1345,7 +1306,8 @@ static gboolean
 multiattrib_callback_popup_menu (GtkWidget *widget,
                                  gpointer user_data)
 {
-  Multiattrib *multiattrib = (Multiattrib*)user_data;
+  GschemMultiattribDockable *multiattrib =
+    GSCHEM_MULTIATTRIB_DOCKABLE (user_data);
 
   multiattrib_popup_menu (multiattrib, NULL);
 
@@ -1361,7 +1323,8 @@ static void
 multiattrib_callback_popup_duplicate (GtkMenuItem *menuitem,
                                       gpointer user_data)
 {
-  Multiattrib *multiattrib = (Multiattrib*)user_data;
+  GschemMultiattribDockable *multiattrib =
+    GSCHEM_MULTIATTRIB_DOCKABLE (user_data);
   GtkTreeModel *model;
   GtkTreeIter iter;
   GedaList *attr_list;
@@ -1392,7 +1355,8 @@ static void
 multiattrib_callback_popup_promote (GtkMenuItem *menuitem,
                                     gpointer user_data)
 {
-  Multiattrib *multiattrib = user_data;
+  GschemMultiattribDockable *multiattrib =
+    GSCHEM_MULTIATTRIB_DOCKABLE (user_data);
   GtkTreeModel *model;
   GtkTreeIter iter;
   GedaList *attr_list;
@@ -1423,7 +1387,8 @@ static void
 multiattrib_callback_popup_delete (GtkMenuItem *menuitem,
                                    gpointer user_data)
 {
-  Multiattrib *multiattrib = (Multiattrib*)user_data;
+  GschemMultiattribDockable *multiattrib =
+    GSCHEM_MULTIATTRIB_DOCKABLE (user_data);
   GtkTreeModel *model;
   GtkTreeIter iter;
   GedaList *attr_list;
@@ -1454,7 +1419,8 @@ static void
 multiattrib_callback_popup_copy_to_all (GtkMenuItem *menuitem,
                                         gpointer user_data)
 {
-  Multiattrib *multiattrib = user_data;
+  GschemMultiattribDockable *multiattrib =
+    GSCHEM_MULTIATTRIB_DOCKABLE (user_data);
   GtkTreeModel *model;
   GtkTreeIter iter;
   GedaList *attr_list;
@@ -1486,7 +1452,8 @@ multiattrib_callback_value_key_pressed (GtkWidget *widget,
                                         GdkEventKey *event,
                                         gpointer user_data)
 {
-  Multiattrib *multiattrib = (Multiattrib*)widget;
+  GschemMultiattribDockable *multiattrib =
+    GSCHEM_MULTIATTRIB_DOCKABLE (user_data);
   gboolean retval = FALSE;
 
   /* ends editing of cell if one of these keys are pressed: */
@@ -1541,7 +1508,8 @@ multiattrib_callback_value_grab_focus (GtkWidget *widget, gpointer user_data)
 static void
 multiattrib_callback_button_add (GtkButton *button, gpointer user_data)
 {
-  Multiattrib *multiattrib = (Multiattrib*)user_data;
+  GschemMultiattribDockable *multiattrib =
+    GSCHEM_MULTIATTRIB_DOCKABLE (user_data);
   GtkTextBuffer *buffer;
   GtkTextIter start, end;
   const gchar *name;
@@ -1629,11 +1597,12 @@ multiattrib_init_visible_types (GtkOptionMenu *optionmenu)
  *  <B>event</B> can be NULL if the popup is triggered by a key binding
  *  instead of a mouse click.
  *
- *  \param [in] multiattrib  The Multiattrib object.
+ *  \param [in] multiattrib  The GschemMultiattribDockable object.
  *  \param [in] event        Mouse event.
  */
 static void
-multiattrib_popup_menu (Multiattrib *multiattrib, GdkEventButton *event)
+multiattrib_popup_menu (GschemMultiattribDockable *multiattrib,
+                        GdkEventButton *event)
 {
   GtkTreePath *path;
   GtkWidget *menu;
@@ -1704,90 +1673,84 @@ multiattrib_popup_menu (Multiattrib *multiattrib, GdkEventButton *event)
 }
 
 
-/*! \brief GschemDialog "geometry_save" class method handler
+/*! \brief GschemDockable "save_internal_geometry" class method handler
  *
  *  \par Function Description
- *  Chain up to our parent's method to save the dialog's size and
- *  position, then save the dialog's current internal geometry.
+ *  Save the dockable's current internal geometry.
  *
- *  \param [in] dialog     The GschemDialog to save the geometry of.
+ *  \param [in] dockable   The GschemDockable to save the geometry of.
  *  \param [in] key_file   The GKeyFile to save the geometry data to.
  *  \param [in] group_name The group name in the key file to store the data under.
  */
 static void
-multiattrib_geometry_save (GschemDialog *dialog, EdaConfig *cfg, gchar *group_name)
+multiattrib_save_internal_geometry (GschemDockable *dockable,
+                                    EdaConfig *cfg,
+                                    gchar *group_name)
 {
   gboolean show_inherited;
 
-  /* Call the parent's geometry_save method */
-  GSCHEM_DIALOG_CLASS (multiattrib_parent_class)->
-    geometry_save (dialog, cfg, group_name);
-
   show_inherited =
-    gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (MULTIATTRIB (dialog)->show_inherited));
+    gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (GSCHEM_MULTIATTRIB_DOCKABLE (dockable)->show_inherited));
   eda_config_set_boolean (cfg, group_name, "show_inherited", show_inherited);
 }
 
 
-/*! \brief GschemDialog "geometry_restore" class method handler
+/*! \brief GschemDockable "restore_internal_geometry" class method handler
  *
  *  \par Function Description
- *  Chain up to our parent's method to restore the dialog's size and
- *  position, then restore the dialog's current internal geometry.
+ *  Restore the dockable's current internal geometry.
  *
- *  \param [in] dialog     The GschemDialog to restore the geometry of.
+ *  \param [in] dockable   The GschemDockable to restore the geometry of.
  *  \param [in] key_file   The GKeyFile to save the geometry data to.
  *  \param [in] group_name The group name in the key file to store the data under.
  */
 static void
-multiattrib_geometry_restore (GschemDialog *dialog, EdaConfig *cfg, gchar *group_name)
+multiattrib_restore_internal_geometry (GschemDockable *dockable,
+                                       EdaConfig *cfg,
+                                       gchar *group_name)
 {
   gboolean show_inherited;
   GError *error = NULL;
-
-  /* Call the parent's geometry_restore method */
-  GSCHEM_DIALOG_CLASS (multiattrib_parent_class)->
-    geometry_restore (dialog, cfg, group_name);
 
   show_inherited = eda_config_get_boolean (cfg, group_name, "show_inherited", &error);
   if (error != NULL) {
     show_inherited = TRUE;
     g_error_free (error);
   }
-  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (MULTIATTRIB (dialog)->show_inherited), show_inherited);
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (GSCHEM_MULTIATTRIB_DOCKABLE (dockable)->show_inherited), show_inherited);
 }
 
 
-/*! \brief Function to retrieve Multiattrib's GType identifier.
+/*! \brief Function to retrieve GschemMultiattribDockable's GType identifier.
  *
  *  \par Function Description
  *
- *  Function to retrieve Multiattrib's GType identifier.
- *  Upon first call, this registers Multiattrib in the GType system.
+ *  Function to retrieve GschemMultiattribDockable's GType identifier.
+ *  Upon first call, this registers GschemMultiattribDockable in the GType system.
  *  Subsequently it returns the saved value from its first execution.
  *
- *  \return the GType identifier associated with Multiattrib.
+ *  \return the GType identifier associated with GschemMultiattribDockable.
  */
 GType
-multiattrib_get_type ()
+gschem_multiattrib_dockable_get_type ()
 {
   static GType multiattrib_type = 0;
 
   if (!multiattrib_type) {
     static const GTypeInfo multiattrib_info = {
-      sizeof(MultiattribClass),
+      sizeof(GschemMultiattribDockableClass),
       NULL, /* base_init */
       NULL, /* base_finalize */
       (GClassInitFunc) multiattrib_class_init,
       NULL, /* class_finalize */
       NULL, /* class_data */
-      sizeof(Multiattrib),
+      sizeof(GschemMultiattribDockable),
       0,    /* n_preallocs */
-      (GInstanceInitFunc) multiattrib_init,
+      NULL, /* multiattrib_init */
     };
 
-    multiattrib_type = g_type_register_static (GSCHEM_TYPE_DIALOG,
-                                               "Multiattrib",
+    multiattrib_type = g_type_register_static (GSCHEM_TYPE_DOCKABLE,
+                                               "GschemMultiattribDockable",
                                                &multiattrib_info, 0);
   }
 
@@ -1803,7 +1766,8 @@ multiattrib_get_type ()
  *  \param [in] multiattrib  The multi-attribute editor dialog.
  */
 static void
-object_list_changed_cb (GedaList *object_list, Multiattrib *multiattrib)
+object_list_changed_cb (GedaList *object_list,
+                        GschemMultiattribDockable *multiattrib)
 {
   multiattrib_update (multiattrib);
 }
@@ -1824,7 +1788,7 @@ object_list_changed_cb (GedaList *object_list, Multiattrib *multiattrib)
 static void
 object_list_weak_ref_cb (gpointer data, GObject *where_the_object_was)
 {
-  Multiattrib *multiattrib = (Multiattrib *)data;
+  GschemMultiattribDockable *multiattrib = GSCHEM_MULTIATTRIB_DOCKABLE (data);
 
   multiattrib->object_list = NULL;
   multiattrib_update (multiattrib);
@@ -1838,11 +1802,12 @@ object_list_weak_ref_cb (gpointer data, GObject *where_the_object_was)
  *  Connect the "changed" signal and add a weak reference
  *  on the GedaList object we are going to watch.
  *
- *  \param [in] multiattrib  The Multiattrib dialog.
+ *  \param [in] multiattrib  The GschemMultiattribDockable dialog.
  *  \param [in] object_list  The GedaList object to watch.
  */
 static void
-connect_object_list (Multiattrib *multiattrib, GedaList *object_list)
+connect_object_list (GschemMultiattribDockable *multiattrib,
+                     GedaList *object_list)
 {
   multiattrib->object_list = object_list;
   if (multiattrib->object_list != NULL) {
@@ -1870,10 +1835,10 @@ connect_object_list (Multiattrib *multiattrib, GedaList *object_list)
  *  If the dialog is watching a GedaList object, disconnect the
  *  "changed" signal and remove our weak reference on the object.
  *
- *  \param [in] multiattrib  The Multiattrib dialog.
+ *  \param [in] multiattrib  The GschemMultiattribDockable dialog.
  */
 static void
-disconnect_object_list (Multiattrib *multiattrib)
+disconnect_object_list (GschemMultiattribDockable *multiattrib)
 {
   if (multiattrib->object_list != NULL) {
     g_signal_handler_disconnect (multiattrib->object_list,
@@ -1889,7 +1854,7 @@ disconnect_object_list (Multiattrib *multiattrib)
  *
  *  \par Function Description
  *
- *  Just before the Multiattrib GObject is finalized, disconnect from
+ *  Just before the GschemMultiattribDockable GObject is finalized, disconnect from
  *  the GedaList object being watched and then chain up to the parent
  *  class's finalize handler.
  *
@@ -1898,30 +1863,35 @@ disconnect_object_list (Multiattrib *multiattrib)
 static void
 multiattrib_finalize (GObject *object)
 {
-  Multiattrib *multiattrib = MULTIATTRIB(object);
+  GschemMultiattribDockable *multiattrib =
+    GSCHEM_MULTIATTRIB_DOCKABLE (object);
 
   disconnect_object_list (multiattrib);
   G_OBJECT_CLASS (multiattrib_parent_class)->finalize (object);
 }
 
 
-/*! \brief GType class initialiser for Multiattrib
+/*! \brief GType class initialiser for GschemMultiattribDockable
  *
  *  \par Function Description
  *
- *  GType class initialiser for Multiattrib. We override our parent
+ *  GType class initialiser for GschemMultiattribDockable. We override our parent
  *  virtual class methods as needed and register our GObject properties.
  *
- *  \param [in]  klass       The MultiattribClass we are initialising
+ *  \param [in]  klass       The GschemMultiattribDockableClass we are initialising
  */
 static void
-multiattrib_class_init (MultiattribClass *klass)
+multiattrib_class_init (GschemMultiattribDockableClass *klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
-  GschemDialogClass *gschem_dialog_class = GSCHEM_DIALOG_CLASS (klass);
+  GschemDockableClass *gschem_dockable_class = GSCHEM_DOCKABLE_CLASS (klass);
 
-  gschem_dialog_class->geometry_save    = multiattrib_geometry_save;
-  gschem_dialog_class->geometry_restore = multiattrib_geometry_restore;
+  gschem_dockable_class->create_widget = multiattrib_create_widget;
+
+  gschem_dockable_class->save_internal_geometry =
+    multiattrib_save_internal_geometry;
+  gschem_dockable_class->restore_internal_geometry =
+    multiattrib_restore_internal_geometry;
 
   gobject_class->set_property = multiattrib_set_property;
   gobject_class->get_property = multiattrib_get_property;
@@ -1944,25 +1914,28 @@ static void
 multiattrib_show_inherited_toggled (GtkToggleButton *button,
                                     gpointer user_data)
 {
-  Multiattrib *multiattrib = user_data;
+  GschemMultiattribDockable *multiattrib =
+    GSCHEM_MULTIATTRIB_DOCKABLE (user_data);
 
   /* update the treeview contents */
   multiattrib_update (multiattrib);
 }
 
 
-/*! \brief GType instance initialiser for Multiattrib
+/*! \brief Create widgets for GschemMultiattribDockable
  *
  *  \par Function Description
  *
- *  GType instance initialiser for Multiattrib. Create
- *  and setup the widgets which make up the dialog.
+ *  Create and setup the widgets which make up the dockable.
  *
- *  \param [in] multiattrib The Multiattrib we are initialising
+ *  \param [in] dockable The GschemMultiattribDockable we are initialising
  */
-static void
-multiattrib_init (Multiattrib *multiattrib)
+static GtkWidget *
+multiattrib_create_widget (GschemDockable *dockable)
 {
+  GschemMultiattribDockable *multiattrib =
+    GSCHEM_MULTIATTRIB_DOCKABLE (dockable);
+  GtkWidget *vbox;
   GtkWidget *label, *scrolled_win, *treeview;
   GtkWidget *table, *textview, *combo, *optionm, *button;
   GtkWidget *attrib_vbox, *show_inherited;
@@ -1972,22 +1945,8 @@ multiattrib_init (Multiattrib *multiattrib)
   GtkTreeSelection *selection;
   GtkStyle *style;
 
-  /* dialog initialization */
-  g_object_set (G_OBJECT (multiattrib),
-                /* GtkContainer */
-                "border-width",    0,
-                /* GtkWindow */
-                "title",           _("Edit Attributes"),
-                "default-width",   320,
-                "default-height",  350,
-                "window-position", GTK_WIN_POS_MOUSE,
-                "allow-grow",      TRUE,
-                "allow-shrink",    FALSE,
-                /* GtkDialog */
-                "has-separator",   TRUE,
-                NULL);
-
-  gtk_box_set_spacing (GTK_BOX (GTK_DIALOG (multiattrib)->vbox), 5);
+  vbox = gtk_vbox_new (FALSE, DIALOG_V_SPACING);
+  gtk_container_set_border_width (GTK_CONTAINER (vbox), DIALOG_BORDER_SPACING);
 
   /* create the attribute list frame */
   multiattrib->list_frame = GTK_WIDGET (g_object_new (GTK_TYPE_FRAME,
@@ -2012,7 +1971,7 @@ multiattrib_init (Multiattrib *multiattrib)
   scrolled_win = GTK_WIDGET (
                     g_object_new (GTK_TYPE_SCROLLED_WINDOW,
                                   /* GtkContainer */
-                                  "border-width",      3,
+                                  "border-width", 0,
                                   /* GtkScrolledWindow */
                                   "hscrollbar-policy",
                                   GTK_POLICY_AUTOMATIC,
@@ -2152,7 +2111,7 @@ multiattrib_init (Multiattrib *multiattrib)
   /* set treeview of multiattrib */
   multiattrib->treeview = GTK_TREE_VIEW (treeview);
 
-  attrib_vbox = gtk_vbox_new (FALSE, 0);
+  attrib_vbox = gtk_vbox_new (FALSE, 4);
 
   /* Pack the vbox into the frame */
   gtk_container_add (GTK_CONTAINER (multiattrib->list_frame), attrib_vbox);
@@ -2183,9 +2142,9 @@ multiattrib_init (Multiattrib *multiattrib)
                     multiattrib);
 
   /* pack the frame */
-  gtk_box_pack_start (GTK_BOX (GTK_DIALOG (multiattrib)->vbox),
+  gtk_box_pack_start (GTK_BOX (vbox),
                       multiattrib->list_frame,
-                      TRUE, TRUE, 1);
+                      TRUE, TRUE, 0);
   gtk_widget_show_all (multiattrib->list_frame);
 
   /* create the add/edit frame */
@@ -2215,6 +2174,8 @@ multiattrib_init (Multiattrib *multiattrib)
   multiattrib->combo_name = GTK_COMBO (combo);
   gtk_table_attach (GTK_TABLE (table), label,
                     0, 1, 0, 1, 0, 0, 0, 0);
+  /* prevent combo from forcing the add button out of add_frame */
+  gtk_widget_set_size_request (combo, 0, -1);
   gtk_table_attach (GTK_TABLE (table), combo,
                     1, 2, 0, 1, GTK_EXPAND | GTK_FILL, 0, 6, 3);
 
@@ -2285,6 +2246,8 @@ multiattrib_init (Multiattrib *multiattrib)
                                       NULL));
   multiattrib_init_visible_types (GTK_OPTION_MENU (optionm));
   multiattrib->optionmenu_shownv = GTK_OPTION_MENU (optionm);
+  /* prevent optionm from forcing the add button out of add_frame */
+  gtk_widget_set_size_request (optionm, 0, -1);
   gtk_table_attach (GTK_TABLE (table), optionm,
                     1, 2, 2, 3, GTK_EXPAND | GTK_FILL, 0, 6, 3);
   gtk_widget_show_all (table);
@@ -2301,24 +2264,23 @@ multiattrib_init (Multiattrib *multiattrib)
   /* add the table to the frame */
   gtk_container_add (GTK_CONTAINER (multiattrib->add_frame), table);
   /* pack the frame in the dialog */
-  gtk_box_pack_start (GTK_BOX (GTK_DIALOG (multiattrib)->vbox),
+  gtk_box_pack_start (GTK_BOX (vbox),
                       multiattrib->add_frame,
-                      FALSE, TRUE, 1);
+                      FALSE, TRUE, 0);
   gtk_widget_show_all (multiattrib->add_frame);
 
-
-  /* now add the close button to the action area */
-  gtk_dialog_add_button (GTK_DIALOG (multiattrib),
-                         GTK_STOCK_CLOSE, GTK_RESPONSE_CLOSE);
+  gtk_widget_show (vbox);
 
   multiattrib_update (multiattrib);
+
+  return vbox;
 }
 
 
 /*! \brief GObject property setter function
  *
  *  \par Function Description
- *  Setter function for Multiattrib's GObject property, "object_list".
+ *  Setter function for GschemMultiattribDockable's GObject property, "object_list".
  *
  *  \param [in]  object       The GObject whose properties we are setting
  *  \param [in]  property_id  The numeric id. under which the property was
@@ -2333,7 +2295,8 @@ multiattrib_set_property (GObject *object,
                           const GValue *value,
                           GParamSpec *pspec)
 {
-  Multiattrib *multiattrib = MULTIATTRIB (object);
+  GschemMultiattribDockable *multiattrib =
+    GSCHEM_MULTIATTRIB_DOCKABLE (object);
 
   switch(property_id) {
       case PROP_OBJECT_LIST:
@@ -2349,7 +2312,7 @@ multiattrib_set_property (GObject *object,
 /*! \brief GObject property getter function
  *
  *  \par Function Description
- *  Getter function for Multiattrib's GObject property, "object_list".
+ *  Getter function for GschemMultiattribDockable's GObject property, "object_list".
  *
  *  \param [in]  object       The GObject whose properties we are getting
  *  \param [in]  property_id  The numeric id. under which the property was
@@ -2363,7 +2326,8 @@ multiattrib_get_property (GObject *object,
                           GValue *value,
                           GParamSpec *pspec)
 {
-  Multiattrib *multiattrib = MULTIATTRIB (object);
+  GschemMultiattribDockable *multiattrib =
+    GSCHEM_MULTIATTRIB_DOCKABLE (object);
 
   switch(property_id) {
       case PROP_OBJECT_LIST:
@@ -2404,7 +2368,8 @@ typedef struct {
  *  \returns  A GList of MODEL_ROW records detailing object's attributes.
  */
 static GList *
-object_attributes_to_model_rows (Multiattrib *multiattrib, OBJECT *object)
+object_attributes_to_model_rows (GschemMultiattribDockable *multiattrib,
+                                 OBJECT *object)
 {
   GList *model_rows = NULL;
   GList *a_iter;
@@ -2467,7 +2432,7 @@ object_attributes_to_model_rows (Multiattrib *multiattrib, OBJECT *object)
  *  \returns  A GList of MODEL_ROW records detailing all lone selected attributes.
  */
 static GList *
-lone_attributes_to_model_rows (Multiattrib *multiattrib)
+lone_attributes_to_model_rows (GschemMultiattribDockable *multiattrib)
 {
   GList *o_iter;
   GList *model_rows = NULL;
@@ -2522,7 +2487,7 @@ lone_attributes_to_model_rows (Multiattrib *multiattrib)
  *  \param [in] model_rows   A GList of MODEL_ROW data.
  */
 static void
-multiattrib_populate_liststore (Multiattrib *multiattrib,
+multiattrib_populate_liststore (GschemMultiattribDockable *multiattrib,
                                 GList *model_rows)
 {
   GtkListStore *liststore;
@@ -2583,7 +2548,8 @@ append_dialog_title_extra (GString *title_string,
 }
 
 static void
-update_dialog_title (Multiattrib *multiattrib, char *complex_title_name)
+update_dialog_title (GschemMultiattribDockable *multiattrib,
+                     char *complex_title_name)
 {
   GString *title_string = g_string_new (NULL);
   int num_title_extras = 0;
@@ -2638,7 +2604,7 @@ update_dialog_title (Multiattrib *multiattrib, char *complex_title_name)
  *  \param [in] multiattrib  The multi-attribute editor dialog.
  */
 static void
-multiattrib_update (Multiattrib *multiattrib)
+multiattrib_update (GschemMultiattribDockable *multiattrib)
 {
   GList *o_iter;
   GtkStyle *style;
@@ -2647,6 +2613,10 @@ multiattrib_update (Multiattrib *multiattrib)
   gboolean add_sensitive;
   GList *model_rows = NULL;
   char *complex_title_name = NULL;
+
+  if (multiattrib->parent.widget == NULL)
+    /* ignore if widgets haven't been created yet */
+    return;
 
   show_inherited =
     gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (multiattrib->show_inherited));

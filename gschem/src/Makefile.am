@@ -47,6 +47,7 @@ gschem_SOURCES = \
 	gschem_log_dockable.c \
 	gschem_macro_widget.c \
 	gschem_main_window.c \
+	gschem_multiattrib_dockable.c \
 	gschem_object_properties_dockable.c \
 	gschem_options.c \
 	gschem_options_dockable.c \
@@ -111,7 +112,6 @@ gschem_SOURCES = \
 	x_linetypecb.c \
 	x_menus.c \
 	x_misc.c \
-	x_multiattrib.c \
 	x_newtext.c \
 	x_pagesel.c \
 	x_print.c \
