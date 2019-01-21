@@ -1073,6 +1073,7 @@ create_lib_treeview (GschemCompselectDockable *compselect)
                                     /* GtkEntry */
                                     "text", "",
                                     NULL));
+  gtk_widget_set_size_request (entry, 10, -1);
   g_signal_connect (entry,
                     "changed",
                     G_CALLBACK (compselect_callback_filter_entry_changed),
@@ -1300,8 +1301,9 @@ compselect_restore_internal_geometry (GschemDockable *dockable,
   GError *error = NULL;
 
   position = eda_config_get_int (cfg, group_name, "hpaned", NULL);
-  if (position != 0)
-    gtk_paned_set_position (GTK_PANED (compselect->hpaned), position);
+  if (position == 0)
+    position = 300;
+  gtk_paned_set_position (GTK_PANED (compselect->hpaned), position);
 
   position = eda_config_get_int (cfg, group_name, "vpaned", NULL);
   if (position != 0)
@@ -1429,7 +1431,11 @@ compselect_create_widget (GschemDockable *dockable)
   gtk_paned_pack2 (GTK_PANED (vpaned), compselect->attrframe, FALSE, FALSE);
   gtk_container_add (GTK_CONTAINER (compselect->attrframe), attributes);
 
-  gtk_paned_pack2 (GTK_PANED (hpaned), vpaned, FALSE, FALSE);
+  gtk_widget_set_size_request (alignment, 0, 15);
+  gtk_widget_set_size_request (attributes, -1, 20);
+  gtk_widget_set_size_request (vpaned, 25, -1);
+
+  gtk_paned_pack2 (GTK_PANED (hpaned), vpaned, TRUE, FALSE);
 
   /* add the hpaned to the vbox */
   gtk_box_pack_start (GTK_BOX (vbox), hpaned,
