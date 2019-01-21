@@ -2394,7 +2394,6 @@ typedef struct {
 static GList *
 object_attributes_to_model_rows (Multiattrib *multiattrib, OBJECT *object)
 {
-  GschemToplevel *w_current = GSCHEM_DIALOG (multiattrib)->w_current;
   GList *model_rows = NULL;
   GList *a_iter;
   GList *object_attribs = o_attrib_return_attribs (object);
@@ -2458,7 +2457,6 @@ object_attributes_to_model_rows (Multiattrib *multiattrib, OBJECT *object)
 static GList *
 lone_attributes_to_model_rows (Multiattrib *multiattrib)
 {
-  GschemToplevel *w_current = GSCHEM_DIALOG (multiattrib)->w_current;
   GList *o_iter;
   GList *model_rows = NULL;
 
