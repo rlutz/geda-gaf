@@ -36,8 +36,7 @@
 #include "gschem.h"
 #include <gdk/gdkkeysyms.h>
 
-#include "../include/gschem_dialog.h"
-#include "../include/x_compselect.h"
+#include "../include/gschem_compselect_dockable.h"
 
 /*! \def COMPSELECT_FILTER_INTERVAL
  *  \brief The time interval between request and actual filtering
@@ -68,11 +67,11 @@ enum compselect_view {
  *  \todo FIXME: This function assumes the GtkNotebook pages displaying the
  *               views are in a specific order.
  *
- *  \param [in] compselect  The component selection dialog.
+ *  \param [in] compselect  The component selection dockable.
  *  \returns The currently active view (from the compselect_view enum).
  */
 static enum compselect_view
-compselect_get_view (Compselect *compselect)
+compselect_get_view (GschemCompselectDockable *compselect)
 {
   switch (gtk_notebook_get_current_page (compselect->viewtabs)) {
     case 0: return VIEW_INUSE;  /* In use page */
@@ -84,29 +83,12 @@ compselect_get_view (Compselect *compselect)
 }
 
 
-/*! \brief Process the response returned by the component selection dialog.
- *  \par Function Description
- *  This function handles the response <B>arg1</B> of the component
- *  selection dialog <B>dialog</B>.
- *
- *  Parameter <B>user_data</B> is a pointer on the relevant toplevel
- *  structure.
- *
- *  \param [in] dialog    The component selection dialog.
- *  \param [in] arg1      The response ID.
- *  \param [in] user_data A pointer on the GschemToplevel environment.
- */
 static void
-x_compselect_callback_response (GtkDialog *dialog,
-                                gint arg1,
-                                gpointer user_data)
+compselect_place (GschemCompselectDockable *compselect)
 {
-  Compselect *compselect = (Compselect*)dialog;
-  GschemToplevel *w_current = (GschemToplevel *)user_data;
+  GschemToplevel *w_current = GSCHEM_DOCKABLE (compselect)->w_current;
   TOPLEVEL *toplevel = gschem_toplevel_get_toplevel (w_current);
 
-  switch (arg1) {
-      case COMPSELECT_RESPONSE_PLACE: {
         CLibSymbol *symbol = NULL;
         CompselectBehavior behavior;
 
@@ -150,90 +132,41 @@ x_compselect_callback_response (GtkDialog *dialog,
           /* Otherwise set the new symbol to place */
           o_complex_prepare_place (w_current, symbol);
         }
-        break;
-      }
-
-      case COMPSELECT_RESPONSE_HIDE:
-        /* Response when clicking on the "hide" button */
-
-        /* If there is no component in the complex place list, set the current one */
-        if (toplevel->page_current->place_list == NULL) {
-          gtk_dialog_response (GTK_DIALOG (compselect),
-                               COMPSELECT_RESPONSE_PLACE);
-        }
-
-        /* Hide the component selector */
-        g_object_set (G_OBJECT (compselect), "hidden", TRUE, NULL);
-        break;
-
-      case GTK_RESPONSE_CLOSE:
-      case GTK_RESPONSE_DELETE_EVENT:
-        g_assert (GTK_WIDGET (dialog) == w_current->cswindow);
-        gtk_widget_destroy (GTK_WIDGET (dialog));
-        w_current->cswindow = NULL;
-
-        if (w_current->event_state == COMPMODE) {
-
-          /* Cancel the place operation currently in progress */
-          o_redraw_cleanstates (w_current);
-
-          /* return to the default state */
-          i_set_state (w_current, SELECT);
-          i_action_stop (w_current);
-        }
-        break;
-
-      default:
-        /* Do nothing, in case there's another handler function which
-           can handle the response ID received. */
-        break;
-  }
-
 }
 
-/*! \brief Opens a component selection dialog.
- *  \par Function Description
- *  This function opens the component chooser dialog for
- *  <B>toplevel</B> if it is not already. In this last case, it only
- *  raises the dialog.
- *
- *  \param [in] w_current  The GschemToplevel environment.
- */
-void
-x_compselect_open (GschemToplevel *w_current)
+
+static void
+compselect_cancel (GschemDockable *dockable)
 {
+  GschemToplevel *w_current = dockable->w_current;
+
+  if (w_current->event_state == COMPMODE) {
+    /* Cancel the place operation currently in progress */
+    o_redraw_cleanstates (w_current);
+
+    /* return to the default state */
+    i_set_state (w_current, SELECT);
+    i_action_stop (w_current);
+  }
+}
+
+
+static void
+compselect_post_present (GschemDockable *dockable)
+{
+  GschemCompselectDockable *compselect = GSCHEM_COMPSELECT_DOCKABLE (dockable);
+
   GtkWidget *current_tab, *entry_filter;
   GtkNotebook *compselect_notebook;
 
-  if (w_current->cswindow == NULL) {
-    w_current->cswindow = GTK_WIDGET (
-      g_object_new (TYPE_COMPSELECT,
-                    /* GschemDialog */
-                    "settings-name", "compselect",
-                    "gschem-toplevel", w_current,
-                    NULL));
-
-    g_signal_connect (w_current->cswindow,
-                      "response",
-                      G_CALLBACK (x_compselect_callback_response),
-                      w_current);
-
-    gtk_window_set_transient_for (GTK_WINDOW (w_current->cswindow),
-                                  GTK_WINDOW (w_current->main_window));
-
-    gtk_widget_show (w_current->cswindow);
-
-  } else {
-    gtk_window_present (GTK_WINDOW (w_current->cswindow));
-  }
-  gtk_editable_select_region (GTK_EDITABLE (COMPSELECT (w_current->cswindow)->entry_filter), 0, -1);
+  gtk_editable_select_region (GTK_EDITABLE (compselect->entry_filter), 0, -1);
 
   /* Set the focus to the filter entry only if it is in the current
      displayed tab */
-  compselect_notebook = GTK_NOTEBOOK (COMPSELECT (w_current->cswindow)->viewtabs);
+  compselect_notebook = GTK_NOTEBOOK (compselect->viewtabs);
   current_tab = gtk_notebook_get_nth_page (compselect_notebook,
                                            gtk_notebook_get_current_page (compselect_notebook));
-  entry_filter = GTK_WIDGET (COMPSELECT (w_current->cswindow)->entry_filter);
+  entry_filter = GTK_WIDGET (compselect->entry_filter);
   if (gtk_widget_is_ancestor (entry_filter, current_tab)) {
     gtk_widget_grab_focus (entry_filter);
   }
@@ -243,10 +176,8 @@ x_compselect_open (GschemToplevel *w_current)
 void
 x_compselect_deselect (GschemToplevel *w_current)
 {
-  Compselect *compselect = COMPSELECT (w_current->cswindow);
-
-  if (compselect == NULL)
-    return;
+  GschemCompselectDockable *compselect =
+    GSCHEM_COMPSELECT_DOCKABLE (w_current->compselect_dockable);
 
   switch (compselect_get_view (compselect)) {
   case VIEW_INUSE:
@@ -265,17 +196,13 @@ x_compselect_deselect (GschemToplevel *w_current)
 
 enum {
   PROP_SYMBOL=1,
-  PROP_BEHAVIOR,
-  PROP_HIDDEN
+  PROP_BEHAVIOR
 };
 
 static GObjectClass *compselect_parent_class = NULL;
 
 
-static void compselect_class_init      (CompselectClass *class);
-static GObject *compselect_constructor (GType type,
-                                        guint n_construct_properties,
-                                        GObjectConstructParam *construct_params);
+static void compselect_class_init      (GschemCompselectDockableClass *class);
 static void compselect_finalize        (GObject *object);
 static void compselect_set_property    (GObject *object,
                                         guint property_id,
@@ -285,6 +212,8 @@ static void compselect_get_property    (GObject *object,
                                         guint property_id,
                                         GValue *value,
                                         GParamSpec *pspec);
+
+static GtkWidget *compselect_create_widget (GschemDockable *dockable);
 
 
 
@@ -325,7 +254,7 @@ static gboolean is_symbol(GtkTreeModel *tree_model, GtkTreeIter *iter)
  *
  *  \param [in] model The current selection in the treeview.
  *  \param [in] iter  An iterator on a component or folder in the tree.
- *  \param [in] data  The component selection dialog.
+ *  \param [in] data  The component selection dockable.
  *  \returns TRUE if item should be visible, FALSE otherwise.
  */
 static gboolean
@@ -333,14 +262,14 @@ lib_model_filter_visible_func (GtkTreeModel *model,
                                       GtkTreeIter  *iter,
                                       gpointer      data)
 {
-  Compselect *compselect = (Compselect*)data;
+  GschemCompselectDockable *compselect = GSCHEM_COMPSELECT_DOCKABLE (data);
   CLibSymbol *sym;
   const gchar *compname;
   gchar *compname_upper, *text_upper, *pattern;
   const gchar *text;
   gboolean ret;
 
-  g_assert (IS_COMPSELECT (data));
+  g_assert (GSCHEM_IS_COMPSELECT_DOCKABLE (data));
 
   text = gtk_entry_get_text (compselect->entry_filter);
   if (g_ascii_strcasecmp (text, "") == 0) {
@@ -389,7 +318,7 @@ lib_model_filter_visible_func (GtkTreeModel *model,
  *  \param [in] tree_view The component treeview.
  *  \param [in] path      The GtkTreePath to the activated row.
  *  \param [in] column    The GtkTreeViewColumn in which the activation occurred.
- *  \param [in] user_data The component selection dialog.
+ *  \param [in] user_data The component selection dockable.
  */
 static void
 tree_row_activated (GtkTreeView       *tree_view,
@@ -399,14 +328,28 @@ tree_row_activated (GtkTreeView       *tree_view,
 {
   GtkTreeModel *model;
   GtkTreeIter iter;
-  Compselect *compselect = (Compselect*)user_data;
+  GschemCompselectDockable *compselect = GSCHEM_COMPSELECT_DOCKABLE (user_data);
 
   model = gtk_tree_view_get_model (tree_view);
   gtk_tree_model_get_iter (model, &iter, path);
 
   if (is_symbol (model, &iter)) {
-    gtk_dialog_response (GTK_DIALOG (compselect),
-                         COMPSELECT_RESPONSE_HIDE);
+    compselect_place (compselect);
+
+    GschemDockable *dockable = GSCHEM_DOCKABLE (compselect);
+    switch (gschem_dockable_get_state (dockable)) {
+      case GSCHEM_DOCKABLE_STATE_DIALOG:
+        /* if shown as dialog, hide */
+        gschem_dockable_hide (dockable);
+        return;
+      case GSCHEM_DOCKABLE_STATE_WINDOW:
+        /* if shown as detached window, focus main window */
+        gtk_widget_grab_focus (dockable->w_current->drawing_area);
+        gtk_window_present (GTK_WINDOW (dockable->w_current->main_window));
+      default:
+        /* if docked, focus drawing area */
+        gtk_widget_grab_focus (dockable->w_current->drawing_area);
+    }
     return;
   }
 
@@ -434,11 +377,12 @@ enum {
  *  \par Function Description
  *  This function takes the toplevel attributes from the preview widget and
  *  puts them into the model of the <b>attrtreeview</b> widget.
- *  \param [in] compselect       The dialog compselect
+ *  \param [in] compselect       The dockable compselect
  *  \param [in] preview_toplevel The toplevel of the preview widget
  */
 void
-update_attributes_model (Compselect *compselect, TOPLEVEL *preview_toplevel)
+update_attributes_model (GschemCompselectDockable *compselect,
+                         TOPLEVEL *preview_toplevel)
 {
   GtkListStore *model;
   GtkTreeIter iter;
@@ -518,17 +462,17 @@ update_attributes_model (Compselect *compselect, TOPLEVEL *preview_toplevel)
 /*! \brief Handles changes in the treeview selection.
  *  \par Function Description
  *  This is the callback function that is called every time the user
- *  select a row in either component treeview of the dialog.
+ *  select a row in either component treeview of the dockable.
  *
  *  If the selection is not a selection of a component (a directory
  *  name), it does nothing. Otherwise it retrieves the #CLibSymbol
  *  from the model.
  *
- *  It then emits the dialog's <B>apply</B> signal to let its parent
- *  know that a component has been selected.
+ *  It then calls compselect_place to let its parent know that a
+ *  component has been selected.
  *
  *  \param [in] selection The current selection in the treeview.
- *  \param [in] user_data The component selection dialog.
+ *  \param [in] user_data The component selection dockable.
  */
 static void
 compselect_callback_tree_selection_changed (GtkTreeSelection *selection,
@@ -537,7 +481,7 @@ compselect_callback_tree_selection_changed (GtkTreeSelection *selection,
   GtkTreeView *view;
   GtkTreeModel *model;
   GtkTreeIter iter;
-  Compselect *compselect = (Compselect*)user_data;
+  GschemCompselectDockable *compselect = GSCHEM_COMPSELECT_DOCKABLE (user_data);
   const CLibSymbol *sym = NULL;
   gchar *buffer = NULL;
 
@@ -564,11 +508,8 @@ compselect_callback_tree_selection_changed (GtkTreeSelection *selection,
   update_attributes_model (compselect,
                            compselect->preview->preview_w_current->toplevel);
 
-  /* signal a component has been selected to parent of dialog */
-  g_signal_emit_by_name (compselect,
-                         "response",
-                         COMPSELECT_RESPONSE_PLACE,
-                         NULL);
+  /* signal a component has been selected to parent of dockable */
+  compselect_place (compselect);
 
   g_free (buffer);
 }
@@ -576,18 +517,18 @@ compselect_callback_tree_selection_changed (GtkTreeSelection *selection,
 /*! \brief Requests re-evaluation of the filter.
  *  \par Function Description
  *  This is the timeout function for the filtering of component in the
- *  tree of the dialog.
+ *  tree of the dockable.
  *
  *  The timeout this callback is attached to is removed after the
  *  function.
  *
- *  \param [in] data The component selection dialog.
+ *  \param [in] data The component selection dockable.
  *  \returns FALSE to remove the timeout.
  */
 static gboolean
 compselect_filter_timeout (gpointer data)
 {
-  Compselect *compselect = COMPSELECT (data);
+  GschemCompselectDockable *compselect = GSCHEM_COMPSELECT_DOCKABLE (data);
   GtkTreeModel *model;
 
   /* resets the source id in compselect */
@@ -613,20 +554,20 @@ compselect_filter_timeout (gpointer data)
 
 /*! \brief Callback function for the changed signal of the filter entry.
  *  \par Function Description
- *  This function monitors changes in the entry filter of the dialog.
+ *  This function monitors changes in the entry filter of the dockable.
  *
  *  It specifically manages the sensitivity of the clear button of the
  *  entry depending on its contents. It also requests an update of the
  *  component list by re-evaluating filter at every changes.
  *
  *  \param [in] editable  The filter text entry.
- *  \param [in] user_data The component selection dialog.
+ *  \param [in] user_data The component selection dockable.
  */
 static void
 compselect_callback_filter_entry_changed (GtkEditable *editable,
                                           gpointer  user_data)
 {
-  Compselect *compselect = COMPSELECT (user_data);
+  GschemCompselectDockable *compselect = GSCHEM_COMPSELECT_DOCKABLE (user_data);
   GtkWidget *button;
   gboolean sensitive;
 
@@ -661,13 +602,13 @@ compselect_callback_filter_entry_changed (GtkEditable *editable,
  *  of the filter on the list of symbols to update the display.
  *
  *  \param [in] button    The clear button
- *  \param [in] user_data The component selection dialog.
+ *  \param [in] user_data The component selection dockable.
  */
 static void
 compselect_callback_filter_button_clicked (GtkButton *button,
                                            gpointer   user_data)
 {
-  Compselect *compselect = COMPSELECT (user_data);
+  GschemCompselectDockable *compselect = GSCHEM_COMPSELECT_DOCKABLE (user_data);
 
   /* clears text in text entry for filter */
   gtk_entry_set_text (compselect->entry_filter, "");
@@ -679,23 +620,20 @@ compselect_callback_filter_button_clicked (GtkButton *button,
  *  This function is called every time the value of the option menu
  *  for behaviors is modified.
  *
- *  It emits the dialog's <B>apply</B> signal to let the parent know
- *  that the requested behavior for the next adding of a component has
- *  been changed.
+ *  It calls compselect_place to let the parent know that the
+ *  requested behavior for the next adding of a component has been
+ *  changed.
  *
  *  \param [in] optionmenu The behavior option menu.
- *  \param [in] user_data  The component selection dialog.
+ *  \param [in] user_data  The component selection dockable.
  */
 static void
 compselect_callback_behavior_changed (GtkOptionMenu *optionmenu,
                                       gpointer user_data)
 {
-  Compselect *compselect = (Compselect*)user_data;
+  GschemCompselectDockable *compselect = GSCHEM_COMPSELECT_DOCKABLE (user_data);
 
-  g_signal_emit_by_name (compselect,
-                         "response",
-                         COMPSELECT_RESPONSE_PLACE,
-                         NULL);
+  compselect_place (compselect);
 }
 
 /* \brief Create the tree model for the "In Use" view.
@@ -704,7 +642,7 @@ compselect_callback_behavior_changed (GtkOptionMenu *optionmenu,
  * use, using s_toplevel_get_symbols().
  */
 static GtkTreeModel*
-create_inuse_tree_model (Compselect *compselect)
+create_inuse_tree_model (GschemCompselectDockable *compselect)
 {
   GtkListStore *store;
   GList *symhead, *symlist;
@@ -712,7 +650,8 @@ create_inuse_tree_model (Compselect *compselect)
 
   store = (GtkListStore *) gtk_list_store_new (1, G_TYPE_POINTER);
 
-  symhead = s_toplevel_get_symbols (GSCHEM_DIALOG (compselect)->w_current->toplevel);
+  symhead = s_toplevel_get_symbols (
+    GSCHEM_DOCKABLE (compselect)->w_current->toplevel);
 
   for (symlist = symhead;
        symlist != NULL;
@@ -846,12 +785,11 @@ static void populate_component_store(GtkTreeStore *store, GList **srclist,
  * sources and the leaves are the symbols.
  */
 static GtkTreeModel*
-create_lib_tree_model (Compselect *compselect)
+create_lib_tree_model (GschemCompselectDockable *compselect)
 {
   GtkTreeStore *store;
   GList *srchead, *srclist;
-  PAGE *page = GSCHEM_DIALOG(compselect)->w_current->toplevel->page_current;
-  EdaConfig *cfg = eda_config_get_context_for_path (page->page_filename);
+  EdaConfig *cfg = eda_config_get_user_context ();
   gboolean sort = eda_config_get_boolean (cfg, "gschem.library", "sort", NULL);
 
   store = (GtkTreeStore*)gtk_tree_store_new (3, G_TYPE_POINTER,
@@ -878,7 +816,7 @@ create_lib_tree_model (Compselect *compselect)
 static void
 compselect_callback_refresh_library (GtkButton *button, gpointer user_data)
 {
-  Compselect *compselect = COMPSELECT (user_data);
+  GschemCompselectDockable *compselect = GSCHEM_COMPSELECT_DOCKABLE (user_data);
   GtkTreeModel *model;
   GtkTreeSelection *selection;
 
@@ -923,7 +861,7 @@ compselect_callback_refresh_library (GtkButton *button, gpointer user_data)
 
 /*! \brief Creates the treeview for the "In Use" view. */
 static GtkWidget*
-create_inuse_treeview (Compselect *compselect)
+create_inuse_treeview (GschemCompselectDockable *compselect)
 {
   GtkWidget *scrolled_win, *treeview, *vbox, *hbox, *button;
   GtkTreeModel *model;
@@ -1031,7 +969,7 @@ create_inuse_treeview (Compselect *compselect)
 
 /*! \brief Creates the treeview for the "Library" view */
 static GtkWidget *
-create_lib_treeview (Compselect *compselect)
+create_lib_treeview (GschemCompselectDockable *compselect)
 {
   GtkWidget *libtreeview, *vbox, *scrolled_win, *label,
     *hbox, *entry, *button;
@@ -1204,7 +1142,7 @@ create_lib_treeview (Compselect *compselect)
 /*! \brief Creates the treeview widget for the attributes
  */
 static GtkWidget*
-create_attributes_treeview (Compselect *compselect)
+create_attributes_treeview (GschemCompselectDockable *compselect)
 {
   GtkWidget *attrtreeview, *scrolled_win;
   GtkListStore *model;
@@ -1273,13 +1211,13 @@ create_behaviors_combo_box (void)
   combobox = gtk_combo_box_new_text ();
 
   /* Note: order of items in menu is important */
-  /* COMPSEL_BEHAVIOR_REFERENCE */
+  /* COMPSELECT_BEHAVIOR_REFERENCE */
   gtk_combo_box_append_text (GTK_COMBO_BOX (combobox),
                              _("Default behavior - reference component"));
-  /* COMPSEL_BEHAVIOR_EMBED */
+  /* COMPSELECT_BEHAVIOR_EMBED */
   gtk_combo_box_append_text (GTK_COMBO_BOX (combobox),
                              _("Embed component in schematic"));
-  /* COMPSEL_BEHAVIOR_INCLUDE */
+  /* COMPSELECT_BEHAVIOR_INCLUDE */
   gtk_combo_box_append_text (GTK_COMBO_BOX (combobox),
                              _("Include component as individual objects"));
 
@@ -1289,25 +1227,25 @@ create_behaviors_combo_box (void)
 }
 
 GType
-compselect_get_type ()
+gschem_compselect_dockable_get_type ()
 {
   static GType compselect_type = 0;
 
   if (!compselect_type) {
     static const GTypeInfo compselect_info = {
-      sizeof (CompselectClass),
+      sizeof (GschemCompselectDockableClass),
       NULL, /* base_init */
       NULL, /* base_finalize */
       (GClassInitFunc) compselect_class_init,
       NULL, /* class_finalize */
       NULL, /* class_data */
-      sizeof (Compselect),
+      sizeof (GschemCompselectDockable),
       0,    /* n_preallocs */
       NULL  /* instance_init */
     };
 
-    compselect_type = g_type_register_static (GSCHEM_TYPE_DIALOG,
-                                              "Compselect",
+    compselect_type = g_type_register_static (GSCHEM_TYPE_DOCKABLE,
+                                              "GschemCompselectDockable",
                                               &compselect_info, 0);
   }
 
@@ -1315,78 +1253,79 @@ compselect_get_type ()
 }
 
 
-/*! \brief GschemDialog "geometry_save" class method handler
+/*! \brief GschemDockable "save_internal_geometry" class method handler
  *
  *  \par Function Description
- *  Chain up to our parent's method to save the dialog's size and
- *  position, then save the dialog's current internal geometry.
+ *  Save the dockable's current internal geometry.
  *
- *  \param [in] dialog     The GschemDialog to save the geometry of.
+ *  \param [in] dockable   The GschemCompselectDockable to save the geometry of.
  *  \param [in] key_file   The GKeyFile to save the geometry data to.
  *  \param [in] group_name The group name in the key file to store the data under.
  */
 static void
-compselect_geometry_save (GschemDialog *dialog, EdaConfig *cfg, gchar *group_name)
+compselect_save_internal_geometry (GschemDockable *dockable,
+                                   EdaConfig *cfg,
+                                   gchar *group_name)
 {
-  int position;
+  GschemCompselectDockable *compselect = GSCHEM_COMPSELECT_DOCKABLE (dockable);
+  gint position;
 
-  /* Call the parent's geometry_save method */
-  GSCHEM_DIALOG_CLASS (compselect_parent_class)->
-    geometry_save (dialog, cfg, group_name);
-
-  position = gtk_paned_get_position (GTK_PANED (COMPSELECT (dialog)->hpaned));
+  position = gtk_paned_get_position (GTK_PANED (compselect->hpaned));
   eda_config_set_int (cfg, group_name, "hpaned", position);
 
-  position = gtk_paned_get_position (GTK_PANED (COMPSELECT (dialog)->vpaned));
+  position = gtk_paned_get_position (GTK_PANED (compselect->vpaned));
   eda_config_set_int (cfg, group_name, "vpaned", position);
 
-  position = gtk_notebook_get_current_page (COMPSELECT (dialog)->viewtabs);
+  position = gtk_notebook_get_current_page (compselect->viewtabs);
   eda_config_set_int (cfg, group_name, "source-tab", position);
 }
 
 
-/*! \brief GschemDialog "geometry_restore" class method handler
+/*! \brief GschemDockable "restore_internal_geometry" class method handler
  *
  *  \par Function Description
- *  Chain up to our parent's method to restore the dialog's size and
- *  position, then restore the dialog's current internal geometry.
+ *  Restore the dockable's current internal geometry.
  *
- *  \param [in] dialog     The GschemDialog to restore the geometry of.
+ *  \param [in] dockable   The GschemCompselectDockable to restore the geometry of.
  *  \param [in] key_file   The GKeyFile to save the geometry data to.
  *  \param [in] group_name The group name in the key file to store the data under.
  */
 static void
-compselect_geometry_restore (GschemDialog *dialog, EdaConfig *cfg, gchar *group_name)
+compselect_restore_internal_geometry (GschemDockable *dockable,
+                                      EdaConfig *cfg,
+                                      gchar *group_name)
 {
-  int position;
-
-  /* Call the parent's geometry_restore method */
-  GSCHEM_DIALOG_CLASS (compselect_parent_class)->
-    geometry_restore (dialog, cfg, group_name);
+  GschemCompselectDockable *compselect = GSCHEM_COMPSELECT_DOCKABLE (dockable);
+  gint position;
 
   position = eda_config_get_int (cfg, group_name, "hpaned", NULL);
   if (position != 0)
-    gtk_paned_set_position (GTK_PANED (COMPSELECT (dialog)->hpaned), position);
+    gtk_paned_set_position (GTK_PANED (compselect->hpaned), position);
 
   position = eda_config_get_int (cfg, group_name, "vpaned", NULL);
   if (position != 0)
-    gtk_paned_set_position (GTK_PANED (COMPSELECT (dialog)->vpaned), position);
+    gtk_paned_set_position (GTK_PANED (compselect->vpaned), position);
 
   position = eda_config_get_int (cfg, group_name, "source-tab", NULL);
-  gtk_notebook_set_current_page (COMPSELECT (dialog)->viewtabs, position);
+  gtk_notebook_set_current_page (compselect->viewtabs, position);
 }
 
 
 static void
-compselect_class_init (CompselectClass *klass)
+compselect_class_init (GschemCompselectDockableClass *klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
-  GschemDialogClass *gschem_dialog_class = GSCHEM_DIALOG_CLASS (klass);
+  GschemDockableClass *gschem_dockable_class = GSCHEM_DOCKABLE_CLASS (klass);
 
-  gschem_dialog_class->geometry_save    = compselect_geometry_save;
-  gschem_dialog_class->geometry_restore = compselect_geometry_restore;
+  gschem_dockable_class->create_widget = compselect_create_widget;
+  gschem_dockable_class->post_present = compselect_post_present;
+  gschem_dockable_class->cancel = compselect_cancel;
 
-  gobject_class->constructor  = compselect_constructor;
+  gschem_dockable_class->save_internal_geometry =
+    compselect_save_internal_geometry;
+  gschem_dockable_class->restore_internal_geometry =
+    compselect_restore_internal_geometry;
+
   gobject_class->finalize     = compselect_finalize;
   gobject_class->set_property = compselect_set_property;
   gobject_class->get_property = compselect_get_property;
@@ -1407,41 +1346,20 @@ compselect_class_init (CompselectClass *klass)
                        COMPSELECT_TYPE_BEHAVIOR,
                        COMPSELECT_BEHAVIOR_REFERENCE,
                        G_PARAM_READWRITE));
-  g_object_class_install_property (
-    gobject_class, PROP_HIDDEN,
-    g_param_spec_boolean ("hidden",
-                          "",
-                          "",
-                          FALSE,
-                          G_PARAM_READWRITE));
-
 }
 
-static GObject*
-compselect_constructor (GType type,
-                        guint n_construct_properties,
-                        GObjectConstructParam *construct_params)
+static GtkWidget *
+compselect_create_widget (GschemDockable *dockable)
 {
-  GObject *object;
-  Compselect *compselect;
-
+  GschemCompselectDockable *compselect = GSCHEM_COMPSELECT_DOCKABLE (dockable);
+  GtkWidget *vbox;
   GtkWidget *hpaned, *vpaned, *notebook, *attributes;
   GtkWidget *libview, *inuseview;
   GtkWidget *preview, *combobox;
   GtkWidget *alignment, *frame;
 
-  /* chain up to constructor of parent class */
-  object = G_OBJECT_CLASS (compselect_parent_class)->
-    constructor (type, n_construct_properties, construct_params);
-  compselect = COMPSELECT (object);
-
-  /* dialog initialization */
-  g_object_set (object,
-                /* GtkWindow */
-                "title",           _("Select Component..."),
-                "default-height",  300,
-                "default-width",   400,
-                NULL);
+  vbox = gtk_vbox_new (FALSE, DIALOG_V_SPACING);
+  gtk_container_set_border_width (GTK_CONTAINER (vbox), DIALOG_BORDER_SPACING);
 
   /* vertical pane containing preview and attributes */
   vpaned = GTK_WIDGET (g_object_new (GTK_TYPE_VPANED, NULL));
@@ -1450,7 +1368,7 @@ compselect_constructor (GType type,
   /* horizontal pane containing selection and preview */
   hpaned = GTK_WIDGET (g_object_new (GTK_TYPE_HPANED,
                                     /* GtkContainer */
-                                    "border-width", 5,
+                                    "border-width", 0,
                                      NULL));
   compselect->hpaned = hpaned;
 
@@ -1508,8 +1426,8 @@ compselect_constructor (GType type,
 
   gtk_paned_pack2 (GTK_PANED (hpaned), vpaned, FALSE, FALSE);
 
-  /* add the hpaned to the dialog vbox */
-  gtk_box_pack_start (GTK_BOX (GTK_DIALOG (compselect)->vbox), hpaned,
+  /* add the hpaned to the vbox */
+  gtk_box_pack_start (GTK_BOX (vbox), hpaned,
                       TRUE, TRUE, 0);
   gtk_widget_show_all (hpaned);
 
@@ -1520,35 +1438,20 @@ compselect_constructor (GType type,
                     "changed",
                     G_CALLBACK (compselect_callback_behavior_changed),
                     compselect);
-  gtk_box_pack_start (GTK_BOX (GTK_DIALOG (compselect)->vbox), combobox,
-                      FALSE, FALSE, 10);
+  gtk_box_pack_start (GTK_BOX (vbox), combobox,
+                      FALSE, FALSE, 0);
   gtk_widget_show_all (combobox);
   /* set behavior combo box of compselect */
   compselect->combobox_behaviors = GTK_COMBO_BOX (combobox);
 
-  /* now add buttons in the action area */
-  gtk_dialog_add_buttons (GTK_DIALOG (compselect),
-                          /*  - close button */
-                          GTK_STOCK_CLOSE, GTK_RESPONSE_CLOSE,
-                          GTK_STOCK_OK, COMPSELECT_RESPONSE_HIDE,
-                          NULL);
-
-  /* Set the alternative button order (ok, cancel, help) for other systems */
-  gtk_dialog_set_alternative_button_order (GTK_DIALOG (compselect),
-                                          COMPSELECT_RESPONSE_HIDE,
-                                          GTK_RESPONSE_CLOSE,
-                                          -1);
-
-  /* Initialize the hidden property */
-  compselect->hidden = FALSE;
-
-  return object;
+  gtk_widget_show (vbox);
+  return vbox;
 }
 
 static void
 compselect_finalize (GObject *object)
 {
-  Compselect *compselect = COMPSELECT (object);
+  GschemCompselectDockable *compselect = GSCHEM_COMPSELECT_DOCKABLE (object);
 
   if (compselect->filter_timeout != 0) {
     g_source_remove (compselect->filter_timeout);
@@ -1564,19 +1467,12 @@ compselect_set_property (GObject *object,
                          const GValue *value,
                          GParamSpec *pspec)
 {
-  Compselect *compselect = COMPSELECT (object);
+  GschemCompselectDockable *compselect = GSCHEM_COMPSELECT_DOCKABLE (object);
 
   switch (property_id) {
     case PROP_BEHAVIOR:
       gtk_combo_box_set_active (compselect->combobox_behaviors,
                                 g_value_get_enum (value));
-      break;
-    case PROP_HIDDEN:
-      compselect->hidden = g_value_get_boolean (value);
-      if (compselect->hidden)
-        gtk_widget_hide (GTK_WIDGET (compselect));
-      else
-        gtk_window_present (GTK_WINDOW (compselect));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
@@ -1590,7 +1486,7 @@ compselect_get_property (GObject *object,
                          GValue *value,
                          GParamSpec *pspec)
 {
-  Compselect *compselect = COMPSELECT (object);
+  GschemCompselectDockable *compselect = GSCHEM_COMPSELECT_DOCKABLE (object);
 
   switch (property_id) {
       case PROP_SYMBOL:
@@ -1628,9 +1524,6 @@ compselect_get_property (GObject *object,
         g_value_set_enum (value,
                           gtk_combo_box_get_active (
                             compselect->combobox_behaviors));
-        break;
-      case PROP_HIDDEN:
-        g_value_set_boolean (value, compselect->hidden);
         break;
       default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);

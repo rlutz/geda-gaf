@@ -34,6 +34,7 @@ gschem_SOURCES = \
 	gschem_binding_integer.c \
 	gschem_bottom_widget.c \
 	gschem_close_confirmation_dialog.c \
+	gschem_compselect_dockable.c \
 	gschem_coord_dialog.c \
 	gschem_dialog.c \
 	gschem_dialog_misc.c \
@@ -100,7 +101,6 @@ gschem_SOURCES = \
 	x_clipboard.c \
 	x_color.c \
 	x_colorcb.c \
-	x_compselect.c \
 	x_dialog.c \
 	x_event.c \
 	x_fileselect.c \

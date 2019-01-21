@@ -19,8 +19,8 @@
  */
 
 
-#ifndef __X_COMPSELECT_H__
-#define __X_COMPSELECT_H__
+#ifndef GSCHEM_COMPSELECT_DOCKABLE_H
+#define GSCHEM_COMPSELECT_DOCKABLE_H
 
 
 /*
@@ -39,28 +39,28 @@ GType compselect_behavior_get_type (void);
 
 
 /*
- * Compselect
+ * GschemCompselectDockable
  */
 
-#define TYPE_COMPSELECT         (compselect_get_type())
-#define COMPSELECT(obj)         (G_TYPE_CHECK_INSTANCE_CAST ((obj), TYPE_COMPSELECT, Compselect))
-#define COMPSELECT_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), TYPE_COMPSELECT, CompselectClass))
-#define IS_COMPSELECT(obj)      (G_TYPE_CHECK_INSTANCE_TYPE ((obj), TYPE_COMPSELECT))
-#define COMPSELECT_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), TYPE_COMPSELECT, CompselectClass))
+#define GSCHEM_TYPE_COMPSELECT_DOCKABLE         (gschem_compselect_dockable_get_type())
+#define GSCHEM_COMPSELECT_DOCKABLE(obj)         (G_TYPE_CHECK_INSTANCE_CAST ((obj), GSCHEM_TYPE_COMPSELECT_DOCKABLE, GschemCompselectDockable))
+#define GSCHEM_COMPSELECT_DOCKABLE_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), GSCHEM_TYPE_COMPSELECT_DOCKABLE, GschemCompselectDockableClass))
+#define GSCHEM_IS_COMPSELECT_DOCKABLE(obj)      (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GSCHEM_TYPE_COMPSELECT_DOCKABLE))
+#define GSCHEM_COMPSELECT_DOCKABLE_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), GSCHEM_TYPE_COMPSELECT_DOCKABLE, GschemCompselectDockableClass))
 
-typedef struct _CompselectClass CompselectClass;
-typedef struct _Compselect      Compselect;
+typedef struct _GschemCompselectDockableClass GschemCompselectDockableClass;
+typedef struct _GschemCompselectDockable      GschemCompselectDockable;
 
 
-struct _CompselectClass {
-  GschemDialogClass parent_class;
+struct _GschemCompselectDockableClass {
+  GschemDockableClass parent_class;
 
   guint behavior_changed_signal_id;
 
 };
 
-struct _Compselect {
-  GschemDialog parent_instance;
+struct _GschemCompselectDockable {
+  GschemDockable parent_instance;
 
   GtkWidget   *hpaned, *vpaned, *attrframe;
   GtkTreeView *libtreeview, *inusetreeview, *attrtreeview;
@@ -70,12 +70,10 @@ struct _Compselect {
   GtkButton   *button_clear;
   guint        filter_timeout;
   GtkComboBox *combobox_behaviors;
-
-  gboolean hidden;
 };
 
 
-GType compselect_get_type (void);
+GType gschem_compselect_dockable_get_type (void);
 
 /* Response IDs for special dialog buttons */
 typedef enum {
@@ -84,4 +82,4 @@ typedef enum {
   COMPSELECT_RESPONSE_REFRESH = 3
 } CompselectResponseType;
 
-#endif /* __X_COMPSEL_H__ */
+#endif /* GSCHEM_COMPSELECT_DOCKABLE_H */

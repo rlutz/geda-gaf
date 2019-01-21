@@ -64,7 +64,6 @@ struct st_gschem_toplevel {
   /* ------------ */
   GtkWidget *sowindow;                  /* Script open */
   GtkWidget *pfswindow;                 /* Picture File Selection window */
-  GtkWidget *cswindow;                  /* component select */
   GtkWidget *pswindow;                  /* page select */
   GtkWidget *tiwindow;                  /* text input */
   GtkWidget *sewindow;                  /* slot edit */
@@ -80,6 +79,7 @@ struct st_gschem_toplevel {
   /* --------- */
   GList *dockables;
 
+  GschemDockable *compselect_dockable;
   GschemDockable *object_properties_dockable;
   GschemDockable *text_properties_dockable;
   GschemDockable *multiattrib_dockable;

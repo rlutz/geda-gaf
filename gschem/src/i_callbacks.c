@@ -1777,7 +1777,7 @@ DEFINE_I_CALLBACK(add_component)
   o_redraw_cleanstates (w_current);
 
   i_set_state(w_current, COMPMODE);
-  x_compselect_open (w_current);
+  gschem_dockable_present (w_current->compselect_dockable);
 
   i_update_middle_button(w_current,
                          i_callback_add_component, _("Component"));
@@ -2789,12 +2789,10 @@ DEFINE_I_CALLBACK(cancel)
 {
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
   TOPLEVEL *toplevel = gschem_toplevel_get_toplevel (w_current);
-  GValue value = { 0, };
 
   g_return_if_fail (w_current != NULL);
 
-  if (w_current->event_state == COMPMODE &&
-      w_current->cswindow) {
+  if (w_current->event_state == COMPMODE) {
     /* user hit escape key when placing components */
 
     /* Undraw any outline of the place list */
@@ -2805,9 +2803,7 @@ DEFINE_I_CALLBACK(cancel)
     x_compselect_deselect (w_current);
 
     /* Present the component selector again */
-    g_value_init (&value, G_TYPE_BOOLEAN);
-    g_value_set_boolean (&value, FALSE);
-    g_object_set_property (G_OBJECT(w_current->cswindow), "hidden", &value);
+    gschem_dockable_present (w_current->compselect_dockable);
   }
 
   if (w_current->inside_action) {

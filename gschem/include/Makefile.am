@@ -3,7 +3,6 @@
 noinst_HEADERS = \
 	globals.h i_vars.h prototype.h x_dialog.h x_states.h \
 	gettext.h \
-	x_compselect.h \
 	x_pagesel.h \
 	gschem.h \
 	gschemhotkeystore.h \
@@ -13,6 +12,7 @@ noinst_HEADERS = \
 	gschem_binding.h \
 	gschem_binding_integer.h \
 	gschem_bottom_widget.h \
+	gschem_compselect_dockable.h \
 	gschem_defines.h \
 	gschem_dialog.h \
 	gschem_dialog_misc.h \

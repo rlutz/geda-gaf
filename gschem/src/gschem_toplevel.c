@@ -181,7 +181,6 @@ GschemToplevel *gschem_toplevel_new ()
   /* ------------ */
   w_current->sowindow     = NULL;
   w_current->pfswindow    = NULL;
-  w_current->cswindow     = NULL;
   w_current->pswindow     = NULL;
   w_current->tiwindow     = NULL;
   w_current->sewindow     = NULL;
@@ -197,6 +196,7 @@ GschemToplevel *gschem_toplevel_new ()
   /* --------- */
   w_current->dockables = NULL;
 
+  w_current->compselect_dockable        = NULL;
   w_current->object_properties_dockable = NULL;
   w_current->text_properties_dockable   = NULL;
   w_current->multiattrib_dockable       = NULL;

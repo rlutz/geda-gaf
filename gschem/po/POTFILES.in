@@ -20,6 +20,7 @@ gschem/src/gschem_binding.c
 gschem/src/gschem_binding_integer.c
 gschem/src/gschem_bottom_widget.c
 gschem/src/gschem_close_confirmation_dialog.c
+gschem/src/gschem_compselect_dockable.c
 gschem/src/gschem_coord_dialog.c
 gschem/src/gschem_dialog.c
 gschem/src/gschem_dialog_misc.c
@@ -81,7 +82,6 @@ gschem/src/x_basic.c
 gschem/src/x_clipboard.c
 gschem/src/x_color.c
 gschem/src/x_colorcb.c
-gschem/src/x_compselect.c
 gschem/src/x_dialog.c
 gschem/src/x_event.c
 gschem/src/x_fileselect.c

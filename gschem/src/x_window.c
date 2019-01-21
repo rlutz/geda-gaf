@@ -23,6 +23,7 @@
 
 #include "gschem.h"
 
+#include "gschem_compselect_dockable.h"
 #include "gschem_object_properties_dockable.h"
 #include "gschem_text_properties_dockable.h"
 #include "gschem_multiattrib_dockable.h"
@@ -838,6 +839,17 @@ void x_window_create_main(GschemToplevel *w_current)
                                "gschem-dock");
 
 
+  w_current->compselect_dockable = g_object_new (
+    GSCHEM_TYPE_COMPSELECT_DOCKABLE,
+    "title", _("Library"),
+    "settings-name", "compselect",
+    "cancellable", TRUE,
+    "initial-state", GSCHEM_DOCKABLE_STATE_HIDDEN,
+    "initial-width", 500,
+    "initial-height", 600,
+    "gschem-toplevel", w_current,
+    NULL);
+
   w_current->object_properties_dockable = g_object_new (
     GSCHEM_TYPE_OBJECT_PROPERTIES_DOCKABLE,
     "title", _("Object"),
@@ -978,9 +990,6 @@ void x_window_close(GschemToplevel *w_current)
   /* close all the dialog boxes */
   if (w_current->sowindow)
   gtk_widget_destroy(w_current->sowindow);
-
-  if (w_current->cswindow)
-  gtk_widget_destroy(w_current->cswindow);
 
   if (w_current->tiwindow)
   gtk_widget_destroy(w_current->tiwindow);
