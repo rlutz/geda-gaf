@@ -53,6 +53,7 @@ struct _Multiattrib {
   int       num_buses_in_list;
   int       num_lone_attribs_in_list;
 
+  GtkWidget      *status_label;
   GtkTreeView    *treeview;
 
   GtkWidget      *show_inherited;

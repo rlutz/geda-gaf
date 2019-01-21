@@ -2157,6 +2157,17 @@ multiattrib_init (Multiattrib *multiattrib)
   /* Pack the vbox into the frame */
   gtk_container_add (GTK_CONTAINER (multiattrib->list_frame), attrib_vbox);
 
+  multiattrib->status_label = gtk_label_new (NULL);
+  gtk_misc_set_alignment (GTK_MISC (multiattrib->status_label), 0, 1);
+  gtk_misc_set_padding (GTK_MISC (multiattrib->status_label), 3, 1);
+  gtk_label_set_ellipsize (GTK_LABEL (multiattrib->status_label),
+                           PANGO_ELLIPSIZE_END);
+  gtk_label_set_single_line_mode (GTK_LABEL (multiattrib->status_label), TRUE);
+
+  gtk_box_pack_start (GTK_BOX (attrib_vbox),
+                      multiattrib->status_label, FALSE, FALSE, 0);
+  gtk_widget_show (multiattrib->status_label);
+
   /* add the scrolled window to box */
   gtk_box_pack_start (GTK_BOX (attrib_vbox), scrolled_win, TRUE, TRUE, 0);
 
@@ -2564,7 +2575,8 @@ append_dialog_title_extra (GString *title_string,
   va_list args;
 
   va_start (args, text);
-  g_string_append (title_string, ((*num_title_extras)++ == 0) ? " - " : ", ");
+  if ((*num_title_extras)++ != 0)
+    g_string_append (title_string, ", ");
   g_string_append_vprintf (title_string, text, args);
   va_end (args);
 }
@@ -2572,7 +2584,7 @@ append_dialog_title_extra (GString *title_string,
 static void
 update_dialog_title (Multiattrib *multiattrib, char *complex_title_name)
 {
-  GString *title_string = g_string_new (_("Edit Attributes"));
+  GString *title_string = g_string_new (NULL);
   int num_title_extras = 0;
 
   if (multiattrib->num_complex_in_list > 0) {
@@ -2606,7 +2618,11 @@ update_dialog_title (Multiattrib *multiattrib, char *complex_title_name)
   }
 
   char *title = g_string_free (title_string, FALSE);
-  g_object_set (G_OBJECT (multiattrib), "title", title, NULL);
+  if (title != NULL && *title != '\0')
+    gtk_label_set_text (GTK_LABEL (multiattrib->status_label), title);
+  else
+    gtk_label_set_text (GTK_LABEL (multiattrib->status_label),
+                        _("Select a symbol, net, or attribute"));
   g_free (title);
 }
 
