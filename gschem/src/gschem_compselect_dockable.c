@@ -1297,6 +1297,7 @@ compselect_restore_internal_geometry (GschemDockable *dockable,
 {
   GschemCompselectDockable *compselect = GSCHEM_COMPSELECT_DOCKABLE (dockable);
   gint position;
+  GError *error = NULL;
 
   position = eda_config_get_int (cfg, group_name, "hpaned", NULL);
   if (position != 0)
@@ -1306,7 +1307,11 @@ compselect_restore_internal_geometry (GschemDockable *dockable,
   if (position != 0)
     gtk_paned_set_position (GTK_PANED (compselect->vpaned), position);
 
-  position = eda_config_get_int (cfg, group_name, "source-tab", NULL);
+  position = eda_config_get_int (cfg, group_name, "source-tab", &error);
+  if (error != NULL) {
+    position = 1;
+    g_error_free (error);
+  }
   gtk_notebook_set_current_page (compselect->viewtabs, position);
 }
 
