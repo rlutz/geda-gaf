@@ -2163,10 +2163,11 @@ multiattrib_init (Multiattrib *multiattrib)
   gtk_label_set_ellipsize (GTK_LABEL (multiattrib->status_label),
                            PANGO_ELLIPSIZE_END);
   gtk_label_set_single_line_mode (GTK_LABEL (multiattrib->status_label), TRUE);
-
+/*
   gtk_box_pack_start (GTK_BOX (attrib_vbox),
                       multiattrib->status_label, FALSE, FALSE, 0);
   gtk_widget_show (multiattrib->status_label);
+*/
 
   /* add the scrolled window to box */
   gtk_box_pack_start (GTK_BOX (attrib_vbox), scrolled_win, TRUE, TRUE, 0);
