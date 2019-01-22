@@ -675,8 +675,6 @@ void x_window_create_main(GschemToplevel *w_current)
                    w_current->left_notebook,
                    FALSE,
                    TRUE);
-  gtk_container_set_border_width (GTK_CONTAINER (w_current->left_notebook),
-                                  DIALOG_BORDER_SPACING);
   gtk_notebook_set_group_name (GTK_NOTEBOOK (w_current->left_notebook),
                                "gschem-dock");
 
@@ -691,8 +689,6 @@ void x_window_create_main(GschemToplevel *w_current)
                    w_current->right_notebook,
                    FALSE,
                    TRUE);
-  gtk_container_set_border_width (GTK_CONTAINER (w_current->right_notebook),
-                                  DIALOG_BORDER_SPACING);
   gtk_notebook_set_group_name (GTK_NOTEBOOK (w_current->right_notebook),
                                "gschem-dock");
 
@@ -707,8 +703,6 @@ void x_window_create_main(GschemToplevel *w_current)
                    w_current->bottom_notebook,
                    FALSE,
                    TRUE);
-  gtk_container_set_border_width (GTK_CONTAINER (w_current->bottom_notebook),
-                                  DIALOG_BORDER_SPACING);
   gtk_notebook_set_group_name (GTK_NOTEBOOK (w_current->bottom_notebook),
                                "gschem-dock");
 
