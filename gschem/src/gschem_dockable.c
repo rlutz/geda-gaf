@@ -839,6 +839,9 @@ restore_detached_dockables (GschemToplevel *w_current)
         present_in_notebook (w_current->log_dockable);
         break;
     }
+  else if (w_current->log_dockable->widget == NULL)
+    /* create the widget so the log window can auto-show if necessary */
+    create_widget (w_current->log_dockable);
 }
 
 

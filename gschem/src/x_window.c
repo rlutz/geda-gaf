@@ -885,9 +885,9 @@ void x_window_create_main(GschemToplevel *w_current)
     GSCHEM_TYPE_LOG_DOCKABLE,
     "title", _("Status"),
     "settings-name", "log",
-    "initial-state", GSCHEM_DOCKABLE_STATE_DOCKED_BOTTOM,
-    "initial-width", 600,
-    "initial-height", 300,
+    "initial-state", GSCHEM_DOCKABLE_STATE_HIDDEN,
+    "initial-width", 640,
+    "initial-height", 480,
     "gschem-toplevel", w_current,
     NULL);
 

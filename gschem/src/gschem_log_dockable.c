@@ -178,6 +178,8 @@ changed_cb (GtkTextBuffer *buffer, GschemLogDockable *dockable)
   g_return_if_fail (dockable != NULL);
   g_return_if_fail (dockable->viewer != NULL);
 
+  gschem_dockable_present (GSCHEM_DOCKABLE (dockable));
+
   gtk_text_buffer_get_end_iter (buffer, &iter);
   gtk_text_view_scroll_to_iter (dockable->viewer, &iter, 0.0, TRUE, 0.0, 1.0);
 }
