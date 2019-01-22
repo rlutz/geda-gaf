@@ -1,7 +1,7 @@
-# xorn.geda.netlist - gEDA Netlist Extraction and Generation
+# gaf.netlist - gEDA Netlist Extraction and Generation
 # Copyright (C) 1998-2010 Ales Hvezda
 # Copyright (C) 1998-2010 gEDA Contributors (see ChangeLog for details)
-# Copyright (C) 2013-2017 Roland Lutz
+# Copyright (C) 2013-2018 Roland Lutz
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -32,7 +32,7 @@ attribs:
 all-local: attribs
 
 dist_check_SCRIPTS = run-test
-EXTRA_DIST = $(TESTS) $(testdata) gnet-apitest.scm run-test.gnetlist \
+EXTRA_DIST = $(TESTS) $(testdata) gnet-apitest.scm run-test.gnetlist-legacy \
              gschemrc regression/gschemrc drc2/gschemrc common/gschemrc
 # dist_check_DATA would be more appropriate for $(TESTS) and $(testdata)
 # but triggers a lot of "Nothing to be done for '...'" messages.
@@ -57,6 +57,7 @@ TESTS = stack_1-geda.out \
 	regression/override_netname-geda.out \
 	regression/refdes_promotion-geda.out \
 	regression/transform_symbols-geda.out \
+	regression/unnumbered_component-geda.out \
 	drc2/connected_noconnects-drc2.out \
 	drc2/duplicated_refdes-drc2.out \
 	drc2/duplicated_slot-drc2.out \
@@ -424,6 +425,7 @@ TESTS = stack_1-geda.out \
 
 XFAIL_TESTS = \
 	regression/missing_pinseq-geda.out \
+	regression/unnumbered_component-geda.out \
 	common/SlottedOpamps-futurenet2.out \
 	common/SlottedOpamps-spice_noqsi.out \
 	common/SlottedOpamps-switcap.out \
@@ -500,6 +502,8 @@ testdata = \
 	regression/refdes_promotion.sch \
 	regression/transform_symbols-symbols/L.sym \
 	regression/transform_symbols.sch \
+	regression/unnumbered_component-symbols/component.sym \
+	regression/unnumbered_component.sch \
 	stack_1.sch \
 	std-symbols/74/7400-1.sym \
 	std-symbols/74/7404-1.sym \

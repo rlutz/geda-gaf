@@ -128,8 +128,8 @@ static void eda_renderer_draw_path (EdaRenderer *renderer, OBJECT *object);
 static void eda_renderer_draw_text (EdaRenderer *renderer, OBJECT *object);
 static int eda_renderer_get_font_descent (EdaRenderer *renderer,
                                           PangoFontDescription *desc);
-static int eda_renderer_prepare_text (EdaRenderer *renderer, const GedaObject *object);
-static void eda_renderer_calc_text_position (EdaRenderer *renderer, const GedaObject *object,
+static int eda_renderer_prepare_text (EdaRenderer *renderer, OBJECT *object);
+static void eda_renderer_calc_text_position (EdaRenderer *renderer, OBJECT *object,
                                              int descent, double *x, double *y);
 static void eda_renderer_draw_picture (EdaRenderer *renderer, OBJECT *object);
 static void eda_renderer_draw_complex (EdaRenderer *renderer, OBJECT *object);
@@ -149,21 +149,12 @@ static void eda_renderer_draw_mid_cues (EdaRenderer *renderer, OBJECT *object);
 static void eda_renderer_draw_junction_cue (EdaRenderer *renderer, int x, int y,
                                             int is_bus);
 
-static gboolean
-eda_renderer_default_get_user_bounds (EdaRenderer *renderer,
-                                      const GedaObject *object,
-                                      double *left,
-                                      double *top,
-                                      double *right,
-                                      double *bottom);
-
-static gboolean
-eda_renderer_get_text_user_bounds (EdaRenderer *renderer,
-                                   const GedaObject *object,
-                                   double *left,
-                                   double *top,
-                                   double *right,
-                                   double *bottom);
+static int eda_renderer_default_get_user_bounds (EdaRenderer *renderer, OBJECT *object,
+                                                 double *left, double *top,
+                                                 double *right, double *bottom);
+static int eda_renderer_get_text_user_bounds (EdaRenderer *renderer, OBJECT *object,
+                                              double *left, double *top,
+                                              double *right, double *bottom);
 
 G_DEFINE_TYPE (EdaRenderer, eda_renderer, G_TYPE_OBJECT);
 
@@ -513,7 +504,7 @@ eda_renderer_default_draw (EdaRenderer *renderer, OBJECT *object)
     g_return_if_reached ();
   }
 
-  eda_renderer_set_color (renderer, geda_object_get_drawing_color (object));
+  eda_renderer_set_color (renderer, object->color);
   draw_func (renderer, object);
 }
 
@@ -541,14 +532,13 @@ eda_renderer_is_drawable_color (EdaRenderer *renderer, int color,
   g_return_val_if_fail ((color >= 0) || (color < map->len), FALSE);
 
   /* Otherwise, return enabled flag of object's color */
-  return (&g_array_index (map, GedaColor, color))->enabled;
+  return (&g_array_index (map, COLOR, color))->enabled;
 }
 
 static int
 eda_renderer_is_drawable (EdaRenderer *renderer, OBJECT *object)
 {
-  int color = geda_object_get_drawing_color (object);
-
+  int color = object->color;
   /* Always attempt to draw complex objects */
   if ((object->type == OBJ_COMPLEX) || (object->type == OBJ_PLACEHOLDER)) {
     return TRUE;
@@ -596,17 +586,21 @@ eda_renderer_draw_hatch (EdaRenderer *renderer, OBJECT *object)
   }
 
   /* Handle mesh and hatch fill types */
-  fill_lines = g_array_new (FALSE, FALSE, sizeof (GedaLine));
-  if (geda_fill_type_draw_first_hatch (object->fill_type)) {
-    hatch_func (hatch_data, object->fill_angle1, object->fill_pitch1, fill_lines);
-  }
-  if (geda_fill_type_draw_second_hatch (object->fill_type)) {
+  fill_lines = g_array_new (FALSE, FALSE, sizeof (LINE));
+  switch (object->fill_type) {
+  case FILLING_MESH:
     hatch_func (hatch_data, object->fill_angle2, object->fill_pitch2, fill_lines);
+    /* Intentionally fall through */
+  case FILLING_HATCH:
+    hatch_func (hatch_data, object->fill_angle1, object->fill_pitch1, fill_lines);
+    break;
+  default:
+    break;
   }
 
   /* Draw fill pattern */
   for (i = 0; i < fill_lines->len; i++) {
-    GedaLine *line = &g_array_index (fill_lines, GedaLine, i);
+    LINE *line = &g_array_index (fill_lines, LINE, i);
     eda_cairo_line (renderer->priv->cr, EDA_RENDERER_CAIRO_FLAGS (renderer),
                     END_NONE, object->fill_width,
                     line->x[0], line->y[0], line->x[1], line->y[1]);
@@ -672,7 +666,17 @@ eda_renderer_draw_bus (EdaRenderer *renderer, OBJECT *object)
 static void
 eda_renderer_draw_pin (EdaRenderer *renderer, OBJECT *object)
 {
-  int width = geda_pin_object_get_width (object);
+  int width = 0;
+  switch (object->pin_type) {
+  case PIN_TYPE_NET:
+    width = PIN_WIDTH_NET;
+    break;
+  case PIN_TYPE_BUS:
+    width = PIN_WIDTH_BUS;
+    break;
+  default:
+    g_return_if_reached ();
+  }
 
   eda_cairo_line (renderer->priv->cr, EDA_RENDERER_CAIRO_FLAGS (renderer),
                   END_SQUARE, width,
@@ -709,11 +713,11 @@ eda_renderer_draw_arc (EdaRenderer *renderer, OBJECT *object)
 {
   eda_cairo_arc (renderer->priv->cr, EDA_RENDERER_CAIRO_FLAGS (renderer),
                  object->line_width,
-                 geda_arc_object_get_center_x (object),
-                 geda_arc_object_get_center_y (object),
-                 geda_arc_object_get_radius (object),
-                 geda_arc_object_get_start_angle (object),
-                 geda_arc_object_get_sweep_angle (object));
+                 object->arc->x,
+                 object->arc->y,
+                 object->arc->radius,
+                 object->arc->start_angle,
+                 object->arc->sweep_angle);
 
   eda_cairo_stroke (renderer->priv->cr, EDA_RENDERER_CAIRO_FLAGS (renderer),
                     object->line_type,
@@ -734,10 +738,8 @@ eda_renderer_draw_circle (EdaRenderer *renderer, OBJECT *object)
   /* Draw outline of circle */
   eda_cairo_arc (renderer->priv->cr, EDA_RENDERER_CAIRO_FLAGS (renderer),
                  object->line_width,
-                 geda_circle_object_get_center_x (object),
-                 geda_circle_object_get_center_y (object),
-                 geda_circle_object_get_radius (object),
-                 0, 360);
+                 object->circle->center_x, object->circle->center_y,
+                 object->circle->radius, 0, 360);
   if (fill_solid) cairo_fill_preserve (renderer->priv->cr);
   eda_cairo_stroke (renderer->priv->cr, EDA_RENDERER_CAIRO_FLAGS (renderer),
                     object->line_type, object->line_end,
@@ -784,8 +786,8 @@ eda_renderer_draw_text (EdaRenderer *renderer, OBJECT *object)
   /* If text outline mode is selected, draw an outline */
   if (EDA_RENDERER_CHECK_FLAG (renderer, FLAG_TEXT_OUTLINE)) {
     eda_cairo_box (renderer->priv->cr, EDA_RENDERER_CAIRO_FLAGS (renderer),
-                   0, object->bounds.min_x, object->bounds.max_y,
-                   object->bounds.max_x, object->bounds.min_y);
+                   0, object->w_left, object->w_bottom,
+                   object->w_right, object->w_top);
     eda_cairo_stroke (renderer->priv->cr, EDA_RENDERER_CAIRO_FLAGS (renderer),
                       TYPE_SOLID, END_SQUARE,
                       EDA_RENDERER_STROKE_WIDTH (renderer, 0),
@@ -866,9 +868,8 @@ eda_renderer_get_font_descent (EdaRenderer *renderer,
 }
 
 static int
-eda_renderer_prepare_text (EdaRenderer *renderer, const GedaObject *object)
+eda_renderer_prepare_text (EdaRenderer *renderer, OBJECT *object)
 {
-  gint angle;
   double points_size, dx, dy;
   int size, descent;
   char *draw_string;
@@ -876,7 +877,7 @@ eda_renderer_prepare_text (EdaRenderer *renderer, const GedaObject *object)
   PangoFontDescription *desc;
   PangoAttrList *attrs;
 
-  points_size = geda_text_object_get_size_in_points (object);
+  points_size = o_text_get_font_size_in_points (object); /* FIXME */
   size = lrint (points_size * PANGO_SCALE);
 
   /* Set hinting as appropriate */
@@ -916,9 +917,9 @@ eda_renderer_prepare_text (EdaRenderer *renderer, const GedaObject *object)
   cairo_translate (renderer->priv->cr, object->text->x, object->text->y);
 
   /* Special case turns upside-down text back upright */
-  angle = geda_text_object_get_angle (object);
-  if (angle != 180) {
-    cairo_rotate (renderer->priv->cr, M_PI * angle / 180.);
+  if (object->text->angle != 180) {
+    cairo_rotate (renderer->priv->cr,
+                  M_PI * object->text->angle / 180.);
   }
 
   cairo_scale (renderer->priv->cr, 1, -1);
@@ -941,7 +942,7 @@ eda_renderer_prepare_text (EdaRenderer *renderer, const GedaObject *object)
 /* Calculate position to draw text relative to text origin marker, in
  * world coordinates. */
 static void
-eda_renderer_calc_text_position (EdaRenderer *renderer, const GedaObject *object,
+eda_renderer_calc_text_position (EdaRenderer *renderer, OBJECT *object,
                                  int descent, double *x, double *y)
 {
   PangoRectangle inked_rect, logical_rect;
@@ -972,12 +973,12 @@ eda_renderer_calc_text_position (EdaRenderer *renderer, const GedaObject *object
    * the text is rotated to 180 degrees, since the drawing code
    * does not rotate the text to be shown upside down.
    */
-  if (geda_text_object_get_angle (object) == 180) {
+  if (object->text->angle == 180) {
     temp = y_lower; y_lower = y_upper; y_upper = temp;
     temp = x_left;  x_left  = x_right; x_right = temp;
   }
 
-  switch (geda_text_object_get_alignment (object)) {
+  switch (object->text->alignment) {
     default:
       /* Fall through to LOWER_left case */
     case LOWER_LEFT:    *y = y_lower;  *x = x_left;   break;
@@ -1118,8 +1119,8 @@ eda_renderer_default_draw_grips (EdaRenderer *renderer, OBJECT *object)
   case OBJ_CIRCLE:
     /* Grip at bottom right of containing square */
     eda_renderer_draw_grips_impl (renderer, GRIP_SQUARE, 1,
-        geda_circle_object_get_center_x (object) + geda_circle_object_get_radius (object),
-        geda_circle_object_get_center_y (object) - geda_circle_object_get_radius (object));
+        object->circle->center_x + object->circle->radius,
+        object->circle->center_y - object->circle->radius);
     break;
   case OBJ_PATH:
     eda_renderer_draw_path_grips (renderer, object);
@@ -1200,12 +1201,12 @@ eda_renderer_draw_arc_grips (EdaRenderer *renderer, OBJECT *object)
    *   <DT>*</DT><DD>one at the end of the arc - at (<B>x2</B>,<B>y2</B>).
    */
 
-  x1 = geda_arc_object_get_center_x (object);
-  y1 = geda_arc_object_get_center_y (object);
+  x1 = object->arc->x;
+  y1 = object->arc->y;
 
-  radius      = geda_arc_object_get_radius (object);
-  start_angle = geda_arc_object_get_start_angle (object);
-  sweep_angle = geda_arc_object_get_sweep_angle (object);
+  radius      = object->arc->radius;
+  start_angle = object->arc->start_angle;
+  sweep_angle = object->arc->sweep_angle;
 
   x2 = x1 + radius * cos ( start_angle                * M_PI / 180);
   y2 = y1 + radius * sin ( start_angle                * M_PI / 180);
@@ -1460,13 +1461,10 @@ eda_renderer_draw_junction_cue (EdaRenderer *renderer, int x, int y, int is_bus)
  * RENDERED BOUNDS
  * ================================================================ */
 
-gboolean
-eda_renderer_get_user_bounds (EdaRenderer *renderer,
-                              const GedaObject *object,
-                              double *left,
-                              double *top,
-                              double *right,
-                              double *bottom)
+int
+eda_renderer_get_user_bounds (EdaRenderer *renderer, OBJECT *object,
+                                      double *left, double *top,
+                                      double *right, double *bottom)
 {
   g_return_val_if_fail (EDA_IS_RENDERER (renderer), FALSE);
 
@@ -1475,13 +1473,10 @@ eda_renderer_get_user_bounds (EdaRenderer *renderer,
                                                          right, bottom);
 }
 
-static gboolean
-eda_renderer_default_get_user_bounds (EdaRenderer *renderer,
-                                      const GedaObject *object,
-                                      double *left,
-                                      double *top,
-                                      double *right,
-                                      double *bottom)
+static int
+eda_renderer_default_get_user_bounds (EdaRenderer *renderer, OBJECT *object,
+                                      double *left, double *top,
+                                      double *right, double *bottom)
 {
   g_return_val_if_fail ((object != NULL), FALSE);
   g_return_val_if_fail ((renderer->priv->cr != NULL), FALSE);
@@ -1508,13 +1503,10 @@ eda_renderer_default_get_user_bounds (EdaRenderer *renderer,
   }
 }
 
-static gboolean
-eda_renderer_get_text_user_bounds (EdaRenderer *renderer,
-                                   const GedaObject *object,
-                                   double *left,
-                                   double *top,
-                                   double *right,
-                                   double *bottom)
+static int
+eda_renderer_get_text_user_bounds (EdaRenderer *renderer, OBJECT *object,
+                                   double *left, double *top,
+                                   double *right, double *bottom)
 {
   PangoRectangle inked_rect, logical_rect;
 

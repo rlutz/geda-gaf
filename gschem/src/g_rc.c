@@ -2,7 +2,6 @@
  * gschem - gEDA Schematic Capture
  * Copyright (C) 1998-2010 Ales Hvezda
  * Copyright (C) 1998-2010 gEDA Contributors (see ChangeLog for details)
- * Copyright (C) 2016 Peter Brett <peter@peter-b.co.uk>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -36,36 +35,22 @@
 
 #include "gschem.h"
 
-/*!
- *  \brief Load gschem's GTK+ resource files
+/*! \todo Finish function documentation!!!
+ *  \brief
  *  \par Function Description
- *  Load GTK system and user resource files.  These can be used to
- *  customize gschem's appearance.  The first such file in the system
- *  configuration file is loaded, followed by any resource file in the
- *  per-user configuration directory.
+ *
  */
-void
-g_rc_parse_gtkrc(void)
+void g_rc_parse_gtkrc()
 {
-#if defined(ENABLE_DEPRECATED)
-	gchar *filename;
+  gchar *filename;
 
-	/* Search for the first gschem-gtkrc file in the system
-	 * configuration path. */
-	const gchar * const * sys_dirs = g_get_system_config_dirs();
-	for (gint i = 0; sys_dirs[i]; ++i) {
-		filename = g_build_filename (sys_dirs[i], "gschem-gtkrc", NULL);
-		if (g_file_test(filename, G_FILE_TEST_EXISTS)) {
-			gtk_rc_parse (filename);
-		}
-		g_free (filename);
-	}
-
-	filename = g_build_filename (eda_get_user_config_dir(),
-	                             "gschem-gtkrc", NULL);
+  filename = g_build_filename (s_path_sys_config (), "gschem-gtkrc", NULL);
   gtk_rc_parse (filename);
   g_free (filename);
-#endif /* ENABLE_DEPRECATED */
+
+  filename = g_build_filename (s_path_user_config (), "gschem-gtkrc", NULL);
+  gtk_rc_parse (filename);
+  g_free (filename);
 }
 
 /*! \brief Verify the version of the RC file under evaluation.
@@ -86,7 +71,7 @@ SCM g_rc_gschem_version(SCM scm_version)
   char *version;
   SCM rc_filename;
   char *sourcefile;
-
+  
   SCM_ASSERT (scm_is_string (scm_version), scm_version,
               SCM_ARG1, "gschem-version");
 
@@ -233,7 +218,7 @@ SCM g_rc_text_size(SCM size)
   int val;
 
   SCM_ASSERT (scm_is_integer (size), size, SCM_ARG1, "text-size");
-
+  
   val = scm_to_int (size);
   if (val == 0) {
     fprintf(stderr,
@@ -378,7 +363,7 @@ SCM g_rc_image_size(SCM width, SCM height)
 {
   SCM_ASSERT (scm_is_integer (width),  width,  SCM_ARG1, "image-size");
   SCM_ASSERT (scm_is_integer (height), height, SCM_ARG2, "image-size");
-
+  
   /* yes this is legit, we are casting the resulting double to an int */
   default_image_width  = scm_to_int (width);
   default_image_height = scm_to_int (height);
@@ -414,7 +399,7 @@ SCM g_rc_log_window_type(SCM mode)
     {TRANSIENT, "transient" },
     {DECORATED, "decorated" },
   };
-
+  
   RETURN_G_RC_MODE("log-window-type",
 		   default_log_window_type,
 		   2);
@@ -579,7 +564,7 @@ SCM g_rc_raise_dialog_boxes_on_expose(SCM mode)
     {TRUE , "enabled" },
     {FALSE, "disabled"},
   };
-
+  
   RETURN_G_RC_MODE("raise-dialog-boxes-on-expose",
 		   default_raise_dialog_boxes,
 		   2);
@@ -684,7 +669,7 @@ SCM g_rc_draw_grips(SCM mode)
     {TRUE , "enabled" },
     {FALSE, "disabled"},
   };
-
+  
   RETURN_G_RC_MODE("draw-grips",
 		   default_draw_grips,
 		   2);
@@ -755,7 +740,7 @@ SCM g_rc_window_size(SCM width, SCM height)
 {
   SCM_ASSERT (scm_is_integer (width),  width,  SCM_ARG1, "window-size");
   SCM_ASSERT (scm_is_integer (height), height, SCM_ARG2, "window-size");
-
+  
   default_width  = scm_to_int (width);
   default_height = scm_to_int (height);
 
@@ -823,7 +808,7 @@ SCM g_rc_bus_ripper_size(SCM size)
   int val;
 
   SCM_ASSERT (scm_is_integer (size), size, SCM_ARG1, "bus-ripper-size");
-
+  
   val = scm_to_int (size);
 
   if (val == 0) {
@@ -923,7 +908,7 @@ SCM g_rc_dots_grid_dot_size (SCM dotsize)
   int val;
 
   SCM_ASSERT (scm_is_integer (dotsize), dotsize, SCM_ARG1, "dots-grid-dot-size");
-
+  
   val = scm_to_int (dotsize);
 
   if (val <= 0) {
@@ -964,7 +949,7 @@ SCM g_rc_dots_grid_fixed_threshold (SCM spacing)
   int val;
 
   SCM_ASSERT (scm_is_integer (spacing), spacing, SCM_ARG1, "dots-grid-fixed-threshold");
-
+  
   val = scm_to_int (spacing);
 
   if (val <= 0) {
@@ -1015,7 +1000,7 @@ SCM g_rc_add_attribute_offset(SCM offset)
 
   SCM_ASSERT (scm_is_integer (offset), offset,
               SCM_ARG1, "add-attribute-offset");
-
+  
   val = scm_to_int (offset);
 
   if (val < 0) {
@@ -1063,7 +1048,7 @@ SCM g_rc_mousepan_gain(SCM gain)
   int val;
 
   SCM_ASSERT (scm_is_integer (gain), gain, SCM_ARG1, "mousepan-gain");
-
+  
   val = scm_to_int (gain);
 
   if (val <= 0) {
@@ -1086,7 +1071,7 @@ SCM g_rc_keyboardpan_gain(SCM gain)
   int val;
 
   SCM_ASSERT (scm_is_integer (gain), gain, SCM_ARG1, "keyboardpan-gain");
-
+  
   val = scm_to_int (gain);
 
   if (val <= 0) {
@@ -1110,7 +1095,7 @@ SCM g_rc_select_slack_pixels(SCM pixels)
   int val;
 
   SCM_ASSERT (scm_is_integer (pixels), pixels, SCM_ARG1, "select-slack-pixels");
-
+  
   val = scm_to_int (pixels);
 
   if (val <= 0) {
@@ -1175,8 +1160,8 @@ SCM g_rc_scrollpan_steps(SCM steps)
 }
 
 
-extern GedaColorMap display_colors;
-extern GedaColorMap display_outline_colors;
+extern COLOR display_colors[MAX_COLORS];
+extern COLOR display_outline_colors[MAX_COLORS];
 
 SCM g_rc_display_color_map (SCM scm_map)
 {

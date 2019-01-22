@@ -28,57 +28,15 @@
 #include <gdk-pixbuf/gdk-pixbuf.h>
 
 #include <libgeda/defines.h>
-
-#include <libgeda/geda_color.h>
-#include <libgeda/geda_color_map.h>
-#include <libgeda/geda_fill_type.h>
-#include <libgeda/geda_line_type.h>
-#include <libgeda/geda_line_cap_type.h>
-#include <libgeda/geda_point.h>
-#include <libgeda/geda_string.h>
-
-#include <libgeda/geda_angle.h>
-#include <libgeda/geda_arc.h>
-#include <libgeda/geda_bezier.h>
-#include <libgeda/geda_bounds.h>
-#include <libgeda/geda_box.h>
-#include <libgeda/geda_circle.h>
-#include <libgeda/geda_complex.h>
-#include <libgeda/geda_coord.h>
-#include <libgeda/geda_line.h>
-#include <libgeda/geda_path.h>
-#include <libgeda/geda_picture.h>
-#include <libgeda/geda_text.h>
-#include <libgeda/geda_transform.h>
-
-#include <libgeda/geda_forward.h>
-
 #include <libgeda/struct.h>
-#include <libgeda/geda_object.h>
-#include <libgeda/geda_object_list.h>
-#include <libgeda/geda_page.h>
-#include <libgeda/geda_toplevel.h>
-#include <libgeda/geda_undo.h>
-
-#include <libgeda/geda_arc_object.h>
-#include <libgeda/geda_box_object.h>
-#include <libgeda/geda_bus_object.h>
-#include <libgeda/geda_circle_object.h>
-#include <libgeda/geda_complex_object.h>
-#include <libgeda/geda_line_object.h>
-#include <libgeda/geda_net_object.h>
-#include <libgeda/geda_path_object.h>
-#include <libgeda/geda_picture_object.h>
-#include <libgeda/geda_pin_object.h>
-#include <libgeda/geda_text_object.h>
-
+#include <libgeda/s_toplevel.h>
 #include <libgeda/globals.h>
 #include <libgeda/o_types.h>
 #include <libgeda/funcs.h>
+#include <libgeda/colors.h>
 #include <libgeda/prototype.h>
 #include <libgeda/edaconfig.h>
 #include <libgeda/edaerrors.h>
-#include <libgeda/edapaths.h>
 #include <libgeda/geda_list.h>
 
 #endif

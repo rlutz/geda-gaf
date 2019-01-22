@@ -1,4 +1,4 @@
-# Copyright (C) 2013-2017 Roland Lutz
+# Copyright (C) 2013-2018 Roland Lutz
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -92,30 +92,30 @@ pythontests = \
 	python/hybridnum.py \
 	python/proxy.py \
 	python/xml_writer.py \
-	python/geda/attrib.py \
-	python/geda/complex.py \
-	python/geda/parse_attrib.py \
-	python/geda/pixmap.py \
-	python/geda/plain_transform.py \
-	python/geda/plainread_log.py \
-	python/geda/ripperdir.py \
-	python/geda/unhide_attrib.py \
-	python/geda/xmlread.py \
-	python/geda/xmlread_log.py \
-	python/geda/xmlwrite.py
+	gaf/attrib.py \
+	gaf/complex.py \
+	gaf/parse_attrib.py \
+	gaf/pixmap.py \
+	gaf/plain_transform.py \
+	gaf/plainread_log.py \
+	gaf/ripperdir.py \
+	gaf/unhide_attrib.py \
+	gaf/xmlread.py \
+	gaf/xmlread_log.py \
+	gaf/xmlwrite.py
 
 testdata = \
-	python/geda/pixmap.data \
-	python/geda/plain_transform.sch \
-	python/geda/plain_transform.sch.xml \
-	python/geda/ripperdir.sch \
-	python/geda/xmlread.sch \
-	python/geda/xmlread.sch.xml \
-	python/geda/xmlwrite.sch.xml
+	gaf/pixmap.data \
+	gaf/plain_transform.sch \
+	gaf/plain_transform.sch.xml \
+	gaf/ripperdir.sch \
+	gaf/xmlread.sch \
+	gaf/xmlread.sch.xml \
+	gaf/xmlwrite.sch.xml
 
 MOSTLYCLEANFILES = \
-	python/geda/xmlread.out \
-	python/geda/xmlwrite.out
+	gaf/xmlread.out \
+	gaf/xmlwrite.out
 
 TESTS = $(check_PROGRAMS) $(pythontests)
 

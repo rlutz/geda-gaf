@@ -1,4 +1,4 @@
-# xorn.geda - Python library for manipulating gEDA files
+# gaf - Python library for manipulating gEDA files
 #**********************************************************************
 #                   _     _                     __   _  _
 #   __ _ _ __   ___| |_  | |__   __ _ ___  ___ / /_ | or |
@@ -12,7 +12,7 @@
 #
 #**********************************************************************
 # Copyright (C) 2003 Free Software Foundation
-# Copyright (C) 2013-2017 Roland Lutz
+# Copyright (C) 2013-2018 Roland Lutz
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by

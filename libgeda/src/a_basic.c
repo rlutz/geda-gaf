@@ -31,6 +31,179 @@
 
 #include "libgeda_priv.h"
 
+/*! \brief Get the file header string.
+ *  \par Function Description
+ *  This function simply returns the DATE_VERSION and
+ *  FILEFORMAT_VERSION formatted as a gEDA file header.
+ *
+ *  \warning <em>Do not</em> free the returned string.
+ */
+const gchar *o_file_format_header()
+{
+  static gchar *header = NULL;
+
+  if (header == NULL)
+    header = g_strdup_printf("v %s %u\n", PACKAGE_DATE_VERSION,
+                             FILEFORMAT_VERSION);
+
+  return header;
+}
+
+/*! \brief "Save" a file into a string buffer
+ *  \par Function Description
+ *  This function saves a whole schematic into a buffer in libgeda
+ *  format. The buffer should be freed when no longer needed.
+ *
+ *  \param [in] object_list The head of a GList of OBJECTs to save.
+ *  \returns a buffer containing schematic data or NULL on failure.
+ */
+gchar *o_save_buffer (const GList *object_list)
+{
+  GString *acc;
+  gchar *buffer;
+
+  acc = g_string_new (o_file_format_header());
+
+  buffer = o_save_objects (object_list, FALSE);
+  g_string_append (acc, buffer);
+  g_free (buffer);
+
+  return g_string_free (acc, FALSE);
+}
+
+/*! \brief Save a series of objects into a string buffer
+ *  \par Function Description
+ *  This function recursively saves a set of objects into a buffer in
+ *  libgeda format.  User code should not normally call this function;
+ *  they should call o_save_buffer() instead.
+ *
+ *  With save_attribs passed as FALSE, attribute objects are skipped over,
+ *  and saved separately - after the objects they are attached to. When
+ *  we recurse for saving out those attributes, the function must be called
+ *  with save_attribs passed as TRUE.
+ *
+ *  \param [in] object_list   The head of a GList of objects to save.
+ *  \param [in] save_attribs  Should attribute objects encounterd be saved?
+ *  \returns a buffer containing schematic data or NULL on failure.
+ */
+gchar *o_save_objects (const GList *object_list, gboolean save_attribs)
+{
+  OBJECT *o_current;
+  const GList *iter;
+  gchar *out;
+  GString *acc;
+  gboolean already_wrote = FALSE;
+
+  acc = g_string_new("");
+
+  iter = object_list;
+
+  while ( iter != NULL ) {
+    o_current = (OBJECT *)iter->data;
+
+    if (save_attribs || o_current->attached_to == NULL) {
+
+      switch (o_current->type) {
+
+        case(OBJ_LINE):
+          out = o_line_save(o_current);
+          break;
+
+        case(OBJ_NET):
+          out = o_net_save(o_current);
+          break;
+
+        case(OBJ_BUS):
+          out = o_bus_save(o_current);
+          break;
+
+        case(OBJ_BOX):
+          out = o_box_save(o_current);
+          break;
+
+        case(OBJ_CIRCLE):
+          out = o_circle_save(o_current);
+          break;
+
+        case(OBJ_COMPLEX):
+          out = o_complex_save(o_current);
+          g_string_append_printf(acc, "%s\n", out);
+          already_wrote = TRUE;
+          g_free(out); /* need to free here because of the above flag */
+
+          if (o_complex_is_embedded(o_current)) {
+            g_string_append(acc, "[\n");
+
+            out = o_save_objects(o_current->complex->prim_objs, FALSE);
+            g_string_append (acc, out);
+            g_free(out);
+
+            g_string_append(acc, "]\n");
+          }
+          break;
+
+        case(OBJ_PLACEHOLDER):  /* new type by SDB 1.20.2005 */
+          out = o_complex_save(o_current);
+          break;
+
+        case(OBJ_TEXT):
+          out = o_text_save(o_current);
+          break;
+
+        case(OBJ_PATH):
+          out = o_path_save(o_current);
+          break;
+
+        case(OBJ_PIN):
+          out = o_pin_save(o_current);
+          break;
+
+        case(OBJ_ARC):
+          out = o_arc_save(o_current);
+          break;
+
+        case(OBJ_PICTURE):
+          out = o_picture_save(o_current);
+          break;
+
+        default:
+          /*! \todo Maybe we can continue instead of just failing
+           *  completely? In any case, failing gracefully is better
+           *  than killing the program, which is what this used to
+           *  do... */
+          g_critical (_("o_save_objects: object %p has unknown type '%c'\n"),
+                      o_current, o_current->type);
+          /* Dump string built so far */
+          g_string_free (acc, TRUE);
+          return NULL;
+      }
+
+      /* output the line */
+      if (!already_wrote) {
+        g_string_append_printf(acc, "%s\n", out);
+        g_free(out);
+      } else {
+        already_wrote = FALSE;
+      }
+
+      /* save any attributes */
+      if (o_current->attribs != NULL) {
+        g_string_append (acc, "{\n");
+
+        out = o_save_objects (o_current->attribs, TRUE);
+        g_string_append (acc, out);
+        g_free(out);
+
+        g_string_append (acc, "}\n");
+      }
+    }
+
+    iter = g_list_next (iter);
+  }
+
+  return g_string_free (acc, FALSE);
+}
+
 /*! \brief Save a file
  *  \par Function Description
  *  This function saves the data in a libgeda format to a file
@@ -51,14 +224,14 @@ int o_save (TOPLEVEL *toplevel, const GList *object_list,
 
   /* Check to see if real filename is writable; if file doesn't exists
      we assume all is well */
-  if (g_file_test(filename, G_FILE_TEST_EXISTS) &&
+  if (g_file_test(filename, G_FILE_TEST_EXISTS) && 
       g_access(filename, W_OK) != 0) {
     g_set_error (err, G_FILE_ERROR, G_FILE_ERROR_PERM,
                  _("File %s is read-only"), filename);
-    return 0;
+    return 0;      
   }
 
-  buffer = geda_object_list_to_buffer (object_list);
+  buffer = o_save_buffer (object_list);
   if (!g_file_set_contents (filename, buffer, strlen(buffer), err)) {
     g_free (buffer);
     return 0;
@@ -215,7 +388,7 @@ GList *o_read_buffer (TOPLEVEL *toplevel, GList *object_list,
         new_object_list = g_list_prepend (new_object_list, new_obj);
         break;
 
-      case(STARTATTACH_ATTR):
+      case(STARTATTACH_ATTR): 
         /* first is the fp */
         /* 2nd is the object to get the attributes */
         if (new_obj != NULL) {
@@ -271,7 +444,7 @@ GList *o_read_buffer (TOPLEVEL *toplevel, GList *object_list,
         if (embedded_level>0) {
           /* don't do this since objects are already
            * stored/read translated
-           * geda_complex_object_translate (toplevel, new_object_list->x,
+           * o_complex_translate_world (toplevel, new_object_list->x,
            *                            new_object_list->y, new_object_list->complex);
            */
           new_object_list = g_list_reverse (new_object_list);
@@ -350,7 +523,7 @@ GList *o_read_buffer (TOPLEVEL *toplevel, GList *object_list,
 
   if (found_pin) {
     if (release_ver <= VERSION_20020825) {
-      geda_pin_object_update_whichend (toplevel, new_object_list, found_pin);
+      o_pin_update_whichend (toplevel, new_object_list, found_pin);
     }
   }
 
@@ -361,7 +534,7 @@ GList *o_read_buffer (TOPLEVEL *toplevel, GList *object_list,
 
   return(object_list);
  error:
-  geda_object_list_delete (toplevel, new_object_list);
+  s_delete_object_glist(toplevel, new_object_list);
   return NULL;
 }
 
@@ -389,7 +562,7 @@ GList *o_read (TOPLEVEL *toplevel, GList *object_list, char *filename,
 
   if (!g_file_get_contents(filename, &buffer, &size, err)) {
     return NULL;
-  }
+  } 
 
   /* Parse file contents */
   result = o_read_buffer (toplevel, object_list, buffer, size, filename, err);

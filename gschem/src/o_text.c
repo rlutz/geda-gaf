@@ -36,13 +36,9 @@
  *  \par Function Description
  *
  */
-gboolean
-o_text_get_rendered_bounds (void *user_data,
-                            const GedaObject *o_current,
-                            gint *min_x,
-                            gint *min_y,
-                            gint *max_x,
-                            gint *max_y)
+int o_text_get_rendered_bounds (void *user_data, OBJECT *o_current,
+                                int *min_x, int *min_y,
+                                int *max_x, int *max_y)
 {
   TOPLEVEL *toplevel;
   EdaRenderer *renderer;
@@ -121,24 +117,19 @@ void o_text_prepare_place(GschemToplevel *w_current, char *text, int color, int 
   w_current->last_drawb_mode = LAST_DRAWB_MODE_NONE;
 
   /* remove the old place list if it exists */
-  geda_object_list_delete (toplevel, page->place_list);
+  s_delete_object_glist(toplevel, page->place_list);
   page->place_list = NULL;
 
   /* here you need to add OBJ_TEXT when it's done */
   page->place_list =
     g_list_append(page->place_list,
-                  geda_text_object_new (toplevel,
-                                        color,
-                                        0,
-                                        0,
-                                        align,
-                                        rotate, /* zero is angle */
-                                        text,
-                                        size,
+                  o_text_new (toplevel, color,
+                              0, 0, align, rotate, /* zero is angle */
+                              text,
+                              size,
                               /* has to be visible so you can place it */
                               /* visibility is set when you create the object */
-                                        VISIBLE,
-                                        SHOW_NAME_VALUE));
+                              VISIBLE, SHOW_NAME_VALUE));
 
   i_action_start (w_current);
   i_set_state (w_current, TEXTMODE);

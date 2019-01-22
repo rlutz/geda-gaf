@@ -24,8 +24,8 @@
 
 #define INVALIDATE_MARGIN 1
 
-extern GedaColorMap display_colors;
-extern GedaColorMap display_outline_colors;
+extern COLOR display_colors[MAX_COLORS];
+extern COLOR display_outline_colors[MAX_COLORS];
 
 /*! \todo Lots of Gross code... needs lots of cleanup - mainly
  * readability issues
@@ -110,14 +110,14 @@ void o_redraw_rect (GschemToplevel *w_current,
 
   /* This color map is used for "normal" rendering. */
   render_color_map =
-    g_array_sized_new (FALSE, FALSE, sizeof(GedaColor), MAX_COLORS);
+    g_array_sized_new (FALSE, FALSE, sizeof(COLOR), MAX_COLORS);
   render_color_map =
     g_array_append_vals (render_color_map, display_colors, MAX_COLORS);
 
   /* This color map is used for rendering rubberbanding nets and
      buses, and objects which are in the process of being placed. */
   render_outline_color_map =
-    g_array_sized_new (FALSE, FALSE, sizeof(GedaColor), MAX_COLORS);
+    g_array_sized_new (FALSE, FALSE, sizeof(COLOR), MAX_COLORS);
   render_outline_color_map =
     g_array_append_vals (render_outline_color_map, display_outline_colors,
                          MAX_COLORS);
@@ -132,13 +132,13 @@ void o_redraw_rect (GschemToplevel *w_current,
                 NULL);
 
   /* Paint background */
-  GedaColor *color = x_color_lookup (w_current, BACKGROUND_COLOR);
+  COLOR *color = x_color_lookup (BACKGROUND_COLOR);
 
   cairo_set_source_rgba (cr,
-                         geda_color_get_red_double (color),
-                         geda_color_get_green_double (color),
-                         geda_color_get_blue_double (color),
-                         geda_color_get_alpha_double (color));
+                         color->r / 255.0,
+                         color->g / 255.0,
+                         color->b / 255.0,
+                         color->a / 255.0);
 
   cairo_paint (cr);
 
@@ -364,7 +364,7 @@ int o_redraw_cleanstates(GschemToplevel *w_current)
       /* Free the place list and its contents. If we were in a move
        * action, the list (refering to objects on the page) would
        * already have been cleared in o_move_cancel(), so this is OK. */
-      geda_object_list_delete (toplevel, toplevel->page_current->place_list);
+      s_delete_object_glist(toplevel, toplevel->page_current->place_list);
       toplevel->page_current->place_list = NULL;
 
       i_action_stop (w_current);
@@ -453,7 +453,7 @@ void o_invalidate (GschemToplevel *w_current, OBJECT *object)
     return;
   }
 
-  if (geda_object_calculate_visible_bounds(page->toplevel, object, &left,  &top,
+  if (world_get_single_object_bounds(page->toplevel, object, &left,  &top,
                                                        &right, &bottom)) {
     gschem_page_view_invalidate_world_rect (page_view,
                                             left,

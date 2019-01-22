@@ -251,7 +251,7 @@ assign_store (GschemFindTextState *state, GSList *objects)
       continue;
     }
 
-    str = geda_text_object_get_string (object);
+    str = o_text_get_string (object->page->toplevel, object);
 
     if (str == NULL) {
       g_warning ("NULL string encountered");
@@ -332,7 +332,7 @@ assign_store_patch (GschemFindTextState *state, GSList *objects)
         final_object = i->data;
         if (final_object->type == OBJ_TEXT) {
           page_obj = gschem_page_get_page_object(final_object);
-          if (o_is_visible (page_obj->page->toplevel, page_obj)) {
+          if (o_is_visible (page_obj)) {
             found_pin = 1;
             break;
           }
@@ -529,11 +529,11 @@ find_objects_using_pattern (GSList *pages, const char *text)
         continue;
       }
 
-      if (!(o_is_visible (page->toplevel, object) || page->toplevel->show_hidden_text)) {
+      if (!(o_is_visible (object) || page->toplevel->show_hidden_text)) {
         continue;
       }
 
-      str = geda_text_object_get_string (object);
+      str = o_text_get_string (object->page->toplevel, object);
 
       if (str == NULL) {
         g_warning ("NULL string encountered");
@@ -606,11 +606,11 @@ find_objects_using_regex (GSList *pages, const char *text, GError **error)
         continue;
       }
 
-      if (!(o_is_visible (page->toplevel, object) || page->toplevel->show_hidden_text)) {
+      if (!(o_is_visible (object) || page->toplevel->show_hidden_text)) {
         continue;
       }
 
-      str = geda_text_object_get_string (object);
+      str = o_text_get_string (object->page->toplevel, object);
 
       if (str == NULL) {
         g_warning ("NULL string encountered");
@@ -671,11 +671,11 @@ find_objects_using_substring (GSList *pages, const char *text)
         continue;
       }
 
-      if (!(o_is_visible (page->toplevel, object) || page->toplevel->show_hidden_text)) {
+      if (!(o_is_visible (object) || page->toplevel->show_hidden_text)) {
         continue;
       }
 
-      str = geda_text_object_get_string (object);
+      str = o_text_get_string (object->page->toplevel, object);
 
       if (str == NULL) {
         g_warning ("NULL string encountered");

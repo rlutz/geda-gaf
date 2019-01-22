@@ -119,12 +119,12 @@ void o_move_end_lowlevel (GschemToplevel *w_current,
     case (OBJ_BUS):
     case (OBJ_PIN):
       s_conn_remove_object_connections (page->toplevel, object);
-      geda_object_translate (object, diff_x, diff_y);
+      o_translate_world (object, diff_x, diff_y);
       s_conn_update_object (page, object);
       break;
 
     default:
-      geda_object_translate (object, diff_x, diff_y);
+      o_translate_world (object, diff_x, diff_y);
       break;
   }
 }
@@ -382,7 +382,7 @@ void o_move_motion (GschemToplevel *w_current, int w_x, int w_y)
   /* manipulate w_x and w_y in a way that will lead to a position
      of the object that is aligned with the grid */
   if (NULL != object) {
-    if (geda_object_get_position (object, &object_x, &object_y)) {
+    if (o_get_position (object, &object_x, &object_y)) {
       w_x += snap_grid (w_current, object_x) - object_x;
       w_y += snap_grid (w_current, object_y) - object_y;
     }
@@ -581,9 +581,9 @@ void o_move_check_endpoint(GschemToplevel *w_current, OBJECT * object)
 
       OBJECT *new_net;
       /* other object is a pin, insert a net */
-      new_net = geda_net_object_new (page->toplevel, OBJ_NET, NET_COLOR,
-                                     c_current->x, c_current->y,
-                                     c_current->x, c_current->y);
+      new_net = o_net_new (page->toplevel, OBJ_NET, NET_COLOR,
+                           c_current->x, c_current->y,
+                           c_current->x, c_current->y);
       s_page_append (page->toplevel, page, new_net);
       /* This new net object is only picked up for stretching later,
        * somewhat of a kludge. If the move operation is cancelled, these

@@ -107,7 +107,7 @@ void o_attrib_deselect_invisible (GschemToplevel *w_current,
        a_iter = g_list_next (a_iter)) {
     a_current = a_iter->data;
 
-    if (a_current->selected && !o_is_visible(w_current->toplevel, a_current)) {
+    if (a_current->selected && !o_is_visible(a_current)) {
       o_selection_remove (w_current->toplevel, selection, a_current);
     }
   }
@@ -141,7 +141,7 @@ void o_attrib_select_invisible (GschemToplevel *w_current,
        a_iter = g_list_next (a_iter)) {
     a_current = a_iter->data;
 
-    if (!a_current->selected && !o_is_visible(w_current->toplevel, a_current)) {
+    if (!a_current->selected && !o_is_visible(a_current)) {
       o_selection_add (w_current->toplevel, selection, a_current);
     }
   }
@@ -162,7 +162,7 @@ void o_attrib_toggle_visibility(GschemToplevel *w_current, OBJECT *object)
 
   g_return_if_fail (object != NULL && object->type == OBJ_TEXT);
 
-  if (o_is_visible (toplevel, object)) {
+  if (o_is_visible (object)) {
     /* only erase if we are not showing hidden text */
     if (!toplevel->show_hidden_text) {
       o_invalidate (w_current, object);
@@ -222,7 +222,7 @@ void o_attrib_toggle_show_name_value(GschemToplevel *w_current,
 /* This function no longer returns NULL, but will always return the new */
 /* text item */
 OBJECT *o_attrib_add_attrib(GschemToplevel *w_current,
-			    const char *text_string, int visibility,
+			    const char *text_string, int visibility, 
 			    int show_name_value, OBJECT *object)
 {
   TOPLEVEL *toplevel = gschem_toplevel_get_toplevel (w_current);
@@ -252,16 +252,16 @@ OBJECT *o_attrib_add_attrib(GschemToplevel *w_current,
         break;
 
       case(OBJ_ARC):
-        world_x = geda_arc_object_get_center_x (o_current);
-        world_y = geda_arc_object_get_center_y (o_current);
+        world_x = o_current->arc->x;
+        world_y = o_current->arc->y;
         align = LOWER_LEFT;
         angle = 0;
         color = ATTRIBUTE_COLOR;
         break;
 
       case(OBJ_CIRCLE):
-        world_x = geda_circle_object_get_center_x (o_current);
-        world_y = geda_circle_object_get_center_y (o_current);
+        world_x = o_current->circle->center_x;
+        world_y = o_current->circle->center_y;
         align = LOWER_LEFT;
         angle = 0;
         color = ATTRIBUTE_COLOR;
@@ -340,10 +340,10 @@ OBJECT *o_attrib_add_attrib(GschemToplevel *w_current,
     world_get_object_glist_bounds (toplevel,
                                    s_page_objects (toplevel->page_current),
                                    &left, &top, &right, &bottom);
-
-    /* this really is the lower left hand corner */
-    world_x = left;
-    world_y = top;
+	
+    /* this really is the lower left hand corner */	
+    world_x = left; 
+    world_y = top;  
 
     /* printf("%d %d\n", world_x, world_y); */
     align = LOWER_LEFT;
@@ -352,16 +352,10 @@ OBJECT *o_attrib_add_attrib(GschemToplevel *w_current,
   }
 
   /* first create text item */
-  new_obj = geda_text_object_new (toplevel,
-                                  color,
-                                  world_x,
-                                  world_y,
-                                  align,
-                                  angle,
-                                  text_string,
-                                  w_current->text_size, /* current text size */
-                                  visibility,
-                                  show_name_value);
+  new_obj = o_text_new(toplevel, color, world_x, world_y,
+                       align, angle, text_string,
+                       w_current->text_size, /* current text size */
+                       visibility, show_name_value);
   s_page_append (toplevel, toplevel->page_current, new_obj);
 
   /* now attach the attribute to the object (if o_current is not NULL) */

@@ -1363,7 +1363,7 @@ DEFINE_I_CALLBACK (view_dark_colors)
 
   x_color_free ();
   /* Change the scheme here */
-  g_scm_c_eval_string_protected ("(load-rc-from-sys-config-dirs \"gschem-colormap-darkbg\")");
+  g_scm_c_eval_string_protected ("(load (build-path geda-rc-path \"gschem-colormap-darkbg\"))");
   x_color_allocate ();
 
   gschem_page_view_invalidate_all (gschem_toplevel_get_current_page_view (w_current));
@@ -1380,7 +1380,7 @@ DEFINE_I_CALLBACK (view_light_colors)
 
   x_color_free ();
   /* Change the scheme here */
-  g_scm_c_eval_string_protected ("(load-rc-from-sys-config-dirs \"gschem-colormap-lightbg\")");
+  g_scm_c_eval_string_protected ("(load (build-path geda-rc-path \"gschem-colormap-lightbg\"))");
   x_color_allocate ();
 
   gschem_page_view_invalidate_all (gschem_toplevel_get_current_page_view (w_current));
@@ -1397,7 +1397,7 @@ DEFINE_I_CALLBACK (view_bw_colors)
 
   x_color_free ();
   /* Change the scheme here */
-  g_scm_c_eval_string_protected ("(load-rc-from-sys-config-dirs \"gschem-colormap-bw\")");
+  g_scm_c_eval_string_protected ("(load (build-path geda-rc-path \"gschem-colormap-bw\"))");
   x_color_allocate ();
 
   gschem_page_view_invalidate_all (gschem_toplevel_get_current_page_view (w_current));
@@ -2828,7 +2828,7 @@ DEFINE_I_CALLBACK(cancel)
    * action, the list (refering to objects on the page) would
    * already have been cleared in o_move_cancel(), so this is OK. */
   if (toplevel->page_current != NULL) {
-    geda_object_list_delete (toplevel, toplevel->page_current->place_list);
+    s_delete_object_glist(toplevel, toplevel->page_current->place_list);
     toplevel->page_current->place_list = NULL;
   }
 

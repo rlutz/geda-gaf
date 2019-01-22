@@ -108,7 +108,7 @@ o_undo_savestate (GschemToplevel *w_current, PAGE *page, int flag)
      * triggered before it was removed from o_save_buffer().
      */
     if (toplevel->net_consolidate == TRUE)
-      geda_net_object_consolidate (toplevel, page);
+      o_net_consolidate (toplevel, page);
   }
 
   if (w_current->undo_type == UNDO_DISK && flag == UNDO_ALL) {
@@ -218,7 +218,7 @@ o_undo_savestate (GschemToplevel *w_current, PAGE *page, int flag)
       }
 
       if (u_current->object_list) {
-        geda_object_list_delete (toplevel, u_current->object_list);
+        s_delete_object_glist (toplevel, u_current->object_list);
         u_current->object_list = NULL;
       }
 
@@ -394,7 +394,7 @@ o_undo_callback (GschemToplevel *w_current, PAGE *page, int type)
     s_page_delete_objects (toplevel, page);
 
     /* Free the objects in the place list. */
-    geda_object_list_delete (toplevel, page->place_list);
+    s_delete_object_glist (toplevel, page->place_list);
     page->place_list = NULL;
 
     gschem_toplevel_page_content_changed (w_current, page);
@@ -403,7 +403,7 @@ o_undo_callback (GschemToplevel *w_current, PAGE *page, int type)
     s_page_delete_objects (toplevel, page);
 
     /* Free the objects in the place list. */
-    geda_object_list_delete (toplevel, page->place_list);
+    s_delete_object_glist (toplevel, page->place_list);
     page->place_list = NULL;
 
     gschem_toplevel_page_content_changed (w_current, page);

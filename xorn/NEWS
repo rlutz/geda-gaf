@@ -1,3 +1,15 @@
+September 2018
+==============
+
+- The wrapper script `gnetlist2' is now the official gnetlist executable
+
+
+August 2018
+===========
+
+- Renamed package `xorn.geda' to `gaf'
+
+
 October 2017
 ============
 
@@ -195,7 +207,7 @@ March 2014
 
 --------------------------------------------------------------------------------
 
-Copyright (C) 2013-2017 Roland Lutz
+Copyright (C) 2013-2018 Roland Lutz
 
 Permission is granted to copy, distribute and/or modify this document
 under the terms of the GNU Free Documentation License, Version 1.2 or

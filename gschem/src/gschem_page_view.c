@@ -517,12 +517,12 @@ gschem_page_view_invalidate_object (GschemPageView *view, OBJECT *object)
     int world_left;
     int world_top;
 
-    success = geda_object_calculate_visible_bounds (page->toplevel,
-                                                    object,
-                                                    &world_left,
-                                                    &world_top,
-                                                    &world_right,
-                                                    &world_bottom);
+    success = world_get_single_object_bounds (page->toplevel,
+                                              object,
+                                              &world_left,
+                                              &world_top,
+                                              &world_right,
+                                              &world_bottom);
 
     if (success) {
       gschem_page_view_invalidate_world_rect (view,
@@ -1358,12 +1358,12 @@ gschem_page_view_zoom_text (GschemPageView *view, OBJECT *object, gboolean zoom_
     page_obj->page->toplevel->show_hidden_text = 1;
   }
 
-  success = geda_object_calculate_visible_bounds (page_obj->page->toplevel,
-                                                  object,
-                                                  &x[0],
-                                                  &y[0],
-                                                  &x[1],
-                                                  &y[1]);
+  success = world_get_single_object_bounds (page_obj->page->toplevel,
+                                            object,
+                                            &x[0],
+                                            &y[0],
+                                            &x[1],
+                                            &y[1]);
   if (zoom_hidden)
     page_obj->page->toplevel->show_hidden_text = old_show_hidden;
 

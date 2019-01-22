@@ -1,7 +1,7 @@
-# xorn.geda.netlist - gEDA Netlist Extraction and Generation
+# gaf.netlist - gEDA Netlist Extraction and Generation
 # Copyright (C) 1998-2010 Ales Hvezda
 # Copyright (C) 1998-2010 gEDA Contributors (see ChangeLog for details)
-# Copyright (C) 2013-2017 Roland Lutz
+# Copyright (C) 2013-2018 Roland Lutz
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -22,11 +22,11 @@
 
 import sys
 from gettext import gettext as _
-import xorn.geda.netlist.package
+import gaf.netlist.package
 
-class Package(xorn.geda.netlist.package.Package):
+class Package(gaf.netlist.package.Package):
     def __init__(self, *args, **kwds):
-        xorn.geda.netlist.package.Package.__init__(self, *args, **kwds)
+        gaf.netlist.package.Package.__init__(self, *args, **kwds)
 
     def error(self, msg):
         sys.stderr.write(_("(re-packaged) package `%s': error: %s\n") % (
@@ -37,9 +37,9 @@ class Package(xorn.geda.netlist.package.Package):
         sys.stderr.write(_("(re-packaged) package `%s': warning: %s\n") % (
                              self.refdes, msg))
 
-class PackagePin(xorn.geda.netlist.package.PackagePin):
+class PackagePin(gaf.netlist.package.PackagePin):
     def __init__(self, *args, **kwds):
-        xorn.geda.netlist.package.PackagePin.__init__(self, *args, **kwds)
+        gaf.netlist.package.PackagePin.__init__(self, *args, **kwds)
 
     def error(self, msg):
         sys.stderr.write(

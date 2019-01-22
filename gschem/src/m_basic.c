@@ -30,24 +30,41 @@
  *  closest grid coordinate.
  *
  *  \param [in] w_current  The GschemToplevel object.
- *  \param [in] coord      The coordinate to snap.
+ *  \param [in] input      The coordinate to snap.
  *  \return The closest grid coordinate to the input.
  */
-int snap_grid(GschemToplevel *w_current, int coord)
+int snap_grid(GschemToplevel *w_current, int input)
 {
+  int p, m, n;
+  int sign, value, snap_size;
   SNAP_STATE snap_mode;
 
-  g_return_val_if_fail (w_current != NULL, coord);
-
   snap_mode = gschem_options_get_snap_mode (w_current->options);
+  snap_size = gschem_options_get_snap_size (w_current->options);
 
-  if (snap_mode != SNAP_OFF) {
-    gint snap_size = gschem_options_get_snap_size (w_current->options);
-
-    coord = geda_coord_snap (coord, snap_size);
+  if (snap_mode == SNAP_OFF) {
+    return(input);
   }
 
-  return coord;
+  /* this code was inspired from killustrator, it's much simpler than mine */
+  sign = ( input < 0 ? -1 : 1 );
+  value = abs(input);
+
+  p = value / snap_size;
+  m = value % snap_size;
+  n = p * snap_size;
+  if (m > snap_size / 2)
+  n += snap_size;
+
+#if DEBUG
+  printf("p: %d\n", p);
+  printf("m: %d\n", m);
+  printf("m > snap_size / 2: %d\n", (m > snap_size / 2));
+  printf("n: %d\n", n);
+  printf("n*s: %d\n", n*sign);
+#endif
+
+  return(sign*n);
 }
 
 

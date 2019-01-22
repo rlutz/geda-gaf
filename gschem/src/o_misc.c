@@ -75,7 +75,7 @@ void o_edit(GschemToplevel *w_current, GList *list)
     arc_angle_dialog(w_current, o_current);
     break;
     case(OBJ_TEXT):
-      str = geda_text_object_get_string (o_current);
+      str = o_text_get_string (w_current->toplevel, o_current);
       if (o_attrib_get_name_value (o_current, NULL, NULL) &&
         /* attribute editor only accept 1-line values for attribute */
         o_text_num_lines (str) == 1) {
@@ -100,15 +100,29 @@ void o_edit(GschemToplevel *w_current, GList *list)
  * this cannot be called recursively */
 void o_lock(GschemToplevel *w_current)
 {
-  g_return_if_fail (w_current != NULL);
-  g_return_if_fail (w_current->toplevel != NULL);
-  g_return_if_fail (w_current->toplevel->page_current != NULL);
+  OBJECT *object = NULL;
+  GList *s_current = NULL;
 
-  geda_object_list_set_selectable (
-      geda_list_get_glist (w_current->toplevel->page_current->selection_list),
-      FALSE);
+  /* skip over head */
+  s_current = geda_list_get_glist( w_current->toplevel->page_current->selection_list );
 
-  gschem_toplevel_page_content_changed (w_current, w_current->toplevel->page_current);
+  while(s_current != NULL) {
+    object = (OBJECT *) s_current->data;
+    if (object) {
+      /* check to see if locked_color is already being used */
+      if (object->locked_color == -1) {
+        object->selectable = FALSE;
+        object->locked_color = object->color;
+        object->color = LOCK_COLOR;
+        gschem_toplevel_page_content_changed (w_current, w_current->toplevel->page_current);
+      } else {
+        s_log_message(_("Object already locked\n"));
+      }
+    }
+
+    s_current = g_list_next(s_current);
+  }
+
   if (!w_current->SHIFTKEY) o_select_unselect_all(w_current);
   o_undo_savestate_old(w_current, UNDO_ALL);
   i_update_menus(w_current);
@@ -125,15 +139,27 @@ void o_lock(GschemToplevel *w_current)
 /* this cannot be called recursively */
 void o_unlock(GschemToplevel *w_current)
 {
-  g_return_if_fail (w_current != NULL);
-  g_return_if_fail (w_current->toplevel != NULL);
-  g_return_if_fail (w_current->toplevel->page_current != NULL);
+  OBJECT *object = NULL;
+  GList *s_current = NULL;
 
-  geda_object_list_set_selectable (
-      geda_list_get_glist (w_current->toplevel->page_current->selection_list),
-      TRUE);
+  s_current = geda_list_get_glist( w_current->toplevel->page_current->selection_list );
 
-  gschem_toplevel_page_content_changed (w_current, w_current->toplevel->page_current);
+  while(s_current != NULL) {
+    object = (OBJECT *) s_current->data;
+    if (object) {
+      /* only unlock if the object is locked */
+      if (object->selectable == FALSE) {
+        object->selectable = TRUE;
+        object->color = object->locked_color;
+        object->locked_color = -1;
+        gschem_toplevel_page_content_changed (w_current, w_current->toplevel->page_current);
+      } else {
+        s_log_message(_("Object already unlocked\n"));
+      }
+    }
+
+    s_current = g_list_next(s_current);
+  }
   o_undo_savestate_old(w_current, UNDO_ALL);
 }
 
@@ -179,7 +205,7 @@ void o_rotate_world_update(GschemToplevel *w_current,
     s_conn_remove_object_connections (toplevel, o_current);
   }
 
-  geda_object_list_rotate ( list, centerx, centery, angle, toplevel );
+  o_glist_rotate_world( toplevel, centerx, centery, angle, list );
 
   /* Find connected objects, adding each object in turn back to the
    * connection list. We only _really_ want those objects connected
@@ -237,7 +263,7 @@ void o_mirror_world_update(GschemToplevel *w_current, int centerx, int centery, 
     s_conn_remove_object_connections (toplevel, o_current);
   }
 
-  geda_object_list_mirror ( list, centerx, centery, toplevel );
+  o_glist_mirror_world( toplevel, centerx, centery, list );
 
   /* Find connected objects, adding each object in turn back to the
    * connection list. We only _really_ want those objects connected
@@ -277,7 +303,7 @@ void o_edit_show_hidden_lowlevel (GschemToplevel *w_current,
   iter = o_list;
   while (iter != NULL) {
     o_current = (OBJECT *)iter->data;
-    if (o_current->type == OBJ_TEXT && !o_is_visible (toplevel, o_current)) {
+    if (o_current->type == OBJ_TEXT && !o_is_visible (o_current)) {
 
       /* don't toggle the visibility flag */
       o_text_recreate (toplevel, o_current);
@@ -336,9 +362,9 @@ void o_edit_hide_specific_text (GschemToplevel *w_current,
     o_current = (OBJECT *)iter->data;
 
     if (o_current->type == OBJ_TEXT) {
-      const gchar *str = geda_text_object_get_string (o_current);
+      const gchar *str = o_text_get_string (w_current->toplevel, o_current);
       if (!strncmp (stext, str, strlen (stext))) {
-        if (o_is_visible (toplevel, o_current)) {
+        if (o_is_visible (o_current)) {
           o_set_visibility (toplevel, o_current, INVISIBLE);
           o_text_recreate(toplevel, o_current);
 
@@ -370,9 +396,9 @@ void o_edit_show_specific_text (GschemToplevel *w_current,
     o_current = (OBJECT *)iter->data;
 
     if (o_current->type == OBJ_TEXT) {
-      const gchar *str = geda_text_object_get_string (o_current);
+      const gchar *str = o_text_get_string (w_current->toplevel, o_current);
       if (!strncmp (stext, str, strlen (stext))) {
-        if (!o_is_visible (toplevel, o_current)) {
+        if (!o_is_visible (o_current)) {
           o_set_visibility (toplevel, o_current, VISIBLE);
           o_text_recreate(toplevel, o_current);
 

@@ -29,7 +29,7 @@
  *  \param bezier [in] The bezier curve to append.
  *  \param segments [in] The number of segments to subdivide the bezier curve into.
  */
-void m_polygon_append_bezier (GArray *points, GedaBezier *bezier, int segments)
+void m_polygon_append_bezier (GArray *points, BEZIER *bezier, int segments)
 {
   m_polygon_append_point (points, bezier->x[0], bezier->y[0]);
 
@@ -168,7 +168,7 @@ double m_polygon_shortest_distance (GArray *points, int x, int y, gboolean close
 
     while (i < points->len) {
       double distance;
-      GedaLine line;
+      LINE line;
 
       line.x[0] = point.x;
       line.y[0] = point.y;
@@ -178,7 +178,7 @@ double m_polygon_shortest_distance (GArray *points, int x, int y, gboolean close
       line.x[1] = point.x;
       line.y[1] = point.y;
 
-      distance = geda_line_shortest_distance (&line, x, y);
+      distance = m_line_shortest_distance (&line, x, y);
 
       shortest = min (shortest, distance);
     }

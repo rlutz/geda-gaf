@@ -65,9 +65,9 @@ void arc_angle_dialog_response(GtkWidget *w, gint response,
     arc_object = (OBJECT*) g_object_get_data(G_OBJECT(w_current->aawindow),"arc_object");
 
     if (arc_object != NULL) {
-      geda_arc_object_modify (w_current->toplevel, arc_object, radius, 0, ARC_RADIUS);
-      geda_arc_object_modify (w_current->toplevel, arc_object, start_angle, 0, ARC_START_ANGLE);
-      geda_arc_object_modify (w_current->toplevel, arc_object, sweep_angle, 0, ARC_SWEEP_ANGLE);
+      o_arc_modify(w_current->toplevel, arc_object, radius, 0, ARC_RADIUS);
+      o_arc_modify(w_current->toplevel, arc_object, start_angle, 0, ARC_START_ANGLE);
+      o_arc_modify(w_current->toplevel, arc_object, sweep_angle, 0, ARC_SWEEP_ANGLE);
     } else {
       o_arc_end4(w_current, radius, start_angle, sweep_angle);
     }
@@ -170,11 +170,11 @@ void arc_angle_dialog (GschemToplevel *w_current, OBJECT *arc_object)
     gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget[2]), 90);
   } else {
     gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget[0]),
-                              geda_arc_object_get_radius (arc_object));
+			      arc_object->arc->radius);
     gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget[1]),
-                              geda_arc_object_get_start_angle (arc_object));
+			      arc_object->arc->start_angle);
     gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget[2]),
-                              geda_arc_object_get_sweep_angle (arc_object));
+			      arc_object->arc->sweep_angle);
   }
 
   gtk_widget_grab_focus(widget[0]);

@@ -46,6 +46,12 @@
 /* FIX-1.0.0.20060906. */
 #define PREPEND_VERSION_STRING ""
 
+/* for color mechanism used in gschem */
+#define MAX_COLORS 25
+
+/* X's obsession with *64 */
+#define FULL_CIRCLE 360*64
+
 /* for show_name_value in st_objects */
 #define SHOW_NAME_VALUE         0
 #define SHOW_VALUE              1
@@ -56,6 +62,10 @@
 #define INVISIBLE               0
 #define VISIBLE                 1
 #define LEAVE_VISIBILITY_ALONE  -1
+
+/* For pin and net styles */
+#define THIN            0     
+#define THICK           1
 
 /* various thicknesses (in mils) */
 #define LINE_WIDTH       10
@@ -77,7 +87,7 @@
 #define max(a,b) ((a) > (b) ? (a) : (b))
 
 #undef min
-#define min(a,b) ((a) < (b) ? (a) : (b))
+#define min(a,b) ((a) < (b) ? (a) : (b)) 
 
 /* for s_clib_getfilename() */
 #define OPEN_DIR	0
@@ -132,25 +142,39 @@
 #define HIERARCHY_POSTORDER (1<<1)
 #define HIERARCHY_INNERLOOP (1<<7)
 
-#define MILS_PER_INCH		1000
+#define MILS_PER_INCH		1000 
+
+/* for text_output */
+#define VECTOR_FONTS		0
+#define PS_FONTS		1
 
 /* for print dialog box */
 #define EXTENTS			0
 #define WINDOW			1
 #define EXTENTS_NOMARGINS	2
 
+/* for output-capstyle */ 
+#define BUTT_CAP 		0
+#define ROUND_CAP 		1
+#define SQUARE_CAP 		2
+
 /* for print dialog box */
 #define LANDSCAPE		0
 #define PORTRAIT 		1
 #define AUTOLAYOUT 		2
+
+/* for o_net_orientation */
+#define NEITHER			0
+#define HORIZONTAL		1
+#define VERTICAL		2
 
 /* for pin_type */
 #define PIN_TYPE_NET		0
 #define PIN_TYPE_BUS		1
 
 /* gnetlist: hierarchy_*_order */
-#define APPEND			FALSE
-#define PREPEND			TRUE
+#define APPEND			0
+#define PREPEND			1
 
 /* gnetlist: netlist_mode */
 #define gEDA			0

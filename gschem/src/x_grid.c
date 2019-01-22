@@ -103,12 +103,12 @@ draw_dots_grid_region (GschemToplevel *w_current, cairo_t *cr, int x, int y, int
 
   int dot_size = min (w_current->dots_grid_dot_size, 5);
 
-  GedaColor *color = x_color_lookup (w_current, DOTS_GRID_COLOR);
+  COLOR *color = x_color_lookup (DOTS_GRID_COLOR);
   cairo_set_source_rgba (cr,
-                         geda_color_get_red_double (color),
-                         geda_color_get_green_double (color),
-                         geda_color_get_blue_double (color),
-                         geda_color_get_alpha_double (color));
+                         color->r / 255.0,
+                         color->g / 255.0,
+                         color->b / 255.0,
+                         color->a / 255.0);
 
   cairo_matrix_t user_to_device_matrix;
   double x_start = x - 1;
@@ -162,7 +162,7 @@ draw_dots_grid_region (GschemToplevel *w_current, cairo_t *cr, int x, int y, int
 static void draw_mesh (GschemToplevel *w_current,
                        cairo_t *cr,
                        cairo_matrix_t *user_to_device_matrix,
-                       GedaColor *color,
+                       int color,
                        int x_start, int y_start, int x_end, int y_end,
                        int incr, int coarse_mult)
 {
@@ -170,6 +170,7 @@ static void draw_mesh (GschemToplevel *w_current,
   double x1, y1, x2, y2;
   int next_coarse_x, next_coarse_y;
   int coarse_incr = incr * coarse_mult;
+  COLOR *c;
 
   /* figure starting grid coordinates, work by taking the start
    * and end coordinates and rounding down to the nearest increment */
@@ -186,11 +187,12 @@ static void draw_mesh (GschemToplevel *w_current,
     if (next_coarse_y < y_start) next_coarse_y += coarse_incr;
   }
 
+  c = x_color_lookup (color);
   cairo_set_source_rgba (cr,
-                         geda_color_get_red_double (color),
-                         geda_color_get_green_double (color),
-                         geda_color_get_blue_double (color),
-                         geda_color_get_alpha_double (color));
+                         (double)c->r / 255.0,
+                         (double)c->g / 255.0,
+                         (double)c->b / 255.0,
+                         (double)c->a / 255.0);
 
   cairo_set_line_width (cr, 1.);
   cairo_set_line_cap (cr, CAIRO_LINE_CAP_SQUARE);
@@ -319,7 +321,7 @@ draw_mesh_grid_region (GschemToplevel *w_current, cairo_t *cr, int x, int y, int
       draw_mesh (w_current,
                  cr,
                  &user_to_device_matrix,
-                 x_color_lookup (w_current, MESH_GRID_MINOR_COLOR),
+                 MESH_GRID_MINOR_COLOR,
                  floor (x_start),
                  floor (y_start),
                  ceil (x_end),
@@ -331,7 +333,7 @@ draw_mesh_grid_region (GschemToplevel *w_current, cairo_t *cr, int x, int y, int
     draw_mesh (w_current,
                cr,
                &user_to_device_matrix,
-               x_color_lookup (w_current, MESH_GRID_MAJOR_COLOR),
+               MESH_GRID_MAJOR_COLOR,
                floor (x_start),
                floor (y_start),
                ceil (x_end),

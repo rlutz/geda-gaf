@@ -54,7 +54,7 @@ clip_get (GtkClipboard *cb, GtkSelectionData *selection_data,
   if (info != CLIP_TYPE_SCHEMATIC) return;
   /* Convert the objects in the clipboard buffer to gEDA schematic
    * format */
-  buf = geda_object_list_to_buffer (w_current->clipboard_buffer);
+  buf = o_save_buffer (w_current->clipboard_buffer);
   /* Set the selection appropriately */
   gtk_selection_data_set (selection_data, type,
                           8, /* 8-bit data (UTF-8) */
@@ -70,7 +70,7 @@ clip_clear (GtkClipboard *cb, gpointer user_data_or_owner)
   TOPLEVEL *toplevel = gschem_toplevel_get_toplevel (w_current);
 
   /* Free the objects in the clipboard buffer */
-  geda_object_list_delete (toplevel, w_current->clipboard_buffer);
+  s_delete_object_glist (toplevel, w_current->clipboard_buffer);
   w_current->clipboard_buffer = NULL;
 }
 

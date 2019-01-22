@@ -1,4 +1,4 @@
-# Copyright (C) 2013-2017 Roland Lutz
+# Copyright (C) 2013-2018 Roland Lutz
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -29,35 +29,7 @@ nobase_pkgpyexec_PYTHON = \
 	fixednum.py \
 	hybridnum.py \
 	proxy.py \
-	xml_writer.py \
-	geda/__init__.py \
-	geda/attrib.py \
-	geda/clib.py \
-	geda/fileformat.py \
-	geda/plainformat.py \
-	geda/plainread.py \
-	geda/plainwrite.py \
-	geda/read.py \
-	geda/ref.py \
-	geda/write.py \
-	geda/xmlformat.py \
-	geda/xmlread.py \
-	geda/xmlwrite.py \
-	geda/netlist/__init__.py \
-	geda/netlist/backend.py \
-	geda/netlist/blueprint.py \
-	geda/netlist/conn.py \
-	geda/netlist/guile.py \
-	geda/netlist/instance.py \
-	geda/netlist/net.py \
-	geda/netlist/netlist.py \
-	geda/netlist/package.py \
-	geda/netlist/pp_graphical.py \
-	geda/netlist/pp_hierarchy.py \
-	geda/netlist/pp_netattrib.py \
-	geda/netlist/pp_power.py \
-	geda/netlist/pp_slotting.py \
-	geda/netlist/slib.py
+	xml_writer.py
 
 noinst_PYTHON = guile.py storage.py
 

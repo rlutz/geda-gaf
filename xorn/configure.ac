@@ -1,5 +1,5 @@
 # Process this file with autoconf to produce a configure script.
-# Copyright (C) 2013-2017 Roland Lutz
+# Copyright (C) 2013-2018 Roland Lutz
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -28,13 +28,9 @@ LT_INIT([])
 
 AC_PROG_CXX
 
-AS_IF([test x$enable_xorn = xyes], [
-    AM_PATH_PYTHON([2.7])
-    PKG_CHECK_MODULES([PYTHON], [python2 >= 2.7])
-    PKG_CHECK_MODULES([GUILE], [guile-2.0 >= 2.0.10])
-], [
-    AC_MSG_NOTICE([skipping Python detection])
-])
+AM_PATH_PYTHON([2.7])
+PKG_CHECK_MODULES([PYTHON], [python2 >= 2.7])
+PKG_CHECK_MODULES([GUILE], [guile-2.0 >= 2.0.10])
 
 AM_GNU_GETTEXT([external])
 AM_GNU_GETTEXT_VERSION([0.18.2])
@@ -61,6 +57,7 @@ AC_CONFIG_FILES([
 	src/cpython/storage/Makefile
 	src/cpython/guile/Makefile
 	src/python/Makefile
+	src/gaf/Makefile
 	src/command/Makefile
 	src/backend/Makefile
 	tests/Makefile

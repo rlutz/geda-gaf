@@ -45,13 +45,6 @@
 #define QUADRANT3  0x04
 #define QUADRANT4  0x08
 
-typedef struct st_bus_ripper BUS_RIPPER;
-
-struct st_bus_ripper
-{
-  int x[2];
-  int y[2];
-};
 
 /*! \brief Reset all variables used for net drawing
  *  \par Function Description
@@ -107,7 +100,7 @@ void o_net_guess_direction(GschemToplevel *w_current,
     for (iter2 = (GList*) iter1->data; iter2 != NULL; iter2 = g_list_next(iter2)) {
       o_current = (OBJECT*) iter2->data;
 
-      if ((orientation = geda_net_object_orientation (o_current)) == NEITHER)
+      if ((orientation = o_net_orientation(o_current)) == NEITHER)
 	continue;
 
       switch (o_current->type) {
@@ -237,8 +230,8 @@ void o_net_find_magnetic(GschemToplevel *w_current,
       int left, top, right, bottom;
       o_current = (OBJECT*) iter2->data;
 
-      if (!geda_object_calculate_visible_bounds(page->toplevel, o_current,
-                                                &left, &top, &right, &bottom) ||
+      if (!world_get_single_object_bounds(page->toplevel, o_current,
+                                          &left, &top, &right, &bottom) ||
           !visible (w_current, left, top, right, bottom))
 	continue; /* skip invisible objects */
 
@@ -510,9 +503,9 @@ void o_net_end(GschemToplevel *w_current, int w_x, int w_y)
 
   if (!primary_zero_length ) {
   /* create primary net */
-      new_net = geda_net_object_new (page->toplevel, OBJ_NET, NET_COLOR,
-                                     w_current->first_wx, w_current->first_wy,
-                                     w_current->second_wx, w_current->second_wy);
+      new_net = o_net_new(page->toplevel, OBJ_NET, NET_COLOR,
+                          w_current->first_wx, w_current->first_wy,
+                          w_current->second_wx, w_current->second_wy);
       s_page_append (page->toplevel, page, new_net);
 
       added_objects = g_list_prepend (added_objects, new_net);
@@ -545,9 +538,9 @@ void o_net_end(GschemToplevel *w_current, int w_x, int w_y)
   if (!secondary_zero_length && !found_primary_connection) {
 
       /* Add secondary net */
-      new_net = geda_net_object_new (page->toplevel, OBJ_NET, NET_COLOR,
-                                     w_current->second_wx, w_current->second_wy,
-                                     w_current->third_wx, w_current->third_wy);
+      new_net = o_net_new(page->toplevel, OBJ_NET, NET_COLOR,
+                          w_current->second_wx, w_current->second_wy,
+                          w_current->third_wx, w_current->third_wy);
       s_page_append (page->toplevel, page, new_net);
 
       added_objects = g_list_prepend (added_objects, new_net);
@@ -777,7 +770,7 @@ int o_net_add_busrippers(GschemToplevel *w_current, OBJECT *net_obj,
   PAGE *page = gschem_page_view_get_page (page_view);
   g_return_val_if_fail (page != NULL, FALSE);
 
-  length = geda_line_object_length (net_obj);
+  length = o_line_length(net_obj);
 
   if (!prev_conn_objects) {
     return(FALSE);
@@ -794,8 +787,8 @@ int o_net_add_busrippers(GschemToplevel *w_current, OBJECT *net_obj,
     bus_object = (OBJECT *) cl_current->data;
     if (bus_object && bus_object->type == OBJ_BUS) {
       /* yes, using the net routine is okay */
-      int bus_orientation = geda_net_object_orientation (bus_object);
-      int net_orientation = geda_net_object_orientation (net_obj);
+      int bus_orientation = o_net_orientation(bus_object);
+      int net_orientation = o_net_orientation(net_obj);
 
       /* find the CONN structure which is associated with this object */
       GList *cl_current2 = net_obj->conn_list;
@@ -824,7 +817,7 @@ int o_net_add_busrippers(GschemToplevel *w_current, OBJECT *net_obj,
 	/* printf("found horiz bus %s %d!\n", bus_object->name,
            found_conn->whichone);*/
 
-        sign = geda_bus_object_get_ripper_direction (bus_object);
+        sign = bus_object->bus_ripper_direction;
         if (!sign) {
           if (bus_object->line->x[0] < bus_object->line->x[1]) {
             first = 0;
@@ -844,7 +837,7 @@ int o_net_add_busrippers(GschemToplevel *w_current, OBJECT *net_obj,
           } else {
             sign = -1;
           }
-          geda_bus_object_set_ripper_direction (bus_object, sign);
+          bus_object->bus_ripper_direction = sign;
         }
         /* printf("hor sign: %d\n", sign); */
 
@@ -931,7 +924,7 @@ int o_net_add_busrippers(GschemToplevel *w_current, OBJECT *net_obj,
 	/* printf("found vert bus %s %d!\n", bus_object->name,
            found_conn->whichone); */
 
-        sign = geda_bus_object_get_ripper_direction (bus_object);
+        sign = bus_object->bus_ripper_direction;
         if (!sign) {
           if (bus_object->line->y[0] < bus_object->line->y[1]) {
             first = 0;
@@ -951,7 +944,7 @@ int o_net_add_busrippers(GschemToplevel *w_current, OBJECT *net_obj,
           } else {
             sign = -1;
           }
-          geda_bus_object_set_ripper_direction (bus_object, sign);
+          bus_object->bus_ripper_direction = sign;
         }
         /* printf("ver sign: %d\n", sign); */
 
@@ -1050,9 +1043,9 @@ int o_net_add_busrippers(GschemToplevel *w_current, OBJECT *net_obj,
 
     for (i = 0; i < ripper_count; i++) {
       if (w_current->bus_ripper_type == NET_BUS_RIPPER) {
-        new_obj = geda_net_object_new (page->toplevel, OBJ_NET, NET_COLOR,
-                                       rippers[i].x[0], rippers[i].y[0],
-                                       rippers[i].x[1], rippers[i].y[1]);
+        new_obj = o_net_new(page->toplevel, OBJ_NET, NET_COLOR,
+                  rippers[i].x[0], rippers[i].y[0],
+                  rippers[i].x[1], rippers[i].y[1]);
         s_page_append (page->toplevel, page, new_obj);
       } else {
 

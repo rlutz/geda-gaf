@@ -104,7 +104,7 @@ void o_place_end (GschemToplevel *w_current,
     page->place_list = NULL;
   }
 
-  geda_object_list_translate (temp_dest_list, w_diff_x, w_diff_y);
+  o_glist_translate_world(temp_dest_list, w_diff_x, w_diff_y);
 
   /* Attach each item back onto the page's object list. Update object
    * connectivity and add the new objects to the selection list.*/
@@ -361,11 +361,11 @@ void o_place_rotate (GschemToplevel *w_current)
 
   o_place_invalidate_rubber (w_current, FALSE);
 
-  geda_object_list_rotate (page->place_list,
-                           w_current->first_wx,
-                           w_current->first_wy,
-                           90,
-                           page->toplevel);
+  o_glist_rotate_world (page->toplevel,
+                        w_current->first_wx,
+                        w_current->first_wy,
+                        90,
+                        page->place_list);
 
   /* Run rotate-objects-hook */
   g_run_hook_object_list (w_current, "%rotate-objects-hook", page->place_list);
@@ -393,10 +393,10 @@ void o_place_mirror (GschemToplevel *w_current)
 
   o_place_invalidate_rubber (w_current, FALSE);
 
-  geda_object_list_mirror (page->place_list,
-                           w_current->first_wx,
-                           w_current->first_wy,
-                           page->toplevel);
+  o_glist_mirror_world (page->toplevel,
+                        w_current->first_wx,
+                        w_current->first_wy,
+                        page->place_list);
 
   /* Run mirror-objects-hook */
   g_run_hook_object_list (w_current, "%mirror-objects-hook", page->place_list);

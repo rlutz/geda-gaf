@@ -69,8 +69,8 @@ pixmaps referenced by the schematic are included in the XML file by
 default.  In order to make this possible, you'll need to specify the
 symbol library directories:
 
-    $ xorn convert --symbol-library=sym/
-                   --symbol-library-search=/path/to/library/
+    $ xorn convert --symbol-library=sym/ \
+                   --symbol-library-search=/path/to/library/ \
         example.sch example.sch.xml
 
 When using the default library included with gEDA, you can't use
@@ -444,7 +444,7 @@ Does not have any attributes.
 
 --------------------------------------------------------------------------------
 
-Copyright (C) 2013-2017 Roland Lutz
+Copyright (C) 2013-2018 Roland Lutz
 
 Permission is granted to copy, distribute and/or modify this document
 under the terms of the [GNU Free Documentation License, Version 1.2]

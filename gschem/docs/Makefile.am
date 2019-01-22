@@ -7,9 +7,8 @@ all:
 doxygen: gschem.dox
 	@echo 'Creating doxygen documentation for gschem...'
 if ENABLE_DOXYGEN
-	$(DOXYGEN) gschem.dox
-	-cd latex && $(MAKE)
-	-cd ..
+	cd $(srcdir) && $(DOXYGEN) gschem.dox
+	cd $(srcdir)/latex && $(MAKE)
 else
 	@echo 'configure was not run with the --enable-doxygen switch.'
 	@echo 'The documentation cannot be built from the sources.'

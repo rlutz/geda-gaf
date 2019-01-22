@@ -18,8 +18,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
  * MA 02111-1301 USA.
  */
-/*! \file geda_list.h
- */
+
 
 #ifndef __GEDA_LIST_H__
 #define __GEDA_LIST_H__

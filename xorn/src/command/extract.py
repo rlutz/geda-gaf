@@ -1,4 +1,4 @@
-# Copyright (C) 2013-2017 Roland Lutz
+# Copyright (C) 2013-2018 Roland Lutz
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -21,9 +21,9 @@ import xorn.config
 import xorn.fileutils
 import xorn.proxy
 import xorn.storage
-import xorn.geda.attrib
-import xorn.geda.read
-import xorn.geda.write
+import gaf.attrib
+import gaf.read
+import gaf.write
 
 def main():
     extract_all = False
@@ -70,8 +70,8 @@ Report %s bugs to %s
         xorn.command.invalid_arguments(_("not enough arguments"))
 
     try:
-        rev = xorn.geda.read.read(args[0])
-    except xorn.geda.fileformat.UnknownFormatError:
+        rev = gaf.read.read(args[0])
+    except gaf.fileformat.UnknownFormatError:
         sys.stderr.write(_("%s: %s: unrecognized file name extension\n")
                          % (xorn.command.program_short_name, args[0]))
         sys.exit(1)
@@ -84,7 +84,7 @@ Report %s bugs to %s
         sys.stderr.write(_("%s: can't read %s: %s\n")
                          % (xorn.command.program_short_name, args[0], str(e)))
         sys.exit(1)
-    except xorn.geda.read.ParseError:
+    except gaf.read.ParseError:
         sys.exit(1)
 
     embedded_symbols = {}
@@ -124,12 +124,12 @@ Report %s bugs to %s
         basename = os.path.basename(filename)
         if basename in embedded_symbols:
             ob = embedded_symbols[basename]
-            if xorn.geda.attrib.search_all(ob, 'slot'):
+            if gaf.attrib.search_all(ob, 'slot'):
                 sys.stderr.write(
                     _("Warning: Symbol \"%s\" is slotted; "
                       "pin numbers may have changed.\n") % basename)
             try:
-                xorn.geda.write.write(
+                gaf.write.write(
                     xorn.proxy.RevisionProxy(ob.data().symbol.prim_objs),
                     filename)
             except (IOError, OSError) as e:

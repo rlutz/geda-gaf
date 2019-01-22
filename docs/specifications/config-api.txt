@@ -3,7 +3,7 @@
 ===============================
 
 :Author: Peter Brett
-:Status: Implemented
+:Status: Proposed Specification
 
 ..
   This document can be processed with docutils <http://docutils.sf.net>

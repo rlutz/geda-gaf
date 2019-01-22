@@ -46,27 +46,25 @@ is_object_hit (GschemToplevel *w_current, OBJECT *object,
 {
   int left, top, right, bottom;
 
-  if (!geda_object_get_selectable (object)) {
+  if (!object->selectable)
     return FALSE;
-  }
 
   /* We can't hit invisible (text) objects unless show_hidden_text is active.
    */
-  if (!o_is_visible (w_current->toplevel, object) &&
-      !w_current->toplevel->show_hidden_text)
+  if (!o_is_visible (object) && !w_current->toplevel->show_hidden_text)
     return FALSE;
 
   /* Do a coarse test first to avoid computing distances for objects ouside
    * of the hit range.
    */
-  if (!geda_object_calculate_visible_bounds(w_current->toplevel, object,
+  if (!world_get_single_object_bounds(w_current->toplevel, object,
                                       &left, &top, &right, &bottom) ||
       !inside_region (left  - w_slack, top    - w_slack,
                       right + w_slack, bottom + w_slack,
                       w_x, w_y))
     return FALSE;
 
-  return (geda_object_shortest_distance (w_current->toplevel, object, w_x, w_y) < w_slack);
+  return (o_shortest_distance (w_current->toplevel, object, w_x, w_y) < w_slack);
 }
 
 

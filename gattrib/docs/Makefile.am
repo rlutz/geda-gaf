@@ -7,7 +7,7 @@ all:
 doxygen: gattrib.dox
 	@echo 'Creating doxygen documentation for gattrib...'
 if ENABLE_DOXYGEN
-	$(DOXYGEN) gattrib.dox
+	cd $(srcdir) && $(DOXYGEN) gattrib.dox
 else
 	@echo 'configure was not run with the --enable-doxygen switch.'
 	@echo 'The documentation cannot be built from the sources.'

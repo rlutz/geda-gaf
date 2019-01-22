@@ -211,11 +211,11 @@ OBJECT *o_grips_search_arc_world(GschemToplevel *w_current, OBJECT *o_current,
   int centerx, centery, radius, start_angle, sweep_angle;
   double tmp;
 
-  centerx     = geda_arc_object_get_center_x (o_current);
-  centery     = geda_arc_object_get_center_y (o_current);
-  radius      = geda_arc_object_get_radius (o_current);
-  start_angle = geda_arc_object_get_start_angle (o_current);
-  sweep_angle = geda_arc_object_get_sweep_angle (o_current);
+  centerx     = o_current->arc->x;
+  centery     = o_current->arc->y;
+  radius      = o_current->arc->radius;
+  start_angle = o_current->arc->start_angle;
+  sweep_angle = o_current->arc->sweep_angle;
 
   /* check the grip on the center of the arc */
   if (inside_grip(x, y, centerx, centery, size)) {
@@ -471,14 +471,10 @@ OBJECT *o_grips_search_picture_world(GschemToplevel *w_current, OBJECT *o_curren
 OBJECT *o_grips_search_circle_world(GschemToplevel *w_current, OBJECT *o_current,
                                     int x, int y, int size, int *whichone)
 {
-  gint center_x = geda_circle_object_get_center_x (o_current);
-  gint center_y = geda_circle_object_get_center_y (o_current);
-  gint radius = geda_circle_object_get_radius (o_current);
-
   /* check the grip for radius */
   if (inside_grip(x, y,
-                  center_x + radius,
-                  center_y - radius,
+                  o_current->circle->center_x + o_current->circle->radius,
+                  o_current->circle->center_y - o_current->circle->radius,
                   size)) {
     *whichone = CIRCLE_RADIUS;
     return(o_current);
@@ -561,13 +557,13 @@ static void o_grips_start_arc(GschemToplevel *w_current, OBJECT *o_current,
 
   /* describe the arc with GschemToplevel variables */
   /* center */
-  w_current->first_wx = geda_arc_object_get_center_x (o_current);
-  w_current->first_wy = geda_arc_object_get_center_y (o_current);
+  w_current->first_wx = o_current->arc->x;
+  w_current->first_wy = o_current->arc->y;
   /* radius */
-  w_current->distance = geda_arc_object_get_radius (o_current);
+  w_current->distance = o_current->arc->radius;
   /* angles */
-  w_current->second_wx = geda_arc_object_get_start_angle (o_current);
-  w_current->second_wy = geda_arc_object_get_sweep_angle (o_current);
+  w_current->second_wx = o_current->arc->start_angle;
+  w_current->second_wy = o_current->arc->sweep_angle;
 
   /* draw the first temporary arc */
   /* o_arc_invalidate_rubber (w_current); */
@@ -803,9 +799,9 @@ static void o_grips_start_circle(GschemToplevel *w_current, OBJECT *o_current,
   w_current->last_drawb_mode = LAST_DRAWB_MODE_NONE;
 
   /* store circle center and radius in GschemToplevel structure */
-  w_current->first_wx = geda_circle_object_get_center_x (o_current);
-  w_current->first_wy = geda_circle_object_get_center_y (o_current);
-  w_current->distance = geda_circle_object_get_radius (o_current);
+  w_current->first_wx = o_current->circle->center_x;
+  w_current->first_wy = o_current->circle->center_y;
+  w_current->distance = o_current->circle->radius;
 
   /* draw the first temporary circle */
   /* o_circle_invalidate_rubber (w_current); */
@@ -1002,12 +998,11 @@ void o_grips_cancel(GschemToplevel *w_current)
  *
  *  If the grip at the center of the arc has been moved - modifying the radius
  *  of the arc -, the new radius is calculated expressed in world unit
- *  (the center is unchanged). It is updated with the function
- *  #geda_arc_object_modify().
+ *  (the center is unchanged). It is updated with the function #o_arc_modify().
  *
  *  If one of the end of arc grip has been moved - modifying one of the
  *  angles describing the arc -, this angle is updated with the
- *  #geda_arc_object_modify() function.
+ *  #o_arc_modify() function.
  *
  *  \param [in] w_current  The GschemToplevel object.
  *  \param [in] o_current  Arc OBJECT to end modification on.
@@ -1050,7 +1045,7 @@ static void o_grips_end_arc(GschemToplevel *w_current, OBJECT *o_current,
   }
 
   /* modify the arc with the parameters determined above */
-  geda_arc_object_modify (toplevel, o_current, arg1, arg2, whichone);
+  o_arc_modify(toplevel, o_current, arg1, arg2, whichone);
 }
 
 /*! \todo Finish function documentation!!!
@@ -1079,7 +1074,7 @@ static void o_grips_end_box(GschemToplevel *w_current, OBJECT *o_current,
     return;
   }
 
-  geda_box_object_modify (toplevel, o_current, w_current->second_wx, w_current->second_wy, whichone);
+  o_box_modify(toplevel, o_current, w_current->second_wx, w_current->second_wy, whichone);
 }
 
 /*! \todo Finish function documentation!!!
@@ -1093,8 +1088,8 @@ static void o_grips_end_box(GschemToplevel *w_current, OBJECT *o_current,
 static void o_grips_end_path(GschemToplevel *w_current, OBJECT *o_current,
                              int whichone)
 {
-  geda_path_object_modify (w_current->toplevel, o_current,
-                           w_current->second_wx, w_current->second_wy, whichone);
+  o_path_modify (w_current->toplevel, o_current,
+                 w_current->second_wx, w_current->second_wy, whichone);
 }
 
 /*! \todo Finish function documentation!!!
@@ -1159,7 +1154,7 @@ static void o_grips_end_circle(GschemToplevel *w_current, OBJECT *o_current,
   }
 
   /* modify the radius of the circle */
-  geda_circle_object_modify (toplevel, o_current, w_current->distance, -1, CIRCLE_RADIUS);
+  o_circle_modify(toplevel, o_current, w_current->distance, -1, CIRCLE_RADIUS);
 }
 
 /*! \brief End process of modifying line object with grip.
@@ -1194,8 +1189,8 @@ static void o_grips_end_line(GschemToplevel *w_current, OBJECT *o_current,
   }
 
   /* modify the right line end according to whichone */
-  geda_line_object_modify(toplevel, o_current,
-                          w_current->second_wx, w_current->second_wy, whichone);
+  o_line_modify(toplevel, o_current,
+		w_current->second_wx, w_current->second_wy, whichone);
 }
 
 
@@ -1231,8 +1226,8 @@ static void o_grips_end_net(GschemToplevel *w_current, OBJECT *o_current,
   }
 
   s_conn_remove_object_connections (toplevel, o_current);
-  geda_net_object_modify (toplevel, o_current, w_current->second_wx,
-                          w_current->second_wy, w_current->which_grip);
+  o_net_modify (toplevel, o_current, w_current->second_wx,
+                w_current->second_wy, w_current->which_grip);
   s_conn_update_object (o_current->page, o_current);
 
   /* add bus rippers if necessary */
@@ -1272,8 +1267,8 @@ static void o_grips_end_pin(GschemToplevel *w_current, OBJECT *o_current,
   }
 
   s_conn_remove_object_connections (toplevel, o_current);
-  geda_pin_object_modify (toplevel, o_current, w_current->second_wx,
-                          w_current->second_wy, w_current->which_grip);
+  o_pin_modify (toplevel, o_current, w_current->second_wx,
+                w_current->second_wy, w_current->which_grip);
   s_conn_update_object (o_current->page, o_current);
 }
 
@@ -1308,8 +1303,8 @@ static void o_grips_end_bus(GschemToplevel *w_current, OBJECT *o_current,
   }
 
   s_conn_remove_object_connections (toplevel, o_current);
-  geda_bus_object_modify (toplevel, o_current, w_current->second_wx,
-                          w_current->second_wy, w_current->which_grip);
+  o_bus_modify (toplevel, o_current, w_current->second_wx,
+                w_current->second_wy, w_current->which_grip);
   s_conn_update_object (o_current->page, o_current);
 }
 

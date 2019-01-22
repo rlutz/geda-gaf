@@ -45,7 +45,7 @@ void o_complex_prepare_place(GschemToplevel *w_current, const CLibSymbol *sym)
   i_action_start (w_current);
 
   /* remove the old place list if it exists */
-  geda_object_list_delete (toplevel, toplevel->page_current->place_list);
+  s_delete_object_glist(toplevel, toplevel->page_current->place_list);
   toplevel->page_current->place_list = NULL;
 
   /* Insert the new object into the buffer at world coordinates (0,0).
@@ -191,11 +191,12 @@ void o_complex_translate_all(GschemToplevel *w_current, int offset)
 
   if (offset == 0) {
     s_log_message(_("Translating schematic [%d %d]\n"), -x, -y);
-    geda_object_list_translate (s_page_objects (toplevel->page_current), -x, -y);
+    o_glist_translate_world (s_page_objects (toplevel->page_current), -x, -y);
   } else {
     s_log_message(_("Translating schematic [%d %d]\n"),
                   offset, offset);
-    geda_object_list_translate (s_page_objects (toplevel->page_current), offset, offset);
+    o_glist_translate_world (s_page_objects (toplevel->page_current),
+                             offset, offset);
   }
 
   for (iter = s_page_objects (toplevel->page_current);

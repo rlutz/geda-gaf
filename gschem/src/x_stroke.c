@@ -106,12 +106,12 @@ x_stroke_record (GschemToplevel *w_current, gint x, gint y)
     g_array_append_val (stroke_points, point);
 
     cairo_t *cr = gdk_cairo_create (gtk_widget_get_window (GTK_WIDGET(view)));
-    GedaColor *color = x_color_lookup (w_current, STROKE_COLOR);
+    COLOR *color = x_color_lookup (STROKE_COLOR);
     cairo_set_source_rgba (cr,
-                           geda_color_get_red_double (color),
-                           geda_color_get_green_double (color),
-                           geda_color_get_blue_double (color),
-                           geda_color_get_alpha_double (color));
+                           color->r / 255.0,
+                           color->g / 255.0,
+                           color->b / 255.0,
+                           color->a / 255.0);
 
     cairo_set_matrix (cr, gschem_page_geometry_get_world_to_screen_matrix (geometry));
     x0 = x;

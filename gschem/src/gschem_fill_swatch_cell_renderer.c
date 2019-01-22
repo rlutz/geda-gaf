@@ -272,10 +272,10 @@ render (GtkCellRenderer      *cell,
 
     cairo_close_path (cr);
 
-    if (geda_fill_type_draw_first_hatch (swatch->fill_type)) {
+    if ((swatch->fill_type == FILLING_HATCH) || (swatch->fill_type == FILLING_MESH)) {
       BOX box;
       int index;
-      GArray *lines = g_array_new (FALSE, FALSE, sizeof (GedaLine));
+      GArray *lines = g_array_new (FALSE, FALSE, sizeof (LINE));
       cairo_path_t *save_path = cairo_copy_path (cr);
 
       cairo_save (cr);
@@ -288,12 +288,12 @@ render (GtkCellRenderer      *cell,
 
       m_hatch_box (&box, 135, SWATCH_LINE_PITCH, lines);
 
-      if (geda_fill_type_draw_second_hatch (swatch->fill_type)) {
+      if (swatch->fill_type == FILLING_MESH) {
         m_hatch_box (&box, 45, SWATCH_LINE_PITCH, lines);
       }
 
       for (index=0; index<lines->len; index++) {
-        GedaLine *line = &g_array_index (lines, GedaLine, index);
+        LINE *line = &g_array_index (lines, LINE, index);
 
         cairo_move_to (cr, line->x[0], line->y[0]);
         cairo_line_to (cr, line->x[1], line->y[1]);

@@ -401,10 +401,10 @@ void o_select_box_search(GschemToplevel *w_current)
   while (iter != NULL) {
     o_current = iter->data;
     /* only select visible objects */
-    if (o_is_visible (toplevel, o_current) || toplevel->show_hidden_text) {
+    if (o_is_visible (o_current) || toplevel->show_hidden_text) {
       int cleft, ctop, cright, cbottom;
 
-      if ( geda_object_calculate_visible_bounds(toplevel, o_current,
+      if ( world_get_single_object_bounds(toplevel, o_current,
                                           &cleft, &ctop, &cright, &cbottom) &&
            cleft   >= left &&
            cright  <= right  &&
@@ -603,7 +603,7 @@ o_select_visible_unlocked (GschemToplevel *w_current)
     OBJECT *obj = (OBJECT *) iter->data;
 
     /* Skip invisible objects. */
-    if (!o_is_visible (toplevel, obj) && !toplevel->show_hidden_text)
+    if (!o_is_visible (obj) && !toplevel->show_hidden_text)
       continue;
 
     /* Skip locked objects. */
@@ -641,7 +641,7 @@ o_select_move_to_place_list(GschemToplevel *w_current)
   GList *selection_copy;
 
   /* remove the old place list if it exists */
-  geda_object_list_delete (toplevel, toplevel->page_current->place_list);
+  s_delete_object_glist(toplevel, toplevel->page_current->place_list);
   toplevel->page_current->place_list = NULL;
 
   selection = geda_list_get_glist( toplevel->page_current->selection_list );

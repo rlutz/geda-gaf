@@ -461,7 +461,7 @@ void o_line_start(GschemToplevel *w_current, int x, int y);
 void o_line_end(GschemToplevel *w_current, int x, int y);
 void o_line_motion(GschemToplevel *w_current, int x, int y);
 void o_line_draw_rubber(GschemToplevel *w_current, EdaRenderer *renderer);
-int o_line_visible(GschemToplevel *w_current, GedaLine *line, int *x1, int *y1, int *x2, int *y2);
+int o_line_visible(GschemToplevel *w_current, LINE *line, int *x1, int *y1, int *x2, int *y2);
 /* o_misc.c */
 void o_edit(GschemToplevel *w_current, GList *list);
 void o_lock(GschemToplevel *w_current);
@@ -557,13 +557,7 @@ void o_select_move_to_place_list(GschemToplevel *w_current);
 void o_slot_start(GschemToplevel *w_current, OBJECT *object);
 void o_slot_end(GschemToplevel *w_current, OBJECT *object, const char *string);
 /* o_text.c */
-gboolean
-o_text_get_rendered_bounds (void *user_data,
-                            const GedaObject *o_current,
-                            gint *min_x,
-                            gint *min_y,
-                            gint *max_x,
-                            gint *max_y);
+int o_text_get_rendered_bounds(void *user_data, OBJECT *object, int *min_x, int *min_y, int *max_x, int *max_y);
 void o_text_prepare_place(GschemToplevel *w_current, char *text, int color, int align, int rotate, int size);
 void o_text_change(GschemToplevel *w_current, OBJECT *object, char *string, int visibility, int show);
 /* o_undo.c */
@@ -603,7 +597,7 @@ void x_color_init (void);
 void x_color_free (void);
 void x_color_allocate (void);
 GdkColor *x_get_color(int color);
-GedaColor *x_color_lookup(GschemToplevel *toplevel, int color);
+COLOR *x_color_lookup(int color);
 gboolean x_color_display_enabled (int index);
 /* x_colorcb.c */
 GtkWidget* x_colorcb_new ();

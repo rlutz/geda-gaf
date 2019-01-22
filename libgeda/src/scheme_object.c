@@ -697,14 +697,10 @@ SCM_DEFINE (set_object_color_x, "%set-object-color!", 2, 0, 0,
 SCM_DEFINE (make_line, "%make-line", 0, 0, 0,
             (), "Create a new line object.")
 {
-  GedaObject *object = geda_line_object_new (edascm_c_current_toplevel (),
-                                             DEFAULT_COLOR,
-                                             0,
-                                             0,
-                                             0,
-                                             0);
+  OBJECT *obj = o_line_new (edascm_c_current_toplevel (),
+                            DEFAULT_COLOR, 0, 0, 0, 0);
 
-  SCM result = edascm_from_object (object);
+  SCM result = edascm_from_object (obj);
 
   /* At the moment, the only pointer to the object is owned by the
    * smob. */
@@ -761,21 +757,21 @@ SCM_DEFINE (set_line_x, "%set-line!", 6, 0, 0,
 
   switch (obj->type) {
   case OBJ_LINE:
-    geda_line_object_modify (toplevel, obj, x1, y1, LINE_END1);
-    geda_line_object_modify (toplevel, obj, x2, y2, LINE_END2);
+    o_line_modify (toplevel, obj, x1, y1, LINE_END1);
+    o_line_modify (toplevel, obj, x2, y2, LINE_END2);
     break;
   case OBJ_NET:
-    geda_net_object_modify (toplevel, obj, x1, y1, 0);
-    geda_net_object_modify (toplevel, obj, x2, y2, 1);
+    o_net_modify (toplevel, obj, x1, y1, 0);
+    o_net_modify (toplevel, obj, x2, y2, 1);
     break;
   case OBJ_BUS:
-    geda_bus_object_modify (toplevel, obj, x1, y1, 0);
-    geda_bus_object_modify (toplevel, obj, x2, y2, 1);
+    o_bus_modify (toplevel, obj, x1, y1, 0);
+    o_bus_modify (toplevel, obj, x2, y2, 1);
     break;
   case OBJ_PIN:
     /* Swap ends according to pin's whichend flag. */
-    geda_pin_object_modify (toplevel, obj, x1, y1, obj->whichend ? 1 : 0);
-    geda_pin_object_modify (toplevel, obj, x2, y2, obj->whichend ? 0 : 1);
+    o_pin_modify (toplevel, obj, x1, y1, obj->whichend ? 1 : 0);
+    o_pin_modify (toplevel, obj, x2, y2, obj->whichend ? 0 : 1);
     break;
   default:
     return line_s;
@@ -820,10 +816,10 @@ SCM_DEFINE (line_info, "%line-info", 1, 0, 0,
               line_s, SCM_ARG1, s_line_info);
 
   OBJECT *obj = edascm_to_object (line_s);
-  SCM x1 = scm_from_int (geda_line_object_get_x0 (obj));
-  SCM y1 = scm_from_int (geda_line_object_get_y0 (obj));
-  SCM x2 = scm_from_int (geda_line_object_get_x1 (obj));
-  SCM y2 = scm_from_int (geda_line_object_get_y1 (obj));
+  SCM x1 = scm_from_int (obj->line->x[0]);
+  SCM y1 = scm_from_int (obj->line->y[0]);
+  SCM x2 = scm_from_int (obj->line->x[1]);
+  SCM y2 = scm_from_int (obj->line->y[1]);
   SCM color = scm_from_int (obj->color);
 
   /* Swap ends according to pin's whichend flag. */
@@ -852,8 +848,8 @@ SCM_DEFINE (make_net, "%make-net", 0, 0, 0,
   OBJECT *obj;
   SCM result;
 
-  obj = geda_net_object_new (edascm_c_current_toplevel (),
-                             OBJ_NET, NET_COLOR, 0, 0, 0, 0);
+  obj = o_net_new (edascm_c_current_toplevel (),
+                   OBJ_NET, NET_COLOR, 0, 0, 0, 0);
 
 
   result = edascm_from_object (obj);
@@ -883,13 +879,9 @@ SCM_DEFINE (make_bus, "%make-bus", 0, 0, 0,
   OBJECT *obj;
   SCM result;
 
-  obj = geda_bus_object_new (edascm_c_current_toplevel (),
-                             BUS_COLOR,
-                             0,
-                             0,
-                             0,
-                             0,
-                             0); /* Bus ripper direction */
+  obj = o_bus_new (edascm_c_current_toplevel (),
+                   BUS_COLOR, 0, 0, 0, 0,
+                   0); /* Bus ripper direction */
 
   result = edascm_from_object (obj);
 
@@ -928,14 +920,8 @@ SCM_DEFINE (make_pin, "%make-pin", 1, 0, 0,
                     scm_list_1 (type_s));
   }
 
-  OBJECT *obj = geda_pin_object_new (edascm_c_current_toplevel (),
-                                     PIN_COLOR,
-                                     0,
-                                     0,
-                                     0,
-                                     0,
-                                     type,
-                                     0);
+  OBJECT *obj = o_pin_new (edascm_c_current_toplevel (),
+                           PIN_COLOR, 0, 0, 0, 0, type, 0);
   SCM result = edascm_from_object (obj);
 
   /* At the moment, the only pointer to the object is owned by the
@@ -993,9 +979,9 @@ SCM_DEFINE (pin_type, "%pin-type", 1, 0, 0,
 SCM_DEFINE (make_box, "%make-box", 0, 0, 0,
             (), "Create a new box object.")
 {
-  OBJECT *obj = geda_box_object_new (edascm_c_current_toplevel (),
-                                     OBJ_BOX, DEFAULT_COLOR,
-                                     0, 0, 0, 0);
+  OBJECT *obj = o_box_new (edascm_c_current_toplevel (),
+                           OBJ_BOX, DEFAULT_COLOR,
+                           0, 0, 0, 0);
 
   SCM result = edascm_from_object (obj);
 
@@ -1037,9 +1023,9 @@ SCM_DEFINE (set_box_x, "%set-box!", 6, 0, 0,
 
   TOPLEVEL *toplevel = edascm_c_current_toplevel ();
   OBJECT *obj = edascm_to_object (box_s);
-  geda_box_object_modify_all (toplevel, obj,
-                              scm_to_int (x1_s), scm_to_int (y1_s),
-                              scm_to_int (x2_s), scm_to_int (y2_s));
+  o_box_modify_all (toplevel, obj,
+                    scm_to_int (x1_s), scm_to_int (y1_s),
+                    scm_to_int (x2_s), scm_to_int (y2_s));
   o_set_color (toplevel, obj, scm_to_int (color_s));
 
   o_page_changed (toplevel, obj);
@@ -1091,13 +1077,10 @@ SCM_DEFINE (box_info, "%box-info", 1, 0, 0,
 SCM_DEFINE (make_circle, "%make-circle", 0, 0, 0,
             (), "Create a new circle object.")
 {
-  GedaObject *object = geda_circle_object_new (edascm_c_current_toplevel (),
-                                               DEFAULT_COLOR,
-                                               0,
-                                               0,
-                                               1);
+  OBJECT *obj = o_circle_new (edascm_c_current_toplevel (),
+                              DEFAULT_COLOR, 0, 0, 1);
 
-  SCM result = edascm_from_object (object);
+  SCM result = edascm_from_object (obj);
 
   /* At the moment, the only pointer to the object is owned by the
    * smob. */
@@ -1135,9 +1118,9 @@ SCM_DEFINE (set_circle_x, "%set-circle!", 5, 0, 0,
 
   TOPLEVEL *toplevel = edascm_c_current_toplevel ();
   OBJECT *obj = edascm_to_object (circle_s);
-  geda_circle_object_modify (toplevel, obj, scm_to_int(x_s), scm_to_int(y_s),
-                             CIRCLE_CENTER);
-  geda_circle_object_modify (toplevel, obj, scm_to_int(r_s), 0, CIRCLE_RADIUS);
+  o_circle_modify (toplevel, obj, scm_to_int(x_s), scm_to_int(y_s),
+                   CIRCLE_CENTER);
+  o_circle_modify (toplevel, obj, scm_to_int(r_s), 0, CIRCLE_RADIUS);
   o_set_color (toplevel, obj, scm_to_int (color_s));
 
   o_page_changed (toplevel, obj);
@@ -1167,9 +1150,9 @@ SCM_DEFINE (circle_info, "%circle-info", 1, 0, 0,
 
   OBJECT *obj = edascm_to_object (circle_s);
 
-  return scm_list_n (scm_from_int (geda_circle_object_get_center_x (obj)),
-                     scm_from_int (geda_circle_object_get_center_y (obj)),
-                     scm_from_int (geda_circle_object_get_radius (obj)),
+  return scm_list_n (scm_from_int (obj->circle->center_x),
+                     scm_from_int (obj->circle->center_y),
+                     scm_from_int (obj->circle->radius),
                      scm_from_int (obj->color),
                      SCM_UNDEFINED);
 }
@@ -1187,15 +1170,10 @@ SCM_DEFINE (circle_info, "%circle-info", 1, 0, 0,
 SCM_DEFINE (make_arc, "%make-arc", 0, 0, 0,
             (), "Create a new arc object.")
 {
-  GedaObject *object = geda_arc_object_new (edascm_c_current_toplevel (),
-                                            DEFAULT_COLOR,
-                                            0,
-                                            0,
-                                            1,
-                                            0,
-                                            0);
+  OBJECT *obj = o_arc_new (edascm_c_current_toplevel (),
+                           DEFAULT_COLOR, 0, 0, 1, 0, 0);
 
-  SCM result = edascm_from_object (object);
+  SCM result = edascm_from_object (obj);
 
   /* At the moment, the only pointer to the object is owned by the
    * smob. */
@@ -1216,7 +1194,7 @@ SCM_DEFINE (make_arc, "%make-arc", 0, 0, 0,
  * \param y_s           the new y-coordinate of the center of the arc.
  * \param r_s           the new radius of the arc.
  * \param start_angle_s the start angle of the arc.
- * \param end_angle_s   the start angle of the arc.
+ * \param sweep_angle_s the sweep angle of the arc.
  * \param color_s       the colormap index of the color to be used for
  *                      drawing the arc.
  *
@@ -1224,7 +1202,7 @@ SCM_DEFINE (make_arc, "%make-arc", 0, 0, 0,
  */
 SCM_DEFINE (set_arc_x, "%set-arc!", 7, 0, 0,
             (SCM arc_s, SCM x_s, SCM y_s, SCM r_s, SCM start_angle_s,
-             SCM end_angle_s, SCM color_s),
+             SCM sweep_angle_s, SCM color_s),
             "Set arc parameters")
 {
   SCM_ASSERT (edascm_is_object_type (arc_s, OBJ_ARC), arc_s,
@@ -1235,15 +1213,16 @@ SCM_DEFINE (set_arc_x, "%set-arc!", 7, 0, 0,
   SCM_ASSERT (scm_is_integer (color_s), color_s, SCM_ARG7, s_set_arc_x);
   SCM_ASSERT (scm_is_integer (start_angle_s),
                                   start_angle_s, SCM_ARG5, s_set_arc_x);
-  SCM_ASSERT (scm_is_integer (end_angle_s),
-                                  end_angle_s, SCM_ARG6, s_set_arc_x);
+  SCM_ASSERT (scm_is_integer (sweep_angle_s),
+                                  sweep_angle_s, SCM_ARG6, s_set_arc_x);
 
   TOPLEVEL *toplevel = edascm_c_current_toplevel ();
   OBJECT *obj = edascm_to_object (arc_s);
-  geda_arc_object_modify (toplevel, obj, scm_to_int(x_s), scm_to_int(y_s), ARC_CENTER);
-  geda_arc_object_modify (toplevel, obj, scm_to_int(r_s), 0, ARC_RADIUS);
-  geda_arc_object_modify (toplevel, obj, scm_to_int(start_angle_s), 0, ARC_START_ANGLE);
-  geda_arc_object_modify (toplevel, obj, scm_to_int(end_angle_s), 0, ARC_SWEEP_ANGLE);
+  o_arc_modify (toplevel, obj, scm_to_int(x_s), scm_to_int(y_s),
+                   ARC_CENTER);
+  o_arc_modify (toplevel, obj, scm_to_int(r_s), 0, ARC_RADIUS);
+  o_arc_modify (toplevel, obj, scm_to_int(start_angle_s), 0, ARC_START_ANGLE);
+  o_arc_modify (toplevel, obj, scm_to_int(sweep_angle_s), 0, ARC_SWEEP_ANGLE);
   o_set_color (toplevel, obj, scm_to_int (color_s));
 
   o_page_changed (toplevel, obj);
@@ -1277,11 +1256,11 @@ SCM_DEFINE (arc_info, "%arc-info", 1, 0, 0,
 
   OBJECT *obj = edascm_to_object (arc_s);
 
-  return scm_list_n (scm_from_int (geda_arc_object_get_center_x (obj)),
-                     scm_from_int (geda_arc_object_get_center_y (obj)),
-                     scm_from_int (geda_arc_object_get_radius (obj)),
-                     scm_from_int (geda_arc_object_get_start_angle (obj)),
-                     scm_from_int (geda_arc_object_get_sweep_angle (obj)),
+  return scm_list_n (scm_from_int (obj->arc->x),
+                     scm_from_int (obj->arc->y),
+                     scm_from_int (obj->arc->radius),
+                     scm_from_int (obj->arc->start_angle),
+                     scm_from_int (obj->arc->sweep_angle),
                      scm_from_int (obj->color),
                      SCM_UNDEFINED);
 }
@@ -1299,16 +1278,10 @@ SCM_DEFINE (arc_info, "%arc-info", 1, 0, 0,
 SCM_DEFINE (make_text, "%make-text", 0, 0, 0,
             (), "Create a new text object.")
 {
-  OBJECT *obj = geda_text_object_new (edascm_c_current_toplevel (),
-                                      DEFAULT_COLOR,
-                                      0,
-                                      0,
-                                      LOWER_LEFT,
-                                      0,
-                                      "",
-                                      10,
-                                      VISIBLE,
-                                      SHOW_NAME_VALUE);
+  OBJECT *obj = o_text_new (edascm_c_current_toplevel (),
+                            DEFAULT_COLOR,
+                            0, 0, LOWER_LEFT, 0, "", 10,
+                            VISIBLE, SHOW_NAME_VALUE);
 
   SCM result = edascm_from_object (obj);
 
@@ -1423,10 +1396,10 @@ SCM_DEFINE (set_text_x, "%set-text!", 10, 0, 0,
 
   obj->text->x = scm_to_int (x_s);
   obj->text->y = scm_to_int (y_s);
-  geda_text_object_set_alignment (obj, align);
-  geda_text_object_set_angle (obj, angle);
+  obj->text->alignment = align;
+  obj->text->angle = angle;
 
-  geda_text_object_set_size (obj, scm_to_int (size_s));
+  obj->text->size = scm_to_int (size_s);
   obj->visibility = visibility;
   obj->show_name_value = show;
 
@@ -1473,10 +1446,11 @@ SCM_DEFINE (text_info, "%text-info", 1, 0, 0,
   SCM_ASSERT (edascm_is_object_type (text_s, OBJ_TEXT),
               text_s, SCM_ARG1, s_text_info);
 
+  TOPLEVEL *toplevel = edascm_c_current_toplevel ();
   OBJECT *obj = edascm_to_object (text_s);
   SCM align_s, visible_s, show_s;
 
-  switch (geda_text_object_get_alignment (obj)) {
+  switch (obj->text->alignment) {
   case LOWER_LEFT:    align_s = lower_left_sym;    break;
   case MIDDLE_LEFT:   align_s = middle_left_sym;   break;
   case UPPER_LEFT:    align_s = upper_left_sym;    break;
@@ -1489,7 +1463,7 @@ SCM_DEFINE (text_info, "%text-info", 1, 0, 0,
   default:
     scm_misc_error (s_text_info,
                     _("Text object ~A has invalid text alignment ~A"),
-                    scm_list_2 (text_s, scm_from_int (geda_text_object_get_alignment (obj))));
+                    scm_list_2 (text_s, scm_from_int (obj->text->alignment)));
   }
 
   switch (obj->visibility) {
@@ -1514,9 +1488,9 @@ SCM_DEFINE (text_info, "%text-info", 1, 0, 0,
   return scm_list_n (scm_from_int (obj->text->x),
                      scm_from_int (obj->text->y),
                      align_s,
-                     scm_from_int (geda_text_object_get_angle (obj)),
-                     scm_from_utf8_string (geda_text_object_get_string (obj)),
-                     scm_from_int (geda_text_object_get_size (obj)),
+                     scm_from_int (obj->text->angle),
+                     scm_from_utf8_string (o_text_get_string (toplevel, obj)),
+                     scm_from_int (obj->text->size),
                      visible_s,
                      show_s,
                      scm_from_int (obj->color),
@@ -1598,8 +1572,8 @@ SCM_DEFINE (object_complex, "%object-complex", 1, 0, 0,
 SCM_DEFINE (make_path, "%make-path", 0, 0, 0,
             (), "Create a new path object")
 {
-  OBJECT *obj = geda_path_object_new (edascm_c_current_toplevel (),
-                                      OBJ_PATH, DEFAULT_COLOR, "");
+  OBJECT *obj = o_path_new (edascm_c_current_toplevel (),
+                            OBJ_PATH, DEFAULT_COLOR, "");
 
   SCM result = edascm_from_object (obj);
 
@@ -2104,7 +2078,7 @@ SCM_DEFINE (translate_object_x, "%translate-object!", 3, 0, 0,
   int dy = scm_to_int (dy_s);
 
   o_emit_pre_change_notify (toplevel, obj);
-  geda_object_translate (obj, dx, dy);
+  o_translate_world (obj, dx, dy);
   o_emit_change_notify (toplevel, obj);
   o_page_changed (toplevel, obj);
 
@@ -2155,7 +2129,7 @@ SCM_DEFINE (rotate_object_x, "%rotate-object!", 4, 0, 0,
               SCM_ARG4, s_rotate_object_x);
 
   o_emit_pre_change_notify (toplevel, obj);
-  geda_object_rotate (toplevel, x, y, angle, obj);
+  o_rotate_world (toplevel, x, y, angle, obj);
   o_emit_change_notify (toplevel, obj);
   o_page_changed (toplevel, obj);
 
@@ -2188,7 +2162,7 @@ SCM_DEFINE (mirror_object_x, "%mirror-object!", 2, 0, 0,
   int x = scm_to_int (x_s);
 
   o_emit_pre_change_notify (toplevel, obj);
-  geda_object_mirror (toplevel, x, 0, obj);
+  o_mirror_world (toplevel, x, 0, obj);
   o_emit_change_notify (toplevel, obj);
   o_page_changed (toplevel, obj);
 

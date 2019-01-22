@@ -16,7 +16,7 @@ AC_CONFIG_AUX_DIR([build-tools])
 AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_HEADER([config.h])
 
-AM_INIT_AUTOMAKE([parallel-tests color-tests])
+AM_INIT_AUTOMAKE([parallel-tests color-tests tar-ustar])
 AM_SILENT_RULES
 
 AC_GNU_SOURCE # FIXME for some reason this is needed?
@@ -49,7 +49,7 @@ AC_DISABLE_STATIC
 AC_PROG_LIBTOOL
 
 AM_PROG_CC_C_O
-AX_GCC_FLAGS([-Wall -Werror=maybe-uninitialized -std=gnu99])
+AX_GCC_FLAGS([-Wall -Werror=maybe-uninitialized])
 
 AC_PROG_MKDIR_P
 AM_PROG_LEX
@@ -111,7 +111,7 @@ AC_HEADER_STDC
 # even vaguely sane libc implementation provides them; we don't use
 # any of their functions in favour of GLib alternatives; or we don't
 # provide an alternative, so the build will fail anyway.
-AC_CHECK_HEADERS([math.h stdlib.h string.h unistd.h])
+AC_CHECK_HEADERS([stdlib.h string.h unistd.h])
 
 # FIXME since we don't have a sensible alternative, if these headers
 # are missing we should fail. Also need to remove HAVE_ERRNO_H tests
@@ -151,8 +151,6 @@ AX_AWK_FEATURES
 
 # Assertions
 AX_OPTION_ASSERT
-# Deprecated features
-AX_OPTION_DEPRECATED
 # Viewing documentation
 AX_OPTION_URI_VIEWER
 # API documentation
@@ -185,19 +183,6 @@ AX_LIBGEDACAIRO([1:1:0])
 # Recurse into Xorn configuration
 #####################################################################
 
-AC_ARG_ENABLE([xorn],
-	      [AS_HELP_STRING([--disable-xorn],
-			      [don't build and install Xorn])],
-	      [], [export enable_xorn; enable_xorn=yes])
-
-case "${enable_xorn}" in
-  yes) AC_DEFINE([HAVE_XORN], 1, [Define to 1 if using Xorn.]) ;;
-  no) ;;
-  *) AC_MSG_ERROR([bad value ${enable_xorn} for --enable-xorn]) ;;
-esac
-
-AM_CONDITIONAL([XORN], [test x$enable_xorn = xyes])
-
 export GEDADATADIR
 export GEDARCDIR
 
@@ -220,7 +205,6 @@ AC_CONFIG_FILES([Makefile
                  libgeda/lib/Makefile
                  libgeda/scheme/Makefile
                  libgeda/src/Makefile
-                 libgeda/tests/Makefile
 
                  libgedacairo/Makefile
                  libgedacairo/libgedacairo.pc
@@ -260,27 +244,27 @@ AC_CONFIG_FILES([Makefile
                  gsymcheck/tests/Makefile
                  gsymcheck/Makefile
 
-                 gnetlist/Makefile
-                 gnetlist/po/Makefile.in
-                 gnetlist/src/Makefile
-                 gnetlist/include/Makefile
-                 gnetlist/scheme/Makefile
-                 gnetlist/examples/Makefile
-                 gnetlist/tests/Makefile
-                 gnetlist/docs/Makefile
-                 gnetlist/docs/vams/Makefile
-                 gnetlist/examples/vams/Makefile
-                 gnetlist/examples/vams/vhdl/Makefile
-                 gnetlist/examples/vams/vhdl/basic-vhdl/Makefile
-                 gnetlist/examples/vams/vhdl/new-vhdl/Makefile
-                 gnetlist/examples/switcap/Makefile
-                 gnetlist/lib/Makefile
-                 gnetlist/utils/Makefile
-                 gnetlist/scripts/Makefile
-                 gnetlist/scripts/annotate.sh
-                 gnetlist/scripts/bom_xref.sh
-                 gnetlist/scripts/bompp.sh
-                 gnetlist/lib/system-gnetlistrc
+                 gnetlist-legacy/Makefile
+                 gnetlist-legacy/po/Makefile.in
+                 gnetlist-legacy/src/Makefile
+                 gnetlist-legacy/include/Makefile
+                 gnetlist-legacy/scheme/Makefile
+                 gnetlist-legacy/examples/Makefile
+                 gnetlist-legacy/tests/Makefile
+                 gnetlist-legacy/docs/Makefile
+                 gnetlist-legacy/docs/vams/Makefile
+                 gnetlist-legacy/examples/vams/Makefile
+                 gnetlist-legacy/examples/vams/vhdl/Makefile
+                 gnetlist-legacy/examples/vams/vhdl/basic-vhdl/Makefile
+                 gnetlist-legacy/examples/vams/vhdl/new-vhdl/Makefile
+                 gnetlist-legacy/examples/switcap/Makefile
+                 gnetlist-legacy/lib/Makefile
+                 gnetlist-legacy/utils/Makefile
+                 gnetlist-legacy/scripts/Makefile
+                 gnetlist-legacy/scripts/annotate.sh
+                 gnetlist-legacy/scripts/bom_xref.sh
+                 gnetlist-legacy/scripts/bompp.sh
+                 gnetlist-legacy/lib/system-gnetlistrc
 
                  utils/Makefile
                  utils/docs/Makefile
@@ -329,17 +313,3 @@ AC_CONFIG_FILES([Makefile
                  contrib/scripts/sw2asc
 ])
 AC_OUTPUT
-
-if test "x${enable_xorn}" != "xyes"
-then	cat <<EOF >&2
-
-    ########################################################################
-    ##                                                                    ##
-    ##    You chose to disable Xorn during configuration.  This means     ##
-    ##    core functionality will not be available.  Most notably, you    ##
-    ##    won't be able to use the new gnetlist frontend.                 ##
-    ##                                                                    ##
-    ########################################################################
-
-EOF
-fi

@@ -35,65 +35,57 @@ scheme_api_sources = \
 libgeda_la_SOURCES = \
 	$(scheme_api_sources) \
 	a_basic.c \
-	edapaths.c \
 	edaconfig.c \
 	edaerrors.c \
 	f_basic.c \
 	g_basic.c \
-	geda_angle.c \
-	geda_arc.c \
-	geda_arc_object.c \
-	geda_bounds.c \
-	geda_box.c \
-	geda_box_object.c \
-	geda_bus_object.c \
-	geda_color.c \
-	geda_color_map.c \
-	geda_circle.c \
-	geda_circle_object.c \
-	geda_complex_object.c \
-	geda_coord.c \
-	geda_fill_type.c \
-	geda_line.c \
-	geda_line_object.c \
 	geda_list.c \
-	geda_net_object.c \
-	geda_object.c \
-	geda_object_list.c \
-	geda_page.c \
-	geda_path.c \
-	geda_path_object.c \
-	geda_picture.c \
-	geda_picture_object.c \
-	geda_pin_object.c \
-	geda_point.c \
-	geda_string.c \
-	geda_text_object.c \
-	geda_toplevel.c \
-	geda_transform.c \
-	geda_undo.c \
 	g_rc.c \
 	g_register.c \
 	i_vars.c \
 	libgeda.c \
 	m_basic.c \
+	m_bounds.c \
+	m_box.c \
+	m_circle.c \
 	m_hatch.c \
+	m_line.c \
 	m_polygon.c \
+	m_transform.c \
+	o_arc_basic.c \
 	o_attrib.c \
+	o_basic.c \
+	o_box_basic.c \
+	o_bus_basic.c \
+	o_circle_basic.c \
+	o_complex_basic.c \
 	o_embed.c \
+	o_line_basic.c \
+	o_list.c \
+	o_net_basic.c \
+	o_path_basic.c \
+	o_picture.c \
+	o_pin_basic.c \
 	o_selection.c \
+	o_text_basic.c \
 	s_attrib.c \
 	s_basic.c \
 	s_clib.c \
+	s_color.c \
 	s_conn.c \
 	s_encoding.c \
 	s_hierarchy.c \
 	s_log.c \
 	s_menu.c \
+	s_page.c \
+	s_path.c \
 	s_slib.c \
 	s_slot.c \
 	s_textbuffer.c \
-	s_weakref.c
+	s_toplevel.c \
+	s_undo.c \
+	s_weakref.c \
+	u_basic.c
 
 libgeda_la_CPPFLAGS = -DLOCALEDIR=\"$(localedir)\"  $(DATADIR_DEFS) \
 	-I$(srcdir)/../include -I$(srcdir)/../include/libgeda -I$(top_srcdir)

@@ -653,7 +653,7 @@ gschem_selection_adapter_get_object_color (GschemSelectionAdapter *adapter)
         (object->type == OBJ_LINE)   ||
         (object->type == OBJ_PATH)   ||
         (object->type == OBJ_TEXT))) {
-      color = geda_object_get_color (object);
+      color = object->color;
       break;
     }
   }
@@ -669,7 +669,7 @@ gschem_selection_adapter_get_object_color (GschemSelectionAdapter *adapter)
         (object->type == OBJ_LINE)   ||
         (object->type == OBJ_PATH)   ||
         (object->type == OBJ_TEXT))) {
-      if (color != geda_object_get_color (object)) {
+      if (color != object->color) {
         color = MULTIPLE_VALUES;
         break;
       }
@@ -756,7 +756,7 @@ gschem_selection_adapter_get_text_alignment (GschemSelectionAdapter *adapter)
     OBJECT *object = (OBJECT*) iter->data;
 
     if ((object != NULL) && (object->type == OBJ_TEXT)) {
-      int temp_alignment = geda_text_object_get_alignment (object);
+      int temp_alignment = object->text->alignment;
 
       if (alignment < 0) {
         alignment = temp_alignment;
@@ -793,7 +793,7 @@ gschem_selection_adapter_get_text_color (GschemSelectionAdapter *adapter)
     OBJECT* object = (OBJECT *) iter->data;
     iter = g_list_next (iter);
     if ((object != NULL) && (object->type == OBJ_TEXT)) {
-      color = geda_object_get_color (object);
+      color = object->color;
       break;
     }
   }
@@ -803,7 +803,7 @@ gschem_selection_adapter_get_text_color (GschemSelectionAdapter *adapter)
   while (iter != NULL) {
     OBJECT* object = (OBJECT *) iter->data;
     if ((object != NULL) && (object->type == OBJ_TEXT)) {
-      if (color != geda_object_get_color (object)) {
+      if (color != object->color) {
         color = MULTIPLE_VALUES;
         break;
       }
@@ -834,7 +834,7 @@ gschem_selection_adapter_get_text_rotation (GschemSelectionAdapter *adapter)
     OBJECT *object = (OBJECT*) iter->data;
 
     if ((object != NULL) && (object->type == OBJ_TEXT)) {
-      int temp_angle = geda_text_object_get_angle (object);
+      int temp_angle = object->text->angle;
 
       if (angle < 0) {
         angle = temp_angle;
@@ -871,7 +871,7 @@ gschem_selection_adapter_get_text_size (GschemSelectionAdapter *adapter)
     OBJECT *object = (OBJECT*) iter->data;
 
     if ((object != NULL) && (object->type == OBJ_TEXT)) {
-      int temp_size = geda_text_object_get_size (object);
+      int temp_size = object->text->size;
 
       if (size < 0) {
         size = temp_size;
@@ -907,7 +907,7 @@ gschem_selection_adapter_get_text_string (GschemSelectionAdapter *adapter)
 
     if ((object != NULL) && (object->type == OBJ_TEXT)) {
       if (string == NULL) {
-        string = geda_text_object_get_string (object);
+        string = o_text_get_string (adapter->toplevel, object);
       } else {
         string = NULL;
         break;
@@ -1649,13 +1649,21 @@ gschem_selection_adapter_set_cap_style (GschemSelectionAdapter *adapter, int cap
 void
 gschem_selection_adapter_set_object_color (GschemSelectionAdapter *adapter, int color)
 {
+  GList *iter;
+
   g_return_if_fail (adapter != NULL);
   g_return_if_fail (color >= 0);
   g_return_if_fail (color < MAX_COLORS);
 
-  geda_object_list_set_color (geda_list_get_glist (adapter->selection),
-                              color,
-                              adapter->toplevel);
+  iter = geda_list_get_glist (adapter->selection);
+
+  while (iter != NULL) {
+    OBJECT *object = (OBJECT*) iter->data;
+
+    o_set_color (adapter->toplevel, object, color);
+
+    iter = g_list_next (iter);
+  }
 
   g_object_notify (G_OBJECT (adapter), "object-color");
   g_object_notify (G_OBJECT (adapter), "text-color");
@@ -1685,7 +1693,7 @@ gschem_selection_adapter_set_pin_type (GschemSelectionAdapter *adapter, int type
 
     if (object->type == OBJ_PIN && object->pin_type != type) {
       s_conn_remove_object_connections (adapter->toplevel, object);
-      geda_pin_object_set_type (adapter->toplevel, object, type);
+      o_pin_set_type (adapter->toplevel, object, type);
       s_conn_update_object (object->page, object);
     }
 
@@ -1765,7 +1773,7 @@ gschem_selection_adapter_set_text_alignment (GschemSelectionAdapter *adapter, in
     OBJECT *object = (OBJECT*) iter->data;
 
     if (object->type == OBJ_TEXT) {
-      geda_text_object_set_alignment (object, alignment);
+      object->text->alignment = alignment;
       o_text_recreate(adapter->toplevel, object);
     }
 
@@ -1833,7 +1841,7 @@ gschem_selection_adapter_set_text_rotation (GschemSelectionAdapter *adapter, int
     OBJECT *object = (OBJECT*) iter->data;
 
     if (object->type == OBJ_TEXT) {
-      geda_text_object_set_angle (object, angle);
+      object->text->angle = angle;
       o_text_recreate(adapter->toplevel, object);
     }
 
@@ -1859,7 +1867,7 @@ gschem_selection_adapter_set_text_size (GschemSelectionAdapter *adapter, int siz
 
   g_return_if_fail (adapter != NULL);
   g_return_if_fail (adapter->toplevel != NULL);
-  g_return_if_fail (size >= MINIMUM_TEXT_SIZE);
+  g_return_if_fail (size >= 0);
 
   iter = geda_list_get_glist (adapter->selection);
 
@@ -1867,7 +1875,7 @@ gschem_selection_adapter_set_text_size (GschemSelectionAdapter *adapter, int siz
     OBJECT *object = (OBJECT*) iter->data;
 
     if (object->type == OBJ_TEXT) {
-      geda_text_object_set_size (object, size);
+      object->text->size = size;
       o_text_recreate(adapter->toplevel, object);
     }
 

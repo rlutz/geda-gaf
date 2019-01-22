@@ -1,4 +1,4 @@
-# Copyright (C) 2013-2017 Roland Lutz
+# Copyright (C) 2013-2018 Roland Lutz
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -18,11 +18,11 @@ import codecs, getopt, os, sys
 from gettext import gettext as _
 import xorn.command
 import xorn.fileutils
-import xorn.geda.clib
-import xorn.geda.read
-import xorn.geda.write
-import xorn.geda.xmlread
-import xorn.geda.xmlwrite
+import gaf.clib
+import gaf.read
+import gaf.write
+import gaf.xmlread
+import gaf.xmlwrite
 
 def check_if_directory(path, option_name):
     if os.path.isdir(path):
@@ -65,7 +65,7 @@ def main():
                 xorn.command.invalid_arguments(
                     "option `-I' can only be given once")
             try:
-                input_format = xorn.geda.fileformat.VALID_FORMATS[value]
+                input_format = gaf.fileformat.VALID_FORMATS[value]
             except KeyError:
                 xorn.command.invalid_arguments(
                     "%s is not a valid format" % value)
@@ -74,7 +74,7 @@ def main():
                 xorn.command.invalid_arguments(
                     "option `-O' can only be given once")
             try:
-                output_format = xorn.geda.fileformat.VALID_FORMATS[value]
+                output_format = gaf.fileformat.VALID_FORMATS[value]
             except KeyError:
                 xorn.command.invalid_arguments(
                     "%s is not a valid format" % value)
@@ -83,15 +83,15 @@ def main():
 
         elif option == '--symbol-library':
             check_if_directory(value, option)
-            xorn.geda.clib.add_source(
-                xorn.geda.clib.DirectorySource(value, False),
-                xorn.geda.clib.uniquify_source_name(os.path.basename(value)))
+            gaf.clib.add_source(
+                gaf.clib.DirectorySource(value, False),
+                gaf.clib.uniquify_source_name(os.path.basename(value)))
 
         elif option == '--symbol-library-search':
             check_if_directory(value, option)
-            xorn.geda.clib.add_source(
-                xorn.geda.clib.DirectorySource(value, True),
-                xorn.geda.clib.uniquify_source_name(os.path.basename(value)))
+            gaf.clib.add_source(
+                gaf.clib.DirectorySource(value, True),
+                gaf.clib.uniquify_source_name(os.path.basename(value)))
 
         elif option == '--symbol-library-command':
             tokens = value.split(':')
@@ -101,12 +101,12 @@ def main():
                                    "separated by colons\n") % value)
                 sys.exit(1)
             listcmd, getcmd = tokens
-            xorn.geda.clib.add_source(
-                xorn.geda.clib.CommandSource(listcmd, getcmd),
-                xorn.geda.clib.uniquify_source_name('command source'))
+            gaf.clib.add_source(
+                gaf.clib.CommandSource(listcmd, getcmd),
+                gaf.clib.uniquify_source_name('command source'))
 
         elif option == '--reset-symbol-library':
-            xorn.geda.clib.reset()
+            gaf.clib.reset()
 
         # omit symbols/pixmaps
 
@@ -153,7 +153,7 @@ def main():
 """))
             sys.stdout.write("\n")
             sys.stdout.write(_("Valid formats are: %s\n") %
-                ', '.join(sorted(xorn.geda.fileformat.VALID_FORMATS)))
+                ', '.join(sorted(gaf.fileformat.VALID_FORMATS)))
             sys.stdout.write("\n")
             sys.stdout.write(_(
 "Both input and output filename can be `-' for the standard input or output,\n"
@@ -186,8 +186,8 @@ def main():
             xorn.command.invalid_arguments(
                 "Input format must be specified when reading from stdin.")
         try:
-            input_format = xorn.geda.fileformat.guess_format(input_file)
-        except xorn.geda.fileformat.UnknownFormatError:
+            input_format = gaf.fileformat.guess_format(input_file)
+        except gaf.fileformat.UnknownFormatError:
             sys.stderr.write(_(
                 "%s: Input format could not be deduced from input file name.\n"
                 "%s: Please specify an input format using `-I FORMAT'.\n")
@@ -199,8 +199,8 @@ def main():
             xorn.command.invalid_arguments(
                 "Output format must be specified when reading from stdin.")
         try:
-            output_format = xorn.geda.fileformat.guess_format(output_file)
-        except xorn.geda.fileformat.UnknownFormatError:
+            output_format = gaf.fileformat.guess_format(output_file)
+        except gaf.fileformat.UnknownFormatError:
             sys.stderr.write(_(
               "%s: Output format could not be deduced from output file name.\n"
               "%s: Please specify an output format using `-O FORMAT'.\n")
@@ -210,22 +210,22 @@ def main():
     # read revision from input file
 
     output_format_is_xml = output_format in (
-        xorn.geda.fileformat.FORMAT_SYM_XML,
-        xorn.geda.fileformat.FORMAT_SCH_XML)
+        gaf.fileformat.FORMAT_SYM_XML,
+        gaf.fileformat.FORMAT_SCH_XML)
     load_symbols = output_format_is_xml and not omit_symbols
     load_pixmaps = output_format_is_xml and not omit_pixmaps
-    xorn.geda.clib.load_pixmaps = load_pixmaps
+    gaf.clib.load_pixmaps = load_pixmaps
 
     try:
         if input_file == '-':
             input_file = '<stdin>'
-            rev = xorn.geda.read.read_file(sys.stdin, '<stdin>', input_format,
-                                           load_symbols = load_symbols,
-                                           load_pixmaps = load_pixmaps)
+            rev = gaf.read.read_file(sys.stdin, '<stdin>', input_format,
+                                     load_symbols = load_symbols,
+                                     load_pixmaps = load_pixmaps)
         else:
-            rev = xorn.geda.read.read(input_file, input_format,
-                                      load_symbols = load_symbols,
-                                      load_pixmaps = load_pixmaps)
+            rev = gaf.read.read(input_file, input_format,
+                                load_symbols = load_symbols,
+                                load_pixmaps = load_pixmaps)
     except IOError as e:
         sys.stderr.write(_("%s: %s: %s\n")
                          % (xorn.command.program_short_name,
@@ -236,13 +236,13 @@ def main():
                          % (xorn.command.program_short_name,
                             input_file, str(e)))
         sys.exit(1)
-    except xorn.geda.read.ParseError:
+    except gaf.read.ParseError:
         sys.exit(1)
 
     # write revision to output file
 
-    if output_format == xorn.geda.fileformat.FORMAT_SYM_XML or \
-       output_format == xorn.geda.fileformat.FORMAT_SCH_XML:
+    if output_format == gaf.fileformat.FORMAT_SYM_XML or \
+       output_format == gaf.fileformat.FORMAT_SCH_XML:
         kwds = { 'use_hybridnum': use_hybridnum,
                  'omit_symbols': omit_symbols,
                  'omit_pixmaps': omit_pixmaps }
@@ -252,10 +252,10 @@ def main():
     try:
         if output_file == '-':
             output_file = '<stdout>'
-            xorn.geda.write.write_file(sys.stdout, rev, output_format, **kwds)
+            gaf.write.write_file(sys.stdout, rev, output_format, **kwds)
         else:
-            xorn.geda.write.write(rev, output_file, output_format,
-                                  { 'backup': False, 'fsync': False }, **kwds)
+            gaf.write.write(rev, output_file, output_format,
+                            { 'backup': False, 'fsync': False }, **kwds)
     except IOError as e:
         sys.stderr.write(_("%s: %s: %s\n")
                          % (xorn.command.program_short_name,
