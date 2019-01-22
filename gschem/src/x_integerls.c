@@ -22,7 +22,6 @@
  *  \brief A GtkListStore for the integer combo box (gschem_integer_combo_box.c).
  */
 #include <config.h>
-#include <version.h>
 
 #ifdef HAVE_ERRNO_H
 #include <errno.h>

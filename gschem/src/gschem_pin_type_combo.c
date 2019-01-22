@@ -22,7 +22,6 @@
  *  \brief A GtkComboBox for gschem pin types
  */
 #include <config.h>
-#include <version.h>
 
 #include <stdio.h>
 #ifdef HAVE_STDLIB_H

@@ -25,7 +25,6 @@
  *  integer value from a drop down menu.
  */
 #include <config.h>
-#include <version.h>
 
 #ifdef HAVE_ERRNO_H
 #include <errno.h>

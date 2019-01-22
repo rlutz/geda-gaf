@@ -22,7 +22,6 @@
  *  \brief A GtkComboBox with the gschem colors.
  */
 #include <config.h>
-#include <version.h>
 
 #include <stdio.h>
 #ifdef HAVE_STDLIB_H
