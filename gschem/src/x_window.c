@@ -667,14 +667,8 @@ void x_window_create_main(GschemToplevel *w_current)
     gtk_toggle_tool_button_set_active (GTK_TOGGLE_TOOL_BUTTON (w_current->toolbar_select), TRUE);
   }
 
-  vpaned = gtk_vpaned_new ();
-  gtk_container_add(GTK_CONTAINER(main_box), vpaned);
-
   left_hpaned = gtk_hpaned_new ();
-  gtk_paned_pack1 (GTK_PANED (vpaned),
-                   left_hpaned,
-                   TRUE,
-                   TRUE);
+  gtk_container_add (GTK_CONTAINER(main_box), left_hpaned);
 
   w_current->left_notebook = gtk_notebook_new ();
   gtk_paned_pack1 (GTK_PANED (left_hpaned),
@@ -692,22 +686,37 @@ void x_window_create_main(GschemToplevel *w_current)
                    TRUE,
                    TRUE);
 
-  work_box = gtk_vbox_new (FALSE, 0);
-  gtk_paned_pack1 (GTK_PANED (right_hpaned),
-                   work_box,
-                   TRUE,
-                   TRUE);
-
   w_current->right_notebook = gtk_notebook_new ();
   gtk_paned_pack2 (GTK_PANED (right_hpaned),
                    w_current->right_notebook,
                    FALSE,
                    TRUE);
-
   gtk_container_set_border_width (GTK_CONTAINER (w_current->right_notebook),
                                   DIALOG_BORDER_SPACING);
   gtk_notebook_set_group_name (GTK_NOTEBOOK (w_current->right_notebook),
                                "gschem-dock");
+
+  vpaned = gtk_vpaned_new ();
+  gtk_paned_pack1 (GTK_PANED (right_hpaned),
+                   vpaned,
+                   TRUE,
+                   TRUE);
+
+  w_current->bottom_notebook = gtk_notebook_new ();
+  gtk_paned_pack2 (GTK_PANED (vpaned),
+                   w_current->bottom_notebook,
+                   FALSE,
+                   TRUE);
+  gtk_container_set_border_width (GTK_CONTAINER (w_current->bottom_notebook),
+                                  DIALOG_BORDER_SPACING);
+  gtk_notebook_set_group_name (GTK_NOTEBOOK (w_current->bottom_notebook),
+                               "gschem-dock");
+
+  work_box = gtk_vbox_new (FALSE, 0);
+  gtk_paned_pack1 (GTK_PANED (vpaned),
+                   work_box,
+                   TRUE,
+                   TRUE);
 
   /*  Try to create popup menu (appears in right mouse button  */
   w_current->popup_menu = (GtkWidget *) get_main_popup(w_current);
@@ -825,18 +834,6 @@ void x_window_create_main(GschemToplevel *w_current)
                     "response",
                     G_CALLBACK (&x_window_translate_response),
                     w_current);
-
-  /* status notebook */
-  w_current->bottom_notebook = gtk_notebook_new ();
-  gtk_paned_pack2 (GTK_PANED (vpaned),
-                   w_current->bottom_notebook,
-                   FALSE,
-                   TRUE);
-
-  gtk_container_set_border_width (GTK_CONTAINER (w_current->bottom_notebook),
-                                  DIALOG_BORDER_SPACING);
-  gtk_notebook_set_group_name (GTK_NOTEBOOK (w_current->bottom_notebook),
-                               "gschem-dock");
 
 
   w_current->compselect_dockable = g_object_new (
