@@ -697,6 +697,8 @@ void x_window_create_main(GschemToplevel *w_current)
                    TRUE);
   gtk_container_set_border_width (GTK_CONTAINER (w_current->left_notebook),
                                   DIALOG_BORDER_SPACING);
+  gtk_notebook_set_group_name (GTK_NOTEBOOK (w_current->left_notebook),
+                               "gschem-dock");
 
   right_hpaned = gtk_hpaned_new ();
   gtk_paned_pack2 (GTK_PANED (left_hpaned),
@@ -718,6 +720,8 @@ void x_window_create_main(GschemToplevel *w_current)
 
   gtk_container_set_border_width (GTK_CONTAINER (w_current->right_notebook),
                                   DIALOG_BORDER_SPACING);
+  gtk_notebook_set_group_name (GTK_NOTEBOOK (w_current->right_notebook),
+                               "gschem-dock");
 
   /*  Try to create popup menu (appears in right mouse button  */
   w_current->popup_menu = (GtkWidget *) get_main_popup(w_current);
@@ -866,6 +870,8 @@ void x_window_create_main(GschemToplevel *w_current)
 
   gtk_container_set_border_width (GTK_CONTAINER (w_current->bottom_notebook),
                                   DIALOG_BORDER_SPACING);
+  gtk_notebook_set_group_name (GTK_NOTEBOOK (w_current->bottom_notebook),
+                               "gschem-dock");
 
   w_current->find_text_state = gschem_find_text_state_new ();
 
@@ -884,6 +890,10 @@ void x_window_create_main(GschemToplevel *w_current)
   gtk_notebook_append_page (GTK_NOTEBOOK (w_current->bottom_notebook),
                             GTK_WIDGET (w_current->log_widget),
                             gtk_label_new (_("Status")));
+
+
+  gschem_dockable_initialize_toplevel (w_current);
+
 
   /* bottom box */
   if (default_third_button == POPUP_ENABLED) {
@@ -983,6 +993,9 @@ void x_window_close(GschemToplevel *w_current)
 
   if (w_current->sewindow)
   gtk_widget_destroy(w_current->sewindow);
+
+  /* save dock window geometry, close dock windows, disconnect signals */
+  gschem_dockable_cleanup_toplevel (w_current);
 
   if (g_list_length (global_window_list) == 1) {
     /* no more window after this one, remember to quit */

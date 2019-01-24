@@ -85,6 +85,11 @@ struct st_gschem_toplevel {
   GtkWidget *coord_world;                 /* World coordinate label */
   GtkWidget *coord_screen;                /* Screen coordinate window */
 
+  /* --------- */
+  /* Dockables */
+  /* --------- */
+  GList *dockables;
+
   /* -------------------------------------- */
   /* Models for widgets inside dialog boxes */
   /* -------------------------------------- */

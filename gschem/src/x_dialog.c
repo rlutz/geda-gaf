@@ -67,6 +67,11 @@ void x_dialog_raise_all(GschemToplevel *w_current)
   if(w_current->cowindow) {
     gdk_window_raise(w_current->cowindow->window);
   }
+  for (GList *l = w_current->dockables; l != NULL; l = l->next) {
+    GtkWidget *window = GSCHEM_DOCKABLE (l->data)->window;
+    if (window != NULL && gtk_widget_get_visible (window))
+      gdk_window_raise (window->window);
+  }
 }
 
 /*********** End of misc support functions for dialog boxes *******/

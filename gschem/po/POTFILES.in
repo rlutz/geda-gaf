@@ -23,6 +23,7 @@ gschem/src/gschem_close_confirmation_dialog.c
 gschem/src/gschem_coord_dialog.c
 gschem/src/gschem_dialog.c
 gschem/src/gschem_dialog_misc.c
+gschem/src/gschem_dockable.c
 gschem/src/gschem_fill_swatch_cell_renderer.c
 gschem/src/gschem_find_text_state.c
 gschem/src/gschem_find_text_widget.c

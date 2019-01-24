@@ -196,6 +196,11 @@ GschemToplevel *gschem_toplevel_new ()
   w_current->coord_world  = NULL;
   w_current->coord_screen = NULL;
 
+  /* --------- */
+  /* Dockables */
+  /* --------- */
+  w_current->dockables = NULL;
+
   /* -------------------------------------- */
   /* Models for widgets inside dialog boxes */
   /* -------------------------------------- */

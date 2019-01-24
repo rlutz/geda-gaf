@@ -16,6 +16,7 @@ noinst_HEADERS = \
 	gschem_defines.h \
 	gschem_dialog.h \
 	gschem_dialog_misc.h \
+	gschem_dockable.h \
 	gschem_fill_swatch_cell_renderer.h \
 	gschem_find_patch_widget.h \
 	gschem_find_text_state.h \

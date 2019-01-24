@@ -1273,7 +1273,11 @@
            (,(N_ "Toggle Net _Rubberband")   &options-rubberband)
            (,(N_ "Toggle _Magnetic Net")     &options-magneticnet)
            (,(N_ "Show _Log Window...")      &options-show-log-window)
-           (,(N_ "Show _Coord Window...")    &options-show-coord-window)))
+           (,(N_ "Show _Coord Window...")    &options-show-coord-window)
+           ("SEPARATOR"                 #f                      #f)
+           (,(N_ "Left docking area")   #f                      #f)
+           (,(N_ "Bottom docking area") #f                      #f)
+           (,(N_ "Right docking area")  #f                      #f)))
 
 (define help-menu-items
 ;;

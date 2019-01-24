@@ -37,6 +37,7 @@ gschem_SOURCES = \
 	gschem_coord_dialog.c \
 	gschem_dialog.c \
 	gschem_dialog_misc.c \
+	gschem_dockable.c \
 	gschem_fill_swatch_cell_renderer.c \
 	gschem_find_text_state.c \
 	gschem_find_text_widget.c \
