@@ -60,9 +60,7 @@ static const gchar *get_notebook_group_name (
   GschemToplevel *w_current, GtkNotebook *notebook);
 static GschemDockable *get_dockable_by_widget (
   GschemToplevel *w_current, GtkWidget *widget);
-static const gchar *get_settings_name_for_widget (
-  GschemToplevel *w_current, GtkWidget *widget);
-static GtkWidget *get_widget_by_settings_name (
+static GschemDockable *get_dockable_by_settings_name (
   GschemToplevel *w_current, const gchar *settings_name);
 
 static void save_internal_geometry (GschemDockable *dockable);
@@ -72,7 +70,7 @@ static void save_page_order (GschemToplevel *w_current,
                              GtkNotebook *notebook);
 static void save_current_page (GschemToplevel *w_current,
                                GtkNotebook *notebook,
-                               GtkWidget *widget);
+                               GschemDockable *dockable);
 static void restore_internal_geometry (GschemDockable *dockable);
 static void restore_window_geometry (GschemDockable *dockable);
 static void restore_state (GschemDockable *dockable);
@@ -568,29 +566,16 @@ get_dockable_by_widget (GschemToplevel *w_current, GtkWidget *widget)
 }
 
 
-static const gchar *
-get_settings_name_for_widget (GschemToplevel *w_current,
-                              GtkWidget *widget)
-{
-  g_return_val_if_fail (widget != NULL, NULL);
-
-  GschemDockable *dockable = get_dockable_by_widget (w_current, widget);
-  g_return_val_if_fail (dockable != NULL, NULL);
-
-  return dockable->settings_name;
-}
-
-
-static GtkWidget *
-get_widget_by_settings_name (GschemToplevel *w_current,
-                             const gchar *settings_name)
+static GschemDockable *
+get_dockable_by_settings_name (GschemToplevel *w_current,
+                               const gchar *settings_name)
 {
   g_return_val_if_fail (settings_name != NULL, NULL);
 
   for (GList *l = w_current->dockables; l != NULL; l = l->next) {
     GschemDockable *dockable = GSCHEM_DOCKABLE (l->data);
     if (strcmp (settings_name, dockable->settings_name) == 0)
-      return dockable->widget;
+      return dockable;
   }
 
   return NULL;  /* unknown dockable name */
@@ -661,7 +646,9 @@ save_page_order (GschemToplevel *w_current,
 
   for (gint page_num = 0; page_num < page_count; page_num++) {
     GtkWidget *widget = gtk_notebook_get_nth_page (notebook, page_num);
-    list[page_num] = get_settings_name_for_widget (w_current, widget);
+    GschemDockable *dockable = get_dockable_by_widget (w_current, widget);
+    g_return_if_fail (dockable != NULL);
+    list[page_num] = dockable->settings_name;
   }
 
   eda_config_set_string_list (
@@ -681,15 +668,14 @@ save_page_order (GschemToplevel *w_current,
 static void
 save_current_page (GschemToplevel *w_current,
                    GtkNotebook *notebook,
-                   GtkWidget *widget)
+                   GschemDockable *dockable)
 {
   EdaConfig *cfg = eda_config_get_user_context ();
   g_return_if_fail (cfg != NULL);
 
   eda_config_set_string (
     cfg, get_notebook_group_name (w_current, notebook),
-    "current-page",
-    get_settings_name_for_widget (w_current, widget));
+    "current-page", dockable->settings_name);
 }
 
 
@@ -771,10 +757,10 @@ restore_page_order (GschemToplevel *w_current,
     "page-order", &page_count, NULL);
 
   for (page_num = 0; page_num < page_count; page_num++) {
-    GtkWidget *widget =
-      get_widget_by_settings_name (w_current, list[page_num]);
-    if (widget != NULL)
-      gtk_notebook_reorder_child (notebook, widget, page_num);
+    GschemDockable *dockable =
+      get_dockable_by_settings_name (w_current, list[page_num]);
+    if (dockable != NULL && dockable->widget != NULL)
+      gtk_notebook_reorder_child (notebook, dockable->widget, page_num);
   }
 }
 
@@ -792,16 +778,17 @@ restore_current_page (GschemToplevel *w_current,
   if (current_page == NULL || *current_page == '\0')
     return;
 
-  GtkWidget *widget = get_widget_by_settings_name (w_current, current_page);
-  if (widget == NULL)
+  GschemDockable *dockable =
+    get_dockable_by_settings_name (w_current, current_page);
+  if (dockable == NULL || dockable->widget == NULL)
     return;
 
-  gint page_num = gtk_notebook_page_num (notebook, widget);
+  gint page_num = gtk_notebook_page_num (notebook, dockable->widget);
   if (page_num == -1)
     return;
 
   /* non-dockable tabs aren't necessarily visible at this point */
-  gtk_widget_show (widget);
+  gtk_widget_show (dockable->widget);
 
   gtk_notebook_set_current_page (notebook, page_num);
 }
@@ -1669,11 +1656,10 @@ callback_notebook_page_added (GtkWidget *notebook,
                               GschemToplevel *w_current)
 {
   GschemDockable *dockable = get_dockable_by_widget (w_current, child);
+  g_return_if_fail (dockable != NULL);
 
-  if (dockable != NULL) {
-    update_menu_items (dockable);
-    save_state (dockable);
-  }
+  update_menu_items (dockable);
+  save_state (dockable);
 }
 
 
@@ -1699,7 +1685,10 @@ callback_notebook_switch_page (GtkWidget *notebook,
                                guint arg2,
                                GschemToplevel *w_current)
 {
-  save_current_page (w_current, GTK_NOTEBOOK (notebook), arg1);
+  GschemDockable *dockable = get_dockable_by_widget (w_current, arg1);
+  g_return_if_fail (dockable != NULL);
+
+  save_current_page (w_current, GTK_NOTEBOOK (notebook), dockable);
 }
 
 
@@ -1710,10 +1699,7 @@ callback_notebook_create_window (GtkWidget *notebook,
                                  GschemToplevel *w_current)
 {
   GschemDockable *dockable = get_dockable_by_widget (w_current, page);
-
-  if (dockable == NULL)
-    /* notebook page is not a dockable */
-    return NULL;
+  g_return_val_if_fail (dockable != NULL, NULL);
 
   /* This is kind of a hack: Write the desired window position to the
      configuration so it is restored when detaching */
@@ -1738,8 +1724,7 @@ callback_notebook_key_press_event (GtkWidget *notebook,
   GtkWidget *widget = gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook),
                                                  page_num);
   GschemDockable *dockable = get_dockable_by_widget (w_current, widget);
-  if (dockable == NULL)
-    return FALSE;
+  g_return_val_if_fail (dockable != NULL, FALSE);
 
   if ((event->keyval == GDK_KEY_Return ||
        event->keyval == GDK_KEY_ISO_Enter ||
