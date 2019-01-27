@@ -47,7 +47,9 @@
 
 
 static void
-changed_cb (GtkTextBuffer *buffer, GschemLogDockable *dockable);
+apply_tag_cb (GtkTextBuffer *buffer, GtkTextTag *tag,
+              GtkTextIter *start, GtkTextIter *end,
+              GschemLogDockable *dockable);
 
 static void
 class_init (GschemLogDockableClass *class);
@@ -161,27 +163,36 @@ log_message (GschemLogDockableClass *klass, const gchar *message, const gchar *s
 }
 
 
-/*! \brief callback for changes in the text buffer
+/*! \brief callback for tags being applied to the text buffer
  *
- *  Changes in the contents of the buffer cause all text view widgets to scroll
- *  to the bottom.
+ *  Applying tags to the buffer causes all text view widgets to scroll
+ *  to the bottom.  Additionally, for high priority tags, the log
+ *  dockable is presented to the user.
  *
  *  \param [in] buffer the text buffer triggering the event
+ *  \param [in] tag the applied tag
+ *  \param [in] start the start of the range the tag is applied to
+ *  \param [in] end the end of the range the tag is applied to
  *  \param [in] dockable the dockable to scroll to the bottom
  */
 static void
-changed_cb (GtkTextBuffer *buffer, GschemLogDockable *dockable)
+apply_tag_cb (GtkTextBuffer *buffer, GtkTextTag *tag,
+              GtkTextIter *start, GtkTextIter *end,
+              GschemLogDockable *dockable)
 {
-  GtkTextIter iter;
+  gchar *tag_name;
 
   g_return_if_fail (buffer != NULL);
   g_return_if_fail (dockable != NULL);
   g_return_if_fail (dockable->viewer != NULL);
 
-  gschem_dockable_present (GSCHEM_DOCKABLE (dockable));
+  g_object_get (tag, "name", &tag_name, NULL);
+  if ((strcmp (tag_name, "critical") == 0 ||
+       strcmp (tag_name, "warning") == 0))
+    gschem_dockable_present (GSCHEM_DOCKABLE (dockable));
+  g_free (tag_name);
 
-  gtk_text_buffer_get_end_iter (buffer, &iter);
-  gtk_text_view_scroll_to_iter (dockable->viewer, &iter, 0.0, TRUE, 0.0, 1.0);
+  gtk_text_view_scroll_to_iter (dockable->viewer, end, 0.0, TRUE, 0.0, 1.0);
 }
 
 
@@ -286,8 +297,8 @@ create_widget (GschemDockable *parent)
   gtk_container_add (GTK_CONTAINER (scrolled), GTK_WIDGET (dockable->viewer));
 
   g_signal_connect (klass->buffer,
-                    "changed",
-                    G_CALLBACK (&changed_cb),
+                    "apply-tag",
+                    G_CALLBACK (&apply_tag_cb),
                     dockable);
 
   gtk_text_buffer_get_end_iter (klass->buffer, &iter);
