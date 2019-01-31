@@ -2484,8 +2484,8 @@ DEFINE_ACTION (options_snap,
                "options-snap",
                NULL,
                _("Switch Snap Mode"),
-               _("Toggle Snap On/Off"),
-               _("Toggle _Snap On/Off"),
+               _("Cycle Snap Modes"),
+               _("Cycle _Snap Modes"),
                NULL,
                ACTUATE)
 {
