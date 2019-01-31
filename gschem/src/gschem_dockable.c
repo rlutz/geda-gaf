@@ -1391,6 +1391,8 @@ gschem_dockable_initialize_toplevel (GschemToplevel *w_current)
 
   /* setup left docking area menu */
   menu = gtk_menu_new ();
+  gtk_menu_shell_append (GTK_MENU_SHELL (menu),
+                         gtk_tearoff_menu_item_new ());
   for (GList *l = w_current->dockables; l != NULL; l = l->next)
     gtk_menu_shell_append (GTK_MENU_SHELL (menu),
                            GSCHEM_DOCKABLE (l->data)->dock_left_item);
@@ -1403,6 +1405,8 @@ gschem_dockable_initialize_toplevel (GschemToplevel *w_current)
 
   /* setup bottom docking area menu */
   menu = gtk_menu_new ();
+  gtk_menu_shell_append (GTK_MENU_SHELL (menu),
+                         gtk_tearoff_menu_item_new ());
   for (GList *l = w_current->dockables; l != NULL; l = l->next)
     gtk_menu_shell_append (GTK_MENU_SHELL (menu),
                            GSCHEM_DOCKABLE (l->data)->dock_bottom_item);
@@ -1415,6 +1419,8 @@ gschem_dockable_initialize_toplevel (GschemToplevel *w_current)
 
   /* setup right docking area menu */
   menu = gtk_menu_new ();
+  gtk_menu_shell_append (GTK_MENU_SHELL (menu),
+                         gtk_tearoff_menu_item_new ());
   for (GList *l = w_current->dockables; l != NULL; l = l->next)
     gtk_menu_shell_append (GTK_MENU_SHELL (menu),
                            GSCHEM_DOCKABLE (l->data)->dock_right_item);
