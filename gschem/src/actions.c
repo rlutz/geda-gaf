@@ -434,20 +434,6 @@ DEFINE_ACTION (edit_edit,
   o_edit(w_current, geda_list_get_glist( gschem_toplevel_get_toplevel (w_current)->page_current->selection_list ) );
 }
 
-DEFINE_ACTION (edit_pin_type,
-               "edit-pin-type",
-               NULL,
-               _("Edit Pin Type"),
-               _("Edit Pin Type..."),
-               _("Pin Type..."),
-               NULL,
-               ACTUATE)
-{
-  i_update_middle_button (w_current, action, _("Edit pin type"));
-
-  gschem_dockable_present (w_current->object_properties_dockable);
-}
-
 DEFINE_ACTION (edit_text,
                "edit-text",
                "gtk-edit",
@@ -481,16 +467,16 @@ DEFINE_ACTION (edit_slot,
   }
 }
 
-DEFINE_ACTION (edit_color,
-               "edit-color",
-               "gtk-select-color",
-               _("Edit Color"),
-               _("Color..."),
-               _("Color..."),
+DEFINE_ACTION (edit_properties,
+               "edit-properties",
+               NULL,
+               _("Edit Object Properties"),
+               _("Object Properties..."),
+               _("Object Properties..."),
                NULL,
                ACTUATE)
 {
-  i_update_middle_button (w_current, action, _("Color"));
+  i_update_middle_button (w_current, action, _("Properties"));
 
   /* dialogs have been merged */
   gschem_dockable_present (w_current->object_properties_dockable);
@@ -888,32 +874,6 @@ DEFINE_ACTION (edit_autonumber_text,
     return;
 
   autonumber_text_dialog(w_current);
-}
-
-DEFINE_ACTION (edit_linetype,
-               "edit-linetype",
-               NULL,
-               _("Edit Line Width & Type"),
-               _("Line Width & Type..."),
-               _("Line Width & Type..."),
-               NULL,
-               ACTUATE)
-{
-  /* dialogs have been merged */
-  gschem_dockable_present (w_current->object_properties_dockable);
-}
-
-DEFINE_ACTION (edit_filltype,
-               "edit-filltype",
-               NULL,
-               _("Edit Fill Type"),
-               _("Fill Type..."),
-               _("Fill Type..."),
-               NULL,
-               ACTUATE)
-{
-  /* dialogs have been merged */
-  gschem_dockable_present (w_current->object_properties_dockable);
 }
 
 /*! \section view-menu View Menu Callback Functions */

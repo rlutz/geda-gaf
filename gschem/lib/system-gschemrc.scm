@@ -957,12 +957,12 @@
 (global-set-key "E R" '&edit-rotate-90)
 (global-set-key "E I" '&edit-mirror)
 (global-set-key "E <Shift>S" '&edit-slot)
-(global-set-key "E O" '&edit-color)
+(global-set-key "E O" '&edit-properties)    ; merged with "E P"
 (global-set-key "E L" '&edit-lock)
 (global-set-key "E <Shift>L" '&edit-unlock)
-(global-set-key "E W" '&edit-linetype)
-(global-set-key "E F" '&edit-filltype)
-(global-set-key "E P" '&edit-pin-type)
+(global-set-key "E W" '&edit-properties)    ; merged with "E P"
+(global-set-key "E F" '&edit-properties)    ; merged with "E P"
+(global-set-key "E P" '&edit-properties)
 (global-set-key "E T" '&edit-translate)
 (global-set-key "E <Shift>colon" '&edit-invoke-macro)
 (global-set-key "E B" '&edit-embed)
@@ -1130,10 +1130,7 @@
           (,&edit-edit
            ,&edit-text
            ,&edit-slot
-           ,&edit-color
-           ,&edit-linetype
-           ,&edit-filltype
-           ,&edit-pin-type
+           ,&edit-properties
            ,&edit-translate
            ,&edit-lock
            ,&edit-unlock)
@@ -1267,7 +1264,7 @@
            ,&view-zoom-extents)
           (,&edit-select
            ,&edit-edit
-           ,&edit-pin-type
+           ,&edit-properties
            ,&edit-copy
            ,&edit-move
            ,&edit-delete)
