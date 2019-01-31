@@ -11,7 +11,6 @@ typedef struct st_gschem_toplevel GschemToplevel;
 
 /* gschem headers */
 #include "gschem_defines.h"
-#include "gschem_bin.h"
 #include "gschem_bottom_widget.h"
 #include "gschem_find_text_widget.h"
 #include "gschem_find_patch_widget.h"
