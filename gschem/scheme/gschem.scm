@@ -236,7 +236,6 @@
 (define attributes-show-value &attributes-show-value)
 (define attributes-show-both &attributes-show-both)
 (define attributes-visibility-toggle &attributes-visibility-toggle)
-(define options-text-size &options-text-size)
 (define options-snap-size &options-snap-size)
 (define options-scale-up-snap-size &options-scale-up-snap-size)
 (define options-scale-down-snap-size &options-scale-down-snap-size)

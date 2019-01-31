@@ -2394,19 +2394,6 @@ DEFINE_ACTION (attributes_visibility_toggle,
 
 /*! \section options-menu Options Menu Callback Functions */
 
-DEFINE_ACTION (options_text_size,
-               "options-text-size",
-               NULL,
-               _("Set Default Text Size"),
-               _("Text Size..."),
-               _("_Text Size..."),
-               NULL,
-               ACTUATE)
-{
-  /* repeat last command doesn't make sense on options either??? (does it?) */
-  gschem_dockable_present (w_current->text_properties_dockable);
-}
-
 DEFINE_ACTION (options_snap_size,
                "options-snap-size",
                NULL,

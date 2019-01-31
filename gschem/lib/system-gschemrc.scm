@@ -1003,7 +1003,6 @@
 (global-set-key "M" '&edit-move)
 (global-set-key "N" '&add-net)
 
-(global-set-key "O T" '&options-text-size)
 (global-set-key "O A" '&options-action-feedback)
 (global-set-key "O G" '&options-grid)
 (global-set-key "O S" '&options-snap)
@@ -1212,8 +1211,7 @@
            ,&edit-autonumber)))
 
 (define options-menu
-        `((,&options-text-size
-           ,&options-grid
+        `((,&options-grid
            ,&options-snap
            ,&options-snap-size
            ,&options-scale-up-snap-size
