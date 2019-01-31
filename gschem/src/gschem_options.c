@@ -168,10 +168,10 @@ gschem_options_get_magnetic_net_mode (GschemOptions *options)
 
 
 
-/*! \brief Get the magnetic net mode
+/*! \brief Get the net rubber band mode
  *
  *  \param [in] options These options
- *  \return The magnetic net mode
+ *  \return The net rubber band mode
  */
 gboolean
 gschem_options_get_net_rubber_band_mode (GschemOptions *options)
