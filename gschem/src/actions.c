@@ -2394,12 +2394,12 @@ DEFINE_ACTION (attributes_visibility_toggle,
 
 /*! \section options-menu Options Menu Callback Functions */
 
-DEFINE_ACTION (options_snap_size,
-               "options-snap-size",
-               NULL,
-               _("Set Grid Spacing"),
-               _("Snap Grid Spacing..."),
-               _("Snap Grid S_pacing..."),
+DEFINE_ACTION (options_options,
+               "options-options",
+               "gtk-preferences",
+               _("Options"),
+               _("Options..."),
+               _("Options..."),
                NULL,
                ACTUATE)
 {

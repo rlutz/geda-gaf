@@ -912,10 +912,10 @@
 ;;    The "Deselect All" command will be run when the <Ctrl> and
 ;;    <Shift> keys are held down, and the <A> key is pressed.
 ;;
-;;  * (global-set-key "O <Shift>S" '&options-snap-size)
+;;  * (global-set-key "E <Shift>B" '&edit-unembed)
 ;;
-;;    The "Snap Size" dialog box will be shown when an <O> is typed,
-;;    followed by an <S> typed with the <Shift> key held down.
+;;    The "Unembed" command will be run when an <E> is typed,
+;;    followed by an <B> typed with the <Shift> key held down.
 ;;
 ;; Key names can be found in /usr/include/gtk-2.0/gdk/gdkkeysyms.h on
 ;; most Linux systems.  For other systems, please see your platform
@@ -1003,12 +1003,12 @@
 (global-set-key "M" '&edit-move)
 (global-set-key "N" '&add-net)
 
+(global-set-key "O O" '&options-options)
 (global-set-key "O A" '&options-action-feedback)
 (global-set-key "O G" '&options-grid)
 (global-set-key "O S" '&options-snap)
 (global-set-key "O R" '&options-rubberband)
 (global-set-key "O M" '&options-magneticnet)
-(global-set-key "O <Shift>S" '&options-snap-size)
 (global-set-key "O L" '&options-show-log-window)
 (global-set-key "O C" '&options-show-coord-window)
 
@@ -1211,9 +1211,9 @@
            ,&edit-autonumber)))
 
 (define options-menu
-        `((,&options-grid
+        `((,&options-options
+           ,&options-grid
            ,&options-snap
-           ,&options-snap-size
            ,&options-scale-up-snap-size
            ,&options-scale-down-snap-size
            ,&options-action-feedback
