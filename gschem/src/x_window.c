@@ -357,6 +357,44 @@ x_window_state_event (GtkWidget *widget,
 }
 
 static void
+x_window_save_menu_geometry (GtkMenuShell *menu_shell,
+                             GschemToplevel *w_current)
+{
+  for (GList *l = gtk_container_get_children (GTK_CONTAINER (menu_shell));
+       l != NULL; l = l->next) {
+    GtkMenuItem *menu_item = GTK_MENU_ITEM (l->data);
+
+    GtkWidget *menu = menu_item->submenu;
+    if (menu == NULL)
+      /* not a submenu */
+      continue;
+
+    char *settings_name = g_object_get_data (G_OBJECT (menu), "settings-name");
+    if (settings_name == NULL)
+      /* menu doesn't have a settings name set */
+      continue;
+
+    gint coords[4];
+    gsize length = 0;
+
+    if (GTK_MENU (menu)->torn_off) {
+      GtkWidget *window = GTK_MENU (menu)->tearoff_window;
+      g_return_if_fail (window != NULL);
+
+      gtk_window_get_position (GTK_WINDOW (window), &coords[0], &coords[1]);
+      gtk_window_get_size (GTK_WINDOW (window), &coords[2], &coords[3]);
+      length = 4;
+    }
+
+    eda_config_set_int_list (
+      eda_config_get_user_context (),
+      "gschem.menu-geometry", settings_name, coords, length);
+
+    x_window_save_menu_geometry (GTK_MENU_SHELL (menu), w_current);
+  }
+}
+
+static void
 x_window_save_geometry (GschemToplevel *w_current)
 {
   gchar *window_state;
@@ -377,6 +415,10 @@ x_window_save_geometry (GschemToplevel *w_current)
     }
   }
 
+  /* save torn-off menus */
+  x_window_save_menu_geometry (
+    GTK_MENU_SHELL (w_current->menubar), w_current);
+
   /* save dock area geometry */
   gtk_widget_get_allocation (w_current->left_notebook, &allocation);
   if (allocation.width > 0)
@@ -395,6 +437,57 @@ x_window_save_geometry (GschemToplevel *w_current)
     eda_config_set_int (eda_config_get_user_context (),
                         "gschem.dock-geometry.right",
                         "size", allocation.width);
+}
+
+static void
+x_window_restore_menu_geometry (GtkMenuShell *menu_shell,
+                                GschemToplevel *w_current)
+{
+  for (GList *l = gtk_container_get_children (GTK_CONTAINER (menu_shell));
+       l != NULL; l = l->next) {
+    GtkMenuItem *menu_item = GTK_MENU_ITEM (l->data);
+
+    GtkWidget *menu = menu_item->submenu;
+    if (menu == NULL)
+      /* not a submenu */
+      continue;
+
+    char *settings_name = g_object_get_data (G_OBJECT (menu), "settings-name");
+    if (settings_name == NULL)
+      /* menu doesn't have a settings name set */
+      continue;
+
+    gsize length = 0;
+    gint *coords = eda_config_get_int_list (
+      eda_config_get_user_context (),
+      "gschem.menu-geometry", settings_name, &length, NULL);
+
+    if (coords != NULL && length == 4) {
+      gtk_menu_set_tearoff_state (GTK_MENU (menu), TRUE);
+
+      GtkWidget *window = GTK_MENU (menu)->tearoff_window;
+      g_return_if_fail (window != NULL);
+
+      gtk_window_move (GTK_WINDOW (window), coords[0], coords[1]);
+      gtk_window_resize (GTK_WINDOW (window), coords[2], coords[3]);
+    }
+    g_free(coords);
+
+    x_window_restore_menu_geometry (GTK_MENU_SHELL (menu), w_current);
+  }
+}
+
+static gboolean
+x_window_restore_all_menu_geometry (GschemToplevel *w_current)
+{
+  g_signal_handlers_disconnect_by_func(
+    G_OBJECT (w_current->main_window),
+    G_CALLBACK (x_window_restore_all_menu_geometry), w_current);
+
+  x_window_restore_menu_geometry (
+    GTK_MENU_SHELL (w_current->menubar), w_current);
+
+  return FALSE;
 }
 
 static void
@@ -425,6 +518,11 @@ x_window_restore_geometry (GschemToplevel *w_current)
     gtk_window_fullscreen (GTK_WINDOW (w_current->main_window));
   else if (window_state != NULL && strcmp (window_state, "maximized") == 0)
     gtk_window_maximize (GTK_WINDOW (w_current->main_window));
+
+  /* defer restoring torn-off menus until main window is shown */
+  g_signal_connect_swapped (
+    G_OBJECT (w_current->main_window), "focus-in-event",
+    G_CALLBACK (x_window_restore_all_menu_geometry), w_current);
 
   /* restore docking area dimensions */
   dock_size = eda_config_get_int (eda_config_get_user_context (),

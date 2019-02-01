@@ -228,6 +228,16 @@ get_main_menu(GschemToplevel *w_current)
     gtk_widget_show (root_menu);
     gtk_menu_item_set_submenu (GTK_MENU_ITEM (root_menu), menu);
     gtk_menu_shell_append (GTK_MENU_SHELL (menu_bar), root_menu);
+
+    /* store lower-case raw name without underscores as settings name
+       for saving/restoring torn-off menus */
+    gchar *settings_name = g_ascii_strdown (*raw_menu_name, -1);
+    gchar *i = settings_name, *j = settings_name;
+    do {
+      if (*i != '_')
+        *j++ = *i;
+    } while (*i++ != '\0');
+    g_object_set_data (G_OBJECT (menu), "settings-name", settings_name);
   }
   scm_dynwind_end ();
 
@@ -392,6 +402,8 @@ void x_menu_attach_recent_files_submenu(GschemToplevel *w_current)
   recent_manager = gtk_recent_manager_get_default();
 
   menuitem_file_recent_items = gtk_recent_chooser_menu_new_for_manager(recent_manager);
+  g_object_set_data (G_OBJECT (menuitem_file_recent_items),
+                     "settings-name", "recent-files");
 
   /* Show only schematic- and symbol-files (*.sch and *.sym) in list */
   recent_filter = gtk_recent_filter_new();
