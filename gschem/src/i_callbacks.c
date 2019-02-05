@@ -1099,30 +1099,36 @@ DEFINE_I_CALLBACK(edit_filltype)
 }
 
 /*! \section view-menu View Menu Callback Functions */
-/*! \brief Toggle the visibility of the sidebar
+/*! \brief Toggle the visibility of the menu bar
  */
-DEFINE_I_CALLBACK(view_sidebar)
+DEFINE_I_CALLBACK(view_menubar)
 {
-  gboolean visible;
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
-
   g_return_if_fail (w_current != NULL);
 
-  visible = gtk_widget_get_visible (GTK_WIDGET (w_current->right_notebook));
-  gtk_widget_set_visible (GTK_WIDGET (w_current->right_notebook), !visible);
+  GtkWidget *w = w_current->menubar;
+  if (w_current->handleboxes)
+    w = gtk_widget_get_parent (w);
+
+  gboolean show = !gtk_widget_get_visible (w);
+  gtk_widget_set_visible (w, show);
 }
 
-/*! \brief Toggle the visibility of the status window
+/*! \brief Toggle the visibility of the toolbar
  */
-DEFINE_I_CALLBACK(view_status)
+DEFINE_I_CALLBACK(view_toolbar)
 {
-  gboolean visible;
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
-
   g_return_if_fail (w_current != NULL);
 
-  visible = gtk_widget_get_visible (GTK_WIDGET (w_current->bottom_notebook));
-  gtk_widget_set_visible (GTK_WIDGET (w_current->bottom_notebook), !visible);
+  GtkWidget *w = w_current->toolbar;
+  if (w == NULL)
+    return;
+  if (w_current->handleboxes)
+    w = gtk_widget_get_parent (w);
+
+  gboolean show = !gtk_widget_get_visible (w);
+  gtk_widget_set_visible (w, show);
 }
 
 /*! \todo Finish function documentation!!!

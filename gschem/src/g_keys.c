@@ -128,8 +128,8 @@ DEFINE_G_KEYS(buffer_paste3)
 DEFINE_G_KEYS(buffer_paste4)
 DEFINE_G_KEYS(buffer_paste5)
 
-DEFINE_G_KEYS(view_sidebar)
-DEFINE_G_KEYS(view_status)
+DEFINE_G_KEYS(view_menubar)
+DEFINE_G_KEYS(view_toolbar)
 
 /* repeat middle shortcut doesn't make sense on redraw, just hit right
  * button */

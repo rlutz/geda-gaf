@@ -35,6 +35,7 @@ struct st_gschem_toplevel {
   GtkWidget *drawing_area;
   GtkWidget *menubar;
   GtkWidget *popup_menu;
+  GtkWidget *toolbar;
 
   /* Widgets at inside the bottom of the main view */
   GtkWidget *find_text_widget;

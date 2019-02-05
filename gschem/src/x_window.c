@@ -625,6 +625,7 @@ void x_window_create_main(GschemToplevel *w_current)
     } else {
       gtk_box_pack_start(GTK_BOX(main_box), toolbar, FALSE, FALSE, 0);
     }
+    w_current->toolbar = toolbar;
 
     button =
       (GtkToolButton*) gtk_tool_button_new (x_window_stock_pixmap ("new", w_current),

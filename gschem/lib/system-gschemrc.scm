@@ -1040,8 +1040,8 @@
 (global-set-key "U" '&edit-undo)
 (global-set-key "<Shift>U" '&edit-undo)
 
-(global-set-key "V A" '&view-sidebar)
-(global-set-key "V S" '&view-status)
+(global-set-key "V M" '&view-menubar)
+(global-set-key "V T" '&view-toolbar)
 (global-set-key "V R" '&view-redraw)
 (global-set-key "V B" '&view-zoom-box)
 (global-set-key "V F" '&view-zoom-full)
@@ -1190,8 +1190,8 @@
 ;;
 ;;          menu item name        menu action             menu stock icon
 ;;
-        `( (,(N_ "Sidebar")             &view-sidebar           #f)
-           (,(N_ "Status")              &view-status            #f)
+        `( (,(N_ "Menubar")             &view-menubar           #f)
+           (,(N_ "Toolbar")             &view-toolbar           #f)
            ("SEPARATOR"                 #f                      #f)
            (,(N_ "_Redraw")             &view-redraw            "gtk-refresh")
            (,(N_ "_Pan")                &view-pan               #f)

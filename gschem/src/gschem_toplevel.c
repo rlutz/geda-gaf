@@ -159,6 +159,7 @@ GschemToplevel *gschem_toplevel_new ()
   w_current->drawing_area = NULL;
   w_current->menubar      = NULL;
   w_current->popup_menu   = NULL;
+  w_current->toolbar      = NULL;
   w_current->find_text_widget = NULL;
   w_current->find_patch_widget = NULL;
   w_current->macro_widget  = NULL;

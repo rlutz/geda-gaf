@@ -179,11 +179,11 @@
 ;; -------------------------------------------------------------------
 ;;;; View control actions
 
-(define-action-public (&view-sidebar #:label (_ "Sidebar"))
-  (%view-sidebar))
+(define-action-public (&view-menubar #:label (_ "Menubar"))
+  (%view-menubar))
 
-(define-action-public (&view-status #:label (_ "Status"))
-  (%view-status))
+(define-action-public (&view-toolbar #:label (_ "Toolbar"))
+  (%view-toolbar))
 
 (define-action-public (&view-redraw #:label (_ "Redraw") #:icon "gtk-refresh")
   (%view-redraw))
