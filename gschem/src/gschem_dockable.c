@@ -1615,27 +1615,33 @@ callback_event_box_button_press_event (GtkWidget *widget,
                                        GdkEventButton *event,
                                        GschemDockable *dockable)
 {
-  if (event->button != 3 || event->type != GDK_BUTTON_PRESS)
-    return FALSE;
+  if (event->button == 2 && event->type == GDK_BUTTON_PRESS) {
+    gschem_dockable_hide (dockable);
+    return TRUE;
+  }
 
-  if (dockable->menu == NULL)
-    create_menu (dockable);
+  if (event->button == 3 && event->type == GDK_BUTTON_PRESS) {
+    if (dockable->menu == NULL)
+      create_menu (dockable);
 
-  GschemDockableState state = gschem_dockable_get_state (dockable);
-  gtk_widget_set_sensitive (dockable->detach_item,
-                            state != GSCHEM_DOCKABLE_STATE_WINDOW);
-  gtk_widget_set_sensitive (dockable->move_left_item,
-                            state != GSCHEM_DOCKABLE_STATE_DOCKED_LEFT);
-  gtk_widget_set_sensitive (dockable->move_bottom_item,
-                            state != GSCHEM_DOCKABLE_STATE_DOCKED_BOTTOM);
-  gtk_widget_set_sensitive (dockable->move_right_item,
-                            state != GSCHEM_DOCKABLE_STATE_DOCKED_RIGHT);
-  gtk_widget_set_sensitive (dockable->close_item,
-                            state != GSCHEM_DOCKABLE_STATE_HIDDEN);
+    GschemDockableState state = gschem_dockable_get_state (dockable);
+    gtk_widget_set_sensitive (dockable->detach_item,
+                              state != GSCHEM_DOCKABLE_STATE_WINDOW);
+    gtk_widget_set_sensitive (dockable->move_left_item,
+                              state != GSCHEM_DOCKABLE_STATE_DOCKED_LEFT);
+    gtk_widget_set_sensitive (dockable->move_bottom_item,
+                              state != GSCHEM_DOCKABLE_STATE_DOCKED_BOTTOM);
+    gtk_widget_set_sensitive (dockable->move_right_item,
+                              state != GSCHEM_DOCKABLE_STATE_DOCKED_RIGHT);
+    gtk_widget_set_sensitive (dockable->close_item,
+                              state != GSCHEM_DOCKABLE_STATE_HIDDEN);
 
-  gtk_menu_popup (GTK_MENU (dockable->menu), NULL, NULL, NULL, NULL,
-                  event->button, event->time);
-  return TRUE;
+    gtk_menu_popup (GTK_MENU (dockable->menu), NULL, NULL, NULL, NULL,
+                    event->button, event->time);
+    return TRUE;
+  }
+
+  return FALSE;
 }
 
 
