@@ -2539,22 +2539,6 @@ DEFINE_I_CALLBACK(attributes_visibility_toggle)
   }
 }
 
-/*! \section script-menu Script Menu Callback Functions */
-/*! \todo Finish function documentation!!!
- *  \brief
- *  \par Function Description
- *
- *  \note
- *  not currently implemented
- */
-DEFINE_I_CALLBACK(script_console)
-{
-  GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
-
-  g_return_if_fail (w_current != NULL);
-  printf(_("Sorry but this is a non-functioning menu option\n"));
-}
-
 /*! \section layers-menu Layers Menu Callback Functions */
 
 /*! \section options-menu Options Menu Callback Functions */

@@ -179,9 +179,6 @@ DEFINE_G_KEYS(attributes_show_value)
 DEFINE_G_KEYS(attributes_show_both)
 DEFINE_G_KEYS(attributes_visibility_toggle)
 
-/* i_callback_script_console is not currently implemented */
-DEFINE_G_KEYS(script_console)
-
 /* repeat last command doesn't make sense on options either??? (does
  * it?) */
 DEFINE_G_KEYS(options_text_size)
