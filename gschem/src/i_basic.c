@@ -237,7 +237,7 @@ void i_set_state_msg(GschemToplevel *w_current, enum x_states newstate,
  *
  */
 void i_update_middle_button (GschemToplevel *w_current,
-                             void (*func_ptr)(),
+                             GschemAction *action,
                              const char *string)
 {
   g_return_if_fail (w_current != NULL);
@@ -250,7 +250,7 @@ void i_update_middle_button (GschemToplevel *w_current,
       gschem_bottom_widget_set_middle_button_text (
           GSCHEM_BOTTOM_WIDGET (w_current->bottom_widget),
           _("Action"));
-      w_current->last_callback = NULL;
+      w_current->last_action = NULL;
       break;
 
 #ifdef HAVE_LIBSTROKE
@@ -258,7 +258,7 @@ void i_update_middle_button (GschemToplevel *w_current,
       gschem_bottom_widget_set_middle_button_text (
           GSCHEM_BOTTOM_WIDGET (w_current->bottom_widget),
           _("Stroke"));
-      w_current->last_callback = NULL;
+      w_current->last_action = NULL;
     break;
 #else
     /* remove this case eventually and make it a null case */
@@ -266,12 +266,12 @@ void i_update_middle_button (GschemToplevel *w_current,
       gschem_bottom_widget_set_middle_button_text (
           GSCHEM_BOTTOM_WIDGET (w_current->bottom_widget),
           _("none"));
-      w_current->last_callback = NULL;
+      w_current->last_action = NULL;
       break;
 #endif
 
     case(REPEAT):
-      if ((string != NULL) && (func_ptr != NULL))
+      if ((string != NULL) && (action != NULL))
       {
         char *temp_string = g_strconcat (_("Repeat/"), string, NULL);
 
@@ -280,12 +280,12 @@ void i_update_middle_button (GschemToplevel *w_current,
             temp_string);
 
         g_free(temp_string);
-        w_current->last_callback = func_ptr;
+        w_current->last_action = action;
       } else {
         gschem_bottom_widget_set_middle_button_text (
             GSCHEM_BOTTOM_WIDGET (w_current->bottom_widget),
             _("Repeat/none"));
-        w_current->last_callback = NULL;
+        w_current->last_action = NULL;
       }
       break;
 
@@ -293,14 +293,14 @@ void i_update_middle_button (GschemToplevel *w_current,
       gschem_bottom_widget_set_middle_button_text (
           GSCHEM_BOTTOM_WIDGET (w_current->bottom_widget),
           _("Pan"));
-      w_current->last_callback = NULL;
+      w_current->last_action = NULL;
       break;
 
     default:
       gschem_bottom_widget_set_middle_button_text (
           GSCHEM_BOTTOM_WIDGET (w_current->bottom_widget),
           _("none"));
-      w_current->last_callback = NULL;
+      w_current->last_action = NULL;
   }
 }
 
@@ -616,7 +616,7 @@ i_cancel (GschemToplevel *w_current)
  *
  */
 void
-i_buffer_copy (GschemToplevel *w_current, int n, void (*f)(gpointer))
+i_buffer_copy (GschemToplevel *w_current, int n, GschemAction *action)
 {
   gchar *msg;
 
@@ -628,7 +628,7 @@ i_buffer_copy (GschemToplevel *w_current, int n, void (*f)(gpointer))
   /* TRANSLATORS: The number is the number of the buffer that the
    * selection is being copied to. */
   msg = g_strdup_printf(_("Copy %i"), n);
-  i_update_middle_button(w_current, f, msg);
+  i_update_middle_button(w_current, action, msg);
   g_free (msg);
   o_buffer_copy(w_current, n-1);
   i_update_menus(w_current);
@@ -640,7 +640,7 @@ i_buffer_copy (GschemToplevel *w_current, int n, void (*f)(gpointer))
  *
  */
 void
-i_buffer_cut (GschemToplevel *w_current, int n, void (*f)(gpointer))
+i_buffer_cut (GschemToplevel *w_current, int n, GschemAction *action)
 {
   gchar *msg;
 
@@ -652,7 +652,7 @@ i_buffer_cut (GschemToplevel *w_current, int n, void (*f)(gpointer))
   /* TRANSLATORS: The number is the number of the buffer that the
    * selection is being cut to. */
   msg = g_strdup_printf(_("Cut %i"), n);
-  i_update_middle_button(w_current, f, msg);
+  i_update_middle_button(w_current, action, msg);
   g_free (msg);
   o_buffer_cut(w_current, n-1);
   i_update_menus(w_current);
@@ -664,7 +664,7 @@ i_buffer_cut (GschemToplevel *w_current, int n, void (*f)(gpointer))
  *
  */
 void
-i_buffer_paste (GschemToplevel *w_current, int n, void (*f)(gpointer))
+i_buffer_paste (GschemToplevel *w_current, int n, GschemAction *action)
 {
   gchar *msg;
   int empty;
@@ -679,7 +679,7 @@ i_buffer_paste (GschemToplevel *w_current, int n, void (*f)(gpointer))
   /* TRANSLATORS: The number is the number of the buffer that is being
    * pasted to the schematic. */
   msg = g_strdup_printf(_("Paste %i"), n);
-  i_update_middle_button(w_current, f, msg);
+  i_update_middle_button(w_current, action, msg);
   g_free (msg);
 
   g_action_get_position (TRUE, &wx, &wy);

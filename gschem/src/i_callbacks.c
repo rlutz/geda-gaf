@@ -28,6 +28,7 @@
 #endif
 
 #include "gschem.h"
+#include "actions.decl.x"
 
 /*! \brief */
 #define DELIMITERS ", "

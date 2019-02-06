@@ -335,7 +335,7 @@ DEFINE_ACTION (edit_copy,
 
   g_return_if_fail (w_current != NULL);
 
-  i_update_middle_button(w_current, i_callback_edit_copy, _("Copy"));
+  i_update_middle_button (w_current, action_edit_copy, _("Copy"));
 
   if (o_select_return_first_object(w_current)) {
     o_redraw_cleanstates(w_current);
@@ -360,7 +360,7 @@ DEFINE_ACTION (edit_mcopy,
 
   g_return_if_fail (w_current != NULL);
 
-  i_update_middle_button(w_current, i_callback_edit_mcopy, _("Multiple Copy"));
+  i_update_middle_button (w_current, action_edit_mcopy, _("Multiple Copy"));
 
   if (o_select_return_first_object(w_current)) {
     o_redraw_cleanstates(w_current);
@@ -385,7 +385,7 @@ DEFINE_ACTION (edit_move,
 
   g_return_if_fail (w_current != NULL);
 
-  i_update_middle_button(w_current, i_callback_edit_move, _("Move"));
+  i_update_middle_button (w_current, action_edit_move, _("Move"));
 
   if (o_select_return_first_object(w_current)) {
     o_redraw_cleanstates(w_current);
@@ -409,7 +409,7 @@ DEFINE_ACTION (edit_delete,
 
   g_return_if_fail (w_current != NULL);
 
-  i_update_middle_button(w_current, i_callback_edit_delete, _("Delete"));
+  i_update_middle_button (w_current, action_edit_delete, _("Delete"));
 
   if (o_select_return_first_object(w_current)) {
     o_redraw_cleanstates(w_current);
@@ -433,7 +433,7 @@ DEFINE_ACTION (edit_edit,
 
   g_return_if_fail (w_current != NULL);
 
-  i_update_middle_button(w_current, i_callback_edit_edit, _("Edit"));
+  i_update_middle_button (w_current, action_edit_edit, _("Edit"));
   o_edit(w_current, geda_list_get_glist( gschem_toplevel_get_toplevel (w_current)->page_current->selection_list ) );
 }
 
@@ -448,7 +448,7 @@ DEFINE_ACTION (edit_pin_type,
 
   g_return_if_fail (w_current != NULL);
 
-  i_update_middle_button (w_current, i_callback_edit_pin_type, _("Edit pin type"));
+  i_update_middle_button (w_current, action_edit_pin_type, _("Edit pin type"));
 
   gschem_dockable_present (w_current->object_properties_dockable);
 }
@@ -464,7 +464,7 @@ DEFINE_ACTION (edit_text,
 
   g_return_if_fail (w_current != NULL);
 
-  i_update_middle_button(w_current, i_callback_edit_text, _("Edit Text"));
+  i_update_middle_button (w_current, action_edit_text, _("Edit Text"));
 
   gschem_dockable_present (w_current->text_properties_dockable);
 }
@@ -483,7 +483,7 @@ DEFINE_ACTION (edit_slot,
 
   object = o_select_return_first_object(w_current);
 
-  i_update_middle_button(w_current, i_callback_edit_slot, _("Slot"));
+  i_update_middle_button (w_current, action_edit_slot, _("Slot"));
   if (object) {
     o_slot_start(w_current, object);
   }
@@ -500,7 +500,7 @@ DEFINE_ACTION (edit_color,
 
   g_return_if_fail (w_current != NULL);
 
-  i_update_middle_button(w_current, i_callback_edit_color, _("Color"));
+  i_update_middle_button (w_current, action_edit_color, _("Color"));
 
   /* dialogs have been merged */
   gschem_dockable_present (w_current->object_properties_dockable);
@@ -540,7 +540,7 @@ DEFINE_ACTION (edit_rotate_90,
 
   if (!g_action_get_position (TRUE, &wx, &wy)) {
     i_set_state(w_current, ROTATEMODE);
-    i_update_middle_button(w_current, i_callback_edit_rotate_90, _("Rotate"));
+    i_update_middle_button (w_current, action_edit_rotate_90, _("Rotate"));
     return;
   }
 
@@ -549,8 +549,7 @@ DEFINE_ACTION (edit_rotate_90,
   object_list = geda_list_get_glist( gschem_toplevel_get_toplevel (w_current)->page_current->selection_list );
 
   if (object_list) {
-    i_update_middle_button(w_current,
-                           i_callback_edit_rotate_90, _("Rotate"));
+    i_update_middle_button (w_current, action_edit_rotate_90, _("Rotate"));
     /* Allow o_rotate_world_update to redraw the objects */
     o_rotate_world_update(w_current, wx, wy, 90, object_list);
   }
@@ -588,7 +587,7 @@ DEFINE_ACTION (edit_mirror,
 
   if (!g_action_get_position (TRUE, &wx, &wy)) {
     i_set_state(w_current, MIRRORMODE);
-    i_update_middle_button(w_current, i_callback_edit_mirror, _("Mirror"));
+    i_update_middle_button (w_current, action_edit_mirror, _("Mirror"));
     return;
   }
 
@@ -597,8 +596,7 @@ DEFINE_ACTION (edit_mirror,
   object_list = geda_list_get_glist( gschem_toplevel_get_toplevel (w_current)->page_current->selection_list );
 
   if (object_list) {
-    i_update_middle_button(w_current,
-                           i_callback_edit_mirror, _("Mirror"));
+    i_update_middle_button (w_current, action_edit_mirror, _("Mirror"));
     o_mirror_world_update(w_current, wx, wy, object_list);
   }
 }
@@ -616,7 +614,7 @@ DEFINE_ACTION (edit_lock,
 
   g_return_if_fail (w_current != NULL);
 
-  i_update_middle_button(w_current, i_callback_edit_lock, _("Lock"));
+  i_update_middle_button (w_current, action_edit_lock, _("Lock"));
 
   if (o_select_return_first_object(w_current)) {
     o_lock(w_current);
@@ -636,7 +634,7 @@ DEFINE_ACTION (edit_unlock,
 
   g_return_if_fail (w_current != NULL);
 
-  i_update_middle_button(w_current, i_callback_edit_unlock, _("Unlock"));
+  i_update_middle_button (w_current, action_edit_unlock, _("Unlock"));
   if (o_select_return_first_object(w_current)) {
     o_unlock(w_current);
   }
@@ -654,8 +652,7 @@ DEFINE_ACTION (edit_translate,
 
   g_return_if_fail (w_current != NULL);
 
-  i_update_middle_button(w_current,
-                         i_callback_edit_translate, _("Translate"));
+  i_update_middle_button (w_current, action_edit_translate, _("Translate"));
 
   snap_mode = gschem_options_get_snap_mode (w_current->options);
 
@@ -708,7 +705,7 @@ DEFINE_ACTION (edit_embed,
 
   g_return_if_fail (w_current != NULL);
 
-  i_update_middle_button(w_current, i_callback_edit_embed, _("Embed"));
+  i_update_middle_button (w_current, action_edit_embed, _("Embed"));
   /* anything selected ? */
   if (o_select_selected(w_current)) {
     /* yes, embed each selected component */
@@ -747,7 +744,7 @@ DEFINE_ACTION (edit_unembed,
 
   g_return_if_fail (w_current != NULL);
 
-  i_update_middle_button(w_current, i_callback_edit_unembed, _("Unembed"));
+  i_update_middle_button (w_current, action_edit_unembed, _("Unembed"));
   /* anything selected ? */
   if (o_select_selected(w_current)) {
     /* yes, unembed each selected component */
@@ -789,7 +786,7 @@ DEFINE_ACTION (edit_update,
 
   g_return_if_fail (w_current != NULL);
 
-  i_update_middle_button(w_current, i_callback_edit_update, _("Update"));
+  i_update_middle_button (w_current, action_edit_update, _("Update"));
   if (o_select_selected(w_current)) {
 
     /* Updating components modifies the selection. Therefore, create a
@@ -828,9 +825,7 @@ DEFINE_ACTION (edit_show_hidden,
 
   g_return_if_fail (w_current != NULL);
 
-  i_update_middle_button(w_current,
-                         i_callback_edit_show_hidden,
-                         _("ShowHidden"));
+  i_update_middle_button (w_current, action_edit_show_hidden, _("ShowHidden"));
 
   o_edit_show_hidden (w_current,
                       s_page_objects (gschem_toplevel_get_toplevel (w_current)->page_current));
@@ -1148,7 +1143,7 @@ DEFINE_ACTION (view_pan,
   GschemPageView *page_view = gschem_toplevel_get_current_page_view (w_current);
   g_return_if_fail (page_view != NULL);
 
-  i_update_middle_button(w_current, i_callback_view_pan, _("Pan"));
+  i_update_middle_button (w_current, action_view_pan, _("Pan"));
 
   if (!g_action_get_position (FALSE, &wx, &wy)) {
     o_redraw_cleanstates (w_current);
@@ -1492,7 +1487,7 @@ DEFINE_ACTION (clipboard_copy,
   g_return_if_fail (w_current != NULL);
   if (!o_select_selected (w_current)) return;
 
-  i_update_middle_button (w_current, i_callback_clipboard_copy,
+  i_update_middle_button (w_current, action_clipboard_copy,
                           _("Copy to clipboard"));
 
   o_buffer_copy (w_current, CLIPBOARD_BUFFER);
@@ -1512,7 +1507,7 @@ DEFINE_ACTION (clipboard_cut,
   g_return_if_fail (w_current != NULL);
   if (!o_select_selected (w_current)) return;
 
-  i_update_middle_button (w_current, i_callback_clipboard_cut,
+  i_update_middle_button (w_current, action_clipboard_cut,
                           _("Cut to clipboard"));
 
   o_redraw_cleanstates(w_current);
@@ -1538,7 +1533,8 @@ DEFINE_ACTION (clipboard_paste,
 
   g_return_if_fail (w_current != NULL);
 
-  i_update_middle_button (w_current, i_callback_clipboard_paste, _("Paste from clipboard"));
+  i_update_middle_button (w_current, action_clipboard_paste,
+                          _("Paste from clipboard"));
 
   g_action_get_position (TRUE, &wx, &wy);
 
@@ -1557,7 +1553,7 @@ DEFINE_ACTION (buffer_copy1,
                _("Copy into 1"),
                _("Copy into 1"))
 {
-  i_buffer_copy (data, 1, i_callback_buffer_copy1);
+  i_buffer_copy (data, 1, action_buffer_copy1);
 }
 
 DEFINE_ACTION (buffer_copy2,
@@ -1567,7 +1563,7 @@ DEFINE_ACTION (buffer_copy2,
                _("Copy into 2"),
                _("Copy into 2"))
 {
-  i_buffer_copy (data, 2, i_callback_buffer_copy2);
+  i_buffer_copy (data, 2, action_buffer_copy2);
 }
 
 DEFINE_ACTION (buffer_copy3,
@@ -1577,7 +1573,7 @@ DEFINE_ACTION (buffer_copy3,
                _("Copy into 3"),
                _("Copy into 3"))
 {
-  i_buffer_copy (data, 3, i_callback_buffer_copy3);
+  i_buffer_copy (data, 3, action_buffer_copy3);
 }
 
 DEFINE_ACTION (buffer_copy4,
@@ -1587,7 +1583,7 @@ DEFINE_ACTION (buffer_copy4,
                _("Copy into 4"),
                _("Copy into 4"))
 {
-  i_buffer_copy (data, 4, i_callback_buffer_copy4);
+  i_buffer_copy (data, 4, action_buffer_copy4);
 }
 
 DEFINE_ACTION (buffer_copy5,
@@ -1597,7 +1593,7 @@ DEFINE_ACTION (buffer_copy5,
                _("Copy into 5"),
                _("Copy into 5"))
 {
-  i_buffer_copy (data, 5, i_callback_buffer_copy5);
+  i_buffer_copy (data, 5, action_buffer_copy5);
 }
 
 DEFINE_ACTION (buffer_cut1,
@@ -1607,7 +1603,7 @@ DEFINE_ACTION (buffer_cut1,
                _("Cut into 1"),
                _("Cut into 1"))
 {
-  i_buffer_cut (data, 1, i_callback_buffer_cut1);
+  i_buffer_cut (data, 1, action_buffer_cut1);
 }
 
 DEFINE_ACTION (buffer_cut2,
@@ -1617,7 +1613,7 @@ DEFINE_ACTION (buffer_cut2,
                _("Cut into 2"),
                _("Cut into 2"))
 {
-  i_buffer_cut (data, 2, i_callback_buffer_cut2);
+  i_buffer_cut (data, 2, action_buffer_cut2);
 }
 
 DEFINE_ACTION (buffer_cut3,
@@ -1627,7 +1623,7 @@ DEFINE_ACTION (buffer_cut3,
                _("Cut into 3"),
                _("Cut into 3"))
 {
-  i_buffer_cut (data, 3, i_callback_buffer_cut3);
+  i_buffer_cut (data, 3, action_buffer_cut3);
 }
 
 DEFINE_ACTION (buffer_cut4,
@@ -1637,7 +1633,7 @@ DEFINE_ACTION (buffer_cut4,
                _("Cut into 4"),
                _("Cut into 4"))
 {
-  i_buffer_cut (data, 4, i_callback_buffer_cut4);
+  i_buffer_cut (data, 4, action_buffer_cut4);
 }
 
 DEFINE_ACTION (buffer_cut5,
@@ -1647,7 +1643,7 @@ DEFINE_ACTION (buffer_cut5,
                _("Cut into 5"),
                _("Cut into 5"))
 {
-  i_buffer_cut (data, 5, i_callback_buffer_cut5);
+  i_buffer_cut (data, 5, action_buffer_cut5);
 }
 
 DEFINE_ACTION (buffer_paste1,
@@ -1657,7 +1653,7 @@ DEFINE_ACTION (buffer_paste1,
                _("Paste from 1"),
                _("Paste from 1"))
 {
-  i_buffer_paste (data, 1, i_callback_buffer_paste1);
+  i_buffer_paste (data, 1, action_buffer_paste1);
 }
 
 DEFINE_ACTION (buffer_paste2,
@@ -1667,7 +1663,7 @@ DEFINE_ACTION (buffer_paste2,
                _("Paste from 2"),
                _("Paste from 2"))
 {
-  i_buffer_paste (data, 2, i_callback_buffer_paste2);
+  i_buffer_paste (data, 2, action_buffer_paste2);
 }
 
 DEFINE_ACTION (buffer_paste3,
@@ -1677,7 +1673,7 @@ DEFINE_ACTION (buffer_paste3,
                _("Paste from 3"),
                _("Paste from 3"))
 {
-  i_buffer_paste (data, 3, i_callback_buffer_paste3);
+  i_buffer_paste (data, 3, action_buffer_paste3);
 }
 
 DEFINE_ACTION (buffer_paste4,
@@ -1687,7 +1683,7 @@ DEFINE_ACTION (buffer_paste4,
                _("Paste from 4"),
                _("Paste from 4"))
 {
-  i_buffer_paste (data, 4, i_callback_buffer_paste4);
+  i_buffer_paste (data, 4, action_buffer_paste4);
 }
 
 DEFINE_ACTION (buffer_paste5,
@@ -1697,7 +1693,7 @@ DEFINE_ACTION (buffer_paste5,
                _("Paste from 5"),
                _("Paste from 5"))
 {
-  i_buffer_paste (data, 5, i_callback_buffer_paste5);
+  i_buffer_paste (data, 5, action_buffer_paste5);
 }
 
 /*! \section add-menu Add Menu Callback Functions */
@@ -1718,8 +1714,7 @@ DEFINE_ACTION (add_component,
   i_set_state(w_current, COMPMODE);
   gschem_dockable_present (w_current->compselect_dockable);
 
-  i_update_middle_button(w_current,
-                         i_callback_add_component, _("Component"));
+  i_update_middle_button (w_current, action_add_component, _("Component"));
 
   i_set_state(w_current, SELECT);
 }
@@ -1737,8 +1732,7 @@ DEFINE_ACTION (add_attribute,
 
   attrib_edit_dialog(w_current, NULL,
                      g_action_get_position (TRUE, NULL, NULL) ? FROM_HOTKEY : FROM_MENU);
-  i_update_middle_button(w_current, i_callback_add_attribute,
-                         _("Attribute"));
+  i_update_middle_button (w_current, action_add_attribute, _("Attribute"));
 
   i_set_state(w_current, SELECT);
 }
@@ -1758,7 +1752,7 @@ DEFINE_ACTION (add_net,
   o_redraw_cleanstates(w_current);
 
   i_set_state(w_current, NETMODE);
-  i_update_middle_button(w_current, i_callback_add_net, _("Net"));
+  i_update_middle_button (w_current, action_add_net, _("Net"));
 
   if (g_action_get_position (TRUE, &wx, &wy)) {
     o_net_reset(w_current);
@@ -1782,7 +1776,7 @@ DEFINE_ACTION (add_bus,
   o_invalidate_rubber (w_current);
 
   i_set_state(w_current, BUSMODE);
-  i_update_middle_button(w_current, i_callback_add_bus, _("Bus"));
+  i_update_middle_button (w_current, action_add_bus, _("Bus"));
 
   if (g_action_get_position (TRUE, &wx, &wy)) {
     o_bus_start(w_current, wx, wy);
@@ -1805,7 +1799,7 @@ DEFINE_ACTION (add_text,
 
   i_action_stop (w_current);
   i_set_state(w_current, SELECT);
-  i_update_middle_button(w_current, i_callback_add_text, _("Text"));
+  i_update_middle_button (w_current, action_add_text, _("Text"));
 
   text_input_dialog(w_current);
 }
@@ -1826,7 +1820,7 @@ DEFINE_ACTION (add_line,
   o_invalidate_rubber (w_current);
 
   i_set_state(w_current, LINEMODE);
-  i_update_middle_button(w_current, i_callback_add_line, _("Line"));
+  i_update_middle_button (w_current, action_add_line, _("Line"));
 
   if (g_action_get_position (TRUE, &wx, &wy)) {
     o_line_start(w_current, wx, wy);
@@ -1848,7 +1842,7 @@ DEFINE_ACTION (add_path,
   o_invalidate_rubber (w_current);
 
   i_set_state (w_current, PATHMODE);
-  i_update_middle_button (w_current, i_callback_add_path, _("Path"));
+  i_update_middle_button (w_current, action_add_path, _("Path"));
 
   /* Don't start path here since setting of its first point and
    * control point requires the left button click and release */
@@ -1870,7 +1864,7 @@ DEFINE_ACTION (add_box,
   o_invalidate_rubber (w_current);
 
   i_set_state(w_current, BOXMODE);
-  i_update_middle_button(w_current, i_callback_add_box, _("Box"));
+  i_update_middle_button (w_current, action_add_box, _("Box"));
 
   if (g_action_get_position (TRUE, &wx, &wy)) {
     o_box_start(w_current, wx, wy);
@@ -1912,7 +1906,7 @@ DEFINE_ACTION (add_circle,
   o_invalidate_rubber (w_current);
 
   i_set_state(w_current, CIRCLEMODE);
-  i_update_middle_button(w_current, i_callback_add_circle, _("Circle"));
+  i_update_middle_button (w_current, action_add_circle, _("Circle"));
 
   if (g_action_get_position (TRUE, &wx, &wy)) {
     o_circle_start(w_current, wx, wy);
@@ -1935,7 +1929,7 @@ DEFINE_ACTION (add_arc,
   o_invalidate_rubber (w_current);
 
   i_set_state(w_current, ARCMODE);
-  i_update_middle_button(w_current, i_callback_add_arc, _("Arc"));
+  i_update_middle_button (w_current, action_add_arc, _("Arc"));
 
   if (g_action_get_position (TRUE, &wx, &wy)) {
     o_arc_start(w_current, wx, wy);
@@ -1958,7 +1952,7 @@ DEFINE_ACTION (add_pin,
   o_invalidate_rubber (w_current);
 
   i_set_state (w_current, PINMODE);
-  i_update_middle_button(w_current, i_callback_add_pin, _("Pin"));
+  i_update_middle_button (w_current, action_add_pin, _("Pin"));
 
   if (g_action_get_position (TRUE, &wx, &wy)) {
     o_pin_start(w_current, wx, wy);
@@ -2206,8 +2200,7 @@ DEFINE_ACTION (attributes_attach,
 
   /* do we want to update the shortcut outside of the ifs? */
   /* probably, if this fails the user may want to try again */
-  i_update_middle_button(w_current, i_callback_attributes_attach,
-                         _("Attach"));
+  i_update_middle_button (w_current, action_attributes_attach, _("Attach"));
 
   /* skip over head */
   s_current = geda_list_get_glist( gschem_toplevel_get_toplevel (w_current)->page_current->selection_list );
@@ -2262,8 +2255,7 @@ DEFINE_ACTION (attributes_detach,
   }
 
   /* same note as above on i_update_middle_button */
-  i_update_middle_button(w_current, i_callback_attributes_detach,
-                         _("Detach"));
+  i_update_middle_button (w_current, action_attributes_detach, _("Detach"));
 
   s_current = geda_list_get_glist( gschem_toplevel_get_toplevel (w_current)->page_current->selection_list );
   while (s_current != NULL) {
@@ -2306,8 +2298,7 @@ DEFINE_ACTION (attributes_show_name,
     return;
   }
 
-  i_update_middle_button(w_current, i_callback_attributes_show_name,
-                         _("ShowN"));
+  i_update_middle_button (w_current, action_attributes_show_name, _("ShowN"));
 
   if (o_select_selected (w_current)) {
     SELECTION *selection = toplevel->page_current->selection_list;
@@ -2343,8 +2334,7 @@ DEFINE_ACTION (attributes_show_value,
     return;
   }
 
-  i_update_middle_button(w_current, i_callback_attributes_show_value,
-                         _("ShowV"));
+  i_update_middle_button (w_current, action_attributes_show_value, _("ShowV"));
 
   if (o_select_selected (w_current)) {
     SELECTION *selection = toplevel->page_current->selection_list;
@@ -2380,8 +2370,7 @@ DEFINE_ACTION (attributes_show_both,
     return;
   }
 
-  i_update_middle_button(w_current, i_callback_attributes_show_both,
-                         _("ShowB"));
+  i_update_middle_button (w_current, action_attributes_show_both, _("ShowB"));
 
   if (o_select_selected (w_current)) {
     SELECTION *selection = toplevel->page_current->selection_list;
@@ -2417,9 +2406,8 @@ DEFINE_ACTION (attributes_visibility_toggle,
     return;
   }
 
-  i_update_middle_button(w_current,
-                         i_callback_attributes_visibility_toggle,
-                         _("VisToggle"));
+  i_update_middle_button (w_current, action_attributes_visibility_toggle,
+                          _("VisToggle"));
 
   if (o_select_selected (w_current)) {
     SELECTION *selection = toplevel->page_current->selection_list;
