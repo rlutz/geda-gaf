@@ -33,8 +33,8 @@
 #define DELIMITERS ", "
 
 /* every i_callback functions have the same footprint */
-#define DEFINE_I_CALLBACK(name)				\
-	void i_callback_ ## name(gpointer data)
+#define DEFINE_ACTION(c_id, id, icon, name, label, menu_label) \
+	void i_callback_ ## c_id (gpointer data)
 
 /* right now, all callbacks except for the ones on the File menu have
  * the middle button shortcut. Let me (Ales) know if we should also
@@ -42,7 +42,12 @@
 
 /*! \section file-menu File Menu Callback Functions */
 
-DEFINE_I_CALLBACK(file_new)
+DEFINE_ACTION (file_new,
+               "file-new",
+               "gtk-new",
+               _("New File"),
+               _(""),
+               _("_New"))
 {
   /*! \todo Perhaps this should be renamed to page_new... */
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
@@ -58,7 +63,12 @@ DEFINE_I_CALLBACK(file_new)
   s_log_message (_("New page created [%s]\n"), page->page_filename);
 }
 
-DEFINE_I_CALLBACK(file_new_window)
+DEFINE_ACTION (file_new_window,
+               "file-new-window",
+               "window-new",
+               _("New Window"),
+               _(""),
+               _("New Window"))
 {
   GschemToplevel *w_current = NULL;
   PAGE *page = NULL;
@@ -74,7 +84,12 @@ DEFINE_I_CALLBACK(file_new_window)
   s_log_message (_("New Window created [%s]\n"), page->page_filename);
 }
 
-DEFINE_I_CALLBACK(file_open)
+DEFINE_ACTION (file_open,
+               "file-open",
+               "gtk-open",
+               _("Open File"),
+               _(""),
+               _("_Open..."))
 {
   /*! \todo Perhaps this should be renamed to page_open... */
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
@@ -84,7 +99,12 @@ DEFINE_I_CALLBACK(file_open)
   x_fileselect_open (w_current);
 }
 
-DEFINE_I_CALLBACK(file_script)
+DEFINE_ACTION (file_script,
+               "file-script",
+               "gtk-execute",
+               _("Run Script"),
+               _(""),
+               _("Execute Script..."))
 {
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
 
@@ -92,7 +112,12 @@ DEFINE_I_CALLBACK(file_script)
   setup_script_selector(w_current);
 }
 
-DEFINE_I_CALLBACK(file_save)
+DEFINE_ACTION (file_save,
+               "file-save",
+               "gtk-save",
+               _("Save"),
+               _(""),
+               _("_Save"))
 {
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
   PAGE *page;
@@ -119,7 +144,12 @@ DEFINE_I_CALLBACK(file_save)
   g_free (untitled_name);
 }
 
-DEFINE_I_CALLBACK(file_save_all)
+DEFINE_ACTION (file_save_all,
+               "file-save-all",
+               "gtk-save",
+               _("Save All"),
+               _(""),
+               _("Save All"))
 {
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
 
@@ -135,7 +165,12 @@ DEFINE_I_CALLBACK(file_save_all)
   i_update_menus(w_current);
 }
 
-DEFINE_I_CALLBACK(file_save_as)
+DEFINE_ACTION (file_save_as,
+               "file-save-as",
+               "gtk-save-as",
+               _("Save As"),
+               _(""),
+               _("Save _As..."))
 {
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
 
@@ -143,13 +178,23 @@ DEFINE_I_CALLBACK(file_save_as)
   x_fileselect_save (w_current);
 }
 
-DEFINE_I_CALLBACK(file_print)
+DEFINE_ACTION (file_print,
+               "file-print",
+               "gtk-print",
+               _("Print"),
+               _(""),
+               _("_Print..."))
 {
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
   x_print (w_current);
 }
 
-DEFINE_I_CALLBACK(file_write_png)
+DEFINE_ACTION (file_write_png,
+               "file-image",
+               NULL,
+               _("Export Image"),
+               _(""),
+               _("Write _image..."))
 {
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
 
@@ -160,7 +205,12 @@ DEFINE_I_CALLBACK(file_write_png)
 
 /*! \brief Close a window. */
 
-DEFINE_I_CALLBACK(file_close)
+DEFINE_ACTION (file_close,
+               "file-close-window",
+               "gtk-close",
+               _("Close Window"),
+               _(""),
+               _("_Close Window"))
 {
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
 
@@ -170,7 +220,12 @@ DEFINE_I_CALLBACK(file_close)
   x_window_close(w_current);
 }
 
-DEFINE_I_CALLBACK(file_quit)
+DEFINE_ACTION (file_quit,
+               "file-quit",
+               "gtk-quit",
+               _("Quit"),
+               _(""),
+               _("_Quit"))
 {
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
 
@@ -180,7 +235,12 @@ DEFINE_I_CALLBACK(file_quit)
 
 /*! \section edit-menu Edit Menu Callback Functions */
 
-DEFINE_I_CALLBACK(edit_undo)
+DEFINE_ACTION (edit_undo,
+               "edit-undo",
+               "gtk-undo",
+               _("Undo"),
+               _(""),
+               _("_Undo"))
 {
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
 
@@ -207,7 +267,12 @@ DEFINE_I_CALLBACK(edit_undo)
   }
 }
 
-DEFINE_I_CALLBACK(edit_redo)
+DEFINE_ACTION (edit_redo,
+               "edit-redo",
+               "gtk-redo",
+               _("Redo"),
+               _(""),
+               _("_Redo"))
 {
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
   g_return_if_fail (w_current != NULL);
@@ -222,7 +287,12 @@ DEFINE_I_CALLBACK(edit_redo)
   }
 }
 
-DEFINE_I_CALLBACK(edit_select)
+DEFINE_ACTION (edit_select,
+               "edit-select",
+               "select",
+               _("Select Mode"),
+               _("Select"),
+               _("Select Mode"))
 {
   /* Select also does not update the middle button shortcut. */
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
@@ -235,7 +305,12 @@ DEFINE_I_CALLBACK(edit_select)
 
 /*! \brief Select all objects on page. */
 
-DEFINE_I_CALLBACK (edit_select_all)
+DEFINE_ACTION (edit_select_all,
+               "edit-select-all",
+               "gtk-select-all",
+               _("Select All"),
+               _(""),
+               _("Select All"))
 {
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
   o_redraw_cleanstates (w_current);
@@ -249,7 +324,12 @@ DEFINE_I_CALLBACK (edit_select_all)
 
 /*! \brief Deselect all objects on page. */
 
-DEFINE_I_CALLBACK (edit_deselect)
+DEFINE_ACTION (edit_deselect,
+               "edit-deselect",
+               "deselect",
+               _("Deselect"),
+               _(""),
+               _("Deselect"))
 {
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
   o_redraw_cleanstates (w_current);
@@ -261,7 +341,12 @@ DEFINE_I_CALLBACK (edit_deselect)
   i_update_menus (w_current);
 }
 
-DEFINE_I_CALLBACK(edit_copy)
+DEFINE_ACTION (edit_copy,
+               "edit-copy",
+               "clone",
+               _("Copy Mode"),
+               _("Copy"),
+               _("Copy Mode"))
 {
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
   gint wx, wy;
@@ -281,7 +366,12 @@ DEFINE_I_CALLBACK(edit_copy)
   }
 }
 
-DEFINE_I_CALLBACK(edit_mcopy)
+DEFINE_ACTION (edit_mcopy,
+               "edit-mcopy",
+               "multi-clone",
+               _("Multiple Copy Mode"),
+               _(""),
+               _("Multiple Copy Mode"))
 {
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
   gint wx, wy;
@@ -301,7 +391,12 @@ DEFINE_I_CALLBACK(edit_mcopy)
   }
 }
 
-DEFINE_I_CALLBACK(edit_move)
+DEFINE_ACTION (edit_move,
+               "edit-move",
+               NULL,
+               _("Move Mode"),
+               _("Move"),
+               _("Move Mode"))
 {
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
   gint wx, wy;
@@ -321,7 +416,12 @@ DEFINE_I_CALLBACK(edit_move)
   }
 }
 
-DEFINE_I_CALLBACK(edit_delete)
+DEFINE_ACTION (edit_delete,
+               "edit-delete",
+               "gtk-delete",
+               _("Delete"),
+               _("Delete"),
+               _("_Delete"))
 {
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
 
@@ -340,7 +440,12 @@ DEFINE_I_CALLBACK(edit_delete)
   }
 }
 
-DEFINE_I_CALLBACK(edit_edit)
+DEFINE_ACTION (edit_edit,
+               "edit-edit",
+               NULL,
+               _("Edit..."),
+               _("Edit..."),
+               _("Edit..."))
 {
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
 
@@ -350,7 +455,12 @@ DEFINE_I_CALLBACK(edit_edit)
   o_edit(w_current, geda_list_get_glist( gschem_toplevel_get_toplevel (w_current)->page_current->selection_list ) );
 }
 
-DEFINE_I_CALLBACK(edit_pin_type)
+DEFINE_ACTION (edit_pin_type,
+               "edit-pin-type",
+               NULL,
+               _("Edit Pin Type"),
+               _("Edit Pin Type..."),
+               _("Pin Type..."))
 {
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
 
@@ -361,7 +471,12 @@ DEFINE_I_CALLBACK(edit_pin_type)
   gschem_dockable_present (w_current->object_properties_dockable);
 }
 
-DEFINE_I_CALLBACK(edit_text)
+DEFINE_ACTION (edit_text,
+               "edit-text",
+               "gtk-edit",
+               _("Edit Text"),
+               _(""),
+               _("Edit Text..."))
 {
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
 
@@ -372,7 +487,12 @@ DEFINE_I_CALLBACK(edit_text)
   gschem_dockable_present (w_current->text_properties_dockable);
 }
 
-DEFINE_I_CALLBACK(edit_slot)
+DEFINE_ACTION (edit_slot,
+               "edit-slot",
+               NULL,
+               _("Choose Slot"),
+               _(""),
+               _("Slot..."))
 {
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
   OBJECT *object;
@@ -387,7 +507,12 @@ DEFINE_I_CALLBACK(edit_slot)
   }
 }
 
-DEFINE_I_CALLBACK(edit_color)
+DEFINE_ACTION (edit_color,
+               "edit-color",
+               "gtk-select-color",
+               _("Edit Color"),
+               _(""),
+               _("Color..."))
 {
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
 
@@ -401,7 +526,12 @@ DEFINE_I_CALLBACK(edit_color)
 
 /*! \brief Rotate all objects in the selection list by 90 degrees. */
 
-DEFINE_I_CALLBACK(edit_rotate_90)
+DEFINE_ACTION (edit_rotate_90,
+               "edit-rotate-90",
+               "object-rotate-left",
+               _("Rotate Mode"),
+               _(""),
+               _("Rotate 90 Mode"))
 {
   gint wx, wy;
   GList *object_list;
@@ -444,7 +574,12 @@ DEFINE_I_CALLBACK(edit_rotate_90)
   }
 }
 
-DEFINE_I_CALLBACK(edit_mirror)
+DEFINE_ACTION (edit_mirror,
+               "edit-mirror",
+               "object-flip-horizontal",
+               _("Mirror Mode"),
+               _(""),
+               _("Mirror Mode"))
 {
   gint wx, wy;
   GList *object_list;
@@ -488,7 +623,12 @@ DEFINE_I_CALLBACK(edit_mirror)
 
 /*! \brief Lock all objects in selection list. */
 
-DEFINE_I_CALLBACK(edit_lock)
+DEFINE_ACTION (edit_lock,
+               "edit-lock",
+               NULL,
+               _("Lock"),
+               _(""),
+               _("Lock"))
 {
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
 
@@ -503,7 +643,12 @@ DEFINE_I_CALLBACK(edit_lock)
 
 /*! \brief Unlock all objects in selection list. */
 
-DEFINE_I_CALLBACK(edit_unlock)
+DEFINE_ACTION (edit_unlock,
+               "edit-unlock",
+               NULL,
+               _("Unlock"),
+               _(""),
+               _("Unlock"))
 {
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
 
@@ -515,7 +660,12 @@ DEFINE_I_CALLBACK(edit_unlock)
   }
 }
 
-DEFINE_I_CALLBACK(edit_translate)
+DEFINE_ACTION (edit_translate,
+               "edit-translate",
+               NULL,
+               _("Translate Symbol"),
+               _(""),
+               _("Symbol Translate..."))
 {
   SNAP_STATE snap_mode;
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
@@ -547,7 +697,12 @@ DEFINE_I_CALLBACK(edit_translate)
   gtk_widget_grab_focus (gschem_translate_widget_get_entry (GSCHEM_TRANSLATE_WIDGET (w_current->translate_widget)));
 }
 
-DEFINE_I_CALLBACK(edit_invoke_macro)
+DEFINE_ACTION (edit_invoke_macro,
+               "edit-invoke-macro",
+               NULL,
+               _("Invoke Macro"),
+               _(""),
+               _("Invoke Macro"))
 {
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
 
@@ -559,7 +714,12 @@ DEFINE_I_CALLBACK(edit_invoke_macro)
 
 /*! \brief Embed all objects in selection list. */
 
-DEFINE_I_CALLBACK(edit_embed)
+DEFINE_ACTION (edit_embed,
+               "edit-embed",
+               NULL,
+               _("Embed Component/Picture"),
+               _(""),
+               _("Embed Component/Picture"))
 {
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
   OBJECT *o_current;
@@ -593,7 +753,12 @@ DEFINE_I_CALLBACK(edit_embed)
 
 /*! \brief Unembed all objects in selection list. */
 
-DEFINE_I_CALLBACK(edit_unembed)
+DEFINE_ACTION (edit_unembed,
+               "edit-unembed",
+               NULL,
+               _("Unembed Component/Picture"),
+               _(""),
+               _("Unembed Component/Picture"))
 {
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
   OBJECT *o_current;
@@ -627,7 +792,12 @@ DEFINE_I_CALLBACK(edit_unembed)
 
 /*! \brief Update components. */
 
-DEFINE_I_CALLBACK(edit_update)
+DEFINE_ACTION (edit_update,
+               "edit-update",
+               "gtk-refresh",
+               _("Update Component"),
+               _(""),
+               _("Update Component"))
 {
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
   TOPLEVEL *toplevel = gschem_toplevel_get_toplevel (w_current);
@@ -665,7 +835,12 @@ DEFINE_I_CALLBACK(edit_update)
   }
 }
 
-DEFINE_I_CALLBACK(edit_show_hidden)
+DEFINE_ACTION (edit_show_hidden,
+               "edit-show-hidden",
+               NULL,
+               _("Show/Hide Invisible Text"),
+               _(""),
+               _("Show/Hide Inv Text"))
 {
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
 
@@ -679,7 +854,12 @@ DEFINE_I_CALLBACK(edit_show_hidden)
                       s_page_objects (gschem_toplevel_get_toplevel (w_current)->page_current));
 }
 
-DEFINE_I_CALLBACK(edit_find)
+DEFINE_ACTION (edit_find,
+               "edit-find-text",
+               "gtk-find",
+               _("Find Specific Text"),
+               _(""),
+               _("_Find Specific Text..."))
 {
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
 
@@ -693,7 +873,12 @@ DEFINE_I_CALLBACK(edit_find)
   find_text_dialog(w_current);
 }
 
-DEFINE_I_CALLBACK(edit_find_patch)
+DEFINE_ACTION (edit_find_patch,
+               "edit-find-patch",
+               "gtk-find",
+               _("Import Patch And Find Mismatches"),
+               _(""),
+               _("_Import patch..."))
 {
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
 
@@ -707,7 +892,12 @@ DEFINE_I_CALLBACK(edit_find_patch)
   find_patch_dialog(w_current);
 }
 
-DEFINE_I_CALLBACK(edit_hide_text)
+DEFINE_ACTION (edit_hide_text,
+               "edit-hide-text",
+               NULL,
+               _("Hide Specific Text"),
+               _(""),
+               _("_Hide Specific Text..."))
 {
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
 
@@ -721,7 +911,12 @@ DEFINE_I_CALLBACK(edit_hide_text)
   hide_text_dialog(w_current);
 }
 
-DEFINE_I_CALLBACK(edit_show_text)
+DEFINE_ACTION (edit_show_text,
+               "edit-show-text",
+               NULL,
+               _("Show Specific Text"),
+               _(""),
+               _("_Show Specific Text..."))
 {
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
 
@@ -735,7 +930,12 @@ DEFINE_I_CALLBACK(edit_show_text)
   show_text_dialog(w_current);
 }
 
-DEFINE_I_CALLBACK(edit_autonumber_text)
+DEFINE_ACTION (edit_autonumber_text,
+               "edit-autonumber",
+               NULL,
+               _("Autonumber Text"),
+               _(""),
+               _("A_utonumber Text..."))
 {
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
 
@@ -749,7 +949,12 @@ DEFINE_I_CALLBACK(edit_autonumber_text)
   autonumber_text_dialog(w_current);
 }
 
-DEFINE_I_CALLBACK(edit_linetype)
+DEFINE_ACTION (edit_linetype,
+               "edit-linetype",
+               NULL,
+               _("Edit Line Width & Type"),
+               _(""),
+               _("Line Width & Type..."))
 {
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
 
@@ -759,7 +964,12 @@ DEFINE_I_CALLBACK(edit_linetype)
   gschem_dockable_present (w_current->object_properties_dockable);
 }
 
-DEFINE_I_CALLBACK(edit_filltype)
+DEFINE_ACTION (edit_filltype,
+               "edit-filltype",
+               NULL,
+               _("Edit Fill Type"),
+               _(""),
+               _("Fill Type..."))
 {
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
 
@@ -773,7 +983,12 @@ DEFINE_I_CALLBACK(edit_filltype)
 
 /*! \brief Toggle visibility of the menu bar. */
 
-DEFINE_I_CALLBACK(view_menubar)
+DEFINE_ACTION (view_menubar,
+               "view-menubar",
+               NULL,
+               _("Menubar"),
+               _(""),
+               _("Menubar"))
 {
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
   g_return_if_fail (w_current != NULL);
@@ -788,7 +1003,12 @@ DEFINE_I_CALLBACK(view_menubar)
 
 /*! \brief Toggle visibility of the toolbar. */
 
-DEFINE_I_CALLBACK(view_toolbar)
+DEFINE_ACTION (view_toolbar,
+               "view-toolbar",
+               NULL,
+               _("Toolbar"),
+               _(""),
+               _("Toolbar"))
 {
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
   g_return_if_fail (w_current != NULL);
@@ -803,7 +1023,12 @@ DEFINE_I_CALLBACK(view_toolbar)
   gtk_widget_set_visible (w, show);
 }
 
-DEFINE_I_CALLBACK(view_redraw)
+DEFINE_ACTION (view_redraw,
+               "view-redraw",
+               "gtk-refresh",
+               _("Redraw"),
+               _(""),
+               _("_Redraw"))
 {
   /* repeat middle shortcut doesn't make sense on redraw,
      just hit right button */
@@ -813,7 +1038,12 @@ DEFINE_I_CALLBACK(view_redraw)
   gschem_page_view_invalidate_all (gschem_toplevel_get_current_page_view (w_current));
 }
 
-DEFINE_I_CALLBACK(view_zoom_full)
+DEFINE_ACTION (view_zoom_full,
+               "view-zoom-full",
+               NULL,
+               _("Zoom Full"),
+               _(""),
+               _("Zoom _Full"))
 {
   /* repeat middle shortcut would get into the way of what user is try to do */
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
@@ -830,7 +1060,12 @@ DEFINE_I_CALLBACK(view_zoom_full)
   }
 }
 
-DEFINE_I_CALLBACK(view_zoom_extents)
+DEFINE_ACTION (view_zoom_extents,
+               "view-zoom-extents",
+               "gtk-zoom-fit",
+               _("Zoom Extents"),
+               _("Zoom Extents"),
+               _("Zoom _Extents"))
 {
   /* repeat middle shortcut would get into the way of what user is try to do */
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
@@ -846,7 +1081,12 @@ DEFINE_I_CALLBACK(view_zoom_extents)
   }
 }
 
-DEFINE_I_CALLBACK(view_zoom_box)
+DEFINE_ACTION (view_zoom_box,
+               "view-zoom-box",
+               NULL,
+               _("Zoom Box"),
+               _("Zoom Box"),
+               _("Zoom _Box"))
 {
   /* repeat middle shortcut would get into the way of what user is try to do */
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
@@ -863,7 +1103,12 @@ DEFINE_I_CALLBACK(view_zoom_box)
   }
 }
 
-DEFINE_I_CALLBACK(view_zoom_in)
+DEFINE_ACTION (view_zoom_in,
+               "view-zoom-in",
+               "gtk-zoom-in",
+               _("Zoom In"),
+               _("Zoom In"),
+               _("Zoom _In"))
 {
   /* repeat middle shortcut would get into the way of what user is try to do */
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
@@ -882,7 +1127,12 @@ DEFINE_I_CALLBACK(view_zoom_in)
   }
 }
 
-DEFINE_I_CALLBACK(view_zoom_out)
+DEFINE_ACTION (view_zoom_out,
+               "view-zoom-out",
+               "gtk-zoom-out",
+               _("Zoom Out"),
+               _("Zoom Out"),
+               _("Zoom _Out"))
 {
   /* repeat middle shortcut would get into the way of what user is try to do */
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
@@ -901,7 +1151,12 @@ DEFINE_I_CALLBACK(view_zoom_out)
   }
 }
 
-DEFINE_I_CALLBACK(view_pan)
+DEFINE_ACTION (view_pan,
+               "view-pan",
+               NULL,
+               _("Pan"),
+               _(""),
+               _("_Pan"))
 {
   gint wx, wy;
 
@@ -929,7 +1184,12 @@ DEFINE_I_CALLBACK(view_pan)
  *
  * The distance can be set with "keyboardpan-gain" scheme callback. */
 
-DEFINE_I_CALLBACK(view_pan_left)
+DEFINE_ACTION (view_pan_left,
+               "view-pan-left",
+               NULL,
+               _("Pan Left"),
+               _(""),
+               _(""))
 {
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
   g_return_if_fail (w_current != NULL);
@@ -944,7 +1204,12 @@ DEFINE_I_CALLBACK(view_pan_left)
  *
  * The distance can be set with "keyboardpan-gain" scheme callback. */
 
-DEFINE_I_CALLBACK(view_pan_right)
+DEFINE_ACTION (view_pan_right,
+               "view-pan-right",
+               NULL,
+               _("Pan Right"),
+               _(""),
+               _(""))
 {
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
   g_return_if_fail (w_current != NULL);
@@ -960,7 +1225,12 @@ DEFINE_I_CALLBACK(view_pan_right)
  *
  * The distance can be set with "keyboardpan-gain" scheme callback. */
 
-DEFINE_I_CALLBACK(view_pan_up)
+DEFINE_ACTION (view_pan_up,
+               "view-pan-up",
+               NULL,
+               _("Pan Up"),
+               _(""),
+               _(""))
 {
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
   g_return_if_fail (w_current != NULL);
@@ -975,7 +1245,12 @@ DEFINE_I_CALLBACK(view_pan_up)
  *
  * The distance can be set with "keyboardpan-gain" scheme callback. */
 
-DEFINE_I_CALLBACK(view_pan_down)
+DEFINE_ACTION (view_pan_down,
+               "view-pan-down",
+               NULL,
+               _("Pan Down"),
+               _(""),
+               _(""))
 {
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
   g_return_if_fail (w_current != NULL);
@@ -987,7 +1262,12 @@ DEFINE_I_CALLBACK(view_pan_down)
   gschem_page_view_pan_mouse (page_view, 0, -w_current->keyboardpan_gain);
 }
 
-DEFINE_I_CALLBACK (view_dark_colors)
+DEFINE_ACTION (view_dark_colors,
+               "view-dark-colors",
+               NULL,
+               _("Dark Color Scheme"),
+               _(""),
+               _("_Dark color scheme"))
 {
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
 
@@ -999,7 +1279,12 @@ DEFINE_I_CALLBACK (view_dark_colors)
   gschem_page_view_invalidate_all (gschem_toplevel_get_current_page_view (w_current));
 }
 
-DEFINE_I_CALLBACK (view_light_colors)
+DEFINE_ACTION (view_light_colors,
+               "view-light-colors",
+               NULL,
+               _("Light Color Scheme"),
+               _(""),
+               _("_Light color scheme"))
 {
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
 
@@ -1011,7 +1296,12 @@ DEFINE_I_CALLBACK (view_light_colors)
   gschem_page_view_invalidate_all (gschem_toplevel_get_current_page_view (w_current));
 }
 
-DEFINE_I_CALLBACK (view_bw_colors)
+DEFINE_ACTION (view_bw_colors,
+               "view-bw-colors",
+               NULL,
+               _("Monochrome Color Scheme"),
+               _(""),
+               _("B_W color scheme"))
 {
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
 
@@ -1025,7 +1315,12 @@ DEFINE_I_CALLBACK (view_bw_colors)
 
 /*! \section page-menu Page Menu Callback Functions */
 
-DEFINE_I_CALLBACK(page_manager)
+DEFINE_ACTION (page_manager,
+               "page-manager",
+               NULL,
+               _("Page Manager"),
+               _(""),
+               _("_Manager..."))
 {
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
 
@@ -1034,7 +1329,12 @@ DEFINE_I_CALLBACK(page_manager)
   x_pagesel_open (w_current);
 }
 
-DEFINE_I_CALLBACK(page_next)
+DEFINE_ACTION (page_next,
+               "page-next",
+               "gtk-go-forward",
+               _("Next Page"),
+               _(""),
+               _("_Next"))
 {
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
   TOPLEVEL *toplevel = gschem_toplevel_get_toplevel (w_current);
@@ -1064,7 +1364,12 @@ DEFINE_I_CALLBACK(page_next)
   x_window_set_current_page (w_current, p_new);
 }
 
-DEFINE_I_CALLBACK(page_prev)
+DEFINE_ACTION (page_prev,
+               "page-prev",
+               "gtk-go-back",
+               _("Previous Page"),
+               _(""),
+               _("_Previous"))
 {
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
   TOPLEVEL *toplevel = gschem_toplevel_get_toplevel (w_current);
@@ -1093,7 +1398,12 @@ DEFINE_I_CALLBACK(page_prev)
   x_window_set_current_page (w_current, p_new);
 }
 
-DEFINE_I_CALLBACK(page_close)
+DEFINE_ACTION (page_close,
+               "page-close",
+               "gtk-close",
+               _("Close Page"),
+               _(""),
+               _("_Close"))
 {
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
   g_return_if_fail (w_current != NULL);
@@ -1112,7 +1422,12 @@ DEFINE_I_CALLBACK(page_close)
   x_window_close_page (w_current, page);
 }
 
-DEFINE_I_CALLBACK(page_revert)
+DEFINE_ACTION (page_revert,
+               "page-revert",
+               "gtk-revert-to-saved",
+               _("Revert Changes"),
+               _(""),
+               _("_Revert"))
 {
   /*! \bug may have memory leak? */
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
@@ -1167,7 +1482,12 @@ DEFINE_I_CALLBACK(page_revert)
   x_window_set_current_page (w_current, page);
 }
 
-DEFINE_I_CALLBACK(page_print)
+DEFINE_ACTION (page_print,
+               "page-print",
+               "gtk-print",
+               _("Print Page"),
+               _(""),
+               _(""))
 {
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
 
@@ -1178,7 +1498,12 @@ DEFINE_I_CALLBACK(page_print)
 
 /*! \brief Copy selection to clipboard, via buffer 0. */
 
-DEFINE_I_CALLBACK(clipboard_copy)
+DEFINE_ACTION (clipboard_copy,
+               "clipboard-copy",
+               "gtk-copy",
+               _("Copy"),
+               _(""),
+               _("_Copy"))
 {
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
 
@@ -1193,7 +1518,12 @@ DEFINE_I_CALLBACK(clipboard_copy)
 
 /*! \brief Cut selection to clipboard, via buffer 0. */
 
-DEFINE_I_CALLBACK(clipboard_cut)
+DEFINE_ACTION (clipboard_cut,
+               "clipboard-cut",
+               "gtk-cut",
+               _("Cut"),
+               _(""),
+               _("Cu_t"))
 {
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
 
@@ -1209,7 +1539,12 @@ DEFINE_I_CALLBACK(clipboard_cut)
 
 /*! \brief Start pasting clipboard contents, via buffer 0. */
 
-DEFINE_I_CALLBACK(clipboard_paste)
+DEFINE_ACTION (clipboard_paste,
+               "clipboard-paste",
+               "gtk-paste",
+               _("Paste"),
+               _(""),
+               _("_Paste"))
 {
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
   int empty;
@@ -1233,84 +1568,164 @@ DEFINE_I_CALLBACK(clipboard_paste)
   }
 }
 
-DEFINE_I_CALLBACK(buffer_copy1)
+DEFINE_ACTION (buffer_copy1,
+               "buffer-copy1",
+               "gtk-copy",
+               _(""),
+               _(""),
+               _("Copy into 1"))
 {
   i_buffer_copy (data, 1, i_callback_buffer_copy1);
 }
 
-DEFINE_I_CALLBACK(buffer_copy2)
+DEFINE_ACTION (buffer_copy2,
+               "buffer-copy2",
+               "gtk-copy",
+               _(""),
+               _(""),
+               _("Copy into 2"))
 {
   i_buffer_copy (data, 2, i_callback_buffer_copy2);
 }
 
-DEFINE_I_CALLBACK(buffer_copy3)
+DEFINE_ACTION (buffer_copy3,
+               "buffer-copy3",
+               "gtk-copy",
+               _(""),
+               _(""),
+               _("Copy into 3"))
 {
   i_buffer_copy (data, 3, i_callback_buffer_copy3);
 }
 
-DEFINE_I_CALLBACK(buffer_copy4)
+DEFINE_ACTION (buffer_copy4,
+               "buffer-copy4",
+               "gtk-copy",
+               _(""),
+               _(""),
+               _("Copy into 4"))
 {
   i_buffer_copy (data, 4, i_callback_buffer_copy4);
 }
 
-DEFINE_I_CALLBACK(buffer_copy5)
+DEFINE_ACTION (buffer_copy5,
+               "buffer-copy5",
+               "gtk-copy",
+               _(""),
+               _(""),
+               _("Copy into 5"))
 {
   i_buffer_copy (data, 5, i_callback_buffer_copy5);
 }
 
-DEFINE_I_CALLBACK(buffer_cut1)
+DEFINE_ACTION (buffer_cut1,
+               "buffer-cut1",
+               "gtk-cut",
+               _(""),
+               _(""),
+               _("Cut into 1"))
 {
   i_buffer_cut (data, 1, i_callback_buffer_cut1);
 }
 
-DEFINE_I_CALLBACK(buffer_cut2)
+DEFINE_ACTION (buffer_cut2,
+               "buffer-cut2",
+               "gtk-cut",
+               _(""),
+               _(""),
+               _("Cut into 2"))
 {
   i_buffer_cut (data, 2, i_callback_buffer_cut2);
 }
 
-DEFINE_I_CALLBACK(buffer_cut3)
+DEFINE_ACTION (buffer_cut3,
+               "buffer-cut3",
+               "gtk-cut",
+               _(""),
+               _(""),
+               _("Cut into 3"))
 {
   i_buffer_cut (data, 3, i_callback_buffer_cut3);
 }
 
-DEFINE_I_CALLBACK(buffer_cut4)
+DEFINE_ACTION (buffer_cut4,
+               "buffer-cut4",
+               "gtk-cut",
+               _(""),
+               _(""),
+               _("Cut into 4"))
 {
   i_buffer_cut (data, 4, i_callback_buffer_cut4);
 }
 
-DEFINE_I_CALLBACK(buffer_cut5)
+DEFINE_ACTION (buffer_cut5,
+               "buffer-cut5",
+               "gtk-cut",
+               _(""),
+               _(""),
+               _("Cut into 5"))
 {
   i_buffer_cut (data, 5, i_callback_buffer_cut5);
 }
 
-DEFINE_I_CALLBACK(buffer_paste1)
+DEFINE_ACTION (buffer_paste1,
+               "buffer-paste1",
+               "gtk-paste",
+               _(""),
+               _(""),
+               _("Paste from 1"))
 {
   i_buffer_paste (data, 1, i_callback_buffer_paste1);
 }
 
-DEFINE_I_CALLBACK(buffer_paste2)
+DEFINE_ACTION (buffer_paste2,
+               "buffer-paste2",
+               "gtk-paste",
+               _(""),
+               _(""),
+               _("Paste from 2"))
 {
   i_buffer_paste (data, 2, i_callback_buffer_paste2);
 }
 
-DEFINE_I_CALLBACK(buffer_paste3)
+DEFINE_ACTION (buffer_paste3,
+               "buffer-paste3",
+               "gtk-paste",
+               _(""),
+               _(""),
+               _("Paste from 3"))
 {
   i_buffer_paste (data, 3, i_callback_buffer_paste3);
 }
 
-DEFINE_I_CALLBACK(buffer_paste4)
+DEFINE_ACTION (buffer_paste4,
+               "buffer-paste4",
+               "gtk-paste",
+               _(""),
+               _(""),
+               _("Paste from 4"))
 {
   i_buffer_paste (data, 4, i_callback_buffer_paste4);
 }
 
-DEFINE_I_CALLBACK(buffer_paste5)
+DEFINE_ACTION (buffer_paste5,
+               "buffer-paste5",
+               "gtk-paste",
+               _(""),
+               _(""),
+               _("Paste from 5"))
 {
   i_buffer_paste (data, 5, i_callback_buffer_paste5);
 }
 
 /*! \section add-menu Add Menu Callback Functions */
 
-DEFINE_I_CALLBACK(add_component)
+DEFINE_ACTION (add_component,
+               "add-component",
+               "insert-symbol",
+               _("Add Component"),
+               _("Add Component"),
+               _("_Component..."))
 {
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
 
@@ -1327,7 +1742,12 @@ DEFINE_I_CALLBACK(add_component)
   i_set_state(w_current, SELECT);
 }
 
-DEFINE_I_CALLBACK(add_attribute)
+DEFINE_ACTION (add_attribute,
+               "add-attribute",
+               "insert-attribute",
+               _("Add Attribute"),
+               _("Add Attribute"),
+               _("_Attribute..."))
 {
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
 
@@ -1341,7 +1761,12 @@ DEFINE_I_CALLBACK(add_attribute)
   i_set_state(w_current, SELECT);
 }
 
-DEFINE_I_CALLBACK(add_net)
+DEFINE_ACTION (add_net,
+               "add-net",
+               "insert-net",
+               _("Add Net"),
+               _("Add Net"),
+               _("_Net"))
 {
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
   gint wx, wy;
@@ -1359,7 +1784,12 @@ DEFINE_I_CALLBACK(add_net)
   }
 }
 
-DEFINE_I_CALLBACK(add_bus)
+DEFINE_ACTION (add_bus,
+               "add-bus",
+               "insert-bus",
+               _("Add Bus"),
+               _("Add Bus"),
+               _("B_us"))
 {
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
   gint wx, wy;
@@ -1377,7 +1807,12 @@ DEFINE_I_CALLBACK(add_bus)
   }
 }
 
-DEFINE_I_CALLBACK(add_text)
+DEFINE_ACTION (add_text,
+               "add-text",
+               "insert-text",
+               _("Add Text"),
+               _("Add Text"),
+               _("_Text..."))
 {
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
 
@@ -1393,7 +1828,12 @@ DEFINE_I_CALLBACK(add_text)
   text_input_dialog(w_current);
 }
 
-DEFINE_I_CALLBACK(add_line)
+DEFINE_ACTION (add_line,
+               "add-line",
+               "insert-line",
+               _("Add Line"),
+               _(""),
+               _("_Line"))
 {
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
   gint wx, wy;
@@ -1411,7 +1851,12 @@ DEFINE_I_CALLBACK(add_line)
   }
 }
 
-DEFINE_I_CALLBACK(add_path)
+DEFINE_ACTION (add_path,
+               "add-path",
+               "insert-path",
+               _("Add Path"),
+               _(""),
+               _("Pat_h"))
 {
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
 
@@ -1427,7 +1872,12 @@ DEFINE_I_CALLBACK(add_path)
    * control point requires the left button click and release */
 }
 
-DEFINE_I_CALLBACK(add_box)
+DEFINE_ACTION (add_box,
+               "add-box",
+               "insert-box",
+               _("Add Box"),
+               _(""),
+               _("_Box"))
 {
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
   gint wx, wy;
@@ -1445,7 +1895,12 @@ DEFINE_I_CALLBACK(add_box)
   }
 }
 
-DEFINE_I_CALLBACK(add_picture)
+DEFINE_ACTION (add_picture,
+               "add-picture",
+               "insert-image",
+               _("Add Picture"),
+               _(""),
+               _("Pictu_re..."))
 {
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
 
@@ -1459,7 +1914,12 @@ DEFINE_I_CALLBACK(add_picture)
   picture_selection_dialog(w_current);
 }
 
-DEFINE_I_CALLBACK(add_circle)
+DEFINE_ACTION (add_circle,
+               "add-circle",
+               "insert-circle",
+               _("Add Circle"),
+               _(""),
+               _("C_ircle"))
 {
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
   gint wx, wy;
@@ -1477,7 +1937,12 @@ DEFINE_I_CALLBACK(add_circle)
   }
 }
 
-DEFINE_I_CALLBACK(add_arc)
+DEFINE_ACTION (add_arc,
+               "add-arc",
+               "insert-arc",
+               _("Add Arc"),
+               _(""),
+               _("A_rc"))
 {
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
   gint wx, wy;
@@ -1495,7 +1960,12 @@ DEFINE_I_CALLBACK(add_arc)
   }
 }
 
-DEFINE_I_CALLBACK(add_pin)
+DEFINE_ACTION (add_pin,
+               "add-pin",
+               "insert-pin",
+               _("Add Pin"),
+               _(""),
+               _("_Pin"))
 {
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
   gint wx, wy;
@@ -1515,7 +1985,12 @@ DEFINE_I_CALLBACK(add_pin)
 
 /*! \section hierarchy-menu Hierarchy Menu Callback Functions */
 
-DEFINE_I_CALLBACK(hierarchy_down_schematic)
+DEFINE_ACTION (hierarchy_down_schematic,
+               "hierarchy-down-schematic",
+               "gtk-go-down",
+               _("Down Schematic"),
+               _("Down Schematic"),
+               _("_Down Schematic"))
 {
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
   char *attrib=NULL;
@@ -1652,7 +2127,12 @@ DEFINE_I_CALLBACK(hierarchy_down_schematic)
   }
 }
 
-DEFINE_I_CALLBACK(hierarchy_down_symbol)
+DEFINE_ACTION (hierarchy_down_symbol,
+               "hierarchy-down-symbol",
+               "gtk-goto-bottom",
+               _("Down Symbol"),
+               _("Down Symbol"),
+               _("Down _Symbol"))
 {
   /*! \bug may cause problems with non-directory symbols */
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
@@ -1690,7 +2170,12 @@ DEFINE_I_CALLBACK(hierarchy_down_symbol)
 
 /*! \brief Return to the parent page in the hierarchy of schematics. */
 
-DEFINE_I_CALLBACK(hierarchy_up)
+DEFINE_ACTION (hierarchy_up,
+               "hierarchy-up",
+               "gtk-go-up",
+               _("Up Hierarchy"),
+               _("Up"),
+               _("_Up"))
 {
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
   PAGE *page = NULL;
@@ -1717,7 +2202,12 @@ DEFINE_I_CALLBACK(hierarchy_up)
 
 /*! \section attributes-menu Attributes Menu Callback Functions */
 
-DEFINE_I_CALLBACK(attributes_attach)
+DEFINE_ACTION (attributes_attach,
+               "attributes-attach",
+               "attribute-attach",
+               _("Attach Attributes"),
+               _(""),
+               _("_Attach"))
 {
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
   OBJECT *first_object;
@@ -1769,7 +2259,12 @@ DEFINE_I_CALLBACK(attributes_attach)
   o_undo_savestate_old(w_current, UNDO_ALL);
 }
 
-DEFINE_I_CALLBACK(attributes_detach)
+DEFINE_ACTION (attributes_detach,
+               "attributes-detach",
+               "attribute-detach",
+               _("Detach Attributes"),
+               _(""),
+               _("_Detach"))
 {
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
   GList *s_current;
@@ -1811,7 +2306,12 @@ DEFINE_I_CALLBACK(attributes_detach)
   o_undo_savestate_old(w_current, UNDO_ALL);
 }
 
-DEFINE_I_CALLBACK(attributes_show_name)
+DEFINE_ACTION (attributes_show_name,
+               "attributes-show-name",
+               "attribute-show-name",
+               _("Show Attribute Name"),
+               _(""),
+               _("Show _Name"))
 {
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
   TOPLEVEL *toplevel = gschem_toplevel_get_toplevel (w_current);
@@ -1843,7 +2343,12 @@ DEFINE_I_CALLBACK(attributes_show_name)
   }
 }
 
-DEFINE_I_CALLBACK(attributes_show_value)
+DEFINE_ACTION (attributes_show_value,
+               "attributes-show-value",
+               "attribute-show-value",
+               _("Show Attribute Value"),
+               _(""),
+               _("Show _Value"))
 {
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
   TOPLEVEL *toplevel = gschem_toplevel_get_toplevel (w_current);
@@ -1875,7 +2380,12 @@ DEFINE_I_CALLBACK(attributes_show_value)
   }
 }
 
-DEFINE_I_CALLBACK(attributes_show_both)
+DEFINE_ACTION (attributes_show_both,
+               "attributes-show-both",
+               "attribute-show-both",
+               _("Show Name & Value"),
+               _(""),
+               _("Show _Both"))
 {
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
   TOPLEVEL *toplevel = gschem_toplevel_get_toplevel (w_current);
@@ -1907,7 +2417,12 @@ DEFINE_I_CALLBACK(attributes_show_both)
   }
 }
 
-DEFINE_I_CALLBACK(attributes_visibility_toggle)
+DEFINE_ACTION (attributes_visibility_toggle,
+               "attributes-visibility-toggle",
+               NULL,
+               _("Toggle Text Visibility"),
+               _(""),
+               _("_Toggle Visibility"))
 {
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
   TOPLEVEL *toplevel = gschem_toplevel_get_toplevel (w_current);
@@ -1942,7 +2457,12 @@ DEFINE_I_CALLBACK(attributes_visibility_toggle)
 
 /*! \section options-menu Options Menu Callback Functions */
 
-DEFINE_I_CALLBACK(options_text_size)
+DEFINE_ACTION (options_text_size,
+               "options-text-size",
+               NULL,
+               _("Set Default Text Size"),
+               _(""),
+               _("_Text Size..."))
 {
   /* repeat last command doesn't make sense on options either??? (does it?) */
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
@@ -1951,7 +2471,12 @@ DEFINE_I_CALLBACK(options_text_size)
   gschem_dockable_present (w_current->text_properties_dockable);
 }
 
-DEFINE_I_CALLBACK(options_snap_size)
+DEFINE_ACTION (options_snap_size,
+               "options-snap-size",
+               NULL,
+               _("Set Grid Spacing"),
+               _(""),
+               _("Snap Grid S_pacing..."))
 {
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
 
@@ -1961,7 +2486,12 @@ DEFINE_I_CALLBACK(options_snap_size)
 
 /*! \brief Multiply snap grid size by two. */
 
-DEFINE_I_CALLBACK(options_scale_up_snap_size)
+DEFINE_ACTION (options_scale_up_snap_size,
+               "options-scale-up-snap-size",
+               NULL,
+               _("Increase Grid Spacing"),
+               _(""),
+               _("Scale _up Grid Spacing"))
 {
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
 
@@ -1972,7 +2502,12 @@ DEFINE_I_CALLBACK(options_scale_up_snap_size)
 
 /*! \brief Divide snap grid size by two (if it's and even number). */
 
-DEFINE_I_CALLBACK(options_scale_down_snap_size)
+DEFINE_ACTION (options_scale_down_snap_size,
+               "options-scale-down-snap-size",
+               NULL,
+               _("Decrease Grid Spacing"),
+               _(""),
+               _("Scale _down Grid Spacing"))
 {
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
 
@@ -1981,7 +2516,12 @@ DEFINE_I_CALLBACK(options_scale_down_snap_size)
   gschem_options_scale_snap_down (w_current->options);
 }
 
-DEFINE_I_CALLBACK(options_afeedback)
+DEFINE_ACTION (options_afeedback,
+               "options-action-feedback",
+               NULL,
+               _("Toggle Outline Drawing"),
+               _(""),
+               _("Toggle _Outline/Box"))
 {
   /* repeat last command doesn't make sense on options either??? (does it?) */
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
@@ -2000,7 +2540,12 @@ DEFINE_I_CALLBACK(options_afeedback)
     o_place_invalidate_rubber (w_current, FALSE);
 }
 
-DEFINE_I_CALLBACK(options_grid)
+DEFINE_ACTION (options_grid,
+               "options-grid",
+               NULL,
+               _("Switch Grid Style"),
+               _(""),
+               _("Cycle _grid styles"))
 {
   GRID_MODE grid_mode;
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
@@ -2019,7 +2564,12 @@ DEFINE_I_CALLBACK(options_grid)
   }
 }
 
-DEFINE_I_CALLBACK(options_snap)
+DEFINE_ACTION (options_snap,
+               "options-snap",
+               NULL,
+               _("Switch Snap Mode"),
+               _(""),
+               _("Toggle _Snap On/Off"))
 {
   SNAP_STATE snap_mode;
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
@@ -2049,7 +2599,12 @@ DEFINE_I_CALLBACK(options_snap)
   i_update_grid_info (w_current);
 }
 
-DEFINE_I_CALLBACK(options_rubberband)
+DEFINE_ACTION (options_rubberband,
+               "options-rubberband",
+               NULL,
+               _("Toggle Net Rubber Band"),
+               _(""),
+               _("Toggle Net _Rubberband"))
 {
   /* Rubber band is cool !
    * Added on/off option from the pull down menu
@@ -2069,7 +2624,12 @@ DEFINE_I_CALLBACK(options_rubberband)
 
 /*! \brief Toggle magnetic net mode option ON and OFF. */
 
-DEFINE_I_CALLBACK(options_magneticnet)
+DEFINE_ACTION (options_magneticnet,
+               "options-magneticnet",
+               NULL,
+               _("Toggle Magnetic Nets"),
+               _(""),
+               _("Toggle _Magnetic Net"))
 {
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
 
@@ -2087,7 +2647,12 @@ DEFINE_I_CALLBACK(options_magneticnet)
   i_show_state(w_current, NULL);
 }
 
-DEFINE_I_CALLBACK(options_show_log_window)
+DEFINE_ACTION (options_show_log_window,
+               "options-show-log-window",
+               NULL,
+               _("Show Log Window"),
+               _(""),
+               _("Show _Log Window..."))
 {
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
 
@@ -2096,7 +2661,12 @@ DEFINE_I_CALLBACK(options_show_log_window)
   gschem_dockable_present (w_current->log_dockable);
 }
 
-DEFINE_I_CALLBACK(cancel)
+DEFINE_ACTION (cancel,
+               "cancel",
+               NULL,
+               _("Cancel"),
+               _(""),
+               _(""))
 {
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
   g_return_if_fail (w_current != NULL);
@@ -2106,7 +2676,12 @@ DEFINE_I_CALLBACK(cancel)
 
 /*! \section help-menu Help Menu Callback Functions */
 
-DEFINE_I_CALLBACK(help_about)
+DEFINE_ACTION (help_about,
+               "help-about",
+               "gtk-about",
+               _("About gschem"),
+               _(""),
+               _("_About..."))
 {
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
 
@@ -2114,7 +2689,12 @@ DEFINE_I_CALLBACK(help_about)
   about_dialog(w_current);
 }
 
-DEFINE_I_CALLBACK(help_hotkeys)
+DEFINE_ACTION (help_hotkeys,
+               "help-hotkeys",
+               "preferences-desktop-keyboard-shortcuts",
+               _("Show Hotkeys"),
+               _(""),
+               _("_Hotkeys..."))
 {
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
 
@@ -2122,7 +2702,12 @@ DEFINE_I_CALLBACK(help_hotkeys)
   x_dialog_hotkeys(w_current);
 }
 
-DEFINE_I_CALLBACK(options_show_coord_window)
+DEFINE_ACTION (options_show_coord_window,
+               "options-show-coord-window",
+               NULL,
+               _("Show Coordinate Window"),
+               _(""),
+               _("Show _Coord Window..."))
 {
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
 
