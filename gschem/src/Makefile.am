@@ -1,6 +1,8 @@
 bin_PROGRAMS = gschem
 
 BUILT_SOURCES = \
+	actions.decl.x \
+	actions.init.x \
 	g_attrib.x \
 	g_hook.x \
 	g_keys.x \
@@ -138,6 +140,18 @@ snarf_cpp_opts = $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
 	$(gschem_CPPFLAGS) $(AM_CFLAGS) $(gschem_CFLAGS)
 .c.x:
 	CPP="$(CPP)" $(GUILE_SNARF) -o $@ $< $(snarf_cpp_opts)
+
+actions.decl.x: actions.decl.h actions.c Makefile
+	$(AM_V_GEN)$(CPP) -I$(srcdir) -c $< | \
+	  sed -e '/^.*KEEP_LINE /!d' -e 's/^.*KEEP_LINE //' > $@.tmp && \
+	mv $@.tmp $@
+
+actions.init.x: actions.init.c actions.c Makefile
+	$(AM_V_GEN)$(CPP) -I$(srcdir) -c $< | \
+	  sed -e '/^.*KEEP_LINE /!d' -e 's/^.*KEEP_LINE //' > $@.tmp && \
+	mv $@.tmp $@
+
+EXTRA_DIST = actions.c actions.decl.h actions.init.c
 
 localedir = @datadir@/locale
 DEFS = -DLOCALEDIR=\"$(localedir)\" @DEFS@

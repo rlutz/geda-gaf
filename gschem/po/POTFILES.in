@@ -99,6 +99,7 @@ gschem/src/x_rc.c
 gschem/src/x_script.c
 gschem/src/x_stroke.c
 gschem/src/x_window.c
+gschem/src/actions.c
 
 gschem/data/geda-gschem.desktop.in
 

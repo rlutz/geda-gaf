@@ -43,4 +43,6 @@ GschemAction *gschem_action_register (gchar *id,
                                       gchar *menu_label,
                                       void (*activate) (gpointer));
 
+void gschem_action_init (void);
+
 #endif /* GSCHEM_ACTION_H */

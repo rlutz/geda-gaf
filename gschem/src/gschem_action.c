@@ -29,6 +29,7 @@
 #endif
 
 #include "gschem.h"
+#include "actions.decl.x"
 
 
 GschemAction *
@@ -49,4 +50,11 @@ gschem_action_register (gchar *id,
   action->activate = activate;
 
   return action;
+}
+
+
+void
+gschem_action_init (void)
+{
+#include "actions.init.x"
 }

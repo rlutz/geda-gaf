@@ -182,6 +182,7 @@ void main_prog(void *closure, int argc, char *argv[])
   g_init_hook ();
   g_init_attrib ();
   g_init_keys ();
+  gschem_action_init ();
   g_init_builtins ();
   g_init_util ();
 
