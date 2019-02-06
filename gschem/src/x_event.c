@@ -207,7 +207,7 @@ x_event_button_pressed(GschemPageView *page_view, GdkEventButton *event, GschemT
             w_current->event_state == COPYMODE  ||
             w_current->event_state == MCOPYMODE ||
             w_current->event_state == PASTEMODE )) {
-        i_callback_cancel(w_current, 0, NULL);
+        i_cancel (w_current);
       }
       goto end_button_pressed;
     }
@@ -287,7 +287,7 @@ x_event_button_pressed(GschemPageView *page_view, GdkEventButton *event, GschemT
           case (PINMODE)    : o_pin_invalidate_rubber     (w_current); break;
 
           default:
-            i_callback_cancel(w_current, 0, NULL);
+            i_cancel (w_current);
             break;
         }
       }

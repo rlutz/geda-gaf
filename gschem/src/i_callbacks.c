@@ -321,7 +321,7 @@ DEFINE_I_CALLBACK(edit_undo)
    * crash occurs when the page objects are free'd.
    * */
   if (w_current->inside_action) {
-    i_callback_cancel (w_current, 0, NULL);
+    i_cancel (w_current);
   } else {
     GschemPageView *page_view = gschem_toplevel_get_current_page_view (w_current);
     g_return_if_fail (page_view != NULL);
@@ -412,7 +412,7 @@ void i_callback_toolbar_edit_select(GtkWidget* widget, gpointer data)
 
   if (gtk_toggle_tool_button_get_active (GTK_TOGGLE_TOOL_BUTTON (widget))) {
     if (!o_invalidate_rubber (w_current)) {
-      i_callback_cancel(w_current, 0, NULL);
+      i_cancel (w_current);
     }
     i_callback_edit_select(data, 0, NULL);
   }
@@ -2759,55 +2759,9 @@ DEFINE_I_CALLBACK(options_show_log_window)
 DEFINE_I_CALLBACK(cancel)
 {
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
-  TOPLEVEL *toplevel = gschem_toplevel_get_toplevel (w_current);
-
   g_return_if_fail (w_current != NULL);
 
-  if (w_current->event_state == COMPMODE) {
-    /* user hit escape key when placing components */
-
-    /* Undraw any outline of the place list */
-    o_place_invalidate_rubber (w_current, FALSE);
-    w_current->rubber_visible = 0;
-
-    /* De-select the lists in the component selector */
-    x_compselect_deselect (w_current);
-
-    /* Present the component selector again */
-    gschem_dockable_present (w_current->compselect_dockable);
-  }
-
-  if (w_current->inside_action) {
-    /* If we're cancelling from a move action, re-wind the
-     * page contents back to their state before we started */
-    o_move_cancel (w_current);
-  }
-
-    /* If we're cancelling from a grip action, call the specific cancel
-     * routine to reset the visibility of the object being modified */
-  if (w_current->event_state == GRIPS) {
-    o_grips_cancel (w_current);
-  }
-
-  /* Free the place list and its contents. If we were in a move
-   * action, the list (refering to objects on the page) would
-   * already have been cleared in o_move_cancel(), so this is OK. */
-  if (toplevel->page_current != NULL) {
-    s_delete_object_glist(toplevel, toplevel->page_current->place_list);
-    toplevel->page_current->place_list = NULL;
-  }
-
-  /* leave this on for now... but it might have to change */
-  /* this is problematic since we don't know what the right mode */
-  /* (when you cancel inside an action) should be */
-  i_set_state(w_current, SELECT);
-
-  /* clear the key guile command-sequence */
-  g_keys_reset (w_current);
-
-  gschem_page_view_invalidate_all (gschem_toplevel_get_current_page_view (w_current));
-
-  i_action_stop (w_current);
+  i_cancel (w_current);
 }
 
 /*! \section help-menu Help Menu Callback Functions */

@@ -372,7 +372,7 @@ int o_redraw_cleanstates(GschemToplevel *w_current)
       /* touch the select state */
       i_set_state(w_current, SELECT);
 
-      /* from i_callback_cancel() */
+      /* from i_cancel() */
       gschem_page_view_invalidate_all (gschem_toplevel_get_current_page_view (w_current));
       return TRUE;
 

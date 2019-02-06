@@ -547,3 +547,63 @@ i_update_grid_info_callback (GschemPageView *view, GschemToplevel *w_current)
 {
   i_update_grid_info (w_current);
 }
+
+
+/*! \todo Finish function documentation!!!
+ *  \brief
+ *  \par Function Description
+ *
+ */
+void
+i_cancel (GschemToplevel *w_current)
+{
+  TOPLEVEL *toplevel = gschem_toplevel_get_toplevel (w_current);
+
+  g_return_if_fail (w_current != NULL);
+
+  if (w_current->event_state == COMPMODE) {
+    /* user hit escape key when placing components */
+
+    /* Undraw any outline of the place list */
+    o_place_invalidate_rubber (w_current, FALSE);
+    w_current->rubber_visible = 0;
+
+    /* De-select the lists in the component selector */
+    x_compselect_deselect (w_current);
+
+    /* Present the component selector again */
+    gschem_dockable_present (w_current->compselect_dockable);
+  }
+
+  if (w_current->inside_action) {
+    /* If we're cancelling from a move action, re-wind the
+     * page contents back to their state before we started */
+    o_move_cancel (w_current);
+  }
+
+    /* If we're cancelling from a grip action, call the specific cancel
+     * routine to reset the visibility of the object being modified */
+  if (w_current->event_state == GRIPS) {
+    o_grips_cancel (w_current);
+  }
+
+  /* Free the place list and its contents. If we were in a move
+   * action, the list (refering to objects on the page) would
+   * already have been cleared in o_move_cancel(), so this is OK. */
+  if (toplevel->page_current != NULL) {
+    s_delete_object_glist(toplevel, toplevel->page_current->place_list);
+    toplevel->page_current->place_list = NULL;
+  }
+
+  /* leave this on for now... but it might have to change */
+  /* this is problematic since we don't know what the right mode */
+  /* (when you cancel inside an action) should be */
+  i_set_state(w_current, SELECT);
+
+  /* clear the key guile command-sequence */
+  g_keys_reset (w_current);
+
+  gschem_page_view_invalidate_all (gschem_toplevel_get_current_page_view (w_current));
+
+  i_action_stop (w_current);
+}
