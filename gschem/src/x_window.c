@@ -549,6 +549,33 @@ x_window_restore_geometry (GschemToplevel *w_current)
  *  \brief
  *  \par Function Description
  *
+ *  \note
+ *  When invoked (via signal delete_event), closes the current window
+ *  if this is the last window, quit gschem
+ *  used when you click the close button on the window which sends a DELETE
+ *  signal to the app
+ */
+static gboolean
+x_window_close_wm (GtkWidget *widget, GdkEvent *event, gpointer data)
+{
+  GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
+  g_return_val_if_fail ((w_current != NULL), TRUE);
+
+  x_window_close(w_current);
+
+  /* stop further propagation of the delete_event signal for window: */
+  /*   - if user has cancelled the close the window should obvioulsy */
+  /*   not be destroyed */
+  /*   - otherwise window has already been destroyed, nothing more to */
+  /*   do */
+  return TRUE;
+}
+
+
+/*! \todo Finish function documentation!!!
+ *  \brief
+ *  \par Function Description
+ *
  */
 void x_window_create_main(GschemToplevel *w_current)
 {
@@ -589,8 +616,7 @@ void x_window_create_main(GschemToplevel *w_current)
 
   /* this should work fine */
   g_signal_connect (G_OBJECT (w_current->main_window), "delete_event",
-                    G_CALLBACK (i_callback_close_wm),
-                    w_current);
+                    G_CALLBACK (x_window_close_wm), w_current);
 
   /* Containers first */
   main_box = gtk_vbox_new(FALSE, 1);
