@@ -26,6 +26,7 @@ gschem_SOURCES = \
 	gschemhotkeystore.c \
 	gschem_about_dialog.c \
 	gschem_accel_label.c \
+	gschem_action.c \
 	gschem_alignment_combo.c \
 	gschem_arc_dialog.c \
 	gschem_binding.c \

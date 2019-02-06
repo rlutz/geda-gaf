@@ -13,6 +13,7 @@ gschem/src/gschem.c
 gschem/src/gschemhotkeystore.c
 gschem/src/gschem_about_dialog.c
 gschem/src/gschem_accel_label.c
+gschem/src/gschem_action.c
 gschem/src/gschem_alignment_combo.c
 gschem/src/gschem_arc_dialog.c
 gschem/src/gschem_binding.c
