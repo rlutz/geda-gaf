@@ -39,9 +39,7 @@
  */
 /* every i_callback functions have the same footprint */
 #define DEFINE_I_CALLBACK(name)				\
-	void i_callback_ ## name(gpointer data,		\
-			         guint callback_action,	\
-			         GtkWidget *widget)
+	void i_callback_ ## name(gpointer data)
 
 /*! \section callback-intro Callback Functions
  * right now, all callbacks except for the ones on the File menu have
@@ -54,9 +52,6 @@
  *  \brief
  *  \par Function Description
  *
- *  \note
- *  don't use the widget parameter on this function, or do some checking...
- *  since there is a call: widget = NULL, data = 0 (will be w_current hack)
  *  \todo This should be renamed to page_new perhaps...
  */
 DEFINE_I_CALLBACK(file_new)
@@ -78,13 +73,10 @@ DEFINE_I_CALLBACK(file_new)
  *  \brief
  *  \par Function Description
  *
- *  \note
- *  don't use the widget parameter on this function, or do some checking...
- *  since there is a call: widget = NULL, data = 0 (will be w_current hack)
  */
 void i_callback_toolbar_file_new(GtkWidget* widget, gpointer data)
 {
-  i_callback_file_new (data, 0, widget);
+  i_callback_file_new (data);
 }
 
 /*! \todo Finish function documentation!!!
@@ -112,10 +104,6 @@ DEFINE_I_CALLBACK(file_new_window)
  *  \brief
  *  \par Function Description
  *
- *  \note
- *  don't use the widget parameter on this function, or do some
- *  checking...
- *  since there is a call: widget = NULL, data = 0 (will be w_current)
  *  \todo This should be renamed to page_open perhaps...
  */
 DEFINE_I_CALLBACK(file_open)
@@ -131,15 +119,11 @@ DEFINE_I_CALLBACK(file_open)
  *  \brief
  *  \par Function Description
  *
- *  \note
- *  don't use the widget parameter on this function, or do some
- *  checking...
- *  since there is a call: widget = NULL, data = 0 (will be w_current)
  *  \todo This should be renamed to page_open perhaps...
  */
 void i_callback_toolbar_file_open(GtkWidget* widget, gpointer data)
 {
-  i_callback_file_open (data, 0, widget);
+  i_callback_file_open (data);
 }
 
 /*! \todo Finish function documentation!!!
@@ -159,10 +143,6 @@ DEFINE_I_CALLBACK(file_script)
  *  \brief
  *  \par Function Description
  *
- *  \note
- *  don't use the widget parameter on this function, or do some
- *  checking...
- *  since there is a call: widget = NULL, data = 0 (will be w_current)
  */
 DEFINE_I_CALLBACK(file_save)
 {
@@ -195,24 +175,17 @@ DEFINE_I_CALLBACK(file_save)
  *  \brief
  *  \par Function Description
  *
- *  \note
- *  don't use the widget parameter on this function, or do some
- *  checking...
- *  since there is a call: widget = NULL, data = 0 (will be w_current)
  *  \todo This should be renamed to page_open perhaps...
  */
 void i_callback_toolbar_file_save(GtkWidget* widget, gpointer data)
 {
-  i_callback_file_save (data, 0, widget);
+  i_callback_file_save (data);
 }
 
 /*! \todo Finish function documentation!!!
  *  \brief
  *  \par Function Description
  *
- *  \note
- *  don't use the widget parameter on this function, or do some checking...
- *  since there is a call: widget = NULL, data = 0 (will be w_current)
  */
 DEFINE_I_CALLBACK(file_save_all)
 {
@@ -272,10 +245,6 @@ DEFINE_I_CALLBACK(file_write_png)
  *  \brief
  *  \par Function Description
  *
- *  \note
- *  don't use the widget parameter on this function, or do some
- *  checking...
- *  since there is a call: widget = NULL, data = 0 (will be w_current)
  *  this function closes a window
  */
 DEFINE_I_CALLBACK(file_close)
@@ -338,13 +307,10 @@ DEFINE_I_CALLBACK(edit_undo)
  *  \brief
  *  \par Function Description
  *
- *  \note
- *  don't use the widget parameter on this function, or do some checking...
- *  since there is a call: widget = NULL, data = 0 (will be w_current hack)
  */
 void i_callback_toolbar_edit_undo(GtkWidget* widget, gpointer data)
 {
-  i_callback_edit_undo (data, 0, widget);
+  i_callback_edit_undo (data);
 }
 
 /*! \todo Finish function documentation!!!
@@ -371,13 +337,10 @@ DEFINE_I_CALLBACK(edit_redo)
  *  \brief
  *  \par Function Description
  *
- *  \note
- *  don't use the widget parameter on this function, or do some checking...
- *  since there is a call: widget = NULL, data = 0 (will be w_current hack)
  */
 void i_callback_toolbar_edit_redo(GtkWidget* widget, gpointer data)
 {
-  i_callback_edit_redo (data, 0, widget);
+  i_callback_edit_redo (data);
 }
 
 /*! \todo Finish function documentation!!!
@@ -401,9 +364,6 @@ DEFINE_I_CALLBACK(edit_select)
  *  \brief
  *  \par Function Description
  *
- *  \note
- *  don't use the widget parameter on this function, or do some checking...
- * since there is a call: widget = NULL, data = 0 (will be w_current hack)
  */
 void i_callback_toolbar_edit_select(GtkWidget* widget, gpointer data)
 {
@@ -414,7 +374,7 @@ void i_callback_toolbar_edit_select(GtkWidget* widget, gpointer data)
     if (!o_invalidate_rubber (w_current)) {
       i_cancel (w_current);
     }
-    i_callback_edit_select(data, 0, NULL);
+    i_callback_edit_select(data);
   }
 }
 
@@ -1639,9 +1599,8 @@ DEFINE_I_CALLBACK(clipboard_paste)
  *
  */
 void
-i_callback_buffer_copy (gpointer data, guint callback_action,
-                        GtkWidget *widget, int n,
-                        void (*f)(gpointer, guint, GtkWidget *))
+i_callback_buffer_copy (gpointer data, int n,
+                        void (*f)(gpointer))
 {
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
   gchar *msg;
@@ -1666,9 +1625,8 @@ i_callback_buffer_copy (gpointer data, guint callback_action,
  *
  */
 void
-i_callback_buffer_cut (gpointer data, guint callback_action,
-                       GtkWidget *widget, int n,
-                       void (*f)(gpointer, guint, GtkWidget *))
+i_callback_buffer_cut (gpointer data, int n,
+                       void (*f)(gpointer))
 {
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
   gchar *msg;
@@ -1693,9 +1651,8 @@ i_callback_buffer_cut (gpointer data, guint callback_action,
  *
  */
 static void
-i_callback_buffer_paste (gpointer data, guint callback_action,
-                         GtkWidget *widget, int n,
-                         void (*f)(gpointer, guint, GtkWidget *))
+i_callback_buffer_paste (gpointer data, int n,
+                         void (*f)(gpointer))
 {
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
   gchar *msg;
@@ -1725,8 +1682,7 @@ i_callback_buffer_paste (gpointer data, guint callback_action,
 
 #define DEFINE_I_CALLBACK_BUF(op, n) \
   DEFINE_I_CALLBACK(buffer_ ## op ## n) { \
-    i_callback_buffer_ ## op (data, callback_action, widget, n, \
-                              i_callback_buffer_ ## op ## n); \
+    i_callback_buffer_ ## op (data, n, i_callback_buffer_ ## op ## n); \
   }
 
 DEFINE_I_CALLBACK_BUF(copy,1)
@@ -1776,13 +1732,10 @@ DEFINE_I_CALLBACK(add_component)
  *  \brief
  *  \par Function Description
  *
- *  \note
- *  don't use the widget parameter on this function, or do some checking...
- *  since there is a call: widget = NULL, data = 0 (will be w_current hack)
  */
 void i_callback_toolbar_add_component(GtkWidget* widget, gpointer data)
 {
-  i_callback_add_component (data, 0, widget);
+  i_callback_add_component (data);
 }
 
 /*! \todo Finish function documentation!!!
@@ -1831,9 +1784,6 @@ DEFINE_I_CALLBACK(add_net)
  *  \brief
  *  \par Function Description
  *
- *  \note
- *  don't use the widget parameter on this function, or do some checking...
- *  since there is a call: widget = NULL, data = 0 (will be w_current hack)
  */
 void i_callback_toolbar_add_net(GtkWidget* widget, gpointer data)
 {
@@ -1841,7 +1791,7 @@ void i_callback_toolbar_add_net(GtkWidget* widget, gpointer data)
   scm_dynwind_begin (0);
   g_dynwind_window (w_current);
   if (gtk_toggle_tool_button_get_active (GTK_TOGGLE_TOOL_BUTTON (widget))) {
-    i_callback_add_net (w_current, 0, widget);
+    i_callback_add_net (w_current);
   }
   scm_dynwind_end ();
 }
@@ -1873,9 +1823,6 @@ DEFINE_I_CALLBACK(add_bus)
  *  \brief
  *  \par Function Description
  *
- *  \note
- *  don't use the widget parameter on this function, or do some checking...
- *  since there is a call: widget = NULL, data = 0 (will be w_current hack)
  */
 void i_callback_toolbar_add_bus(GtkWidget* widget, gpointer data)
 {
@@ -1883,7 +1830,7 @@ void i_callback_toolbar_add_bus(GtkWidget* widget, gpointer data)
   scm_dynwind_begin (0);
   g_dynwind_window (w_current);
   if (gtk_toggle_tool_button_get_active (GTK_TOGGLE_TOOL_BUTTON (widget))) {
-    i_callback_add_bus (w_current, 0, widget);
+    i_callback_add_bus (w_current);
   }
   scm_dynwind_end ();
 }
@@ -1913,13 +1860,10 @@ DEFINE_I_CALLBACK(add_text)
  *  \brief
  *  \par Function Description
  *
- *  \note
- *  don't use the widget parameter on this function, or do some checking...
- *  since there is a call: widget = NULL, data = 0 (will be w_current hack)
  */
 void i_callback_toolbar_add_text(GtkWidget* widget, gpointer data)
 {
-  i_callback_add_text (data, 0, widget);
+  i_callback_add_text (data);
 }
 
 /*! \todo Finish function documentation!!!
@@ -2751,10 +2695,6 @@ DEFINE_I_CALLBACK(options_show_log_window)
  *  \brief
  *  \par Function Description
  *
- *  \note
- *  HACK: be sure that you don't use the widget parameter in this one,
- *  since it is being called with a null, I suppose we should call it
- *  with the right param.
  */
 DEFINE_I_CALLBACK(cancel)
 {

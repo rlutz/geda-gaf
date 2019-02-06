@@ -242,7 +242,7 @@ x_event_button_pressed(GschemPageView *page_view, GdkEventButton *event, GschemT
 
       case(REPEAT):
       if (w_current->last_callback != NULL) {
-        (*w_current->last_callback)(w_current, 0, NULL);
+        (*w_current->last_callback)(w_current);
       }
       break;
 #ifdef HAVE_LIBSTROKE

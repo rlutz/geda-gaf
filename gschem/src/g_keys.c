@@ -41,7 +41,7 @@
 SCM g_keys_ ## name(SCM rest)				\
 {							\
    GschemToplevel *w_current = g_current_window ();	\
-   i_callback_ ## name(w_current, 0, NULL);                   \
+   i_callback_ ## name(w_current);			\
    return SCM_BOOL_T;				\
 }
 

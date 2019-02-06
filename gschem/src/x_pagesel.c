@@ -216,7 +216,7 @@ static void                                                       \
 pagesel_callback_popup_ ## name (GtkMenuItem *menuitem,           \
                                  gpointer user_data)              \
 {                                                                 \
-  i_callback_ ## action (GSCHEM_DIALOG (user_data)->w_current, 0, NULL); \
+  i_callback_ ## action (GSCHEM_DIALOG (user_data)->w_current);   \
 }
 
 DEFINE_POPUP_CALLBACK (new_page,     file_new)
