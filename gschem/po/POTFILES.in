@@ -50,7 +50,6 @@ gschem/src/gschem_text_properties_dockable.c
 gschem/src/gschem_translate_widget.c
 gschem/src/gschem_toplevel.c
 gschem/src/i_basic.c
-gschem/src/i_callbacks.c
 gschem/src/i_vars.c
 gschem/src/o_arc.c
 gschem/src/o_attrib.c

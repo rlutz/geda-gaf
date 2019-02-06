@@ -31,6 +31,11 @@
 #include "gschem.h"
 #include "actions.decl.x"
 
+#define DEFINE_ACTION(c_id, id, icon, name, label, menu_label) \
+  static void action_callback_ ## c_id (gpointer data)
+#include "actions.c"
+#undef DEFINE_ACTION
+
 
 GschemAction *
 gschem_action_register (gchar *id,

@@ -67,7 +67,6 @@ gschem_SOURCES = \
 	gschem_translate_widget.c \
 	gschem_toplevel.c \
 	i_basic.c \
-	i_callbacks.c \
 	i_vars.c \
 	m_basic.c \
 	o_arc.c \

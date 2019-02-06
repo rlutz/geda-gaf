@@ -6,6 +6,6 @@
                             name,                              \
                             label,                             \
                             menu_label,                        \
-                            i_callback_ ## c_id);
+                            action_callback_ ## c_id);
 #include "actions.c"
 #undef DEFINE_ACTION
