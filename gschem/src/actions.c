@@ -34,8 +34,6 @@ DEFINE_ACTION (file_new,
   /*! \todo Perhaps this should be renamed to page_new... */
   PAGE *page;
 
-  g_return_if_fail (w_current != NULL);
-
   /* create a new page */
   page = x_window_open_page (w_current, NULL);
   g_return_if_fail (page != NULL);
@@ -73,8 +71,6 @@ DEFINE_ACTION (file_open,
                _("_Open..."))
 {
   /*! \todo Perhaps this should be renamed to page_open... */
-  g_return_if_fail (w_current != NULL);
-
   x_fileselect_open (w_current);
 }
 
@@ -85,7 +81,6 @@ DEFINE_ACTION (file_script,
                _("Execute Script..."),
                _("Execute Script..."))
 {
-  g_return_if_fail (w_current != NULL);
   setup_script_selector(w_current);
 }
 
@@ -99,8 +94,6 @@ DEFINE_ACTION (file_save,
   PAGE *page;
   EdaConfig *cfg;
   gchar *untitled_name;
-
-  g_return_if_fail (w_current != NULL);
 
   page = gschem_toplevel_get_toplevel (w_current)->page_current;
 
@@ -127,8 +120,6 @@ DEFINE_ACTION (file_save_all,
                _("Save All"),
                _("Save All"))
 {
-  g_return_if_fail (w_current != NULL);
-
   if (s_page_save_all(gschem_toplevel_get_toplevel (w_current))) {
      i_set_state_msg(w_current, SELECT, _("Failed to Save All"));
   } else {
@@ -146,7 +137,6 @@ DEFINE_ACTION (file_save_as,
                _("Save As..."),
                _("Save _As..."))
 {
-  g_return_if_fail (w_current != NULL);
   x_fileselect_save (w_current);
 }
 
@@ -167,8 +157,6 @@ DEFINE_ACTION (file_write_png,
                _("Write image..."),
                _("Write _image..."))
 {
-  g_return_if_fail (w_current != NULL);
-
   x_image_setup(w_current);
 }
 
@@ -181,8 +169,6 @@ DEFINE_ACTION (file_close,
                _("Close Window"),
                _("_Close Window"))
 {
-  g_return_if_fail (w_current != NULL);
-
   s_log_message(_("Closing Window\n"));
   x_window_close(w_current);
 }
@@ -194,7 +180,6 @@ DEFINE_ACTION (file_quit,
                _("Quit"),
                _("_Quit"))
 {
-  g_return_if_fail (w_current != NULL);
   x_window_close_all(w_current);
 }
 
@@ -237,8 +222,6 @@ DEFINE_ACTION (edit_redo,
                _("Redo"),
                _("_Redo"))
 {
-  g_return_if_fail (w_current != NULL);
-
   GschemPageView *page_view = gschem_toplevel_get_current_page_view (w_current);
   g_return_if_fail (page_view != NULL);
 
@@ -309,8 +292,6 @@ DEFINE_ACTION (edit_copy,
 {
   gint wx, wy;
 
-  g_return_if_fail (w_current != NULL);
-
   i_update_middle_button (w_current, action_edit_copy, _("Copy"));
 
   if (o_select_return_first_object(w_current)) {
@@ -332,8 +313,6 @@ DEFINE_ACTION (edit_mcopy,
                _("Multiple Copy Mode"))
 {
   gint wx, wy;
-
-  g_return_if_fail (w_current != NULL);
 
   i_update_middle_button (w_current, action_edit_mcopy, _("Multiple Copy"));
 
@@ -357,8 +336,6 @@ DEFINE_ACTION (edit_move,
 {
   gint wx, wy;
 
-  g_return_if_fail (w_current != NULL);
-
   i_update_middle_button (w_current, action_edit_move, _("Move"));
 
   if (o_select_return_first_object(w_current)) {
@@ -379,8 +356,6 @@ DEFINE_ACTION (edit_delete,
                _("Delete"),
                _("_Delete"))
 {
-  g_return_if_fail (w_current != NULL);
-
   i_update_middle_button (w_current, action_edit_delete, _("Delete"));
 
   if (o_select_return_first_object(w_current)) {
@@ -401,8 +376,6 @@ DEFINE_ACTION (edit_edit,
                _("Edit..."),
                _("Edit..."))
 {
-  g_return_if_fail (w_current != NULL);
-
   i_update_middle_button (w_current, action_edit_edit, _("Edit"));
   o_edit(w_current, geda_list_get_glist( gschem_toplevel_get_toplevel (w_current)->page_current->selection_list ) );
 }
@@ -414,8 +387,6 @@ DEFINE_ACTION (edit_pin_type,
                _("Edit Pin Type..."),
                _("Pin Type..."))
 {
-  g_return_if_fail (w_current != NULL);
-
   i_update_middle_button (w_current, action_edit_pin_type, _("Edit pin type"));
 
   gschem_dockable_present (w_current->object_properties_dockable);
@@ -428,8 +399,6 @@ DEFINE_ACTION (edit_text,
                _("Edit Text..."),
                _("Edit Text..."))
 {
-  g_return_if_fail (w_current != NULL);
-
   i_update_middle_button (w_current, action_edit_text, _("Edit Text"));
 
   gschem_dockable_present (w_current->text_properties_dockable);
@@ -443,8 +412,6 @@ DEFINE_ACTION (edit_slot,
                _("Slot..."))
 {
   OBJECT *object;
-
-  g_return_if_fail (w_current != NULL);
 
   object = o_select_return_first_object(w_current);
 
@@ -461,8 +428,6 @@ DEFINE_ACTION (edit_color,
                _("Color..."),
                _("Color..."))
 {
-  g_return_if_fail (w_current != NULL);
-
   i_update_middle_button (w_current, action_edit_color, _("Color"));
 
   /* dialogs have been merged */
@@ -482,8 +447,6 @@ DEFINE_ACTION (edit_rotate_90,
   GList *object_list;
   GschemPageView *view = NULL;
   PAGE* page = NULL;
-
-  g_return_if_fail (w_current != NULL);
 
   view = (gschem_toplevel_get_current_page_view (w_current));
   g_return_if_fail (view != NULL);
@@ -528,8 +491,6 @@ DEFINE_ACTION (edit_mirror,
   GschemPageView *view = NULL;
   PAGE* page = NULL;
 
-  g_return_if_fail (w_current != NULL);
-
   view = (gschem_toplevel_get_current_page_view (w_current));
   g_return_if_fail (view != NULL);
 
@@ -569,8 +530,6 @@ DEFINE_ACTION (edit_lock,
                _("Lock"),
                _("Lock"))
 {
-  g_return_if_fail (w_current != NULL);
-
   i_update_middle_button (w_current, action_edit_lock, _("Lock"));
 
   if (o_select_return_first_object(w_current)) {
@@ -587,8 +546,6 @@ DEFINE_ACTION (edit_unlock,
                _("Unlock"),
                _("Unlock"))
 {
-  g_return_if_fail (w_current != NULL);
-
   i_update_middle_button (w_current, action_edit_unlock, _("Unlock"));
   if (o_select_return_first_object(w_current)) {
     o_unlock(w_current);
@@ -603,8 +560,6 @@ DEFINE_ACTION (edit_translate,
                _("Symbol Translate..."))
 {
   SNAP_STATE snap_mode;
-
-  g_return_if_fail (w_current != NULL);
 
   i_update_middle_button (w_current, action_edit_translate, _("Translate"));
 
@@ -637,8 +592,6 @@ DEFINE_ACTION (edit_invoke_macro,
                _("Invoke Macro"),
                _("Invoke Macro"))
 {
-  g_return_if_fail (w_current != NULL);
-
   gtk_widget_show (w_current->macro_widget);
   gtk_widget_grab_focus (gschem_macro_widget_get_entry (GSCHEM_MACRO_WIDGET (w_current->macro_widget)));
 }
@@ -653,8 +606,6 @@ DEFINE_ACTION (edit_embed,
                _("Embed Component/Picture"))
 {
   OBJECT *o_current;
-
-  g_return_if_fail (w_current != NULL);
 
   i_update_middle_button (w_current, action_edit_embed, _("Embed"));
   /* anything selected ? */
@@ -691,8 +642,6 @@ DEFINE_ACTION (edit_unembed,
                _("Unembed Component/Picture"))
 {
   OBJECT *o_current;
-
-  g_return_if_fail (w_current != NULL);
 
   i_update_middle_button (w_current, action_edit_unembed, _("Unembed"));
   /* anything selected ? */
@@ -733,8 +682,6 @@ DEFINE_ACTION (edit_update,
   GList *selected_components = NULL;
   GList *iter;
 
-  g_return_if_fail (w_current != NULL);
-
   i_update_middle_button (w_current, action_edit_update, _("Update"));
   if (o_select_selected(w_current)) {
 
@@ -770,8 +717,6 @@ DEFINE_ACTION (edit_show_hidden,
                _("Show/Hide Inv Text"),
                _("Show/Hide Inv Text"))
 {
-  g_return_if_fail (w_current != NULL);
-
   i_update_middle_button (w_current, action_edit_show_hidden, _("ShowHidden"));
 
   o_edit_show_hidden (w_current,
@@ -785,8 +730,6 @@ DEFINE_ACTION (edit_find,
                _("Find Specific Text..."),
                _("_Find Specific Text..."))
 {
-  g_return_if_fail (w_current != NULL);
-
   /* This is a new addition 3/15 to prevent this from executing
    * inside an action */
   if (w_current->inside_action)
@@ -802,8 +745,6 @@ DEFINE_ACTION (edit_find_patch,
                _("Import patch..."),
                _("_Import patch..."))
 {
-  g_return_if_fail (w_current != NULL);
-
   /* This is a new addition 3/15 to prevent this from executing
    * inside an action */
   if (w_current->inside_action)
@@ -819,8 +760,6 @@ DEFINE_ACTION (edit_hide_text,
                _("Hide Specific Text..."),
                _("_Hide Specific Text..."))
 {
-  g_return_if_fail (w_current != NULL);
-
   /* This is a new addition 3/15 to prevent this from executing
    * inside an action */
   if (w_current->inside_action)
@@ -836,8 +775,6 @@ DEFINE_ACTION (edit_show_text,
                _("Show Specific Text..."),
                _("_Show Specific Text..."))
 {
-  g_return_if_fail (w_current != NULL);
-
   /* This is a new addition 3/15 to prevent this from executing
    * inside an action */
   if (w_current->inside_action)
@@ -853,8 +790,6 @@ DEFINE_ACTION (edit_autonumber_text,
                _("Autonumber Text..."),
                _("A_utonumber Text..."))
 {
-  g_return_if_fail (w_current != NULL);
-
   /* This is a new addition 3/15 to prevent this from executing
    * inside an action */
   if (w_current->inside_action)
@@ -870,8 +805,6 @@ DEFINE_ACTION (edit_linetype,
                _("Line Width & Type..."),
                _("Line Width & Type..."))
 {
-  g_return_if_fail (w_current != NULL);
-
   /* dialogs have been merged */
   gschem_dockable_present (w_current->object_properties_dockable);
 }
@@ -883,8 +816,6 @@ DEFINE_ACTION (edit_filltype,
                _("Fill Type..."),
                _("Fill Type..."))
 {
-  g_return_if_fail (w_current != NULL);
-
   /* dialogs have been merged */
   gschem_dockable_present (w_current->object_properties_dockable);
 }
@@ -900,8 +831,6 @@ DEFINE_ACTION (view_menubar,
                _("Menubar"),
                _("Menubar"))
 {
-  g_return_if_fail (w_current != NULL);
-
   GtkWidget *w = w_current->menubar;
   if (w_current->handleboxes)
     w = gtk_widget_get_parent (w);
@@ -919,8 +848,6 @@ DEFINE_ACTION (view_toolbar,
                _("Toolbar"),
                _("Toolbar"))
 {
-  g_return_if_fail (w_current != NULL);
-
   GtkWidget *w = w_current->toolbar;
   if (w == NULL)
     return;
@@ -940,8 +867,6 @@ DEFINE_ACTION (view_redraw,
 {
   /* repeat middle shortcut doesn't make sense on redraw,
      just hit right button */
-  g_return_if_fail (w_current != NULL);
-
   gschem_page_view_invalidate_all (gschem_toplevel_get_current_page_view (w_current));
 }
 
@@ -953,8 +878,6 @@ DEFINE_ACTION (view_zoom_full,
                _("Zoom _Full"))
 {
   /* repeat middle shortcut would get into the way of what user is try to do */
-  g_return_if_fail (w_current != NULL);
-
   GschemPageView *page_view = gschem_toplevel_get_current_page_view (w_current);
   g_return_if_fail (page_view != NULL);
 
@@ -974,8 +897,6 @@ DEFINE_ACTION (view_zoom_extents,
                _("Zoom _Extents"))
 {
   /* repeat middle shortcut would get into the way of what user is try to do */
-  g_return_if_fail (w_current != NULL);
-
   GschemPageView *page_view = gschem_toplevel_get_current_page_view (w_current);
   g_return_if_fail (page_view != NULL);
 
@@ -996,8 +917,6 @@ DEFINE_ACTION (view_zoom_box,
   /* repeat middle shortcut would get into the way of what user is try to do */
   gint wx, wy;
 
-  g_return_if_fail (w_current != NULL);
-
   o_redraw_cleanstates(w_current);
 
   i_set_state(w_current, ZOOMBOX);
@@ -1015,8 +934,6 @@ DEFINE_ACTION (view_zoom_in,
                _("Zoom _In"))
 {
   /* repeat middle shortcut would get into the way of what user is try to do */
-  g_return_if_fail (w_current != NULL);
-
   GschemPageView *page_view = gschem_toplevel_get_current_page_view (w_current);
   g_return_if_fail (page_view != NULL);
 
@@ -1038,8 +955,6 @@ DEFINE_ACTION (view_zoom_out,
                _("Zoom _Out"))
 {
   /* repeat middle shortcut would get into the way of what user is try to do */
-  g_return_if_fail (w_current != NULL);
-
   GschemPageView *page_view = gschem_toplevel_get_current_page_view (w_current);
   g_return_if_fail (page_view != NULL);
 
@@ -1061,8 +976,6 @@ DEFINE_ACTION (view_pan,
                _("_Pan"))
 {
   gint wx, wy;
-
-  g_return_if_fail (w_current != NULL);
 
   GschemPageView *page_view = gschem_toplevel_get_current_page_view (w_current);
   g_return_if_fail (page_view != NULL);
@@ -1092,8 +1005,6 @@ DEFINE_ACTION (view_pan_left,
                _("Pan Left"),
                _("Pan Left"))
 {
-  g_return_if_fail (w_current != NULL);
-
   GschemPageView *page_view = gschem_toplevel_get_current_page_view (w_current);
   g_return_if_fail (page_view != NULL);
 
@@ -1111,8 +1022,6 @@ DEFINE_ACTION (view_pan_right,
                _("Pan Right"),
                _("Pan Right"))
 {
-  g_return_if_fail (w_current != NULL);
-
   GschemPageView *page_view = gschem_toplevel_get_current_page_view (w_current);
   g_return_if_fail (page_view != NULL);
 
@@ -1131,8 +1040,6 @@ DEFINE_ACTION (view_pan_up,
                _("Pan Up"),
                _("Pan Up"))
 {
-  g_return_if_fail (w_current != NULL);
-
   GschemPageView *page_view = gschem_toplevel_get_current_page_view (w_current);
   g_return_if_fail (page_view != NULL);
 
@@ -1150,8 +1057,6 @@ DEFINE_ACTION (view_pan_down,
                _("Pan Down"),
                _("Pan Down"))
 {
-  g_return_if_fail (w_current != NULL);
-
   GschemPageView *page_view = gschem_toplevel_get_current_page_view (w_current);
   g_return_if_fail (page_view != NULL);
 
@@ -1213,8 +1118,6 @@ DEFINE_ACTION (page_manager,
                _("Page Manager..."),
                _("_Manager..."))
 {
-  g_return_if_fail (w_current != NULL);
-
   x_pagesel_open (w_current);
 }
 
@@ -1229,8 +1132,6 @@ DEFINE_ACTION (page_next,
   PAGE *p_current = toplevel->page_current;
   PAGE *p_new;
   GList *iter;
-
-  g_return_if_fail (w_current != NULL);
 
   iter = g_list_find( geda_list_get_glist( toplevel->pages ), p_current );
   iter = g_list_next( iter );
@@ -1264,8 +1165,6 @@ DEFINE_ACTION (page_prev,
   PAGE *p_new;
   GList *iter;
 
-  g_return_if_fail (w_current != NULL);
-
   iter = g_list_find( geda_list_get_glist( toplevel->pages ), p_current );
   iter = g_list_previous( iter );
 
@@ -1292,8 +1191,6 @@ DEFINE_ACTION (page_close,
                _("Close"),
                _("_Close"))
 {
-  g_return_if_fail (w_current != NULL);
-
   PAGE *page = gschem_toplevel_get_toplevel (w_current)->page_current;
 
   if (page == NULL) {
@@ -1323,8 +1220,6 @@ DEFINE_ACTION (page_revert,
   int up;
   int response;
   GtkWidget* dialog;
-
-  g_return_if_fail (w_current != NULL);
 
   page_current = gschem_toplevel_get_toplevel (w_current)->page_current;
 
@@ -1388,7 +1283,6 @@ DEFINE_ACTION (clipboard_copy,
                _("Copy"),
                _("_Copy"))
 {
-  g_return_if_fail (w_current != NULL);
   if (!o_select_selected (w_current)) return;
 
   i_update_middle_button (w_current, action_clipboard_copy,
@@ -1406,7 +1300,6 @@ DEFINE_ACTION (clipboard_cut,
                _("Cut"),
                _("Cu_t"))
 {
-  g_return_if_fail (w_current != NULL);
   if (!o_select_selected (w_current)) return;
 
   i_update_middle_button (w_current, action_clipboard_cut,
@@ -1431,8 +1324,6 @@ DEFINE_ACTION (clipboard_paste,
    * make pasting when the cursor is outside the screen or pasting via
    * menu work as expected. */
   gint wx = 0, wy = 0;
-
-  g_return_if_fail (w_current != NULL);
 
   i_update_middle_button (w_current, action_clipboard_paste,
                           _("Paste from clipboard"));
@@ -1606,8 +1497,6 @@ DEFINE_ACTION (add_component,
                _("Add Component"),
                _("_Component..."))
 {
-  g_return_if_fail (w_current != NULL);
-
   o_redraw_cleanstates (w_current);
 
   i_set_state(w_current, COMPMODE);
@@ -1625,8 +1514,6 @@ DEFINE_ACTION (add_attribute,
                _("Add Attribute"),
                _("_Attribute..."))
 {
-  g_return_if_fail (w_current != NULL);
-
   attrib_edit_dialog(w_current, NULL,
                      g_action_get_position (TRUE, NULL, NULL) ? FROM_HOTKEY : FROM_MENU);
   i_update_middle_button (w_current, action_add_attribute, _("Attribute"));
@@ -1642,8 +1529,6 @@ DEFINE_ACTION (add_net,
                _("_Net"))
 {
   gint wx, wy;
-
-  g_return_if_fail (w_current != NULL);
 
   o_redraw_cleanstates(w_current);
 
@@ -1665,8 +1550,6 @@ DEFINE_ACTION (add_bus,
 {
   gint wx, wy;
 
-  g_return_if_fail (w_current != NULL);
-
   o_redraw_cleanstates(w_current);
   o_invalidate_rubber (w_current);
 
@@ -1685,8 +1568,6 @@ DEFINE_ACTION (add_text,
                _("Add Text"),
                _("_Text..."))
 {
-  g_return_if_fail (w_current != NULL);
-
   o_redraw_cleanstates(w_current);
   o_invalidate_rubber (w_current);
 
@@ -1705,8 +1586,6 @@ DEFINE_ACTION (add_line,
                _("_Line"))
 {
   gint wx, wy;
-
-  g_return_if_fail (w_current != NULL);
 
   o_redraw_cleanstates(w_current);
   o_invalidate_rubber (w_current);
@@ -1747,8 +1626,6 @@ DEFINE_ACTION (add_box,
 {
   gint wx, wy;
 
-  g_return_if_fail (w_current != NULL);
-
   o_redraw_cleanstates(w_current);
   o_invalidate_rubber (w_current);
 
@@ -1767,8 +1644,6 @@ DEFINE_ACTION (add_picture,
                _("Add Picture..."),
                _("Pictu_re..."))
 {
-  g_return_if_fail (w_current != NULL);
-
   o_redraw_cleanstates(w_current);
   o_invalidate_rubber (w_current);
 
@@ -1785,8 +1660,6 @@ DEFINE_ACTION (add_circle,
                _("C_ircle"))
 {
   gint wx, wy;
-
-  g_return_if_fail (w_current != NULL);
 
   o_redraw_cleanstates(w_current);
   o_invalidate_rubber (w_current);
@@ -1808,8 +1681,6 @@ DEFINE_ACTION (add_arc,
 {
   gint wx, wy;
 
-  g_return_if_fail (w_current != NULL);
-
   o_redraw_cleanstates(w_current);
   o_invalidate_rubber (w_current);
 
@@ -1829,8 +1700,6 @@ DEFINE_ACTION (add_pin,
                _("_Pin"))
 {
   gint wx, wy;
-
-  g_return_if_fail (w_current != NULL);
 
   o_redraw_cleanstates(w_current);
   o_invalidate_rubber (w_current);
@@ -1863,8 +1732,6 @@ DEFINE_ACTION (hierarchy_down_schematic,
   int page_control = 0;
   int pcount = 0;
   int looking_inside=FALSE;
-
-  g_return_if_fail (w_current != NULL);
 
   object = o_select_return_first_object(w_current);
 
@@ -1997,8 +1864,6 @@ DEFINE_ACTION (hierarchy_down_symbol,
   OBJECT *object;
   const CLibSymbol *sym;
 
-  g_return_if_fail (w_current != NULL);
-
   object = o_select_return_first_object(w_current);
   if (object != NULL) {
     /* only allow going into symbols */
@@ -2038,8 +1903,6 @@ DEFINE_ACTION (hierarchy_up,
   PAGE *page = NULL;
   PAGE *up_page = NULL;
 
-  g_return_if_fail (w_current != NULL);
-
   page = gschem_toplevel_get_toplevel (w_current)->page_current;
 
   if (page == NULL) {
@@ -2069,8 +1932,6 @@ DEFINE_ACTION (attributes_attach,
   OBJECT *first_object;
   GList *s_current;
   GList *attached_objects = NULL;
-
-  g_return_if_fail (w_current != NULL);
 
   /* This is a new addition 3/15 to prevent this from executing
    * inside an action */
@@ -2125,8 +1986,6 @@ DEFINE_ACTION (attributes_detach,
   OBJECT *o_current;
   GList *detached_attribs = NULL;
 
-  g_return_if_fail (w_current != NULL);
-
   /* This is a new addition 3/15 to prevent this from executing
    * inside an action */
   if (w_current->inside_action) {
@@ -2168,8 +2027,6 @@ DEFINE_ACTION (attributes_show_name,
 {
   TOPLEVEL *toplevel = gschem_toplevel_get_toplevel (w_current);
 
-  g_return_if_fail (w_current != NULL);
-
   /* This is a new addition 3/15 to prevent this from executing
    * inside an action */
   if (w_current->inside_action) {
@@ -2202,8 +2059,6 @@ DEFINE_ACTION (attributes_show_value,
                _("Show _Value"))
 {
   TOPLEVEL *toplevel = gschem_toplevel_get_toplevel (w_current);
-
-  g_return_if_fail (w_current != NULL);
 
   /* This is a new addition 3/15 to prevent this from executing
    * inside an action */
@@ -2238,8 +2093,6 @@ DEFINE_ACTION (attributes_show_both,
 {
   TOPLEVEL *toplevel = gschem_toplevel_get_toplevel (w_current);
 
-  g_return_if_fail (w_current != NULL);
-
   /* This is a new addition 3/15 to prevent this from executing
    * inside an action */
   if (w_current->inside_action) {
@@ -2272,8 +2125,6 @@ DEFINE_ACTION (attributes_visibility_toggle,
                _("_Toggle Visibility"))
 {
   TOPLEVEL *toplevel = gschem_toplevel_get_toplevel (w_current);
-
-  g_return_if_fail (w_current != NULL);
 
   /* This is a new addition 3/15 to prevent this from executing
    * inside an action */
@@ -2310,8 +2161,6 @@ DEFINE_ACTION (options_text_size,
                _("_Text Size..."))
 {
   /* repeat last command doesn't make sense on options either??? (does it?) */
-
-  g_return_if_fail (w_current != NULL);
   gschem_dockable_present (w_current->text_properties_dockable);
 }
 
@@ -2322,7 +2171,6 @@ DEFINE_ACTION (options_snap_size,
                _("Snap Grid Spacing..."),
                _("Snap Grid S_pacing..."))
 {
-  g_return_if_fail (w_current != NULL);
   gschem_dockable_present (w_current->options_dockable);
 }
 
@@ -2335,8 +2183,6 @@ DEFINE_ACTION (options_scale_up_snap_size,
                _("Scale up Grid Spacing"),
                _("Scale _up Grid Spacing"))
 {
-  g_return_if_fail (w_current != NULL);
-
   gschem_options_scale_snap_up (w_current->options);
 }
 
@@ -2349,8 +2195,6 @@ DEFINE_ACTION (options_scale_down_snap_size,
                _("Scale down Grid Spacing"),
                _("Scale _down Grid Spacing"))
 {
-  g_return_if_fail (w_current != NULL);
-
   gschem_options_scale_snap_down (w_current->options);
 }
 
@@ -2362,8 +2206,6 @@ DEFINE_ACTION (options_afeedback,
                _("Toggle _Outline/Box"))
 {
   /* repeat last command doesn't make sense on options either??? (does it?) */
-
-  g_return_if_fail (w_current != NULL);
 
   if (w_current->actionfeedback_mode == BOUNDINGBOX) {
     w_current->actionfeedback_mode = OUTLINE;
@@ -2386,8 +2228,6 @@ DEFINE_ACTION (options_grid,
 {
   GRID_MODE grid_mode;
 
-  g_return_if_fail (w_current != NULL);
-
   gschem_options_cycle_grid_mode (w_current->options);
 
   grid_mode = gschem_options_get_grid_mode (w_current->options);
@@ -2408,8 +2248,6 @@ DEFINE_ACTION (options_snap,
                _("Toggle _Snap On/Off"))
 {
   SNAP_STATE snap_mode;
-
-  g_return_if_fail (w_current != NULL);
 
   gschem_options_cycle_snap_mode (w_current->options);
 
@@ -2445,8 +2283,6 @@ DEFINE_ACTION (options_rubberband,
    * Added on/off option from the pull down menu
    * Chris Ellec - January 2001 */
 
-  g_return_if_fail (w_current != NULL);
-
   gschem_options_cycle_net_rubber_band_mode (w_current->options);
 
   if (gschem_options_get_net_rubber_band_mode (w_current->options)) {
@@ -2465,8 +2301,6 @@ DEFINE_ACTION (options_magneticnet,
                _("Toggle Magnetic Net"),
                _("Toggle _Magnetic Net"))
 {
-  g_return_if_fail (w_current != NULL);
-
   gschem_options_cycle_magnetic_net_mode (w_current->options);
 
   if (gschem_options_get_magnetic_net_mode (w_current->options)) {
@@ -2486,8 +2320,6 @@ DEFINE_ACTION (options_show_log_window,
                _("Show Log Window..."),
                _("Show _Log Window..."))
 {
-  g_return_if_fail (w_current != NULL);
-
   gschem_dockable_present (w_current->log_dockable);
 }
 
@@ -2498,8 +2330,6 @@ DEFINE_ACTION (cancel,
                _("Cancel"),
                _("Cancel"))
 {
-  g_return_if_fail (w_current != NULL);
-
   i_cancel (w_current);
 }
 
@@ -2512,7 +2342,6 @@ DEFINE_ACTION (help_about,
                _("About..."),
                _("_About..."))
 {
-  g_return_if_fail (w_current != NULL);
   about_dialog(w_current);
 }
 
@@ -2523,7 +2352,6 @@ DEFINE_ACTION (help_hotkeys,
                _("Hotkeys..."),
                _("_Hotkeys..."))
 {
-  g_return_if_fail (w_current != NULL);
   x_dialog_hotkeys(w_current);
 }
 
@@ -2534,6 +2362,5 @@ DEFINE_ACTION (options_show_coord_window,
                _("Show Coord Window..."),
                _("Show _Coord Window..."))
 {
-  g_return_if_fail (w_current != NULL);
   coord_dialog (w_current, 0, 0);
 }

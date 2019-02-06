@@ -63,6 +63,7 @@ gschem_action_activate (GschemAction *action,
                         GschemToplevel *w_current)
 {
   g_return_if_fail (action->activate != NULL);
+  g_return_if_fail (w_current != NULL);
 
   action->activate (w_current);
 }
