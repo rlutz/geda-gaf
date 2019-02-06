@@ -1233,30 +1233,80 @@ DEFINE_I_CALLBACK(clipboard_paste)
   }
 }
 
-#define DEFINE_I_CALLBACK_BUF(op, n) \
-  DEFINE_I_CALLBACK(buffer_ ## op ## n) { \
-    i_buffer_ ## op (data, n, i_callback_buffer_ ## op ## n); \
-  }
+DEFINE_I_CALLBACK(buffer_copy1)
+{
+  i_buffer_copy (data, 1, i_callback_buffer_copy1);
+}
 
-DEFINE_I_CALLBACK_BUF(copy,1)
-DEFINE_I_CALLBACK_BUF(copy,2)
-DEFINE_I_CALLBACK_BUF(copy,3)
-DEFINE_I_CALLBACK_BUF(copy,4)
-DEFINE_I_CALLBACK_BUF(copy,5)
+DEFINE_I_CALLBACK(buffer_copy2)
+{
+  i_buffer_copy (data, 2, i_callback_buffer_copy2);
+}
 
-DEFINE_I_CALLBACK_BUF(cut,1)
-DEFINE_I_CALLBACK_BUF(cut,2)
-DEFINE_I_CALLBACK_BUF(cut,3)
-DEFINE_I_CALLBACK_BUF(cut,4)
-DEFINE_I_CALLBACK_BUF(cut,5)
+DEFINE_I_CALLBACK(buffer_copy3)
+{
+  i_buffer_copy (data, 3, i_callback_buffer_copy3);
+}
 
-DEFINE_I_CALLBACK_BUF(paste,1)
-DEFINE_I_CALLBACK_BUF(paste,2)
-DEFINE_I_CALLBACK_BUF(paste,3)
-DEFINE_I_CALLBACK_BUF(paste,4)
-DEFINE_I_CALLBACK_BUF(paste,5)
+DEFINE_I_CALLBACK(buffer_copy4)
+{
+  i_buffer_copy (data, 4, i_callback_buffer_copy4);
+}
 
-#undef DEFINE_I_CALLBACK_BUF
+DEFINE_I_CALLBACK(buffer_copy5)
+{
+  i_buffer_copy (data, 5, i_callback_buffer_copy5);
+}
+
+DEFINE_I_CALLBACK(buffer_cut1)
+{
+  i_buffer_cut (data, 1, i_callback_buffer_cut1);
+}
+
+DEFINE_I_CALLBACK(buffer_cut2)
+{
+  i_buffer_cut (data, 2, i_callback_buffer_cut2);
+}
+
+DEFINE_I_CALLBACK(buffer_cut3)
+{
+  i_buffer_cut (data, 3, i_callback_buffer_cut3);
+}
+
+DEFINE_I_CALLBACK(buffer_cut4)
+{
+  i_buffer_cut (data, 4, i_callback_buffer_cut4);
+}
+
+DEFINE_I_CALLBACK(buffer_cut5)
+{
+  i_buffer_cut (data, 5, i_callback_buffer_cut5);
+}
+
+DEFINE_I_CALLBACK(buffer_paste1)
+{
+  i_buffer_paste (data, 1, i_callback_buffer_paste1);
+}
+
+DEFINE_I_CALLBACK(buffer_paste2)
+{
+  i_buffer_paste (data, 2, i_callback_buffer_paste2);
+}
+
+DEFINE_I_CALLBACK(buffer_paste3)
+{
+  i_buffer_paste (data, 3, i_callback_buffer_paste3);
+}
+
+DEFINE_I_CALLBACK(buffer_paste4)
+{
+  i_buffer_paste (data, 4, i_callback_buffer_paste4);
+}
+
+DEFINE_I_CALLBACK(buffer_paste5)
+{
+  i_buffer_paste (data, 5, i_callback_buffer_paste5);
+}
 
 /*! \section add-menu Add Menu Callback Functions */
 
