@@ -33,6 +33,7 @@
 #endif
 
 #include "gschem.h"
+#include "actions.decl.x"
 
 #include <gdk/gdkkeysyms.h>
 
@@ -41,7 +42,7 @@
 SCM g_keys_ ## name(SCM rest)				\
 {							\
    GschemToplevel *w_current = g_current_window ();	\
-   i_callback_ ## name(w_current);			\
+   gschem_action_activate (action_ ## name, w_current); \
    return SCM_BOOL_T;				\
 }
 

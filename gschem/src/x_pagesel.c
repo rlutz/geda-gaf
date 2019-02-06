@@ -28,6 +28,7 @@
 #endif
 
 #include "gschem.h"
+#include "actions.decl.x"
 
 
 static void x_pagesel_callback_response (GtkDialog *dialog,
@@ -216,7 +217,8 @@ static void                                                       \
 pagesel_callback_popup_ ## name (GtkMenuItem *menuitem,           \
                                  gpointer user_data)              \
 {                                                                 \
-  i_callback_ ## action (GSCHEM_DIALOG (user_data)->w_current);   \
+  gschem_action_activate (action_ ## action,                      \
+                          GSCHEM_DIALOG (user_data)->w_current);  \
 }
 
 DEFINE_POPUP_CALLBACK (new_page,     file_new)

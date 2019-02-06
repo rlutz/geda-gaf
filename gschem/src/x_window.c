@@ -22,6 +22,7 @@
 #include <stdio.h>
 
 #include "gschem.h"
+#include "actions.decl.x"
 
 #include "gschem_compselect_dockable.h"
 #include "gschem_object_properties_dockable.h"
@@ -572,6 +573,15 @@ x_window_close_wm (GtkWidget *widget, GdkEvent *event, gpointer data)
 }
 
 
+static void
+x_window_tool_button_clicked (GtkToolButton *tool_button, gpointer data)
+{
+  GschemAction *action = g_object_get_data (G_OBJECT (tool_button), "action");
+  GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
+  gschem_action_activate (action, w_current);
+}
+
+
 /*! \todo Finish function documentation!!!
  *  \brief
  *  \par Function Description
@@ -658,30 +668,33 @@ void x_window_create_main(GschemToplevel *w_current)
                                             _("New"));
     gtk_widget_set_tooltip_text (GTK_WIDGET (button), _("New file"));
     gtk_toolbar_insert (GTK_TOOLBAR (toolbar), GTK_TOOL_ITEM (button), 0);
-    g_signal_connect_swapped (button,
-                              "clicked",
-                              G_CALLBACK (i_callback_file_new),
-                              w_current);
+    g_object_set_data (G_OBJECT (button), "action", action_file_new);
+    g_signal_connect (button,
+                      "clicked",
+                      G_CALLBACK (x_window_tool_button_clicked),
+                      w_current);
 
     button =
       (GtkToolButton*) gtk_tool_button_new (x_window_stock_pixmap ("open", w_current),
                                             _("Open"));
     gtk_widget_set_tooltip_text (GTK_WIDGET (button), _("Open file"));
     gtk_toolbar_insert (GTK_TOOLBAR (toolbar), GTK_TOOL_ITEM (button), 1);
-    g_signal_connect_swapped (button,
-                              "clicked",
-                              G_CALLBACK (i_callback_file_open),
-                              w_current);
+    g_object_set_data (G_OBJECT (button), "action", action_file_open);
+    g_signal_connect (button,
+                      "clicked",
+                      G_CALLBACK (x_window_tool_button_clicked),
+                      w_current);
 
     button =
       (GtkToolButton*) gtk_tool_button_new (x_window_stock_pixmap ("save", w_current),
                                             _("Save"));
     gtk_widget_set_tooltip_text (GTK_WIDGET (button), _("Save file"));
     gtk_toolbar_insert (GTK_TOOLBAR (toolbar), GTK_TOOL_ITEM (button), 2);
-    g_signal_connect_swapped (button,
-                              "clicked",
-                              G_CALLBACK (i_callback_file_save),
-                              w_current);
+    g_object_set_data (G_OBJECT (button), "action", action_file_save);
+    g_signal_connect (button,
+                      "clicked",
+                      G_CALLBACK (x_window_tool_button_clicked),
+                      w_current);
 
     gtk_toolbar_insert (GTK_TOOLBAR (toolbar),
                         GTK_TOOL_ITEM (gtk_separator_tool_item_new ()), 3);
@@ -691,20 +704,22 @@ void x_window_create_main(GschemToplevel *w_current)
                                             _("Undo"));
     gtk_widget_set_tooltip_text (GTK_WIDGET (button), _("Undo last operation"));
     gtk_toolbar_insert (GTK_TOOLBAR (toolbar), GTK_TOOL_ITEM (button), 4);
-    g_signal_connect_swapped (button,
-                              "clicked",
-                              G_CALLBACK (i_callback_edit_undo),
-                              w_current);
+    g_object_set_data (G_OBJECT (button), "action", action_edit_undo);
+    g_signal_connect (button,
+                      "clicked",
+                      G_CALLBACK (x_window_tool_button_clicked),
+                      w_current);
 
     button =
       (GtkToolButton*) gtk_tool_button_new (x_window_stock_pixmap ("redo", w_current),
                                             _("Redo"));
     gtk_widget_set_tooltip_text (GTK_WIDGET (button), _("Redo last undo"));
     gtk_toolbar_insert (GTK_TOOLBAR (toolbar), GTK_TOOL_ITEM (button), 5);
-    g_signal_connect_swapped (button,
-                              "clicked",
-                              G_CALLBACK (i_callback_edit_redo),
-                              w_current);
+    g_object_set_data (G_OBJECT (button), "action", action_edit_redo);
+    g_signal_connect (button,
+                      "clicked",
+                      G_CALLBACK (x_window_tool_button_clicked),
+                      w_current);
 
     gtk_toolbar_insert (GTK_TOOLBAR (toolbar),
                         GTK_TOOL_ITEM (gtk_separator_tool_item_new ()), 6);
@@ -718,10 +733,11 @@ void x_window_create_main(GschemToplevel *w_current)
                                    "Select library and component from list, move the mouse into main window, click to place\n"
                                    "Right mouse button to cancel"));
     gtk_toolbar_insert (GTK_TOOLBAR (toolbar), GTK_TOOL_ITEM (button), 7);
-    g_signal_connect_swapped (button,
-                              "clicked",
-                              G_CALLBACK (i_callback_add_component),
-                              w_current);
+    g_object_set_data (G_OBJECT (button), "action", action_add_component);
+    g_signal_connect (button,
+                      "clicked",
+                      G_CALLBACK (x_window_tool_button_clicked),
+                      w_current);
 
     /* init radio tool buttons, add first of them */
     w_current->toolbar_net = GTK_WIDGET (gtk_radio_tool_button_new (NULL));
@@ -734,10 +750,11 @@ void x_window_create_main(GschemToplevel *w_current)
     gtk_tool_button_set_icon_widget (GTK_TOOL_BUTTON (w_current->toolbar_net),
                                      x_window_stock_pixmap ("insert-net", w_current));
     /*
-    g_signal_connect_swapped (w_current->toolbar_net,
-                              "toggled",
-                              G_CALLBACK (i_callback_add_net),
-                              w_current);
+    g_object_set_data (G_OBJECT (w_current->toolbar_net), "action", action_add_net);
+    g_signal_connect (w_current->toolbar_net,
+                      "toggled",
+                      G_CALLBACK (x_window_tool_button_clicked),
+                      w_current);
     */
 
     /* add a radio tool button */
@@ -753,10 +770,11 @@ void x_window_create_main(GschemToplevel *w_current)
     gtk_tool_button_set_icon_widget (GTK_TOOL_BUTTON (w_current->toolbar_bus),
                                      x_window_stock_pixmap ("insert-bus", w_current));
     /*
-    g_signal_connect_swapped (w_current->toolbar_bus,
-                              "toggled",
-                              G_CALLBACK (i_callback_add_bus),
-                              w_current);
+    g_object_set_data (G_OBJECT (w_current->toolbar_bus), "action", action_add_bus);
+    g_signal_connect (w_current->toolbar_bus,
+                      "toggled",
+                      G_CALLBACK (x_window_tool_button_clicked),
+                      w_current);
     */
 
     /* not part of any radio button group */
@@ -765,10 +783,11 @@ void x_window_create_main(GschemToplevel *w_current)
                                             _("Text"));
     gtk_widget_set_tooltip_text (GTK_WIDGET (button), _("Add Text..."));
     gtk_toolbar_insert (GTK_TOOLBAR (toolbar), GTK_TOOL_ITEM (button), 10);
-    g_signal_connect_swapped (button,
-                              "clicked",
-                              G_CALLBACK (i_callback_add_text),
-                              w_current);
+    g_object_set_data (G_OBJECT (button), "action", action_add_text);
+    g_signal_connect (button,
+                      "clicked",
+                      G_CALLBACK (x_window_tool_button_clicked),
+                      w_current);
 
     gtk_toolbar_insert (GTK_TOOLBAR (toolbar),
                         GTK_TOOL_ITEM (gtk_separator_tool_item_new ()), 11);
@@ -785,10 +804,11 @@ void x_window_create_main(GschemToplevel *w_current)
     gtk_tool_button_set_icon_widget (GTK_TOOL_BUTTON (w_current->toolbar_select),
                                      x_window_stock_pixmap ("select", w_current));
     /*
-    g_signal_connect_swapped (w_current->toolbar_select,
-                              "toggled",
-                              G_CALLBACK (i_callback_edit_select),
-                              w_current);
+    g_object_set_data (G_OBJECT (w_current->toolbar_select), "action", action_edit_select);
+    g_signal_connect (w_current->toolbar_select,
+                      "toggled",
+                      G_CALLBACK (x_window_tool_button_clicked),
+                      w_current);
     */
 
     gtk_toolbar_insert (GTK_TOOLBAR (toolbar),

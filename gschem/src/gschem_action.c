@@ -54,6 +54,16 @@ gschem_action_register (gchar *id,
 
 
 void
+gschem_action_activate (GschemAction *action,
+                        GschemToplevel *w_current)
+{
+  g_return_if_fail (action->activate != NULL);
+
+  action->activate (w_current);
+}
+
+
+void
 gschem_action_init (void)
 {
 #include "actions.init.x"

@@ -36,6 +36,9 @@ struct _GschemAction {
 };
 
 
+void gschem_action_activate (GschemAction *action,
+                             GschemToplevel *w_current);
+
 GschemAction *gschem_action_register (gchar *id,
                                       gchar *icon_name,
                                       gchar *name,

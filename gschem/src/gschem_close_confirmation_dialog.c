@@ -29,6 +29,7 @@
 #endif
 
 #include "gschem.h"
+#include "actions.decl.x"
 
 #define GLADE_HOOKUP_OBJECT(component,widget,name) \
   g_object_set_data_full (G_OBJECT (component), name, \
@@ -711,7 +712,7 @@ x_dialog_close_changed_page (GschemToplevel *w_current, PAGE *page)
         /* action selected: save */
         s_page_goto (w_current->toplevel, page);
         gschem_toplevel_page_changed (w_current);
-        i_callback_file_save(w_current);
+        gschem_action_activate (action_file_save, w_current);
         /* has the page been really saved? */
         if (!page->CHANGED) {
           result = TRUE;
@@ -812,7 +813,7 @@ x_dialog_close_window (GschemToplevel *w_current)
           s_page_goto (toplevel, p_current);
           gschem_toplevel_page_changed (w_current);
 
-          i_callback_file_save(w_current);
+          gschem_action_activate (action_file_save, w_current);
           /* if user cancelled previous, do not close window */
           ret &= !p_current->CHANGED;
         }
