@@ -64,9 +64,10 @@ static struct PopupEntry popup_items[] = {
  *  \par Function Description
  *
  */
-static void g_menu_execute(GtkAction *action, gpointer user_data)
+static void
+g_menu_execute (GtkMenuItem *menu_item, gpointer user_data)
 {
-  const gchar *action_name = gtk_action_get_name (action);
+  const gchar *action_name = g_object_get_data (G_OBJECT (menu_item), "action");
   GschemToplevel *w_current = (GschemToplevel *) user_data;
   g_action_eval_by_name (w_current, action_name);
 }
@@ -80,7 +81,6 @@ GtkWidget *
 get_main_menu(GschemToplevel *w_current)
 {
   char *buf;
-  GschemAction *action;
   GtkWidget *menu_item;
   GtkWidget *root_menu;
   GtkWidget *menu_bar;
@@ -179,30 +179,41 @@ get_main_menu(GschemToplevel *w_current)
             menu_item_stock = scm_to_utf8_string (scm_item_stock);
 
           action_name = scm_to_utf8_string (scm_symbol_to_string (scm_item_func));
-          action = g_object_new (GSCHEM_TYPE_ACTION,
-                                 "name", action_name,
-                                 "label", menu_item_name,
-                                 "tooltip", menu_item_name,
-                                 "multikey-accel", menu_item_keys,
-                                 NULL);
 
-          /* If stock name corresponds to a GTK stock item, then use
-           * it.  Otherwise, look it up in the icon theme. */
-          if (menu_item_stock != NULL &&
-              gtk_stock_lookup (menu_item_stock, &stock_info)) {
-            gtk_action_set_stock_id (GTK_ACTION(action), menu_item_stock);
-          } else {
-            gtk_action_set_icon_name (GTK_ACTION(action), menu_item_stock);
+          menu_item = g_object_new (GTK_TYPE_IMAGE_MENU_ITEM, NULL);
+
+          /* use custom label widget */
+          GtkWidget *label = g_object_new (GSCHEM_TYPE_ACCEL_LABEL, NULL);
+          gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+          gtk_label_set_use_underline (GTK_LABEL (label), TRUE);
+          gtk_label_set_label (GTK_LABEL (label), menu_item_name);
+          gschem_accel_label_set_accel_string (GSCHEM_ACCEL_LABEL (label),
+                                               menu_item_keys);
+          gtk_container_add (GTK_CONTAINER (menu_item), label);
+          gtk_widget_show (label);
+
+          /* set icon */
+          if (menu_item_stock) {
+            GtkWidget *image = gtk_image_new ();
+            gtk_widget_show (image);
+            gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (menu_item),
+                                           image);
+
+            /* If stock name corresponds to a GTK stock item, then use it.
+               Otherwise, look it up in the icon theme. */
+            if (gtk_stock_lookup (menu_item_stock, &stock_info))
+              gtk_image_set_from_stock (GTK_IMAGE (image), menu_item_stock,
+                                        GTK_ICON_SIZE_MENU);
+            else
+              gtk_image_set_from_icon_name (GTK_IMAGE (image), menu_item_stock,
+                                            GTK_ICON_SIZE_MENU);
           }
-
-
-          free(action_name);
           free(menu_item_stock);
 
-          menu_item = gtk_action_create_menu_item (GTK_ACTION (action));
-          g_signal_connect (G_OBJECT(action), "activate",
-                            G_CALLBACK(g_menu_execute),
-                            w_current);
+          /* don't free action_name */
+          g_object_set_data (G_OBJECT (menu_item), "action", action_name);
+          g_signal_connect (G_OBJECT (menu_item), "activate",
+                            G_CALLBACK (g_menu_execute), w_current);
         }
 
         gtk_menu_shell_append (GTK_MENU_SHELL (menu), menu_item);
@@ -248,7 +259,7 @@ get_main_menu(GschemToplevel *w_current)
 GtkWidget *
 get_main_popup (GschemToplevel *w_current)
 {
-  GschemAction *action;
+  GtkAction *action;
   GtkWidget *menu_item;
   GtkWidget *menu;
   GtkStockItem stock_info;
@@ -268,7 +279,7 @@ get_main_popup (GschemToplevel *w_current)
     }
 
     /* Don't bother showing keybindings in the popup menu */
-    action = g_object_new (GSCHEM_TYPE_ACTION,
+    action = g_object_new (GTK_TYPE_ACTION,
                            "name", e.action,
                            "label", gettext (e.name),
                            "tooltip", gettext (e.name),
