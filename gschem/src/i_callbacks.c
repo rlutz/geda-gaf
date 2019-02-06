@@ -36,17 +36,15 @@
 #define DEFINE_I_CALLBACK(name)				\
 	void i_callback_ ## name(gpointer data)
 
-/*! \section callback-intro Callback Functions
- * right now, all callbacks except for the ones on the File menu have
+/* right now, all callbacks except for the ones on the File menu have
  * the middle button shortcut. Let me (Ales) know if we should also
- * shortcut the File button
- */
+ * shortcut the File button */
 
 /*! \section file-menu File Menu Callback Functions */
-/*! \todo This should be renamed to page_new perhaps...
- */
+
 DEFINE_I_CALLBACK(file_new)
 {
+  /*! \todo Perhaps this should be renamed to page_new... */
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
   PAGE *page;
 
@@ -76,10 +74,9 @@ DEFINE_I_CALLBACK(file_new_window)
   s_log_message (_("New Window created [%s]\n"), page->page_filename);
 }
 
-/*! \todo This should be renamed to page_open perhaps...
- */
 DEFINE_I_CALLBACK(file_open)
 {
+  /*! \todo Perhaps this should be renamed to page_open... */
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
 
   g_return_if_fail (w_current != NULL);
@@ -161,8 +158,8 @@ DEFINE_I_CALLBACK(file_write_png)
   x_image_setup(w_current);
 }
 
-/*! this function closes a window
- */
+/*! \brief Close a window. */
+
 DEFINE_I_CALLBACK(file_close)
 {
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
@@ -182,6 +179,7 @@ DEFINE_I_CALLBACK(file_quit)
 }
 
 /*! \section edit-menu Edit Menu Callback Functions */
+
 DEFINE_I_CALLBACK(edit_undo)
 {
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
@@ -224,11 +222,9 @@ DEFINE_I_CALLBACK(edit_redo)
   }
 }
 
-/*! \note
- *  Select also does not update the middle button shortcut.
- */
 DEFINE_I_CALLBACK(edit_select)
 {
+  /* Select also does not update the middle button shortcut. */
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
   o_redraw_cleanstates(w_current);
 
@@ -237,10 +233,8 @@ DEFINE_I_CALLBACK(edit_select)
   i_action_stop (w_current);
 }
 
-/*! \brief Select all objects on page.
- * \par Function Description
- * Sets all objects on page as selected.
- */
+/*! \brief Select all objects on page. */
+
 DEFINE_I_CALLBACK (edit_select_all)
 {
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
@@ -253,10 +247,8 @@ DEFINE_I_CALLBACK (edit_select_all)
   i_update_menus (w_current);
 }
 
-/*! \brief Deselect all objects on page.
- * \par Function Description
- * Sets all objects on page as deselected.
- */
+/*! \brief Deselect all objects on page. */
+
 DEFINE_I_CALLBACK (edit_deselect)
 {
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
@@ -407,9 +399,8 @@ DEFINE_I_CALLBACK(edit_color)
   gschem_dockable_present (w_current->object_properties_dockable);
 }
 
-/*! This function rotate all objects in the selection list by 90 degrees.
- *
- */
+/*! \brief Rotate all objects in the selection list by 90 degrees. */
+
 DEFINE_I_CALLBACK(edit_rotate_90)
 {
   gint wx, wy;
@@ -495,9 +486,8 @@ DEFINE_I_CALLBACK(edit_mirror)
   }
 }
 
-/*! This function locks all objects in selection list.
- *
- */
+/*! \brief Lock all objects in selection list. */
+
 DEFINE_I_CALLBACK(edit_lock)
 {
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
@@ -511,8 +501,8 @@ DEFINE_I_CALLBACK(edit_lock)
   }
 }
 
-/*! Thus function unlocks all objects in selection list.
- */
+/*! \brief Unlock all objects in selection list. */
+
 DEFINE_I_CALLBACK(edit_unlock)
 {
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
@@ -567,9 +557,8 @@ DEFINE_I_CALLBACK(edit_invoke_macro)
   gtk_widget_grab_focus (gschem_macro_widget_get_entry (GSCHEM_MACRO_WIDGET (w_current->macro_widget)));
 }
 
-/*! This function embedds all objects in selection list
- *
- */
+/*! \brief Embed all objects in selection list. */
+
 DEFINE_I_CALLBACK(edit_embed)
 {
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
@@ -600,12 +589,10 @@ DEFINE_I_CALLBACK(edit_embed)
     i_action_stop (w_current);
     i_set_state(w_current, SELECT);
   }
-
 }
 
-/*! This function unembedds all objects in selection list.
- *
- */
+/*! \brief Unembed all objects in selection list. */
+
 DEFINE_I_CALLBACK(edit_unembed)
 {
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
@@ -636,12 +623,10 @@ DEFINE_I_CALLBACK(edit_unembed)
     i_action_stop (w_current);
     i_set_state(w_current, SELECT);
   }
-
 }
 
-/*! This function updates components
- *
- */
+/*! \brief Update components. */
+
 DEFINE_I_CALLBACK(edit_update)
 {
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
@@ -678,7 +663,6 @@ DEFINE_I_CALLBACK(edit_update)
     i_action_stop (w_current);
     i_set_state(w_current, SELECT);
   }
-
 }
 
 DEFINE_I_CALLBACK(edit_show_hidden)
@@ -786,8 +770,9 @@ DEFINE_I_CALLBACK(edit_filltype)
 }
 
 /*! \section view-menu View Menu Callback Functions */
-/*! \brief Toggle the visibility of the menu bar
- */
+
+/*! \brief Toggle visibility of the menu bar. */
+
 DEFINE_I_CALLBACK(view_menubar)
 {
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
@@ -801,8 +786,8 @@ DEFINE_I_CALLBACK(view_menubar)
   gtk_widget_set_visible (w, show);
 }
 
-/*! \brief Toggle the visibility of the toolbar
- */
+/*! \brief Toggle visibility of the toolbar. */
+
 DEFINE_I_CALLBACK(view_toolbar)
 {
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
@@ -818,23 +803,19 @@ DEFINE_I_CALLBACK(view_toolbar)
   gtk_widget_set_visible (w, show);
 }
 
-/*! \note
- *  repeat middle shortcut doesn't make sense on redraw, just hit right
- *  button
- */
 DEFINE_I_CALLBACK(view_redraw)
 {
+  /* repeat middle shortcut doesn't make sense on redraw,
+     just hit right button */
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
   g_return_if_fail (w_current != NULL);
 
   gschem_page_view_invalidate_all (gschem_toplevel_get_current_page_view (w_current));
 }
 
-/*! \note
- *  repeat middle shortcut would get into the way of what user is try to do
- */
 DEFINE_I_CALLBACK(view_zoom_full)
 {
+  /* repeat middle shortcut would get into the way of what user is try to do */
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
   g_return_if_fail (w_current != NULL);
 
@@ -849,11 +830,9 @@ DEFINE_I_CALLBACK(view_zoom_full)
   }
 }
 
-/*! \note
- *  repeat middle shortcut would get into the way of what user is try to do
- */
 DEFINE_I_CALLBACK(view_zoom_extents)
 {
+  /* repeat middle shortcut would get into the way of what user is try to do */
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
   g_return_if_fail (w_current != NULL);
 
@@ -867,11 +846,9 @@ DEFINE_I_CALLBACK(view_zoom_extents)
   }
 }
 
-/*! \note
- *  repeat middle shortcut would get into the way of what user is try to do
- */
 DEFINE_I_CALLBACK(view_zoom_box)
 {
+  /* repeat middle shortcut would get into the way of what user is try to do */
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
   gint wx, wy;
 
@@ -886,11 +863,9 @@ DEFINE_I_CALLBACK(view_zoom_box)
   }
 }
 
-/*! \note
- *  repeat middle shortcut would get into the way of what user is try to do
- */
 DEFINE_I_CALLBACK(view_zoom_in)
 {
+  /* repeat middle shortcut would get into the way of what user is try to do */
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
   g_return_if_fail (w_current != NULL);
 
@@ -907,11 +882,9 @@ DEFINE_I_CALLBACK(view_zoom_in)
   }
 }
 
-/*! \note
- *  repeat middle shortcut would get into the way of what user is try to do
- */
 DEFINE_I_CALLBACK(view_zoom_out)
 {
+  /* repeat middle shortcut would get into the way of what user is try to do */
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
   g_return_if_fail (w_current != NULL);
 
@@ -952,10 +925,10 @@ DEFINE_I_CALLBACK(view_pan)
   }
 }
 
-/*! \brief Scheme callback function that moves the viewport to the left.
+/*! \brief Move the viewport to the left.
  *
- * The distance can be set with "keyboardpan-gain" scheme callback.
- */
+ * The distance can be set with "keyboardpan-gain" scheme callback. */
+
 DEFINE_I_CALLBACK(view_pan_left)
 {
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
@@ -967,10 +940,10 @@ DEFINE_I_CALLBACK(view_pan_left)
   gschem_page_view_pan_mouse (page_view, w_current->keyboardpan_gain, 0);
 }
 
-/*! \brief Scheme callback function that moves the viewport to the right.
+/*! \brief Move the viewport to the right.
  *
- * The distance can be set with "keyboardpan-gain" scheme callback.
- */
+ * The distance can be set with "keyboardpan-gain" scheme callback. */
+
 DEFINE_I_CALLBACK(view_pan_right)
 {
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
@@ -983,10 +956,10 @@ DEFINE_I_CALLBACK(view_pan_right)
   gschem_page_view_pan_mouse (page_view, -w_current->keyboardpan_gain, 0);
 }
 
-/*! \brief Scheme callback function that moves the viewport up.
+/*! \brief Move the viewport up.
  *
- * The distance can be set with "keyboardpan-gain" scheme callback.
- */
+ * The distance can be set with "keyboardpan-gain" scheme callback. */
+
 DEFINE_I_CALLBACK(view_pan_up)
 {
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
@@ -998,10 +971,10 @@ DEFINE_I_CALLBACK(view_pan_up)
   gschem_page_view_pan_mouse (page_view, 0, w_current->keyboardpan_gain);
 }
 
-/*! \brief Scheme callback function that moves the viewport down.
+/*! \brief Move the viewport down.
  *
- * The distance can be set with "keyboardpan-gain" scheme callback.
- */
+ * The distance can be set with "keyboardpan-gain" scheme callback. */
+
 DEFINE_I_CALLBACK(view_pan_down)
 {
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
@@ -1051,6 +1024,7 @@ DEFINE_I_CALLBACK (view_bw_colors)
 }
 
 /*! \section page-menu Page Menu Callback Functions */
+
 DEFINE_I_CALLBACK(page_manager)
 {
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
@@ -1138,10 +1112,9 @@ DEFINE_I_CALLBACK(page_close)
   x_window_close_page (w_current, page);
 }
 
-/*! \bug may have memory leak?
- */
 DEFINE_I_CALLBACK(page_revert)
 {
+  /*! \bug may have memory leak? */
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
   PAGE *page_current = NULL;
   PAGE *page = NULL;
@@ -1202,10 +1175,9 @@ DEFINE_I_CALLBACK(page_print)
 }
 
 /*! \section clipboard-menu Clipboard Menu Callback Functions */
-/*! \brief Copy selection to clipboard.
- *  \par Function Description
- * Copies the current selection to the clipboard, via buffer 0.
- */
+
+/*! \brief Copy selection to clipboard, via buffer 0. */
+
 DEFINE_I_CALLBACK(clipboard_copy)
 {
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
@@ -1219,10 +1191,8 @@ DEFINE_I_CALLBACK(clipboard_copy)
   o_buffer_copy (w_current, CLIPBOARD_BUFFER);
 }
 
-/*! \brief Cut selection to clipboard.
- *  \par Function Description
- * Cut the current selection to the clipboard, via buffer 0.
- */
+/*! \brief Cut selection to clipboard, via buffer 0. */
+
 DEFINE_I_CALLBACK(clipboard_cut)
 {
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
@@ -1237,10 +1207,8 @@ DEFINE_I_CALLBACK(clipboard_cut)
   o_buffer_cut (w_current, CLIPBOARD_BUFFER);
 }
 
-/*! \brief Start pasting clipboard contents
- *  \par Function Description
- * Start pasting the current clipboard contents, via buffer 0.
- */
+/*! \brief Start pasting clipboard contents, via buffer 0. */
+
 DEFINE_I_CALLBACK(clipboard_paste)
 {
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
@@ -1291,6 +1259,7 @@ DEFINE_I_CALLBACK_BUF(paste,5)
 #undef DEFINE_I_CALLBACK_BUF
 
 /*! \section add-menu Add Menu Callback Functions */
+
 DEFINE_I_CALLBACK(add_component)
 {
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
@@ -1495,6 +1464,7 @@ DEFINE_I_CALLBACK(add_pin)
 }
 
 /*! \section hierarchy-menu Hierarchy Menu Callback Functions */
+
 DEFINE_I_CALLBACK(hierarchy_down_schematic)
 {
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
@@ -1632,10 +1602,9 @@ DEFINE_I_CALLBACK(hierarchy_down_schematic)
   }
 }
 
-/*! \bug may cause problems with non-directory symbols
- */
 DEFINE_I_CALLBACK(hierarchy_down_symbol)
 {
+  /*! \bug may cause problems with non-directory symbols */
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
   OBJECT *object;
   const CLibSymbol *sym;
@@ -1669,11 +1638,8 @@ DEFINE_I_CALLBACK(hierarchy_down_symbol)
   }
 }
 
-/*! \brief Go to the upper hierarchy level page
- *  \par Function Description
- * Return to the page which is parent for the current page in the
- * hierarchy of schematics.
- */
+/*! \brief Return to the parent page in the hierarchy of schematics. */
+
 DEFINE_I_CALLBACK(hierarchy_up)
 {
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
@@ -1700,6 +1666,7 @@ DEFINE_I_CALLBACK(hierarchy_up)
 }
 
 /*! \section attributes-menu Attributes Menu Callback Functions */
+
 DEFINE_I_CALLBACK(attributes_attach)
 {
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
@@ -1923,14 +1890,11 @@ DEFINE_I_CALLBACK(attributes_visibility_toggle)
   }
 }
 
-/*! \section layers-menu Layers Menu Callback Functions */
-
 /*! \section options-menu Options Menu Callback Functions */
-/*! \note
- *  repeat last command doesn't make sense on options either??? (does it?)
- */
+
 DEFINE_I_CALLBACK(options_text_size)
 {
+  /* repeat last command doesn't make sense on options either??? (does it?) */
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
 
   g_return_if_fail (w_current != NULL);
@@ -1945,11 +1909,8 @@ DEFINE_I_CALLBACK(options_snap_size)
   gschem_dockable_present (w_current->options_dockable);
 }
 
-/*! \brief Multiply by two the snap grid size.
- *  \par Function Description
- *  Callback function for the scale-up snap grid size hotkey.
- *  Multiply by two the snap grid size.
- */
+/*! \brief Multiply snap grid size by two. */
+
 DEFINE_I_CALLBACK(options_scale_up_snap_size)
 {
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
@@ -1959,11 +1920,8 @@ DEFINE_I_CALLBACK(options_scale_up_snap_size)
   gschem_options_scale_snap_up (w_current->options);
 }
 
-/*! \brief Divide by two the snap grid size.
- *  \par Function Description
- *  Callback function for the scale-down snap grid size hotkey.
- *  Divide by two the snap grid size (if it's and even number).
- */
+/*! \brief Divide snap grid size by two (if it's and even number). */
+
 DEFINE_I_CALLBACK(options_scale_down_snap_size)
 {
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
@@ -1973,12 +1931,9 @@ DEFINE_I_CALLBACK(options_scale_down_snap_size)
   gschem_options_scale_snap_down (w_current->options);
 }
 
-/*! \note
- *  repeat last command doesn't make sense on options either??? (does
- *  it?)
- */
 DEFINE_I_CALLBACK(options_afeedback)
 {
+  /* repeat last command doesn't make sense on options either??? (does it?) */
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
 
   g_return_if_fail (w_current != NULL);
@@ -2044,13 +1999,11 @@ DEFINE_I_CALLBACK(options_snap)
   i_update_grid_info (w_current);
 }
 
-/*! \note
- *  Rubber band is cool !
- *  Added on/off option from the pull down menu
- *  Chris Ellec - January 2001
- */
 DEFINE_I_CALLBACK(options_rubberband)
 {
+  /* Rubber band is cool !
+   * Added on/off option from the pull down menu
+   * Chris Ellec - January 2001 */
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
 
   g_return_if_fail (w_current != NULL);
@@ -2064,12 +2017,8 @@ DEFINE_I_CALLBACK(options_rubberband)
   }
 }
 
+/*! \brief Toggle magnetic net mode option ON and OFF. */
 
-/*! \brief callback function for setting the magnetic net option
- *  \par Function Description
- *  This function just toggles a variable to switch the magnetic net
- *  mode ON and OFF
- */
 DEFINE_I_CALLBACK(options_magneticnet)
 {
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
@@ -2088,7 +2037,6 @@ DEFINE_I_CALLBACK(options_magneticnet)
   i_show_state(w_current, NULL);
 }
 
-
 DEFINE_I_CALLBACK(options_show_log_window)
 {
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
@@ -2097,7 +2045,6 @@ DEFINE_I_CALLBACK(options_show_log_window)
 
   gschem_dockable_present (w_current->log_dockable);
 }
-
 
 DEFINE_I_CALLBACK(cancel)
 {
@@ -2108,6 +2055,7 @@ DEFINE_I_CALLBACK(cancel)
 }
 
 /*! \section help-menu Help Menu Callback Functions */
+
 DEFINE_I_CALLBACK(help_about)
 {
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
