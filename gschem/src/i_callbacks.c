@@ -1522,97 +1522,9 @@ DEFINE_I_CALLBACK(clipboard_paste)
   }
 }
 
-/*! \section buffer-menu Buffer Menu Callback Functions */
-/*! \todo Finish function documentation!!!
- *  \brief
- *  \par Function Description
- *
- */
-void
-i_callback_buffer_copy (gpointer data, int n,
-                        void (*f)(gpointer))
-{
-  GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
-  gchar *msg;
-
-  g_return_if_fail (w_current != NULL);
-
-  if (!o_select_selected (w_current))
-    return;
-
-  /* TRANSLATORS: The number is the number of the buffer that the
-   * selection is being copied to. */
-  msg = g_strdup_printf(_("Copy %i"), n);
-  i_update_middle_button(w_current, f, msg);
-  g_free (msg);
-  o_buffer_copy(w_current, n-1);
-  i_update_menus(w_current);
-}
-
-/*! \todo Finish function documentation!!!
- *  \brief
- *  \par Function Description
- *
- */
-void
-i_callback_buffer_cut (gpointer data, int n,
-                       void (*f)(gpointer))
-{
-  GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
-  gchar *msg;
-
-  g_return_if_fail (w_current != NULL);
-
-  if (!o_select_selected (w_current))
-    return;
-
-  /* TRANSLATORS: The number is the number of the buffer that the
-   * selection is being cut to. */
-  msg = g_strdup_printf(_("Cut %i"), n);
-  i_update_middle_button(w_current, f, msg);
-  g_free (msg);
-  o_buffer_cut(w_current, n-1);
-  i_update_menus(w_current);
-}
-
-/*! \todo Finish function documentation!!!
- *  \brief
- *  \par Function Description
- *
- */
-static void
-i_callback_buffer_paste (gpointer data, int n,
-                         void (*f)(gpointer))
-{
-  GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
-  gchar *msg;
-  int empty;
-
-  /* Choose a default position to start pasting. This is required to
-   * make pasting when the cursor is outside the screen or pasting via
-   * menu work as expected. */
-  gint wx = 0, wy = 0;
-
-  g_return_if_fail (w_current != NULL);
-
-  /* TRANSLATORS: The number is the number of the buffer that is being
-   * pasted to the schematic. */
-  msg = g_strdup_printf(_("Paste %i"), n);
-  i_update_middle_button(w_current, f, msg);
-  g_free (msg);
-
-  g_action_get_position (TRUE, &wx, &wy);
-
-  empty = o_buffer_paste_start (w_current, wx, wy, n-1);
-
-  if (empty) {
-    i_set_state_msg(w_current, SELECT, _("Empty buffer"));
-  }
-}
-
 #define DEFINE_I_CALLBACK_BUF(op, n) \
   DEFINE_I_CALLBACK(buffer_ ## op ## n) { \
-    i_callback_buffer_ ## op (data, n, i_callback_buffer_ ## op ## n); \
+    i_buffer_ ## op (data, n, i_callback_buffer_ ## op ## n); \
   }
 
 DEFINE_I_CALLBACK_BUF(copy,1)

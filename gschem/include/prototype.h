@@ -240,6 +240,9 @@ void i_set_filename(GschemToplevel *w_current, const gchar *string, const gchar 
 void i_update_grid_info(GschemToplevel *w_current);
 void i_update_grid_info_callback (GschemPageView *view, GschemToplevel *w_current);
 void i_cancel(GschemToplevel *w_current);
+void i_buffer_copy(GschemToplevel *w_current, int n, void (*f)(gpointer));
+void i_buffer_cut(GschemToplevel *w_current, int n, void (*f)(gpointer));
+void i_buffer_paste(GschemToplevel *w_current, int n, void (*f)(gpointer));
 /* i_callbacks.c */
 void i_callback_file_new(gpointer data);
 void i_callback_file_new_window(gpointer data);
