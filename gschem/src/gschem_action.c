@@ -32,7 +32,7 @@
 #include "actions.decl.x"
 
 #define DEFINE_ACTION(c_id, id, icon, name, label, menu_label) \
-  static void action_callback_ ## c_id (gpointer data)
+  static void action_callback_ ## c_id (GschemToplevel *w_current)
 #include "actions.c"
 #undef DEFINE_ACTION
 
@@ -43,7 +43,7 @@ gschem_action_register (gchar *id,
                         gchar *name,
                         gchar *label,
                         gchar *menu_label,
-                        void (*activate) (gpointer))
+                        void (*activate) (GschemToplevel *))
 {
   GschemAction *action = g_new0 (GschemAction, 1);
 
