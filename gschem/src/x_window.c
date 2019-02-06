@@ -658,30 +658,30 @@ void x_window_create_main(GschemToplevel *w_current)
                                             _("New"));
     gtk_widget_set_tooltip_text (GTK_WIDGET (button), _("New file"));
     gtk_toolbar_insert (GTK_TOOLBAR (toolbar), GTK_TOOL_ITEM (button), 0);
-    g_signal_connect (button,
-                      "clicked",
-                      G_CALLBACK (i_callback_toolbar_file_new),
-                      w_current);
+    g_signal_connect_swapped (button,
+                              "clicked",
+                              G_CALLBACK (i_callback_file_new),
+                              w_current);
 
     button =
       (GtkToolButton*) gtk_tool_button_new (x_window_stock_pixmap ("open", w_current),
                                             _("Open"));
     gtk_widget_set_tooltip_text (GTK_WIDGET (button), _("Open file"));
     gtk_toolbar_insert (GTK_TOOLBAR (toolbar), GTK_TOOL_ITEM (button), 1);
-    g_signal_connect (button,
-                      "clicked",
-                      G_CALLBACK (i_callback_toolbar_file_open),
-                      w_current);
+    g_signal_connect_swapped (button,
+                              "clicked",
+                              G_CALLBACK (i_callback_file_open),
+                              w_current);
 
     button =
       (GtkToolButton*) gtk_tool_button_new (x_window_stock_pixmap ("save", w_current),
                                             _("Save"));
     gtk_widget_set_tooltip_text (GTK_WIDGET (button), _("Save file"));
     gtk_toolbar_insert (GTK_TOOLBAR (toolbar), GTK_TOOL_ITEM (button), 2);
-    g_signal_connect (button,
-                      "clicked",
-                      G_CALLBACK (i_callback_toolbar_file_save),
-                      w_current);
+    g_signal_connect_swapped (button,
+                              "clicked",
+                              G_CALLBACK (i_callback_file_save),
+                              w_current);
 
     gtk_toolbar_insert (GTK_TOOLBAR (toolbar),
                         GTK_TOOL_ITEM (gtk_separator_tool_item_new ()), 3);
@@ -691,20 +691,20 @@ void x_window_create_main(GschemToplevel *w_current)
                                             _("Undo"));
     gtk_widget_set_tooltip_text (GTK_WIDGET (button), _("Undo last operation"));
     gtk_toolbar_insert (GTK_TOOLBAR (toolbar), GTK_TOOL_ITEM (button), 4);
-    g_signal_connect (button,
-                      "clicked",
-                      G_CALLBACK (i_callback_toolbar_edit_undo),
-                      w_current);
+    g_signal_connect_swapped (button,
+                              "clicked",
+                              G_CALLBACK (i_callback_edit_undo),
+                              w_current);
 
     button =
       (GtkToolButton*) gtk_tool_button_new (x_window_stock_pixmap ("redo", w_current),
                                             _("Redo"));
     gtk_widget_set_tooltip_text (GTK_WIDGET (button), _("Redo last undo"));
     gtk_toolbar_insert (GTK_TOOLBAR (toolbar), GTK_TOOL_ITEM (button), 5);
-    g_signal_connect (button,
-                      "clicked",
-                      G_CALLBACK (i_callback_toolbar_edit_redo),
-                      w_current);
+    g_signal_connect_swapped (button,
+                              "clicked",
+                              G_CALLBACK (i_callback_edit_redo),
+                              w_current);
 
     gtk_toolbar_insert (GTK_TOOLBAR (toolbar),
                         GTK_TOOL_ITEM (gtk_separator_tool_item_new ()), 6);
@@ -718,10 +718,10 @@ void x_window_create_main(GschemToplevel *w_current)
                                    "Select library and component from list, move the mouse into main window, click to place\n"
                                    "Right mouse button to cancel"));
     gtk_toolbar_insert (GTK_TOOLBAR (toolbar), GTK_TOOL_ITEM (button), 7);
-    g_signal_connect (button,
-                      "clicked",
-                      G_CALLBACK (i_callback_toolbar_add_component),
-                      w_current);
+    g_signal_connect_swapped (button,
+                              "clicked",
+                              G_CALLBACK (i_callback_add_component),
+                              w_current);
 
     /* init radio tool buttons, add first of them */
     w_current->toolbar_net = GTK_WIDGET (gtk_radio_tool_button_new (NULL));
@@ -733,10 +733,12 @@ void x_window_create_main(GschemToplevel *w_current)
     gtk_toolbar_insert (GTK_TOOLBAR (toolbar), GTK_TOOL_ITEM (w_current->toolbar_net), 8);
     gtk_tool_button_set_icon_widget (GTK_TOOL_BUTTON (w_current->toolbar_net),
                                      x_window_stock_pixmap ("insert-net", w_current));
-    g_signal_connect (w_current->toolbar_net,
-                      "toggled",
-                      G_CALLBACK (i_callback_toolbar_add_net),
-                      w_current);
+    /*
+    g_signal_connect_swapped (w_current->toolbar_net,
+                              "toggled",
+                              G_CALLBACK (i_callback_add_net),
+                              w_current);
+    */
 
     /* add a radio tool button */
     w_current->toolbar_bus = GTK_WIDGET (gtk_radio_tool_button_new (
@@ -750,10 +752,12 @@ void x_window_create_main(GschemToplevel *w_current)
     gtk_toolbar_insert (GTK_TOOLBAR (toolbar), GTK_TOOL_ITEM (w_current->toolbar_bus), 9);
     gtk_tool_button_set_icon_widget (GTK_TOOL_BUTTON (w_current->toolbar_bus),
                                      x_window_stock_pixmap ("insert-bus", w_current));
-    g_signal_connect (w_current->toolbar_bus,
-                      "toggled",
-                      G_CALLBACK (i_callback_toolbar_add_bus),
-                      w_current);
+    /*
+    g_signal_connect_swapped (w_current->toolbar_bus,
+                              "toggled",
+                              G_CALLBACK (i_callback_add_bus),
+                              w_current);
+    */
 
     /* not part of any radio button group */
     button =
@@ -761,10 +765,10 @@ void x_window_create_main(GschemToplevel *w_current)
                                             _("Text"));
     gtk_widget_set_tooltip_text (GTK_WIDGET (button), _("Add Text..."));
     gtk_toolbar_insert (GTK_TOOLBAR (toolbar), GTK_TOOL_ITEM (button), 10);
-    g_signal_connect (button,
-                      "clicked",
-                      G_CALLBACK (i_callback_toolbar_add_text),
-                      w_current);
+    g_signal_connect_swapped (button,
+                              "clicked",
+                              G_CALLBACK (i_callback_add_text),
+                              w_current);
 
     gtk_toolbar_insert (GTK_TOOLBAR (toolbar),
                         GTK_TOOL_ITEM (gtk_separator_tool_item_new ()), 11);
@@ -780,10 +784,12 @@ void x_window_create_main(GschemToplevel *w_current)
     gtk_toolbar_insert (GTK_TOOLBAR (toolbar), GTK_TOOL_ITEM (w_current->toolbar_select), 12);
     gtk_tool_button_set_icon_widget (GTK_TOOL_BUTTON (w_current->toolbar_select),
                                      x_window_stock_pixmap ("select", w_current));
-    g_signal_connect (w_current->toolbar_select,
-                      "toggled",
-                      G_CALLBACK (i_callback_toolbar_edit_select),
-                      w_current);
+    /*
+    g_signal_connect_swapped (w_current->toolbar_select,
+                              "toggled",
+                              G_CALLBACK (i_callback_edit_select),
+                              w_current);
+    */
 
     gtk_toolbar_insert (GTK_TOOLBAR (toolbar),
                         GTK_TOOL_ITEM (gtk_separator_tool_item_new ()), 13);

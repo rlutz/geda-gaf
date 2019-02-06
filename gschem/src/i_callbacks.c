@@ -74,16 +74,6 @@ DEFINE_I_CALLBACK(file_new)
  *  \par Function Description
  *
  */
-void i_callback_toolbar_file_new(GtkWidget* widget, gpointer data)
-{
-  i_callback_file_new (data);
-}
-
-/*! \todo Finish function documentation!!!
- *  \brief
- *  \par Function Description
- *
- */
 DEFINE_I_CALLBACK(file_new_window)
 {
   GschemToplevel *w_current = NULL;
@@ -113,17 +103,6 @@ DEFINE_I_CALLBACK(file_open)
   g_return_if_fail (w_current != NULL);
 
   x_fileselect_open (w_current);
-}
-
-/*! \todo Finish function documentation!!!
- *  \brief
- *  \par Function Description
- *
- *  \todo This should be renamed to page_open perhaps...
- */
-void i_callback_toolbar_file_open(GtkWidget* widget, gpointer data)
-{
-  i_callback_file_open (data);
 }
 
 /*! \todo Finish function documentation!!!
@@ -169,17 +148,6 @@ DEFINE_I_CALLBACK(file_save)
     x_window_save_page (w_current, page, page->page_filename);
   }
   g_free (untitled_name);
-}
-
-/*! \todo Finish function documentation!!!
- *  \brief
- *  \par Function Description
- *
- *  \todo This should be renamed to page_open perhaps...
- */
-void i_callback_toolbar_file_save(GtkWidget* widget, gpointer data)
-{
-  i_callback_file_save (data);
 }
 
 /*! \todo Finish function documentation!!!
@@ -308,16 +276,6 @@ DEFINE_I_CALLBACK(edit_undo)
  *  \par Function Description
  *
  */
-void i_callback_toolbar_edit_undo(GtkWidget* widget, gpointer data)
-{
-  i_callback_edit_undo (data);
-}
-
-/*! \todo Finish function documentation!!!
- *  \brief
- *  \par Function Description
- *
- */
 DEFINE_I_CALLBACK(edit_redo)
 {
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
@@ -337,16 +295,6 @@ DEFINE_I_CALLBACK(edit_redo)
  *  \brief
  *  \par Function Description
  *
- */
-void i_callback_toolbar_edit_redo(GtkWidget* widget, gpointer data)
-{
-  i_callback_edit_redo (data);
-}
-
-/*! \todo Finish function documentation!!!
- *  \brief
- *  \par Function Description
- *
  *  \note
  *  Select also does not update the middle button shortcut.
  */
@@ -358,24 +306,6 @@ DEFINE_I_CALLBACK(edit_select)
   /* this is probably the only place this should be */
   i_set_state(w_current, SELECT);
   i_action_stop (w_current);
-}
-
-/*! \todo Finish function documentation!!!
- *  \brief
- *  \par Function Description
- *
- */
-void i_callback_toolbar_edit_select(GtkWidget* widget, gpointer data)
-{
-  GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
-  g_return_if_fail (w_current != NULL);
-
-  if (gtk_toggle_tool_button_get_active (GTK_TOGGLE_TOOL_BUTTON (widget))) {
-    if (!o_invalidate_rubber (w_current)) {
-      i_cancel (w_current);
-    }
-    i_callback_edit_select(data);
-  }
 }
 
 /*! \brief Select all objects on page.
@@ -1733,16 +1663,6 @@ DEFINE_I_CALLBACK(add_component)
  *  \par Function Description
  *
  */
-void i_callback_toolbar_add_component(GtkWidget* widget, gpointer data)
-{
-  i_callback_add_component (data);
-}
-
-/*! \todo Finish function documentation!!!
- *  \brief
- *  \par Function Description
- *
- */
 DEFINE_I_CALLBACK(add_attribute)
 {
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
@@ -1785,22 +1705,6 @@ DEFINE_I_CALLBACK(add_net)
  *  \par Function Description
  *
  */
-void i_callback_toolbar_add_net(GtkWidget* widget, gpointer data)
-{
-  GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
-  scm_dynwind_begin (0);
-  g_dynwind_window (w_current);
-  if (gtk_toggle_tool_button_get_active (GTK_TOGGLE_TOOL_BUTTON (widget))) {
-    i_callback_add_net (w_current);
-  }
-  scm_dynwind_end ();
-}
-
-/*! \todo Finish function documentation!!!
- *  \brief
- *  \par Function Description
- *
- */
 DEFINE_I_CALLBACK(add_bus)
 {
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
@@ -1824,22 +1728,6 @@ DEFINE_I_CALLBACK(add_bus)
  *  \par Function Description
  *
  */
-void i_callback_toolbar_add_bus(GtkWidget* widget, gpointer data)
-{
-  GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
-  scm_dynwind_begin (0);
-  g_dynwind_window (w_current);
-  if (gtk_toggle_tool_button_get_active (GTK_TOGGLE_TOOL_BUTTON (widget))) {
-    i_callback_add_bus (w_current);
-  }
-  scm_dynwind_end ();
-}
-
-/*! \todo Finish function documentation!!!
- *  \brief
- *  \par Function Description
- *
- */
 DEFINE_I_CALLBACK(add_text)
 {
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
@@ -1854,16 +1742,6 @@ DEFINE_I_CALLBACK(add_text)
   i_update_middle_button(w_current, i_callback_add_text, _("Text"));
 
   text_input_dialog(w_current);
-}
-
-/*! \todo Finish function documentation!!!
- *  \brief
- *  \par Function Description
- *
- */
-void i_callback_toolbar_add_text(GtkWidget* widget, gpointer data)
-{
-  i_callback_add_text (data);
 }
 
 /*! \todo Finish function documentation!!!
