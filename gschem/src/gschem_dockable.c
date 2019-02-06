@@ -1464,6 +1464,11 @@ gschem_dockable_cleanup_toplevel (GschemToplevel *w_current)
       gtk_widget_destroy (dockable->window);
       dockable->window = NULL;
     }
+
+    if (dockable->widget != NULL) {
+      gtk_widget_destroy (dockable->widget);
+      dockable->widget = NULL;
+    }
   }
 
   /* disconnect notebook signals */
