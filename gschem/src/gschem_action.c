@@ -63,13 +63,17 @@ gschem_action_register (gchar *id,
 
   action->thunk = SCM_UNDEFINED;
 
+  /* actions are global objects, so their smob should be permanent */
+  action->smob = scm_permanent_object (
+    scm_new_smob (action_tag, (scm_t_bits) action));
+
   /* create public binding */
   scm_dynwind_begin (0);
   {
     gchar *name = g_strdup_printf ("&%s", action->id);
     scm_dynwind_free (name);
 
-    scm_c_define (name, scm_new_smob (action_tag, (scm_t_bits) action));
+    scm_c_define (name, action->smob);
     scm_c_export (name, NULL);
   }
   scm_dynwind_end ();
@@ -177,9 +181,9 @@ make_action (SCM s_icon_name, SCM s_name, SCM s_label, SCM s_menu_label,
 
     action->thunk = SCM_UNDEFINED;
 
-    /* immediately create the smob so the garbage collector knows
-       about the allocated data */
-    smob = scm_new_smob (action_tag, (scm_t_bits) action);
+    /* immediately create the smob and keep a reference on the stack
+       so the garbage collector knows about the allocated data */
+    action->smob = smob = scm_new_smob (action_tag, (scm_t_bits) action);
   }
   scm_dynwind_end ();
 

@@ -37,6 +37,7 @@ struct _GschemAction {
                     GschemToplevel *w_current);
 
   SCM thunk;
+  SCM smob;  /* not owned */
 };
 
 
