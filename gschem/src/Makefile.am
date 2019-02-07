@@ -14,7 +14,6 @@ gschem_SOURCES = \
 	a_zoom.c \
 	g_action.c \
 	g_attrib.c \
-	g_builtins.c \
 	g_funcs.c \
 	g_hook.c \
 	g_keys.c \

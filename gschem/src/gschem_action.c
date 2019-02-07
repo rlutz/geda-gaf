@@ -57,6 +57,17 @@ gschem_action_register (gchar *id,
   action->menu_label = menu_label;
   action->activate = activate;
 
+  /* create public binding */
+  scm_dynwind_begin (0);
+  {
+    gchar *name = g_strdup_printf ("%%%s", action->id);
+    scm_dynwind_free (name);
+
+    scm_c_define (name, scm_new_smob (action_tag, (scm_t_bits) action));
+    scm_c_export (name, NULL);
+  }
+  scm_dynwind_end ();
+
   return action;
 }
 
@@ -101,6 +112,12 @@ init_module_gschem_core_action (void *data)
   scm_c_define_gsubr ("%action?", 1, 0, 0, action_p);
 
   scm_c_export ("%action?", NULL);
+}
+
+static void
+init_module_gschem_core_builtins (void *data)
+{
+#include "actions.init.x"
 }
 
 
@@ -176,5 +193,6 @@ gschem_action_init (void)
   scm_c_define_module ("gschem core action",
                        init_module_gschem_core_action, NULL);
 
-#include "actions.init.x"
+  scm_c_define_module ("gschem core builtins",
+                       init_module_gschem_core_builtins, NULL);
 }
