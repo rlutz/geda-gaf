@@ -90,6 +90,21 @@ scm_to_action (SCM smob)
 
 
 static SCM
+action_p (SCM smob)
+{
+  return scm_from_bool (SCM_SMOB_PREDICATE (action_tag, smob));
+}
+
+static void
+init_module_gschem_core_action (void *data)
+{
+  scm_c_define_gsubr ("%action?", 1, 0, 0, action_p);
+
+  scm_c_export ("%action?", NULL);
+}
+
+
+static SCM
 mark_action (SCM smob)
 {
   return SCM_UNDEFINED;
@@ -157,6 +172,9 @@ gschem_action_init (void)
   scm_set_smob_print (action_tag, print_action);
   scm_set_smob_equalp (action_tag, equalp_action);
   scm_set_smob_apply (action_tag, apply_action, 0, 0, 0);
+
+  scm_c_define_module ("gschem core action",
+                       init_module_gschem_core_action, NULL);
 
 #include "actions.init.x"
 }
