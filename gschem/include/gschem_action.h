@@ -33,7 +33,8 @@ struct _GschemAction {
   gchar *menu_label;
   gchar *tooltip;
 
-  void (*activate) (GschemToplevel *w_current);
+  void (*activate) (GschemAction *action,
+                    GschemToplevel *w_current);
 };
 
 
@@ -49,7 +50,8 @@ GschemAction *gschem_action_register (gchar *id,
                                       gchar *label,
                                       gchar *menu_label,
                                       gchar *tooltip,
-                                      void (*activate) (GschemToplevel *));
+                                      void (*activate) (GschemAction *,
+                                                        GschemToplevel *));
 
 void gschem_action_init (void);
 
