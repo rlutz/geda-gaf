@@ -20,6 +20,7 @@
 
 (use-modules (gschem keymap)
              (gschem action)
+             (gschem core builtins)
              (gschem builtins)
              (gschem window)
              (srfi srfi-1))

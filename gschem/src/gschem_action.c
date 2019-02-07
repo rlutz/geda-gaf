@@ -60,7 +60,7 @@ gschem_action_register (gchar *id,
   /* create public binding */
   scm_dynwind_begin (0);
   {
-    gchar *name = g_strdup_printf ("%%%s", action->id);
+    gchar *name = g_strdup_printf ("&%s", action->id);
     scm_dynwind_free (name);
 
     scm_c_define (name, scm_new_smob (action_tag, (scm_t_bits) action));
