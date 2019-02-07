@@ -61,6 +61,8 @@ gschem_action_register (gchar *id,
   action->tooltip = tooltip;
   action->activate = activate;
 
+  action->thunk = SCM_UNDEFINED;
+
   /* create public binding */
   scm_dynwind_begin (0);
   {
@@ -104,6 +106,86 @@ scm_to_action (SCM smob)
 }
 
 
+static void
+activate_scheme_thunk (GschemAction *action, GschemToplevel *w_current)
+{
+  g_return_if_fail (!SCM_UNBNDP (action->thunk));
+  g_scm_eval_protected (scm_list_1 (action->thunk), SCM_UNDEFINED);
+}
+
+static SCM
+make_action (SCM s_icon_name, SCM s_name, SCM s_label, SCM s_menu_label,
+             SCM s_tooltip, SCM s_thunk)
+{
+  GschemAction *action;
+  SCM smob;
+
+  SCM_ASSERT (scm_is_false (s_icon_name) ||
+              scm_is_string (s_icon_name), s_icon_name,
+              SCM_ARG1, "%make-action!");
+  SCM_ASSERT (scm_is_false (s_name) ||
+              scm_is_string (s_name), s_name,
+              SCM_ARG2, "%make-action!");
+  SCM_ASSERT (scm_is_false (s_label) ||
+              scm_is_string (s_label), s_label,
+              SCM_ARG3, "%make-action!");
+  SCM_ASSERT (scm_is_false (s_menu_label) ||
+              scm_is_string (s_menu_label), s_menu_label,
+              SCM_ARG4, "%make-action!");
+  SCM_ASSERT (scm_is_false (s_tooltip) ||
+              scm_is_string (s_tooltip), s_tooltip,
+              SCM_ARG5, "%make-action!");
+  SCM_ASSERT (scm_is_true (scm_thunk_p (s_thunk)), s_thunk,
+              SCM_ARG6, "%make-action!");
+
+  scm_dynwind_begin (0);
+  {
+    char *icon_name, *name, *label, *menu_label, *tooltip;
+
+    icon_name = scm_is_false (s_icon_name) ? NULL :
+                scm_to_utf8_string (s_icon_name);
+    scm_dynwind_free (icon_name);
+
+    name = scm_is_false (s_name) ? NULL :
+           scm_to_utf8_string (s_name);
+    scm_dynwind_free (name);
+
+    label = scm_is_false (s_label) ? NULL :
+            scm_to_utf8_string (s_label);
+    scm_dynwind_free (label);
+
+    menu_label = scm_is_false (s_menu_label) ? NULL :
+                 scm_to_utf8_string (s_menu_label);
+    scm_dynwind_free (menu_label);
+
+    tooltip = scm_is_false (s_tooltip) ? NULL :
+              scm_to_utf8_string (s_tooltip);
+    scm_dynwind_free (tooltip);
+
+    action = g_new0 (GschemAction, 1);
+
+    action->id = NULL;
+    action->icon_name = g_strdup (icon_name);
+    action->name = g_strdup (name);
+    action->label = g_strdup (label);
+    action->menu_label = g_strdup (menu_label);
+    action->tooltip = g_strdup (tooltip);
+    action->activate = activate_scheme_thunk;
+
+    action->thunk = SCM_UNDEFINED;
+
+    /* immediately create the smob so the garbage collector knows
+       about the allocated data */
+    smob = scm_new_smob (action_tag, (scm_t_bits) action);
+  }
+  scm_dynwind_end ();
+
+  /* only then, fill in the thunk field */
+  action->thunk = s_thunk;
+
+  return smob;
+}
+
 static SCM
 action_p (SCM smob)
 {
@@ -113,9 +195,10 @@ action_p (SCM smob)
 static void
 init_module_gschem_core_action (void *data)
 {
+  scm_c_define_gsubr ("%make-action", 6, 0, 0, make_action);
   scm_c_define_gsubr ("%action?", 1, 0, 0, action_p);
 
-  scm_c_export ("%action?", NULL);
+  scm_c_export ("%make-action", "%action?", NULL);
 }
 
 static void
@@ -128,7 +211,9 @@ init_module_gschem_core_builtins (void *data)
 static SCM
 mark_action (SCM smob)
 {
-  return SCM_UNDEFINED;
+  GschemAction *action = GSCHEM_ACTION (SCM_SMOB_DATA (smob));
+
+  return action->thunk;
 }
 
 static size_t

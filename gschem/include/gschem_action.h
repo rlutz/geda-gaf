@@ -35,6 +35,8 @@ struct _GschemAction {
 
   void (*activate) (GschemAction *action,
                     GschemToplevel *w_current);
+
+  SCM thunk;
 };
 
 
