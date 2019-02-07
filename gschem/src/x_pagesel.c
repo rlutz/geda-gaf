@@ -212,20 +212,12 @@ static gboolean pagesel_callback_popup_menu (GtkWidget *widget,
   return TRUE;
 }
 
-#define DEFINE_POPUP_CALLBACK(name, action)                       \
-static void                                                       \
-pagesel_callback_popup_ ## name (GtkMenuItem *menuitem,           \
-                                 gpointer user_data)              \
-{                                                                 \
-  gschem_action_activate (action_ ## action,                      \
-                          GSCHEM_DIALOG (user_data)->w_current);  \
+static void pagesel_callback_popup (GtkMenuItem *menuitem,
+                                    gpointer user_data)
+{
+  gschem_action_activate (g_object_get_data (G_OBJECT (menuitem), "action"),
+                          GSCHEM_DIALOG (user_data)->w_current);
 }
-
-DEFINE_POPUP_CALLBACK (new_page,     file_new)
-DEFINE_POPUP_CALLBACK (open_page,    file_open)
-DEFINE_POPUP_CALLBACK (save_page,    file_save)
-DEFINE_POPUP_CALLBACK (close_page,   page_close)
-
 
 /*! \brief Popup context-sensitive menu.
  *  \par Function Description
@@ -244,15 +236,15 @@ static void pagesel_popup_menu (Pagesel *pagesel,
   GtkWidget *menu;
   struct menuitem_t {
     gchar *label;
-    GCallback callback;
+    GschemAction *action;
   };
   struct menuitem_t menuitems[] = {
-    { N_("New Page"),     G_CALLBACK (pagesel_callback_popup_new_page)     },
-    { N_("Open Page..."), G_CALLBACK (pagesel_callback_popup_open_page)    },
-    { "-",                NULL                                             },
-    { N_("Save Page"),    G_CALLBACK (pagesel_callback_popup_save_page)    },
-    { N_("Close Page"),   G_CALLBACK (pagesel_callback_popup_close_page)   },
-    { NULL,               NULL                                             } };
+    { N_("New Page"),     action_file_new     },
+    { N_("Open Page..."), action_file_open    },
+    { "-",                NULL                },
+    { N_("Save Page"),    action_file_save    },
+    { N_("Close Page"),   action_page_close   },
+    { NULL,               NULL                } };
   struct menuitem_t *tmp;
   
   if (event != NULL &&
@@ -275,9 +267,10 @@ static void pagesel_popup_menu (Pagesel *pagesel,
       menuitem = gtk_separator_menu_item_new ();
     } else {
       menuitem = gtk_menu_item_new_with_label (_(tmp->label));
+      g_object_set_data (G_OBJECT (menuitem), "action", tmp->action);
       g_signal_connect (menuitem,
                         "activate",
-                        tmp->callback,
+                        G_CALLBACK (pagesel_callback_popup),
                         pagesel);
     }
     gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
