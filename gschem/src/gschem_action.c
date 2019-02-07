@@ -31,7 +31,7 @@
 #include "gschem.h"
 #include "actions.decl.x"
 
-#define DEFINE_ACTION(c_id, id, icon, name, label, menu_label) \
+#define DEFINE_ACTION(c_id, id, icon, name, label, menu_label, tooltip) \
   static void action_callback_ ## c_id (GschemToplevel *w_current)
 #include "actions.c"
 #undef DEFINE_ACTION
@@ -46,6 +46,7 @@ gschem_action_register (gchar *id,
                         gchar *name,
                         gchar *label,
                         gchar *menu_label,
+                        gchar *tooltip,
                         void (*activate) (GschemToplevel *))
 {
   GschemAction *action = g_new0 (GschemAction, 1);
@@ -55,6 +56,7 @@ gschem_action_register (gchar *id,
   action->name = name;
   action->label = label;
   action->menu_label = menu_label;
+  action->tooltip = tooltip;
   action->activate = activate;
 
   /* create public binding */
@@ -137,6 +139,7 @@ free_action (SCM smob)
   g_free (action->name);
   g_free (action->label);
   g_free (action->menu_label);
+  g_free (action->tooltip);
 
   return 0;
 }
