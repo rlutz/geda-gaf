@@ -123,7 +123,9 @@ struct st_gschem_toplevel {
   int third_wy;
   int magnetic_wx, magnetic_wy;         /* Position of the magnetic marker*/
   int distance;
-  int inside_action;                    /* Are we doing an action? */
+  int inside_action;                    /* Are we doing an action?
+                                           This does not refer to GschemAction
+                                           but to i_action_start/stop. */
   int rubber_visible;                   /* Are there any rubber lines on
 					   the screen? */
   int net_direction;                    /* bit field to guess the best net direction */
