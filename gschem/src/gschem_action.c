@@ -37,6 +37,9 @@
 #undef DEFINE_ACTION
 
 
+static scm_t_bits action_tag;
+
+
 GschemAction *
 gschem_action_register (gchar *id,
                         gchar *icon_name,
@@ -69,8 +72,91 @@ gschem_action_activate (GschemAction *action,
 }
 
 
+/******************************************************************************/
+
+
+int
+scm_is_action (SCM x)
+{
+  return SCM_SMOB_PREDICATE (action_tag, x);
+}
+
+GschemAction *
+scm_to_action (SCM smob)
+{
+  scm_assert_smob_type (action_tag, smob);
+  return GSCHEM_ACTION (SCM_SMOB_DATA (smob));
+}
+
+
+static SCM
+mark_action (SCM smob)
+{
+  return SCM_UNDEFINED;
+}
+
+static size_t
+free_action (SCM smob)
+{
+  GschemAction *action = GSCHEM_ACTION (SCM_SMOB_DATA (smob));
+
+  g_free (action->id);
+  g_free (action->icon_name);
+  g_free (action->name);
+  g_free (action->label);
+  g_free (action->menu_label);
+
+  return 0;
+}
+
+static int
+print_action (SCM smob, SCM port, scm_print_state *pstate)
+{
+  GschemAction *action = GSCHEM_ACTION (SCM_SMOB_DATA (smob));
+
+  if (action->id != NULL) {
+    scm_puts ("#<action ", port);
+    scm_puts (action->id, port);
+    scm_puts (">", port);
+  } else if (action->name != NULL) {
+    scm_puts ("#<action \"", port);
+    scm_puts (action->name, port);
+    scm_puts ("\">", port);
+  } else
+    scm_puts ("#<action>", port);
+
+  scm_remember_upto_here_1 (smob);
+  return 1;  /* non-zero means success */
+}
+
+static SCM
+equalp_action (SCM smob0, SCM smob1)
+{
+  GschemAction *action0 = GSCHEM_ACTION (SCM_SMOB_DATA (smob0));
+  GschemAction *action1 = GSCHEM_ACTION (SCM_SMOB_DATA (smob1));
+
+  return scm_from_bool (action0 == action1);
+}
+
+static SCM
+apply_action (SCM smob)
+{
+  GschemAction *action = GSCHEM_ACTION (SCM_SMOB_DATA (smob));
+  gschem_action_activate (action, g_current_window ());
+
+  scm_remember_upto_here_1 (smob);
+  return SCM_UNDEFINED;
+}
+
 void
 gschem_action_init (void)
 {
+  action_tag = scm_make_smob_type ("action", 0);
+  scm_set_smob_mark (action_tag, mark_action);
+  scm_set_smob_free (action_tag, free_action);
+  scm_set_smob_print (action_tag, print_action);
+  scm_set_smob_equalp (action_tag, equalp_action);
+  scm_set_smob_apply (action_tag, apply_action, 0, 0, 0);
+
 #include "actions.init.x"
 }

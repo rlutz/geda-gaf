@@ -36,6 +36,9 @@ struct _GschemAction {
 };
 
 
+int scm_is_action (SCM x);
+GschemAction *scm_to_action (SCM smob);
+
 void gschem_action_activate (GschemAction *action,
                              GschemToplevel *w_current);
 
