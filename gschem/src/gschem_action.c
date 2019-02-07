@@ -29,13 +29,14 @@
 #endif
 
 #include "gschem.h"
-#include "actions.decl.x"
 
 #define DEFINE_ACTION(c_id, id, icon, name, label, menu_label, tooltip) \
   static void action_callback_ ## c_id (GschemAction *action, \
                                         GschemToplevel *w_current)
 #include "actions.c"
 #undef DEFINE_ACTION
+
+#include "actions.decl.x"
 
 
 static scm_t_bits action_tag;
