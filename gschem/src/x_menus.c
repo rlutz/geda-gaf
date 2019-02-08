@@ -29,36 +29,30 @@
 
 #include <glib/gstdio.h>
 
-struct PopupEntry {
-  const gchar const *name;
-  GschemAction **action;
-  const gchar const *stock_id;
-};
+static GschemAction **popup_items[] = {
+  &action_add_net,
+  &action_add_attribute,
+  &action_add_component,
+  &action_add_bus,
+  &action_add_text,
+  NULL,
+  &action_view_zoom_in,
+  &action_view_zoom_out,
+  &action_view_zoom_box,
+  &action_view_zoom_extents,
+  NULL,
+  &action_edit_select,
+  &action_edit_edit,
+  &action_edit_pin_type,
+  &action_edit_copy,
+  &action_edit_move,
+  &action_edit_delete,
+  NULL,
+  &action_hierarchy_down_schematic,
+  &action_hierarchy_down_symbol,
+  &action_hierarchy_up,
 
-static struct PopupEntry popup_items[] = {
-  { N_("Add Net"), &action_add_net, "insert-net" },
-  { N_("Add Attribute"), &action_add_attribute, "insert-attribute" },
-  { N_("Add Component"), &action_add_component, "insert-symbol" },
-  { N_("Add Bus"), &action_add_bus, "insert-bus" },
-  { N_("Add Text"), &action_add_text, "insert-text" },
-  { "SEPARATOR", NULL, NULL },
-  { N_("Zoom In"), &action_view_zoom_in, "gtk-zoom-in" },
-  { N_("Zoom Out"), &action_view_zoom_out, "gtk-zoom-out" },
-  { N_("Zoom Box"), &action_view_zoom_box, NULL },
-  { N_("Zoom Extents"), &action_view_zoom_extents, "gtk-zoom-fit" },
-  { "SEPARATOR", NULL, NULL },
-  { N_("Select"), &action_edit_select, "select" },
-  { N_("Edit..."), &action_edit_edit, NULL },
-  { N_("Edit Pin Type..."), &action_edit_pin_type, NULL },
-  { N_("Copy"), &action_edit_copy, "clone" },
-  { N_("Move"), &action_edit_move, NULL },
-  { N_("Delete"), &action_edit_delete, "gtk-delete" },
-  { "SEPARATOR", NULL, NULL },
-  { N_("Down Schematic"), &action_hierarchy_down_schematic, "gtk-go-down" },
-  { N_("Down Symbol"), &action_hierarchy_down_symbol, "gtk-go-bottom" },
-  { N_("Up"), &action_hierarchy_up, "gtk-go-up" },
-
-  { NULL, NULL, NULL }, /* Guard */
+  NULL, NULL /* Guard */
 };
 
 
@@ -90,7 +84,6 @@ get_main_menu(GschemToplevel *w_current)
   int scm_items_len;
   SCM scm_items;
   SCM scm_item;
-  SCM scm_item_func;
   SCM scm_index;
   SCM scm_keys;
   char *menu_name;
@@ -125,32 +118,29 @@ get_main_menu(GschemToplevel *w_current)
 
       scm_index = scm_from_int (j);
       scm_item = scm_list_ref (scm_items, scm_index);
-      scm_item_func = SCM_CADR (scm_item);
-      SCM_ASSERT(scm_is_symbol (scm_item_func) ||
-                    scm_is_false (scm_item_func),
-                 scm_item_func, SCM_ARGn, "get_main_menu item_func");
+      SCM_ASSERT(scm_is_action (scm_item) ||
+                    scm_is_false (scm_item),
+                 scm_item, SCM_ARGn, "get_main_menu item");
 
       scm_dynwind_begin(0);
 
-      if (scm_is_false (scm_item_func)) {
+      if (scm_is_false (scm_item)) {
         menu_item = gtk_menu_item_new();
         gtk_menu_shell_append (GTK_MENU_SHELL (menu), menu_item);
       } else {
 
           GtkStockItem stock_info;
 
-          SCM s_action = scm_primitive_eval (scm_item_func);
-
           /* make sure the action won't ever be garbage collected
              since we're going to point to it from C data structures */
-          scm_permanent_object (s_action);
+          scm_permanent_object (scm_item);
 
-          GschemAction *action = scm_to_action (s_action);
+          GschemAction *action = scm_to_action (scm_item);
 
           /* Look up key binding in global keymap */
           SCM s_expr =
             scm_list_2 (scm_from_utf8_symbol ("find-key"),
-                        s_action);
+                        scm_item);
 
           scm_keys = g_scm_eval_protected (s_expr, scm_interaction_environment ());
 
@@ -257,18 +247,17 @@ get_main_popup (GschemToplevel *w_current)
 
   menu = gtk_menu_new ();
 
-  for (i = 0; popup_items[i].name != NULL; i++) {
-    struct PopupEntry e = popup_items[i];
+  for (i = 0; popup_items[i] != NULL || popup_items[i + 1] != NULL; i++) {
     GschemAction *action;
 
     /* No action --> add a separator */
-    if (e.action == NULL) {
+    if (popup_items[i] == NULL) {
       menu_item = gtk_menu_item_new();
       gtk_widget_show (menu_item);
       gtk_menu_shell_append (GTK_MENU_SHELL (menu), menu_item);
       continue;
     }
-    action = *e.action;
+    action = *popup_items[i];
 
     /* Don't bother showing keybindings in the popup menu */
 
