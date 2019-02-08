@@ -40,7 +40,6 @@
 gboolean
 g_action_eval_by_name (GschemToplevel *w_current, const gchar *action_name)
 {
-  SCM s_eval_action_proc;
   SCM s_expr;
   SCM s_result;
   gboolean result;
@@ -51,15 +50,8 @@ g_action_eval_by_name (GschemToplevel *w_current, const gchar *action_name)
   scm_dynwind_begin (0);
   g_dynwind_window (w_current);
 
-  /* Get the eval-action procedure */
-  s_eval_action_proc =
-	  scm_variable_ref (scm_c_public_variable ("gschem action",
-	                                           "eval-action!"));
   /* Build expression to evaluate */
-  /* FIXME use SCM_SYMBOL for quote */
-  s_expr = scm_list_2 (s_eval_action_proc,
-                       scm_list_2 (scm_from_utf8_symbol ("quote"),
-                                   scm_from_utf8_symbol (action_name)));
+  s_expr = scm_list_1 (scm_from_utf8_symbol (action_name));
   /* Evaluate and get return value */
   s_result = g_scm_eval_protected (s_expr, SCM_UNDEFINED);
   result = scm_is_true (s_result);

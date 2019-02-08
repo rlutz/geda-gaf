@@ -29,32 +29,14 @@
 
 (define current-action-position (make-fluid))
 
-;; Define an eval-in-currentmodule procedure
-(define (eval-cm expr) (eval expr (current-module)))
-
-;; Evaluates a gschem action.  A gschem action is expected to be a
-;; symbol naming a thunk variable in the current module.
+;; Evaluates a gschem action.  A gschem action is expected to be an
+;; action object from (gschem core builtins) or returned by make-action.
 (define-public (eval-action! action)
-  (define (invalid-action-error)
-    (error (_ "~S is not a valid gschem action.") action))
-
-  (define (eval-action!/recursive a)
-
-    (cond
-     ;; Sometimes actions are specified just by a symbol naming them
-     ((symbol? a)
-      (eval-action!/recursive (false-if-exception (eval-cm a))))
-
-     ;; Eventually you just end up with a thunk.
-     ((thunk? a)
-      (begin 
-        (a) ;; Actually execute the action
-        #t))
-
-     ;; Otherwise, fail
-     (else (invalid-action-error))))
-  
-  (eval-action!/recursive action))
+  (if (action? action)
+      (begin
+        (action) ;; Actually execute the action
+        #t)
+      (error (_ "~S is not a valid gschem action.") action)))
 
 ;; Evaluate an action at a particular point on the schematic plane.
 ;; If the point is omitted, the action is evaluated at the current
