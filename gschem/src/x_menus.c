@@ -272,7 +272,6 @@ get_main_menu(GschemToplevel *w_current)
 GtkWidget *
 get_main_popup (GschemToplevel *w_current)
 {
-  GtkAction *action;
   GtkWidget *menu_item;
   GtkWidget *menu;
   GtkStockItem stock_info;
@@ -292,20 +291,26 @@ get_main_popup (GschemToplevel *w_current)
     }
 
     /* Don't bother showing keybindings in the popup menu */
-    action = g_object_new (GTK_TYPE_ACTION,
-                           "label", gettext (e.name),
-                           "tooltip", gettext (e.name),
-                           NULL);
-    /* If there's a matching stock item, use it. Otherwise lookup the
-       name in the icon theme. */
-    if (e.stock_id != NULL && gtk_stock_lookup (e.stock_id, &stock_info)) {
-      gtk_action_set_stock_id (GTK_ACTION (action), e.stock_id);
-    } else {
-      gtk_action_set_icon_name (GTK_ACTION (action), e.stock_id);
-    }
 
-    menu_item = gtk_action_create_menu_item (GTK_ACTION (action));
+    menu_item = g_object_new (GTK_TYPE_IMAGE_MENU_ITEM, NULL);
+    gtk_menu_item_set_label (GTK_MENU_ITEM (menu_item), gettext (e.name));
     gtk_menu_shell_append (GTK_MENU_SHELL (menu), menu_item);
+    gtk_widget_show (menu_item);
+
+    if (e.stock_id != NULL) {
+      GtkWidget *image = gtk_image_new ();
+      gtk_widget_show (image);
+      gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (menu_item), image);
+
+      /* If there's a matching stock item, use it.
+         Otherwise lookup the name in the icon theme. */
+      if (gtk_stock_lookup (e.stock_id, &stock_info))
+        gtk_image_set_from_stock (GTK_IMAGE (image), e.stock_id,
+                                  GTK_ICON_SIZE_MENU);
+      else
+        gtk_image_set_from_icon_name (GTK_IMAGE (image), e.stock_id,
+                                      GTK_ICON_SIZE_MENU);
+    }
 
     /* Connect things up so that the actions get run */
     g_object_set_data (G_OBJECT (menu_item), "action", *e.action);
