@@ -90,16 +90,11 @@ get_main_menu(GschemToplevel *w_current)
   int scm_items_len;
   SCM scm_items;
   SCM scm_item;
-  SCM scm_item_name;
   SCM scm_item_func;
-  SCM scm_item_stock;
   SCM scm_index;
   SCM scm_keys;
   char *menu_name;
   char **raw_menu_name = g_malloc (sizeof(char *));
-  char *menu_item_name;
-  char *raw_menu_item_name;
-  char *menu_item_stock;
   char *menu_item_keys;
   int i, j;
 
@@ -130,25 +125,14 @@ get_main_menu(GschemToplevel *w_current)
 
       scm_index = scm_from_int (j);
       scm_item = scm_list_ref (scm_items, scm_index);
-      scm_item_name = SCM_CAR (scm_item);
       scm_item_func = SCM_CADR (scm_item);
-      scm_item_stock = scm_is_pair (SCM_CDDR (scm_item)) ?
-                         SCM_CADDR (scm_item) : SCM_BOOL_F;
-      SCM_ASSERT(scm_is_string(scm_item_name), scm_item_name, SCM_ARGn, "get_main_menu item_name");
       SCM_ASSERT(scm_is_symbol (scm_item_func) ||
                     scm_is_false (scm_item_func),
                  scm_item_func, SCM_ARGn, "get_main_menu item_func");
-      SCM_ASSERT (scm_is_string (scm_item_stock) ||
-                    scm_is_false (scm_item_stock),
-                  scm_item_stock, SCM_ARGn, "get_main_menu stock");
 
-      raw_menu_item_name = scm_to_utf8_string(scm_item_name);
       scm_dynwind_begin(0);
-      scm_dynwind_free(raw_menu_item_name);
 
-      menu_item_name = (char *) gettext(raw_menu_item_name);
-
-      if (strcmp(menu_item_name, "SEPARATOR") == 0) {
+      if (scm_is_false (scm_item_func)) {
         menu_item = gtk_menu_item_new();
         gtk_menu_shell_append (GTK_MENU_SHELL (menu), menu_item);
       } else {
@@ -177,25 +161,20 @@ get_main_menu(GschemToplevel *w_current)
             scm_dynwind_free(menu_item_keys);
           }
 
-          if (scm_is_false (scm_item_stock))
-            menu_item_stock = NULL;
-          else
-            menu_item_stock = scm_to_utf8_string (scm_item_stock);
-
           menu_item = g_object_new (GTK_TYPE_IMAGE_MENU_ITEM, NULL);
 
           /* use custom label widget */
           GtkWidget *label = g_object_new (GSCHEM_TYPE_ACCEL_LABEL, NULL);
           gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
           gtk_label_set_use_underline (GTK_LABEL (label), TRUE);
-          gtk_label_set_label (GTK_LABEL (label), menu_item_name);
+          gtk_label_set_label (GTK_LABEL (label), action->menu_label);
           gschem_accel_label_set_accel_string (GSCHEM_ACCEL_LABEL (label),
                                                menu_item_keys);
           gtk_container_add (GTK_CONTAINER (menu_item), label);
           gtk_widget_show (label);
 
           /* set icon */
-          if (menu_item_stock) {
+          if (action->icon_name) {
             GtkWidget *image = gtk_image_new ();
             gtk_widget_show (image);
             gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (menu_item),
@@ -203,14 +182,13 @@ get_main_menu(GschemToplevel *w_current)
 
             /* If stock name corresponds to a GTK stock item, then use it.
                Otherwise, look it up in the icon theme. */
-            if (gtk_stock_lookup (menu_item_stock, &stock_info))
-              gtk_image_set_from_stock (GTK_IMAGE (image), menu_item_stock,
-                                        GTK_ICON_SIZE_MENU);
+            if (gtk_stock_lookup (action->icon_name, &stock_info))
+              gtk_image_set_from_stock (
+                GTK_IMAGE (image), action->icon_name, GTK_ICON_SIZE_MENU);
             else
-              gtk_image_set_from_icon_name (GTK_IMAGE (image), menu_item_stock,
-                                            GTK_ICON_SIZE_MENU);
+              gtk_image_set_from_icon_name (
+                GTK_IMAGE (image), action->icon_name, GTK_ICON_SIZE_MENU);
           }
-          free(menu_item_stock);
 
           if (action == action_file_open_recent)
             gtk_menu_item_set_submenu (GTK_MENU_ITEM (menu_item),
@@ -281,6 +259,7 @@ get_main_popup (GschemToplevel *w_current)
 
   for (i = 0; popup_items[i].name != NULL; i++) {
     struct PopupEntry e = popup_items[i];
+    GschemAction *action;
 
     /* No action --> add a separator */
     if (e.action == NULL) {
@@ -289,35 +268,36 @@ get_main_popup (GschemToplevel *w_current)
       gtk_menu_shell_append (GTK_MENU_SHELL (menu), menu_item);
       continue;
     }
+    action = *e.action;
 
     /* Don't bother showing keybindings in the popup menu */
 
     menu_item = g_object_new (GTK_TYPE_IMAGE_MENU_ITEM, NULL);
-    gtk_menu_item_set_label (GTK_MENU_ITEM (menu_item), gettext (e.name));
+    gtk_menu_item_set_label (GTK_MENU_ITEM (menu_item), action->label);
     gtk_menu_shell_append (GTK_MENU_SHELL (menu), menu_item);
     gtk_widget_show (menu_item);
 
-    if (e.stock_id != NULL) {
+    if (action->icon_name != NULL) {
       GtkWidget *image = gtk_image_new ();
       gtk_widget_show (image);
       gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (menu_item), image);
 
       /* If there's a matching stock item, use it.
          Otherwise lookup the name in the icon theme. */
-      if (gtk_stock_lookup (e.stock_id, &stock_info))
-        gtk_image_set_from_stock (GTK_IMAGE (image), e.stock_id,
+      if (gtk_stock_lookup (action->icon_name, &stock_info))
+        gtk_image_set_from_stock (GTK_IMAGE (image), action->icon_name,
                                   GTK_ICON_SIZE_MENU);
       else
-        gtk_image_set_from_icon_name (GTK_IMAGE (image), e.stock_id,
+        gtk_image_set_from_icon_name (GTK_IMAGE (image), action->icon_name,
                                       GTK_ICON_SIZE_MENU);
     }
 
     /* Connect things up so that the actions get run */
-    g_object_set_data (G_OBJECT (menu_item), "action", *e.action);
+    g_object_set_data (G_OBJECT (menu_item), "action", action);
     g_signal_connect (G_OBJECT (menu_item), "activate",
                       G_CALLBACK (g_menu_execute), w_current);
 
-    GObject *dispatcher = gschem_action_get_dispatcher (*e.action, w_current);
+    GObject *dispatcher = gschem_action_get_dispatcher (action, w_current);
     g_signal_connect_swapped (dispatcher,
                               "set-sensitive",
                               G_CALLBACK (gtk_widget_set_sensitive),
