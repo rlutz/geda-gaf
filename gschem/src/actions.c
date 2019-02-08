@@ -2477,3 +2477,19 @@ DEFINE_ACTION (options_show_coord_window,
 {
   coord_dialog (w_current, 0, 0);
 }
+
+/*! \section special-actions Special Actions */
+
+/*! \brief Cause the last action executed to be repeated. */
+
+DEFINE_ACTION (repeat_last_action,
+               "repeat-last-action",
+               "gtk-redo",
+               _("Repeat Last Action"),
+               _("Repeat Last Action"),
+               _("Repeat Last Action"),
+               NULL)
+{
+  if (w_current->last_action != NULL)
+    gschem_action_activate (w_current->last_action, w_current);
+}

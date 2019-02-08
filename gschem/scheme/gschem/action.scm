@@ -27,7 +27,6 @@
 (or (defined? 'define-syntax)
     (use-modules (ice-9 syncase)))
 
-(define last-action (make-fluid))
 (define current-action-position (make-fluid))
 
 ;; Define an eval-in-currentmodule procedure
@@ -35,9 +34,6 @@
 
 ;; Evaluates a gschem action.  A gschem action is expected to be a
 ;; symbol naming a thunk variable in the current module.
-;;
-;; The special-case symbol repeat-last-command causes the last action
-;; executed to be repeated.
 (define-public (eval-action! action)
   (define (invalid-action-error)
     (error (_ "~S is not a valid gschem action.") action))
@@ -45,13 +41,6 @@
   (define (eval-action!/recursive a)
 
     (cond
-     ;; Handle repeat-last-command
-     ((equal? 'repeat-last-command a)
-      ;; N.b. must call eval-action! rather than
-      ;; eval-action!/recursive here, so that the last-action doesn't
-      ;; get set to 'repeat-last-command.
-      (eval-action! (fluid-ref last-action)))
-
      ;; Sometimes you get a first-class action
      ((action? a)
       (eval-action!/recursive (false-if-exception (action-thunk a))))
@@ -63,7 +52,6 @@
      ;; Eventually you just end up with a thunk.
      ((thunk? a)
       (begin 
-        (fluid-set! last-action action)
         (a) ;; Actually execute the action
         #t))
 
@@ -145,14 +133,3 @@
   (run-hook action-property-hook action key value))
 (define-public (action-property action key)
   (assq-ref (action-properties action) key))
-
-;; -------------------------------------------------------------------
-;; Special actions that operate on actions
-
-;; Note that here we pass "repeat-last-command" as a *symbol* rather
-;; than wrapping the action around an actual procedure.  This is to
-;; trigger the magical recursive behaviour of eval-action! in such
-;; away that the previous successfully-evaluated action gets invoked.
-(define-public &repeat-last-action
-  (make-action 'repeat-last-command
-               #:label (_ "Repeat Last Action") #:icon "gtk-redo"))

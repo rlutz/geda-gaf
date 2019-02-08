@@ -250,7 +250,6 @@ void i_update_middle_button (GschemToplevel *w_current,
       gschem_bottom_widget_set_middle_button_text (
           GSCHEM_BOTTOM_WIDGET (w_current->bottom_widget),
           _("Action"));
-      w_current->last_action = NULL;
       break;
 
 #ifdef HAVE_LIBSTROKE
@@ -258,7 +257,6 @@ void i_update_middle_button (GschemToplevel *w_current,
       gschem_bottom_widget_set_middle_button_text (
           GSCHEM_BOTTOM_WIDGET (w_current->bottom_widget),
           _("Stroke"));
-      w_current->last_action = NULL;
     break;
 #else
     /* remove this case eventually and make it a null case */
@@ -266,7 +264,6 @@ void i_update_middle_button (GschemToplevel *w_current,
       gschem_bottom_widget_set_middle_button_text (
           GSCHEM_BOTTOM_WIDGET (w_current->bottom_widget),
           _("none"));
-      w_current->last_action = NULL;
       break;
 #endif
 
@@ -280,12 +277,10 @@ void i_update_middle_button (GschemToplevel *w_current,
             temp_string);
 
         g_free(temp_string);
-        w_current->last_action = action;
       } else {
         gschem_bottom_widget_set_middle_button_text (
             GSCHEM_BOTTOM_WIDGET (w_current->bottom_widget),
             _("Repeat/none"));
-        w_current->last_action = NULL;
       }
       break;
 
@@ -293,15 +288,16 @@ void i_update_middle_button (GschemToplevel *w_current,
       gschem_bottom_widget_set_middle_button_text (
           GSCHEM_BOTTOM_WIDGET (w_current->bottom_widget),
           _("Pan"));
-      w_current->last_action = NULL;
       break;
 
     default:
       gschem_bottom_widget_set_middle_button_text (
           GSCHEM_BOTTOM_WIDGET (w_current->bottom_widget),
           _("none"));
-      w_current->last_action = NULL;
   }
+
+  if (action != NULL)
+    w_current->last_action = action;
 }
 
 /*! \todo Finish function documentation!!!
