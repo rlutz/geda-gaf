@@ -87,7 +87,10 @@
   (let ((alist (keymap-key-table keymap)))
     (set-keymap-key-table! keymap
                            (if bindable
-                               (assoc-set! alist key bindable)
+                               (assoc-set! alist key
+                                           (if (symbol? bindable)
+                                               (primitive-eval bindable)
+                                               bindable))
                                (assoc-remove! alist key))))
     (run-hook bind-keys-hook keymap (make-vector 1 key) bindable))
 

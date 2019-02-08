@@ -161,8 +161,7 @@ get_main_menu(GschemToplevel *w_current)
           /* Look up key binding in global keymap */
           SCM s_expr =
             scm_list_2 (scm_from_utf8_symbol ("find-key"),
-                        scm_list_2 (scm_from_utf8_symbol ("quote"),
-                                    scm_item_func));
+                        scm_primitive_eval (scm_item_func));
 
           scm_keys = g_scm_eval_protected (s_expr, scm_interaction_environment ());
 
