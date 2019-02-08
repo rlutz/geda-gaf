@@ -411,6 +411,7 @@ void i_update_menus(GschemToplevel *w_current)
     /* These strings should NOT be internationalized */
     gschem_action_set_sensitive (action_clipboard_cut, TRUE, w_current);
     gschem_action_set_sensitive (action_clipboard_copy, TRUE, w_current);
+    gschem_action_set_sensitive (action_edit_deselect, TRUE, w_current);
     gschem_action_set_sensitive (action_edit_delete, TRUE, w_current);
     gschem_action_set_sensitive (action_edit_copy, TRUE, w_current);
     gschem_action_set_sensitive (action_edit_mcopy, TRUE, w_current);
@@ -418,12 +419,17 @@ void i_update_menus(GschemToplevel *w_current)
     gschem_action_set_sensitive (action_edit_rotate_90, TRUE, w_current);
     gschem_action_set_sensitive (action_edit_mirror, TRUE, w_current);
     gschem_action_set_sensitive (action_edit_edit, TRUE, w_current);
+    gschem_action_set_sensitive (action_edit_pin_type, TRUE, w_current);
+    gschem_action_set_sensitive (action_edit_text, TRUE, w_current);
     gschem_action_set_sensitive (action_edit_slot, TRUE, w_current);
+    gschem_action_set_sensitive (action_edit_color, TRUE, w_current);
     gschem_action_set_sensitive (action_edit_lock, TRUE, w_current);
     gschem_action_set_sensitive (action_edit_unlock, TRUE, w_current);
     gschem_action_set_sensitive (action_edit_embed, TRUE, w_current);
     gschem_action_set_sensitive (action_edit_unembed, TRUE, w_current);
     gschem_action_set_sensitive (action_edit_update, TRUE, w_current);
+    gschem_action_set_sensitive (action_edit_linetype, TRUE, w_current);
+    gschem_action_set_sensitive (action_edit_filltype, TRUE, w_current);
     gschem_action_set_sensitive (action_hierarchy_down_schematic, TRUE, w_current);
     gschem_action_set_sensitive (action_hierarchy_down_symbol, TRUE, w_current);
     gschem_action_set_sensitive (action_hierarchy_documentation, TRUE, w_current);
@@ -439,6 +445,7 @@ void i_update_menus(GschemToplevel *w_current)
     /* These strings should NOT be internationalized */
     gschem_action_set_sensitive (action_clipboard_cut, FALSE, w_current);
     gschem_action_set_sensitive (action_clipboard_copy, FALSE, w_current);
+    gschem_action_set_sensitive (action_edit_deselect, FALSE, w_current);
     gschem_action_set_sensitive (action_edit_delete, FALSE, w_current);
     gschem_action_set_sensitive (action_edit_copy, FALSE, w_current);
     gschem_action_set_sensitive (action_edit_mcopy, FALSE, w_current);
@@ -446,12 +453,17 @@ void i_update_menus(GschemToplevel *w_current)
     gschem_action_set_sensitive (action_edit_rotate_90, FALSE, w_current);
     gschem_action_set_sensitive (action_edit_mirror, FALSE, w_current);
     gschem_action_set_sensitive (action_edit_edit, FALSE, w_current);
+    gschem_action_set_sensitive (action_edit_pin_type, FALSE, w_current);
+    gschem_action_set_sensitive (action_edit_text, FALSE, w_current);
     gschem_action_set_sensitive (action_edit_slot, FALSE, w_current);
+    gschem_action_set_sensitive (action_edit_color, FALSE, w_current);
     gschem_action_set_sensitive (action_edit_lock, FALSE, w_current);
     gschem_action_set_sensitive (action_edit_unlock, FALSE, w_current);
     gschem_action_set_sensitive (action_edit_embed, FALSE, w_current);
     gschem_action_set_sensitive (action_edit_unembed, FALSE, w_current);
     gschem_action_set_sensitive (action_edit_update, FALSE, w_current);
+    gschem_action_set_sensitive (action_edit_linetype, FALSE, w_current);
+    gschem_action_set_sensitive (action_edit_filltype, FALSE, w_current);
     gschem_action_set_sensitive (action_hierarchy_down_schematic, FALSE, w_current);
     gschem_action_set_sensitive (action_hierarchy_down_symbol, FALSE, w_current);
     gschem_action_set_sensitive (action_hierarchy_documentation, FALSE, w_current);
