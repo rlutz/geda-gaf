@@ -57,18 +57,10 @@
 documentation in a browser or PDF viewer. If no documentation can be
 found, shows a dialog with an error message."
 
-  (catch 'misc-error
-
-   (lambda ()
-     (let ((component
-            (any (lambda (obj) (and (component? obj) obj))
-                 (page-selection (active-page)))))
-       (and component (show-component-documentation component))))
-
-   (lambda (key subr msg args . rest)
-     (gschem-msg (string-append
-                  (_ "Could not show documentation for selected component:\n\n")
-                  (apply format #f msg args))))))
+  (let ((component
+	 (any (lambda (obj) (and (component? obj) obj))
+	      (page-selection (active-page)))))
+    (and component (show-component-documentation-or-error-msg component))))
 
 (define-action-public
     (&help-manual

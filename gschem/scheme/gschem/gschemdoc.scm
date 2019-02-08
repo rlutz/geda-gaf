@@ -237,3 +237,21 @@ displayed in the system associated viewer application."
 
      ;; 4) Fail miserably
      (error (_ "No documentation found")))))
+
+(define-public (show-component-documentation-or-error-msg obj)
+  "show-component-documentation-or-error-msg COMPONENT
+
+Search for and display documentation corresponding to COMPONENT in a
+browser or PDF viewer. If no documentation can be found, show a dialog
+with an error message."
+
+  (catch 'misc-error
+
+   (lambda ()
+     (show-component-documentation obj))
+
+   (lambda (key subr msg args . rest)
+     ((module-ref (interaction-environment) 'gschem-msg)
+      (string-append
+       (_ "Could not show documentation for selected component:\n\n")
+       (apply format #f msg args))))))
