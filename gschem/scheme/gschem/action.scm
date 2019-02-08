@@ -42,10 +42,6 @@
   (define (eval-action!/recursive a)
 
     (cond
-     ;; Sometimes you get a first-class action
-     ((action? a)
-      (eval-action!/recursive (false-if-exception (action-thunk a))))
-
      ;; Sometimes actions are specified just by a symbol naming them
      ((symbol? a)
       (eval-action!/recursive (false-if-exception (eval-cm a))))
@@ -83,9 +79,7 @@
 ;; Make a symbol that's guaranteed to be unique in this session.
 (define %cookie (make-symbol "gschem-action-cookie"))
 
-(define-public (action? proc)
-  (false-if-exception
-   (eq? %cookie (procedure-property proc 'gschem-cookie))))
+(define-public action? %action?)
 
 (define-syntax define-action
   (syntax-rules ()
