@@ -21,7 +21,6 @@
   #:use-module (gschem core gettext)
   #:use-module (gschem core action)
   #:use-module (gschem window)
-  #:use-module (gschem hook)
   #:use-module (ice-9 optargs)
   #:export-syntax (define-action))
 
@@ -76,9 +75,6 @@
 ;; -------------------------------------------------------------------
 ;; First-class actions
 
-;; Make a symbol that's guaranteed to be unique in this session.
-(define %cookie (make-symbol "gschem-action-cookie"))
-
 (define-public action? %action?)
 
 (define-syntax define-action
@@ -96,18 +92,3 @@
                       (assq-ref alist '#:label)
                       (assq-ref alist '#:menu-label)
                       (assq-ref alist '#:tooltip) thunk))))
-
-(define (action-thunk action)
-  (procedure-property action 'gschem-thunk))
-
-(define (action-properties action)
-  (procedure-property action 'gschem-properties))
-(define (set-action-properties! action alist)
-  (set-procedure-property! action 'gschem-properties alist))
-
-(define-public (set-action-property! action key value)
-  (set-action-properties! action
-   (assq-set! (action-properties action) key value))
-  (run-hook action-property-hook action key value))
-(define-public (action-property action key)
-  (assq-ref (action-properties action) key))
