@@ -67,9 +67,9 @@ static struct PopupEntry popup_items[] = {
 static void
 g_menu_execute (GtkMenuItem *menu_item, gpointer user_data)
 {
-  const gchar *action_name = g_object_get_data (G_OBJECT (menu_item), "action");
+  GschemAction *action = g_object_get_data (G_OBJECT (menu_item), "action");
   GschemToplevel *w_current = (GschemToplevel *) user_data;
-  g_action_eval_by_name (w_current, action_name);
+  gschem_action_activate (action, w_current);
 }
 
 /*! \todo Finish function documentation!!!
@@ -94,7 +94,6 @@ get_main_menu(GschemToplevel *w_current)
   SCM scm_index;
   SCM scm_keys;
   char *menu_name;
-  char *action_name;
   char **raw_menu_name = g_malloc (sizeof(char *));
   char *menu_item_name;
   char *raw_menu_item_name;
@@ -158,10 +157,18 @@ get_main_menu(GschemToplevel *w_current)
 
           GtkStockItem stock_info;
 
+          SCM s_action = scm_primitive_eval (scm_item_func);
+
+          /* make sure the action won't ever be garbage collected
+             since we're going to point to it from C data structures */
+          scm_permanent_object (s_action);
+
+          GschemAction *action = scm_to_action (s_action);
+
           /* Look up key binding in global keymap */
           SCM s_expr =
             scm_list_2 (scm_from_utf8_symbol ("find-key"),
-                        scm_primitive_eval (scm_item_func));
+                        s_action);
 
           scm_keys = g_scm_eval_protected (s_expr, scm_interaction_environment ());
 
@@ -176,8 +183,6 @@ get_main_menu(GschemToplevel *w_current)
             menu_item_stock = NULL;
           else
             menu_item_stock = scm_to_utf8_string (scm_item_stock);
-
-          action_name = scm_to_utf8_string (scm_symbol_to_string (scm_item_func));
 
           menu_item = g_object_new (GTK_TYPE_IMAGE_MENU_ITEM, NULL);
 
@@ -209,8 +214,7 @@ get_main_menu(GschemToplevel *w_current)
           }
           free(menu_item_stock);
 
-          /* don't free action_name */
-          g_object_set_data (G_OBJECT (menu_item), "action", action_name);
+          g_object_set_data (G_OBJECT (menu_item), "action", action);
           g_signal_connect (G_OBJECT (menu_item), "activate",
                             G_CALLBACK (g_menu_execute), w_current);
         }

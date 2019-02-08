@@ -25,41 +25,6 @@
 
 #include "gschem.h"
 
-/*! \brief Evaluate a gschem action by name.
- * \par Function Description
- * Evaluates the action named \a action_name, which should be a UTF-8
- * string naming a symbol in the user module.  If evaluating the
- * action fails, prints a message to the log and returns FALSE;
- * otherwise, returns TRUE.
- *
- * \param w_current    Current gschem toplevel structure.
- * \param action_name  Name of action to evaluate.
- *
- * \return TRUE on success, FALSE on failure.
- */
-gboolean
-g_action_eval_by_name (GschemToplevel *w_current, const gchar *action_name)
-{
-  SCM s_expr;
-  SCM s_result;
-  gboolean result;
-
-  g_assert (w_current);
-  g_assert (action_name);
-
-  scm_dynwind_begin (0);
-  g_dynwind_window (w_current);
-
-  /* Build expression to evaluate */
-  s_expr = scm_list_1 (scm_from_utf8_symbol (action_name));
-  /* Evaluate and get return value */
-  s_result = g_scm_eval_protected (s_expr, SCM_UNDEFINED);
-  result = scm_is_true (s_result);
-
-  scm_dynwind_end ();
-  return result;
-}
-
 /*! \brief Get the action position.
  * \par Function Description
  * Retrieves the current action position and stores it in \a x and \a

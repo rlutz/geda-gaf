@@ -85,7 +85,10 @@ gschem_action_activate (GschemAction *action,
   g_return_if_fail (action->activate != NULL);
   g_return_if_fail (w_current != NULL);
 
+  scm_dynwind_begin (0);
+  g_dynwind_window (w_current);
   action->activate (action, w_current);
+  scm_dynwind_end ();
 }
 
 
