@@ -214,6 +214,15 @@ get_main_menu(GschemToplevel *w_current)
           if (action == action_file_open_recent)
             gtk_menu_item_set_submenu (GTK_MENU_ITEM (menu_item),
                                        w_current->recent_chooser_menu);
+          else if (action == action_docking_area_left)
+            gtk_menu_item_set_submenu (GTK_MENU_ITEM (menu_item),
+                                       w_current->left_docking_area_menu);
+          else if (action == action_docking_area_bottom)
+            gtk_menu_item_set_submenu (GTK_MENU_ITEM (menu_item),
+                                       w_current->bottom_docking_area_menu);
+          else if (action == action_docking_area_right)
+            gtk_menu_item_set_submenu (GTK_MENU_ITEM (menu_item),
+                                       w_current->right_docking_area_menu);
 
           g_object_set_data (G_OBJECT (menu_item), "action", action);
           g_signal_connect (G_OBJECT (menu_item), "activate",
@@ -405,19 +414,15 @@ recent_chooser_item_activated (GtkRecentChooser *chooser, GschemToplevel *w_curr
 
 /*! \brief Create a submenu with filenames for the 'Open Recent'
  *         menu item.
- *
- *  Called from x_window_setup().
  */
-void
-x_menu_create_recent_files_submenu (GschemToplevel *w_current)
+static GtkWidget *
+create_recent_chooser_menu (GschemToplevel *w_current)
 {
   GtkRecentFilter *recent_filter;
   GtkWidget *menuitem_file_recent_items;
   recent_manager = gtk_recent_manager_get_default();
 
   menuitem_file_recent_items = gtk_recent_chooser_menu_new_for_manager(recent_manager);
-  g_object_set_data (G_OBJECT (menuitem_file_recent_items),
-                     "settings-name", "recent-files");
 
   /* Show only schematic- and symbol-files (*.sch and *.sym) in list */
   recent_filter = gtk_recent_filter_new();
@@ -436,5 +441,42 @@ x_menu_create_recent_files_submenu (GschemToplevel *w_current)
   g_signal_connect(GTK_OBJECT(menuitem_file_recent_items), "item-activated",
                    G_CALLBACK(recent_chooser_item_activated), w_current);
 
-  w_current->recent_chooser_menu = menuitem_file_recent_items;
+  return menuitem_file_recent_items;
+}
+
+/*! \brief Create submenus for various menu items.
+ *
+ *  Called from x_window_setup().
+ */
+void
+x_menus_create_submenus (GschemToplevel *w_current)
+{
+  /* create recent files menu */
+  w_current->recent_chooser_menu = create_recent_chooser_menu (w_current);
+  g_object_set_data (G_OBJECT (w_current->recent_chooser_menu),
+                     "settings-name", "recent-files");
+
+  /* create left docking area menu */
+  w_current->left_docking_area_menu = gtk_menu_new ();
+  g_object_set_data (G_OBJECT (w_current->left_docking_area_menu),
+                     "settings-name", "left-docking-area");
+  gtk_menu_shell_append (GTK_MENU_SHELL (w_current->left_docking_area_menu),
+                         gtk_tearoff_menu_item_new ());
+  gtk_widget_show_all (w_current->left_docking_area_menu);
+
+  /* create bottom docking area menu */
+  w_current->bottom_docking_area_menu = gtk_menu_new ();
+  g_object_set_data (G_OBJECT (w_current->bottom_docking_area_menu),
+                     "settings-name", "bottom-docking-area");
+  gtk_menu_shell_append (GTK_MENU_SHELL (w_current->bottom_docking_area_menu),
+                         gtk_tearoff_menu_item_new ());
+  gtk_widget_show_all (w_current->bottom_docking_area_menu);
+
+  /* create right docking area menu */
+  w_current->right_docking_area_menu = gtk_menu_new ();
+  g_object_set_data (G_OBJECT (w_current->right_docking_area_menu),
+                     "settings-name", "right-docking-area");
+  gtk_menu_shell_append (GTK_MENU_SHELL (w_current->right_docking_area_menu),
+                         gtk_tearoff_menu_item_new ());
+  gtk_widget_show_all (w_current->right_docking_area_menu);
 }

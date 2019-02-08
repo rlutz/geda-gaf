@@ -356,10 +356,13 @@ constructed (GObject *object)
 
   dockable->dock_left_item =
     gtk_check_menu_item_new_with_label (dockable->title);
+  gtk_widget_show (dockable->dock_left_item);
   dockable->dock_bottom_item =
     gtk_check_menu_item_new_with_label (dockable->title);
+  gtk_widget_show (dockable->dock_bottom_item);
   dockable->dock_right_item =
     gtk_check_menu_item_new_with_label (dockable->title);
+  gtk_widget_show (dockable->dock_right_item);
 
   restore_state (dockable);
 
@@ -1366,9 +1369,6 @@ connect_notebook_signals (GschemToplevel *w_current, GtkWidget *notebook)
 void
 gschem_dockable_initialize_toplevel (GschemToplevel *w_current)
 {
-  GtkWidget *menu;
-  gpointer menuitem_to_append_to;
-
   /* restore saved page order and last opened page */
   restore_page_order (w_current, GTK_NOTEBOOK (w_current->left_notebook));
   restore_current_page (w_current, GTK_NOTEBOOK (w_current->left_notebook));
@@ -1388,51 +1388,15 @@ gschem_dockable_initialize_toplevel (GschemToplevel *w_current)
     G_OBJECT (w_current->main_window), "focus-in-event",
     G_CALLBACK (callback_main_window_focus_in_event), w_current);
 
-
-  /* setup left docking area menu */
-  menu = gtk_menu_new ();
-  g_object_set_data (G_OBJECT (menu), "settings-name", "left-docking-area");
-  gtk_menu_shell_append (GTK_MENU_SHELL (menu),
-                         gtk_tearoff_menu_item_new ());
-  for (GList *l = w_current->dockables; l != NULL; l = l->next)
-    gtk_menu_shell_append (GTK_MENU_SHELL (menu),
+  /* populate docking area menus */
+  for (GList *l = w_current->dockables; l != NULL; l = l->next) {
+    gtk_menu_shell_append (GTK_MENU_SHELL (w_current->left_docking_area_menu),
                            GSCHEM_DOCKABLE (l->data)->dock_left_item);
-  gtk_widget_show_all (menu);
-
-  menuitem_to_append_to = g_object_get_data (G_OBJECT (w_current->menubar),
-                                             "_Options/Left docking area");
-  if (menuitem_to_append_to != NULL)
-    gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem_to_append_to), menu);
-
-  /* setup bottom docking area menu */
-  menu = gtk_menu_new ();
-  g_object_set_data (G_OBJECT (menu), "settings-name", "bottom-docking-area");
-  gtk_menu_shell_append (GTK_MENU_SHELL (menu),
-                         gtk_tearoff_menu_item_new ());
-  for (GList *l = w_current->dockables; l != NULL; l = l->next)
-    gtk_menu_shell_append (GTK_MENU_SHELL (menu),
+    gtk_menu_shell_append (GTK_MENU_SHELL (w_current->bottom_docking_area_menu),
                            GSCHEM_DOCKABLE (l->data)->dock_bottom_item);
-  gtk_widget_show_all (menu);
-
-  menuitem_to_append_to = g_object_get_data (G_OBJECT (w_current->menubar),
-                                             "_Options/Bottom docking area");
-  if (menuitem_to_append_to != NULL)
-    gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem_to_append_to), menu);
-
-  /* setup right docking area menu */
-  menu = gtk_menu_new ();
-  g_object_set_data (G_OBJECT (menu), "settings-name", "right-docking-area");
-  gtk_menu_shell_append (GTK_MENU_SHELL (menu),
-                         gtk_tearoff_menu_item_new ());
-  for (GList *l = w_current->dockables; l != NULL; l = l->next)
-    gtk_menu_shell_append (GTK_MENU_SHELL (menu),
+    gtk_menu_shell_append (GTK_MENU_SHELL (w_current->right_docking_area_menu),
                            GSCHEM_DOCKABLE (l->data)->dock_right_item);
-  gtk_widget_show_all (menu);
-
-  menuitem_to_append_to = g_object_get_data (G_OBJECT (w_current->menubar),
-                                             "_Options/Right docking area");
-  if (menuitem_to_append_to != NULL)
-    gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem_to_append_to), menu);
+  }
 }
 
 

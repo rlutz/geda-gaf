@@ -35,6 +35,9 @@ struct st_gschem_toplevel {
   GtkWidget *drawing_area;
   GtkWidget *menubar;
   GtkWidget *recent_chooser_menu;
+  GtkWidget *left_docking_area_menu;
+  GtkWidget *bottom_docking_area_menu;
+  GtkWidget *right_docking_area_menu;
   GtkWidget *popup_menu;
   GtkWidget *toolbar;
 
