@@ -179,7 +179,6 @@
 (define edit-update &edit-update)
 (define edit-show-hidden &edit-show-hidden)
 (define edit-find-text &edit-find-text)
-(define edit-find-patch &edit-find-patch)
 (define edit-show-text &edit-show-text)
 (define edit-hide-text &edit-hide-text)
 (define edit-autonumber &edit-autonumber)
@@ -204,8 +203,6 @@
 (define buffer-paste4 &buffer-paste4)
 (define buffer-paste5 &buffer-paste5)
 
-(define view-menubar &view-menubar)
-(define view-toolbar &view-toolbar)
 (define view-redraw &view-redraw)
 (define view-zoom-full &view-zoom-full)
 (define view-zoom-extents &view-zoom-extents)
