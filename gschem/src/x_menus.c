@@ -151,10 +151,6 @@ get_main_menu(GschemToplevel *w_current)
         gtk_menu_shell_append (GTK_MENU_SHELL (menu), menu_item);
       } else {
 
-        if(scm_is_false (scm_item_func)) {
-          menu_item = gtk_menu_item_new_with_mnemonic(menu_item_name);
-        } else {
-
           GtkStockItem stock_info;
 
           SCM s_action = scm_primitive_eval (scm_item_func);
@@ -217,7 +213,6 @@ get_main_menu(GschemToplevel *w_current)
           g_object_set_data (G_OBJECT (menu_item), "action", action);
           g_signal_connect (G_OBJECT (menu_item), "activate",
                             G_CALLBACK (g_menu_execute), w_current);
-        }
 
         gtk_menu_shell_append (GTK_MENU_SHELL (menu), menu_item);
       }

@@ -1110,8 +1110,7 @@
 ;;
         `( (,(N_ "_New")              &file-new               "gtk-new")
            (,(N_ "_Open...")          &file-open              "gtk-open")
-;; The entry below will be removed from the menu if glib < 2.6 is detected
-           (,(N_ "Open Recen_t")      #f                      #f)
+           (,(N_ "Open Recen_t")      &file-open-recent       #f)
            ("SEPARATOR"               #f                      #f)
            (,(N_ "_Save")             &file-save              "gtk-save")
            (,(N_ "Save _As...")       &file-save-as           "gtk-save-as")
@@ -1275,9 +1274,9 @@
            (,(N_ "Show _Log Window...")      &options-show-log-window)
            (,(N_ "Show _Coord Window...")    &options-show-coord-window)
            ("SEPARATOR"                 #f                      #f)
-           (,(N_ "Left docking area")   #f                      #f)
-           (,(N_ "Bottom docking area") #f                      #f)
-           (,(N_ "Right docking area")  #f                      #f)))
+           (,(N_ "Left docking area")   &docking-area-left      #f)
+           (,(N_ "Bottom docking area") &docking-area-bottom    #f)
+           (,(N_ "Right docking area")  &docking-area-right     #f)))
 
 (define help-menu-items
 ;;

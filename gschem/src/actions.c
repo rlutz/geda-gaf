@@ -77,6 +77,17 @@ DEFINE_ACTION (file_open,
   x_fileselect_open (w_current);
 }
 
+DEFINE_ACTION (file_open_recent,
+               "file-open-recent",
+               NULL,
+               _("Open Recent"),
+               _("Open Recent"),
+               _("Open Recen_t"),
+               NULL)
+{
+  /* submenu */
+}
+
 DEFINE_ACTION (file_script,
                "file-script",
                "gtk-execute",
@@ -2479,6 +2490,39 @@ DEFINE_ACTION (options_show_coord_window,
 }
 
 /*! \section special-actions Special Actions */
+
+DEFINE_ACTION (docking_area_left,
+               "docking-area-left",
+               NULL,
+               _("Left docking area"),
+               _("Left docking area"),
+               _("Left docking area"),
+               NULL)
+{
+  /* submenu */
+}
+
+DEFINE_ACTION (docking_area_bottom,
+               "docking-area-bottom",
+               NULL,
+               _("Bottom docking area"),
+               _("Bottom docking area"),
+               _("Bottom docking area"),
+               NULL)
+{
+  /* submenu */
+}
+
+DEFINE_ACTION (docking_area_right,
+               "docking-area-right",
+               NULL,
+               _("Right docking area"),
+               _("Right docking area"),
+               _("Right docking area"),
+               NULL)
+{
+  /* submenu */
+}
 
 /*! \brief Cause the last action executed to be repeated. */
 
