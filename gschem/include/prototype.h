@@ -430,7 +430,7 @@ GtkWidget *get_main_popup(GschemToplevel *w_current);
 gint do_popup(GschemToplevel *w_current, GdkEventButton *event);
 void x_menus_sensitivity(GschemToplevel *w_current, const char *buf, int flag);
 void x_menus_popup_sensitivity(GschemToplevel *w_current, const char *buf, int flag);
-void x_menu_attach_recent_files_submenu(GschemToplevel *w_current);
+void x_menu_create_recent_files_submenu(GschemToplevel *w_current);
 /* gschem_multiattrib_dockable.c */
 void x_multiattrib_update (GschemToplevel *w_current);
 /* x_multimulti.c */
