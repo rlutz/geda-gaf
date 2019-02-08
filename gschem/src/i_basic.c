@@ -24,6 +24,7 @@
 #endif
 
 #include "gschem.h"
+#include "actions.decl.x"
 
 /*! \brief Update status bar string
  *
@@ -360,7 +361,7 @@ void i_update_toolbar(GschemToplevel *w_current)
 static void clipboard_usable_cb (int usable, void *userdata)
 {
   GschemToplevel *w_current = userdata;
-  x_menus_sensitivity (w_current, "_Edit/_Paste", usable);
+  gschem_action_set_sensitive (action_clipboard_paste, usable, w_current);
 }
 
 static gboolean
@@ -408,68 +409,58 @@ void i_update_menus(GschemToplevel *w_current)
 
     /* since one or more things are selected, we set these TRUE */
     /* These strings should NOT be internationalized */
-    x_menus_sensitivity(w_current, "_Edit/Cu_t", TRUE);
-    x_menus_sensitivity(w_current, "_Edit/_Copy", TRUE);
-    x_menus_sensitivity(w_current, "_Edit/_Delete", TRUE);
-    x_menus_sensitivity(w_current, "_Edit/Copy Mode", TRUE);
-    x_menus_sensitivity(w_current, "_Edit/Multiple Copy Mode", TRUE);
-    x_menus_sensitivity(w_current, "_Edit/Move Mode", TRUE);
-    x_menus_sensitivity(w_current, "_Edit/Rotate 90 Mode", TRUE);
-    x_menus_sensitivity(w_current, "_Edit/Mirror Mode", TRUE);
-    x_menus_sensitivity(w_current, "_Edit/Edit...", TRUE);
-    x_menus_sensitivity(w_current, "_Edit/Slot...", TRUE);
-    x_menus_sensitivity(w_current, "_Edit/Lock", TRUE);
-    x_menus_sensitivity(w_current, "_Edit/Unlock", TRUE);
-    x_menus_sensitivity(w_current, "_Edit/Embed Component/Picture", TRUE);
-    x_menus_sensitivity(w_current, "_Edit/Unembed Component/Picture", TRUE);
-    x_menus_sensitivity(w_current, "_Edit/Update Component", TRUE);
-    x_menus_sensitivity(w_current, "Hie_rarchy/_Down Schematic", TRUE);
-    x_menus_sensitivity(w_current, "Hie_rarchy/Down _Symbol", TRUE);
-    x_menus_sensitivity(w_current, "Hie_rarchy/D_ocumentation...", TRUE);
-    x_menus_sensitivity(w_current, "A_ttributes/_Attach", TRUE);
-    x_menus_sensitivity(w_current, "A_ttributes/_Detach", TRUE);
-    x_menus_sensitivity(w_current, "A_ttributes/Show _Value", have_text_selected);
-    x_menus_sensitivity(w_current, "A_ttributes/Show _Name", have_text_selected);
-    x_menus_sensitivity(w_current, "A_ttributes/Show _Both", have_text_selected);
-    x_menus_sensitivity(w_current, "A_ttributes/_Toggle Visibility", have_text_selected);
-
-    /*  Menu items for hierarchy added by SDB 1.9.2005.  */
-    x_menus_popup_sensitivity(w_current, "Down Schematic", TRUE);
-    x_menus_popup_sensitivity(w_current, "Down Symbol", TRUE);
-    /* x_menus_popup_sensitivity(w_current, "/Up", TRUE); */
+    gschem_action_set_sensitive (action_clipboard_cut, TRUE, w_current);
+    gschem_action_set_sensitive (action_clipboard_copy, TRUE, w_current);
+    gschem_action_set_sensitive (action_edit_delete, TRUE, w_current);
+    gschem_action_set_sensitive (action_edit_copy, TRUE, w_current);
+    gschem_action_set_sensitive (action_edit_mcopy, TRUE, w_current);
+    gschem_action_set_sensitive (action_edit_move, TRUE, w_current);
+    gschem_action_set_sensitive (action_edit_rotate_90, TRUE, w_current);
+    gschem_action_set_sensitive (action_edit_mirror, TRUE, w_current);
+    gschem_action_set_sensitive (action_edit_edit, TRUE, w_current);
+    gschem_action_set_sensitive (action_edit_slot, TRUE, w_current);
+    gschem_action_set_sensitive (action_edit_lock, TRUE, w_current);
+    gschem_action_set_sensitive (action_edit_unlock, TRUE, w_current);
+    gschem_action_set_sensitive (action_edit_embed, TRUE, w_current);
+    gschem_action_set_sensitive (action_edit_unembed, TRUE, w_current);
+    gschem_action_set_sensitive (action_edit_update, TRUE, w_current);
+    gschem_action_set_sensitive (action_hierarchy_down_schematic, TRUE, w_current);
+    gschem_action_set_sensitive (action_hierarchy_down_symbol, TRUE, w_current);
+    gschem_action_set_sensitive (action_hierarchy_documentation, TRUE, w_current);
+    gschem_action_set_sensitive (action_attributes_attach, TRUE, w_current);
+    gschem_action_set_sensitive (action_attributes_detach, TRUE, w_current);
+    gschem_action_set_sensitive (action_attributes_show_value, have_text_selected, w_current);
+    gschem_action_set_sensitive (action_attributes_show_name, have_text_selected, w_current);
+    gschem_action_set_sensitive (action_attributes_show_both, have_text_selected, w_current);
+    gschem_action_set_sensitive (action_attributes_visibility_toggle, have_text_selected, w_current);
 
   } else {
     /* Nothing is selected, grey these out */
     /* These strings should NOT be internationalized */
-    x_menus_sensitivity(w_current, "_Edit/Cu_t", FALSE);
-    x_menus_sensitivity(w_current, "_Edit/_Copy", FALSE);
-    x_menus_sensitivity(w_current, "_Edit/_Delete", FALSE);
-    x_menus_sensitivity(w_current, "_Edit/Copy Mode", FALSE);
-    x_menus_sensitivity(w_current, "_Edit/Multiple Copy Mode", FALSE);
-    x_menus_sensitivity(w_current, "_Edit/Move Mode", FALSE);
-    x_menus_sensitivity(w_current, "_Edit/Rotate 90 Mode", FALSE);
-    x_menus_sensitivity(w_current, "_Edit/Mirror Mode", FALSE);
-    x_menus_sensitivity(w_current, "_Edit/Edit...", FALSE);
-    x_menus_sensitivity(w_current, "_Edit/Slot...", FALSE);
-    x_menus_sensitivity(w_current, "_Edit/Lock", FALSE);
-    x_menus_sensitivity(w_current, "_Edit/Unlock", FALSE);
-    x_menus_sensitivity(w_current, "_Edit/Embed Component/Picture", FALSE);
-    x_menus_sensitivity(w_current, "_Edit/Unembed Component/Picture", FALSE);
-    x_menus_sensitivity(w_current, "_Edit/Update Component", FALSE);
-    x_menus_sensitivity(w_current, "Hie_rarchy/_Down Schematic", FALSE);
-    x_menus_sensitivity(w_current, "Hie_rarchy/Down _Symbol", FALSE);
-    x_menus_sensitivity(w_current, "Hie_rarchy/D_ocumentation...", FALSE);
-    x_menus_sensitivity(w_current, "A_ttributes/_Attach", FALSE);
-    x_menus_sensitivity(w_current, "A_ttributes/_Detach", FALSE);
-    x_menus_sensitivity(w_current, "A_ttributes/Show _Value", FALSE);
-    x_menus_sensitivity(w_current, "A_ttributes/Show _Name", FALSE);
-    x_menus_sensitivity(w_current, "A_ttributes/Show _Both", FALSE);
-    x_menus_sensitivity(w_current, "A_ttributes/_Toggle Visibility", FALSE);
-
-    /*  Menu items for hierarchy added by SDB 1.9.2005.  */
-    x_menus_popup_sensitivity(w_current, "Down Schematic", FALSE);
-    x_menus_popup_sensitivity(w_current, "Down Symbol", FALSE);
-    /* x_menus_popup_sensitivity(w_current, "/Up", FALSE);	*/
+    gschem_action_set_sensitive (action_clipboard_cut, FALSE, w_current);
+    gschem_action_set_sensitive (action_clipboard_copy, FALSE, w_current);
+    gschem_action_set_sensitive (action_edit_delete, FALSE, w_current);
+    gschem_action_set_sensitive (action_edit_copy, FALSE, w_current);
+    gschem_action_set_sensitive (action_edit_mcopy, FALSE, w_current);
+    gschem_action_set_sensitive (action_edit_move, FALSE, w_current);
+    gschem_action_set_sensitive (action_edit_rotate_90, FALSE, w_current);
+    gschem_action_set_sensitive (action_edit_mirror, FALSE, w_current);
+    gschem_action_set_sensitive (action_edit_edit, FALSE, w_current);
+    gschem_action_set_sensitive (action_edit_slot, FALSE, w_current);
+    gschem_action_set_sensitive (action_edit_lock, FALSE, w_current);
+    gschem_action_set_sensitive (action_edit_unlock, FALSE, w_current);
+    gschem_action_set_sensitive (action_edit_embed, FALSE, w_current);
+    gschem_action_set_sensitive (action_edit_unembed, FALSE, w_current);
+    gschem_action_set_sensitive (action_edit_update, FALSE, w_current);
+    gschem_action_set_sensitive (action_hierarchy_down_schematic, FALSE, w_current);
+    gschem_action_set_sensitive (action_hierarchy_down_symbol, FALSE, w_current);
+    gschem_action_set_sensitive (action_hierarchy_documentation, FALSE, w_current);
+    gschem_action_set_sensitive (action_attributes_attach, FALSE, w_current);
+    gschem_action_set_sensitive (action_attributes_detach, FALSE, w_current);
+    gschem_action_set_sensitive (action_attributes_show_value, FALSE, w_current);
+    gschem_action_set_sensitive (action_attributes_show_name, FALSE, w_current);
+    gschem_action_set_sensitive (action_attributes_show_both, FALSE, w_current);
+    gschem_action_set_sensitive (action_attributes_visibility_toggle, FALSE, w_current);
   }
 
 

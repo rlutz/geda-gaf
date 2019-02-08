@@ -83,7 +83,6 @@ g_menu_execute (GtkMenuItem *menu_item, gpointer user_data)
 GtkWidget *
 get_main_menu(GschemToplevel *w_current)
 {
-  char *buf;
   GtkWidget *menu_item;
   GtkWidget *root_menu;
   GtkWidget *menu_bar;
@@ -241,13 +240,6 @@ get_main_menu(GschemToplevel *w_current)
       }
 
       gtk_widget_show (menu_item);
-
-      /* add a handle to the menu_bar object to get access to widget objects */
-      /* This string should NOT be internationalized */
-      buf = g_strdup_printf("%s/%s", *raw_menu_name, raw_menu_item_name);
-      g_object_set_data (G_OBJECT (menu_bar), buf, menu_item);
-      g_free(buf);
-
       scm_dynwind_end();
     }
     
@@ -325,11 +317,6 @@ get_main_popup (GschemToplevel *w_current)
                               "set-sensitive",
                               G_CALLBACK (gtk_widget_set_sensitive),
                               menu_item);
-
-    /* Add a handle to the menu object to get access to widget
-       objects. Horrible horrible hack, but it's the same approach as
-       taken for the main menu bar. :-( */
-    g_object_set_data (G_OBJECT (menu), e.name, menu_item);
   }
 
   return menu;
@@ -351,58 +338,6 @@ gint do_popup (GschemToplevel *w_current, GdkEventButton *event)
                   event->button, event->time);
 
   return FALSE;
-}
-
-/*! \todo Finish function documentation!!!
- *  \brief
- *  \par Function Description
- *
- */
-void x_menus_sensitivity (GschemToplevel *w_current, const char *buf, int flag)
-{
-  GtkWidget* item=NULL;
-  
-  if (!buf) {
-    return;
-  }
-
-  if (!w_current->menubar) {
-    return;
-  }
-  
-  item = (GtkWidget *) g_object_get_data (G_OBJECT (w_current->menubar), buf);
-
-  if (item) {
-    gtk_widget_set_sensitive(GTK_WIDGET(item), flag);
-    /* free(item); */ /* Why doesn't this need to be freed?  */
-  } else {
-    s_log_message(_("Tried to set the sensitivity on non-existent menu item '%s'\n"), buf); 
-  }
- 
-}
-
-/*! \todo Finish function documentation!!!
- *  \brief
- *  \par Function Description
- *  This function sets the sensitivity of the items in the right button
- *  popup.
- */
-void x_menus_popup_sensitivity (GschemToplevel *w_current, const char *buf, int flag)
-{
-  GtkWidget *item;
-
-  g_assert (w_current);
-  g_assert (buf);
-  g_assert (w_current->popup_menu);
-
-  item = GTK_WIDGET (g_object_get_data (G_OBJECT (w_current->popup_menu), buf));
-
-  if (item) {
-    gtk_widget_set_sensitive (item, flag);
-  } else {
-    g_critical (_("Tried to set the sensitivity on non-existent menu item '%s'\n"),
-                buf);
-  }
 }
 
 #define MAX_RECENT_FILES 10
