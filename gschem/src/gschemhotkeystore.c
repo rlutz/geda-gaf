@@ -144,30 +144,27 @@ gschem_hotkey_store_rebuild (GschemHotkeyStore *store)
     SCM s_info = scm_car (s_iter);
     SCM s_binding = scm_car (s_info);
     SCM s_keys = scm_cadr (s_info);
-    SCM s_icon = scm_caddr (s_info);
-    char *binding, *keys, *icon = NULL;
+    GschemAction *action;
+    char *keys;
     GtkTreeIter iter;
 
+    SCM_ASSERT (scm_is_action (s_binding),
+                s_binding, SCM_ARGn, "gschem_hotkey_store_rebuild item");
+    action = scm_to_action (s_binding);
+
     scm_dynwind_begin (0);
-
-    binding = scm_to_utf8_string (s_binding);
-    scm_dynwind_free (binding);
-
     keys = scm_to_utf8_string (s_keys);
     scm_dynwind_free (keys);
 
-    if (scm_is_true (s_icon)) {
-      icon = scm_to_utf8_string (s_icon);
-      scm_dynwind_free (icon);
-    }
-
-    gtk_list_store_insert_with_values (GTK_LIST_STORE (store), &iter, -1,
-                                       GSCHEM_HOTKEY_STORE_COLUMN_LABEL, binding,
-                                       GSCHEM_HOTKEY_STORE_COLUMN_KEYS, keys,
-                                       GSCHEM_HOTKEY_STORE_COLUMN_ICON, icon,
-                                       -1);
+    gtk_list_store_insert_with_values (
+      GTK_LIST_STORE (store), &iter, -1,
+      GSCHEM_HOTKEY_STORE_COLUMN_LABEL, action->name,
+      GSCHEM_HOTKEY_STORE_COLUMN_KEYS, keys,
+      GSCHEM_HOTKEY_STORE_COLUMN_ICON, action->icon_name,
+      -1);
 
     scm_dynwind_end ();
+    scm_remember_upto_here_1 (s_binding);
   }
 
   store->rebuild_source_id = 0;

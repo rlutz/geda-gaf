@@ -105,25 +105,16 @@
   (define lst '())
 
   (define (binding->entry prefix key binding)
-    (let ((keys (list->vector (reverse (cons key prefix))))
-          (action (false-if-exception (eval binding (current-module)))))
-
-      ;; If the binding points to an action, then use its label.
-      ;; Otherwise, just use the string value of the binding.
-      (let ((keystr (munge-keystring (keys->display-string keys)))
-            (cmdstr (or (and (action? action)
-                             (action-property action 'label))
-                        (symbol->string binding)))
-            (iconstr (and (action? action)
-                          (action-property action 'icon))))
-      (set! lst (cons (list cmdstr keystr iconstr) lst)))))
+    (let* ((keys (list->vector (reverse (cons key prefix))))
+           (keystr (munge-keystring (keys->display-string keys))))
+      (set! lst (cons (list binding keystr) lst))))
 
   (define (build-dump! km prefix)
     (keymap-for-each
      (lambda (key binding)
        (cond
 
-        ((or (symbol? binding) (action? binding))
+        ((action? binding)
          (binding->entry prefix key binding))
 
         ((keymap? binding)
