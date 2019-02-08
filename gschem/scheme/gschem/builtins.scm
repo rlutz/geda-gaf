@@ -18,14 +18,10 @@
 ;;
 
 (define-module (gschem builtins)
-  #:use-module (geda object)
   #:use-module (gschem core gettext)
   #:use-module (gschem action)
   #:use-module (gschem gschemdoc)
-  #:use-module (gschem repl)
-  #:use-module (gschem selection)
-  #:use-module (gschem window)
-  #:use-module (srfi srfi-1))
+  #:use-module (gschem repl))
 
 (or (defined? 'define-syntax)
     (use-modules (ice-9 syncase)))
@@ -44,23 +40,6 @@
      #:label      (_ "REPL...")
      #:menu-label (_ "REPL..."))
   (start-repl-in-background-terminal))
-
-(define-action-public
-    (&hierarchy-documentation
-     #:icon       "symbol-datasheet"
-     #:name       (_ "Component Documentation")
-     #:label      (_ "Component Documentation...")
-     #:menu-label (_ "D_ocumentation...")
-     #:tooltip    (_ "View documentation for selected component"))
-
-  "If a component is selected, search for and display corresponding
-documentation in a browser or PDF viewer. If no documentation can be
-found, shows a dialog with an error message."
-
-  (let ((component
-	 (any (lambda (obj) (and (component? obj) obj))
-	      (page-selection (active-page)))))
-    (and component (show-component-documentation-or-error-msg component))))
 
 (define-action-public
     (&help-manual

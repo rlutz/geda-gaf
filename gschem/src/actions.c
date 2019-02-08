@@ -2025,6 +2025,33 @@ DEFINE_ACTION (hierarchy_up,
   }
 }
 
+/*! \brief Search for and display documentation for selected component
+ *         in a browser or PDF viewer. */
+
+DEFINE_ACTION (hierarchy_documentation,
+               "hierarchy-documentation",
+               "symbol-datasheet",
+               _("Component Documentation"),
+               _("Component Documentation..."),
+               _("D_ocumentation..."),
+               _("View documentation for selected component"))
+{
+  TOPLEVEL *toplevel = gschem_toplevel_get_toplevel (w_current);
+  SCM s_show_documentation_proc =
+    scm_variable_ref (
+      scm_c_public_variable ("gschem gschemdoc",
+                             "show-component-documentation-or-error-msg"));
+
+  for (GList *l = geda_list_get_glist (toplevel->page_current->selection_list);
+       l != NULL; l = l->next) {
+    OBJECT *obj = (OBJECT *) l->data;
+    if (obj->type == OBJ_COMPLEX)
+      g_scm_eval_protected (scm_list_2 (s_show_documentation_proc,
+                                        edascm_from_object (obj)),
+                            SCM_UNDEFINED);
+  }
+}
+
 /*! \section attributes-menu Attributes Menu Callback Functions */
 
 DEFINE_ACTION (attributes_attach,
