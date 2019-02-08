@@ -289,3 +289,112 @@ gschem_action_init (void)
   scm_c_define_module ("gschem core builtins",
                        init_module_gschem_core_builtins, NULL);
 }
+
+
+/******************************************************************************/
+
+
+#define TYPE_DISPATCHER \
+  (gschem_action_state_dispatcher_get_type ())
+#define DISPATCHER(obj) \
+  (G_TYPE_CHECK_INSTANCE_CAST ((obj), TYPE_DISPATCHER, Dispatcher))
+#define DISPATCHER_CLASS(klass) \
+  (G_TYPE_CHECK_CLASS_CAST ((klass), TYPE_DISPATCHER, DispatcherClass))
+#define IS_DISPATCHER(obj) \
+  (G_TYPE_CHECK_INSTANCE_TYPE ((obj), TYPE_DISPATCHER))
+#define DISPATCHER_GET_CLASS(obj) \
+  (G_TYPE_INSTANCE_GET_CLASS ((obj), TYPE_DISPATCHER, DispatcherClass))
+
+typedef struct _DispatcherClass DispatcherClass;
+typedef struct _Dispatcher      Dispatcher;
+
+struct _DispatcherClass {
+  GObjectClass parent_class;
+};
+
+struct _Dispatcher {
+  GObject parent_instance;
+};
+
+enum {
+  SET_SENSITIVE,
+  LAST_SIGNAL
+};
+
+static void dispatcher_class_init (DispatcherClass *class);
+
+static guint dispatcher_signals[LAST_SIGNAL] = { 0 };
+
+
+static GType
+gschem_action_state_dispatcher_get_type ()
+{
+  static GType type = 0;
+
+  if (type == 0) {
+    static const GTypeInfo info = {
+      sizeof (DispatcherClass),
+      NULL,                                     /* base_init */
+      NULL,                                     /* base_finalize */
+      (GClassInitFunc) dispatcher_class_init,
+      NULL,                                     /* class_finalize */
+      NULL,                                     /* class_data */
+      sizeof (Dispatcher),
+      0,                                        /* n_preallocs */
+      NULL,                                     /* instance_init */
+      NULL                                      /* value_table */
+    };
+
+    type = g_type_register_static (G_TYPE_OBJECT,
+                                   "GschemActionStateDispatcher",
+                                   &info, 0);
+  }
+
+  return type;
+}
+
+
+static void
+dispatcher_class_init (DispatcherClass *class)
+{
+  dispatcher_signals[SET_SENSITIVE] =
+    g_signal_new ("set-sensitive",
+                  G_OBJECT_CLASS_TYPE (class),
+                  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                  0, NULL, NULL,
+                  g_cclosure_marshal_VOID__BOOLEAN,
+                  G_TYPE_NONE, 1,
+                  G_TYPE_BOOLEAN);
+}
+
+
+void
+gschem_action_set_sensitive (GschemAction *action, gboolean sensitive,
+                             GschemToplevel *w_current)
+{
+  Dispatcher *dispatcher = g_hash_table_lookup (
+    w_current->action_state_dispatchers, action);
+  if (dispatcher == NULL)
+    /* no widget for this action */
+    return;
+
+  g_return_if_fail (IS_DISPATCHER (dispatcher));
+  g_signal_emit (dispatcher, dispatcher_signals[SET_SENSITIVE], 0, sensitive);
+}
+
+
+GObject *
+gschem_action_get_dispatcher (GschemAction *action,
+                              GschemToplevel *w_current)
+{
+  Dispatcher *dispatcher = g_hash_table_lookup (
+    w_current->action_state_dispatchers, action);
+
+  if (dispatcher == NULL) {
+    dispatcher = g_object_new (TYPE_DISPATCHER, NULL);
+    g_hash_table_insert (w_current->action_state_dispatchers,
+                         action, dispatcher);
+  }
+
+  return G_OBJECT (dispatcher);
+}

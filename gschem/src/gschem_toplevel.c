@@ -164,6 +164,7 @@ GschemToplevel *gschem_toplevel_new ()
   w_current->right_docking_area_menu = NULL;
   w_current->popup_menu   = NULL;
   w_current->toolbar      = NULL;
+  w_current->action_state_dispatchers = NULL;
   w_current->find_text_widget = NULL;
   w_current->find_patch_widget = NULL;
   w_current->macro_widget  = NULL;
@@ -392,6 +393,11 @@ gschem_toplevel_free (GschemToplevel *w_current)
   if (w_current->renderer != NULL) {
     g_object_unref (w_current->renderer);
     w_current->renderer = NULL;
+  }
+
+  if (w_current->action_state_dispatchers != NULL) {
+    g_hash_table_destroy (w_current->action_state_dispatchers);
+    w_current->action_state_dispatchers = NULL;
   }
 
   g_free (w_current);

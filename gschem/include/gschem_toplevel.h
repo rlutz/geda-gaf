@@ -40,6 +40,7 @@ struct st_gschem_toplevel {
   GtkWidget *right_docking_area_menu;
   GtkWidget *popup_menu;
   GtkWidget *toolbar;
+  GHashTable *action_state_dispatchers;
 
   /* Widgets at inside the bottom of the main view */
   GtkWidget *find_text_widget;

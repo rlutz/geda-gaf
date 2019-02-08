@@ -230,6 +230,13 @@ get_main_menu(GschemToplevel *w_current)
           g_signal_connect (G_OBJECT (menu_item), "activate",
                             G_CALLBACK (g_menu_execute), w_current);
 
+          GObject *dispatcher =
+            gschem_action_get_dispatcher (action, w_current);
+          g_signal_connect_swapped (dispatcher,
+                                    "set-sensitive",
+                                    G_CALLBACK (gtk_widget_set_sensitive),
+                                    menu_item);
+
         gtk_menu_shell_append (GTK_MENU_SHELL (menu), menu_item);
       }
 
@@ -312,6 +319,12 @@ get_main_popup (GschemToplevel *w_current)
     g_object_set_data (G_OBJECT (menu_item), "action", *e.action);
     g_signal_connect (G_OBJECT (menu_item), "activate",
                       G_CALLBACK (g_menu_execute), w_current);
+
+    GObject *dispatcher = gschem_action_get_dispatcher (*e.action, w_current);
+    g_signal_connect_swapped (dispatcher,
+                              "set-sensitive",
+                              G_CALLBACK (gtk_widget_set_sensitive),
+                              menu_item);
 
     /* Add a handle to the menu object to get access to widget
        objects. Horrible horrible hack, but it's the same approach as

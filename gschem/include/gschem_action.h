@@ -46,6 +46,11 @@ GschemAction *scm_to_action (SCM smob);
 void gschem_action_activate (GschemAction *action,
                              GschemToplevel *w_current);
 
+void gschem_action_set_sensitive (GschemAction *action, gboolean sensitive,
+                                  GschemToplevel *w_current);
+GObject *gschem_action_get_dispatcher (GschemAction *action,
+                                       GschemToplevel *w_current);
+
 GschemAction *gschem_action_register (gchar *id,
                                       gchar *icon_name,
                                       gchar *name,
