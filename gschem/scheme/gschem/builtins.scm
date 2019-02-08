@@ -37,13 +37,21 @@
        (define-action (name . args) . forms)
        (export name)))))
 
-(define-action-public (&file-repl #:label (_ "Terminal REPL") #:icon "gtk-execute")
+(define-action-public
+    (&file-repl
+     #:icon       "gtk-execute"
+     #:name       (_ "Terminal REPL")
+     #:label      (_ "REPL...")
+     #:menu-label (_ "REPL..."))
   (start-repl-in-background-terminal))
 
 (define-action-public
-    (&hierarchy-documentation #:label (_ "Component Documentation")
-                              #:icon "symbol-datasheet"
-                              #:tooltip (_ "View documentation for selected component"))
+    (&hierarchy-documentation
+     #:icon       "symbol-datasheet"
+     #:name       (_ "Component Documentation")
+     #:label      (_ "Component Documentation...")
+     #:menu-label (_ "D_ocumentation...")
+     #:tooltip    (_ "View documentation for selected component"))
 
   "If a component is selected, search for and display corresponding
 documentation in a browser or PDF viewer. If no documentation can be
@@ -63,23 +71,39 @@ found, shows a dialog with an error message."
                   (apply format #f msg args))))))
 
 (define-action-public
-    (&help-manual #:label (_ "gEDA Manuals") #:icon "help-browser"
-     #:tooltip (_ "View the front page of the gEDA documentation in a browser."))
+    (&help-manual
+     #:icon       "help-browser"
+     #:name       (_ "gEDA Manuals")
+     #:label      (_ "gEDA Documentation...")
+     #:menu-label (_ "gEDA Docu_mentation...")
+     #:tooltip    (_ "View the front page of the gEDA documentation in a browser."))
   (show-wiki "geda:documentation"))
 
 (define-action-public
-    (&help-guide #:label (_ "gschem User Guide") #:icon "gtk-help"
-                 #:tooltip (_ "View the gschem User Guide in a browser."))
+    (&help-guide
+     #:icon       "gtk-help"
+     #:name       (_ "gschem User Guide")
+     #:label      (_ "gschem User Guide...")
+     #:menu-label (_ "gschem User _Guide...")
+     #:tooltip    (_ "View the gschem User Guide in a browser."))
   (show-wiki "geda:gschem_ug"))
 
 (define-action-public
-    (&help-faq #:label (_ "gschem FAQ") #:icon "help-faq"
-     #:tooltip (_ "Frequently Asked Questions about using gschem."))
+    (&help-faq
+     #:icon       "help-faq"
+     #:name       (_ "gschem FAQ")
+     #:label      (_ "gschem FAQ...")
+     #:menu-label (_ "gschem _FAQ...")
+     #:tooltip    (_ "Frequently Asked Questions about using gschem."))
   (show-wiki "geda:faq-gschem"))
 
 (define-action-public
-    (&help-wiki #:label (_ "gEDA wiki") #:icon "web-browser"
-     #:tooltip (_ "View the front page of the gEDA wiki in a browser."))
+    (&help-wiki
+     #:icon       "web-browser"
+     #:name       (_ "gEDA wiki")
+     #:label      (_ "gEDA Wiki...")
+     #:menu-label (_ "gEDA _Wiki...")
+     #:tooltip    (_ "View the front page of the gEDA wiki in a browser."))
   (show-wiki))
 
 ;; Local Variables:
