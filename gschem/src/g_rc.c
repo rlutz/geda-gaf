@@ -715,27 +715,6 @@ SCM g_rc_magnetic_net_mode(SCM mode)
  *  \par Function Description
  *
  */
-SCM g_rc_add_menu(SCM scm_menu_name, SCM scm_menu_items)
-{
-  char *menu_name;
-
-  SCM_ASSERT (scm_is_string (scm_menu_name), scm_menu_name,
-              SCM_ARG1, "add-menu");
-  SCM_ASSERT (SCM_NIMP (scm_menu_items) && SCM_CONSP (scm_menu_items), scm_menu_items,
-              SCM_ARG2, "add-menu");
-
-  menu_name = scm_to_utf8_string (scm_menu_name);
-  s_menu_add_entry(menu_name, scm_menu_items);
-  free (menu_name);
-
-  return SCM_BOOL_T;
-}
-
-/*! \todo Finish function documentation!!!
- *  \brief
- *  \par Function Description
- *
- */
 SCM g_rc_window_size(SCM width, SCM height)
 {
   SCM_ASSERT (scm_is_integer (width),  width,  SCM_ARG1, "window-size");

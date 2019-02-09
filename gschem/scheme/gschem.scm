@@ -20,6 +20,7 @@
 
 (use-modules (gschem keymap)
              (gschem action)
+             (gschem core gettext)
              (gschem core builtins)
              (gschem builtins)
              (gschem window)

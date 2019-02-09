@@ -322,14 +322,6 @@ void s_log_init (const gchar *filename);
 void s_log_close (void);
 gchar *s_log_read (void);
 
-/* s_menu.c */
-int s_menu_return_num(void);
-SCM s_menu_return_entry(int index, char **menu_name);
-int s_menu_add_entry(char *new_menu, SCM menu_items);
-void s_menu_print(void);
-void s_menu_free(void);
-void s_menu_init(void);
-
 /* s_page.c */
 PAGE *s_page_new (TOPLEVEL *toplevel, const gchar *filename);
 void s_page_delete (TOPLEVEL *toplevel, PAGE *page);

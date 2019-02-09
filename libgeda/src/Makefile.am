@@ -76,7 +76,6 @@ libgeda_la_SOURCES = \
 	s_encoding.c \
 	s_hierarchy.c \
 	s_log.c \
-	s_menu.c \
 	s_page.c \
 	s_path.c \
 	s_slib.c \

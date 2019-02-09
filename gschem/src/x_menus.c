@@ -109,10 +109,14 @@ get_main_menu(GschemToplevel *w_current)
   GtkWidget *menu_bar;
   GtkWidget *menu;
   char *menu_name;
-  char **raw_menu_name = g_malloc (sizeof(char *));
-  int i;
 
   menu_bar = gtk_menu_bar_new ();
+
+  SCM s_var = scm_module_variable (scm_current_module (),
+                                   scm_from_utf8_symbol ("menubar"));
+  if (!scm_is_true (s_var))
+    /* no menubar definition found */
+    return menu_bar;
 
   scm_dynwind_begin (0);
   g_dynwind_window (w_current);
@@ -120,18 +124,22 @@ get_main_menu(GschemToplevel *w_current)
    * in Guile code. At some point, unwind handlers need to be added to
    * clean up heap-allocated strings. */
 
-  for (i = 0 ; i < s_menu_return_num(); i++) {
-    
-    if (*raw_menu_name == NULL) {
-      fprintf(stderr, "Oops.. got a NULL menu name in get_main_menu()\n");
-      exit(-1);
-    }
+  for (SCM l = scm_variable_ref (s_var); scm_is_pair (l); l = scm_cdr (l)) {
+    SCM s_menu = scm_car (l);
+    SCM_ASSERT (scm_is_pair (s_menu),
+                s_menu, SCM_ARGn, "get_main_menu menu");
 
-    menu = build_menu (s_menu_return_entry (i, raw_menu_name), w_current);
+    SCM s_title = scm_car (s_menu);
+    SCM_ASSERT (scm_is_string (s_title),
+                s_title, SCM_ARGn, "get_main_menu menu title");
 
-    menu_name = (char *) gettext(*raw_menu_name);
+    menu = build_menu (scm_cdr (s_menu), w_current);
+
+    scm_dynwind_begin (0);
+    menu_name = scm_to_utf8_string (s_title);
+    scm_dynwind_free (menu_name);
+
     root_menu = gtk_menu_item_new_with_mnemonic (menu_name);
-    /* do not free *raw_menu_name */
 
     /* no longer right justify the help menu since that has gone out of style */
 
@@ -139,19 +147,20 @@ get_main_menu(GschemToplevel *w_current)
     gtk_menu_item_set_submenu (GTK_MENU_ITEM (root_menu), menu);
     gtk_menu_shell_append (GTK_MENU_SHELL (menu_bar), root_menu);
 
-    /* store lower-case raw name without underscores as settings name
+    /* store lower-case title without underscores as settings name
        for saving/restoring torn-off menus */
-    gchar *settings_name = g_ascii_strdown (*raw_menu_name, -1);
+    gchar *settings_name = g_ascii_strdown (menu_name, -1);
     gchar *i = settings_name, *j = settings_name;
     do {
       if (*i != '_')
         *j++ = *i;
     } while (*i++ != '\0');
     g_object_set_data (G_OBJECT (menu), "settings-name", settings_name);
+
+    scm_dynwind_end ();
   }
   scm_dynwind_end ();
 
-  g_free(raw_menu_name);
   return menu_bar;
 }
 

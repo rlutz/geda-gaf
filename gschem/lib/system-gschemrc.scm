@@ -1096,15 +1096,7 @@
 ; The SEPARATOR keyword is case sensitive and puts a separator into the menu.
 ;
 
-(or (defined? 'define-syntax)
-    (use-modules (ice-9 syncase)))
-
-;; Define a no-op macro for flagging strings as translatable.
-(define-syntax N_
-  (syntax-rules ()
-    ((N_ expr) expr)))
-
-(define file-menu-items
+(define file-menu
         `((,&file-new
            ,&file-open
            ,&file-open-recent)
@@ -1120,7 +1112,7 @@
            ,&file-close-window
            ,&file-quit)))
 
-(define edit-menu-items
+(define edit-menu
         `((,&edit-undo
            ,&edit-redo)
           (,&clipboard-cut
@@ -1151,7 +1143,7 @@
            ,&edit-update
            ,&edit-show-hidden)))
 
-(define buffer-menu-items
+(define buffer-menu
 	`((,&buffer-copy1
 	   ,&buffer-copy2
 	   ,&buffer-copy3
@@ -1168,7 +1160,7 @@
 	   ,&buffer-paste4
 	   ,&buffer-paste5)))
 
-(define view-menu-items
+(define view-menu
         `((,&view-menubar
            ,&view-toolbar)
           (,&view-redraw
@@ -1182,14 +1174,14 @@
            ,&view-light-colors
            ,&view-bw-colors)))
 
-(define page-menu-items
+(define page-menu
         `((,&page-manager
            ,&page-prev
            ,&page-next
            ,&page-revert
            ,&page-close)))
 
-(define add-menu-items
+(define add-menu
         `((,&add-component
            ,&add-net
            ,&add-bus
@@ -1203,13 +1195,13 @@
            ,&add-pin
            ,&add-picture)))
 
-(define hierarchy-menu-items
+(define hierarchy-menu
         `((,&hierarchy-down-schematic
            ,&hierarchy-down-symbol
            ,&hierarchy-up
            ,&hierarchy-documentation)))
 
-(define attributes-menu-items
+(define attributes-menu
         `((,&attributes-attach
            ,&attributes-detach
            ,&attributes-show-value
@@ -1222,7 +1214,7 @@
            ,&edit-show-text
            ,&edit-autonumber)))
 
-(define options-menu-items
+(define options-menu
         `((,&options-text-size
            ,&options-grid
            ,&options-snap
@@ -1238,7 +1230,7 @@
            ,&docking-area-bottom
            ,&docking-area-right)))
 
-(define help-menu-items
+(define help-menu
         `((,&help-guide
            ,&help-faq
            ,&help-manual
@@ -1251,16 +1243,17 @@
 ; Now actually add the menus.  The order here defines the order in which
 ; the menus appear in the top menu bar.
 ;
-(add-menu (N_ "_File") file-menu-items)
-(add-menu (N_ "_Edit") edit-menu-items)
-;(add-menu (N_ "_Buffer") buffer-menu-items)
-(add-menu (N_ "_View") view-menu-items)
-(add-menu (N_ "_Page") page-menu-items)
-(add-menu (N_ "_Add") add-menu-items)
-(add-menu (N_ "Hie_rarchy") hierarchy-menu-items)
-(add-menu (N_ "A_ttributes") attributes-menu-items)
-(add-menu (N_ "_Options") options-menu-items)
-(add-menu (N_ "_Help") help-menu-items)
+(define menubar
+        `((,(_ "_File")       . ,file-menu)
+          (,(_ "_Edit")       . ,edit-menu)
+;          (,(_ "_Buffer")     . ,buffer-menu)
+          (,(_ "_View")       . ,view-menu)
+          (,(_ "_Page")       . ,page-menu)
+          (,(_ "_Add")        . ,add-menu)
+          (,(_ "Hie_rarchy")  . ,hierarchy-menu)
+          (,(_ "A_ttributes") . ,attributes-menu)
+          (,(_ "_Options")    . ,options-menu)
+          (,(_ "_Help")       . ,help-menu)))
 
 ;
 ; End of keymapping related keywords

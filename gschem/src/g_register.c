@@ -87,7 +87,6 @@ static struct gsubr_t gschem_funcs[] = {
   { "draw-grips",                1, 0, 0, g_rc_draw_grips },
   { "netconn-rubberband",        1, 0, 0, g_rc_netconn_rubberband },
   { "magnetic-net-mode",         1, 0, 0, g_rc_magnetic_net_mode },
-  { "add-menu",                  2, 0, 0, g_rc_add_menu },
   { "window-size",               2, 0, 0, g_rc_window_size },
   { "warp-cursor",               1, 0, 0, g_rc_warp_cursor },
   { "toolbars",                  1, 0, 0, g_rc_toolbars },
