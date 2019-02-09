@@ -559,7 +559,7 @@ x_window_tool_button_clicked (GtkToolButton *tool_button, gpointer data)
 
 static GtkToolItem *
 create_tool_button (GschemAction *action,
-                    const gchar *stock,
+                    const gchar *icon_name,
                     const gchar *label,
                     const gchar *tooltip_text,
                     gboolean is_radio,
@@ -575,24 +575,18 @@ create_tool_button (GschemAction *action,
   gtk_tool_button_set_label (GTK_TOOL_BUTTON (button), label);
   gtk_widget_set_tooltip_text (GTK_WIDGET (button), tooltip_text);
 
-  /* If a stock GTK icon with the requested name is not found,
-     fall back to the bitmap icons provided in the distribution. */
+  GtkWidget *image = gtk_image_new ();
+  gtk_tool_button_set_icon_widget (GTK_TOOL_BUTTON (button), image);
 
-  gchar *stockid = g_strconcat("gtk-", stock, NULL);
-  GtkStockItem item;
-  GtkWidget *wpixmap;
-
-  /* First check if GTK knows this icon */
-  if (gtk_stock_lookup (stockid, &item))
-    wpixmap = gtk_image_new_from_stock (stockid,
-                                        GTK_ICON_SIZE_LARGE_TOOLBAR);
+  /* If there's a matching stock item, use it.
+     Otherwise lookup the name in the icon theme. */
+  GtkStockItem stock_item;
+  if (gtk_stock_lookup (icon_name, &stock_item))
+    gtk_image_set_from_stock (GTK_IMAGE (image), icon_name,
+                              GTK_ICON_SIZE_LARGE_TOOLBAR);
   else
-    /* Look up the icon in the icon theme */
-    wpixmap = gtk_image_new_from_icon_name (stock,
-                                            GTK_ICON_SIZE_LARGE_TOOLBAR);
-
-  gtk_tool_button_set_icon_widget (GTK_TOOL_BUTTON (button), wpixmap);
-  g_free(stockid);
+    gtk_image_set_from_icon_name (GTK_IMAGE (image), icon_name,
+                                  GTK_ICON_SIZE_LARGE_TOOLBAR);
 
   /* register callback so the action gets run */
   g_object_set_data (G_OBJECT (button), "action", action);
@@ -689,7 +683,7 @@ void x_window_create_main(GschemToplevel *w_current)
     w_current->toolbar = toolbar;
 
     button = create_tool_button (action_file_new,
-                                 "new",
+                                 "gtk-new",
                                  _("New"),
                                  _("New file"),
                                  FALSE,
@@ -697,7 +691,7 @@ void x_window_create_main(GschemToplevel *w_current)
     gtk_toolbar_insert (GTK_TOOLBAR (toolbar), button, -1);
 
     button = create_tool_button (action_file_open,
-                                 "open",
+                                 "gtk-open",
                                  _("Open"),
                                  _("Open file"),
                                  FALSE,
@@ -705,7 +699,7 @@ void x_window_create_main(GschemToplevel *w_current)
     gtk_toolbar_insert (GTK_TOOLBAR (toolbar), button, -1);
 
     button = create_tool_button (action_file_save,
-                                 "save",
+                                 "gtk-save",
                                  _("Save"),
                                  _("Save file"),
                                  FALSE,
@@ -716,7 +710,7 @@ void x_window_create_main(GschemToplevel *w_current)
                         gtk_separator_tool_item_new (), -1);
 
     button = create_tool_button (action_edit_undo,
-                                 "undo",
+                                 "gtk-undo",
                                  _("Undo"),
                                  _("Undo last operation"),
                                  FALSE,
@@ -724,7 +718,7 @@ void x_window_create_main(GschemToplevel *w_current)
     gtk_toolbar_insert (GTK_TOOLBAR (toolbar), button, -1);
 
     button = create_tool_button (action_edit_redo,
-                                 "redo",
+                                 "gtk-redo",
                                  _("Redo"),
                                  _("Redo last undo"),
                                  FALSE,

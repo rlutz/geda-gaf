@@ -437,13 +437,12 @@ gschem_action_create_menu_item (GschemAction *action,
     menu_item = g_object_new (GTK_TYPE_IMAGE_MENU_ITEM, NULL);
 
     GtkWidget *image = gtk_image_new ();
-    gtk_widget_show (image);
     gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (menu_item), image);
 
     /* If there's a matching stock item, use it.
        Otherwise lookup the name in the icon theme. */
-    GtkStockItem stock_info;
-    if (gtk_stock_lookup (action->icon_name, &stock_info))
+    GtkStockItem stock_item;
+    if (gtk_stock_lookup (action->icon_name, &stock_item))
       gtk_image_set_from_stock (GTK_IMAGE (image), action->icon_name,
                                 GTK_ICON_SIZE_MENU);
     else
