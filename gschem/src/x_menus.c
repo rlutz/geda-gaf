@@ -105,26 +105,13 @@ build_menu (SCM s_menu, GschemToplevel *w_current)
 GtkWidget *
 get_main_menu(GschemToplevel *w_current)
 {
-  GtkWidget *root_menu;
-  GtkWidget *menu_bar;
-  GtkWidget *menu;
-  char *menu_name;
-
-  menu_bar = gtk_menu_bar_new ();
-
   SCM s_var = scm_module_variable (scm_current_module (),
                                    scm_from_utf8_symbol ("menubar"));
-  if (!scm_is_true (s_var))
-    /* no menubar definition found */
-    return menu_bar;
+  SCM s_menubar = scm_variable_ref (s_var);
 
-  scm_dynwind_begin (0);
-  g_dynwind_window (w_current);
-  /*! \bug This function may leak memory if there is a non-local exit
-   * in Guile code. At some point, unwind handlers need to be added to
-   * clean up heap-allocated strings. */
+  GtkWidget *menu_bar = gtk_menu_bar_new ();
 
-  for (SCM l = scm_variable_ref (s_var); scm_is_pair (l); l = scm_cdr (l)) {
+  for (SCM l = s_menubar; scm_is_pair (l); l = scm_cdr (l)) {
     SCM s_menu = scm_car (l);
     SCM_ASSERT (scm_is_pair (s_menu),
                 s_menu, SCM_ARGn, "get_main_menu menu");
@@ -133,33 +120,32 @@ get_main_menu(GschemToplevel *w_current)
     SCM_ASSERT (scm_is_string (s_title),
                 s_title, SCM_ARGn, "get_main_menu menu title");
 
-    menu = build_menu (scm_cdr (s_menu), w_current);
+    GtkWidget *menu = build_menu (scm_cdr (s_menu), w_current);
 
     scm_dynwind_begin (0);
-    menu_name = scm_to_utf8_string (s_title);
-    scm_dynwind_free (menu_name);
+    {
+      char *title = scm_to_utf8_string (s_title);
+      scm_dynwind_free (title);
 
-    root_menu = gtk_menu_item_new_with_mnemonic (menu_name);
+      /* store lower-case title without underscores as settings name
+         for saving/restoring torn-off menus */
+      gchar *settings_name = g_ascii_strdown (title, -1);
+      gchar *i = settings_name, *j = settings_name;
+      do {
+        if (*i != '_')
+          *j++ = *i;
+      } while (*i++ != '\0');
+      g_object_set_data (G_OBJECT (menu), "settings-name", settings_name);
 
-    /* no longer right justify the help menu since that has gone out of style */
-
-    gtk_widget_show (root_menu);
-    gtk_menu_item_set_submenu (GTK_MENU_ITEM (root_menu), menu);
-    gtk_menu_shell_append (GTK_MENU_SHELL (menu_bar), root_menu);
-
-    /* store lower-case title without underscores as settings name
-       for saving/restoring torn-off menus */
-    gchar *settings_name = g_ascii_strdown (menu_name, -1);
-    gchar *i = settings_name, *j = settings_name;
-    do {
-      if (*i != '_')
-        *j++ = *i;
-    } while (*i++ != '\0');
-    g_object_set_data (G_OBJECT (menu), "settings-name", settings_name);
-
+      GtkWidget *root_menu = gtk_menu_item_new_with_mnemonic (title);
+      gtk_widget_show (root_menu);
+      gtk_menu_item_set_submenu (GTK_MENU_ITEM (root_menu), menu);
+      /* no longer right justify the help menu since that has gone out
+         of style */
+      gtk_menu_shell_append (GTK_MENU_SHELL (menu_bar), root_menu);
+    }
     scm_dynwind_end ();
   }
-  scm_dynwind_end ();
 
   return menu_bar;
 }
