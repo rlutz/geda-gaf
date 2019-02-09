@@ -1255,6 +1255,26 @@
           (,(_ "_Options")    . ,options-menu)
           (,(_ "_Help")       . ,help-menu)))
 
+(define context-menu
+        `((,&add-net
+           ,&add-attribute
+           ,&add-component
+           ,&add-bus
+           ,&add-text)
+          (,&view-zoom-in
+           ,&view-zoom-out
+           ,&view-zoom-box
+           ,&view-zoom-extents)
+          (,&edit-select
+           ,&edit-edit
+           ,&edit-pin-type
+           ,&edit-copy
+           ,&edit-move
+           ,&edit-delete)
+          (,&hierarchy-down-schematic
+           ,&hierarchy-down-symbol
+           ,&hierarchy-up)))
+
 ;
 ; End of keymapping related keywords
 ;

@@ -29,41 +29,17 @@
 
 #include <glib/gstdio.h>
 
-static GschemAction **popup_items[] = {
-  &action_add_net,
-  &action_add_attribute,
-  &action_add_component,
-  &action_add_bus,
-  &action_add_text,
-  NULL,
-  &action_view_zoom_in,
-  &action_view_zoom_out,
-  &action_view_zoom_box,
-  &action_view_zoom_extents,
-  NULL,
-  &action_edit_select,
-  &action_edit_edit,
-  &action_edit_pin_type,
-  &action_edit_copy,
-  &action_edit_move,
-  &action_edit_delete,
-  NULL,
-  &action_hierarchy_down_schematic,
-  &action_hierarchy_down_symbol,
-  &action_hierarchy_up,
-
-  NULL, NULL /* Guard */
-};
-
 
 static GtkWidget *
-build_menu (SCM s_menu, GschemToplevel *w_current)
+build_menu (SCM s_menu, gboolean is_main_menu, GschemToplevel *w_current)
 {
   GtkWidget *menu = gtk_menu_new ();
 
-  GtkWidget *tearoff_menu_item = gtk_tearoff_menu_item_new ();
-  gtk_menu_shell_append (GTK_MENU_SHELL (menu), tearoff_menu_item);
-  gtk_widget_show (tearoff_menu_item);
+  if (is_main_menu) {
+    GtkWidget *tearoff_menu_item = gtk_tearoff_menu_item_new ();
+    gtk_menu_shell_append (GTK_MENU_SHELL (menu), tearoff_menu_item);
+    gtk_widget_show (tearoff_menu_item);
+  }
 
   for (SCM l0 = s_menu; scm_is_pair (l0); l0 = scm_cdr (l0)) {
     SCM s_section = scm_car (l0);
@@ -81,7 +57,7 @@ build_menu (SCM s_menu, GschemToplevel *w_current)
 
       GschemAction *action = scm_to_action (s_item);
       GtkWidget *menu_item =
-        gschem_action_create_menu_item (action, TRUE, w_current);
+        gschem_action_create_menu_item (action, is_main_menu, w_current);
       gtk_menu_shell_append (GTK_MENU_SHELL (menu), menu_item);
       gtk_widget_show (menu_item);
     }
@@ -129,7 +105,7 @@ x_menus_create_main_menu (GschemToplevel *w_current)
     SCM_ASSERT (scm_is_string (s_title),
                 s_title, SCM_ARGn, "get_main_menu menu title");
 
-    GtkWidget *menu = build_menu (scm_cdr (s_menu), w_current);
+    GtkWidget *menu = build_menu (scm_cdr (s_menu), TRUE, w_current);
 
     scm_dynwind_begin (0);
     {
@@ -160,30 +136,11 @@ x_menus_create_main_menu (GschemToplevel *w_current)
 GtkWidget *
 get_main_popup (GschemToplevel *w_current)
 {
-  GtkWidget *menu_item;
-  GtkWidget *menu;
-  int i;
+  SCM s_var = scm_module_variable (scm_current_module (),
+                                   scm_from_utf8_symbol ("context-menu"));
+  SCM s_menu = scm_variable_ref (s_var);
 
-  menu = gtk_menu_new ();
-
-  for (i = 0; popup_items[i] != NULL || popup_items[i + 1] != NULL; i++) {
-    GschemAction *action;
-
-    /* No action --> add a separator */
-    if (popup_items[i] == NULL) {
-      menu_item = gtk_menu_item_new();
-      gtk_widget_show (menu_item);
-      gtk_menu_shell_append (GTK_MENU_SHELL (menu), menu_item);
-      continue;
-    }
-    action = *popup_items[i];
-
-    menu_item = gschem_action_create_menu_item (action, FALSE, w_current);
-    gtk_menu_shell_append (GTK_MENU_SHELL (menu), menu_item);
-    gtk_widget_show (menu_item);
-  }
-
-  return menu;
+  return build_menu (s_menu, FALSE, w_current);
 }
 
 /*! \todo Finish function documentation!!!
