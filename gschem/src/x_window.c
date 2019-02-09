@@ -148,38 +148,6 @@ void x_window_setup_draw_events(GschemToplevel *w_current)
 }
 
 
-/*! \brief Creates a new GtkImage displaying a GTK stock icon if available.
- *
- * If a stock GTK icon with the requested name was not found, this function
- * falls back to the bitmap icons provided in the distribution.
- *
- * \param stock Name of the stock icon ("new", "open", etc.)
- * \param w_current Schematic top level
- * \return Pointer to the new GtkImage object.
- */
-static GtkWidget *x_window_stock_pixmap(const char *stock, GschemToplevel *w_current)
-{
-  GtkWidget *wpixmap = NULL;
-  GtkStockItem item;
-
-  gchar *stockid=g_strconcat("gtk-", stock, NULL);
-
-  /* First check if GTK knows this icon */
-  if(gtk_stock_lookup(stockid, &item)) {
-    wpixmap = gtk_image_new_from_stock(stockid,
-                                       GTK_ICON_SIZE_LARGE_TOOLBAR);
-  } else {
-    /* Look up the icon in the icon theme */
-    wpixmap = gtk_image_new_from_icon_name (stock,
-                                            GTK_ICON_SIZE_LARGE_TOOLBAR);
-  }
-
-  g_free(stockid);
-
-  return wpixmap;
-}
-
-
 static void
 x_window_find_text (GtkWidget *widget, gint response, GschemToplevel *w_current)
 {
@@ -605,9 +573,26 @@ create_tool_button (GschemAction *action,
     button = g_object_new (GTK_TYPE_TOOL_BUTTON, NULL);
 
   gtk_tool_button_set_label (GTK_TOOL_BUTTON (button), label);
-  gtk_tool_button_set_icon_widget (GTK_TOOL_BUTTON (button),
-                                   x_window_stock_pixmap (stock, w_current));
   gtk_widget_set_tooltip_text (GTK_WIDGET (button), tooltip_text);
+
+  /* If a stock GTK icon with the requested name is not found,
+     fall back to the bitmap icons provided in the distribution. */
+
+  gchar *stockid = g_strconcat("gtk-", stock, NULL);
+  GtkStockItem item;
+  GtkWidget *wpixmap;
+
+  /* First check if GTK knows this icon */
+  if (gtk_stock_lookup (stockid, &item))
+    wpixmap = gtk_image_new_from_stock (stockid,
+                                        GTK_ICON_SIZE_LARGE_TOOLBAR);
+  else
+    /* Look up the icon in the icon theme */
+    wpixmap = gtk_image_new_from_icon_name (stock,
+                                            GTK_ICON_SIZE_LARGE_TOOLBAR);
+
+  gtk_tool_button_set_icon_widget (GTK_TOOL_BUTTON (button), wpixmap);
+  g_free(stockid);
 
   /* register callback so the action gets run */
   g_object_set_data (G_OBJECT (button), "action", action);
