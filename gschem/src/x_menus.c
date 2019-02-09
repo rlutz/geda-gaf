@@ -102,14 +102,23 @@ build_menu (SCM s_menu, GschemToplevel *w_current)
  *  \par Function Description
  *
  */
-GtkWidget *
-get_main_menu(GschemToplevel *w_current)
+void
+x_menus_create_main_menu (GschemToplevel *w_current)
 {
   SCM s_var = scm_module_variable (scm_current_module (),
                                    scm_from_utf8_symbol ("menubar"));
-  SCM s_menubar = scm_variable_ref (s_var);
+  if (!scm_is_true (s_var)) {
+    g_critical (_("No menubar definition found\n"));
+    return;
+  }
 
-  GtkWidget *menu_bar = gtk_menu_bar_new ();
+  SCM s_menubar = scm_variable_ref (s_var);
+  if (scm_is_null (s_menubar) || !scm_is_true (scm_list_p (s_menubar))) {
+    g_critical (_("Empty or malformed menubar definition\n"));
+    return;
+  }
+
+  w_current->menubar = gtk_menu_bar_new ();
 
   for (SCM l = s_menubar; scm_is_pair (l); l = scm_cdr (l)) {
     SCM s_menu = scm_car (l);
@@ -142,12 +151,10 @@ get_main_menu(GschemToplevel *w_current)
       gtk_menu_item_set_submenu (GTK_MENU_ITEM (root_menu), menu);
       /* no longer right justify the help menu since that has gone out
          of style */
-      gtk_menu_shell_append (GTK_MENU_SHELL (menu_bar), root_menu);
+      gtk_menu_shell_append (GTK_MENU_SHELL (w_current->menubar), root_menu);
     }
     scm_dynwind_end ();
   }
-
-  return menu_bar;
 }
 
 GtkWidget *

@@ -422,8 +422,9 @@ x_window_save_geometry (GschemToplevel *w_current)
   }
 
   /* save torn-off menus */
-  x_window_save_menu_geometry (
-    GTK_MENU_SHELL (w_current->menubar), w_current);
+  if (w_current->menubar != NULL)
+    x_window_save_menu_geometry (
+      GTK_MENU_SHELL (w_current->menubar), w_current);
 
   /* save dock area geometry */
   gtk_widget_get_allocation (w_current->left_notebook, &allocation);
@@ -490,8 +491,9 @@ x_window_restore_all_menu_geometry (GschemToplevel *w_current)
     G_OBJECT (w_current->main_window),
     G_CALLBACK (x_window_restore_all_menu_geometry), w_current);
 
-  x_window_restore_menu_geometry (
-    GTK_MENU_SHELL (w_current->menubar), w_current);
+  if (w_current->menubar != NULL)
+    x_window_restore_menu_geometry (
+      GTK_MENU_SHELL (w_current->menubar), w_current);
 
   return FALSE;
 }
@@ -598,7 +600,6 @@ void x_window_create_main(GschemToplevel *w_current)
 
   GtkPolicyType policy;
   GtkWidget *main_box=NULL;
-  GtkWidget *menubar=NULL;
   GtkWidget *toolbar=NULL;
   GtkWidget *handlebox=NULL;
   GtkWidget *scrolled;
@@ -638,16 +639,18 @@ void x_window_create_main(GschemToplevel *w_current)
   gtk_container_set_border_width (GTK_CONTAINER (main_box), 0);
   gtk_container_add(GTK_CONTAINER(w_current->main_window), main_box);
 
-  menubar = get_main_menu (w_current);
-  if (w_current->handleboxes) {
-  	handlebox = gtk_handle_box_new ();
-  	gtk_box_pack_start(GTK_BOX(main_box), handlebox, FALSE, FALSE, 0);
-  	gtk_container_add (GTK_CONTAINER (handlebox), menubar);
-  } else {
-  	gtk_box_pack_start(GTK_BOX(main_box), menubar, FALSE, FALSE, 0);
+  x_menus_create_main_menu (w_current);
+  if (w_current->menubar != NULL) {
+    if (w_current->handleboxes) {
+      handlebox = gtk_handle_box_new ();
+      gtk_box_pack_start (GTK_BOX (main_box), handlebox, FALSE, FALSE, 0);
+      gtk_container_add (GTK_CONTAINER (handlebox), w_current->menubar);
+    } else {
+      gtk_box_pack_start (GTK_BOX (main_box), w_current->menubar,
+                          FALSE, FALSE, 0);
+    }
   }
 
-  w_current->menubar = menubar;
   gtk_widget_realize (w_current->main_window);
 
   if (w_current->handleboxes && w_current->toolbars) {

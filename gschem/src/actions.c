@@ -886,6 +886,8 @@ DEFINE_ACTION (view_menubar,
                NULL)
 {
   GtkWidget *w = w_current->menubar;
+  if (w == NULL)
+    return;
   if (w_current->handleboxes)
     w = gtk_widget_get_parent (w);
 
