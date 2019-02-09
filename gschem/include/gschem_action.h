@@ -61,6 +61,8 @@ GtkToolItem *gschem_action_create_tool_button (GschemAction *action,
 
 void gschem_action_set_sensitive (GschemAction *action, gboolean sensitive,
                                   GschemToplevel *w_current);
+void gschem_action_set_active (GschemAction *action, gboolean is_active,
+                               GschemToplevel *w_current);
 
 GschemAction *gschem_action_register (gchar *id,
                                       gchar *icon_name,

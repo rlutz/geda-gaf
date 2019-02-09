@@ -52,10 +52,6 @@ struct st_gschem_toplevel {
 
   GtkWidget *bottom_widget;
 
-  GtkWidget *toolbar_select;
-  GtkWidget *toolbar_net;
-  GtkWidget *toolbar_bus;
-
   GtkWidget *left_notebook;
   GtkWidget *bottom_notebook;
   GtkWidget *right_notebook;

@@ -171,10 +171,6 @@ GschemToplevel *gschem_toplevel_new ()
   w_current->bottom_widget = NULL;
   w_current->translate_widget = NULL;
 
-  w_current->toolbar_select = NULL;
-  w_current->toolbar_net    = NULL;
-  w_current->toolbar_bus    = NULL;
-
   w_current->left_notebook   = NULL;
   w_current->bottom_notebook = NULL;
   w_current->right_notebook  = NULL;

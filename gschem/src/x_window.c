@@ -658,16 +658,10 @@ void x_window_create_main(GschemToplevel *w_current)
     /* init radio tool buttons, add first of them */
     button = gschem_action_create_tool_button (action_add_net, w_current);
     gtk_toolbar_insert (GTK_TOOLBAR (toolbar), button, -1);
-    w_current->toolbar_net = GTK_WIDGET (button);
 
     /* add a radio tool button */
     button = gschem_action_create_tool_button (action_add_bus, w_current);
-    gtk_radio_tool_button_set_group (
-      GTK_RADIO_TOOL_BUTTON (button),
-      gtk_radio_tool_button_get_group (
-        GTK_RADIO_TOOL_BUTTON (w_current->toolbar_net)));
     gtk_toolbar_insert (GTK_TOOLBAR (toolbar), button, -1);
-    w_current->toolbar_bus = GTK_WIDGET (button);
 
     /* not part of any radio button group */
     button = gschem_action_create_tool_button (action_add_text, w_current);
@@ -678,18 +672,13 @@ void x_window_create_main(GschemToplevel *w_current)
 
     /* add a radio tool button */
     button = gschem_action_create_tool_button (action_edit_select, w_current);
-    gtk_radio_tool_button_set_group (
-      GTK_RADIO_TOOL_BUTTON (button),
-      gtk_radio_tool_button_get_group (
-        GTK_RADIO_TOOL_BUTTON (w_current->toolbar_net)));
     gtk_toolbar_insert (GTK_TOOLBAR (toolbar), button, -1);
-    w_current->toolbar_select = GTK_WIDGET (button);
 
     gtk_toolbar_insert (GTK_TOOLBAR (toolbar),
                         gtk_separator_tool_item_new (), -1);
 
     /* activate 'select' button at start-up */
-    gtk_toggle_tool_button_set_active (GTK_TOGGLE_TOOL_BUTTON (w_current->toolbar_select), TRUE);
+    gschem_action_set_active (action_edit_select, TRUE, w_current);
   }
 
   left_hpaned = gtk_hpaned_new ();

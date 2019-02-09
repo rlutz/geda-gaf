@@ -325,6 +325,7 @@ struct _Dispatcher {
 
 enum {
   SET_SENSITIVE,
+  SET_ACTIVE,
   LAST_SIGNAL
 };
 
@@ -372,6 +373,15 @@ dispatcher_class_init (DispatcherClass *class)
                   g_cclosure_marshal_VOID__BOOLEAN,
                   G_TYPE_NONE, 1,
                   G_TYPE_BOOLEAN);
+
+  dispatcher_signals[SET_ACTIVE] =
+    g_signal_new ("set-active",
+                  G_OBJECT_CLASS_TYPE (class),
+                  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                  0, NULL, NULL,
+                  g_cclosure_marshal_VOID__BOOLEAN,
+                  G_TYPE_NONE, 1,
+                  G_TYPE_BOOLEAN);
 }
 
 
@@ -387,6 +397,21 @@ gschem_action_set_sensitive (GschemAction *action, gboolean sensitive,
 
   g_return_if_fail (IS_DISPATCHER (dispatcher));
   g_signal_emit (dispatcher, dispatcher_signals[SET_SENSITIVE], 0, sensitive);
+}
+
+
+void
+gschem_action_set_active (GschemAction *action, gboolean is_active,
+                          GschemToplevel *w_current)
+{
+  Dispatcher *dispatcher = g_hash_table_lookup (
+    w_current->action_state_dispatchers, action);
+  if (dispatcher == NULL)
+    /* no widget for this action */
+    return;
+
+  g_return_if_fail (IS_DISPATCHER (dispatcher));
+  g_signal_emit (dispatcher, dispatcher_signals[SET_ACTIVE], 0, is_active);
 }
 
 
@@ -514,7 +539,7 @@ gschem_action_create_tool_button (GschemAction *action,
   GtkToolItem *button;
 
   if (action->type != GSCHEM_ACTION_TYPE_ACTUATE)
-    button = g_object_new (GTK_TYPE_RADIO_TOOL_BUTTON, NULL);
+    button = g_object_new (GTK_TYPE_TOGGLE_TOOL_BUTTON, NULL);
   else
     button = g_object_new (GTK_TYPE_TOOL_BUTTON, NULL);
 
@@ -544,11 +569,20 @@ gschem_action_create_tool_button (GschemAction *action,
 
   /* register callback so the action gets run */
   g_object_set_data (G_OBJECT (button), "action", action);
-  if (GTK_IS_RADIO_TOOL_BUTTON (button))
+  if (GTK_IS_TOGGLE_TOOL_BUTTON (button))
     /* todo */;
   else
     g_signal_connect (button, "clicked",
                       G_CALLBACK (tool_button_clicked), w_current);
+
+  /* connect button to the dispatcher for status updates */
+  Dispatcher *dispatcher = get_dispatcher (action, w_current);
+  g_signal_connect_swapped (dispatcher, "set-sensitive",
+                            G_CALLBACK (gtk_widget_set_sensitive), button);
+  if (GTK_IS_TOGGLE_TOOL_BUTTON (button))
+    g_signal_connect_swapped (dispatcher, "set-active",
+                              G_CALLBACK (gtk_toggle_tool_button_set_active),
+                              button);
 
   return button;
 }
