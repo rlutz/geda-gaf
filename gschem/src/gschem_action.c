@@ -494,3 +494,61 @@ gschem_action_create_menu_item (GschemAction *action,
 
   return menu_item;
 }
+
+
+/******************************************************************************/
+
+
+static void
+tool_button_clicked (GtkToolButton *button, gpointer user_data)
+{
+  GschemAction *action = g_object_get_data (G_OBJECT (button), "action");
+  GschemToplevel *w_current = GSCHEM_TOPLEVEL (user_data);
+  gschem_action_activate (action, w_current);
+}
+
+GtkToolItem *
+gschem_action_create_tool_button (GschemAction *action,
+                                  GschemToplevel *w_current)
+{
+  GtkToolItem *button;
+
+  if (action->type != GSCHEM_ACTION_TYPE_ACTUATE)
+    button = g_object_new (GTK_TYPE_RADIO_TOOL_BUTTON, NULL);
+  else
+    button = g_object_new (GTK_TYPE_TOOL_BUTTON, NULL);
+
+  gtk_tool_button_set_label (GTK_TOOL_BUTTON (button), action->label);
+
+  if (action->tooltip == NULL)
+    gtk_widget_set_tooltip_text (GTK_WIDGET (button), action->name);
+  else {
+    gchar *tooltip_text = g_strdup_printf ("%s\n%s", action->name,
+                                                     action->tooltip);
+    gtk_widget_set_tooltip_text (GTK_WIDGET (button), tooltip_text);
+    g_free (tooltip_text);
+  }
+
+  GtkWidget *image = gtk_image_new ();
+  gtk_tool_button_set_icon_widget (GTK_TOOL_BUTTON (button), image);
+
+  /* If there's a matching stock item, use it.
+     Otherwise lookup the name in the icon theme. */
+  GtkStockItem stock_item;
+  if (gtk_stock_lookup (action->icon_name, &stock_item))
+    gtk_image_set_from_stock (GTK_IMAGE (image), action->icon_name,
+                              GTK_ICON_SIZE_LARGE_TOOLBAR);
+  else
+    gtk_image_set_from_icon_name (GTK_IMAGE (image), action->icon_name,
+                                  GTK_ICON_SIZE_LARGE_TOOLBAR);
+
+  /* register callback so the action gets run */
+  g_object_set_data (G_OBJECT (button), "action", action);
+  if (GTK_IS_RADIO_TOOL_BUTTON (button))
+    /* todo */;
+  else
+    g_signal_connect (button, "clicked",
+                      G_CALLBACK (tool_button_clicked), w_current);
+
+  return button;
+}

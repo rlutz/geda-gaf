@@ -56,6 +56,8 @@ void gschem_action_activate (GschemAction *action,
 GtkWidget *gschem_action_create_menu_item (GschemAction *action,
                                            gboolean use_menu_label,
                                            GschemToplevel *w_current);
+GtkToolItem *gschem_action_create_tool_button (GschemAction *action,
+                                               GschemToplevel *w_current);
 
 void gschem_action_set_sensitive (GschemAction *action, gboolean sensitive,
                                   GschemToplevel *w_current);

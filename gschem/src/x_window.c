@@ -548,62 +548,6 @@ x_window_close_wm (GtkWidget *widget, GdkEvent *event, gpointer data)
 }
 
 
-static void
-x_window_tool_button_clicked (GtkToolButton *tool_button, gpointer data)
-{
-  GschemAction *action = g_object_get_data (G_OBJECT (tool_button), "action");
-  GschemToplevel *w_current = GSCHEM_TOPLEVEL (data);
-  gschem_action_activate (action, w_current);
-}
-
-
-static GtkToolItem *
-create_tool_button (GschemAction *action,
-                    GschemToplevel *w_current)
-{
-  GtkToolItem *button;
-
-  if (action->type != GSCHEM_ACTION_TYPE_ACTUATE)
-    button = g_object_new (GTK_TYPE_RADIO_TOOL_BUTTON, NULL);
-  else
-    button = g_object_new (GTK_TYPE_TOOL_BUTTON, NULL);
-
-  gtk_tool_button_set_label (GTK_TOOL_BUTTON (button), action->label);
-
-  if (action->tooltip == NULL)
-    gtk_widget_set_tooltip_text (GTK_WIDGET (button), action->name);
-  else {
-    gchar *tooltip_text = g_strdup_printf ("%s\n%s", action->name,
-                                                     action->tooltip);
-    gtk_widget_set_tooltip_text (GTK_WIDGET (button), tooltip_text);
-    g_free (tooltip_text);
-  }
-
-  GtkWidget *image = gtk_image_new ();
-  gtk_tool_button_set_icon_widget (GTK_TOOL_BUTTON (button), image);
-
-  /* If there's a matching stock item, use it.
-     Otherwise lookup the name in the icon theme. */
-  GtkStockItem stock_item;
-  if (gtk_stock_lookup (action->icon_name, &stock_item))
-    gtk_image_set_from_stock (GTK_IMAGE (image), action->icon_name,
-                              GTK_ICON_SIZE_LARGE_TOOLBAR);
-  else
-    gtk_image_set_from_icon_name (GTK_IMAGE (image), action->icon_name,
-                                  GTK_ICON_SIZE_LARGE_TOOLBAR);
-
-  /* register callback so the action gets run */
-  g_object_set_data (G_OBJECT (button), "action", action);
-  if (GTK_IS_RADIO_TOOL_BUTTON (button))
-    /* todo */;
-  else
-    g_signal_connect (button, "clicked",
-                      G_CALLBACK (x_window_tool_button_clicked), w_current);
-
-  return button;
-}
-
-
 /*! \todo Finish function documentation!!!
  *  \brief
  *  \par Function Description
@@ -686,38 +630,38 @@ void x_window_create_main(GschemToplevel *w_current)
     }
     w_current->toolbar = toolbar;
 
-    button = create_tool_button (action_file_new, w_current);
+    button = gschem_action_create_tool_button (action_file_new, w_current);
     gtk_toolbar_insert (GTK_TOOLBAR (toolbar), button, -1);
 
-    button = create_tool_button (action_file_open, w_current);
+    button = gschem_action_create_tool_button (action_file_open, w_current);
     gtk_toolbar_insert (GTK_TOOLBAR (toolbar), button, -1);
 
-    button = create_tool_button (action_file_save, w_current);
+    button = gschem_action_create_tool_button (action_file_save, w_current);
     gtk_toolbar_insert (GTK_TOOLBAR (toolbar), button, -1);
 
     gtk_toolbar_insert (GTK_TOOLBAR (toolbar),
                         gtk_separator_tool_item_new (), -1);
 
-    button = create_tool_button (action_edit_undo, w_current);
+    button = gschem_action_create_tool_button (action_edit_undo, w_current);
     gtk_toolbar_insert (GTK_TOOLBAR (toolbar), button, -1);
 
-    button = create_tool_button (action_edit_redo, w_current);
+    button = gschem_action_create_tool_button (action_edit_redo, w_current);
     gtk_toolbar_insert (GTK_TOOLBAR (toolbar), button, -1);
 
     gtk_toolbar_insert (GTK_TOOLBAR (toolbar),
                         gtk_separator_tool_item_new (), -1);
 
     /* not part of any radio button group */
-    button = create_tool_button (action_add_component, w_current);
+    button = gschem_action_create_tool_button (action_add_component, w_current);
     gtk_toolbar_insert (GTK_TOOLBAR (toolbar), button, -1);
 
     /* init radio tool buttons, add first of them */
-    button = create_tool_button (action_add_net, w_current);
+    button = gschem_action_create_tool_button (action_add_net, w_current);
     gtk_toolbar_insert (GTK_TOOLBAR (toolbar), button, -1);
     w_current->toolbar_net = GTK_WIDGET (button);
 
     /* add a radio tool button */
-    button = create_tool_button (action_add_bus, w_current);
+    button = gschem_action_create_tool_button (action_add_bus, w_current);
     gtk_radio_tool_button_set_group (
       GTK_RADIO_TOOL_BUTTON (button),
       gtk_radio_tool_button_get_group (
@@ -726,14 +670,14 @@ void x_window_create_main(GschemToplevel *w_current)
     w_current->toolbar_bus = GTK_WIDGET (button);
 
     /* not part of any radio button group */
-    button = create_tool_button (action_add_text, w_current);
+    button = gschem_action_create_tool_button (action_add_text, w_current);
     gtk_toolbar_insert (GTK_TOOLBAR (toolbar), button, -1);
 
     gtk_toolbar_insert (GTK_TOOLBAR (toolbar),
                         gtk_separator_tool_item_new (), -1);
 
     /* add a radio tool button */
-    button = create_tool_button (action_edit_select, w_current);
+    button = gschem_action_create_tool_button (action_edit_select, w_current);
     gtk_radio_tool_button_set_group (
       GTK_RADIO_TOOL_BUTTON (button),
       gtk_radio_tool_button_get_group (
