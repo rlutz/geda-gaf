@@ -30,31 +30,33 @@
 #include <glib/gstdio.h>
 
 struct PopupEntry {
-  const gchar const *name, *action, *stock_id;
+  const gchar const *name;
+  GschemAction **action;
+  const gchar const *stock_id;
 };
 
 static struct PopupEntry popup_items[] = {
-  { N_("Add Net"), "add-net", "insert-net" },
-  { N_("Add Attribute"), "add-attribute", "insert-attribute" },
-  { N_("Add Component"), "add-component", "insert-symbol" },
-  { N_("Add Bus"), "add-bus", "insert-bus" },
-  { N_("Add Text"), "add-text", "insert-text" },
+  { N_("Add Net"), &action_add_net, "insert-net" },
+  { N_("Add Attribute"), &action_add_attribute, "insert-attribute" },
+  { N_("Add Component"), &action_add_component, "insert-symbol" },
+  { N_("Add Bus"), &action_add_bus, "insert-bus" },
+  { N_("Add Text"), &action_add_text, "insert-text" },
   { "SEPARATOR", NULL, NULL },
-  { N_("Zoom In"), "view-zoom-in", "gtk-zoom-in" },
-  { N_("Zoom Out"), "view-zoom-out", "gtk-zoom-out" },
-  { N_("Zoom Box"), "view-zoom-box", NULL },
-  { N_("Zoom Extents"), "view-zoom-extents", "gtk-zoom-fit" },
+  { N_("Zoom In"), &action_view_zoom_in, "gtk-zoom-in" },
+  { N_("Zoom Out"), &action_view_zoom_out, "gtk-zoom-out" },
+  { N_("Zoom Box"), &action_view_zoom_box, NULL },
+  { N_("Zoom Extents"), &action_view_zoom_extents, "gtk-zoom-fit" },
   { "SEPARATOR", NULL, NULL },
-  { N_("Select"), "edit-select", "select" },
-  { N_("Edit..."), "edit-edit", NULL },
-  { N_("Edit Pin Type..."), "edit-pin-type", NULL },
-  { N_("Copy"), "edit-copy", "clone" },
-  { N_("Move"), "edit-move", NULL },
-  { N_("Delete"), "edit-delete", "gtk-delete" },
+  { N_("Select"), &action_edit_select, "select" },
+  { N_("Edit..."), &action_edit_edit, NULL },
+  { N_("Edit Pin Type..."), &action_edit_pin_type, NULL },
+  { N_("Copy"), &action_edit_copy, "clone" },
+  { N_("Move"), &action_edit_move, NULL },
+  { N_("Delete"), &action_edit_delete, "gtk-delete" },
   { "SEPARATOR", NULL, NULL },
-  { N_("Down Schematic"), "hierarchy-down-schematic", "gtk-go-down" },
-  { N_("Down Symbol"), "hierarchy-down-symbol", "gtk-go-bottom" },
-  { N_("Up"), "hierarchy-up", "gtk-go-up" },
+  { N_("Down Schematic"), &action_hierarchy_down_schematic, "gtk-go-down" },
+  { N_("Down Symbol"), &action_hierarchy_down_symbol, "gtk-go-bottom" },
+  { N_("Up"), &action_hierarchy_up, "gtk-go-up" },
 
   { NULL, NULL, NULL }, /* Guard */
 };
@@ -292,7 +294,6 @@ get_main_popup (GschemToplevel *w_current)
 
     /* Don't bother showing keybindings in the popup menu */
     action = g_object_new (GTK_TYPE_ACTION,
-                           "name", e.action,
                            "label", gettext (e.name),
                            "tooltip", gettext (e.name),
                            NULL);
@@ -304,12 +305,13 @@ get_main_popup (GschemToplevel *w_current)
       gtk_action_set_icon_name (GTK_ACTION (action), e.stock_id);
     }
 
-    /* Connect things up so that the actions get run */
-    g_signal_connect (G_OBJECT (action), "activate",
-                      G_CALLBACK (g_menu_execute), w_current);
-
     menu_item = gtk_action_create_menu_item (GTK_ACTION (action));
     gtk_menu_shell_append (GTK_MENU_SHELL (menu), menu_item);
+
+    /* Connect things up so that the actions get run */
+    g_object_set_data (G_OBJECT (menu_item), "action", *e.action);
+    g_signal_connect (G_OBJECT (menu_item), "activate",
+                      G_CALLBACK (g_menu_execute), w_current);
 
     /* Add a handle to the menu object to get access to widget
        objects. Horrible horrible hack, but it's the same approach as
