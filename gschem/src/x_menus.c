@@ -56,6 +56,49 @@ static GschemAction **popup_items[] = {
 };
 
 
+static GtkWidget *
+build_menu (SCM s_menu, GschemToplevel *w_current)
+{
+  GtkWidget *menu_item;
+  int s_menu_len;
+  SCM scm_item;
+  SCM scm_index;
+  int j;
+
+  GtkWidget *menu = gtk_menu_new();
+
+  menu_item = gtk_tearoff_menu_item_new ();
+  gtk_menu_shell_append (GTK_MENU_SHELL (menu), menu_item);
+  gtk_widget_show(menu_item);
+
+  s_menu_len = (int) scm_ilength (s_menu);
+  for (j = 0 ; j < s_menu_len; j++) {
+
+    scm_index = scm_from_int (j);
+    scm_item = scm_list_ref (s_menu, scm_index);
+    SCM_ASSERT(scm_is_action (scm_item) ||
+                 scm_is_false (scm_item),
+               scm_item, SCM_ARGn, "build_menu item");
+
+    if (scm_is_false (scm_item)) {
+      menu_item = gtk_menu_item_new();
+      gtk_menu_shell_append (GTK_MENU_SHELL (menu), menu_item);
+    } else {
+      /* make sure the action won't ever be garbage collected
+         since we're going to point to it from C data structures */
+      scm_permanent_object (scm_item);
+
+      GschemAction *action = scm_to_action (scm_item);
+      menu_item = gschem_action_create_menu_item (action, TRUE, w_current);
+      gtk_menu_shell_append (GTK_MENU_SHELL (menu), menu_item);
+    }
+
+    gtk_widget_show (menu_item);
+  }
+
+  return menu;
+}
+
 /*! \todo Finish function documentation!!!
  *  \brief
  *  \par Function Description
@@ -64,17 +107,12 @@ static GschemAction **popup_items[] = {
 GtkWidget *
 get_main_menu(GschemToplevel *w_current)
 {
-  GtkWidget *menu_item;
   GtkWidget *root_menu;
   GtkWidget *menu_bar;
   GtkWidget *menu;
-  int scm_items_len;
-  SCM scm_items;
-  SCM scm_item;
-  SCM scm_index;
   char *menu_name;
   char **raw_menu_name = g_malloc (sizeof(char *));
-  int i, j;
+  int i;
 
   menu_bar = gtk_menu_bar_new ();
 
@@ -86,43 +124,13 @@ get_main_menu(GschemToplevel *w_current)
 
   for (i = 0 ; i < s_menu_return_num(); i++) {
     
-    scm_items = s_menu_return_entry(i, raw_menu_name);   
     if (*raw_menu_name == NULL) {
       fprintf(stderr, "Oops.. got a NULL menu name in get_main_menu()\n");
       exit(-1);
     }
 
-    menu = gtk_menu_new();
+    menu = build_menu (s_menu_return_entry (i, raw_menu_name), w_current);
 
-    menu_item = gtk_tearoff_menu_item_new ();
-    gtk_menu_shell_append (GTK_MENU_SHELL (menu), menu_item);
-    gtk_widget_show(menu_item);
-
-    scm_items_len = (int) scm_ilength (scm_items);
-    for (j = 0 ; j < scm_items_len; j++) {
-
-      scm_index = scm_from_int (j);
-      scm_item = scm_list_ref (scm_items, scm_index);
-      SCM_ASSERT(scm_is_action (scm_item) ||
-                    scm_is_false (scm_item),
-                 scm_item, SCM_ARGn, "get_main_menu item");
-
-      if (scm_is_false (scm_item)) {
-        menu_item = gtk_menu_item_new();
-        gtk_menu_shell_append (GTK_MENU_SHELL (menu), menu_item);
-      } else {
-        /* make sure the action won't ever be garbage collected
-           since we're going to point to it from C data structures */
-        scm_permanent_object (scm_item);
-
-        GschemAction *action = scm_to_action (scm_item);
-        menu_item = gschem_action_create_menu_item (action, TRUE, w_current);
-        gtk_menu_shell_append (GTK_MENU_SHELL (menu), menu_item);
-      }
-
-      gtk_widget_show (menu_item);
-    }
-    
     menu_name = (char *) gettext(*raw_menu_name);
     root_menu = gtk_menu_item_new_with_mnemonic (menu_name);
     /* do not free *raw_menu_name */
