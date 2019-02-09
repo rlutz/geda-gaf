@@ -1105,44 +1105,37 @@
     ((N_ expr) expr)))
 
 (define file-menu-items
-        `( ,&file-new
+        `((,&file-new
            ,&file-open
-           ,&file-open-recent
-           #f
-           ,&file-save
+           ,&file-open-recent)
+          (,&file-save
            ,&file-save-as
            ,&file-save-all
-           ,&page-revert
-           #f
-           ,&file-print
-           ,&file-image
-           #f
-           ,&file-script
-           ,&file-repl
-           #f
-           ,&file-new-window
+           ,&page-revert)
+          (,&file-print
+           ,&file-image)
+          (,&file-script
+           ,&file-repl)
+          (,&file-new-window
            ,&file-close-window
-           ,&file-quit))
+           ,&file-quit)))
 
 (define edit-menu-items
-        `( ,&edit-undo
-           ,&edit-redo
-           #f
-           ,&clipboard-cut
+        `((,&edit-undo
+           ,&edit-redo)
+          (,&clipboard-cut
            ,&clipboard-copy
            ,&clipboard-paste
-           ,&edit-delete
-           #f
-           ,&edit-select
+           ,&edit-delete)
+          (,&edit-select
            ,&edit-select-all
            ,&edit-deselect
            ,&edit-copy
            ,&edit-mcopy
            ,&edit-move
            ,&edit-rotate-90
-           ,&edit-mirror
-           #f
-           ,&edit-edit
+           ,&edit-mirror)
+          (,&edit-edit
            ,&edit-text
            ,&edit-slot
            ,&edit-color
@@ -1151,16 +1144,15 @@
            ,&edit-pin-type
            ,&edit-translate
            ,&edit-lock
-           ,&edit-unlock
-           #f
-           ,&edit-invoke-macro
+           ,&edit-unlock)
+          (,&edit-invoke-macro
            ,&edit-embed
            ,&edit-unembed
            ,&edit-update
-           ,&edit-show-hidden))
+           ,&edit-show-hidden)))
 
 (define buffer-menu-items
-	`( ,&buffer-copy1
+	`((,&buffer-copy1
 	   ,&buffer-copy2
 	   ,&buffer-copy3
 	   ,&buffer-copy4
@@ -1174,55 +1166,51 @@
 	   ,&buffer-paste2
 	   ,&buffer-paste3
 	   ,&buffer-paste4
-	   ,&buffer-paste5))
+	   ,&buffer-paste5)))
 
 (define view-menu-items
-        `( ,&view-menubar
-           ,&view-toolbar
-           #f
-           ,&view-redraw
+        `((,&view-menubar
+           ,&view-toolbar)
+          (,&view-redraw
            ,&view-pan
            ,&view-zoom-box
            ,&view-zoom-extents
            ,&view-zoom-in
            ,&view-zoom-out
-           ,&view-zoom-full
-           #f
-           ,&view-dark-colors
+           ,&view-zoom-full)
+          (,&view-dark-colors
            ,&view-light-colors
-           ,&view-bw-colors
-         ))
+           ,&view-bw-colors)))
 
 (define page-menu-items
-        `( ,&page-manager
+        `((,&page-manager
            ,&page-prev
            ,&page-next
            ,&page-revert
-           ,&page-close))
+           ,&page-close)))
 
 (define add-menu-items
-        `( ,&add-component
+        `((,&add-component
            ,&add-net
            ,&add-bus
            ,&add-attribute
-           ,&add-text
-           #f
-           ,&add-line
+           ,&add-text)
+          (,&add-line
            ,&add-path
            ,&add-box
            ,&add-circle
            ,&add-arc
            ,&add-pin
-           ,&add-picture))
+           ,&add-picture)))
 
 (define hierarchy-menu-items
-        `( ,&hierarchy-down-schematic
+        `((,&hierarchy-down-schematic
            ,&hierarchy-down-symbol
            ,&hierarchy-up
-           ,&hierarchy-documentation))
+           ,&hierarchy-documentation)))
 
 (define attributes-menu-items
-        `( ,&attributes-attach
+        `((,&attributes-attach
            ,&attributes-detach
            ,&attributes-show-value
            ,&attributes-show-name
@@ -1232,10 +1220,10 @@
            ,&edit-find-patch
            ,&edit-hide-text
            ,&edit-show-text
-           ,&edit-autonumber))
+           ,&edit-autonumber)))
 
 (define options-menu-items
-        `( ,&options-text-size
+        `((,&options-text-size
            ,&options-grid
            ,&options-snap
            ,&options-snap-size
@@ -1245,22 +1233,19 @@
            ,&options-rubberband
            ,&options-magneticnet
            ,&options-show-log-window
-           ,&options-show-coord-window
-           #f
-           ,&docking-area-left
+           ,&options-show-coord-window)
+          (,&docking-area-left
            ,&docking-area-bottom
-           ,&docking-area-right))
+           ,&docking-area-right)))
 
 (define help-menu-items
-        `(
-           ,&help-guide
+        `((,&help-guide
            ,&help-faq
            ,&help-manual
            ,&help-wiki
-           ,&hierarchy-documentation
-           #f
-           ,&help-hotkeys
-           ,&help-about))
+           ,&hierarchy-documentation)
+          (,&help-hotkeys
+           ,&help-about)))
 
 ;
 ; Now actually add the menus.  The order here defines the order in which

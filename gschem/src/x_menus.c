@@ -65,26 +65,33 @@ build_menu (SCM s_menu, GschemToplevel *w_current)
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), tearoff_menu_item);
   gtk_widget_show (tearoff_menu_item);
 
-  for (SCM l = s_menu; scm_is_pair (l); l = scm_cdr (l)) {
-    SCM s_item = scm_car (l);
-    SCM_ASSERT (scm_is_action (s_item) || scm_is_false (s_item),
-                s_item, SCM_ARGn, "build_menu item");
+  for (SCM l0 = s_menu; scm_is_pair (l0); l0 = scm_cdr (l0)) {
+    SCM s_section = scm_car (l0);
+    SCM_ASSERT (scm_is_true (scm_list_p (s_section)),
+                s_section, SCM_ARGn, "build_menu section");
 
-    GtkWidget *menu_item;
+    for (SCM l1 = s_section; scm_is_pair (l1); l1 = scm_cdr (l1)) {
+      SCM s_item = scm_car (l1);
+      SCM_ASSERT (scm_is_action (s_item),
+                  s_item, SCM_ARGn, "build_menu item");
 
-    if (scm_is_false (s_item))
-      menu_item = gtk_menu_item_new ();
-    else {
       /* make sure the action won't ever be garbage collected
          since we're going to point to it from C data structures */
       scm_permanent_object (s_item);
 
       GschemAction *action = scm_to_action (s_item);
-      menu_item = gschem_action_create_menu_item (action, TRUE, w_current);
+      GtkWidget *menu_item =
+        gschem_action_create_menu_item (action, TRUE, w_current);
+      gtk_menu_shell_append (GTK_MENU_SHELL (menu), menu_item);
+      gtk_widget_show (menu_item);
     }
 
-    gtk_menu_shell_append (GTK_MENU_SHELL (menu), menu_item);
-    gtk_widget_show (menu_item);
+    if (scm_is_pair (scm_cdr (l0))) {
+      /* add separator */
+      GtkWidget *menu_item = gtk_menu_item_new ();
+      gtk_menu_shell_append (GTK_MENU_SHELL (menu), menu_item);
+      gtk_widget_show (menu_item);
+    }
   }
 
   return menu;
