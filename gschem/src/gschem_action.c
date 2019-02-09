@@ -525,8 +525,38 @@ gschem_action_create_menu_item (GschemAction *action,
 
 
 static void
+tool_button_toggled (GtkToggleToolButton *button, gpointer user_data);
+
+static void
+tool_button_set_active (GtkToggleToolButton *button, gboolean is_active)
+{
+  /* make sure the toggle handler isn't called recursively */
+  g_signal_handlers_block_matched (
+    button, G_SIGNAL_MATCH_FUNC, 0, 0, NULL,
+    G_CALLBACK (tool_button_toggled), NULL);
+
+  gtk_toggle_tool_button_set_active (button, is_active);
+
+  g_signal_handlers_unblock_matched (
+    button, G_SIGNAL_MATCH_FUNC, 0, 0, NULL,
+    G_CALLBACK (tool_button_toggled), NULL);
+}
+
+static void
 tool_button_clicked (GtkToolButton *button, gpointer user_data)
 {
+  GschemAction *action = g_object_get_data (G_OBJECT (button), "action");
+  GschemToplevel *w_current = GSCHEM_TOPLEVEL (user_data);
+  gschem_action_activate (action, w_current);
+}
+
+static void
+tool_button_toggled (GtkToggleToolButton *button, gpointer user_data)
+{
+  /* button self-toggles when clicked--undo this first */
+  tool_button_set_active (button,
+                          !gtk_toggle_tool_button_get_active (button));
+
   GschemAction *action = g_object_get_data (G_OBJECT (button), "action");
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (user_data);
   gschem_action_activate (action, w_current);
@@ -570,7 +600,8 @@ gschem_action_create_tool_button (GschemAction *action,
   /* register callback so the action gets run */
   g_object_set_data (G_OBJECT (button), "action", action);
   if (GTK_IS_TOGGLE_TOOL_BUTTON (button))
-    /* todo */;
+    g_signal_connect (button, "toggled",
+                      G_CALLBACK (tool_button_toggled), w_current);
   else
     g_signal_connect (button, "clicked",
                       G_CALLBACK (tool_button_clicked), w_current);
@@ -581,8 +612,7 @@ gschem_action_create_tool_button (GschemAction *action,
                             G_CALLBACK (gtk_widget_set_sensitive), button);
   if (GTK_IS_TOGGLE_TOOL_BUTTON (button))
     g_signal_connect_swapped (dispatcher, "set-active",
-                              G_CALLBACK (gtk_toggle_tool_button_set_active),
-                              button);
+                              G_CALLBACK (tool_button_set_active), button);
 
   return button;
 }
