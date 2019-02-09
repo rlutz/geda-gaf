@@ -59,40 +59,31 @@ static GschemAction **popup_items[] = {
 static GtkWidget *
 build_menu (SCM s_menu, GschemToplevel *w_current)
 {
-  GtkWidget *menu_item;
-  int s_menu_len;
-  SCM scm_item;
-  SCM scm_index;
-  int j;
+  GtkWidget *menu = gtk_menu_new ();
 
-  GtkWidget *menu = gtk_menu_new();
+  GtkWidget *tearoff_menu_item = gtk_tearoff_menu_item_new ();
+  gtk_menu_shell_append (GTK_MENU_SHELL (menu), tearoff_menu_item);
+  gtk_widget_show (tearoff_menu_item);
 
-  menu_item = gtk_tearoff_menu_item_new ();
-  gtk_menu_shell_append (GTK_MENU_SHELL (menu), menu_item);
-  gtk_widget_show(menu_item);
+  for (SCM l = s_menu; scm_is_pair (l); l = scm_cdr (l)) {
+    SCM s_item = scm_car (l);
+    SCM_ASSERT (scm_is_action (s_item) || scm_is_false (s_item),
+                s_item, SCM_ARGn, "build_menu item");
 
-  s_menu_len = (int) scm_ilength (s_menu);
-  for (j = 0 ; j < s_menu_len; j++) {
+    GtkWidget *menu_item;
 
-    scm_index = scm_from_int (j);
-    scm_item = scm_list_ref (s_menu, scm_index);
-    SCM_ASSERT(scm_is_action (scm_item) ||
-                 scm_is_false (scm_item),
-               scm_item, SCM_ARGn, "build_menu item");
-
-    if (scm_is_false (scm_item)) {
-      menu_item = gtk_menu_item_new();
-      gtk_menu_shell_append (GTK_MENU_SHELL (menu), menu_item);
-    } else {
+    if (scm_is_false (s_item))
+      menu_item = gtk_menu_item_new ();
+    else {
       /* make sure the action won't ever be garbage collected
          since we're going to point to it from C data structures */
-      scm_permanent_object (scm_item);
+      scm_permanent_object (s_item);
 
-      GschemAction *action = scm_to_action (scm_item);
+      GschemAction *action = scm_to_action (s_item);
       menu_item = gschem_action_create_menu_item (action, TRUE, w_current);
-      gtk_menu_shell_append (GTK_MENU_SHELL (menu), menu_item);
     }
 
+    gtk_menu_shell_append (GTK_MENU_SHELL (menu), menu_item);
     gtk_widget_show (menu_item);
   }
 
