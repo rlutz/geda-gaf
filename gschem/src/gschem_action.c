@@ -429,10 +429,13 @@ gschem_action_create_menu_item (GschemAction *action,
                                 gboolean use_menu_label,
                                 GschemToplevel *w_current)
 {
-  GtkWidget *menu_item = g_object_new (GTK_TYPE_IMAGE_MENU_ITEM, NULL);
+  GtkWidget *menu_item;
 
-  /* set icon */
-  if (action->icon_name) {
+  if (action->icon_name == NULL)
+    menu_item = g_object_new (GTK_TYPE_MENU_ITEM, NULL);
+  else {
+    menu_item = g_object_new (GTK_TYPE_IMAGE_MENU_ITEM, NULL);
+
     GtkWidget *image = gtk_image_new ();
     gtk_widget_show (image);
     gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (menu_item), image);
