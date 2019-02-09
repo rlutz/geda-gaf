@@ -242,3 +242,76 @@ x_menus_create_submenus (GschemToplevel *w_current)
                          gtk_tearoff_menu_item_new ());
   gtk_widget_show_all (w_current->right_docking_area_menu);
 }
+
+void
+x_menus_create_toolbar (GschemToplevel *w_current)
+{
+  w_current->toolbar = gtk_toolbar_new ();
+  gtk_orientable_set_orientation (GTK_ORIENTABLE (w_current->toolbar),
+                                  GTK_ORIENTATION_HORIZONTAL);
+  gtk_toolbar_set_style (GTK_TOOLBAR (w_current->toolbar), GTK_TOOLBAR_ICONS);
+
+  gtk_toolbar_insert (
+    GTK_TOOLBAR (w_current->toolbar),
+    gschem_action_create_tool_button (action_file_new, w_current), -1);
+
+  gtk_toolbar_insert (
+    GTK_TOOLBAR (w_current->toolbar),
+    gschem_action_create_tool_button (action_file_open, w_current), -1);
+
+  gtk_toolbar_insert (
+    GTK_TOOLBAR (w_current->toolbar),
+    gschem_action_create_tool_button (action_file_save, w_current), -1);
+
+  gtk_toolbar_insert (
+    GTK_TOOLBAR (w_current->toolbar),
+    gtk_separator_tool_item_new (), -1);
+
+  gtk_toolbar_insert (
+    GTK_TOOLBAR (w_current->toolbar),
+    gschem_action_create_tool_button (action_edit_undo, w_current), -1);
+
+  gtk_toolbar_insert (
+    GTK_TOOLBAR (w_current->toolbar),
+    gschem_action_create_tool_button (action_edit_redo, w_current), -1);
+
+  gtk_toolbar_insert (
+    GTK_TOOLBAR (w_current->toolbar),
+    gtk_separator_tool_item_new (), -1);
+
+  /* not part of any radio button group */
+  gtk_toolbar_insert (
+    GTK_TOOLBAR (w_current->toolbar),
+    gschem_action_create_tool_button (action_add_component, w_current), -1);
+
+  /* init radio tool buttons, add first of them */
+  gtk_toolbar_insert (
+    GTK_TOOLBAR (w_current->toolbar),
+    gschem_action_create_tool_button (action_add_net, w_current), -1);
+
+  /* add a radio tool button */
+  gtk_toolbar_insert (
+    GTK_TOOLBAR (w_current->toolbar),
+    gschem_action_create_tool_button (action_add_bus, w_current), -1);
+
+  /* not part of any radio button group */
+  gtk_toolbar_insert (
+    GTK_TOOLBAR (w_current->toolbar),
+    gschem_action_create_tool_button (action_add_text, w_current), -1);
+
+  gtk_toolbar_insert (
+    GTK_TOOLBAR (w_current->toolbar),
+    gtk_separator_tool_item_new (), -1);
+
+  /* add a radio tool button */
+  gtk_toolbar_insert (
+    GTK_TOOLBAR (w_current->toolbar),
+    gschem_action_create_tool_button (action_edit_select, w_current), -1);
+
+  gtk_toolbar_insert (
+    GTK_TOOLBAR (w_current->toolbar),
+    gtk_separator_tool_item_new (), -1);
+
+  /* activate 'select' button at start-up */
+  gschem_action_set_active (action_edit_select, TRUE, w_current);
+}

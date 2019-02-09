@@ -427,6 +427,7 @@ gboolean x_show_uri (GschemToplevel *w_current, const gchar *buf, GError **err);
 void x_menus_create_main_menu(GschemToplevel *w_current);
 void x_menus_create_main_popup(GschemToplevel *w_current);
 void x_menus_create_submenus(GschemToplevel *w_current);
+void x_menus_create_toolbar(GschemToplevel *w_current);
 /* gschem_multiattrib_dockable.c */
 void x_multiattrib_update (GschemToplevel *w_current);
 /* x_multimulti.c */

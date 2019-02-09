@@ -559,7 +559,6 @@ void x_window_create_main(GschemToplevel *w_current)
 
   GtkPolicyType policy;
   GtkWidget *main_box=NULL;
-  GtkWidget *toolbar=NULL;
   GtkWidget *handlebox=NULL;
   GtkWidget *scrolled;
   GtkAdjustment *hadjustment;
@@ -568,7 +567,6 @@ void x_window_create_main(GschemToplevel *w_current)
   GtkWidget *left_hpaned, *right_hpaned;
   GtkWidget *vpaned;
   GtkWidget *work_box;
-  GtkToolItem *button;
 
   w_current->main_window = GTK_WIDGET (gschem_main_window_new ());
 
@@ -618,67 +616,13 @@ void x_window_create_main(GschemToplevel *w_current)
   }
 
   if (w_current->toolbars) {
-    toolbar = gtk_toolbar_new();
-    gtk_orientable_set_orientation (GTK_ORIENTABLE (toolbar),
-                                    GTK_ORIENTATION_HORIZONTAL);
-    gtk_toolbar_set_style (GTK_TOOLBAR(toolbar), GTK_TOOLBAR_ICONS);
-
+    x_menus_create_toolbar (w_current);
     if (w_current->handleboxes) {
-      gtk_container_add (GTK_CONTAINER (handlebox), toolbar);
+      gtk_container_add (GTK_CONTAINER (handlebox), w_current->toolbar);
     } else {
-      gtk_box_pack_start(GTK_BOX(main_box), toolbar, FALSE, FALSE, 0);
+      gtk_box_pack_start (GTK_BOX (main_box), w_current->toolbar,
+                          FALSE, FALSE, 0);
     }
-    w_current->toolbar = toolbar;
-
-    button = gschem_action_create_tool_button (action_file_new, w_current);
-    gtk_toolbar_insert (GTK_TOOLBAR (toolbar), button, -1);
-
-    button = gschem_action_create_tool_button (action_file_open, w_current);
-    gtk_toolbar_insert (GTK_TOOLBAR (toolbar), button, -1);
-
-    button = gschem_action_create_tool_button (action_file_save, w_current);
-    gtk_toolbar_insert (GTK_TOOLBAR (toolbar), button, -1);
-
-    gtk_toolbar_insert (GTK_TOOLBAR (toolbar),
-                        gtk_separator_tool_item_new (), -1);
-
-    button = gschem_action_create_tool_button (action_edit_undo, w_current);
-    gtk_toolbar_insert (GTK_TOOLBAR (toolbar), button, -1);
-
-    button = gschem_action_create_tool_button (action_edit_redo, w_current);
-    gtk_toolbar_insert (GTK_TOOLBAR (toolbar), button, -1);
-
-    gtk_toolbar_insert (GTK_TOOLBAR (toolbar),
-                        gtk_separator_tool_item_new (), -1);
-
-    /* not part of any radio button group */
-    button = gschem_action_create_tool_button (action_add_component, w_current);
-    gtk_toolbar_insert (GTK_TOOLBAR (toolbar), button, -1);
-
-    /* init radio tool buttons, add first of them */
-    button = gschem_action_create_tool_button (action_add_net, w_current);
-    gtk_toolbar_insert (GTK_TOOLBAR (toolbar), button, -1);
-
-    /* add a radio tool button */
-    button = gschem_action_create_tool_button (action_add_bus, w_current);
-    gtk_toolbar_insert (GTK_TOOLBAR (toolbar), button, -1);
-
-    /* not part of any radio button group */
-    button = gschem_action_create_tool_button (action_add_text, w_current);
-    gtk_toolbar_insert (GTK_TOOLBAR (toolbar), button, -1);
-
-    gtk_toolbar_insert (GTK_TOOLBAR (toolbar),
-                        gtk_separator_tool_item_new (), -1);
-
-    /* add a radio tool button */
-    button = gschem_action_create_tool_button (action_edit_select, w_current);
-    gtk_toolbar_insert (GTK_TOOLBAR (toolbar), button, -1);
-
-    gtk_toolbar_insert (GTK_TOOLBAR (toolbar),
-                        gtk_separator_tool_item_new (), -1);
-
-    /* activate 'select' button at start-up */
-    gschem_action_set_active (action_edit_select, TRUE, w_current);
   }
 
   left_hpaned = gtk_hpaned_new ();
