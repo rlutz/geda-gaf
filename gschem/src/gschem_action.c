@@ -387,9 +387,9 @@ gschem_action_set_sensitive (GschemAction *action, gboolean sensitive,
 }
 
 
-GObject *
-gschem_action_get_dispatcher (GschemAction *action,
-                              GschemToplevel *w_current)
+static Dispatcher *
+get_dispatcher (GschemAction *action,
+                GschemToplevel *w_current)
 {
   Dispatcher *dispatcher = g_hash_table_lookup (
     w_current->action_state_dispatchers, action);
@@ -400,5 +400,92 @@ gschem_action_get_dispatcher (GschemAction *action,
                          action, dispatcher);
   }
 
-  return G_OBJECT (dispatcher);
+  return dispatcher;
+}
+
+
+/******************************************************************************/
+
+
+static void
+menu_item_activate (GtkMenuItem *menu_item, gpointer user_data)
+{
+  GschemAction *action = g_object_get_data (G_OBJECT (menu_item), "action");
+  GschemToplevel *w_current = GSCHEM_TOPLEVEL (user_data);
+  gschem_action_activate (action, w_current);
+}
+
+static char *
+get_accel_string (GschemAction *action)
+{
+  /* look up key binding in global keymap */
+  SCM s_expr = scm_list_2 (scm_from_utf8_symbol ("find-key"), action->smob);
+  SCM s_keys = g_scm_eval_protected (s_expr, scm_interaction_environment ());
+  return scm_is_true (s_keys) ? scm_to_utf8_string (s_keys) : NULL;
+}
+
+GtkWidget *
+gschem_action_create_menu_item (GschemAction *action,
+                                gboolean use_menu_label,
+                                GschemToplevel *w_current)
+{
+  GtkWidget *menu_item = g_object_new (GTK_TYPE_IMAGE_MENU_ITEM, NULL);
+
+  /* set icon */
+  if (action->icon_name) {
+    GtkWidget *image = gtk_image_new ();
+    gtk_widget_show (image);
+    gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (menu_item), image);
+
+    /* If there's a matching stock item, use it.
+       Otherwise lookup the name in the icon theme. */
+    GtkStockItem stock_info;
+    if (gtk_stock_lookup (action->icon_name, &stock_info))
+      gtk_image_set_from_stock (GTK_IMAGE (image), action->icon_name,
+                                GTK_ICON_SIZE_MENU);
+    else
+      gtk_image_set_from_icon_name (GTK_IMAGE (image), action->icon_name,
+                                    GTK_ICON_SIZE_MENU);
+  }
+
+  /* use custom label widget */
+  char *accel_string = get_accel_string (action);
+  GtkWidget *label = g_object_new (GSCHEM_TYPE_ACCEL_LABEL, NULL);
+  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+  gtk_label_set_use_underline (GTK_LABEL (label), TRUE);
+  gtk_label_set_label (GTK_LABEL (label), use_menu_label ? action->menu_label
+                                                         : action->label);
+  gschem_accel_label_set_accel_string (GSCHEM_ACCEL_LABEL (label),
+                                       accel_string);
+  gtk_container_add (GTK_CONTAINER (menu_item), label);
+  gtk_widget_show (label);
+  free (accel_string);
+
+  gtk_widget_set_tooltip_text (menu_item, action->tooltip);
+
+  /* attach submenus */
+  if (action == action_file_open_recent)
+    gtk_menu_item_set_submenu (GTK_MENU_ITEM (menu_item),
+                               w_current->recent_chooser_menu);
+  else if (action == action_docking_area_left)
+    gtk_menu_item_set_submenu (GTK_MENU_ITEM (menu_item),
+                               w_current->left_docking_area_menu);
+  else if (action == action_docking_area_bottom)
+    gtk_menu_item_set_submenu (GTK_MENU_ITEM (menu_item),
+                               w_current->bottom_docking_area_menu);
+  else if (action == action_docking_area_right)
+    gtk_menu_item_set_submenu (GTK_MENU_ITEM (menu_item),
+                               w_current->right_docking_area_menu);
+
+  /* register callback so the action gets run */
+  g_object_set_data (G_OBJECT (menu_item), "action", action);
+  g_signal_connect (G_OBJECT (menu_item), "activate",
+                    G_CALLBACK (menu_item_activate), w_current);
+
+  /* connect menu item to the dispatcher for status updates */
+  Dispatcher *dispatcher = get_dispatcher (action, w_current);
+  g_signal_connect_swapped (dispatcher, "set-sensitive",
+                            G_CALLBACK (gtk_widget_set_sensitive), menu_item);
+
+  return menu_item;
 }

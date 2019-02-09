@@ -61,19 +61,6 @@ static GschemAction **popup_items[] = {
  *  \par Function Description
  *
  */
-static void
-g_menu_execute (GtkMenuItem *menu_item, gpointer user_data)
-{
-  GschemAction *action = g_object_get_data (G_OBJECT (menu_item), "action");
-  GschemToplevel *w_current = (GschemToplevel *) user_data;
-  gschem_action_activate (action, w_current);
-}
-
-/*! \todo Finish function documentation!!!
- *  \brief
- *  \par Function Description
- *
- */
 GtkWidget *
 get_main_menu(GschemToplevel *w_current)
 {
@@ -85,10 +72,8 @@ get_main_menu(GschemToplevel *w_current)
   SCM scm_items;
   SCM scm_item;
   SCM scm_index;
-  SCM scm_keys;
   char *menu_name;
   char **raw_menu_name = g_malloc (sizeof(char *));
-  char *menu_item_keys;
   int i, j;
 
   menu_bar = gtk_menu_bar_new ();
@@ -122,93 +107,20 @@ get_main_menu(GschemToplevel *w_current)
                     scm_is_false (scm_item),
                  scm_item, SCM_ARGn, "get_main_menu item");
 
-      scm_dynwind_begin(0);
-
       if (scm_is_false (scm_item)) {
         menu_item = gtk_menu_item_new();
         gtk_menu_shell_append (GTK_MENU_SHELL (menu), menu_item);
       } else {
+        /* make sure the action won't ever be garbage collected
+           since we're going to point to it from C data structures */
+        scm_permanent_object (scm_item);
 
-          GtkStockItem stock_info;
-
-          /* make sure the action won't ever be garbage collected
-             since we're going to point to it from C data structures */
-          scm_permanent_object (scm_item);
-
-          GschemAction *action = scm_to_action (scm_item);
-
-          /* Look up key binding in global keymap */
-          SCM s_expr =
-            scm_list_2 (scm_from_utf8_symbol ("find-key"),
-                        scm_item);
-
-          scm_keys = g_scm_eval_protected (s_expr, scm_interaction_environment ());
-
-          if (scm_is_false (scm_keys)) {
-            menu_item_keys = "";
-          } else {
-            menu_item_keys = scm_to_utf8_string (scm_keys);
-            scm_dynwind_free(menu_item_keys);
-          }
-
-          menu_item = g_object_new (GTK_TYPE_IMAGE_MENU_ITEM, NULL);
-
-          /* use custom label widget */
-          GtkWidget *label = g_object_new (GSCHEM_TYPE_ACCEL_LABEL, NULL);
-          gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
-          gtk_label_set_use_underline (GTK_LABEL (label), TRUE);
-          gtk_label_set_label (GTK_LABEL (label), action->menu_label);
-          gschem_accel_label_set_accel_string (GSCHEM_ACCEL_LABEL (label),
-                                               menu_item_keys);
-          gtk_container_add (GTK_CONTAINER (menu_item), label);
-          gtk_widget_show (label);
-
-          /* set icon */
-          if (action->icon_name) {
-            GtkWidget *image = gtk_image_new ();
-            gtk_widget_show (image);
-            gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (menu_item),
-                                           image);
-
-            /* If stock name corresponds to a GTK stock item, then use it.
-               Otherwise, look it up in the icon theme. */
-            if (gtk_stock_lookup (action->icon_name, &stock_info))
-              gtk_image_set_from_stock (
-                GTK_IMAGE (image), action->icon_name, GTK_ICON_SIZE_MENU);
-            else
-              gtk_image_set_from_icon_name (
-                GTK_IMAGE (image), action->icon_name, GTK_ICON_SIZE_MENU);
-          }
-
-          if (action == action_file_open_recent)
-            gtk_menu_item_set_submenu (GTK_MENU_ITEM (menu_item),
-                                       w_current->recent_chooser_menu);
-          else if (action == action_docking_area_left)
-            gtk_menu_item_set_submenu (GTK_MENU_ITEM (menu_item),
-                                       w_current->left_docking_area_menu);
-          else if (action == action_docking_area_bottom)
-            gtk_menu_item_set_submenu (GTK_MENU_ITEM (menu_item),
-                                       w_current->bottom_docking_area_menu);
-          else if (action == action_docking_area_right)
-            gtk_menu_item_set_submenu (GTK_MENU_ITEM (menu_item),
-                                       w_current->right_docking_area_menu);
-
-          g_object_set_data (G_OBJECT (menu_item), "action", action);
-          g_signal_connect (G_OBJECT (menu_item), "activate",
-                            G_CALLBACK (g_menu_execute), w_current);
-
-          GObject *dispatcher =
-            gschem_action_get_dispatcher (action, w_current);
-          g_signal_connect_swapped (dispatcher,
-                                    "set-sensitive",
-                                    G_CALLBACK (gtk_widget_set_sensitive),
-                                    menu_item);
-
+        GschemAction *action = scm_to_action (scm_item);
+        menu_item = gschem_action_create_menu_item (action, TRUE, w_current);
         gtk_menu_shell_append (GTK_MENU_SHELL (menu), menu_item);
       }
 
       gtk_widget_show (menu_item);
-      scm_dynwind_end();
     }
     
     menu_name = (char *) gettext(*raw_menu_name);
@@ -242,7 +154,6 @@ get_main_popup (GschemToplevel *w_current)
 {
   GtkWidget *menu_item;
   GtkWidget *menu;
-  GtkStockItem stock_info;
   int i;
 
   menu = gtk_menu_new ();
@@ -259,38 +170,9 @@ get_main_popup (GschemToplevel *w_current)
     }
     action = *popup_items[i];
 
-    /* Don't bother showing keybindings in the popup menu */
-
-    menu_item = g_object_new (GTK_TYPE_IMAGE_MENU_ITEM, NULL);
-    gtk_menu_item_set_label (GTK_MENU_ITEM (menu_item), action->label);
+    menu_item = gschem_action_create_menu_item (action, FALSE, w_current);
     gtk_menu_shell_append (GTK_MENU_SHELL (menu), menu_item);
     gtk_widget_show (menu_item);
-
-    if (action->icon_name != NULL) {
-      GtkWidget *image = gtk_image_new ();
-      gtk_widget_show (image);
-      gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (menu_item), image);
-
-      /* If there's a matching stock item, use it.
-         Otherwise lookup the name in the icon theme. */
-      if (gtk_stock_lookup (action->icon_name, &stock_info))
-        gtk_image_set_from_stock (GTK_IMAGE (image), action->icon_name,
-                                  GTK_ICON_SIZE_MENU);
-      else
-        gtk_image_set_from_icon_name (GTK_IMAGE (image), action->icon_name,
-                                      GTK_ICON_SIZE_MENU);
-    }
-
-    /* Connect things up so that the actions get run */
-    g_object_set_data (G_OBJECT (menu_item), "action", action);
-    g_signal_connect (G_OBJECT (menu_item), "activate",
-                      G_CALLBACK (g_menu_execute), w_current);
-
-    GObject *dispatcher = gschem_action_get_dispatcher (action, w_current);
-    g_signal_connect_swapped (dispatcher,
-                              "set-sensitive",
-                              G_CALLBACK (gtk_widget_set_sensitive),
-                              menu_item);
   }
 
   return menu;
