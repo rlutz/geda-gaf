@@ -425,7 +425,7 @@ void x_linetypecb_set_index (GtkWidget *widget, int index);
 gboolean x_show_uri (GschemToplevel *w_current, const gchar *buf, GError **err);
 /* x_menus.c */
 void x_menus_create_main_menu(GschemToplevel *w_current);
-GtkWidget *get_main_popup(GschemToplevel *w_current);
+void x_menus_create_main_popup(GschemToplevel *w_current);
 gint do_popup(GschemToplevel *w_current, GdkEventButton *event);
 void x_menus_create_submenus(GschemToplevel *w_current);
 /* gschem_multiattrib_dockable.c */

@@ -133,14 +133,23 @@ x_menus_create_main_menu (GschemToplevel *w_current)
   }
 }
 
-GtkWidget *
-get_main_popup (GschemToplevel *w_current)
+void
+x_menus_create_main_popup (GschemToplevel *w_current)
 {
   SCM s_var = scm_module_variable (scm_current_module (),
                                    scm_from_utf8_symbol ("context-menu"));
-  SCM s_menu = scm_variable_ref (s_var);
+  if (!scm_is_true (s_var)) {
+    g_warning (_("No context menu definition found\n"));
+    return;
+  }
 
-  return build_menu (s_menu, FALSE, w_current);
+  SCM s_menu = scm_variable_ref (s_var);
+  if (scm_is_null (s_menu) || !scm_is_true (scm_list_p (s_menu))) {
+    g_warning (_("Empty or malformed context menu definition\n"));
+    return;
+  }
+
+  w_current->popup_menu = build_menu (s_menu, FALSE, w_current);
 }
 
 /*! \todo Finish function documentation!!!
@@ -153,10 +162,10 @@ get_main_popup (GschemToplevel *w_current)
 gint do_popup (GschemToplevel *w_current, GdkEventButton *event)
 {
   GtkWidget *menu = (GtkWidget *) w_current->popup_menu;
-  g_return_val_if_fail (menu != NULL, FALSE);
 
-  gtk_menu_popup (GTK_MENU (menu), NULL, NULL, NULL, NULL,
-                  event->button, event->time);
+  if (menu != NULL)
+    gtk_menu_popup (GTK_MENU (menu), NULL, NULL, NULL, NULL,
+                    event->button, event->time);
 
   return FALSE;
 }

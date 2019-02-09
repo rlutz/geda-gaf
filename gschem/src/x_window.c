@@ -872,7 +872,7 @@ void x_window_create_main(GschemToplevel *w_current)
                    TRUE);
 
   /*  Try to create popup menu (appears in right mouse button  */
-  w_current->popup_menu = (GtkWidget *) get_main_popup(w_current);
+  x_menus_create_main_popup (w_current);
 
 
   /* Setup a GtkScrolledWindow for the drawing area */
