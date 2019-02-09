@@ -23,6 +23,11 @@
 
 #define GSCHEM_ACTION(obj) ((GschemAction *) (obj))
 
+typedef enum {
+  GSCHEM_ACTION_TYPE_ACTUATE,
+  GSCHEM_ACTION_TYPE_TOGGLE
+} GschemActionType;
+
 typedef struct _GschemAction GschemAction;
 
 struct _GschemAction {
@@ -32,6 +37,7 @@ struct _GschemAction {
   gchar *label;
   gchar *menu_label;
   gchar *tooltip;
+  GschemActionType type;
 
   void (*activate) (GschemAction *action,
                     GschemToplevel *w_current);
@@ -60,6 +66,7 @@ GschemAction *gschem_action_register (gchar *id,
                                       gchar *label,
                                       gchar *menu_label,
                                       gchar *tooltip,
+                                      GschemActionType type,
                                       void (*activate) (GschemAction *,
                                                         GschemToplevel *));
 

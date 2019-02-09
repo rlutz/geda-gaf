@@ -30,7 +30,7 @@
 
 #include "gschem.h"
 
-#define DEFINE_ACTION(c_id, id, icon, name, label, menu_label, tooltip) \
+#define DEFINE_ACTION(c_id, id, icon, name, label, menu_label, tooltip, type) \
   static void action_callback_ ## c_id (GschemAction *action, \
                                         GschemToplevel *w_current)
 #include "actions.c"
@@ -49,6 +49,7 @@ gschem_action_register (gchar *id,
                         gchar *label,
                         gchar *menu_label,
                         gchar *tooltip,
+                        GschemActionType type,
                         void (*activate) (GschemAction *, GschemToplevel *))
 {
   GschemAction *action = g_new0 (GschemAction, 1);
@@ -59,6 +60,7 @@ gschem_action_register (gchar *id,
   action->label = label;
   action->menu_label = menu_label;
   action->tooltip = tooltip;
+  action->type = type;
   action->activate = activate;
 
   action->thunk = SCM_UNDEFINED;
@@ -177,6 +179,7 @@ make_action (SCM s_icon_name, SCM s_name, SCM s_label, SCM s_menu_label,
     action->label = g_strdup (label);
     action->menu_label = g_strdup (menu_label);
     action->tooltip = g_strdup (tooltip);
+    action->type = GSCHEM_ACTION_TYPE_ACTUATE;
     action->activate = activate_scheme_thunk;
 
     action->thunk = SCM_UNDEFINED;

@@ -30,7 +30,8 @@ DEFINE_ACTION (file_new,
                _("New File"),
                _("New"),
                _("_New"),
-               NULL)
+               NULL,
+               ACTUATE)
 {
   /*! \todo Perhaps this should be renamed to page_new... */
   PAGE *page;
@@ -49,7 +50,8 @@ DEFINE_ACTION (file_new_window,
                _("New Window"),
                _("New Window"),
                _("New Window"),
-               NULL)
+               NULL,
+               ACTUATE)
 {
   GschemToplevel *w_current_new = NULL;
   PAGE *page = NULL;
@@ -71,7 +73,8 @@ DEFINE_ACTION (file_open,
                _("Open File"),
                _("Open..."),
                _("_Open..."),
-               NULL)
+               NULL,
+               ACTUATE)
 {
   /*! \todo Perhaps this should be renamed to page_open... */
   x_fileselect_open (w_current);
@@ -83,7 +86,8 @@ DEFINE_ACTION (file_open_recent,
                _("Open Recent"),
                _("Open Recent"),
                _("Open Recen_t"),
-               NULL)
+               NULL,
+               ACTUATE)
 {
   /* submenu */
 }
@@ -94,7 +98,8 @@ DEFINE_ACTION (file_script,
                _("Run Script"),
                _("Execute Script..."),
                _("Execute Script..."),
-               NULL)
+               NULL,
+               ACTUATE)
 {
   setup_script_selector(w_current);
 }
@@ -105,7 +110,8 @@ DEFINE_ACTION (file_save,
                _("Save"),
                _("Save"),
                _("_Save"),
-               NULL)
+               NULL,
+               ACTUATE)
 {
   PAGE *page;
   EdaConfig *cfg;
@@ -135,7 +141,8 @@ DEFINE_ACTION (file_save_all,
                _("Save All"),
                _("Save All"),
                _("Save All"),
-               NULL)
+               NULL,
+               ACTUATE)
 {
   if (s_page_save_all(gschem_toplevel_get_toplevel (w_current))) {
      i_set_state_msg(w_current, SELECT, _("Failed to Save All"));
@@ -153,7 +160,8 @@ DEFINE_ACTION (file_save_as,
                _("Save As"),
                _("Save As..."),
                _("Save _As..."),
-               NULL)
+               NULL,
+               ACTUATE)
 {
   x_fileselect_save (w_current);
 }
@@ -164,7 +172,8 @@ DEFINE_ACTION (file_print,
                _("Print"),
                _("Print..."),
                _("_Print..."),
-               NULL)
+               NULL,
+               ACTUATE)
 {
   x_print (w_current);
 }
@@ -175,7 +184,8 @@ DEFINE_ACTION (file_write_png,
                _("Export Image"),
                _("Write image..."),
                _("Write _image..."),
-               NULL)
+               NULL,
+               ACTUATE)
 {
   x_image_setup(w_current);
 }
@@ -188,7 +198,8 @@ DEFINE_ACTION (file_close,
                _("Close Window"),
                _("Close Window"),
                _("_Close Window"),
-               NULL)
+               NULL,
+               ACTUATE)
 {
   s_log_message(_("Closing Window\n"));
   x_window_close(w_current);
@@ -200,7 +211,8 @@ DEFINE_ACTION (file_quit,
                _("Quit"),
                _("Quit"),
                _("_Quit"),
-               NULL)
+               NULL,
+               ACTUATE)
 {
   x_window_close_all(w_current);
 }
@@ -213,7 +225,8 @@ DEFINE_ACTION (edit_undo,
                _("Undo"),
                _("Undo"),
                _("_Undo"),
-               NULL)
+               NULL,
+               ACTUATE)
 {
   /* If we're cancelling from a move action, re-wind the
    * page contents back to their state before we started.
@@ -244,7 +257,8 @@ DEFINE_ACTION (edit_redo,
                _("Redo"),
                _("Redo"),
                _("_Redo"),
-               NULL)
+               NULL,
+               ACTUATE)
 {
   GschemPageView *page_view = gschem_toplevel_get_current_page_view (w_current);
   g_return_if_fail (page_view != NULL);
@@ -262,7 +276,8 @@ DEFINE_ACTION (edit_select,
                _("Select Mode"),
                _("Select"),
                _("Select Mode"),
-               NULL)
+               NULL,
+               ACTUATE)
 {
   /* Select also does not update the middle button shortcut. */
   o_redraw_cleanstates(w_current);
@@ -280,7 +295,8 @@ DEFINE_ACTION (edit_select_all,
                _("Select All"),
                _("Select All"),
                _("Select All"),
-               NULL)
+               NULL,
+               ACTUATE)
 {
   o_redraw_cleanstates (w_current);
 
@@ -299,7 +315,8 @@ DEFINE_ACTION (edit_deselect,
                _("Deselect"),
                _("Deselect"),
                _("Deselect"),
-               NULL)
+               NULL,
+               ACTUATE)
 {
   o_redraw_cleanstates (w_current);
 
@@ -316,7 +333,8 @@ DEFINE_ACTION (edit_copy,
                _("Copy Mode"),
                _("Copy"),
                _("Copy Mode"),
-               NULL)
+               NULL,
+               ACTUATE)
 {
   gint wx, wy;
 
@@ -339,7 +357,8 @@ DEFINE_ACTION (edit_mcopy,
                _("Multiple Copy Mode"),
                _("Multiple Copy"),
                _("Multiple Copy Mode"),
-               NULL)
+               NULL,
+               ACTUATE)
 {
   gint wx, wy;
 
@@ -362,7 +381,8 @@ DEFINE_ACTION (edit_move,
                _("Move Mode"),
                _("Move"),
                _("Move Mode"),
-               NULL)
+               NULL,
+               ACTUATE)
 {
   gint wx, wy;
 
@@ -385,7 +405,8 @@ DEFINE_ACTION (edit_delete,
                _("Delete"),
                _("Delete"),
                _("_Delete"),
-               NULL)
+               NULL,
+               ACTUATE)
 {
   i_update_middle_button (w_current, action, _("Delete"));
 
@@ -406,7 +427,8 @@ DEFINE_ACTION (edit_edit,
                _("Edit..."),
                _("Edit..."),
                _("Edit..."),
-               NULL)
+               NULL,
+               ACTUATE)
 {
   i_update_middle_button (w_current, action, _("Edit"));
   o_edit(w_current, geda_list_get_glist( gschem_toplevel_get_toplevel (w_current)->page_current->selection_list ) );
@@ -418,7 +440,8 @@ DEFINE_ACTION (edit_pin_type,
                _("Edit Pin Type"),
                _("Edit Pin Type..."),
                _("Pin Type..."),
-               NULL)
+               NULL,
+               ACTUATE)
 {
   i_update_middle_button (w_current, action, _("Edit pin type"));
 
@@ -431,7 +454,8 @@ DEFINE_ACTION (edit_text,
                _("Edit Text"),
                _("Edit Text..."),
                _("Edit Text..."),
-               NULL)
+               NULL,
+               ACTUATE)
 {
   i_update_middle_button (w_current, action, _("Edit Text"));
 
@@ -444,7 +468,8 @@ DEFINE_ACTION (edit_slot,
                _("Choose Slot"),
                _("Slot..."),
                _("Slot..."),
-               NULL)
+               NULL,
+               ACTUATE)
 {
   OBJECT *object;
 
@@ -462,7 +487,8 @@ DEFINE_ACTION (edit_color,
                _("Edit Color"),
                _("Color..."),
                _("Color..."),
-               NULL)
+               NULL,
+               ACTUATE)
 {
   i_update_middle_button (w_current, action, _("Color"));
 
@@ -478,7 +504,8 @@ DEFINE_ACTION (edit_rotate_90,
                _("Rotate Mode"),
                _("Rotate 90"),
                _("Rotate 90 Mode"),
-               NULL)
+               NULL,
+               ACTUATE)
 {
   gint wx, wy;
   GList *object_list;
@@ -522,7 +549,8 @@ DEFINE_ACTION (edit_mirror,
                _("Mirror Mode"),
                _("Mirror"),
                _("Mirror Mode"),
-               NULL)
+               NULL,
+               ACTUATE)
 {
   gint wx, wy;
   GList *object_list;
@@ -567,7 +595,8 @@ DEFINE_ACTION (edit_lock,
                _("Lock"),
                _("Lock"),
                _("Lock"),
-               NULL)
+               NULL,
+               ACTUATE)
 {
   i_update_middle_button (w_current, action, _("Lock"));
 
@@ -584,7 +613,8 @@ DEFINE_ACTION (edit_unlock,
                _("Unlock"),
                _("Unlock"),
                _("Unlock"),
-               NULL)
+               NULL,
+               ACTUATE)
 {
   i_update_middle_button (w_current, action, _("Unlock"));
   if (o_select_return_first_object(w_current)) {
@@ -598,7 +628,8 @@ DEFINE_ACTION (edit_translate,
                _("Translate Symbol"),
                _("Symbol Translate..."),
                _("Symbol Translate..."),
-               NULL)
+               NULL,
+               ACTUATE)
 {
   SNAP_STATE snap_mode;
 
@@ -632,7 +663,8 @@ DEFINE_ACTION (edit_invoke_macro,
                _("Invoke Macro"),
                _("Invoke Macro"),
                _("Invoke Macro"),
-               NULL)
+               NULL,
+               ACTUATE)
 {
   gtk_widget_show (w_current->macro_widget);
   gtk_widget_grab_focus (gschem_macro_widget_get_entry (GSCHEM_MACRO_WIDGET (w_current->macro_widget)));
@@ -646,7 +678,8 @@ DEFINE_ACTION (edit_embed,
                _("Embed Component/Picture"),
                _("Embed Component/Picture"),
                _("Embed Component/Picture"),
-               NULL)
+               NULL,
+               ACTUATE)
 {
   OBJECT *o_current;
 
@@ -683,7 +716,8 @@ DEFINE_ACTION (edit_unembed,
                _("Unembed Component/Picture"),
                _("Unembed Component/Picture"),
                _("Unembed Component/Picture"),
-               NULL)
+               NULL,
+               ACTUATE)
 {
   OBJECT *o_current;
 
@@ -720,7 +754,8 @@ DEFINE_ACTION (edit_update,
                _("Update Component"),
                _("Update Component"),
                _("Update Component"),
-               NULL)
+               NULL,
+               ACTUATE)
 {
   TOPLEVEL *toplevel = gschem_toplevel_get_toplevel (w_current);
   GList *selection;
@@ -761,7 +796,8 @@ DEFINE_ACTION (edit_show_hidden,
                _("Show/Hide Invisible Text"),
                _("Show/Hide Inv Text"),
                _("Show/Hide Inv Text"),
-               NULL)
+               NULL,
+               ACTUATE)
 {
   i_update_middle_button (w_current, action, _("ShowHidden"));
 
@@ -775,7 +811,8 @@ DEFINE_ACTION (edit_find,
                _("Find Specific Text"),
                _("Find Specific Text..."),
                _("_Find Specific Text..."),
-               NULL)
+               NULL,
+               ACTUATE)
 {
   /* This is a new addition 3/15 to prevent this from executing
    * inside an action */
@@ -791,7 +828,8 @@ DEFINE_ACTION (edit_find_patch,
                _("Import Patch And Find Mismatches"),
                _("Import patch..."),
                _("_Import patch..."),
-               NULL)
+               NULL,
+               ACTUATE)
 {
   /* This is a new addition 3/15 to prevent this from executing
    * inside an action */
@@ -807,7 +845,8 @@ DEFINE_ACTION (edit_hide_text,
                _("Hide Specific Text"),
                _("Hide Specific Text..."),
                _("_Hide Specific Text..."),
-               NULL)
+               NULL,
+               ACTUATE)
 {
   /* This is a new addition 3/15 to prevent this from executing
    * inside an action */
@@ -823,7 +862,8 @@ DEFINE_ACTION (edit_show_text,
                _("Show Specific Text"),
                _("Show Specific Text..."),
                _("_Show Specific Text..."),
-               NULL)
+               NULL,
+               ACTUATE)
 {
   /* This is a new addition 3/15 to prevent this from executing
    * inside an action */
@@ -839,7 +879,8 @@ DEFINE_ACTION (edit_autonumber_text,
                _("Autonumber Text"),
                _("Autonumber Text..."),
                _("A_utonumber Text..."),
-               NULL)
+               NULL,
+               ACTUATE)
 {
   /* This is a new addition 3/15 to prevent this from executing
    * inside an action */
@@ -855,7 +896,8 @@ DEFINE_ACTION (edit_linetype,
                _("Edit Line Width & Type"),
                _("Line Width & Type..."),
                _("Line Width & Type..."),
-               NULL)
+               NULL,
+               ACTUATE)
 {
   /* dialogs have been merged */
   gschem_dockable_present (w_current->object_properties_dockable);
@@ -867,7 +909,8 @@ DEFINE_ACTION (edit_filltype,
                _("Edit Fill Type"),
                _("Fill Type..."),
                _("Fill Type..."),
-               NULL)
+               NULL,
+               ACTUATE)
 {
   /* dialogs have been merged */
   gschem_dockable_present (w_current->object_properties_dockable);
@@ -883,7 +926,8 @@ DEFINE_ACTION (view_menubar,
                _("Menubar"),
                _("Menubar"),
                _("Menubar"),
-               NULL)
+               NULL,
+               ACTUATE)
 {
   GtkWidget *w = w_current->menubar;
   if (w == NULL)
@@ -903,7 +947,8 @@ DEFINE_ACTION (view_toolbar,
                _("Toolbar"),
                _("Toolbar"),
                _("Toolbar"),
-               NULL)
+               NULL,
+               ACTUATE)
 {
   GtkWidget *w = w_current->toolbar;
   if (w == NULL)
@@ -921,7 +966,8 @@ DEFINE_ACTION (view_redraw,
                _("Redraw"),
                _("Redraw"),
                _("_Redraw"),
-               NULL)
+               NULL,
+               ACTUATE)
 {
   /* repeat middle shortcut doesn't make sense on redraw,
      just hit right button */
@@ -934,7 +980,8 @@ DEFINE_ACTION (view_zoom_full,
                _("Zoom Full"),
                _("Zoom Full"),
                _("Zoom _Full"),
-               NULL)
+               NULL,
+               ACTUATE)
 {
   /* repeat middle shortcut would get into the way of what user is try to do */
   GschemPageView *page_view = gschem_toplevel_get_current_page_view (w_current);
@@ -954,7 +1001,8 @@ DEFINE_ACTION (view_zoom_extents,
                _("Zoom Extents"),
                _("Zoom Extents"),
                _("Zoom _Extents"),
-               NULL)
+               NULL,
+               ACTUATE)
 {
   /* repeat middle shortcut would get into the way of what user is try to do */
   GschemPageView *page_view = gschem_toplevel_get_current_page_view (w_current);
@@ -973,7 +1021,8 @@ DEFINE_ACTION (view_zoom_box,
                _("Zoom Box"),
                _("Zoom Box"),
                _("Zoom _Box"),
-               NULL)
+               NULL,
+               ACTUATE)
 {
   /* repeat middle shortcut would get into the way of what user is try to do */
   gint wx, wy;
@@ -993,7 +1042,8 @@ DEFINE_ACTION (view_zoom_in,
                _("Zoom In"),
                _("Zoom In"),
                _("Zoom _In"),
-               NULL)
+               NULL,
+               ACTUATE)
 {
   /* repeat middle shortcut would get into the way of what user is try to do */
   GschemPageView *page_view = gschem_toplevel_get_current_page_view (w_current);
@@ -1015,7 +1065,8 @@ DEFINE_ACTION (view_zoom_out,
                _("Zoom Out"),
                _("Zoom Out"),
                _("Zoom _Out"),
-               NULL)
+               NULL,
+               ACTUATE)
 {
   /* repeat middle shortcut would get into the way of what user is try to do */
   GschemPageView *page_view = gschem_toplevel_get_current_page_view (w_current);
@@ -1037,7 +1088,8 @@ DEFINE_ACTION (view_pan,
                _("Pan"),
                _("Pan"),
                _("_Pan"),
-               NULL)
+               NULL,
+               ACTUATE)
 {
   gint wx, wy;
 
@@ -1068,7 +1120,8 @@ DEFINE_ACTION (view_pan_left,
                _("Pan Left"),
                _("Pan Left"),
                _("Pan Left"),
-               NULL)
+               NULL,
+               ACTUATE)
 {
   GschemPageView *page_view = gschem_toplevel_get_current_page_view (w_current);
   g_return_if_fail (page_view != NULL);
@@ -1086,7 +1139,8 @@ DEFINE_ACTION (view_pan_right,
                _("Pan Right"),
                _("Pan Right"),
                _("Pan Right"),
-               NULL)
+               NULL,
+               ACTUATE)
 {
   GschemPageView *page_view = gschem_toplevel_get_current_page_view (w_current);
   g_return_if_fail (page_view != NULL);
@@ -1105,7 +1159,8 @@ DEFINE_ACTION (view_pan_up,
                _("Pan Up"),
                _("Pan Up"),
                _("Pan Up"),
-               NULL)
+               NULL,
+               ACTUATE)
 {
   GschemPageView *page_view = gschem_toplevel_get_current_page_view (w_current);
   g_return_if_fail (page_view != NULL);
@@ -1123,7 +1178,8 @@ DEFINE_ACTION (view_pan_down,
                _("Pan Down"),
                _("Pan Down"),
                _("Pan Down"),
-               NULL)
+               NULL,
+               ACTUATE)
 {
   GschemPageView *page_view = gschem_toplevel_get_current_page_view (w_current);
   g_return_if_fail (page_view != NULL);
@@ -1138,7 +1194,8 @@ DEFINE_ACTION (view_dark_colors,
                _("Dark Color Scheme"),
                _("Dark color scheme"),
                _("_Dark color scheme"),
-               NULL)
+               NULL,
+               ACTUATE)
 {
   x_color_free ();
   /* Change the scheme here */
@@ -1154,7 +1211,8 @@ DEFINE_ACTION (view_light_colors,
                _("Light Color Scheme"),
                _("Light color scheme"),
                _("_Light color scheme"),
-               NULL)
+               NULL,
+               ACTUATE)
 {
   x_color_free ();
   /* Change the scheme here */
@@ -1170,7 +1228,8 @@ DEFINE_ACTION (view_bw_colors,
                _("Monochrome Color Scheme"),
                _("BW color scheme"),
                _("B_W color scheme"),
-               NULL)
+               NULL,
+               ACTUATE)
 {
   x_color_free ();
   /* Change the scheme here */
@@ -1188,7 +1247,8 @@ DEFINE_ACTION (page_manager,
                _("Page Manager"),
                _("Page Manager..."),
                _("_Manager..."),
-               NULL)
+               NULL,
+               ACTUATE)
 {
   x_pagesel_open (w_current);
 }
@@ -1199,7 +1259,8 @@ DEFINE_ACTION (page_next,
                _("Next Page"),
                _("Next"),
                _("_Next"),
-               NULL)
+               NULL,
+               ACTUATE)
 {
   TOPLEVEL *toplevel = gschem_toplevel_get_toplevel (w_current);
   PAGE *p_current = toplevel->page_current;
@@ -1232,7 +1293,8 @@ DEFINE_ACTION (page_prev,
                _("Previous Page"),
                _("Previous"),
                _("_Previous"),
-               NULL)
+               NULL,
+               ACTUATE)
 {
   TOPLEVEL *toplevel = gschem_toplevel_get_toplevel (w_current);
   PAGE *p_current = toplevel->page_current;
@@ -1264,7 +1326,8 @@ DEFINE_ACTION (page_close,
                _("Close Page"),
                _("Close"),
                _("_Close"),
-               NULL)
+               NULL,
+               ACTUATE)
 {
   PAGE *page = gschem_toplevel_get_toplevel (w_current)->page_current;
 
@@ -1286,7 +1349,8 @@ DEFINE_ACTION (page_revert,
                _("Revert Changes"),
                _("Revert"),
                _("_Revert"),
-               NULL)
+               NULL,
+               ACTUATE)
 {
   /*! \bug may have memory leak? */
   PAGE *page_current = NULL;
@@ -1344,7 +1408,8 @@ DEFINE_ACTION (page_print,
                _("Print Page"),
                _("Print Page"),
                _("Print Page"),
-               NULL)
+               NULL,
+               ACTUATE)
 {
   s_page_print_all(gschem_toplevel_get_toplevel (w_current));
 }
@@ -1359,7 +1424,8 @@ DEFINE_ACTION (clipboard_copy,
                _("Copy"),
                _("Copy"),
                _("_Copy"),
-               NULL)
+               NULL,
+               ACTUATE)
 {
   if (!o_select_selected (w_current)) return;
 
@@ -1376,7 +1442,8 @@ DEFINE_ACTION (clipboard_cut,
                _("Cut"),
                _("Cut"),
                _("Cu_t"),
-               NULL)
+               NULL,
+               ACTUATE)
 {
   if (!o_select_selected (w_current)) return;
 
@@ -1394,7 +1461,8 @@ DEFINE_ACTION (clipboard_paste,
                _("Paste"),
                _("Paste"),
                _("_Paste"),
-               NULL)
+               NULL,
+               ACTUATE)
 {
   int empty;
 
@@ -1421,7 +1489,8 @@ DEFINE_ACTION (buffer_copy1,
                _("Copy into 1"),
                _("Copy into 1"),
                _("Copy into 1"),
-               NULL)
+               NULL,
+               ACTUATE)
 {
   i_buffer_copy (w_current, 1, action);
 }
@@ -1432,7 +1501,8 @@ DEFINE_ACTION (buffer_copy2,
                _("Copy into 2"),
                _("Copy into 2"),
                _("Copy into 2"),
-               NULL)
+               NULL,
+               ACTUATE)
 {
   i_buffer_copy (w_current, 2, action);
 }
@@ -1443,7 +1513,8 @@ DEFINE_ACTION (buffer_copy3,
                _("Copy into 3"),
                _("Copy into 3"),
                _("Copy into 3"),
-               NULL)
+               NULL,
+               ACTUATE)
 {
   i_buffer_copy (w_current, 3, action);
 }
@@ -1454,7 +1525,8 @@ DEFINE_ACTION (buffer_copy4,
                _("Copy into 4"),
                _("Copy into 4"),
                _("Copy into 4"),
-               NULL)
+               NULL,
+               ACTUATE)
 {
   i_buffer_copy (w_current, 4, action);
 }
@@ -1465,7 +1537,8 @@ DEFINE_ACTION (buffer_copy5,
                _("Copy into 5"),
                _("Copy into 5"),
                _("Copy into 5"),
-               NULL)
+               NULL,
+               ACTUATE)
 {
   i_buffer_copy (w_current, 5, action);
 }
@@ -1476,7 +1549,8 @@ DEFINE_ACTION (buffer_cut1,
                _("Cut into 1"),
                _("Cut into 1"),
                _("Cut into 1"),
-               NULL)
+               NULL,
+               ACTUATE)
 {
   i_buffer_cut (w_current, 1, action);
 }
@@ -1487,7 +1561,8 @@ DEFINE_ACTION (buffer_cut2,
                _("Cut into 2"),
                _("Cut into 2"),
                _("Cut into 2"),
-               NULL)
+               NULL,
+               ACTUATE)
 {
   i_buffer_cut (w_current, 2, action);
 }
@@ -1498,7 +1573,8 @@ DEFINE_ACTION (buffer_cut3,
                _("Cut into 3"),
                _("Cut into 3"),
                _("Cut into 3"),
-               NULL)
+               NULL,
+               ACTUATE)
 {
   i_buffer_cut (w_current, 3, action);
 }
@@ -1509,7 +1585,8 @@ DEFINE_ACTION (buffer_cut4,
                _("Cut into 4"),
                _("Cut into 4"),
                _("Cut into 4"),
-               NULL)
+               NULL,
+               ACTUATE)
 {
   i_buffer_cut (w_current, 4, action);
 }
@@ -1520,7 +1597,8 @@ DEFINE_ACTION (buffer_cut5,
                _("Cut into 5"),
                _("Cut into 5"),
                _("Cut into 5"),
-               NULL)
+               NULL,
+               ACTUATE)
 {
   i_buffer_cut (w_current, 5, action);
 }
@@ -1531,7 +1609,8 @@ DEFINE_ACTION (buffer_paste1,
                _("Paste from 1"),
                _("Paste from 1"),
                _("Paste from 1"),
-               NULL)
+               NULL,
+               ACTUATE)
 {
   i_buffer_paste (w_current, 1, action);
 }
@@ -1542,7 +1621,8 @@ DEFINE_ACTION (buffer_paste2,
                _("Paste from 2"),
                _("Paste from 2"),
                _("Paste from 2"),
-               NULL)
+               NULL,
+               ACTUATE)
 {
   i_buffer_paste (w_current, 2, action);
 }
@@ -1553,7 +1633,8 @@ DEFINE_ACTION (buffer_paste3,
                _("Paste from 3"),
                _("Paste from 3"),
                _("Paste from 3"),
-               NULL)
+               NULL,
+               ACTUATE)
 {
   i_buffer_paste (w_current, 3, action);
 }
@@ -1564,7 +1645,8 @@ DEFINE_ACTION (buffer_paste4,
                _("Paste from 4"),
                _("Paste from 4"),
                _("Paste from 4"),
-               NULL)
+               NULL,
+               ACTUATE)
 {
   i_buffer_paste (w_current, 4, action);
 }
@@ -1575,7 +1657,8 @@ DEFINE_ACTION (buffer_paste5,
                _("Paste from 5"),
                _("Paste from 5"),
                _("Paste from 5"),
-               NULL)
+               NULL,
+               ACTUATE)
 {
   i_buffer_paste (w_current, 5, action);
 }
@@ -1588,7 +1671,8 @@ DEFINE_ACTION (add_component,
                _("Add Component"),
                _("Add Component"),
                _("_Component..."),
-               NULL)
+               NULL,
+               ACTUATE)
 {
   o_redraw_cleanstates (w_current);
 
@@ -1606,7 +1690,8 @@ DEFINE_ACTION (add_attribute,
                _("Add Attribute"),
                _("Add Attribute"),
                _("_Attribute..."),
-               NULL)
+               NULL,
+               ACTUATE)
 {
   attrib_edit_dialog(w_current, NULL,
                      g_action_get_position (TRUE, NULL, NULL) ? FROM_HOTKEY : FROM_MENU);
@@ -1621,7 +1706,8 @@ DEFINE_ACTION (add_net,
                _("Add Net"),
                _("Add Net"),
                _("_Net"),
-               NULL)
+               NULL,
+               ACTUATE)
 {
   gint wx, wy;
 
@@ -1642,7 +1728,8 @@ DEFINE_ACTION (add_bus,
                _("Add Bus"),
                _("Add Bus"),
                _("B_us"),
-               NULL)
+               NULL,
+               ACTUATE)
 {
   gint wx, wy;
 
@@ -1663,7 +1750,8 @@ DEFINE_ACTION (add_text,
                _("Add Text"),
                _("Add Text"),
                _("_Text..."),
-               NULL)
+               NULL,
+               ACTUATE)
 {
   o_redraw_cleanstates(w_current);
   o_invalidate_rubber (w_current);
@@ -1681,7 +1769,8 @@ DEFINE_ACTION (add_line,
                _("Add Line"),
                _("Add Line"),
                _("_Line"),
-               NULL)
+               NULL,
+               ACTUATE)
 {
   gint wx, wy;
 
@@ -1702,7 +1791,8 @@ DEFINE_ACTION (add_path,
                _("Add Path"),
                _("Add Path"),
                _("Pat_h"),
-               NULL)
+               NULL,
+               ACTUATE)
 {
   g_assert (w_current != NULL);
 
@@ -1722,7 +1812,8 @@ DEFINE_ACTION (add_box,
                _("Add Box"),
                _("Add Box"),
                _("_Box"),
-               NULL)
+               NULL,
+               ACTUATE)
 {
   gint wx, wy;
 
@@ -1743,7 +1834,8 @@ DEFINE_ACTION (add_picture,
                _("Add Picture"),
                _("Add Picture..."),
                _("Pictu_re..."),
-               NULL)
+               NULL,
+               ACTUATE)
 {
   o_redraw_cleanstates(w_current);
   o_invalidate_rubber (w_current);
@@ -1759,7 +1851,8 @@ DEFINE_ACTION (add_circle,
                _("Add Circle"),
                _("Add Circle"),
                _("C_ircle"),
-               NULL)
+               NULL,
+               ACTUATE)
 {
   gint wx, wy;
 
@@ -1780,7 +1873,8 @@ DEFINE_ACTION (add_arc,
                _("Add Arc"),
                _("Add Arc"),
                _("A_rc"),
-               NULL)
+               NULL,
+               ACTUATE)
 {
   gint wx, wy;
 
@@ -1801,7 +1895,8 @@ DEFINE_ACTION (add_pin,
                _("Add Pin"),
                _("Add Pin"),
                _("_Pin"),
-               NULL)
+               NULL,
+               ACTUATE)
 {
   gint wx, wy;
 
@@ -1824,7 +1919,8 @@ DEFINE_ACTION (hierarchy_down_schematic,
                _("Down Schematic"),
                _("Down Schematic"),
                _("_Down Schematic"),
-               NULL)
+               NULL,
+               ACTUATE)
 {
   char *attrib=NULL;
   char *current_filename=NULL;
@@ -1964,7 +2060,8 @@ DEFINE_ACTION (hierarchy_down_symbol,
                _("Down Symbol"),
                _("Down Symbol"),
                _("Down _Symbol"),
-               NULL)
+               NULL,
+               ACTUATE)
 {
   /*! \bug may cause problems with non-directory symbols */
   OBJECT *object;
@@ -2005,7 +2102,8 @@ DEFINE_ACTION (hierarchy_up,
                _("Up Hierarchy"),
                _("Up"),
                _("_Up"),
-               NULL)
+               NULL,
+               ACTUATE)
 {
   PAGE *page = NULL;
   PAGE *up_page = NULL;
@@ -2036,7 +2134,8 @@ DEFINE_ACTION (hierarchy_documentation,
                _("Component Documentation"),
                _("Component Documentation..."),
                _("D_ocumentation..."),
-               _("View documentation for selected component"))
+               _("View documentation for selected component"),
+               ACTUATE)
 {
   TOPLEVEL *toplevel = gschem_toplevel_get_toplevel (w_current);
   SCM s_show_documentation_proc =
@@ -2062,7 +2161,8 @@ DEFINE_ACTION (attributes_attach,
                _("Attach Attributes"),
                _("Attach Attributes"),
                _("_Attach"),
-               NULL)
+               NULL,
+               ACTUATE)
 {
   OBJECT *first_object;
   GList *s_current;
@@ -2116,7 +2216,8 @@ DEFINE_ACTION (attributes_detach,
                _("Detach Attributes"),
                _("Detach Attributes"),
                _("_Detach"),
-               NULL)
+               NULL,
+               ACTUATE)
 {
   GList *s_current;
   OBJECT *o_current;
@@ -2160,7 +2261,8 @@ DEFINE_ACTION (attributes_show_name,
                _("Show Attribute Name"),
                _("Show Name"),
                _("Show _Name"),
-               NULL)
+               NULL,
+               ACTUATE)
 {
   TOPLEVEL *toplevel = gschem_toplevel_get_toplevel (w_current);
 
@@ -2194,7 +2296,8 @@ DEFINE_ACTION (attributes_show_value,
                _("Show Attribute Value"),
                _("Show Value"),
                _("Show _Value"),
-               NULL)
+               NULL,
+               ACTUATE)
 {
   TOPLEVEL *toplevel = gschem_toplevel_get_toplevel (w_current);
 
@@ -2228,7 +2331,8 @@ DEFINE_ACTION (attributes_show_both,
                _("Show Name & Value"),
                _("Show Both"),
                _("Show _Both"),
-               NULL)
+               NULL,
+               ACTUATE)
 {
   TOPLEVEL *toplevel = gschem_toplevel_get_toplevel (w_current);
 
@@ -2262,7 +2366,8 @@ DEFINE_ACTION (attributes_visibility_toggle,
                _("Toggle Text Visibility"),
                _("Toggle Visibility"),
                _("_Toggle Visibility"),
-               NULL)
+               NULL,
+               ACTUATE)
 {
   TOPLEVEL *toplevel = gschem_toplevel_get_toplevel (w_current);
 
@@ -2298,7 +2403,8 @@ DEFINE_ACTION (options_text_size,
                _("Set Default Text Size"),
                _("Text Size..."),
                _("_Text Size..."),
-               NULL)
+               NULL,
+               ACTUATE)
 {
   /* repeat last command doesn't make sense on options either??? (does it?) */
   gschem_dockable_present (w_current->text_properties_dockable);
@@ -2310,7 +2416,8 @@ DEFINE_ACTION (options_snap_size,
                _("Set Grid Spacing"),
                _("Snap Grid Spacing..."),
                _("Snap Grid S_pacing..."),
-               NULL)
+               NULL,
+               ACTUATE)
 {
   gschem_dockable_present (w_current->options_dockable);
 }
@@ -2323,7 +2430,8 @@ DEFINE_ACTION (options_scale_up_snap_size,
                _("Increase Grid Spacing"),
                _("Scale up Grid Spacing"),
                _("Scale _up Grid Spacing"),
-               NULL)
+               NULL,
+               ACTUATE)
 {
   gschem_options_scale_snap_up (w_current->options);
 }
@@ -2336,7 +2444,8 @@ DEFINE_ACTION (options_scale_down_snap_size,
                _("Decrease Grid Spacing"),
                _("Scale down Grid Spacing"),
                _("Scale _down Grid Spacing"),
-               NULL)
+               NULL,
+               ACTUATE)
 {
   gschem_options_scale_snap_down (w_current->options);
 }
@@ -2347,7 +2456,8 @@ DEFINE_ACTION (options_afeedback,
                _("Toggle Outline Drawing"),
                _("Toggle Outline/Box"),
                _("Toggle _Outline/Box"),
-               NULL)
+               NULL,
+               ACTUATE)
 {
   /* repeat last command doesn't make sense on options either??? (does it?) */
 
@@ -2369,7 +2479,8 @@ DEFINE_ACTION (options_grid,
                _("Switch Grid Style"),
                _("Cycle grid styles"),
                _("Cycle _grid styles"),
-               NULL)
+               NULL,
+               ACTUATE)
 {
   GRID_MODE grid_mode;
 
@@ -2391,7 +2502,8 @@ DEFINE_ACTION (options_snap,
                _("Switch Snap Mode"),
                _("Toggle Snap On/Off"),
                _("Toggle _Snap On/Off"),
-               NULL)
+               NULL,
+               ACTUATE)
 {
   SNAP_STATE snap_mode;
 
@@ -2424,7 +2536,8 @@ DEFINE_ACTION (options_rubberband,
                _("Toggle Net Rubber Band"),
                _("Toggle Net Rubberband"),
                _("Toggle Net _Rubberband"),
-               NULL)
+               NULL,
+               ACTUATE)
 {
   /* Rubber band is cool !
    * Added on/off option from the pull down menu
@@ -2447,7 +2560,8 @@ DEFINE_ACTION (options_magneticnet,
                _("Toggle Magnetic Nets"),
                _("Toggle Magnetic Net"),
                _("Toggle _Magnetic Net"),
-               NULL)
+               NULL,
+               ACTUATE)
 {
   gschem_options_cycle_magnetic_net_mode (w_current->options);
 
@@ -2467,7 +2581,8 @@ DEFINE_ACTION (options_show_log_window,
                _("Show Log Window"),
                _("Show Log Window..."),
                _("Show _Log Window..."),
-               NULL)
+               NULL,
+               ACTUATE)
 {
   gschem_dockable_present (w_current->log_dockable);
 }
@@ -2478,7 +2593,8 @@ DEFINE_ACTION (cancel,
                _("Cancel"),
                _("Cancel"),
                _("Cancel"),
-               NULL)
+               NULL,
+               ACTUATE)
 {
   i_cancel (w_current);
 }
@@ -2491,7 +2607,8 @@ DEFINE_ACTION (help_about,
                _("About gschem"),
                _("About..."),
                _("_About..."),
-               NULL)
+               NULL,
+               ACTUATE)
 {
   about_dialog(w_current);
 }
@@ -2502,7 +2619,8 @@ DEFINE_ACTION (help_hotkeys,
                _("Show Hotkeys"),
                _("Hotkeys..."),
                _("_Hotkeys..."),
-               NULL)
+               NULL,
+               ACTUATE)
 {
   x_dialog_hotkeys(w_current);
 }
@@ -2513,7 +2631,8 @@ DEFINE_ACTION (options_show_coord_window,
                _("Show Coordinate Window"),
                _("Show Coord Window..."),
                _("Show _Coord Window..."),
-               NULL)
+               NULL,
+               ACTUATE)
 {
   coord_dialog (w_current, 0, 0);
 }
@@ -2526,7 +2645,8 @@ DEFINE_ACTION (docking_area_left,
                _("Left docking area"),
                _("Left docking area"),
                _("Left docking area"),
-               NULL)
+               NULL,
+               ACTUATE)
 {
   /* submenu */
 }
@@ -2537,7 +2657,8 @@ DEFINE_ACTION (docking_area_bottom,
                _("Bottom docking area"),
                _("Bottom docking area"),
                _("Bottom docking area"),
-               NULL)
+               NULL,
+               ACTUATE)
 {
   /* submenu */
 }
@@ -2548,7 +2669,8 @@ DEFINE_ACTION (docking_area_right,
                _("Right docking area"),
                _("Right docking area"),
                _("Right docking area"),
-               NULL)
+               NULL,
+               ACTUATE)
 {
   /* submenu */
 }
@@ -2561,7 +2683,8 @@ DEFINE_ACTION (repeat_last_action,
                _("Repeat Last Action"),
                _("Repeat Last Action"),
                _("Repeat Last Action"),
-               NULL)
+               NULL,
+               ACTUATE)
 {
   if (w_current->last_action != NULL)
     gschem_action_activate (w_current->last_action, w_current);
