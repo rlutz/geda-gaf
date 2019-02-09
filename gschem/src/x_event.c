@@ -261,7 +261,10 @@ x_event_button_pressed(GschemPageView *page_view, GdkEventButton *event, GschemT
       if (w_current->third_button == POPUP_ENABLED) {
         /* (third-button "popup") */
         i_update_menus(w_current);  /* update menus before popup  */
-        do_popup(w_current, event);
+        if (w_current->popup_menu != NULL)
+          gtk_menu_popup (GTK_MENU (w_current->popup_menu),
+                          NULL, NULL, NULL, NULL,
+                          event->button, event->time);
       } else {
         /* (third-button "mousepan") */
         gschem_page_view_pan_start (page_view, (int) event->x, (int) event->y);

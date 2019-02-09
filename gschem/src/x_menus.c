@@ -152,24 +152,6 @@ x_menus_create_main_popup (GschemToplevel *w_current)
   w_current->popup_menu = build_menu (s_menu, FALSE, w_current);
 }
 
-/*! \todo Finish function documentation!!!
- *  \brief
- *  \par Function Description
- *
- *  \note
- *  need to look at this... here and the setup
- */
-gint do_popup (GschemToplevel *w_current, GdkEventButton *event)
-{
-  GtkWidget *menu = (GtkWidget *) w_current->popup_menu;
-
-  if (menu != NULL)
-    gtk_menu_popup (GTK_MENU (menu), NULL, NULL, NULL, NULL,
-                    event->button, event->time);
-
-  return FALSE;
-}
-
 #define MAX_RECENT_FILES 10
 /*! \brief Callback for recent-chooser.
  *
