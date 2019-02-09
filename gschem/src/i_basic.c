@@ -311,48 +311,50 @@ void i_update_toolbar(GschemToplevel *w_current)
   if (!w_current->toolbars)
 	return;
 
-  switch(w_current->event_state) {
-    case(SELECT):
-      gschem_action_set_active (action_edit_select, TRUE, w_current);
-      gschem_action_set_active (action_add_net, FALSE, w_current);
-      gschem_action_set_active (action_add_bus, FALSE, w_current);
-      break;
+  gschem_action_set_active (action_edit_select,
+                            w_current->event_state == SELECT ||
+                            w_current->event_state == GRIPS ||
+                            w_current->event_state == MOVEMODE ||
+                            w_current->event_state == PASTEMODE ||
+                            w_current->event_state == SBOX, w_current);
 
-    case(NETMODE):
-      gschem_action_set_active (action_edit_select, FALSE, w_current);
-      gschem_action_set_active (action_add_net, TRUE, w_current);
-      gschem_action_set_active (action_add_bus, FALSE, w_current);
-      break;
+  gschem_action_set_active (action_add_arc,
+                            w_current->event_state == ARCMODE, w_current);
+  gschem_action_set_active (action_add_box,
+                            w_current->event_state == BOXMODE, w_current);
+  gschem_action_set_active (action_add_bus,
+                            w_current->event_state == BUSMODE, w_current);
+  gschem_action_set_active (action_add_circle,
+                            w_current->event_state == CIRCLEMODE, w_current);
+  gschem_action_set_active (action_add_line,
+                            w_current->event_state == LINEMODE, w_current);
+  gschem_action_set_active (action_add_net,
+                            w_current->event_state == NETMODE, w_current);
+  gschem_action_set_active (action_add_path,
+                            w_current->event_state == PATHMODE, w_current);
+  gschem_action_set_active (action_add_picture,
+                            w_current->event_state == PICTUREMODE, w_current);
+  gschem_action_set_active (action_add_pin,
+                            w_current->event_state == PINMODE, w_current);
 
-    case(BUSMODE):
-      gschem_action_set_active (action_edit_select, FALSE, w_current);
-      gschem_action_set_active (action_add_net, FALSE, w_current);
-      gschem_action_set_active (action_add_bus, TRUE, w_current);
-      break;
+  gschem_action_set_active (action_add_component,
+                            w_current->event_state == COMPMODE, w_current);
+  gschem_action_set_active (action_add_text,
+                            w_current->event_state == TEXTMODE, w_current);
 
-    case(ARCMODE): /*! \todo */
-    case(BOXMODE): /*! \todo */
-    case(CIRCLEMODE): /*! \todo */
-    case(LINEMODE): /*! \todo */
-    case(PICTUREMODE): /*! \todo */
-    case(PINMODE): /*! \todo */
-    case(PAN): /*! \todo */
-    case(COPYMODE): /*! \todo */
-    case(MCOPYMODE): /*! \todo */
-    case(MOVEMODE): /*! \todo */
-    case(COMPMODE): /*! \todo */
-    case(ROTATEMODE): /*! \todo */
-    case(TEXTMODE): /*! \todo */
-    case(MIRRORMODE): /*! \todo */
-    case(ZOOMBOX): /*! \todo */
-    case(PASTEMODE): /*! \todo */
-    case(GRIPS): /*! \todo */
-    default:
-      gschem_action_set_active (action_edit_select, TRUE, w_current);
-      gschem_action_set_active (action_add_net, FALSE, w_current);
-      gschem_action_set_active (action_add_bus, FALSE, w_current);
-      break;
-  }
+  gschem_action_set_active (action_edit_copy,
+                            w_current->event_state == COPYMODE, w_current);
+  gschem_action_set_active (action_edit_mcopy,
+                            w_current->event_state == MCOPYMODE, w_current);
+  gschem_action_set_active (action_edit_rotate_90,
+                            w_current->event_state == ROTATEMODE, w_current);
+  gschem_action_set_active (action_edit_mirror,
+                            w_current->event_state == MIRRORMODE, w_current);
+
+  gschem_action_set_active (action_view_pan,
+                            w_current->event_state == PAN, w_current);
+  gschem_action_set_active (action_view_zoom_box,
+                            w_current->event_state == ZOOMBOX, w_current);
 }
 
 
