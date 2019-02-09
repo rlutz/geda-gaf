@@ -277,7 +277,7 @@ DEFINE_ACTION (edit_select,
                _("Select"),
                _("Select Mode"),
                NULL,
-               ACTUATE)
+               TOGGLE)
 {
   /* Select also does not update the middle button shortcut. */
   o_redraw_cleanstates(w_current);
@@ -1707,7 +1707,7 @@ DEFINE_ACTION (add_net,
                _("Add Net"),
                _("_Net"),
                NULL,
-               ACTUATE)
+               TOGGLE)
 {
   gint wx, wy;
 
@@ -1729,7 +1729,7 @@ DEFINE_ACTION (add_bus,
                _("Add Bus"),
                _("B_us"),
                NULL,
-               ACTUATE)
+               TOGGLE)
 {
   gint wx, wy;
 
