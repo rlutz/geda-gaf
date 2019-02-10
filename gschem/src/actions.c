@@ -797,7 +797,7 @@ DEFINE_ACTION (edit_show_hidden,
                _("Show/Hide Inv Text"),
                _("Show/Hide Inv Text"),
                NULL,
-               ACTUATE)
+               TOGGLE_CHECK)
 {
   i_update_middle_button (w_current, action, _("ShowHidden"));
 

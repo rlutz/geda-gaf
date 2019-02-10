@@ -31,6 +31,7 @@
 #include <unistd.h>
 
 #include "gschem.h"
+#include "actions.decl.x"
 
 /* break with the tradition here and input a list */
 /*! \todo probably should go back and do the same for o_copy o_move
@@ -342,6 +343,10 @@ void o_edit_show_hidden (GschemToplevel *w_current, const GList *o_list)
   } else {
     s_log_message(_("Hidden text is now invisible\n"));
   }
+
+  gschem_action_set_active (action_edit_show_hidden,
+                            w_current->toplevel->show_hidden_text,
+                            w_current);
 }
 
 /*! \todo Finish function documentation!!!
