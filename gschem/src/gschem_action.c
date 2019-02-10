@@ -317,10 +317,16 @@ typedef struct _Dispatcher      Dispatcher;
 
 struct _DispatcherClass {
   GObjectClass parent_class;
+
+  void (*set_sensitive) (Dispatcher *dispatcher, gboolean sensitive);
+  void (*set_active) (Dispatcher *dispatcher, gboolean is_active);
 };
 
 struct _Dispatcher {
   GObject parent_instance;
+
+  guint sensitive : 1;
+  guint active : 1;
 };
 
 enum {
@@ -330,6 +336,12 @@ enum {
 };
 
 static void dispatcher_class_init (DispatcherClass *class);
+static void dispatcher_instance_init (Dispatcher *dispatcher);
+
+static void dispatcher_set_sensitive (Dispatcher *dispatcher,
+                                      gboolean sensitive);
+static void dispatcher_set_active (Dispatcher *dispatcher,
+                                   gboolean is_active);
 
 static guint dispatcher_signals[LAST_SIGNAL] = { 0 };
 
@@ -349,7 +361,7 @@ gschem_action_state_dispatcher_get_type ()
       NULL,                                     /* class_data */
       sizeof (Dispatcher),
       0,                                        /* n_preallocs */
-      NULL,                                     /* instance_init */
+      (GInstanceInitFunc) dispatcher_instance_init,
       NULL                                      /* value_table */
     };
 
@@ -365,11 +377,15 @@ gschem_action_state_dispatcher_get_type ()
 static void
 dispatcher_class_init (DispatcherClass *class)
 {
+  class->set_sensitive = dispatcher_set_sensitive;
+  class->set_active = dispatcher_set_active;
+
   dispatcher_signals[SET_SENSITIVE] =
     g_signal_new ("set-sensitive",
                   G_OBJECT_CLASS_TYPE (class),
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
-                  0, NULL, NULL,
+                  G_STRUCT_OFFSET (DispatcherClass, set_sensitive),
+                  NULL, NULL,
                   g_cclosure_marshal_VOID__BOOLEAN,
                   G_TYPE_NONE, 1,
                   G_TYPE_BOOLEAN);
@@ -378,40 +394,18 @@ dispatcher_class_init (DispatcherClass *class)
     g_signal_new ("set-active",
                   G_OBJECT_CLASS_TYPE (class),
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
-                  0, NULL, NULL,
+                  G_STRUCT_OFFSET (DispatcherClass, set_active),
+                  NULL, NULL,
                   g_cclosure_marshal_VOID__BOOLEAN,
                   G_TYPE_NONE, 1,
                   G_TYPE_BOOLEAN);
 }
 
 
-void
-gschem_action_set_sensitive (GschemAction *action, gboolean sensitive,
-                             GschemToplevel *w_current)
+static void
+dispatcher_instance_init (Dispatcher *dispatcher)
 {
-  Dispatcher *dispatcher = g_hash_table_lookup (
-    w_current->action_state_dispatchers, action);
-  if (dispatcher == NULL)
-    /* no widget for this action */
-    return;
-
-  g_return_if_fail (IS_DISPATCHER (dispatcher));
-  g_signal_emit (dispatcher, dispatcher_signals[SET_SENSITIVE], 0, sensitive);
-}
-
-
-void
-gschem_action_set_active (GschemAction *action, gboolean is_active,
-                          GschemToplevel *w_current)
-{
-  Dispatcher *dispatcher = g_hash_table_lookup (
-    w_current->action_state_dispatchers, action);
-  if (dispatcher == NULL)
-    /* no widget for this action */
-    return;
-
-  g_return_if_fail (IS_DISPATCHER (dispatcher));
-  g_signal_emit (dispatcher, dispatcher_signals[SET_ACTIVE], 0, is_active);
+  dispatcher->sensitive = TRUE;
 }
 
 
@@ -429,6 +423,40 @@ get_dispatcher (GschemAction *action,
   }
 
   return dispatcher;
+}
+
+
+void
+gschem_action_set_sensitive (GschemAction *action, gboolean sensitive,
+                             GschemToplevel *w_current)
+{
+  Dispatcher *dispatcher = get_dispatcher (action, w_current);
+  g_return_if_fail (IS_DISPATCHER (dispatcher));
+  g_signal_emit (dispatcher, dispatcher_signals[SET_SENSITIVE], 0, sensitive);
+}
+
+
+void
+gschem_action_set_active (GschemAction *action, gboolean is_active,
+                          GschemToplevel *w_current)
+{
+  Dispatcher *dispatcher = get_dispatcher (action, w_current);
+  g_return_if_fail (IS_DISPATCHER (dispatcher));
+  g_signal_emit (dispatcher, dispatcher_signals[SET_ACTIVE], 0, is_active);
+}
+
+
+static void
+dispatcher_set_sensitive (Dispatcher *dispatcher, gboolean sensitive)
+{
+  dispatcher->sensitive = sensitive;
+}
+
+
+static void
+dispatcher_set_active (Dispatcher *dispatcher, gboolean is_active)
+{
+  dispatcher->active = is_active;
 }
 
 
@@ -555,9 +583,12 @@ gschem_action_create_menu_item (GschemAction *action,
   Dispatcher *dispatcher = get_dispatcher (action, w_current);
   g_signal_connect_swapped (dispatcher, "set-sensitive",
                             G_CALLBACK (gtk_widget_set_sensitive), menu_item);
-  if (GTK_IS_CHECK_MENU_ITEM (menu_item))
+  gtk_widget_set_sensitive (GTK_WIDGET (menu_item), dispatcher->sensitive);
+  if (GTK_IS_CHECK_MENU_ITEM (menu_item)) {
     g_signal_connect_swapped (dispatcher, "set-active",
                               G_CALLBACK (menu_item_set_active), menu_item);
+    menu_item_set_active (GTK_CHECK_MENU_ITEM (menu_item), dispatcher->active);
+  }
 
   return menu_item;
 }
@@ -652,9 +683,13 @@ gschem_action_create_tool_button (GschemAction *action,
   Dispatcher *dispatcher = get_dispatcher (action, w_current);
   g_signal_connect_swapped (dispatcher, "set-sensitive",
                             G_CALLBACK (gtk_widget_set_sensitive), button);
-  if (GTK_IS_TOGGLE_TOOL_BUTTON (button))
+  gtk_widget_set_sensitive (GTK_WIDGET (button), dispatcher->sensitive);
+  if (GTK_IS_TOGGLE_TOOL_BUTTON (button)) {
     g_signal_connect_swapped (dispatcher, "set-active",
                               G_CALLBACK (tool_button_set_active), button);
+    tool_button_set_active (GTK_TOGGLE_TOOL_BUTTON (button),
+                            dispatcher->active);
+  }
 
   return button;
 }
