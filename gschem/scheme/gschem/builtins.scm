@@ -62,7 +62,7 @@
 (define-action-public
     (&help-wiki
      #:icon       "web-browser"
-     #:name       (_ "gEDA wiki")
+     #:name       (_ "gEDA Wiki")
      #:label      (_ "gEDA Wiki...")
      #:menu-label (_ "gEDA _Wiki...")
      #:tooltip    (_ "View the front page of the gEDA wiki in a browser."))

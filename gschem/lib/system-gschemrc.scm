@@ -1164,11 +1164,10 @@
           (,&file-save
            ,&file-save-as
            ,&file-save-all
-           ,&page-revert)
+           ,&page-revert
+           ,&page-close)
           (,&file-print
            ,&file-image)
-          (,&file-script
-           ,&file-repl)
           (,&file-new-window
            ,&file-close-window
            ,&file-quit)))
@@ -1179,65 +1178,10 @@
           (,&clipboard-cut
            ,&clipboard-copy
            ,&clipboard-paste
-           ,&edit-delete)
-          (,&edit-select
+           ,&edit-delete
            ,&edit-select-all
-           ,&edit-deselect
-           ,&edit-copy
-           ,&edit-mcopy
-           ,&edit-move
-           ,&edit-rotate-90
-           ,&edit-mirror)
-          (,&edit-edit
-           ,&edit-text
-           ,&edit-slot
-           ,&edit-properties
-           ,&edit-translate
-           ,&edit-lock
-           ,&edit-unlock)
-          (,&edit-invoke-macro
-           ,&edit-embed
-           ,&edit-unembed
-           ,&edit-update
-           ,&edit-show-hidden)))
-
-(define buffer-menu
-	`((,&buffer-copy1
-	   ,&buffer-copy2
-	   ,&buffer-copy3
-	   ,&buffer-copy4
-	   ,&buffer-copy5
-	   ,&buffer-cut1
-	   ,&buffer-cut2
-	   ,&buffer-cut3
-	   ,&buffer-cut4
-	   ,&buffer-cut5
-	   ,&buffer-paste1
-	   ,&buffer-paste2
-	   ,&buffer-paste3
-	   ,&buffer-paste4
-	   ,&buffer-paste5)))
-
-(define view-menu
-        `((,&view-menubar
-           ,&view-toolbar)
-          (,&view-redraw
-           ,&view-pan
-           ,&view-zoom-box
-           ,&view-zoom-extents
-           ,&view-zoom-in
-           ,&view-zoom-out
-           ,&view-zoom-full)
-          (,&view-dark-colors
-           ,&view-light-colors
-           ,&view-bw-colors)))
-
-(define page-menu
-        `((,&page-manager
-           ,&page-prev
-           ,&page-next
-           ,&page-revert
-           ,&page-close)))
+           ,&edit-deselect)
+          (,&edit-find-text)))
 
 (define add-menu
         `((,&add-component
@@ -1253,80 +1197,111 @@
            ,&add-pin
            ,&add-picture)))
 
-(define hierarchy-menu
-        `((,&hierarchy-down-schematic
-           ,&hierarchy-down-symbol
-           ,&hierarchy-up
-           ,&hierarchy-documentation)))
-
-(define attributes-menu
-        `((,&attributes-attach
+(define object-menu
+        `((,&edit-edit
+           ,&edit-properties
+           ,&edit-copy
+           ,&edit-mcopy
+           ,&edit-move
+           ,&edit-rotate-90
+           ,&edit-mirror)
+          (,&edit-text
+           ,&attributes-attach
            ,&attributes-detach
            ,&attributes-show-value
            ,&attributes-show-name
            ,&attributes-show-both
-           ,&attributes-visibility-toggle
-           ,&edit-find-text
-           ,&edit-find-patch
-           ,&edit-hide-text
-           ,&edit-show-text
-           ,&edit-autonumber)))
+           ,&attributes-visibility-toggle)
+          (,&edit-embed
+           ,&edit-unembed
+           ,&edit-update
+           ,&edit-lock
+           ,&edit-unlock
+           ,&edit-slot
+           ,&hierarchy-documentation)))
 
-(define options-menu
-        `((,&options-options)
-          (,&options-grid-none
-           ,&options-grid-dots
-           ,&options-grid-mesh)
-          (,&options-snap-off
-           ,&options-snap-grid
-           ,&options-snap-resnap)
-          (,&options-scale-up-snap-size
-           ,&options-scale-down-snap-size
-           ,&options-action-feedback
-           ,&options-rubberband
-           ,&options-magneticnet
-           ,&options-show-log-window
-           ,&options-show-coord-window)
+(define view-menu
+        `((,&edit-show-hidden)
+          (,&view-zoom-in
+           ,&view-zoom-out
+           ,&view-zoom-extents
+           ,&view-zoom-full
+           ,&view-zoom-box
+           ,&view-pan
+           ,&view-redraw)
+          (,&view-menubar
+           ,&view-toolbar)
           (,&docking-area-left
            ,&docking-area-bottom
            ,&docking-area-right)))
 
+(define pages-menu
+        `((,&hierarchy-down-schematic
+           ,&hierarchy-down-symbol
+           ,&hierarchy-up)
+          (,&page-prev
+           ,&page-next)
+          (,&page-manager)))
+
+(define tools-menu
+        `((,&edit-autonumber
+           ,&edit-translate
+           ,&edit-find-patch
+           ,&edit-hide-text
+           ,&edit-show-text)
+          (,&options-show-log-window
+           ,&options-show-coord-window)
+          (,&edit-invoke-macro
+           ,&file-script
+           ,&file-repl)))
+
+(define options-menu
+        `((,&options-options)
+          (,&options-rubberband
+           ,&options-magneticnet
+           ,&options-action-feedback)
+          (,&options-snap-off
+           ,&options-snap-grid
+           ,&options-snap-resnap
+           ,&options-scale-up-snap-size
+           ,&options-scale-down-snap-size)
+          (,&view-dark-colors
+           ,&view-light-colors
+           ,&view-bw-colors)))
+
 (define help-menu
-        `((,&help-guide
+        `((,&help-manual
+           ,&help-guide
            ,&help-faq
-           ,&help-manual
-           ,&help-wiki
-           ,&hierarchy-documentation)
+           ,&help-wiki)
           (,&help-hotkeys
            ,&help-about)))
 
 (define menubar
-        `((,(_ "_File")       . ,file-menu)
-          (,(_ "_Edit")       . ,edit-menu)
-;          (,(_ "_Buffer")     . ,buffer-menu)
-          (,(_ "_View")       . ,view-menu)
-          (,(_ "_Page")       . ,page-menu)
-          (,(_ "_Add")        . ,add-menu)
-          (,(_ "Hie_rarchy")  . ,hierarchy-menu)
-          (,(_ "A_ttributes") . ,attributes-menu)
-          (,(_ "_Options")    . ,options-menu)
-          (,(_ "_Help")       . ,help-menu)))
+        `((,(_ "_File")    . ,file-menu)
+          (,(_ "_Edit")    . ,edit-menu)
+          (,(_ "_Add")     . ,add-menu)
+          (,(_ "O_bject")  . ,object-menu)
+          (,(_ "_View")    . ,view-menu)
+          (,(_ "_Pages")   . ,pages-menu)
+          (,(_ "_Tools")   . ,tools-menu)
+          (,(_ "_Options") . ,options-menu)
+          (,(_ "_Help")    . ,help-menu)))
 
 (define context-menu
-        `((,&add-net
-           ,&add-attribute
+        `((,&edit-select
+           ,&add-net
            ,&add-component
-           ,&add-bus
+           ,&add-attribute
            ,&add-text)
           (,&view-zoom-in
            ,&view-zoom-out
            ,&view-zoom-box
            ,&view-zoom-extents)
-          (,&edit-select
-           ,&edit-edit
+          (,&edit-edit
            ,&edit-properties
-           ,&edit-copy
-           ,&edit-move
+           ,&edit-rotate-90
+           ,&edit-mirror
            ,&edit-delete)
           (,&hierarchy-down-schematic
            ,&hierarchy-down-symbol
@@ -1340,9 +1315,16 @@
            ,&edit-redo)
           (,&add-component
            ,&add-net
-           ,&add-bus
-           ,&add-text)
-          (,&edit-select)))
+           ,&add-text
+           ,&edit-select)
+          (,&edit-edit
+           ,&edit-properties
+           ,&edit-update)
+          (,&hierarchy-down-schematic
+           ,&hierarchy-down-symbol
+           ,&hierarchy-up)
+          (,&options-options
+           ,&help-manual)))
 
 ;
 ; End of keymapping related keywords
