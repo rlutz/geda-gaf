@@ -1215,8 +1215,10 @@
           (,&options-grid-none
            ,&options-grid-dots
            ,&options-grid-mesh)
-          (,&options-snap
-           ,&options-scale-up-snap-size
+          (,&options-snap-off
+           ,&options-snap-grid
+           ,&options-snap-resnap)
+          (,&options-scale-up-snap-size
            ,&options-scale-down-snap-size
            ,&options-action-feedback
            ,&options-rubberband

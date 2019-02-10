@@ -2550,6 +2550,53 @@ DEFINE_ACTION (options_snap,
   i_update_grid_info (w_current);
 }
 
+DEFINE_ACTION (options_snap_off,
+               "options-snap-off",
+               NULL,
+               _("Snap Off"),
+               _("Snap Off"),
+               _("Snap Off"),
+               NULL,
+               TOGGLE_RADIO)
+{
+  gschem_options_set_snap_mode (w_current->options, SNAP_OFF);
+
+  i_show_state (w_current, NULL); /* update status on screen */
+  i_update_grid_info (w_current);
+}
+
+DEFINE_ACTION (options_snap_grid,
+               "options-snap-grid",
+               NULL,
+               _("Snap On"),
+               _("Snap On"),
+               _("Snap On"),
+               _("When moving off-grid points, translate them by multiples of "
+                 "the grid but preserve their offset relative to the grid"),
+               TOGGLE_RADIO)
+{
+  gschem_options_set_snap_mode (w_current->options, SNAP_GRID);
+
+  i_show_state (w_current, NULL); /* update status on screen */
+  i_update_grid_info (w_current);
+}
+
+DEFINE_ACTION (options_snap_resnap,
+               "options-snap-resnap",
+               NULL,
+               _("Snap Back to Nearest Grid Point"),
+               _("Snap Back to Nearest Grid Point"),
+               _("Snap Back to Nearest Grid Point"),
+               _("When moving off-grid objects, snap them to the nearest "
+                 "location on the grid"),
+               TOGGLE_RADIO)
+{
+  gschem_options_set_snap_mode (w_current->options, SNAP_RESNAP);
+
+  i_show_state (w_current, NULL); /* update status on screen */
+  i_update_grid_info (w_current);
+}
+
 DEFINE_ACTION (options_rubberband,
                "options-rubberband",
                NULL,

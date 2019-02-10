@@ -371,6 +371,16 @@ gschem_options_set_snap_mode (GschemOptions *options, SNAP_STATE snap_mode)
 
   options->snap_mode = snap_mode;
 
+  gschem_action_set_active (action_options_snap_off,
+                            options->snap_mode == SNAP_OFF,
+                            options->w_current);
+  gschem_action_set_active (action_options_snap_grid,
+                            options->snap_mode == SNAP_GRID,
+                            options->w_current);
+  gschem_action_set_active (action_options_snap_resnap,
+                            options->snap_mode == SNAP_RESNAP,
+                            options->w_current);
+
   g_object_notify (G_OBJECT (options), "snap-mode");
 }
 
