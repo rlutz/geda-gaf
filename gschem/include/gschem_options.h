@@ -89,6 +89,8 @@ struct _GschemOptionsClass {
 struct _GschemOptions {
   GObject parent;
 
+  GschemToplevel *w_current;
+
   int        grid_mode;
   gboolean   magnetic_net_mode;
   gboolean   net_rubber_band_mode;
@@ -127,7 +129,7 @@ GType
 gschem_options_get_type ();
 
 GschemOptions*
-gschem_options_new ();
+gschem_options_new (GschemToplevel *w_current);
 
 void
 gschem_options_scale_snap_down (GschemOptions *options);

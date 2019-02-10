@@ -276,7 +276,7 @@ GschemToplevel *gschem_toplevel_new ()
   /* ------------------ */
   /* rc/user parameters */
   /* ------------------ */
-  w_current->options = gschem_options_new();
+  w_current->options = gschem_options_new (w_current);
 
   g_signal_connect_swapped (G_OBJECT (w_current->options),
                             "notify",

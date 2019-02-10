@@ -41,7 +41,7 @@
  */
 enum
 {
-  PROP_0,
+  PROP_GSCHEM_TOPLEVEL = 1,
   PROP_GRID_MODE,
   PROP_MAGNETIC_NET_MODE,
   PROP_NET_RUBBER_BAND_MODE,
@@ -246,9 +246,11 @@ gschem_options_get_type ()
  *  \returns A new set of options
  */
 GschemOptions*
-gschem_options_new ()
+gschem_options_new (GschemToplevel *w_current)
 {
-  return g_object_new (GSCHEM_TYPE_OPTIONS, NULL);
+  return g_object_new (GSCHEM_TYPE_OPTIONS,
+                       "gschem-toplevel", w_current,
+                       NULL);
 }
 
 
@@ -403,6 +405,13 @@ class_init (GschemOptionsClass *klass)
   G_OBJECT_CLASS (klass)->set_property = set_property;
 
   g_object_class_install_property (G_OBJECT_CLASS (klass),
+                                   PROP_GSCHEM_TOPLEVEL,
+                                   g_param_spec_pointer ("gschem-toplevel",
+                                                         "gschem Toplevel",
+                                                         "gschem Toplevel",
+                                                         G_PARAM_CONSTRUCT_ONLY | G_PARAM_READWRITE));
+
+  g_object_class_install_property (G_OBJECT_CLASS (klass),
                                    PROP_GRID_MODE,
                                    g_param_spec_int ("grid-mode",
                                                      "Grid Mode",
@@ -465,6 +474,10 @@ get_property (GObject *object, guint param_id, GValue *value, GParamSpec *pspec)
   GschemOptions *options = GSCHEM_OPTIONS (object);
 
   switch (param_id) {
+    case PROP_GSCHEM_TOPLEVEL:
+      g_value_set_pointer (value, options->w_current);
+      break;
+
     case PROP_GRID_MODE:
       g_value_set_int (value, gschem_options_get_grid_mode (options));
       break;
@@ -516,6 +529,10 @@ set_property (GObject *object, guint param_id, const GValue *value, GParamSpec *
   GschemOptions *options = GSCHEM_OPTIONS (object);
 
   switch (param_id) {
+    case PROP_GSCHEM_TOPLEVEL:
+      options->w_current = GSCHEM_TOPLEVEL (g_value_get_pointer (value));
+      break;
+
     case PROP_GRID_MODE:
       gschem_options_set_grid_mode (options, g_value_get_int (value));
       break;
