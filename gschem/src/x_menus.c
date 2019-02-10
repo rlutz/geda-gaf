@@ -25,7 +25,6 @@
 
 
 #include "gschem.h"
-#include "actions.decl.x"
 
 #include <glib/gstdio.h>
 
@@ -246,72 +245,40 @@ x_menus_create_submenus (GschemToplevel *w_current)
 void
 x_menus_create_toolbar (GschemToplevel *w_current)
 {
+  SCM s_var = scm_module_variable (scm_current_module (),
+                                   scm_from_utf8_symbol ("toolbar"));
+  SCM s_toolbar = scm_variable_ref (s_var);
+
   w_current->toolbar = gtk_toolbar_new ();
   gtk_orientable_set_orientation (GTK_ORIENTABLE (w_current->toolbar),
                                   GTK_ORIENTATION_HORIZONTAL);
   gtk_toolbar_set_style (GTK_TOOLBAR (w_current->toolbar), GTK_TOOLBAR_ICONS);
 
-  gtk_toolbar_insert (
-    GTK_TOOLBAR (w_current->toolbar),
-    gschem_action_create_tool_button (action_file_new, w_current), -1);
+  for (SCM l0 = s_toolbar; scm_is_pair (l0); l0 = scm_cdr (l0)) {
+    SCM s_section = scm_car (l0);
+    SCM_ASSERT (scm_is_true (scm_list_p (s_section)),
+                s_section, SCM_ARGn, "x_menus_create_toolbar section");
 
-  gtk_toolbar_insert (
-    GTK_TOOLBAR (w_current->toolbar),
-    gschem_action_create_tool_button (action_file_open, w_current), -1);
+    for (SCM l1 = s_section; scm_is_pair (l1); l1 = scm_cdr (l1)) {
+      SCM s_item = scm_car (l1);
+      SCM_ASSERT (scm_is_action (s_item),
+                  s_item, SCM_ARGn, "x_menus_create_toolbar item");
 
-  gtk_toolbar_insert (
-    GTK_TOOLBAR (w_current->toolbar),
-    gschem_action_create_tool_button (action_file_save, w_current), -1);
+      /* make sure the action won't ever be garbage collected
+         since we're going to point to it from C data structures */
+      scm_permanent_object (s_item);
 
-  gtk_toolbar_insert (
-    GTK_TOOLBAR (w_current->toolbar),
-    gtk_separator_tool_item_new (), -1);
+      GschemAction *action = scm_to_action (s_item);
+      GtkToolItem *button =
+        gschem_action_create_tool_button (action, w_current);
+      gtk_toolbar_insert (GTK_TOOLBAR (w_current->toolbar), button, -1);
+    }
 
-  gtk_toolbar_insert (
-    GTK_TOOLBAR (w_current->toolbar),
-    gschem_action_create_tool_button (action_edit_undo, w_current), -1);
-
-  gtk_toolbar_insert (
-    GTK_TOOLBAR (w_current->toolbar),
-    gschem_action_create_tool_button (action_edit_redo, w_current), -1);
-
-  gtk_toolbar_insert (
-    GTK_TOOLBAR (w_current->toolbar),
-    gtk_separator_tool_item_new (), -1);
-
-  /* not part of any radio button group */
-  gtk_toolbar_insert (
-    GTK_TOOLBAR (w_current->toolbar),
-    gschem_action_create_tool_button (action_add_component, w_current), -1);
-
-  /* init radio tool buttons, add first of them */
-  gtk_toolbar_insert (
-    GTK_TOOLBAR (w_current->toolbar),
-    gschem_action_create_tool_button (action_add_net, w_current), -1);
-
-  /* add a radio tool button */
-  gtk_toolbar_insert (
-    GTK_TOOLBAR (w_current->toolbar),
-    gschem_action_create_tool_button (action_add_bus, w_current), -1);
-
-  /* not part of any radio button group */
-  gtk_toolbar_insert (
-    GTK_TOOLBAR (w_current->toolbar),
-    gschem_action_create_tool_button (action_add_text, w_current), -1);
-
-  gtk_toolbar_insert (
-    GTK_TOOLBAR (w_current->toolbar),
-    gtk_separator_tool_item_new (), -1);
-
-  /* add a radio tool button */
-  gtk_toolbar_insert (
-    GTK_TOOLBAR (w_current->toolbar),
-    gschem_action_create_tool_button (action_edit_select, w_current), -1);
-
-  gtk_toolbar_insert (
-    GTK_TOOLBAR (w_current->toolbar),
-    gtk_separator_tool_item_new (), -1);
+    if (scm_is_pair (scm_cdr (l0)))
+      gtk_toolbar_insert (GTK_TOOLBAR (w_current->toolbar),
+                          gtk_separator_tool_item_new (), -1);
+  }
 
   /* activate 'select' button at start-up */
-  gschem_action_set_active (action_edit_select, TRUE, w_current);
+  i_update_toolbar (w_current);
 }

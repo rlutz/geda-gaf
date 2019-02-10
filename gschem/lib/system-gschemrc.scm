@@ -1275,6 +1275,18 @@
            ,&hierarchy-down-symbol
            ,&hierarchy-up)))
 
+(define toolbar
+        `((,&file-new
+           ,&file-open
+           ,&file-save)
+          (,&edit-undo
+           ,&edit-redo)
+          (,&add-component
+           ,&add-net
+           ,&add-bus
+           ,&add-text)
+          (,&edit-select)))
+
 ;
 ; End of keymapping related keywords
 ;
