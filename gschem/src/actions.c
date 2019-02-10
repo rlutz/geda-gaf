@@ -927,7 +927,7 @@ DEFINE_ACTION (view_menubar,
                _("Menubar"),
                _("Menubar"),
                NULL,
-               ACTUATE)
+               TOGGLE_CHECK)
 {
   GtkWidget *w = w_current->menubar;
   if (w == NULL)
@@ -937,6 +937,7 @@ DEFINE_ACTION (view_menubar,
 
   gboolean show = !gtk_widget_get_visible (w);
   gtk_widget_set_visible (w, show);
+  gschem_action_set_active (action, show, w_current);
 }
 
 /*! \brief Toggle visibility of the toolbar. */
@@ -948,7 +949,7 @@ DEFINE_ACTION (view_toolbar,
                _("Toolbar"),
                _("Toolbar"),
                NULL,
-               ACTUATE)
+               TOGGLE_CHECK)
 {
   GtkWidget *w = w_current->toolbar;
   if (w == NULL)
@@ -958,6 +959,7 @@ DEFINE_ACTION (view_toolbar,
 
   gboolean show = !gtk_widget_get_visible (w);
   gtk_widget_set_visible (w, show);
+  gschem_action_set_active (action, show, w_current);
 }
 
 DEFINE_ACTION (view_redraw,

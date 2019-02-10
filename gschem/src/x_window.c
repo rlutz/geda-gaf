@@ -609,6 +609,8 @@ void x_window_create_main(GschemToplevel *w_current)
   }
   gschem_action_set_sensitive (action_view_menubar, w_current->menubar != NULL,
                                w_current);
+  gschem_action_set_active (action_view_menubar, w_current->menubar != NULL,
+                            w_current);
 
   gtk_widget_realize (w_current->main_window);
 
@@ -629,6 +631,9 @@ void x_window_create_main(GschemToplevel *w_current)
   }
   gschem_action_set_sensitive (action_view_toolbar, w_current->toolbar != NULL,
                                w_current);
+  gschem_action_set_active (action_view_toolbar,
+                            w_current->toolbars && w_current->toolbar != NULL,
+                            w_current);
 
   left_hpaned = gtk_hpaned_new ();
   gtk_container_add (GTK_CONTAINER(main_box), left_hpaned);
