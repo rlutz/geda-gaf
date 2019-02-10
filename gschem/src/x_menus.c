@@ -247,7 +247,16 @@ x_menus_create_toolbar (GschemToplevel *w_current)
 {
   SCM s_var = scm_module_variable (scm_current_module (),
                                    scm_from_utf8_symbol ("toolbar"));
+  if (!scm_is_true (s_var)) {
+    g_warning (_("No toolbar definition found\n"));
+    return;
+  }
+
   SCM s_toolbar = scm_variable_ref (s_var);
+  if (scm_is_null (s_toolbar) || !scm_is_true (scm_list_p (s_toolbar))) {
+    g_warning (_("Empty or malformed toolbar definition\n"));
+    return;
+  }
 
   w_current->toolbar = gtk_toolbar_new ();
   gtk_orientable_set_orientation (GTK_ORIENTABLE (w_current->toolbar),

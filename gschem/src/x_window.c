@@ -610,14 +610,13 @@ void x_window_create_main(GschemToplevel *w_current)
 
   gtk_widget_realize (w_current->main_window);
 
-  if (w_current->handleboxes && w_current->toolbars) {
-  	handlebox = gtk_handle_box_new ();
-  	gtk_box_pack_start (GTK_BOX (main_box), handlebox, FALSE, FALSE, 0);
-  }
-
-  if (w_current->toolbars) {
+  if (w_current->toolbars)
     x_menus_create_toolbar (w_current);
+
+  if (w_current->toolbar != NULL) {
     if (w_current->handleboxes) {
+      handlebox = gtk_handle_box_new ();
+      gtk_box_pack_start (GTK_BOX (main_box), handlebox, FALSE, FALSE, 0);
       gtk_container_add (GTK_CONTAINER (handlebox), w_current->toolbar);
     } else {
       gtk_box_pack_start (GTK_BOX (main_box), w_current->toolbar,
