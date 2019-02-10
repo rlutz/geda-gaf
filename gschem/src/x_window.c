@@ -55,12 +55,6 @@ void x_window_setup (GschemToplevel *w_current)
   /* Add to the list of windows */
   global_window_list = g_list_append (global_window_list, w_current);
 
-  /* Initialize action state dispatchers */
-  w_current->action_state_dispatchers =
-    g_hash_table_new_full (NULL, NULL, NULL, g_object_unref);
-  /* pass g_object_unref as value_destroy_func so values are
-     automatically destroyed when the hash table is */
-
   /* X related stuff */
   x_menus_create_submenus (w_current);
   x_window_create_main (w_current);

@@ -164,7 +164,12 @@ GschemToplevel *gschem_toplevel_new ()
   w_current->right_docking_area_menu = NULL;
   w_current->popup_menu   = NULL;
   w_current->toolbar      = NULL;
-  w_current->action_state_dispatchers = NULL;
+
+  w_current->action_state_dispatchers =
+    g_hash_table_new_full (NULL, NULL, NULL, g_object_unref);
+  /* pass g_object_unref as value_destroy_func so values are
+     automatically destroyed when the hash table is */
+
   w_current->find_text_widget = NULL;
   w_current->find_patch_widget = NULL;
   w_current->macro_widget  = NULL;
