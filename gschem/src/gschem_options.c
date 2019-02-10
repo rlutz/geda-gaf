@@ -335,6 +335,10 @@ gschem_options_set_magnetic_net_mode (GschemOptions *options, gboolean enabled)
 
   options->magnetic_net_mode = enabled;
 
+  gschem_action_set_active (action_options_magneticnet,
+                            options->magnetic_net_mode,
+                            options->w_current);
+
   g_object_notify (G_OBJECT (options), "magnetic-net-mode");
 }
 
@@ -353,6 +357,10 @@ gschem_options_set_net_rubber_band_mode (GschemOptions *options, gboolean enable
   g_return_if_fail (options != NULL);
 
   options->net_rubber_band_mode = enabled;
+
+  gschem_action_set_active (action_options_rubberband,
+                            options->net_rubber_band_mode,
+                            options->w_current);
 
   g_object_notify (G_OBJECT (options), "net-rubber-band-mode");
 }

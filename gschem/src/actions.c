@@ -2437,11 +2437,12 @@ DEFINE_ACTION (options_scale_down_snap_size,
 DEFINE_ACTION (options_afeedback,
                "options-action-feedback",
                NULL,
-               _("Toggle Outline Drawing"),
-               _("Toggle Outline/Box"),
-               _("Toggle _Outline/Box"),
-               NULL,
-               ACTUATE)
+               _("Toggle Bounding Box Drawing"),
+               _("Draw Bounding Box"),
+               _("Draw _Bounding Box"),
+               _("While moving objects, show their bounding box only "
+                 "(speeds up drawing, may be useful for older machines)"),
+               TOGGLE_CHECK)
 {
   /* repeat last command doesn't make sense on options either??? (does it?) */
 
@@ -2455,6 +2456,10 @@ DEFINE_ACTION (options_afeedback,
   if (w_current->inside_action &&
       gschem_toplevel_get_toplevel (w_current)->page_current->place_list != NULL)
     o_place_invalidate_rubber (w_current, FALSE);
+
+  gschem_action_set_active (action,
+                            w_current->actionfeedback_mode == BOUNDINGBOX,
+                            w_current);
 }
 
 DEFINE_ACTION (options_grid,
@@ -2601,10 +2606,11 @@ DEFINE_ACTION (options_rubberband,
                "options-rubberband",
                NULL,
                _("Toggle Net Rubber Band"),
-               _("Toggle Net Rubberband"),
-               _("Toggle Net _Rubberband"),
-               NULL,
-               ACTUATE)
+               _("Net Rubberband Mode"),
+               _("Net _Rubberband Mode"),
+               _("When moving components or nets, drag the nets which are "
+                 "attached to them"),
+               TOGGLE_CHECK)
 {
   /* Rubber band is cool !
    * Added on/off option from the pull down menu
@@ -2625,10 +2631,11 @@ DEFINE_ACTION (options_magneticnet,
                "options-magneticnet",
                NULL,
                _("Toggle Magnetic Nets"),
-               _("Toggle Magnetic Net"),
-               _("Toggle _Magnetic Net"),
-               NULL,
-               ACTUATE)
+               _("Magnetic Net Mode"),
+               _("_Magnetic Net Mode"),
+               _("When adding nets, the endpoint snaps to the nearest net or "
+                 "pin (indicated by a circle)"),
+               TOGGLE_CHECK)
 {
   gschem_options_cycle_magnetic_net_mode (w_current->options);
 

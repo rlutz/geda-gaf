@@ -21,6 +21,7 @@
 #include <stdio.h>
 
 #include "gschem.h"
+#include "actions.decl.x"
 
 /*! \def INIT_STR(w, name, str) */
 #define INIT_STR(w, name, str) {                                        \
@@ -119,6 +120,9 @@ void i_vars_set(GschemToplevel *w_current)
 
   w_current->zoom_with_pan           = default_zoom_with_pan;
   w_current->actionfeedback_mode     = default_actionfeedback_mode;
+  gschem_action_set_active (action_options_afeedback,
+                            w_current->actionfeedback_mode == BOUNDINGBOX,
+                            w_current);
   w_current->scrollbars_flag         = default_scrollbars_flag;
 
   w_current->embed_complex   = default_embed_complex;
