@@ -34,6 +34,7 @@
 #endif
 
 #include "gschem.h"
+#include "actions.decl.x"
 
 
 
@@ -306,6 +307,16 @@ gschem_options_set_grid_mode (GschemOptions *options, GRID_MODE grid_mode)
       options->grid_mode = default_grid_mode;
       break;
   }
+
+  gschem_action_set_active (action_options_grid_none,
+                            options->grid_mode == GRID_MODE_NONE,
+                            options->w_current);
+  gschem_action_set_active (action_options_grid_dots,
+                            options->grid_mode == GRID_MODE_DOTS,
+                            options->w_current);
+  gschem_action_set_active (action_options_grid_mesh,
+                            options->grid_mode == GRID_MODE_MESH,
+                            options->w_current);
 
   g_object_notify (G_OBJECT (options), "grid-mode");
 }

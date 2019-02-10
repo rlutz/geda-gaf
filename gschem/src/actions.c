@@ -2480,6 +2480,42 @@ DEFINE_ACTION (options_grid,
   }
 }
 
+DEFINE_ACTION (options_grid_none,
+               "options-grid-none",
+               NULL,
+               _("No Grid"),
+               _("No Grid"),
+               _("No Grid"),
+               NULL,
+               TOGGLE_RADIO)
+{
+  gschem_options_set_grid_mode (w_current->options, GRID_MODE_NONE);
+}
+
+DEFINE_ACTION (options_grid_dots,
+               "options-grid-dots",
+               NULL,
+               _("Dot Grid"),
+               _("Dot Grid"),
+               _("Dot Grid"),
+               NULL,
+               TOGGLE_RADIO)
+{
+  gschem_options_set_grid_mode (w_current->options, GRID_MODE_DOTS);
+}
+
+DEFINE_ACTION (options_grid_mesh,
+               "options-grid-mesh",
+               NULL,
+               _("Mesh Grid"),
+               _("Mesh Grid"),
+               _("Mesh Grid"),
+               NULL,
+               TOGGLE_RADIO)
+{
+  gschem_options_set_grid_mode (w_current->options, GRID_MODE_MESH);
+}
+
 DEFINE_ACTION (options_snap,
                "options-snap",
                NULL,

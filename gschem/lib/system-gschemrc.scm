@@ -1211,9 +1211,11 @@
            ,&edit-autonumber)))
 
 (define options-menu
-        `((,&options-options
-           ,&options-grid
-           ,&options-snap
+        `((,&options-options)
+          (,&options-grid-none
+           ,&options-grid-dots
+           ,&options-grid-mesh)
+          (,&options-snap
            ,&options-scale-up-snap-size
            ,&options-scale-down-snap-size
            ,&options-action-feedback
