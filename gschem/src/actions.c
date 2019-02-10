@@ -277,7 +277,7 @@ DEFINE_ACTION (edit_select,
                _("Select"),
                _("Select Mode"),
                NULL,
-               TOGGLE)
+               TOGGLE_PLAIN)
 {
   /* Select also does not update the middle button shortcut. */
   o_redraw_cleanstates(w_current);
@@ -334,7 +334,7 @@ DEFINE_ACTION (edit_copy,
                _("Copy"),
                _("Copy Mode"),
                NULL,
-               TOGGLE)
+               TOGGLE_PLAIN)
 {
   gint wx, wy;
 
@@ -358,7 +358,7 @@ DEFINE_ACTION (edit_mcopy,
                _("Multiple Copy"),
                _("Multiple Copy Mode"),
                NULL,
-               TOGGLE)
+               TOGGLE_PLAIN)
 {
   gint wx, wy;
 
@@ -505,7 +505,7 @@ DEFINE_ACTION (edit_rotate_90,
                _("Rotate 90"),
                _("Rotate 90 Mode"),
                NULL,
-               TOGGLE)
+               TOGGLE_PLAIN)
 {
   gint wx, wy;
   GList *object_list;
@@ -550,7 +550,7 @@ DEFINE_ACTION (edit_mirror,
                _("Mirror"),
                _("Mirror Mode"),
                NULL,
-               TOGGLE)
+               TOGGLE_PLAIN)
 {
   gint wx, wy;
   GList *object_list;
@@ -1022,7 +1022,7 @@ DEFINE_ACTION (view_zoom_box,
                _("Zoom Box"),
                _("Zoom _Box"),
                NULL,
-               TOGGLE)
+               TOGGLE_PLAIN)
 {
   /* repeat middle shortcut would get into the way of what user is try to do */
   gint wx, wy;
@@ -1089,7 +1089,7 @@ DEFINE_ACTION (view_pan,
                _("Pan"),
                _("_Pan"),
                NULL,
-               TOGGLE)
+               TOGGLE_PLAIN)
 {
   gint wx, wy;
 
@@ -1672,7 +1672,7 @@ DEFINE_ACTION (add_component,
                _("Add Component"),
                _("_Component..."),
                NULL,
-               TOGGLE)
+               TOGGLE_PLAIN)
 {
   o_redraw_cleanstates (w_current);
 
@@ -1707,7 +1707,7 @@ DEFINE_ACTION (add_net,
                _("Add Net"),
                _("_Net"),
                NULL,
-               TOGGLE)
+               TOGGLE_PLAIN)
 {
   gint wx, wy;
 
@@ -1729,7 +1729,7 @@ DEFINE_ACTION (add_bus,
                _("Add Bus"),
                _("B_us"),
                NULL,
-               TOGGLE)
+               TOGGLE_PLAIN)
 {
   gint wx, wy;
 
@@ -1751,7 +1751,7 @@ DEFINE_ACTION (add_text,
                _("Add Text"),
                _("_Text..."),
                NULL,
-               TOGGLE)
+               TOGGLE_PLAIN)
 {
   o_redraw_cleanstates(w_current);
   o_invalidate_rubber (w_current);
@@ -1770,7 +1770,7 @@ DEFINE_ACTION (add_line,
                _("Add Line"),
                _("_Line"),
                NULL,
-               TOGGLE)
+               TOGGLE_PLAIN)
 {
   gint wx, wy;
 
@@ -1792,7 +1792,7 @@ DEFINE_ACTION (add_path,
                _("Add Path"),
                _("Pat_h"),
                NULL,
-               TOGGLE)
+               TOGGLE_PLAIN)
 {
   g_assert (w_current != NULL);
 
@@ -1813,7 +1813,7 @@ DEFINE_ACTION (add_box,
                _("Add Box"),
                _("_Box"),
                NULL,
-               TOGGLE)
+               TOGGLE_PLAIN)
 {
   gint wx, wy;
 
@@ -1835,7 +1835,7 @@ DEFINE_ACTION (add_picture,
                _("Add Picture..."),
                _("Pictu_re..."),
                NULL,
-               TOGGLE)
+               TOGGLE_PLAIN)
 {
   o_redraw_cleanstates(w_current);
   o_invalidate_rubber (w_current);
@@ -1852,7 +1852,7 @@ DEFINE_ACTION (add_circle,
                _("Add Circle"),
                _("C_ircle"),
                NULL,
-               TOGGLE)
+               TOGGLE_PLAIN)
 {
   gint wx, wy;
 
@@ -1874,7 +1874,7 @@ DEFINE_ACTION (add_arc,
                _("Add Arc"),
                _("A_rc"),
                NULL,
-               TOGGLE)
+               TOGGLE_PLAIN)
 {
   gint wx, wy;
 
@@ -1896,7 +1896,7 @@ DEFINE_ACTION (add_pin,
                _("Add Pin"),
                _("_Pin"),
                NULL,
-               TOGGLE)
+               TOGGLE_PLAIN)
 {
   gint wx, wy;
 

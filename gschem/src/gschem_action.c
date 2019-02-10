@@ -436,8 +436,38 @@ get_dispatcher (GschemAction *action,
 
 
 static void
+menu_item_toggled (GtkCheckMenuItem *menu_item, gpointer user_data);
+
+static void
+menu_item_set_active (GtkCheckMenuItem *menu_item, gboolean is_active)
+{
+  /* make sure the toggle handler isn't called recursively */
+  g_signal_handlers_block_matched (
+    menu_item, G_SIGNAL_MATCH_FUNC, 0, 0, NULL,
+    G_CALLBACK (menu_item_toggled), NULL);
+
+  gtk_check_menu_item_set_active (menu_item, is_active);
+
+  g_signal_handlers_unblock_matched (
+    menu_item, G_SIGNAL_MATCH_FUNC, 0, 0, NULL,
+    G_CALLBACK (menu_item_toggled), NULL);
+}
+
+static void
 menu_item_activate (GtkMenuItem *menu_item, gpointer user_data)
 {
+  GschemAction *action = g_object_get_data (G_OBJECT (menu_item), "action");
+  GschemToplevel *w_current = GSCHEM_TOPLEVEL (user_data);
+  gschem_action_activate (action, w_current);
+}
+
+static void
+menu_item_toggled (GtkCheckMenuItem *menu_item, gpointer user_data)
+{
+  /* menu item self-toggles when clicked--undo this first */
+  menu_item_set_active (menu_item,
+                        !gtk_check_menu_item_get_active (menu_item));
+
   GschemAction *action = g_object_get_data (G_OBJECT (menu_item), "action");
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (user_data);
   gschem_action_activate (action, w_current);
@@ -459,7 +489,12 @@ gschem_action_create_menu_item (GschemAction *action,
 {
   GtkWidget *menu_item;
 
-  if (action->icon_name == NULL)
+  if (action->type == GSCHEM_ACTION_TYPE_TOGGLE_CHECK)
+    menu_item = g_object_new (GTK_TYPE_CHECK_MENU_ITEM, NULL);
+  else if (action->type == GSCHEM_ACTION_TYPE_TOGGLE_RADIO)
+    menu_item = g_object_new (GTK_TYPE_CHECK_MENU_ITEM,
+                              "draw-as-radio", TRUE, NULL);
+  else if (action->icon_name == NULL)
     menu_item = g_object_new (GTK_TYPE_MENU_ITEM, NULL);
   else {
     menu_item = g_object_new (GTK_TYPE_IMAGE_MENU_ITEM, NULL);
@@ -509,13 +544,20 @@ gschem_action_create_menu_item (GschemAction *action,
 
   /* register callback so the action gets run */
   g_object_set_data (G_OBJECT (menu_item), "action", action);
-  g_signal_connect (G_OBJECT (menu_item), "activate",
-                    G_CALLBACK (menu_item_activate), w_current);
+  if (GTK_IS_CHECK_MENU_ITEM (menu_item))
+    g_signal_connect (G_OBJECT (menu_item), "toggled",
+                      G_CALLBACK (menu_item_toggled), w_current);
+  else
+    g_signal_connect (G_OBJECT (menu_item), "activate",
+                      G_CALLBACK (menu_item_activate), w_current);
 
   /* connect menu item to the dispatcher for status updates */
   Dispatcher *dispatcher = get_dispatcher (action, w_current);
   g_signal_connect_swapped (dispatcher, "set-sensitive",
                             G_CALLBACK (gtk_widget_set_sensitive), menu_item);
+  if (GTK_IS_CHECK_MENU_ITEM (menu_item))
+    g_signal_connect_swapped (dispatcher, "set-active",
+                              G_CALLBACK (menu_item_set_active), menu_item);
 
   return menu_item;
 }
