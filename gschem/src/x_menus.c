@@ -288,6 +288,8 @@ x_menus_create_toolbar (GschemToplevel *w_current)
                           gtk_separator_tool_item_new (), -1);
   }
 
+  gtk_widget_show_all (w_current->toolbar);
+
   /* activate 'select' button at start-up */
   i_update_toolbar (w_current);
 }

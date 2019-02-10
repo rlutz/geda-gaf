@@ -308,9 +308,6 @@ void i_update_middle_button (GschemToplevel *w_current,
  */
 void i_update_toolbar(GschemToplevel *w_current)
 {
-  if (!w_current->toolbars)
-	return;
-
   gschem_action_set_active (action_edit_select,
                             w_current->event_state == SELECT ||
                             w_current->event_state == GRIPS ||
