@@ -938,6 +938,41 @@ DEFINE_ACTION (view_menubar,
   gboolean show = !gtk_widget_get_visible (w);
   gtk_widget_set_visible (w, show);
   gschem_action_set_active (action, show, w_current);
+
+
+  /* If the user accidentally hid the menu bar, they may not know how
+     to re-show it.  They may try the context menu, so add a temporary
+     "Show Menubar" item there. */
+
+  /* See if there's a "Show Menubar" action in the context menu and/or
+     update the visibility of any previously created temporary item. */
+  GList *popup_items =
+    gtk_container_get_children (GTK_CONTAINER (w_current->popup_menu));
+  gboolean found = FALSE;
+  for (GList *l = popup_items; l != NULL; l = l->next) {
+    if (g_object_get_data (l->data, "action") == action)
+      found = TRUE;
+    if (g_object_get_data (l->data, "temporary-item") == action)
+      gtk_widget_set_visible (GTK_WIDGET (l->data), !show);
+  }
+  g_list_free (popup_items);
+
+  /* Only need to create the temporary item if we actually hid the
+     menu bar and if there's not already a matching item in the menu. */
+  if (show || found)
+    return;
+
+  GtkWidget *menu_item;
+
+  menu_item = gtk_menu_item_new ();
+  g_object_set_data (G_OBJECT (menu_item), "temporary-item", action);
+  gtk_menu_shell_append (GTK_MENU_SHELL (w_current->popup_menu), menu_item);
+  gtk_widget_show (menu_item);
+
+  menu_item = gschem_action_create_menu_item (action, FALSE, w_current);
+  g_object_set_data (G_OBJECT (menu_item), "temporary-item", action);
+  gtk_menu_shell_append (GTK_MENU_SHELL (w_current->popup_menu), menu_item);
+  gtk_widget_show (menu_item);
 }
 
 /*! \brief Toggle visibility of the toolbar. */
