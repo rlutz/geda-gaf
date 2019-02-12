@@ -52,7 +52,7 @@ int do_logging = TRUE;
 #define PRINT_LOG_LEVELS (CATCH_LOG_LEVELS ^ \
                           (G_LOG_LEVEL_WARNING | G_LOG_LEVEL_MESSAGE))
 
-#define LOG_OPEN_ATTEMPTS 5
+#define LOG_OPEN_ATTEMPTS 50
 
 static void s_log_handler (const gchar *log_domain,
                            GLogLevelFlags log_level,
