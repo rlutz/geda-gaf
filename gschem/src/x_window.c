@@ -1145,8 +1145,11 @@ void
 x_window_set_current_page (GschemToplevel *w_current, PAGE *page)
 {
   GschemPageView *page_view = gschem_toplevel_get_current_page_view (w_current);
-  g_return_if_fail (page_view != NULL);
+  TOPLEVEL *toplevel = gschem_toplevel_get_toplevel (w_current);
+  GList *iter;
 
+  g_return_if_fail (page_view != NULL);
+  g_return_if_fail (toplevel != NULL);
   g_return_if_fail (page != NULL);
 
   o_redraw_cleanstates (w_current);
@@ -1159,6 +1162,21 @@ x_window_set_current_page (GschemToplevel *w_current, PAGE *page)
   gschem_action_set_sensitive (action_edit_redo,
                                page->undo_current != NULL &&
                                page->undo_current->next != NULL, w_current);
+
+  iter = g_list_find (geda_list_get_glist (toplevel->pages), page);
+  gschem_action_set_sensitive (action_page_prev,
+                               w_current->enforce_hierarchy
+                                 ? s_hierarchy_find_prev_page (
+                                     toplevel->pages, page) != NULL
+                                 : iter != NULL && iter->prev != NULL,
+                               w_current);
+  gschem_action_set_sensitive (action_page_next,
+                               w_current->enforce_hierarchy
+                                 ? s_hierarchy_find_next_page(
+                                     toplevel->pages, page) != NULL
+                                 : iter != NULL && iter->next != NULL,
+                               w_current);
+  gschem_action_set_sensitive (action_hierarchy_up, page->up >= 0, w_current);
 
   i_update_menus (w_current);
   /* i_set_filename (w_current, page->page_filename); */
