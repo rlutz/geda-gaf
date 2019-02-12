@@ -2220,8 +2220,7 @@ DEFINE_ACTION (attributes_detach,
                NULL,
                ACTUATE)
 {
-  GList *s_current;
-  OBJECT *o_current;
+  TOPLEVEL *toplevel = gschem_toplevel_get_toplevel (w_current);
   GList *detached_attribs = NULL;
 
   /* This is a new addition 3/15 to prevent this from executing
@@ -2233,21 +2232,22 @@ DEFINE_ACTION (attributes_detach,
   /* same note as above on i_update_middle_button */
   i_update_middle_button (w_current, action, _("Detach"));
 
-  s_current = geda_list_get_glist( gschem_toplevel_get_toplevel (w_current)->page_current->selection_list );
-  while (s_current != NULL) {
-    o_current = (OBJECT *) s_current->data;
-    if (o_current) {
-      if (o_current->attribs) {
-        detached_attribs = g_list_concat (g_list_copy (o_current->attribs),
-                                          detached_attribs);
-        o_attrib_detach_all (gschem_toplevel_get_toplevel (w_current), o_current);
-        gschem_toplevel_get_toplevel (w_current)->page_current->CHANGED=1;
-      }
+  for (GList *l = geda_list_get_glist (toplevel->page_current->selection_list);
+       l != NULL; l = l->next) {
+    OBJECT *obj = (OBJECT *) l->data;
+
+    if (obj->type == OBJ_TEXT && obj->attached_to != NULL) {
+      obj->attached_to->attribs =
+        g_list_remove (obj->attached_to->attribs, obj);
+      obj->attached_to = NULL;
+      o_set_color (toplevel, obj, DETACHED_ATTRIBUTE_COLOR);
+      detached_attribs = g_list_prepend (detached_attribs, obj);
+      toplevel->page_current->CHANGED = 1;
     }
-    s_current = g_list_next(s_current);
   }
 
   if (detached_attribs != NULL) {
+    detached_attribs = g_list_reverse (detached_attribs);
     g_run_hook_object_list (w_current, "%detach-attribs-hook",
                             detached_attribs);
     g_list_free (detached_attribs);
