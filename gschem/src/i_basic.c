@@ -367,22 +367,6 @@ static void clipboard_usable_cb (int usable, void *userdata)
   gschem_action_set_sensitive (action_clipboard_paste, usable, w_current);
 }
 
-static gboolean
-selected_at_least_one_text_object(GschemToplevel *w_current)
-{
-  OBJECT *obj;
-  TOPLEVEL *toplevel = gschem_toplevel_get_toplevel (w_current);
-  GList *list = geda_list_get_glist(toplevel->page_current->selection_list);
-
-  while(list != NULL) {
-    obj = (OBJECT *) list->data;
-    if (obj->type == OBJ_TEXT)
-      return TRUE;
-    list = g_list_next(list);
-  }
-  return FALSE;
-}
-
 
 /*! \brief Update sensitivity of relevant menu items
  *
@@ -393,86 +377,147 @@ selected_at_least_one_text_object(GschemToplevel *w_current)
  */
 void i_update_menus(GschemToplevel *w_current)
 {
-  gboolean have_text_selected;
   TOPLEVEL *toplevel = gschem_toplevel_get_toplevel (w_current);
-  /*
-   * This is very simplistic.  Right now it just disables all menu
-   * items which get greyed out when a component is not selected.
-   * Eventually what gets enabled/disabled
-   * should be based on what is in the selection list
-   */
-
-  g_assert(w_current != NULL);
-  g_assert(toplevel->page_current != NULL);
+  g_return_if_fail (w_current != NULL);
+  g_return_if_fail (toplevel->page_current != NULL);
 
   x_clipboard_query_usable (w_current, clipboard_usable_cb, w_current);
 
-  if (o_select_selected (w_current)) {
-    have_text_selected = selected_at_least_one_text_object(w_current);
+  gboolean sel_object = FALSE;          /* any object */
+  gboolean sel_editable = FALSE;        /* object that can be edited via E E */
+  gboolean sel_has_properties = FALSE;  /* object that can be edited via E P */
+  gboolean sel_embeddable = FALSE;      /* component or picture */
+  guint sel_attachable = 0;             /* component or net */
 
-    /* since one or more things are selected, we set these TRUE */
-    /* These strings should NOT be internationalized */
-    gschem_action_set_sensitive (action_clipboard_cut, TRUE, w_current);
-    gschem_action_set_sensitive (action_clipboard_copy, TRUE, w_current);
-    gschem_action_set_sensitive (action_edit_deselect, TRUE, w_current);
-    gschem_action_set_sensitive (action_edit_delete, TRUE, w_current);
-    gschem_action_set_sensitive (action_edit_copy, TRUE, w_current);
-    gschem_action_set_sensitive (action_edit_mcopy, TRUE, w_current);
-    gschem_action_set_sensitive (action_edit_move, TRUE, w_current);
-    gschem_action_set_sensitive (action_edit_rotate_90, TRUE, w_current);
-    gschem_action_set_sensitive (action_edit_mirror, TRUE, w_current);
-    gschem_action_set_sensitive (action_edit_edit, TRUE, w_current);
-    gschem_action_set_sensitive (action_edit_text, TRUE, w_current);
-    gschem_action_set_sensitive (action_edit_slot, TRUE, w_current);
-    gschem_action_set_sensitive (action_edit_properties, TRUE, w_current);
-    gschem_action_set_sensitive (action_edit_lock, TRUE, w_current);
-    gschem_action_set_sensitive (action_edit_unlock, TRUE, w_current);
-    gschem_action_set_sensitive (action_edit_embed, TRUE, w_current);
-    gschem_action_set_sensitive (action_edit_unembed, TRUE, w_current);
-    gschem_action_set_sensitive (action_edit_update, TRUE, w_current);
-    gschem_action_set_sensitive (action_hierarchy_down_schematic, TRUE, w_current);
-    gschem_action_set_sensitive (action_hierarchy_down_symbol, TRUE, w_current);
-    gschem_action_set_sensitive (action_hierarchy_documentation, TRUE, w_current);
-    gschem_action_set_sensitive (action_attributes_attach, TRUE, w_current);
-    gschem_action_set_sensitive (action_attributes_detach, TRUE, w_current);
-    gschem_action_set_sensitive (action_attributes_show_value, have_text_selected, w_current);
-    gschem_action_set_sensitive (action_attributes_show_name, have_text_selected, w_current);
-    gschem_action_set_sensitive (action_attributes_show_both, have_text_selected, w_current);
-    gschem_action_set_sensitive (action_attributes_visibility_toggle, have_text_selected, w_current);
+  gboolean sel_component = FALSE;       /* component */
+  gboolean sel_referenced = FALSE;      /* referenced component */
+  gboolean sel_slotted = FALSE;         /* slotted component */
+  gboolean sel_subsheet = FALSE;        /* subsheet component */
+  gboolean sel_documented = FALSE;      /* documented component */
 
-  } else {
-    /* Nothing is selected, grey these out */
-    /* These strings should NOT be internationalized */
-    gschem_action_set_sensitive (action_clipboard_cut, FALSE, w_current);
-    gschem_action_set_sensitive (action_clipboard_copy, FALSE, w_current);
-    gschem_action_set_sensitive (action_edit_deselect, FALSE, w_current);
-    gschem_action_set_sensitive (action_edit_delete, FALSE, w_current);
-    gschem_action_set_sensitive (action_edit_copy, FALSE, w_current);
-    gschem_action_set_sensitive (action_edit_mcopy, FALSE, w_current);
-    gschem_action_set_sensitive (action_edit_move, FALSE, w_current);
-    gschem_action_set_sensitive (action_edit_rotate_90, FALSE, w_current);
-    gschem_action_set_sensitive (action_edit_mirror, FALSE, w_current);
-    gschem_action_set_sensitive (action_edit_edit, FALSE, w_current);
-    gschem_action_set_sensitive (action_edit_text, FALSE, w_current);
-    gschem_action_set_sensitive (action_edit_slot, FALSE, w_current);
-    gschem_action_set_sensitive (action_edit_properties, FALSE, w_current);
-    gschem_action_set_sensitive (action_edit_lock, FALSE, w_current);
-    gschem_action_set_sensitive (action_edit_unlock, FALSE, w_current);
-    gschem_action_set_sensitive (action_edit_embed, FALSE, w_current);
-    gschem_action_set_sensitive (action_edit_unembed, FALSE, w_current);
-    gschem_action_set_sensitive (action_edit_update, FALSE, w_current);
-    gschem_action_set_sensitive (action_hierarchy_down_schematic, FALSE, w_current);
-    gschem_action_set_sensitive (action_hierarchy_down_symbol, FALSE, w_current);
-    gschem_action_set_sensitive (action_hierarchy_documentation, FALSE, w_current);
-    gschem_action_set_sensitive (action_attributes_attach, FALSE, w_current);
-    gschem_action_set_sensitive (action_attributes_detach, FALSE, w_current);
-    gschem_action_set_sensitive (action_attributes_show_value, FALSE, w_current);
-    gschem_action_set_sensitive (action_attributes_show_name, FALSE, w_current);
-    gschem_action_set_sensitive (action_attributes_show_both, FALSE, w_current);
-    gschem_action_set_sensitive (action_attributes_visibility_toggle, FALSE, w_current);
+  gboolean sel_text = FALSE;            /* text (whether attribute or not) */
+  gboolean sel_floating = FALSE;        /* floating text */
+  gboolean sel_attached = FALSE;        /* attached text */
+
+  for (GList *l = geda_list_get_glist (toplevel->page_current->selection_list);
+       l != NULL; l = l->next) {
+    OBJECT *obj = (OBJECT *) l->data;
+    sel_object = TRUE;
+
+    if (obj->type == OBJ_ARC ||
+        obj->type == OBJ_BUS ||
+        obj->type == OBJ_COMPLEX ||
+        obj->type == OBJ_NET ||
+        obj->type == OBJ_PICTURE ||
+        obj->type == OBJ_PIN ||
+        obj->type == OBJ_PLACEHOLDER ||
+        obj->type == OBJ_TEXT)
+      sel_editable = TRUE;
+
+    /* Net and bus objects have a color property, but it can't be
+       changed in the Object Properties dock */
+    if (obj->type == OBJ_ARC ||
+        obj->type == OBJ_BOX ||
+        obj->type == OBJ_CIRCLE ||
+        obj->type == OBJ_LINE ||
+        obj->type == OBJ_PATH ||
+        obj->type == OBJ_PIN ||
+        obj->type == OBJ_TEXT)
+      sel_has_properties = TRUE;
+
+    if (obj->type == OBJ_COMPLEX ||
+        obj->type == OBJ_PICTURE)
+      sel_embeddable = TRUE;
+
+    if (obj->type == OBJ_NET ||
+        obj->type == OBJ_BUS ||
+        obj->type == OBJ_PIN ||
+        obj->type == OBJ_COMPLEX ||
+        obj->type == OBJ_PLACEHOLDER)
+      sel_attachable++;
+
+    if (obj->type == OBJ_COMPLEX) {
+      sel_component = TRUE;
+
+      if (!obj->complex_embedded) {
+        /* Can only descend into symbol if it is referenced and it
+           comes from a directory source (as opposed to a command or
+           Guile function source). */
+        const CLibSymbol *sym =
+          s_clib_get_symbol_by_name (obj->complex_basename);
+        gchar *filename = s_clib_symbol_get_filename (sym);
+        if (filename != NULL)
+          sel_referenced = TRUE;
+        g_free (filename);
+      }
+
+      if (o_attrib_search_attached_attribs_by_name (obj, "slot", 0) ||
+          o_attrib_search_inherited_attribs_by_name (obj, "slot", 0))
+        sel_slotted = TRUE;
+
+      if (o_attrib_search_attached_attribs_by_name (obj, "source", 0) ||
+          o_attrib_search_inherited_attribs_by_name (obj, "source", 0))
+        sel_subsheet = TRUE;
+
+      if (o_attrib_search_attached_attribs_by_name (obj, "documentation", 0) ||
+          o_attrib_search_inherited_attribs_by_name (obj, "documentation", 0))
+        sel_documented = TRUE;
+    }
+
+    if (obj->type == OBJ_TEXT) {
+      sel_text = TRUE;
+      if (obj->attached_to == NULL)
+        sel_floating = TRUE;
+      else
+        sel_attached = TRUE;
+    }
   }
 
+  gschem_action_set_sensitive (action_clipboard_cut, sel_object, w_current);
+  gschem_action_set_sensitive (action_clipboard_copy, sel_object, w_current);
+  gschem_action_set_sensitive (action_edit_deselect, sel_object, w_current);
+  gschem_action_set_sensitive (action_edit_delete, sel_object, w_current);
+  gschem_action_set_sensitive (action_edit_copy, sel_object, w_current);
+  gschem_action_set_sensitive (action_edit_mcopy, sel_object, w_current);
+  gschem_action_set_sensitive (action_edit_move, sel_object, w_current);
+  gschem_action_set_sensitive (action_edit_rotate_90, sel_object, w_current);
+  gschem_action_set_sensitive (action_edit_mirror, sel_object, w_current);
 
+  gschem_action_set_sensitive (action_edit_edit, sel_editable, w_current);
+  gschem_action_set_sensitive (action_edit_text, sel_text, w_current);
+  gschem_action_set_sensitive (action_edit_slot, sel_slotted, w_current);
+  gschem_action_set_sensitive (action_edit_properties,
+                               sel_has_properties, w_current);
+
+  gschem_action_set_sensitive (action_edit_lock, sel_component, w_current);
+  gschem_action_set_sensitive (action_edit_unlock, sel_component, w_current);
+  gschem_action_set_sensitive (action_edit_update, sel_component, w_current);
+
+  gschem_action_set_sensitive (action_edit_embed,
+                               sel_embeddable, w_current);
+  gschem_action_set_sensitive (action_edit_unembed,
+                               sel_embeddable, w_current);
+
+  gschem_action_set_sensitive (action_hierarchy_down_schematic,
+                               sel_subsheet, w_current);
+  gschem_action_set_sensitive (action_hierarchy_down_symbol,
+                               sel_referenced, w_current);
+  gschem_action_set_sensitive (action_hierarchy_documentation,
+                               sel_documented, w_current);
+
+  gschem_action_set_sensitive (action_attributes_attach,
+                               sel_floating && sel_attachable == 1, w_current);
+  gschem_action_set_sensitive (action_attributes_detach,
+                               sel_attached, w_current);
+
+  gschem_action_set_sensitive (action_attributes_show_value,
+                               sel_text, w_current);
+  gschem_action_set_sensitive (action_attributes_show_name,
+                               sel_text, w_current);
+  gschem_action_set_sensitive (action_attributes_show_both,
+                               sel_text, w_current);
+  gschem_action_set_sensitive (action_attributes_visibility_toggle,
+                               sel_text, w_current);
 }
 
 /*! \brief Set filename as gschem window title

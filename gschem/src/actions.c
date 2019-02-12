@@ -2223,6 +2223,7 @@ DEFINE_ACTION (attributes_attach,
   }
 
   o_undo_savestate_old(w_current, UNDO_ALL);
+  i_update_menus (w_current);
 }
 
 DEFINE_ACTION (attributes_detach,
@@ -2268,6 +2269,7 @@ DEFINE_ACTION (attributes_detach,
   }
 
   o_undo_savestate_old(w_current, UNDO_ALL);
+  i_update_menus (w_current);
 }
 
 DEFINE_ACTION (attributes_show_name,
