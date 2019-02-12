@@ -190,7 +190,7 @@ displayed in the system associated viewer application."
        (directory-doc-search (sys-doc-dir) documentation)
        ;; c) Does the documentation attribute look like a URL?
        (and (any (lambda (prefix) (string-prefix? prefix documentation))
-                 '("http://" "ftp://" "file://"))
+                 '("http://" "https://" "ftp://" "file://"))
             (show-uri documentation))
 
        ;; d) If a documentation attribute was specified at all, search
