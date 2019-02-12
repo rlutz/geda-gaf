@@ -2068,6 +2068,10 @@ DEFINE_ACTION (hierarchy_down_symbol,
   if (object != NULL) {
     /* only allow going into symbols */
     if (object->type == OBJ_COMPLEX) {
+      if (object->complex_embedded) {
+        s_log_message(_("Cannot descend into embedded symbol!\n"));
+        return;
+      }
       s_log_message(_("Searching for symbol [%s]\n"),
 		    object->complex_basename);
       sym = s_clib_get_symbol_by_name (object->complex_basename);
