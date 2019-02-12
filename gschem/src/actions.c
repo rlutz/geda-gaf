@@ -2165,8 +2165,8 @@ DEFINE_ACTION (attributes_attach,
                NULL,
                ACTUATE)
 {
-  OBJECT *first_object;
-  GList *s_current;
+  TOPLEVEL *toplevel = gschem_toplevel_get_toplevel (w_current);
+  OBJECT *base_object = NULL;
   GList *attached_objects = NULL;
 
   /* This is a new addition 3/15 to prevent this from executing
@@ -2179,30 +2179,44 @@ DEFINE_ACTION (attributes_attach,
   /* probably, if this fails the user may want to try again */
   i_update_middle_button (w_current, action, _("Attach"));
 
-  /* skip over head */
-  s_current = geda_list_get_glist( gschem_toplevel_get_toplevel (w_current)->page_current->selection_list );
-  if (!s_current) {
-    return;
-  }
+  /* find object to attach to */
+  for (GList *l = geda_list_get_glist (toplevel->page_current->selection_list);
+       l != NULL; l = l->next) {
+    OBJECT *obj = l->data;
+    if (obj->type != OBJ_NET && obj->type != OBJ_BUS && obj->type != OBJ_PIN &&
+        obj->type != OBJ_COMPLEX && obj->type != OBJ_PLACEHOLDER)
+      continue;
 
-  first_object = (OBJECT *) s_current->data;
-  if (!first_object) {
-    return;
-  }
-
-  /* skip over first object */
-  s_current = g_list_next(s_current);
-  while (s_current != NULL) {
-    OBJECT *object = s_current->data;
-    if (object != NULL) {
-      o_attrib_attach (gschem_toplevel_get_toplevel (w_current), object, first_object, TRUE);
-      attached_objects = g_list_prepend (attached_objects, object);
-      gschem_toplevel_get_toplevel (w_current)->page_current->CHANGED=1;
+    if (base_object != NULL) {
+      g_warning (_("Multiple suitable base objects selected!\n"));
+      return;
     }
-    s_current = g_list_next(s_current);
+    base_object = obj;
+  }
+  if (base_object == NULL) {
+    g_warning (_("No suitable base object selected!\n"));
+    return;
+  }
+
+  for (GList *l = geda_list_get_glist (toplevel->page_current->selection_list);
+       l != NULL; l = l->next) {
+    OBJECT *obj = l->data;
+
+    /* ignore the base object and already attached attributes */
+    if (obj == base_object || obj->attached_to == base_object)
+      continue;
+
+    o_attrib_attach (toplevel, obj, base_object, TRUE);
+    if (obj->attached_to != base_object)
+      /* not a text object or already attached to something else */
+      continue;
+
+    attached_objects = g_list_prepend (attached_objects, obj);
+    toplevel->page_current->CHANGED = 1;
   }
 
   if (attached_objects != NULL) {
+    attached_objects = g_list_reverse (attached_objects);
     g_run_hook_object_list (w_current, "%attach-attribs-hook",
                             attached_objects);
     g_list_free (attached_objects);
