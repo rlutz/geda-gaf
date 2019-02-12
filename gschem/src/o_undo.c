@@ -29,6 +29,7 @@
 #endif
 
 #include "gschem.h"
+#include "actions.decl.x"
 
 static int undo_file_index=0;
 static int prog_pid=0;
@@ -178,6 +179,11 @@ o_undo_savestate (GschemToplevel *w_current, PAGE *page, int flag)
 #endif
 
   g_free(filename);
+
+  gschem_action_set_sensitive (action_edit_undo,
+                               page->undo_current->prev != NULL, w_current);
+  gschem_action_set_sensitive (action_edit_redo,
+                               page->undo_current->next != NULL, w_current);
 
   /* Now go through and see if we need to free/remove some undo levels */
   /* so we stay within the limits */
@@ -483,6 +489,11 @@ o_undo_callback (GschemToplevel *w_current, PAGE *page, int type)
     u_current->filename = NULL;
     u_current->object_list = NULL;
   }
+
+  gschem_action_set_sensitive (action_edit_undo,
+                               page->undo_current->prev != NULL, w_current);
+  gschem_action_set_sensitive (action_edit_redo,
+                               page->undo_current->next != NULL, w_current);
 
 #if DEBUG
   printf("\n\n---Undo----\n");

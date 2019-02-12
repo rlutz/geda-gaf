@@ -1153,6 +1153,13 @@ x_window_set_current_page (GschemToplevel *w_current, PAGE *page)
 
   gschem_page_view_set_page (page_view, page);
 
+  gschem_action_set_sensitive (action_edit_undo,
+                               page->undo_current != NULL &&
+                               page->undo_current->prev != NULL, w_current);
+  gschem_action_set_sensitive (action_edit_redo,
+                               page->undo_current != NULL &&
+                               page->undo_current->next != NULL, w_current);
+
   i_update_menus (w_current);
   /* i_set_filename (w_current, page->page_filename); */
 
