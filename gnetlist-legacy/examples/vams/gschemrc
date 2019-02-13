@@ -13,6 +13,11 @@
                 #:menu-label "Generate Entit_y")
   (generate-entity))
 
+(set! tools-menu
+      (append! tools-menu
+               `((,&generate-netlist
+                  ,&generate-entity))))
+
 (global-set-key "G N" &generate-netlist)
 (global-set-key "G E" &generate-entity)
 
