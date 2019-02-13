@@ -272,7 +272,7 @@
 )
 
 (define (pcb:save-project)
-  (let ((f def nil))
+  (let ((f nil))
     (gschem-msg "This menu choice does not really do anything yet other than select a file\n")
 
     (set! f (gschem-filesel "Save Project File As" pcb:project-file-name 'save 'may_exist))
