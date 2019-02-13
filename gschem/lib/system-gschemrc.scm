@@ -33,8 +33,10 @@
 ; original look.
 ;
 (primitive-load (build-path geda-rc-path "gschem-colormap-darkbg")) ; dark background
-;(load (build-path geda-rc-path "gschem-colormap-lightbg")) ; light background
-;(load (build-path geda-rc-path "gschem-colormap-bw")) ; light background, bw
+;(load (build-path geda-rc-path "gschem-colormap-whitebg")) ; light background
+;(load (build-path geda-rc-path "gschem-colormap-whitebg-bw")) ; light background, bw
+;(load (build-path geda-rc-path "gschem-colormap-lightbg")) ; shaded background
+;(load (build-path geda-rc-path "gschem-colormap-bw")) ; shaded background, bw
 
 ;
 ; End of color section
@@ -1073,7 +1075,7 @@
 (global-set-key "V I" &view-zoom-in)
 (global-set-key "V D" &view-dark-colors)
 (global-set-key "V L" &view-light-colors)
-(global-set-key "V W" &view-bw-colors)
+(global-set-key "V W" &view-light-bw-colors)
 
 (global-set-key "W" &view-zoom-box)
 (global-set-key "X" &view-pan)
@@ -1284,7 +1286,9 @@
            ,&options-scale-down-snap-size)
           (,&view-dark-colors
            ,&view-light-colors
-           ,&view-bw-colors)))
+           ,&view-light-bw-colors
+           ,&view-shaded-colors
+           ,&view-shaded-bw-colors)))
 
 (define help-menu
         `((,&help-manual

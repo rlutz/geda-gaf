@@ -3,6 +3,8 @@ rcdatadir = $(GEDARCDIR)
 
 dist_rcdata_DATA = \
 	gschem-colormap-darkbg \
+	gschem-colormap-whitebg \
+	gschem-colormap-whitebg-bw \
 	gschem-colormap-lightbg \
 	gschem-colormap-bw \
 	gschem-gtkrc

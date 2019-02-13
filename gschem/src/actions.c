@@ -1350,18 +1350,52 @@ DEFINE_ACTION (view_light_colors,
 {
   x_color_free ();
   /* Change the scheme here */
+  g_scm_c_eval_string_protected ("(load (build-path geda-rc-path \"gschem-colormap-whitebg\"))");
+  x_color_allocate ();
+
+  gschem_page_view_invalidate_all (gschem_toplevel_get_current_page_view (w_current));
+}
+
+DEFINE_ACTION (view_light_bw_colors,
+               "view-light-bw-colors",
+               NULL,
+               _("Light Monochrome Color Scheme"),
+               _("Light Color Scheme (B&W)"),
+               _("Light Color Scheme (B&_W)"),
+               NULL,
+               ACTUATE)
+{
+  x_color_free ();
+  /* Change the scheme here */
+  g_scm_c_eval_string_protected ("(load (build-path geda-rc-path \"gschem-colormap-whitebg-bw\"))");
+  x_color_allocate ();
+
+  gschem_page_view_invalidate_all (gschem_toplevel_get_current_page_view (w_current));
+}
+
+DEFINE_ACTION (view_shaded_colors,
+               "view-shaded-colors",
+               NULL,
+               _("Shaded Color Scheme"),
+               _("Shaded Color Scheme"),
+               _("S_haded Color Scheme"),
+               NULL,
+               ACTUATE)
+{
+  x_color_free ();
+  /* Change the scheme here */
   g_scm_c_eval_string_protected ("(load (build-path geda-rc-path \"gschem-colormap-lightbg\"))");
   x_color_allocate ();
 
   gschem_page_view_invalidate_all (gschem_toplevel_get_current_page_view (w_current));
 }
 
-DEFINE_ACTION (view_bw_colors,
-               "view-bw-colors",
+DEFINE_ACTION (view_shaded_bw_colors,
+               "view-shaded-bw-colors",
                NULL,
-               _("Monochrome Color Scheme"),
-               _("B&W Color Scheme"),
-               _("B&_W Color Scheme"),
+               _("Shaded Monochrome Color Scheme"),
+               _("Shaded Color Scheme (B&W)"),
+               _("Shaded Color Scheme (B&W)"),
                NULL,
                ACTUATE)
 {

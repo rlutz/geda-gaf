@@ -208,7 +208,7 @@
 (define view-pan-down &view-pan-down)
 (define view-dark-colors &view-dark-colors)
 (define view-light-colors &view-light-colors)
-(define view-bw-colors &view-bw-colors)
+(define view-bw-colors &view-light-bw-colors)
 (define page-manager &page-manager)
 (define page-next &page-next)
 (define page-prev &page-prev)
