@@ -1,6 +1,14 @@
 
 rcdatadir = $(GEDARCDIR)
-rcdata_DATA = system-gschemrc gschem-gtkrc gschem-colormap-lightbg gschem-colormap-darkbg gschem-colormap-bw
+
+dist_rcdata_DATA = \
+	gschem-colormap-darkbg \
+	gschem-colormap-lightbg \
+	gschem-colormap-bw \
+	gschem-gtkrc
+
+rcdata_DATA = system-gschemrc
+EXTRA_DIST = system-gschemrc.scm
 
 system-gschemrc: $(top_builddir)/configure system-gschemrc.scm
 	@date_ver=$(DATE_VERSION); \
@@ -13,8 +21,6 @@ system-gschemrc: $(top_builddir)/configure system-gschemrc.scm
 	  echo "Recreating system-gschemrc"; \
 	  mv system-gschemrc.new system-gschemrc; \
 	fi
-
-EXTRA_DIST = system-gschemrc.scm gschem-gtkrc gschem-colormap-lightbg gschem-colormap-darkbg gschem-colormap-bw
 
 MOSTLYCLEANFILES = *.log *~
 CLEANFILES = *.log *~
