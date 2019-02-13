@@ -211,7 +211,10 @@
 ;;
 ;;
 ;;
-(define (pcb:about)
+(define-action (&pcb-about
+                #:name       (_ "About PCB Major Mode")
+                #:label      (_ "About PCB Major Mode...")
+                #:menu-label (_ "About..."))
   (gschem-msg (string-append
 	       "This is the pcb major mode for gschem\n"
 	       "pcb.scm version $Id$\n"
@@ -224,7 +227,10 @@
 	      )
   )
 
-(define (pcb:launch-pcb)
+(define-action (&pcb-launch
+                #:name       (_ "Launch PCB")
+                #:label      (_ "Launch PCB...")
+                #:menu-label (_ "Launch PCB..."))
   ;; We don't want to crash on a SIGPIPE if the user
   ;; exits from PCB
   (if pcb:pipe 
@@ -253,16 +259,28 @@
       )
   )
 
-(define (pcb:run-gsch2pcb)
+(define-action (&pcb-run-gsch2pcb
+                #:name       (_ "Run gsch2pcb")
+                #:label      (_ "Run gsch2pcb...")
+                #:menu-label (_ "Run gsch2pcb..."))
   (gschem-log "Running gsch2pcb")
   (system pcb:gsch2pcb-cmd)
 )
 
-(define (pcb:run-editor)
+(define-action (&pcb-run-editor
+                #:icon       "accessories-text-editor"
+                #:name       (_ "Edit gsch2pcb Project")
+                #:label      (_ "Edit gsch2pcb Project...")
+                #:menu-label (_ "Edit gsch2pcb Project..."))
   (system pcb:editor-cmd)
 )
 
-(define (pcb:load-project)
+(define-action (&pcb-load-project
+                #:icon       "gtk-open"
+                #:name       (_ "Load gsch2pcb Project")
+                #:label      (_ "Load gsch2pcb Project...")
+                #:menu-label (_ "Load gsch2pcb Project...")
+                #:tooltip    (_ "Not implemented yet"))
   (let ((f nil))
     (gschem-msg "This menu choice does not really do anything yet other than select a file\n")
 
@@ -271,7 +289,12 @@
   )
 )
 
-(define (pcb:save-project)
+(define-action (&pcb-save-project
+                #:icon       "gtk-save"
+                #:name       (_ "Save gsch2pcb Project")
+                #:label      (_ "Save gsch2pcb Project...")
+                #:menu-label (_ "Save gsch2pcb Project...")
+                #:tooltip    (_ "Not implemented yet"))
   (let ((f nil))
     (gschem-msg "This menu choice does not really do anything yet other than select a file\n")
 
@@ -280,31 +303,21 @@
   )
 )
 
-; All keys in this keymap *must* be unique
-(define pcb:pcb-keymap
-  '(
-    ("?" . pcb:about)
-    ("l" . pcb:launch-pcb)
-    ("n" . pcb:run-gsch2pcb)
-    ("e" . pcb:run-editor)
-    ("o" . pcb:load-project)
-    ("s" . pcb:save-project)
-    )
-  )
+(global-set-key "P L" &pcb-launch)
+(global-set-key "P N" &pcb-run-gsch2pcb)
+(global-set-key "P E" &pcb-run-editor)
+(global-set-key "P O" &pcb-load-project)
+(global-set-key "P S" &pcb-save-project)
+(global-set-key "P question" &pcb-about)
 
-(define pcb:menu-items 
-;;
-;;          menu item name      menu action     	menu hotkey action
-;;
-	'( ("About..."		         pcb:about               pcb:about)
-	   ("Launch PCB"                 pcb:launch-pcb          pcb:launch-pcb)
-	   ("Run gsch2pcb"               pcb:run-gsch2pcb        pcb:run-gsch2pcb)
-	   ("Edit gsch2pcb project"      pcb:run-editor          pcb:run-editor)
-	   ("Load Project..."            pcb:load-project        pcb:load-project)
-	   ("Save Project..."            pcb:save-project        pcb:save-project)
-	   )
-)
+(define pcb-menu
+  `((,&pcb-launch)
+    (,&pcb-run-gsch2pcb
+     ,&pcb-run-editor
+     ,&pcb-load-project
+     ,&pcb-save-project)
+    (,&pcb-about)))
 
-(add-menu "PCB" pcb:menu-items)
-
-
+;; Insert as second-to-last item in the menubar (last one is "Help")
+(let ((x (list-tail menubar (- (length menubar) 2))))
+  (set-cdr! x (cons (cons (_ "PCB") pcb-menu) (cdr x))))
