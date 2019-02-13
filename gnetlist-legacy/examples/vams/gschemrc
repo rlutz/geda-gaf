@@ -1,8 +1,20 @@
 (load "./commonrc")
 (load (string-append examples-path "/../../../gschem/scheme/generate_netlist.scm"))
 
-(global-set-key "G N" generate-netlist)
-(global-set-key "G E" generate-entity)
+(define-action (&generate-netlist
+                #:name       "Generate Netlist"
+                #:label      "Generate Netlist"
+                #:menu-label "Generate _Netlist")
+  (generate-netlist))
+
+(define-action (&generate-entity
+                #:name       "Generate Entity"
+                #:label      "Generate Entity"
+                #:menu-label "Generate Entit_y")
+  (generate-entity))
+
+(global-set-key "G N" &generate-netlist)
+(global-set-key "G E" &generate-entity)
 
 (attribute-promotion "enabled")
 (promote-invisible "enabled")
