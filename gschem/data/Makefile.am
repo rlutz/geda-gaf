@@ -41,9 +41,16 @@ regen-svg-icons: $(iconsvg)
 	if test -x "`which inkscape`"; then \
 	  for f in $(action_icon_files); do \
 	    id=`echo $$f | sed -e's:.png::'`; \
+	    size=`echo $$id | sed -e's:.*-::'`; \
 	    inkscape --export-id=$$id \
-	             --export-png=$(srcdir)/$$f \
-	             $(srcdir)/$(iconsvg); \
+	             --export-png=$$id.out \
+	             $(srcdir)/$(iconsvg) | tee $$id.log; \
+	    if grep "exported to $${size} x $${size} pixels" $$id.log >/dev/null; then \
+	      mv $$id.out $(srcdir)/$$f; \
+	    else \
+	      echo "*** ERROR: Exported pixmap has wrong size ***" >&2; \
+	    fi; \
+	    rm $$id.log; \
 	  done; \
 	fi
 
