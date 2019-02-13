@@ -4468,10 +4468,7 @@
     <g
        inkscape:label="Layer 1"
        id="insert-line-16"
-       transform="translate(132,491.36218)"
-       inkscape:export-filename="/home/peter/Projects/geda/geda-gaf/gschem/data/insert-line-16.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90">
+       transform="translate(132,491.36218)">
       <g
          transform="translate(-1.1894913,-3.5122519)"
          id="g10419">
@@ -4535,9 +4532,7 @@
     <g
        inkscape:label="Layer 1"
        id="insert-path-16"
-       transform="translate(132,521.36218)"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90">
+       transform="translate(132,521.36218)">
       <path
          sodipodi:type="arc"
          style="fill:#4e9a06;fill-opacity:1;stroke:none;display:inline;enable-background:new"
@@ -4598,9 +4593,7 @@
     <g
        inkscape:label="Layer 1"
        id="insert-box-16"
-       transform="translate(132,551.36218)"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90">
+       transform="translate(132,551.36218)">
       <g
          transform="matrix(0.47066,0,0,0.449643,-0.79523603,-4.4623284)"
          id="g3813-68"
@@ -4669,9 +4662,7 @@
     <g
        inkscape:label="Layer 1"
        id="insert-circle-16"
-       transform="translate(132,581.36218)"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90">
+       transform="translate(132,581.36218)">
       <path
          transform="matrix(1.375,0,0,1.375,-3,-2.25)"
          d="M 12,6 C 12,8.209139 10.209139,10 8,10 5.790861,10 4,8.209139 4,6 4,3.790861 5.790861,2 8,2 c 2.209139,0 4,1.790861 4,4 z"
@@ -4749,9 +4740,7 @@
     <g
        inkscape:label="Layer 1"
        id="insert-arc-16"
-       transform="translate(132,611.36218)"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90">
+       transform="translate(132,611.36218)">
       <g
          transform="translate(-1.1894913,-3.5122519)"
          id="g10419-45">
@@ -4882,9 +4871,7 @@
          y="777.36218">insert-attribute</tspan></text>
     <g
        id="insert-symbol-16"
-       inkscape:label="#g4064"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90">
+       inkscape:label="#g4064">
       <g
          transform="matrix(0.47066,0,0,0.449643,131.20354,636.85307)"
          id="g3813-3-5"

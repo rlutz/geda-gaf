@@ -41,8 +41,7 @@ regen-svg-icons: $(iconsvg)
 	if test -x "`which inkscape`"; then \
 	  for f in $(action_icon_files); do \
 	    id=`echo $$f | sed -e's:.png::'`; \
-	    inkscape --export-use-hints \
-	             --export-id=$$id \
+	    inkscape --export-id=$$id \
 	             --export-png=$(srcdir)/$$f \
 	             $(srcdir)/$(iconsvg); \
 	  done; \
