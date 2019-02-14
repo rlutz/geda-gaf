@@ -896,6 +896,25 @@
 ; Start of keymapping related keywords
 ;
 
+;;;; Custom actions
+;;
+;; Actions defined here are available for key bindings and/or menu
+;; items.  Example:
+;;
+;; (define-action (&hello-world
+;;                 #:name       "Hello World"
+;;                 #:label      "Hello World"
+;;                 #:menu-label "_Hello World")
+;;   (display "Hello world!")
+;;   (newline))
+;;
+;; #:name is the general name of the action, e.g. shown in the hotkey
+;; list.  #:label is the label associated with the action, e.g. shown
+;; in the popup menu.  #:menu-label is the label of the item as it
+;; will appear in the main menu.  Only #:menu-label should contain an
+;; underscored letter.
+
+
 ;;;; Keymapping
 ;;
 ;; Everything is case-sensitive.  Any number of keys may be bound in
@@ -1081,19 +1100,62 @@
 (global-set-key "less" &page-prev)
 (global-set-key "Page_Up" &page-prev)
 
-;
-; Here are the definitions for the top pull down menu bar
-;
-; The "menu item name" is the name of the item as it will appear in the menu
-; The "menu action" is the scheme function which is executed when the item
-; is selected off of the menu.
-;
-; The hotkeys which are displayed are defined by the global-keymap.
-; Actions can have several hotkeys, but the displayed keys are the last
-; ones found.
-;
-; The SEPARATOR keyword is case sensitive and puts a separator into the menu.
-;
+
+;;;; Definitions for the main menu bar, context menu, and toolbar
+;;
+;; The main menu definition is split into individual variables in order
+;; to allow for easier modification of the menus.  Each menu definition
+;; is a list of sections; each section is a list of action objects.
+;; Separators are automatically inserted between adjacent sections.
+;;
+;; The labels and icons which are displayed in the menu are determined
+;; by the individual action objects.  The hotkeys are defined by the
+;; global keymap.  Actions can have several hotkeys, but only the
+;; hotkey defined last will be displayed.
+;;
+;; When adding actions to the menu e.g. from your "gschemrc" file, you
+;; don't have to copy and paste the menu definition but can alter the
+;; existing definition.  This has the advantage that you won't get out
+;; of sync with changes in newer versions of gschem.  Examples:
+;;
+;; * Adding a section to a menu
+;;
+;;   (set! tools-menu
+;;         (append! tools-menu
+;;                  `((,&do-something
+;;                     ,&do-something-else))))
+;;
+;; * Adding a menu to the menubar
+;;
+;;   (define my-menu
+;;           `((,&do-something
+;;              ,&do-something-else)))
+;;
+;;   (let ((t (list-tail menubar (- (length menubar) 2))))
+;;     (set-cdr! t (cons (cons "My Menu" my-menu) (cdr t))))
+;;
+;; * Replacing a whole menu
+;;
+;;   (define my-help-menu
+;;           `((,&do-something
+;;              ,&do-something-else)
+;;             (,&help-about)))
+;;
+;;   (assoc-set! menubar (_ "_Help") my-help-menu)
+;;
+;; * Replacing the context menu
+;;
+;;   (set! context-menu
+;;         `((,&edit-select)
+;;           (,&do-something
+;;            ,&do-something-else)))
+;;
+;; * Adding a section to the toolbar
+;;
+;;   (let ((buttons `((,&do-something
+;;                     ,&do-something-else)))
+;;         (t (list-tail toolbar (- (length toolbar) 2))))
+;;     (set-cdr! t (append! buttons (cdr t))))
 
 (define file-menu
         `((,&file-new
@@ -1238,10 +1300,6 @@
           (,&help-hotkeys
            ,&help-about)))
 
-;
-; Now actually add the menus.  The order here defines the order in which
-; the menus appear in the top menu bar.
-;
 (define menubar
         `((,(_ "_File")       . ,file-menu)
           (,(_ "_Edit")       . ,edit-menu)

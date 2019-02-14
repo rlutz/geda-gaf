@@ -18,6 +18,126 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
+/*! \file actions.c
+ *
+ * \brief Action definitions.
+ *
+ * This file contains the definitions for gschem's menu and toolbar
+ * actions.  It is specially processed, resulting in three separate
+ * pieces of code for each instance of the DEFINE_ACTION macro:
+ *
+ * - a global variable "action_<cid>"
+ *
+ * - code to initialize this variable with the appropriate action
+ *   object and export it to the Guile module (gschem core builtins)
+ *   as "action-<id>"
+ *
+ * - the callback procedure associated with the action.
+ *
+ * The metadata of an action (name, icon, etc.) is initialized from
+ * the parameters to the DEFINE_ACTION macro and stored in the action
+ * object.  The fields are, in this order:
+ *
+ * - cid:
+ *     The C identifier of the action.
+ *
+ *     Prefixed with `action_', this is the name of the global
+ *     variable under which the action can be referenced by C code.
+ *
+ *     Example: add_component
+ *
+ * - id (string):
+ *     The identifier of the action, as a string.
+ *
+ *     This should be identical to the C identifier, except for
+ *     underscores, which should be replaced by dashes.
+ *
+ *     Example: "add-component"
+ *
+ * - icon_name (string or NULL):
+ *     The name of the icon to be used for the action.
+ *
+ *     This can be either a GTK stock identifier, in which case the
+ *     GTK stock icon is used, or an icon name in the current icon
+ *     theme.
+ *
+ *     Example: "insert-symbol"
+ *
+ * - name (localized string):
+ *     The generic name of the action.
+ *
+ *     This is displayed as a tooltip for toolbar buttons, and in the
+ *     hotkey list.  It should be understandable without any context
+ *     and not contain a mnemonic or ellipsis.
+ *
+ *     Example: _("Add Component")
+ *
+ * - label (localized string):
+ *     The generic label of the action.
+ *
+ *     This is displayed in the context menu.  It should be suitable
+ *     to be used as a menu label but be understandable without any
+ *     context and not contain a mnemonic.
+ *
+ *     Example: _("Add Component...")
+ *
+ * - menu_label (localized string):
+ *     The label for the action when shown in the main menu.
+ *
+ *     This should be identical to the generic label except for the
+ *     mnemonic (a character preceded by an underscore for easier
+ *     keyboard access) and omissions based on the menu name.
+ *
+ *     Example: _("_Component...")
+ *
+ * - tooltip (localized string or NULL):
+ *     A string explaining the action.
+ *
+ *     This is displayed as an additional information when the user
+ *     hovers the mouse cursor over the action.  For tool buttons, it
+ *     is displayed in addition to the action name.  GTK tends to
+ *     display tooltips quite aggressively, so use with care.
+ *
+ * - type:
+ *     How to display menu items or tool buttons.
+ *
+ *     For regular actions, this is ACTUATE.  If it takes any other
+ *     value, the action is considered stateful, and a tool button
+ *     associated with the action will be displayed either toggled or
+ *     not toggled depending on the action's state.  An associated
+ *     menu item will be rendered depending on the type:
+ *
+ *       TOGGLE_PLAIN: regular menu item (state won't be visible)
+ *       TOGGLE_CHECK: check-box menu item
+ *       TOGGLE_RADIO: radio check-box menu item
+ *
+ *     This field only determines how the widgets are rendered; the
+ *     action state won't automatically change when the action is
+ *     activated.  You will have to do this explicitly:
+ *
+ *       gschem_action_set_active (action, FALSE / TRUE, w_current);
+ *
+ *
+ * The DEFINE_ACTION macro is followed by the body of the callback
+ * function for the action.  The callback function has two parameters:
+ *
+ * - GschemAction *action:
+ *     The associated action object.
+ *
+ * - GschemToplevel *w_current:
+ *     The toplevel object for which the action was called.
+ *
+ * The callback function is only invoked by gschem_action_activate
+ * which checks for a non-null toplevel object and enters a dynamic
+ * Guile context for this toplevel object.
+ *
+ *
+ * \note This file only contains actions implemented in C.
+ *       Actions implemented in Guile are defined in
+ *       gschem/scheme/gschem/builtins.scm.
+ */
+
+
 /* right now, all callbacks except for the ones on the File menu have
  * the middle button shortcut. Let me (Ales) know if we should also
  * shortcut the File button */
