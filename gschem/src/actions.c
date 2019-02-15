@@ -2563,6 +2563,18 @@ DEFINE_ACTION (options_options,
   gschem_dockable_present (w_current->options_dockable);
 }
 
+DEFINE_ACTION (options_grid_size,
+               "options-grid-size",
+               NULL,
+               _("Grid Size"),
+               _("Grid Size"),
+               _("Grid Size"),
+               NULL,
+               ACTUATE)
+{
+  /* grid size spinbox */
+}
+
 /*! \brief Multiply snap grid size by two. */
 
 DEFINE_ACTION (options_scale_up_snap_size,

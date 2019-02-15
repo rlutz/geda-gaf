@@ -1340,6 +1340,7 @@
           (,&hierarchy-down-schematic
            ,&hierarchy-down-symbol
            ,&hierarchy-up)
+          (,&options-grid-size)
           (,&options-options
            ,&help-manual)))
 

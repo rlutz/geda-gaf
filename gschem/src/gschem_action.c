@@ -61,6 +61,7 @@
 #ifdef HAVE_STRING_H
 #include <string.h>
 #endif
+#include <math.h>
 
 #include "gschem.h"
 
@@ -713,6 +714,19 @@ gschem_action_create_menu_item (GschemAction *action,
   else if (action == action_docking_area_right)
     gtk_menu_item_set_submenu (GTK_MENU_ITEM (menu_item),
                                w_current->right_docking_area_menu);
+  else if (action == action_options_grid_size) {
+    GtkWidget *menu = gtk_menu_new ();
+    gtk_menu_shell_append (GTK_MENU_SHELL (menu),
+                           gschem_action_create_menu_item (
+                             action_options_scale_up_snap_size,
+                             use_menu_label, w_current));
+    gtk_menu_shell_append (GTK_MENU_SHELL (menu),
+                           gschem_action_create_menu_item (
+                             action_options_scale_down_snap_size,
+                             use_menu_label, w_current));
+    gtk_widget_show_all (menu);
+    gtk_menu_item_set_submenu (GTK_MENU_ITEM (menu_item), menu);
+  }
 
   /* register callback so the action gets run */
   g_object_set_data (G_OBJECT (menu_item), "action", action);
@@ -735,6 +749,122 @@ gschem_action_create_menu_item (GschemAction *action,
   }
 
   return menu_item;
+}
+
+
+/******************************************************************************/
+
+
+static gint
+spin_button_input (GtkSpinButton *spin_button,
+                   gdouble *new_value,
+                   GschemToplevel *w_current)
+{
+  gchar *err = NULL;
+  gdouble num = g_strtod (gtk_entry_get_text (GTK_ENTRY (spin_button)), &err);
+  if (*err)
+    return GTK_INPUT_ERROR;
+  *new_value = round (log2 (num / 25));
+  if (*new_value < 0)
+    *new_value = 0;
+  if (*new_value > 12)
+    *new_value = 12;
+  return TRUE;
+}
+
+static gint
+spin_button_output (GtkSpinButton *spin_button,
+                    GschemToplevel *w_current)
+{
+  gint value = gtk_spin_button_get_value_as_int (spin_button);
+  gchar *buf = g_strdup_printf ("%.0f", 25 * exp2 (value));
+  if (strcmp (buf, gtk_entry_get_text (GTK_ENTRY (spin_button))) != 0)
+    gtk_entry_set_text (GTK_ENTRY (spin_button), buf);
+  g_free (buf);
+  return TRUE;
+}
+
+static void
+spin_button_value_changed (GtkSpinButton *spin_button,
+                           GschemToplevel *w_current)
+{
+  gint value = gtk_spin_button_get_value_as_int (spin_button);
+  gschem_options_set_snap_size (w_current->options, 25 * exp2 (value));
+
+  gtk_widget_grab_focus (w_current->drawing_area);
+}
+
+static void
+update_spin_button (GschemOptions *options,
+                    GParamSpec *pspec,
+                    gpointer user_data)
+{
+  gdouble value = round (log2 (gschem_options_get_snap_size (options) / 25));
+
+  g_signal_handlers_block_matched (
+    GTK_WIDGET (user_data), G_SIGNAL_MATCH_FUNC, 0, 0, NULL,
+    G_CALLBACK (spin_button_value_changed), NULL);
+
+  gtk_spin_button_set_value (GTK_SPIN_BUTTON (user_data), value);
+
+  g_signal_handlers_unblock_matched (
+    GTK_WIDGET (user_data), G_SIGNAL_MATCH_FUNC, 0, 0, NULL,
+    G_CALLBACK (spin_button_value_changed), NULL);
+}
+
+static gboolean
+create_grid_size_menu_proxy (GtkToolItem *tool_item,
+                             GschemToplevel *w_current)
+{
+  gtk_tool_item_set_proxy_menu_item (
+    tool_item, "gschem-grid-size-menu-id",
+    gschem_action_create_menu_item (
+      action_options_grid_size, FALSE, w_current));
+
+  return TRUE;
+}
+
+/*! \brief Create special toolbar widget for "Grid Size" action.
+ *
+ * This is called by \ref gschem_action_create_tool_button to create
+ * the special spin button widget.
+ */
+static GtkToolItem *
+create_grid_size_tool_item (GschemAction *action,
+                            GschemToplevel *w_current)
+{
+  GtkObject *adjustment = gtk_adjustment_new (2, 0, 12, 1, 0, 0);
+  GtkWidget *spin_button = g_object_new (GTK_TYPE_SPIN_BUTTON, NULL);
+  gtk_spin_button_set_adjustment (GTK_SPIN_BUTTON (spin_button),
+                                  GTK_ADJUSTMENT (adjustment));
+  gtk_spin_button_set_update_policy (GTK_SPIN_BUTTON (spin_button),
+                                     GTK_UPDATE_IF_VALID);
+
+  g_signal_connect (spin_button, "input",
+                    G_CALLBACK (spin_button_input), w_current);
+  g_signal_connect (spin_button, "output",
+                    G_CALLBACK (spin_button_output), w_current);
+  g_signal_connect (spin_button, "value-changed",
+                    G_CALLBACK (spin_button_value_changed), w_current);
+  g_signal_connect (w_current->options, "notify::snap-size",
+                    G_CALLBACK (update_spin_button), spin_button);
+
+  GtkToolItem *tool_item = gtk_tool_item_new ();
+
+  if (action->tooltip == NULL)
+    gtk_widget_set_tooltip_text (GTK_WIDGET (tool_item), action->name);
+  else {
+    gchar *tooltip_text = g_strdup_printf ("%s\n%s", action->name,
+                                                     action->tooltip);
+    gtk_widget_set_tooltip_text (GTK_WIDGET (tool_item), tooltip_text);
+    g_free (tooltip_text);
+  }
+
+  g_signal_connect (tool_item, "create-menu-proxy",
+                    G_CALLBACK (create_grid_size_menu_proxy), w_current);
+
+  gtk_container_add (GTK_CONTAINER (tool_item), spin_button);
+  return tool_item;
 }
 
 
@@ -791,6 +921,9 @@ gschem_action_create_tool_button (GschemAction *action,
                                   GschemToplevel *w_current)
 {
   GtkToolItem *button;
+
+  if (action == action_options_grid_size)
+    return create_grid_size_tool_item (action, w_current);
 
   if (action->type != GSCHEM_ACTION_TYPE_ACTUATE)
     button = g_object_new (GTK_TYPE_TOGGLE_TOOL_BUTTON, NULL);
