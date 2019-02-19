@@ -20,8 +20,7 @@
 (define-module (gschem builtins)
   #:use-module (gschem core gettext)
   #:use-module (gschem action)
-  #:use-module (gschem gschemdoc)
-  #:use-module (gschem repl))
+  #:use-module (gschem gschemdoc))
 
 (or (defined? 'define-syntax)
     (use-modules (ice-9 syncase)))
@@ -32,14 +31,6 @@
      (begin
        (define-action (name . args) . forms)
        (export name)))))
-
-(define-action-public
-    (&file-repl
-     #:icon       "gtk-execute"
-     #:name       (_ "Terminal REPL")
-     #:label      (_ "REPL...")
-     #:menu-label (_ "REPL..."))
-  (start-repl-in-background-terminal))
 
 (define-action-public
     (&help-manual

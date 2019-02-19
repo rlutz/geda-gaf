@@ -104,6 +104,23 @@ DEFINE_ACTION (file_script,
   setup_script_selector(w_current);
 }
 
+DEFINE_ACTION (file_repl,
+               "file-repl",
+               "gtk-execute",
+               _("Terminal REPL"),
+               _("REPL..."),
+               _("REPL..."),
+               NULL,
+               ACTUATE)
+{
+  g_scm_eval_protected (scm_list_1 (
+                          scm_variable_ref (
+                            scm_c_public_variable (
+                              "gschem repl",
+                              "start-repl-in-background-terminal"))),
+                        SCM_UNDEFINED);
+}
+
 DEFINE_ACTION (file_save,
                "file-save",
                "gtk-save",
