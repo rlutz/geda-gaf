@@ -1,5 +1,5 @@
-GNETLIST = $(abs_top_builddir)/xorn/src/command/gnetlist
-GAF = $(abs_top_builddir)/gaf/gaf
+GNETLIST = $(bindir)/gnetlist
+GAF = $(bindir)/gaf
 
 sources = \
 	gafrc \
@@ -35,15 +35,27 @@ extra = \
 	crdist.sh
 
 gTAG-pcb.net: $(sources)
-	cd $(srcdir) && $(GNETLIST) -g PCB -o $@ gTAG.sch
+	$(AM_V_GEN)if [ -x $(GNETLIST) ]; then \
+	  cd $(srcdir) && $(GNETLIST) -g PCB -o $@ gTAG.sch; \
+	else \
+	  echo '*** Skipping, re-run "make" after "make install" ***'; \
+	fi
 
 gTAG.bom: $(sources)
-	cd $(srcdir) && $(GNETLIST) -g bom -o $@ gTAG.sch
+	$(AM_V_GEN)if [ -x $(GNETLIST) ]; then \
+	  cd $(srcdir) && $(GNETLIST) -g bom -o $@ gTAG.sch; \
+	else \
+	  echo '*** Skipping, re-run "make" after "make install" ***'; \
+	fi
 
 .sch.ps:
-	cd $(srcdir) && ( \
+	$(AM_V_GEN)if [ -x $(GAF) ]; then \
+	  cd $(srcdir) && ( \
 	    $(GAF) export -p iso_a4 -m "1cm;1cm;1cm;1cm" -o $@ $< && \
-	    sed -e '/^%%CreationDate: /d' -i $@)
+	    sed -e '/^%%CreationDate: /d' -i $@); \
+	else \
+	  echo '*** Skipping, re-run "make" after "make install" ***'; \
+	fi
 
 exampledir = $(docdir)/examples/gTAG/
 example_DATA = $(sources) $(targets) $(extra)
