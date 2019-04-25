@@ -1355,6 +1355,37 @@ compselect_class_init (GschemCompselectDockableClass *klass)
                        G_PARAM_READWRITE));
 }
 
+/*! \brief Set the current layout for this dockable.
+ *
+ * Tiled layout is the classical behavior of gschem: the tree view is
+ * on the left, preview and attributes are on the right.
+ *
+ * Vertical layout is used for tall aspect ratios: so far, it only
+ * shows the tree view.
+ */
+static void
+compselect_set_tiled (GschemCompselectDockable *compselect, gboolean tiled)
+{
+  if (tiled)
+    gtk_widget_show (compselect->vpaned);
+  else
+    gtk_widget_hide (compselect->vpaned);
+}
+
+/*! \brief Callback function: Size of the whole dockable changed.
+ *
+ * Changes from and to tiled layout when the aspect ratio of the
+ * dockable becomes wider and taller than 1:2, respectively.
+ */
+static void
+compselect_vbox_size_allocate (GtkWidget *widget,
+                               GdkRectangle *allocation,
+                               gpointer user_data)
+{
+  compselect_set_tiled (GSCHEM_COMPSELECT_DOCKABLE (user_data),
+                        allocation->width * 2 > allocation->height);
+}
+
 static GtkWidget *
 compselect_create_widget (GschemDockable *dockable)
 {
@@ -1367,6 +1398,8 @@ compselect_create_widget (GschemDockable *dockable)
 
   vbox = gtk_vbox_new (FALSE, DIALOG_V_SPACING);
   gtk_container_set_border_width (GTK_CONTAINER (vbox), DIALOG_BORDER_SPACING);
+  g_signal_connect (vbox, "size-allocate",
+                    G_CALLBACK (compselect_vbox_size_allocate), compselect);
 
   /* vertical pane containing preview and attributes */
   vpaned = GTK_WIDGET (g_object_new (GTK_TYPE_VPANED, NULL));
