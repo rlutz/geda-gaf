@@ -1278,6 +1278,14 @@ compselect_save_internal_geometry (GschemDockable *dockable,
 
   position = gtk_notebook_get_current_page (compselect->viewtabs);
   eda_config_set_int (cfg, group_name, "source-tab", position);
+
+  eda_config_set_boolean (cfg, group_name, "preview-expanded",
+                          gtk_expander_get_expanded (
+                            GTK_EXPANDER (compselect->preview_expander)));
+
+  eda_config_set_boolean (cfg, group_name, "attribs-expanded",
+                          gtk_expander_get_expanded (
+                            GTK_EXPANDER (compselect->attribs_expander)));
 }
 
 
@@ -1297,6 +1305,7 @@ compselect_restore_internal_geometry (GschemDockable *dockable,
 {
   GschemCompselectDockable *compselect = GSCHEM_COMPSELECT_DOCKABLE (dockable);
   gint position;
+  gboolean expanded;
   GError *error = NULL;
 
   position = eda_config_get_int (cfg, group_name, "hpaned", NULL);
@@ -1311,9 +1320,25 @@ compselect_restore_internal_geometry (GschemDockable *dockable,
   position = eda_config_get_int (cfg, group_name, "source-tab", &error);
   if (error != NULL) {
     position = 1;
-    g_error_free (error);
+    g_clear_error (&error);
   }
   gtk_notebook_set_current_page (compselect->viewtabs, position);
+
+  expanded = eda_config_get_boolean (cfg, group_name, "preview-expanded", &error);
+  if (error != NULL) {
+    expanded = TRUE;
+    g_clear_error (&error);
+  }
+  gtk_expander_set_expanded (GTK_EXPANDER (compselect->preview_expander),
+                             expanded);
+
+  expanded = eda_config_get_boolean (cfg, group_name, "attribs-expanded", &error);
+  if (error != NULL) {
+    expanded = FALSE;
+    g_clear_error (&error);
+  }
+  gtk_expander_set_expanded (GTK_EXPANDER (compselect->attribs_expander),
+                             expanded);
 }
 
 
@@ -1578,6 +1603,67 @@ compselect_expander_notify_expanded (GObject *expander,
   }
 }
 
+/*! \brief Callback function: Size of preview/attribute area changed.
+ *
+ * This function does two things:
+ *
+ * - When the content widgets are assigned a size for the first time,
+ *   it calculates the difference between the stored and actual size
+ *   and moves the corresponding vpaned's handle accordingly.  (This
+ *   is necessary because there is no direct way to set the handle
+ *   position relative to the far end of the paned.)
+ *
+ * - On subsequent size changes, it updates the stored size for that
+ *   widget.
+ */
+static void
+compselect_content_size_allocate (GtkWidget *widget,
+                                  GdkRectangle *allocation,
+                                  gpointer user_data)
+{
+  GschemCompselectDockable *compselect = GSCHEM_COMPSELECT_DOCKABLE (user_data);
+  if (compselect_is_tiled (compselect))
+    return;
+
+  gboolean *size_allocated;
+  const gchar *key;
+  gint default_height;
+  GtkPaned *vpaned;
+
+  if (widget == compselect->preview_content) {
+    size_allocated = &compselect->preview_size_allocated;
+    key = "preview-height";
+    default_height = 160;
+    vpaned = GTK_PANED (compselect->preview_paned);
+  } else if (widget == compselect->attribs_content) {
+    size_allocated = &compselect->attribs_size_allocated;
+    key = "attribs-height";
+    default_height = 100;
+    vpaned = GTK_PANED (compselect->attribs_paned);
+  } else
+    g_assert_not_reached ();
+
+  if (*size_allocated == FALSE) {
+    gint height = eda_config_get_int (eda_config_get_user_context (),
+                                      GSCHEM_DOCKABLE (compselect)->group_name,
+                                      key, NULL);
+    if (height <= 0)
+      height = default_height;
+
+    gtk_paned_set_position (vpaned,
+                            gtk_paned_get_position (vpaned)
+                              - height
+                              + allocation->height);
+    *size_allocated = TRUE;
+    return;
+  }
+
+  if (allocation->height > 0)
+    eda_config_set_int (eda_config_get_user_context (),
+                        GSCHEM_DOCKABLE (compselect)->group_name,
+                        key, allocation->height);
+}
+
 static GtkWidget *
 compselect_create_widget (GschemDockable *dockable)
 {
@@ -1634,6 +1720,8 @@ compselect_create_widget (GschemDockable *dockable)
 
   compselect->preview_content = gtk_alignment_new (.5, .5, 1., 1.);
   gtk_widget_set_size_request (compselect->preview_content, 0, 15);
+  g_signal_connect (compselect->preview_content, "size-allocate",
+                    G_CALLBACK (compselect_content_size_allocate), compselect);
   gtk_container_add (GTK_CONTAINER (compselect->preview_content), preview);
   gtk_widget_show_all (compselect->preview_content);
   g_object_ref (compselect->preview_content);
@@ -1658,11 +1746,14 @@ compselect_create_widget (GschemDockable *dockable)
   g_object_ref (compselect->preview_expander);
 
   compselect->preview_expander_event_window = NULL;
+  compselect->preview_size_allocated = FALSE;
 
 
   /* attributes area */
   compselect->attribs_content = create_attributes_treeview (compselect);
   gtk_widget_set_size_request (compselect->attribs_content, -1, 20);
+  g_signal_connect (compselect->attribs_content, "size-allocate",
+                    G_CALLBACK (compselect_content_size_allocate), compselect);
   gtk_widget_show_all (compselect->attribs_content);
   g_object_ref (compselect->attribs_content);
 
@@ -1687,6 +1778,7 @@ compselect_create_widget (GschemDockable *dockable)
   g_object_ref (compselect->attribs_expander);
 
   compselect->attribs_expander_event_window = NULL;
+  compselect->attribs_size_allocated = FALSE;
 
 
   /* top-level container widget (will contain one of the other widgets

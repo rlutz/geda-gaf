@@ -77,6 +77,7 @@ struct _GschemCompselectDockable {
   GtkWidget *preview_paned,                 *attribs_paned;
   GtkWidget *preview_expander,              *attribs_expander;
   GdkWindow *preview_expander_event_window, *attribs_expander_event_window;
+  gboolean   preview_size_allocated,         attribs_size_allocated;
 };
 
 
