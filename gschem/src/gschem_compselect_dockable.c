@@ -1487,6 +1487,44 @@ compselect_is_tiled (GschemCompselectDockable *compselect)
          top_widget != compselect->attribs_box;
 }
 
+/*! \brief Remove prelight state from an expander.
+ *
+ * Expanders are prelit (painted in a shaded color) while the pointer
+ * hovers over them.  This prelight state is not correctly removed
+ * when the widget hierarchy changes.  This function synthesizes a
+ * leave event to un-prelight the expander explicitly.
+ */
+static void
+compselect_unprelight_expander (GschemCompselectDockable *compselect,
+                                GtkWidget *expander)
+{
+  GdkWindow *window = NULL;
+  if (expander == compselect->preview_expander)
+    window = compselect->preview_expander_event_window;
+  if (expander == compselect->attribs_expander)
+    window = compselect->attribs_expander_event_window;
+
+  if (window == NULL)
+    return;
+
+  GdkEvent *event = gdk_event_new (GDK_LEAVE_NOTIFY);
+  event->crossing.window = g_object_ref (window);
+  event->crossing.send_event = TRUE;
+  event->crossing.subwindow = g_object_ref (window);
+  event->crossing.time = GDK_CURRENT_TIME;
+  event->crossing.x = 0;
+  event->crossing.y = 0;
+  event->crossing.x_root = 0;
+  event->crossing.y_root = 0;
+  event->crossing.mode = GDK_CROSSING_STATE_CHANGED;
+  event->crossing.detail = GDK_NOTIFY_UNKNOWN;
+  event->crossing.focus = FALSE;
+  event->crossing.state = 0;
+
+  gtk_widget_event (expander, event);
+  gdk_event_free(event);
+}
+
 /*! \brief Callback function: Size of the whole dockable changed.
  *
  * Changes from and to tiled layout when the aspect ratio of the
@@ -1501,9 +1539,31 @@ compselect_top_size_allocate (GtkWidget *widget,
                         allocation->width * 2 > allocation->height);
 }
 
+/*! \brief Callback function: Pointer hovers over expander.
+ *
+ * In order to synthesize leave notify events for the expanders, we
+ * need pointers to their event windows.  These can't be accessed
+ * directly, so as a workaround, wait for an enter notify event and
+ * store the pointers for later.
+ */
+static gboolean
+compselect_expander_enter_notify_event (GtkWidget *widget,
+                                        GdkEvent *event,
+                                        gpointer user_data)
+{
+  GschemCompselectDockable *compselect = GSCHEM_COMPSELECT_DOCKABLE (user_data);
+
+  if (widget == compselect->preview_expander)
+    compselect->preview_expander_event_window = event->crossing.window;
+  if (widget == compselect->attribs_expander)
+    compselect->attribs_expander_event_window = event->crossing.window;
+
+  return FALSE;
+}
+
 /*! \brief Callback function: Expander activated.
  *
- * Update the widget hierarchy.
+ * Update the widget hierarchy and prelight state of the expanders.
  */
 static void
 compselect_expander_notify_expanded (GObject *expander,
@@ -1512,8 +1572,10 @@ compselect_expander_notify_expanded (GObject *expander,
 {
   GschemCompselectDockable *compselect = GSCHEM_COMPSELECT_DOCKABLE (user_data);
 
-  if (!compselect_is_tiled (compselect))
+  if (!compselect_is_tiled (compselect)) {
+    compselect_unprelight_expander (compselect, GTK_WIDGET (expander));
     compselect_update_vertical_hierarchy (compselect);
+  }
 }
 
 static GtkWidget *
@@ -1586,11 +1648,16 @@ compselect_create_widget (GschemDockable *dockable)
 
   compselect->preview_expander = gtk_expander_new_with_mnemonic (_("Preview"));
   gtk_expander_set_spacing (GTK_EXPANDER (compselect->preview_expander), 3);
+  g_signal_connect (compselect->preview_expander, "enter-notify-event",
+                    G_CALLBACK (compselect_expander_enter_notify_event),
+                    compselect);
   g_signal_connect (compselect->preview_expander, "notify::expanded",
                     G_CALLBACK (compselect_expander_notify_expanded),
                     compselect);
   gtk_widget_show (compselect->preview_expander);
   g_object_ref (compselect->preview_expander);
+
+  compselect->preview_expander_event_window = NULL;
 
 
   /* attributes area */
@@ -1610,11 +1677,16 @@ compselect_create_widget (GschemDockable *dockable)
   compselect->attribs_expander =
     gtk_expander_new_with_mnemonic (_("Attributes"));
   gtk_expander_set_spacing (GTK_EXPANDER (compselect->attribs_expander), 3);
+  g_signal_connect (compselect->attribs_expander, "enter-notify-event",
+                    G_CALLBACK (compselect_expander_enter_notify_event),
+                    compselect);
   g_signal_connect (compselect->attribs_expander, "notify::expanded",
                     G_CALLBACK (compselect_expander_notify_expanded),
                     compselect);
   gtk_widget_show (compselect->attribs_expander);
   g_object_ref (compselect->attribs_expander);
+
+  compselect->attribs_expander_event_window = NULL;
 
 
   /* top-level container widget (will contain one of the other widgets

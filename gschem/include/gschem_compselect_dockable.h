@@ -71,11 +71,12 @@ struct _GschemCompselectDockable {
   guint        filter_timeout;
   GtkComboBox *combobox_behaviors;
 
-  GtkWidget *preview_content,  *attribs_content;
-  GtkWidget *preview_frame,    *attribs_frame;
-  GtkWidget *preview_box,      *attribs_box;
-  GtkWidget *preview_paned,    *attribs_paned;
-  GtkWidget *preview_expander, *attribs_expander;
+  GtkWidget *preview_content,               *attribs_content;
+  GtkWidget *preview_frame,                 *attribs_frame;
+  GtkWidget *preview_box,                   *attribs_box;
+  GtkWidget *preview_paned,                 *attribs_paned;
+  GtkWidget *preview_expander,              *attribs_expander;
+  GdkWindow *preview_expander_event_window, *attribs_expander_event_window;
 };
 
 
