@@ -1440,8 +1440,7 @@ compselect_create_widget (GschemDockable *dockable)
   /* behavior combo box at the bottom */
   combobox = create_behaviors_combo_box ();
   compselect->combobox_behaviors = GTK_COMBO_BOX (combobox);
-  g_signal_connect (combobox,
-                    "changed",
+  g_signal_connect (combobox, "changed",
                     G_CALLBACK (compselect_callback_behavior_changed),
                     compselect);
 
@@ -1450,10 +1449,8 @@ compselect_create_widget (GschemDockable *dockable)
   gtk_container_set_border_width (GTK_CONTAINER (vbox), DIALOG_BORDER_SPACING);
   g_signal_connect (vbox, "size-allocate",
                     G_CALLBACK (compselect_vbox_size_allocate), compselect);
-  gtk_box_pack_start (GTK_BOX (vbox), compselect->hpaned,
-                      TRUE, TRUE, 0);
-  gtk_box_pack_start (GTK_BOX (vbox), combobox,
-                      FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox), compselect->hpaned, TRUE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox), combobox, FALSE, FALSE, 0);
   gtk_widget_show_all (vbox);
   return vbox;
 }
