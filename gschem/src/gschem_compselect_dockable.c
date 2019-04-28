@@ -1160,6 +1160,7 @@ create_attributes_treeview (GschemCompselectDockable *compselect)
                                            "model",      model,
                                            "headers-visible", FALSE,
                                            "rules-hint", TRUE,
+                                           "tooltip-column", 1,
                                            NULL));
 
   /* two columns for name and value of the attributes */
