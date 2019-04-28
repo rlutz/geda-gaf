@@ -62,7 +62,7 @@ struct _GschemCompselectDockableClass {
 struct _GschemCompselectDockable {
   GschemDockable parent_instance;
 
-  GtkWidget   *hpaned, *vpaned, *attrframe;
+  GtkWidget   *hpaned, *vpaned, *attribs_frame;
   GtkTreeView *libtreeview, *inusetreeview, *attrtreeview;
   GtkNotebook *viewtabs;
   GschemPreview *preview;

@@ -453,7 +453,7 @@ update_attributes_model (GschemCompselectDockable *compselect,
 
   /* Hide the attributes list if the list of attributes to show is
    * empty. */
-  gtk_widget_set_visible (compselect->attrframe, n != 0);
+  gtk_widget_set_visible (compselect->attribs_frame, n != 0);
 
   g_strfreev (filter_list);
   g_list_free (o_attrlist);
@@ -1421,14 +1421,14 @@ compselect_create_widget (GschemDockable *dockable)
   attributes = create_attributes_treeview (compselect);
   gtk_widget_set_size_request (attributes, -1, 20);
 
-  compselect->attrframe = gtk_frame_new (_("Attributes"));
-  gtk_container_add (GTK_CONTAINER (compselect->attrframe), attributes);
+  compselect->attribs_frame = gtk_frame_new (_("Attributes"));
+  gtk_container_add (GTK_CONTAINER (compselect->attribs_frame), attributes);
 
   /* vertical pane containing preview and attributes */
   compselect->vpaned = gtk_vpaned_new ();
   gtk_widget_set_size_request (compselect->vpaned, 25, -1);
   gtk_paned_pack1 (GTK_PANED (compselect->vpaned), frame, FALSE, FALSE);
-  gtk_paned_pack2 (GTK_PANED (compselect->vpaned), compselect->attrframe,
+  gtk_paned_pack2 (GTK_PANED (compselect->vpaned), compselect->attribs_frame,
                    FALSE, FALSE);
 
   /* horizontal pane containing selection and preview/attributes */
