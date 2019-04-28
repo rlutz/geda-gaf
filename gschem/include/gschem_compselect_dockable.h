@@ -73,6 +73,9 @@ struct _GschemCompselectDockable {
 
   GtkWidget *preview_content,  *attribs_content;
   GtkWidget *preview_frame,    *attribs_frame;
+  GtkWidget *preview_box,      *attribs_box;
+  GtkWidget *preview_paned,    *attribs_paned;
+  GtkWidget *preview_expander, *attribs_expander;
 };
 
 

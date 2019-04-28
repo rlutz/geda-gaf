@@ -203,6 +203,7 @@ static GObjectClass *compselect_parent_class = NULL;
 
 
 static void compselect_class_init      (GschemCompselectDockableClass *class);
+static void compselect_dispose         (GObject *object);
 static void compselect_finalize        (GObject *object);
 static void compselect_set_property    (GObject *object,
                                         guint property_id,
@@ -1184,8 +1185,6 @@ create_attributes_treeview (GschemCompselectDockable *compselect)
   gtk_tree_view_append_column (GTK_TREE_VIEW (attrtreeview), column);
 
   scrolled_win = GTK_WIDGET (g_object_new (GTK_TYPE_SCROLLED_WINDOW,
-                                           /* GtkContainer */
-                                           "border-width", 5,
                                            /* GtkScrolledWindow */
                                            "hscrollbar-policy", GTK_POLICY_AUTOMATIC,
                                            "vscrollbar-policy", GTK_POLICY_AUTOMATIC,
@@ -1333,6 +1332,7 @@ compselect_class_init (GschemCompselectDockableClass *klass)
   gschem_dockable_class->restore_internal_geometry =
     compselect_restore_internal_geometry;
 
+  gobject_class->dispose      = compselect_dispose;
   gobject_class->finalize     = compselect_finalize;
   gobject_class->set_property = compselect_set_property;
   gobject_class->get_property = compselect_get_property;
@@ -1355,21 +1355,136 @@ compselect_class_init (GschemCompselectDockableClass *klass)
                        G_PARAM_READWRITE));
 }
 
+/*! \brief Make <widget> the child of <container>, removing other
+ *         parent-child relations if necessary.
+ */
+static void
+reparent (GtkWidget *container, GtkWidget *widget)
+{
+  GtkWidget *old_child = gtk_bin_get_child (GTK_BIN (container));
+  GtkWidget *old_parent = widget ? gtk_widget_get_parent (widget) : NULL;
+  if (old_child == widget && old_parent == container)
+    return;
+
+  if (old_child != NULL)
+    gtk_container_remove (GTK_CONTAINER (container), old_child);
+  if (old_parent != NULL)
+    gtk_container_remove (GTK_CONTAINER (old_parent), widget);
+
+  if (container != NULL && widget != NULL)
+    gtk_container_add (GTK_CONTAINER (container), widget);
+}
+
+/*! \brief Make <top> and <bottom> the children of <container>,
+ *         removing other parent-child relations if necessary.
+ */
+static void
+reparent2 (GtkWidget *container, GtkWidget *top, GtkWidget *bottom)
+{
+  GtkWidget *top_parent = gtk_widget_get_parent (top);
+  GtkWidget *bottom_parent = gtk_widget_get_parent (bottom);
+  if (top_parent == container && bottom_parent == container)
+    return;
+
+  if (top_parent != NULL)
+    gtk_container_remove (GTK_CONTAINER (top_parent), top);
+  if (bottom_parent != NULL)
+    gtk_container_remove (GTK_CONTAINER (bottom_parent), bottom);
+
+  do {
+    GList *old_children =
+      gtk_container_get_children (GTK_CONTAINER (container));
+    if (old_children == NULL)
+      break;
+    gtk_container_remove (GTK_CONTAINER (container), old_children->data);
+  } while (1);
+
+  if (GTK_IS_PANED (container)) {
+    gtk_paned_pack1 (GTK_PANED (container), top, TRUE, FALSE);
+    gtk_paned_pack2 (GTK_PANED (container), bottom, FALSE, FALSE);
+  } else if (GTK_IS_BOX (container)) {
+    gtk_box_pack_start (GTK_BOX (container), top, TRUE, TRUE, 0);
+    gtk_box_pack_start (GTK_BOX (container), bottom, FALSE, FALSE, 0);
+  } else
+    g_assert_not_reached ();
+}
+
+/*! \brief Put the appropriate widget hierarchy for vertical layout in place.
+ */
+static void
+compselect_update_vertical_hierarchy (GschemCompselectDockable *compselect)
+{
+  gboolean expanded0 = gtk_expander_get_expanded (
+    GTK_EXPANDER (compselect->preview_expander));
+  gboolean expanded1 = gtk_expander_get_expanded (
+    GTK_EXPANDER (compselect->attribs_expander));
+
+  GtkWidget *container0 = expanded0 ? compselect->preview_paned
+                                    : compselect->preview_box;
+  GtkWidget *container1 = expanded1 ? compselect->attribs_paned
+                                    : compselect->attribs_box;
+
+  reparent (compselect->preview_expander,
+            expanded0 ? compselect->preview_content : NULL);
+  reparent (compselect->attribs_expander,
+            expanded1 ? compselect->attribs_content : NULL);
+
+  reparent2 (container0, compselect->vbox, compselect->preview_expander);
+  reparent2 (container1, container0, compselect->attribs_expander);
+  reparent (compselect->top, container1);
+}
+
 /*! \brief Set the current layout for this dockable.
  *
  * Tiled layout is the classical behavior of gschem: the tree view is
  * on the left, preview and attributes are on the right.
  *
- * Vertical layout is used for tall aspect ratios: so far, it only
- * shows the tree view.
+ * Vertical layout is used for tall aspect ratios: the tree view is at
+ * the top, preview and attributes are below and expandable.
  */
 static void
 compselect_set_tiled (GschemCompselectDockable *compselect, gboolean tiled)
 {
-  if (tiled)
+  GtkWidget *top_widget = gtk_bin_get_child (GTK_BIN (compselect->top));
+
+  if (tiled) {
+    if (top_widget == compselect->vbox)
+      return;
+
+    gtk_container_set_border_width (
+      GTK_CONTAINER (compselect->preview_content), 5);
+    gtk_container_set_border_width (
+      GTK_CONTAINER (compselect->attribs_content), 5);
+
+    reparent (compselect->preview_frame, compselect->preview_content);
+    reparent (compselect->attribs_frame, compselect->attribs_content);
+    reparent (compselect->top, compselect->vbox);
     gtk_widget_show (compselect->vpaned);
-  else
+
+  } else {
+    if (top_widget == compselect->attribs_paned ||
+        top_widget == compselect->attribs_box)
+      return;
+
+    gtk_container_set_border_width (
+      GTK_CONTAINER (compselect->preview_content), 0);
+    gtk_container_set_border_width (
+      GTK_CONTAINER (compselect->attribs_content), 0);
+
     gtk_widget_hide (compselect->vpaned);
+    compselect_update_vertical_hierarchy (compselect);
+  }
+}
+
+/*! \brief Return whether tiled layout is in effect.
+ */
+static gboolean
+compselect_is_tiled (GschemCompselectDockable *compselect)
+{
+  GtkWidget *top_widget = gtk_bin_get_child (GTK_BIN (compselect->top));
+
+  return top_widget != compselect->attribs_paned &&
+         top_widget != compselect->attribs_box;
 }
 
 /*! \brief Callback function: Size of the whole dockable changed.
@@ -1386,12 +1501,27 @@ compselect_top_size_allocate (GtkWidget *widget,
                         allocation->width * 2 > allocation->height);
 }
 
+/*! \brief Callback function: Expander activated.
+ *
+ * Update the widget hierarchy.
+ */
+static void
+compselect_expander_notify_expanded (GObject *expander,
+                                     GParamSpec *pspec,
+                                     gpointer user_data)
+{
+  GschemCompselectDockable *compselect = GSCHEM_COMPSELECT_DOCKABLE (user_data);
+
+  if (!compselect_is_tiled (compselect))
+    compselect_update_vertical_hierarchy (compselect);
+}
+
 static GtkWidget *
 compselect_create_widget (GschemDockable *dockable)
 {
   GschemCompselectDockable *compselect = GSCHEM_COMPSELECT_DOCKABLE (dockable);
   GtkWidget *inuseview, *libview, *notebook;
-  GtkWidget *preview, *combobox;
+  GtkWidget *combobox, *preview;
 
   /* notebook for library and inuse views */
   inuseview = create_inuse_treeview (compselect);
@@ -1403,29 +1533,9 @@ compselect_create_widget (GschemDockable *dockable)
   gtk_notebook_append_page (GTK_NOTEBOOK (notebook), libview,
                             gtk_label_new (_("Libraries")));
 
-  /* preview area */
-  preview = gschem_preview_new ();
-  compselect->preview = GSCHEM_PREVIEW (preview);
-  gtk_widget_set_size_request (preview, 160, 120);
-
-  compselect->preview_content = gtk_alignment_new (.5, .5, 1., 1.);
-  gtk_widget_set_size_request (compselect->preview_content, 0, 15);
-  gtk_container_set_border_width (GTK_CONTAINER (compselect->preview_content), 5);
-  gtk_container_add (GTK_CONTAINER (compselect->preview_content), preview);
-
-  compselect->preview_frame = gtk_frame_new (_("Preview"));
-  gtk_container_add (GTK_CONTAINER (compselect->preview_frame),
-                     compselect->preview_content);
-
-  /* attributes area */
-  compselect->attribs_content = create_attributes_treeview (compselect);
-  gtk_widget_set_size_request (compselect->attribs_content, -1, 20);
-
-  compselect->attribs_frame = gtk_frame_new (_("Attributes"));
-  gtk_container_add (GTK_CONTAINER (compselect->attribs_frame),
-                     compselect->attribs_content);
-
   /* vertical pane containing preview and attributes */
+  compselect->preview_frame = gtk_frame_new (_("Preview"));
+  compselect->attribs_frame = gtk_frame_new (_("Attributes"));
   compselect->vpaned = gtk_vpaned_new ();
   gtk_widget_set_size_request (compselect->vpaned, 25, -1);
   gtk_paned_pack1 (GTK_PANED (compselect->vpaned), compselect->preview_frame,
@@ -1451,6 +1561,61 @@ compselect_create_widget (GschemDockable *dockable)
   gtk_box_pack_start (GTK_BOX (compselect->vbox), compselect->hpaned,
                       TRUE, TRUE, 0);
   gtk_box_pack_start (GTK_BOX (compselect->vbox), combobox, FALSE, FALSE, 0);
+  gtk_widget_show_all (compselect->vbox);
+  g_object_ref (compselect->vbox);
+
+
+  /* preview area */
+  preview = gschem_preview_new ();
+  compselect->preview = GSCHEM_PREVIEW (preview);
+  gtk_widget_set_size_request (preview, 160, 120);
+
+  compselect->preview_content = gtk_alignment_new (.5, .5, 1., 1.);
+  gtk_widget_set_size_request (compselect->preview_content, 0, 15);
+  gtk_container_add (GTK_CONTAINER (compselect->preview_content), preview);
+  gtk_widget_show_all (compselect->preview_content);
+  g_object_ref (compselect->preview_content);
+
+  compselect->preview_box = gtk_vbox_new (FALSE, 3);
+  gtk_widget_show (compselect->preview_box);
+  g_object_ref (compselect->preview_box);
+
+  compselect->preview_paned = gtk_vpaned_new ();
+  gtk_widget_show (compselect->preview_paned);
+  g_object_ref (compselect->preview_paned);
+
+  compselect->preview_expander = gtk_expander_new_with_mnemonic (_("Preview"));
+  gtk_expander_set_spacing (GTK_EXPANDER (compselect->preview_expander), 3);
+  g_signal_connect (compselect->preview_expander, "notify::expanded",
+                    G_CALLBACK (compselect_expander_notify_expanded),
+                    compselect);
+  gtk_widget_show (compselect->preview_expander);
+  g_object_ref (compselect->preview_expander);
+
+
+  /* attributes area */
+  compselect->attribs_content = create_attributes_treeview (compselect);
+  gtk_widget_set_size_request (compselect->attribs_content, -1, 20);
+  gtk_widget_show_all (compselect->attribs_content);
+  g_object_ref (compselect->attribs_content);
+
+  compselect->attribs_box = gtk_vbox_new (FALSE, 3);
+  gtk_widget_show (compselect->attribs_box);
+  g_object_ref (compselect->attribs_box);
+
+  compselect->attribs_paned = gtk_vpaned_new ();
+  gtk_widget_show (compselect->attribs_paned);
+  g_object_ref (compselect->attribs_paned);
+
+  compselect->attribs_expander =
+    gtk_expander_new_with_mnemonic (_("Attributes"));
+  gtk_expander_set_spacing (GTK_EXPANDER (compselect->attribs_expander), 3);
+  g_signal_connect (compselect->attribs_expander, "notify::expanded",
+                    G_CALLBACK (compselect_expander_notify_expanded),
+                    compselect);
+  gtk_widget_show (compselect->attribs_expander);
+  g_object_ref (compselect->attribs_expander);
+
 
   /* top-level container widget (will contain one of the other widgets
      according to the selected layout) */
@@ -1459,9 +1624,28 @@ compselect_create_widget (GschemDockable *dockable)
                                   DIALOG_BORDER_SPACING);
   g_signal_connect (compselect->top, "size-allocate",
                     G_CALLBACK (compselect_top_size_allocate), compselect);
-  gtk_container_add (GTK_CONTAINER (compselect->top), compselect->vbox);
-  gtk_widget_show_all (compselect->top);
+  gtk_widget_show (compselect->top);
   return compselect->top;
+}
+
+static void
+compselect_dispose (GObject *object)
+{
+  GschemCompselectDockable *compselect = GSCHEM_COMPSELECT_DOCKABLE (object);
+
+  g_clear_object (&compselect->vbox);
+
+  g_clear_object (&compselect->preview_content);
+  g_clear_object (&compselect->preview_box);
+  g_clear_object (&compselect->preview_paned);
+  g_clear_object (&compselect->preview_expander);
+
+  g_clear_object (&compselect->attribs_content);
+  g_clear_object (&compselect->attribs_box);
+  g_clear_object (&compselect->attribs_paned);
+  g_clear_object (&compselect->attribs_expander);
+
+  G_OBJECT_CLASS (compselect_parent_class)->dispose (object);
 }
 
 static void
