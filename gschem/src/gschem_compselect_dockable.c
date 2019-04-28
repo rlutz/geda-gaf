@@ -452,10 +452,6 @@ update_attributes_model (GschemCompselectDockable *compselect, gchar *filename)
     }
   }
 
-  /* Hide the attributes list if the list of attributes to show is
-   * empty. */
-  gtk_widget_set_visible (compselect->attribs_frame, n != 0);
-
   g_strfreev (filter_list);
   g_list_free (o_attrlist);
 }
