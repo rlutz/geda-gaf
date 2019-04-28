@@ -50,6 +50,8 @@ enum {
 static GObjectClass *preview_parent_class = NULL;
 
 
+static void preview_zoom (GschemPreview *preview);
+
 static void preview_class_init (GschemPreviewClass *class);
 static void preview_init       (GschemPreview *preview);
 static void preview_set_property (GObject *object,
@@ -100,6 +102,24 @@ preview_callback_realize (GtkWidget *widget, gpointer user_data)
 
   gtk_widget_grab_focus (widget);
   gschem_page_view_zoom_extents (GSCHEM_PAGE_VIEW (widget), NULL);
+}
+
+
+/*! \brief Trigger deferred zoom and redraw preview widget.
+ */
+static gboolean
+preview_callback_expose_event (GtkWidget *widget,
+                               GdkEvent *event,
+                               gpointer user_data)
+{
+  GschemPreview *preview = GSCHEM_PREVIEW (widget);
+
+  if (preview->needs_zoom) {
+    preview_zoom (preview);
+    preview->needs_zoom = FALSE;
+  }
+
+  return x_event_expose (GSCHEM_PAGE_VIEW (widget), &event->expose, user_data);
 }
 
 
@@ -164,8 +184,6 @@ preview_callback_button_press (GtkWidget *widget,
 static void
 preview_update (GschemPreview *preview)
 {
-  int left, top, right, bottom;
-  int width, height;
   GError * err = NULL;
 
   GschemPageView *preview_view = GSCHEM_PAGE_VIEW (preview);
@@ -211,7 +229,25 @@ preview_update (GschemPreview *preview)
     }
   }
 
-  if (world_get_object_glist_bounds (preview_toplevel,
+  if (gtk_widget_get_window (GTK_WIDGET (preview)) != NULL) {
+    preview_zoom (preview);
+    preview->needs_zoom = FALSE;
+  } else
+    preview->needs_zoom = TRUE;
+}
+
+static void
+preview_zoom (GschemPreview *preview)
+{
+  GschemPageView *preview_view = GSCHEM_PAGE_VIEW (preview);
+  PAGE *preview_page = gschem_page_view_get_page (preview_view);
+  if (preview_page == NULL)
+    return;
+
+  int left, top, right, bottom;
+  int width, height;
+
+  if (world_get_object_glist_bounds (preview_page->toplevel,
                                      s_page_objects (preview_page),
                                      &left, &top,
                                      &right, &bottom)) {
@@ -312,7 +348,7 @@ preview_init (GschemPreview *preview)
     GCallback c_handler;
   } drawing_area_events[] = {
     { "realize",              G_CALLBACK (preview_callback_realize)       },
-    { "expose_event",         G_CALLBACK (x_event_expose)                 },
+    { "expose_event",         G_CALLBACK (preview_callback_expose_event)  },
     { "button_press_event",   G_CALLBACK (preview_callback_button_press)  },
     { "configure_event",      G_CALLBACK (x_event_configure)              },
     { "scroll_event",         G_CALLBACK (preview_event_scroll)           },
@@ -347,6 +383,7 @@ preview_init (GschemPreview *preview)
   preview->preview_w_current = preview_w_current;
 
   preview->active   = FALSE;
+  preview->needs_zoom = FALSE;
   preview->filename = NULL;
   preview->buffer   = NULL;
   GSCHEM_PAGE_VIEW (preview)->page = s_page_new (preview->preview_w_current->toplevel, "preview");

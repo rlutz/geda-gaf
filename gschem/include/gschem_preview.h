@@ -46,7 +46,7 @@ struct _GschemPreview
   gchar *filename;
   gchar *buffer;
 
-  gboolean active;
+  gboolean active, needs_zoom;
 };
 
 GType
