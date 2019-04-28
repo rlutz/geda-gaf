@@ -1433,7 +1433,6 @@ compselect_create_widget (GschemDockable *dockable)
 
   /* horizontal pane containing selection and preview/attributes */
   compselect->hpaned = gtk_hpaned_new ();
-  gtk_container_set_border_width (GTK_CONTAINER (compselect->hpaned), 0);
   gtk_paned_pack1 (GTK_PANED (compselect->hpaned), notebook, TRUE, FALSE);
   gtk_paned_pack2 (GTK_PANED (compselect->hpaned), compselect->vpaned,
                    TRUE, FALSE);
