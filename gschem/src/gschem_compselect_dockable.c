@@ -1391,8 +1391,7 @@ compselect_create_widget (GschemDockable *dockable)
 {
   GschemCompselectDockable *compselect = GSCHEM_COMPSELECT_DOCKABLE (dockable);
   GtkWidget *inuseview, *libview, *notebook;
-  GtkWidget *preview, *alignment, *frame, *attributes;
-  GtkWidget *combobox, *vbox, *top;
+  GtkWidget *preview, *combobox;
 
   /* notebook for library and inuse views */
   inuseview = create_inuse_treeview (compselect);
@@ -1409,25 +1408,28 @@ compselect_create_widget (GschemDockable *dockable)
   compselect->preview = GSCHEM_PREVIEW (preview);
   gtk_widget_set_size_request (preview, 160, 120);
 
-  alignment = gtk_alignment_new (.5, .5, 1., 1.);
-  gtk_widget_set_size_request (alignment, 0, 15);
-  gtk_container_set_border_width (GTK_CONTAINER (alignment), 5);
-  gtk_container_add (GTK_CONTAINER (alignment), preview);
+  compselect->preview_content = gtk_alignment_new (.5, .5, 1., 1.);
+  gtk_widget_set_size_request (compselect->preview_content, 0, 15);
+  gtk_container_set_border_width (GTK_CONTAINER (compselect->preview_content), 5);
+  gtk_container_add (GTK_CONTAINER (compselect->preview_content), preview);
 
-  frame = gtk_frame_new (_("Preview"));
-  gtk_container_add (GTK_CONTAINER (frame), alignment);
+  compselect->preview_frame = gtk_frame_new (_("Preview"));
+  gtk_container_add (GTK_CONTAINER (compselect->preview_frame),
+                     compselect->preview_content);
 
   /* attributes area */
-  attributes = create_attributes_treeview (compselect);
-  gtk_widget_set_size_request (attributes, -1, 20);
+  compselect->attribs_content = create_attributes_treeview (compselect);
+  gtk_widget_set_size_request (compselect->attribs_content, -1, 20);
 
   compselect->attribs_frame = gtk_frame_new (_("Attributes"));
-  gtk_container_add (GTK_CONTAINER (compselect->attribs_frame), attributes);
+  gtk_container_add (GTK_CONTAINER (compselect->attribs_frame),
+                     compselect->attribs_content);
 
   /* vertical pane containing preview and attributes */
   compselect->vpaned = gtk_vpaned_new ();
   gtk_widget_set_size_request (compselect->vpaned, 25, -1);
-  gtk_paned_pack1 (GTK_PANED (compselect->vpaned), frame, FALSE, FALSE);
+  gtk_paned_pack1 (GTK_PANED (compselect->vpaned), compselect->preview_frame,
+                   FALSE, FALSE);
   gtk_paned_pack2 (GTK_PANED (compselect->vpaned), compselect->attribs_frame,
                    FALSE, FALSE);
 
@@ -1445,19 +1447,21 @@ compselect_create_widget (GschemDockable *dockable)
                     compselect);
 
   /* top-level vbox */
-  vbox = gtk_vbox_new (FALSE, DIALOG_V_SPACING);
-  gtk_box_pack_start (GTK_BOX (vbox), compselect->hpaned, TRUE, TRUE, 0);
-  gtk_box_pack_start (GTK_BOX (vbox), combobox, FALSE, FALSE, 0);
+  compselect->vbox = gtk_vbox_new (FALSE, DIALOG_V_SPACING);
+  gtk_box_pack_start (GTK_BOX (compselect->vbox), compselect->hpaned,
+                      TRUE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (compselect->vbox), combobox, FALSE, FALSE, 0);
 
   /* top-level container widget (will contain one of the other widgets
      according to the selected layout) */
-  top = gtk_alignment_new (.5, .5, 1., 1.);
-  gtk_container_set_border_width (GTK_CONTAINER (top), DIALOG_BORDER_SPACING);
-  g_signal_connect (top, "size-allocate",
+  compselect->top = gtk_alignment_new (.5, .5, 1., 1.);
+  gtk_container_set_border_width (GTK_CONTAINER (compselect->top),
+                                  DIALOG_BORDER_SPACING);
+  g_signal_connect (compselect->top, "size-allocate",
                     G_CALLBACK (compselect_top_size_allocate), compselect);
-  gtk_container_add (GTK_CONTAINER (top), vbox);
-  gtk_widget_show_all (top);
-  return top;
+  gtk_container_add (GTK_CONTAINER (compselect->top), compselect->vbox);
+  gtk_widget_show_all (compselect->top);
+  return compselect->top;
 }
 
 static void

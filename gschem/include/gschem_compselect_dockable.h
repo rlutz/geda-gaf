@@ -62,7 +62,7 @@ struct _GschemCompselectDockableClass {
 struct _GschemCompselectDockable {
   GschemDockable parent_instance;
 
-  GtkWidget   *hpaned, *vpaned, *attribs_frame;
+  GtkWidget   *top, *vbox, *hpaned, *vpaned;
   GtkTreeView *libtreeview, *inusetreeview, *attrtreeview;
   GtkNotebook *viewtabs;
   GschemPreview *preview;
@@ -70,6 +70,9 @@ struct _GschemCompselectDockable {
   GtkButton   *button_clear;
   guint        filter_timeout;
   GtkComboBox *combobox_behaviors;
+
+  GtkWidget *preview_content,  *attribs_content;
+  GtkWidget *preview_frame,    *attribs_frame;
 };
 
 
