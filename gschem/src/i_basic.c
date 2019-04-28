@@ -613,7 +613,9 @@ i_cancel (GschemToplevel *w_current)
     x_compselect_deselect (w_current);
 
     /* Present the component selector again */
-    gschem_dockable_present (w_current->compselect_dockable);
+    if (gschem_dockable_get_state (w_current->compselect_dockable)
+          == GSCHEM_DOCKABLE_STATE_HIDDEN)
+      gschem_dockable_present (w_current->compselect_dockable);
   }
 
   if (w_current->inside_action) {
