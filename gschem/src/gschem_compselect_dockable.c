@@ -1397,8 +1397,7 @@ compselect_create_widget (GschemDockable *dockable)
   /* notebook for library and inuse views */
   inuseview = create_inuse_treeview (compselect);
   libview = create_lib_treeview (compselect);
-  notebook = GTK_WIDGET (g_object_new (GTK_TYPE_NOTEBOOK,
-                                       NULL));
+  notebook = gtk_notebook_new ();
   compselect->viewtabs = GTK_NOTEBOOK (notebook);
   gtk_notebook_append_page (GTK_NOTEBOOK (notebook), inuseview,
                             gtk_label_new (_("In Use")));
@@ -1408,50 +1407,33 @@ compselect_create_widget (GschemDockable *dockable)
   /* preview area */
   preview = gschem_preview_new ();
   compselect->preview = GSCHEM_PREVIEW (preview);
-  g_object_set (GTK_WIDGET (preview),
-                "width-request",  160,
-                "height-request", 120,
-                NULL);
+  gtk_widget_set_size_request (preview, 160, 120);
 
-  alignment = GTK_WIDGET (g_object_new (GTK_TYPE_ALIGNMENT,
-                                        /* GtkAlignment */
-                                        "border-width", 5,
-                                        "xscale",         1.0,
-                                        "yscale",         1.0,
-                                        "xalign",         0.5,
-                                        "yalign",         0.5,
-                                        NULL));
+  alignment = gtk_alignment_new (.5, .5, 1., 1.);
   gtk_widget_set_size_request (alignment, 0, 15);
+  gtk_container_set_border_width (GTK_CONTAINER (alignment), 5);
   gtk_container_add (GTK_CONTAINER (alignment), preview);
 
-  frame = GTK_WIDGET (g_object_new (GTK_TYPE_FRAME,
-                                    /* GtkFrame */
-                                    "label", _("Preview"),
-                                    NULL));
+  frame = gtk_frame_new (_("Preview"));
   gtk_container_add (GTK_CONTAINER (frame), alignment);
 
   /* attributes area */
   attributes = create_attributes_treeview (compselect);
   gtk_widget_set_size_request (attributes, -1, 20);
 
-  compselect->attrframe = GTK_WIDGET (g_object_new (GTK_TYPE_FRAME,
-                                                    /* GtkFrame */
-                                                    "label", _("Attributes"),
-                                                    NULL));
+  compselect->attrframe = gtk_frame_new (_("Attributes"));
   gtk_container_add (GTK_CONTAINER (compselect->attrframe), attributes);
 
   /* vertical pane containing preview and attributes */
-  compselect->vpaned = GTK_WIDGET (g_object_new (GTK_TYPE_VPANED, NULL));
+  compselect->vpaned = gtk_vpaned_new ();
   gtk_widget_set_size_request (compselect->vpaned, 25, -1);
   gtk_paned_pack1 (GTK_PANED (compselect->vpaned), frame, FALSE, FALSE);
   gtk_paned_pack2 (GTK_PANED (compselect->vpaned), compselect->attrframe,
                    FALSE, FALSE);
 
   /* horizontal pane containing selection and preview/attributes */
-  compselect->hpaned = GTK_WIDGET (g_object_new (GTK_TYPE_HPANED,
-                                                 /* GtkContainer */
-                                                 "border-width", 0,
-                                                 NULL));
+  compselect->hpaned = gtk_hpaned_new ();
+  gtk_container_set_border_width (GTK_CONTAINER (compselect->hpaned), 0);
   gtk_paned_pack1 (GTK_PANED (compselect->hpaned), notebook, TRUE, FALSE);
   gtk_paned_pack2 (GTK_PANED (compselect->hpaned), compselect->vpaned,
                    TRUE, FALSE);
