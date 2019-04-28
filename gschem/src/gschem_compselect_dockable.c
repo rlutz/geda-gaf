@@ -382,7 +382,7 @@ enum {
  *  \param [in] preview_toplevel The toplevel of the preview widget
  */
 void
-update_attributes_model (GschemCompselectDockable *compselect)
+update_attributes_model (GschemCompselectDockable *compselect, gchar *filename)
 {
   GtkListStore *model;
   GtkTreeIter iter;
@@ -419,7 +419,8 @@ update_attributes_model (GschemCompselectDockable *compselect)
 
   o_attrlist = o_attrib_find_floating_attribs (s_page_objects (preview_page));
 
-  cfg = eda_config_get_context_for_path (preview_page->page_filename);
+  cfg = filename != NULL ? eda_config_get_context_for_path (filename)
+                         : eda_config_get_user_context ();
   filter_list = eda_config_get_string_list (cfg, "gschem.library",
                                             "component-attributes", &n, NULL);
 
@@ -484,6 +485,7 @@ compselect_callback_tree_selection_changed (GtkTreeSelection *selection,
   GschemCompselectDockable *compselect = GSCHEM_COMPSELECT_DOCKABLE (user_data);
   const CLibSymbol *sym = NULL;
   gchar *buffer = NULL;
+  gchar *filename = NULL;
 
   if (gtk_tree_selection_get_selected (selection, &model, &iter)) {
 
@@ -495,6 +497,7 @@ compselect_callback_tree_selection_changed (GtkTreeSelection *selection,
 
       gtk_tree_model_get (model, &iter, 0, &sym, -1);
       buffer = s_clib_symbol_get_data (sym);
+      filename = s_clib_symbol_get_filename (sym);
     }
   }
 
@@ -505,7 +508,7 @@ compselect_callback_tree_selection_changed (GtkTreeSelection *selection,
                 NULL);
 
   /* update the attributes with the toplevel of the preview widget*/
-  update_attributes_model (compselect);
+  update_attributes_model (compselect, filename);
 
   /* signal a component has been selected to parent of dockable */
   compselect_place (compselect);
