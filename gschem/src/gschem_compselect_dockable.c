@@ -1437,7 +1437,6 @@ compselect_create_widget (GschemDockable *dockable)
   gtk_paned_pack1 (GTK_PANED (compselect->hpaned), notebook, TRUE, FALSE);
   gtk_paned_pack2 (GTK_PANED (compselect->hpaned), compselect->vpaned,
                    TRUE, FALSE);
-  gtk_widget_show_all (compselect->hpaned);
 
   /* behavior combo box at the bottom */
   combobox = create_behaviors_combo_box ();
@@ -1446,7 +1445,6 @@ compselect_create_widget (GschemDockable *dockable)
                     "changed",
                     G_CALLBACK (compselect_callback_behavior_changed),
                     compselect);
-  gtk_widget_show_all (combobox);
 
   /* top-level vbox */
   vbox = gtk_vbox_new (FALSE, DIALOG_V_SPACING);
@@ -1457,7 +1455,7 @@ compselect_create_widget (GschemDockable *dockable)
                       TRUE, TRUE, 0);
   gtk_box_pack_start (GTK_BOX (vbox), combobox,
                       FALSE, FALSE, 0);
-  gtk_widget_show (vbox);
+  gtk_widget_show_all (vbox);
   return vbox;
 }
 
