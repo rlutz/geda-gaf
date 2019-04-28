@@ -1378,9 +1378,9 @@ compselect_set_tiled (GschemCompselectDockable *compselect, gboolean tiled)
  * dockable becomes wider and taller than 1:2, respectively.
  */
 static void
-compselect_vbox_size_allocate (GtkWidget *widget,
-                               GdkRectangle *allocation,
-                               gpointer user_data)
+compselect_top_size_allocate (GtkWidget *widget,
+                              GdkRectangle *allocation,
+                              gpointer user_data)
 {
   compselect_set_tiled (GSCHEM_COMPSELECT_DOCKABLE (user_data),
                         allocation->width * 2 > allocation->height);
@@ -1392,7 +1392,7 @@ compselect_create_widget (GschemDockable *dockable)
   GschemCompselectDockable *compselect = GSCHEM_COMPSELECT_DOCKABLE (dockable);
   GtkWidget *inuseview, *libview, *notebook;
   GtkWidget *preview, *alignment, *frame, *attributes;
-  GtkWidget *combobox, *vbox;
+  GtkWidget *combobox, *vbox, *top;
 
   /* notebook for library and inuse views */
   inuseview = create_inuse_treeview (compselect);
@@ -1446,13 +1446,18 @@ compselect_create_widget (GschemDockable *dockable)
 
   /* top-level vbox */
   vbox = gtk_vbox_new (FALSE, DIALOG_V_SPACING);
-  gtk_container_set_border_width (GTK_CONTAINER (vbox), DIALOG_BORDER_SPACING);
-  g_signal_connect (vbox, "size-allocate",
-                    G_CALLBACK (compselect_vbox_size_allocate), compselect);
   gtk_box_pack_start (GTK_BOX (vbox), compselect->hpaned, TRUE, TRUE, 0);
   gtk_box_pack_start (GTK_BOX (vbox), combobox, FALSE, FALSE, 0);
-  gtk_widget_show_all (vbox);
-  return vbox;
+
+  /* top-level container widget (will contain one of the other widgets
+     according to the selected layout) */
+  top = gtk_alignment_new (.5, .5, 1., 1.);
+  gtk_container_set_border_width (GTK_CONTAINER (top), DIALOG_BORDER_SPACING);
+  g_signal_connect (top, "size-allocate",
+                    G_CALLBACK (compselect_top_size_allocate), compselect);
+  gtk_container_add (GTK_CONTAINER (top), vbox);
+  gtk_widget_show_all (top);
+  return top;
 }
 
 static void
