@@ -1390,50 +1390,29 @@ static GtkWidget *
 compselect_create_widget (GschemDockable *dockable)
 {
   GschemCompselectDockable *compselect = GSCHEM_COMPSELECT_DOCKABLE (dockable);
-  GtkWidget *vbox;
-  GtkWidget *hpaned, *vpaned, *notebook, *attributes;
-  GtkWidget *libview, *inuseview;
-  GtkWidget *preview, *combobox;
-  GtkWidget *alignment, *frame;
-
-  vbox = gtk_vbox_new (FALSE, DIALOG_V_SPACING);
-  gtk_container_set_border_width (GTK_CONTAINER (vbox), DIALOG_BORDER_SPACING);
-  g_signal_connect (vbox, "size-allocate",
-                    G_CALLBACK (compselect_vbox_size_allocate), compselect);
-
-  /* vertical pane containing preview and attributes */
-  vpaned = GTK_WIDGET (g_object_new (GTK_TYPE_VPANED, NULL));
-  compselect->vpaned = vpaned;
-
-  /* horizontal pane containing selection and preview */
-  hpaned = GTK_WIDGET (g_object_new (GTK_TYPE_HPANED,
-                                    /* GtkContainer */
-                                    "border-width", 0,
-                                     NULL));
-  compselect->hpaned = hpaned;
+  GtkWidget *inuseview, *libview, *notebook;
+  GtkWidget *preview, *alignment, *frame, *attributes;
+  GtkWidget *vpaned, *hpaned, *combobox, *vbox;
 
   /* notebook for library and inuse views */
+  inuseview = create_inuse_treeview (compselect);
+  libview = create_lib_treeview (compselect);
   notebook = GTK_WIDGET (g_object_new (GTK_TYPE_NOTEBOOK,
                                        NULL));
   compselect->viewtabs = GTK_NOTEBOOK (notebook);
-
-  inuseview = create_inuse_treeview (compselect);
   gtk_notebook_append_page (GTK_NOTEBOOK (notebook), inuseview,
                             gtk_label_new (_("In Use")));
-
-  libview = create_lib_treeview (compselect);
   gtk_notebook_append_page (GTK_NOTEBOOK (notebook), libview,
                             gtk_label_new (_("Libraries")));
 
-  /* include the vertical box in horizontal box */
-  gtk_paned_pack1 (GTK_PANED (hpaned), notebook, TRUE, FALSE);
+  /* preview area */
+  preview = gschem_preview_new ();
+  compselect->preview = GSCHEM_PREVIEW (preview);
+  g_object_set (GTK_WIDGET (preview),
+                "width-request",  160,
+                "height-request", 120,
+                NULL);
 
-
-  /* -- preview area -- */
-  frame = GTK_WIDGET (g_object_new (GTK_TYPE_FRAME,
-                                    /* GtkFrame */
-                                    "label", _("Preview"),
-                                    NULL));
   alignment = GTK_WIDGET (g_object_new (GTK_TYPE_ALIGNMENT,
                                         /* GtkAlignment */
                                         "border-width", 5,
@@ -1442,52 +1421,60 @@ compselect_create_widget (GschemDockable *dockable)
                                         "xalign",         0.5,
                                         "yalign",         0.5,
                                         NULL));
-
-  preview = gschem_preview_new ();
-
+  gtk_widget_set_size_request (alignment, 0, 15);
   gtk_container_add (GTK_CONTAINER (alignment), preview);
-  gtk_container_add (GTK_CONTAINER (frame), alignment);
-  /* set preview of compselect */
-  compselect->preview = GSCHEM_PREVIEW (preview);
-  g_object_set (GTK_WIDGET (preview),
-                "width-request",  160,
-                "height-request", 120,
-                NULL);
 
-  gtk_paned_pack1 (GTK_PANED (vpaned), frame, FALSE, FALSE);
+  frame = GTK_WIDGET (g_object_new (GTK_TYPE_FRAME,
+                                    /* GtkFrame */
+                                    "label", _("Preview"),
+                                    NULL));
+  gtk_container_add (GTK_CONTAINER (frame), alignment);
+
+  /* attributes area */
+  attributes = create_attributes_treeview (compselect);
+  gtk_widget_set_size_request (attributes, -1, 20);
 
   compselect->attrframe = GTK_WIDGET (g_object_new (GTK_TYPE_FRAME,
                                                     /* GtkFrame */
                                                     "label", _("Attributes"),
                                                     NULL));
-  attributes = create_attributes_treeview (compselect);
-  gtk_paned_pack2 (GTK_PANED (vpaned), compselect->attrframe, FALSE, FALSE);
   gtk_container_add (GTK_CONTAINER (compselect->attrframe), attributes);
 
-  gtk_widget_set_size_request (alignment, 0, 15);
-  gtk_widget_set_size_request (attributes, -1, 20);
+  /* vertical pane containing preview and attributes */
+  vpaned = GTK_WIDGET (g_object_new (GTK_TYPE_VPANED, NULL));
+  compselect->vpaned = vpaned;
   gtk_widget_set_size_request (vpaned, 25, -1);
+  gtk_paned_pack1 (GTK_PANED (vpaned), frame, FALSE, FALSE);
+  gtk_paned_pack2 (GTK_PANED (vpaned), compselect->attrframe, FALSE, FALSE);
 
+  /* horizontal pane containing selection and preview/attributes */
+  hpaned = GTK_WIDGET (g_object_new (GTK_TYPE_HPANED,
+                                    /* GtkContainer */
+                                    "border-width", 0,
+                                     NULL));
+  compselect->hpaned = hpaned;
+  gtk_paned_pack1 (GTK_PANED (hpaned), notebook, TRUE, FALSE);
   gtk_paned_pack2 (GTK_PANED (hpaned), vpaned, TRUE, FALSE);
-
-  /* add the hpaned to the vbox */
-  gtk_box_pack_start (GTK_BOX (vbox), hpaned,
-                      TRUE, TRUE, 0);
   gtk_widget_show_all (hpaned);
 
-
-  /* -- behavior combo box -- */
+  /* behavior combo box at the bottom */
   combobox = create_behaviors_combo_box ();
+  compselect->combobox_behaviors = GTK_COMBO_BOX (combobox);
   g_signal_connect (combobox,
                     "changed",
                     G_CALLBACK (compselect_callback_behavior_changed),
                     compselect);
+  gtk_widget_show_all (combobox);
+
+  /* top-level vbox */
+  vbox = gtk_vbox_new (FALSE, DIALOG_V_SPACING);
+  gtk_container_set_border_width (GTK_CONTAINER (vbox), DIALOG_BORDER_SPACING);
+  g_signal_connect (vbox, "size-allocate",
+                    G_CALLBACK (compselect_vbox_size_allocate), compselect);
+  gtk_box_pack_start (GTK_BOX (vbox), hpaned,
+                      TRUE, TRUE, 0);
   gtk_box_pack_start (GTK_BOX (vbox), combobox,
                       FALSE, FALSE, 0);
-  gtk_widget_show_all (combobox);
-  /* set behavior combo box of compselect */
-  compselect->combobox_behaviors = GTK_COMBO_BOX (combobox);
-
   gtk_widget_show (vbox);
   return vbox;
 }
