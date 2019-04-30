@@ -2493,22 +2493,55 @@ symbol.
 @defmac define-action (name [keyword value ...]) body
 Create a new action, bound to the given @var{name} in the current
 module.  The @var{body} is a sequence of Scheme expressions which are
-evaluated in order when the action is invoked.  Any number of initial
-properties can be specified for the action by providing pairs of
-@var{keyword}s and @var{value}s.
+evaluated in order when the action is invoked.  The following
+meta-information can be specified for the action by providing pairs of
+@var{keyword}s and @var{value}s:
 
+@itemize
+@item
+  @samp{#:icon} sets the name of the icon to be used for the action.
+  This can be either a GTK stock identifier, in which case the GTK
+  stock icon is used, or an icon name in the current icon theme.
+@item
+  @samp{#:name} sets the generic name of the action.  This is
+  displayed as a tooltip for toolbar buttons, and in the hotkey list.
+  It should be understandable without any context and not contain a
+  mnemonic or ellipsis.
+@item
+  @samp{#:label} sets the generic label of the action.  This is
+  displayed in the context menu.  It should be suitable to be used as
+  a menu label but be understandable without any context and not
+  contain a mnemonic.
+@item
+  @samp{#:menu-label} sets the label for the action when shown in the
+  main menu.  This should be identical to the generic label except for
+  the mnemonic (a character preceded by an underscore for easier
+  keyboard access) and omissions based on the menu name.
+@item
+  @samp{#:tooltip} sets a string explaining the action.  This is
+  displayed as an additional information when the user hovers the
+  mouse cursor over the action.  For tool buttons, it is displayed in
+  addition to the action name.  GTK tends to display tooltips quite
+  aggressively, so use with care.
+@end itemize
+
+Example:
 @example
-(define-action (&report-bug #:label ``Report Bug'' #:icon ``web-browser'')
-  (show-uri ``http://bugs.launchpad.net/geda/+reportbug''))
+(define-action (&report-bug
+                #:icon       "web-browser"
+                #:name       "Report Bug"
+                #:label      "Report Bug..."
+                #:menu-label "Report _Bug...")
+  (show-uri "http://bugs.launchpad.net/geda/+reportbug"))
 @end example
 
 Since 1.10.
 @end defmac
 
 @defun make-action thunk [keyword value ...]
-Create and return a new action wrapping @var{thunk}.  Optionally,
-specify @var{keyword}-@var{value} pairs to set initial properties for the
-action.
+Create and return a new action wrapping @var{thunk}.
+@var{keyword}-@var{value} pairs specify the meta-information for the
+action as with @code{define-action}.
 
 Since 1.10.
 @end defun
@@ -2516,22 +2549,6 @@ Since 1.10.
 @defun action? obj
 Returns @samp{#t} iff @var{obj} is a gschem action, and @samp{#f}
 otherwise.
-
-Since 1.10.
-@end defun
-
-Action properties are name-value pairs that are attached to an action.
-
-@defun action-property action key
-Return the value of one of @var{action}'s properties.  @var{key} is a
-symbol naming the property to retrieve.
-
-Since 1.10.
-@end defun
-
-@defun set-action-property! action key value
-Set the value of one of @var{action}'s properties.  @var{key} is a
-symbol naming the property to set, and @var{value} is the new value.
 
 Since 1.10.
 @end defun
