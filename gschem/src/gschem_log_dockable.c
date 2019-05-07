@@ -46,6 +46,8 @@
 #include "../include/gschem_log_dockable.h"
 
 
+static gpointer parent_class = NULL;
+
 static void
 apply_tag_cb (GtkTextBuffer *buffer, GtkTextTag *tag,
               GtkTextIter *start, GtkTextIter *end,
@@ -59,6 +61,9 @@ create_text_buffer();
 
 static GtkWidget *
 create_widget (GschemDockable *parent);
+
+static void
+dispose (GObject *object);
 
 static void
 x_log_message (const gchar *log_domain, GLogLevelFlags log_level, const gchar *message);
@@ -219,6 +224,9 @@ class_init (GschemLogDockableClass *klass)
   }
 
   GSCHEM_DOCKABLE_CLASS (klass)->create_widget = create_widget;
+  G_OBJECT_CLASS (klass)->dispose = dispose;
+
+  parent_class = g_type_class_peek_parent (klass);
 }
 
 
@@ -306,4 +314,14 @@ create_widget (GschemDockable *parent)
 
   gtk_widget_show_all (scrolled);
   return scrolled;
+}
+
+
+static void
+dispose (GObject *object)
+{
+  g_signal_handlers_disconnect_by_data (
+    GSCHEM_LOG_DOCKABLE_GET_CLASS (object)->buffer, object);
+
+  G_OBJECT_CLASS (parent_class)->dispose (object);
 }
