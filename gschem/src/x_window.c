@@ -972,6 +972,14 @@ void x_window_close(GschemToplevel *w_current)
   /* save dock window geometry, close dock windows, disconnect signals */
   gschem_dockable_cleanup_toplevel (w_current);
 
+  g_clear_object (&w_current->compselect_dockable);
+  g_clear_object (&w_current->object_properties_dockable);
+  g_clear_object (&w_current->text_properties_dockable);
+  g_clear_object (&w_current->multiattrib_dockable);
+  g_clear_object (&w_current->options_dockable);
+  g_clear_object (&w_current->log_dockable);
+  g_clear_object (&w_current->find_text_dockable);
+
   if (g_list_length (global_window_list) == 1) {
     /* no more window after this one, remember to quit */
     last_window = TRUE;
