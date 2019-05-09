@@ -236,7 +236,7 @@ inuse_treeview_set_cell_data (GtkTreeViewColumn *tree_column,
   CLibSymbol *symbol;
 
   gtk_tree_model_get (tree_model, iter, 0, &symbol, -1);
-  g_object_set ((GObject*)cell, "text", s_clib_symbol_get_name (symbol), NULL);
+  g_object_set (G_OBJECT (cell), "text", s_clib_symbol_get_name (symbol), NULL);
 }
 
 /*! \brief Returns whether a library treeview node represents a symbol. */
@@ -395,7 +395,7 @@ update_attributes_model (GschemCompselectDockable *compselect, gchar *filename)
   gint i;
   gsize n;
 
-  model = (GtkListStore*) gtk_tree_view_get_model (compselect->attrtreeview);
+  model = GTK_LIST_STORE (gtk_tree_view_get_model (compselect->attrtreeview));
   gtk_list_store_clear (model);
 
   /* Invalidate the column width for the attribute value column, so
@@ -536,7 +536,7 @@ compselect_filter_timeout (gpointer data)
 
   if (model != NULL) {
     const gchar *text = gtk_entry_get_text (compselect->entry_filter);
-    gtk_tree_model_filter_refilter ((GtkTreeModelFilter*)model);
+    gtk_tree_model_filter_refilter (GTK_TREE_MODEL_FILTER (model));
     if (strcmp (text, "") != 0) {
       /* filter text not-empty */
       gtk_tree_view_expand_all (compselect->libtreeview);
@@ -646,7 +646,7 @@ create_inuse_tree_model (GschemCompselectDockable *compselect)
   GList *symhead, *symlist;
   GtkTreeIter iter;
 
-  store = (GtkListStore *) gtk_list_store_new (1, G_TYPE_POINTER);
+  store = GTK_LIST_STORE (gtk_list_store_new (1, G_TYPE_POINTER));
 
   symhead = s_toplevel_get_symbols (
     GSCHEM_DOCKABLE (compselect)->w_current->toplevel);
@@ -664,7 +664,7 @@ create_inuse_tree_model (GschemCompselectDockable *compselect)
 
   g_list_free (symhead);
 
-  return (GtkTreeModel*)store;
+  return GTK_TREE_MODEL (store);
 }
 
 /* \brief Helper function for create_lib_tree_model. */
@@ -790,9 +790,9 @@ create_lib_tree_model (GschemCompselectDockable *compselect)
   EdaConfig *cfg = eda_config_get_user_context ();
   gboolean sort = eda_config_get_boolean (cfg, "gschem.library", "sort", NULL);
 
-  store = (GtkTreeStore*)gtk_tree_store_new (3, G_TYPE_POINTER,
-                                                G_TYPE_STRING,
-                                                G_TYPE_BOOLEAN);
+  store = GTK_TREE_STORE (gtk_tree_store_new (3, G_TYPE_POINTER,
+                                                 G_TYPE_STRING,
+                                                 G_TYPE_BOOLEAN));
 
   /* populate component store */
   srchead = s_clib_get_sources (sort);
@@ -803,7 +803,7 @@ create_lib_tree_model (GschemCompselectDockable *compselect)
   }
   g_list_free (srchead);
 
-  return (GtkTreeModel*)store;
+  return GTK_TREE_MODEL (store);
 }
 
 /* \brief On-demand refresh of the component library.
@@ -823,14 +823,14 @@ compselect_callback_refresh_library (GtkButton *button, gpointer user_data)
 
   /* Refresh the "Library" view */
   child_model = create_lib_tree_model (compselect);
-  model = (GtkTreeModel *)
+  model = GTK_TREE_MODEL (
     g_object_new (GTK_TYPE_TREE_MODEL_FILTER,
                   "child-model", child_model,
                   "virtual-root", NULL,
-                  NULL);
+                  NULL));
   g_object_unref (child_model);  /* release initially owned reference */
 
-  gtk_tree_model_filter_set_visible_func ((GtkTreeModelFilter*)model,
+  gtk_tree_model_filter_set_visible_func (GTK_TREE_MODEL_FILTER (model),
                                           lib_model_filter_visible_func,
                                           compselect,
                                           NULL);
@@ -991,10 +991,10 @@ create_lib_treeview (GschemCompselectDockable *compselect)
                                    NULL));
 
   child_model  = create_lib_tree_model (compselect);
-  model = (GtkTreeModel*)g_object_new (GTK_TYPE_TREE_MODEL_FILTER,
-                                       "child-model",  child_model,
-                                       "virtual-root", NULL,
-                                       NULL);
+  model = GTK_TREE_MODEL (g_object_new (GTK_TYPE_TREE_MODEL_FILTER,
+                                        "child-model",  child_model,
+                                        "virtual-root", NULL,
+                                        NULL));
   g_object_unref (child_model);  /* release initially owned reference */
 
   scrolled_win = GTK_WIDGET (
@@ -1083,7 +1083,7 @@ create_lib_treeview (GschemCompselectDockable *compselect)
                     compselect);
 
   /* now that that we have an entry, set the filter func of model */
-  gtk_tree_model_filter_set_visible_func ((GtkTreeModelFilter*)model,
+  gtk_tree_model_filter_set_visible_func (GTK_TREE_MODEL_FILTER (model),
                                           lib_model_filter_visible_func,
                                           compselect,
                                           NULL);
