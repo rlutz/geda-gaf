@@ -223,6 +223,7 @@ static GObjectClass *compselect_parent_class = NULL;
 
 
 static void compselect_class_init      (GschemCompselectDockableClass *class);
+static void compselect_constructed     (GObject *object);
 static void compselect_dispose         (GObject *object);
 static void compselect_finalize        (GObject *object);
 
@@ -912,19 +913,11 @@ select_symbol_by_filename (GschemCompselectDockable *compselect,
     gtk_tree_view_get_selection (tree_view), &iter);
 }
 
-/* \brief On-demand refresh of the component library.
- * \par Function Description
- * Requests a rescan of the component library in order to pick up any
- * new signals, and then updates the component selector.
- */
 static void
-compselect_callback_refresh_library (GtkButton *button, gpointer user_data)
+library_updated (gpointer user_data)
 {
   GschemCompselectDockable *compselect = GSCHEM_COMPSELECT_DOCKABLE (user_data);
   gchar *filename = g_strdup (compselect->selected_filename);
-
-  /* Rescan the libraries for symbols */
-  s_clib_refresh ();
 
   /* Refresh the "Library" view */
   create_lib_tree_model (compselect);
@@ -936,6 +929,18 @@ compselect_callback_refresh_library (GtkButton *button, gpointer user_data)
   if (filename != NULL)
     select_symbol_by_filename (compselect, filename);
   g_free (filename);
+}
+
+/* \brief On-demand refresh of the component library.
+ * \par Function Description
+ * Requests a rescan of the component library in order to pick up any
+ * new signals, and then updates the component selector.
+ */
+static void
+compselect_callback_refresh_library (GtkButton *button, gpointer user_data)
+{
+  /* Rescan the libraries for symbols */
+  s_clib_refresh ();
 }
 
 /*! \brief Creates the treeview for the "In Use" view. */
@@ -1424,6 +1429,7 @@ compselect_class_init (GschemCompselectDockableClass *klass)
   gschem_dockable_class->restore_internal_geometry =
     compselect_restore_internal_geometry;
 
+  gobject_class->constructed  = compselect_constructed;
   gobject_class->dispose      = compselect_dispose;
   gobject_class->finalize     = compselect_finalize;
 
@@ -1843,9 +1849,19 @@ compselect_create_widget (GschemDockable *dockable)
 }
 
 static void
+compselect_constructed (GObject *object)
+{
+  G_OBJECT_CLASS (compselect_parent_class)->constructed (object);
+
+  s_clib_add_update_callback (library_updated, object);
+}
+
+static void
 compselect_dispose (GObject *object)
 {
   GschemCompselectDockable *compselect = GSCHEM_COMPSELECT_DOCKABLE (object);
+
+  s_clib_remove_update_callback (object);
 
   g_clear_object (&compselect->vbox);
 
