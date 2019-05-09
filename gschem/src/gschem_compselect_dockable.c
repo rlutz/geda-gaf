@@ -815,19 +815,20 @@ static void
 compselect_callback_refresh_library (GtkButton *button, gpointer user_data)
 {
   GschemCompselectDockable *compselect = GSCHEM_COMPSELECT_DOCKABLE (user_data);
-  GtkTreeModel *model;
+  GtkTreeModel *child_model, *model;
   GtkTreeSelection *selection;
 
   /* Rescan the libraries for symbols */
   s_clib_refresh ();
 
   /* Refresh the "Library" view */
-  g_object_unref (gtk_tree_view_get_model (compselect->libtreeview));
+  child_model = create_lib_tree_model (compselect);
   model = (GtkTreeModel *)
     g_object_new (GTK_TYPE_TREE_MODEL_FILTER,
-                  "child-model", create_lib_tree_model (compselect),
+                  "child-model", child_model,
                   "virtual-root", NULL,
                   NULL);
+  g_object_unref (child_model);  /* release initially owned reference */
 
   gtk_tree_model_filter_set_visible_func ((GtkTreeModelFilter*)model,
                                           lib_model_filter_visible_func,
@@ -842,14 +843,15 @@ compselect_callback_refresh_library (GtkButton *button, gpointer user_data)
 
   /* Update the view model with signals blocked */
   gtk_tree_view_set_model (compselect->libtreeview, model);
+  g_object_unref (model);  /* release initially owned reference */
 
   /* Refresh the "In Use" view */
-  g_object_unref (gtk_tree_view_get_model (compselect->inusetreeview));
   model = create_inuse_tree_model (compselect);
 
   /* Here we can update the model without blocking signals
    * as this is the second (final) tree view we are updating */
   gtk_tree_view_set_model (compselect->inusetreeview, model);
+  g_object_unref (model);  /* release initially owned reference */
 
   /* Unblock & fire handler for libtreeview selection */
   g_signal_handlers_unblock_by_func (selection,
@@ -895,6 +897,7 @@ create_inuse_treeview (GschemCompselectDockable *compselect)
                                        "rules-hint", TRUE,
                                        "headers-visible", FALSE,
                                        NULL));
+  g_object_unref (model);  /* release initially owned reference */
 
   g_signal_connect (treeview,
                     "row-activated",
@@ -992,6 +995,7 @@ create_lib_treeview (GschemCompselectDockable *compselect)
                                        "child-model",  child_model,
                                        "virtual-root", NULL,
                                        NULL);
+  g_object_unref (child_model);  /* release initially owned reference */
 
   scrolled_win = GTK_WIDGET (
     g_object_new (GTK_TYPE_SCROLLED_WINDOW,
@@ -1009,6 +1013,7 @@ create_lib_treeview (GschemCompselectDockable *compselect)
                                           "rules-hint", TRUE,
                                           "headers-visible", FALSE,
                                           NULL));
+  g_object_unref (model);  /* release initially owned reference */
 
   g_signal_connect (libtreeview,
                     "row-activated",
