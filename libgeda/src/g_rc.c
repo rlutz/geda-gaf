@@ -202,6 +202,9 @@ g_rc_parse_file (TOPLEVEL *toplevel, const gchar *rcfile,
             && g_read_file (toplevel, name_norm, &tmp_err));
   scm_dynwind_end ();
 
+  /* refresh the component library in case the script changed it */
+  s_clib_end_update ();
+
   if (status) {
     s_log_message (_("Loaded RC file [%s]\n"), name_norm);
   } else {

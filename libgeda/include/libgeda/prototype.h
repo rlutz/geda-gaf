@@ -293,6 +293,11 @@ void s_clib_symbol_invalidate_data (const CLibSymbol *symbol);
 const CLibSymbol *s_clib_get_symbol_by_name (const gchar *name);
 gchar *s_clib_symbol_get_data_by_name (const gchar *name);
 GList *s_toplevel_get_symbols (const TOPLEVEL *toplevel);
+void s_clib_add_update_callback (void (*update) (gpointer user_data),
+                                 gpointer user_data);
+void s_clib_remove_update_callback (gpointer user_data);
+void s_clib_begin_update ();
+void s_clib_end_update ();
 
 /* s_color.c */
 void s_color_map_defaults (COLOR *map);

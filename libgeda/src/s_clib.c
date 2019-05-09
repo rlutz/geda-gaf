@@ -245,6 +245,9 @@ static gchar *get_data_directory (const CLibSymbol *symbol);
 static gchar *get_data_command (const CLibSymbol *symbol);
 static gchar *get_data_scm (const CLibSymbol *symbol);
 
+static gboolean s_clib_updating = FALSE;
+static GList *s_clib_update_closures = NULL;
+
 /*! \brief Initialise the component library.
  *  \par Function Description
  *  Resets and initialises the component library.
@@ -357,6 +360,8 @@ void s_clib_free ()
     g_list_free (clib_sources);
     clib_sources = NULL;
   }
+
+  s_clib_begin_update ();
 }
 
 /*! \brief Compare two component sources by name.
@@ -581,6 +586,8 @@ static void refresh_directory (CLibSource *source)
   g_return_if_fail (source != NULL);
   g_return_if_fail (source->type == CLIB_DIR);
 
+  s_clib_begin_update ();
+
   /* Clear the current symbol list */
   g_list_foreach (source->symbols, (GFunc) free_symbol, NULL);
   g_list_free (source->symbols);
@@ -656,6 +663,8 @@ static void refresh_command (CLibSource *source)
   g_return_if_fail (source != NULL);
   g_return_if_fail (source->type == CLIB_CMD);
 
+  s_clib_begin_update ();
+
   /* Clear the current symbol list */
   g_list_foreach (source->symbols, (GFunc) free_symbol, NULL);
   g_list_free (source->symbols);
@@ -717,6 +726,8 @@ static void refresh_scm (CLibSource *source)
 
   g_return_if_fail (source != NULL);
   g_return_if_fail (source->type == CLIB_SCM);
+
+  s_clib_begin_update ();
 
   /* Clear the current symbol list */
   g_list_foreach (source->symbols, (GFunc) free_symbol, NULL);
@@ -795,6 +806,8 @@ void s_clib_refresh ()
         break;
       }
   }
+
+  s_clib_end_update ();
 }
 
 /*! \brief Get a named component source.
@@ -1495,4 +1508,65 @@ GList *s_toplevel_get_symbols (const TOPLEVEL *toplevel)
   }
 
   return result;
+}
+
+
+
+/*! \brief A marshaller for a GCClosure with a callback of type
+ *         `void (*callback) (gpointer user_data)`.
+ */
+static void
+update_marshal (GClosure *closure,
+                GValue *return_value,
+                guint n_param_values,
+                const GValue *param_values,
+                gpointer invocation_hint,
+                gpointer marshal_data)
+{
+  GCClosure *cclosure = (GCClosure *) closure;
+  g_return_if_fail (n_param_values == 0);
+
+  typedef void (*marshal_func) (gpointer data);
+  marshal_func callback = (marshal_func) (marshal_data ? marshal_data
+                                                       : cclosure->callback);
+  callback (closure->data);
+}
+
+void s_clib_add_update_callback (void (*update) (gpointer user_data),
+                                 gpointer user_data)
+{
+  GClosure *closure = g_cclosure_new (G_CALLBACK (update), user_data, NULL);
+  g_closure_set_marshal (closure, update_marshal);
+
+  s_clib_update_closures = g_list_append (s_clib_update_closures, closure);
+  g_closure_ref (closure);
+  g_closure_sink (closure);
+}
+
+void s_clib_remove_update_callback (gpointer user_data)
+{
+  for (GList *l = s_clib_update_closures; l != NULL; l = l->next) {
+    GClosure *closure = (GClosure *) l->data;
+    if (closure->data != user_data)
+      continue;
+
+    s_clib_update_closures = g_list_remove (s_clib_update_closures, closure);
+    g_closure_unref (closure);
+    break;
+  }
+}
+
+void s_clib_begin_update ()
+{
+  s_clib_updating = TRUE;
+}
+
+void s_clib_end_update ()
+{
+  if (!s_clib_updating)
+    return;
+  s_clib_updating = FALSE;
+
+  for (GList *l = s_clib_update_closures; l != NULL; l = l->next)
+    g_closure_invoke ((GClosure *) l->data, NULL, 0, NULL, NULL);
 }
