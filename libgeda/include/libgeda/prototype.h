@@ -281,6 +281,7 @@ const CLibSource *s_clib_add_scm (SCM listfunc, SCM getfunc,
 				  const gchar *name);
 const gchar *s_clib_source_get_name (const CLibSource *source);
 GList *s_clib_source_get_symbols (const CLibSource *source);
+const gchar *s_clib_source_get_directory (const CLibSource *source);
 const gchar *s_clib_symbol_get_name (const CLibSymbol *symbol);
 gchar *s_clib_symbol_get_filename (const CLibSymbol *symbol);
 const CLibSource *s_clib_symbol_get_source (const CLibSymbol *symbol);

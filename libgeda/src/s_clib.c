@@ -1034,6 +1034,14 @@ gchar *s_clib_symbol_get_filename (const CLibSymbol *symbol)
   return g_build_filename(symbol->source->directory, symbol->name, NULL);
 }
 
+const gchar *s_clib_source_get_directory (const CLibSource *source)
+{
+  if (source->type != CLIB_DIR)
+    return NULL;
+
+  return source->directory;
+}
+
 /*! \brief Get the source to which a symbol belongs.
  *  \par Function Description
  *  Get the source which a symbol is associated.
