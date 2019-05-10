@@ -162,7 +162,9 @@ select_symbol (GschemCompselectDockable *compselect, CLibSymbol *symbol)
   /* update the attributes with the toplevel of the preview widget*/
   gchar *filename = symbol ? s_clib_symbol_get_filename (symbol) : NULL;
   update_attributes_model (compselect, filename);
-  g_free (filename);
+
+  g_free (compselect->selected_filename);
+  compselect->selected_filename = filename;
 
   /* signal a component has been selected to parent of dockable */
   compselect_place (compselect);
@@ -822,6 +824,89 @@ create_lib_tree_model (GschemCompselectDockable *compselect)
   g_object_unref (model);  /* release initially owned reference */
 }
 
+/*! \brief Helper function for \ref select_symbol_by_filename.
+ */
+static gboolean
+find_tree_iter_by_filename (GtkTreeModel *tree_model,
+                            GtkTreeIter *iter_return,
+                            GtkTreeIter *parent,
+                            const gchar *filename)
+{
+  GtkTreeIter iter;
+
+  if (gtk_tree_model_iter_children (tree_model, &iter, parent))
+    do {
+      if (gtk_tree_model_get_n_columns (tree_model) == 1 ||
+          is_symbol (tree_model, &iter)) {
+        /* node is a symbol */
+        CLibSymbol *symbol;
+        gtk_tree_model_get (tree_model, &iter, 0, &symbol, -1);
+        gchar *fn = s_clib_symbol_get_filename (symbol);
+        if (strcmp (fn, filename) == 0) {
+          *iter_return = iter;
+          g_free (fn);
+          return TRUE;
+        }
+        g_free (fn);
+        continue;
+      }
+
+      /* node is a source */
+      CLibSource *source;
+      gtk_tree_model_get (tree_model, &iter, 0, &source, -1);
+
+      gboolean recurse;
+      if (source == NULL)
+        /* this is a virtual node that was added for sub-directory sources */
+        recurse = TRUE;
+      else {
+        const gchar *directory = s_clib_source_get_directory (source);
+        recurse = strncmp (directory, filename, strlen (directory)) == 0 &&
+                  filename[strlen (directory)] == '/';
+      }
+      if (recurse &&
+          find_tree_iter_by_filename (tree_model, iter_return, &iter, filename))
+        return TRUE;
+    } while (gtk_tree_model_iter_next (tree_model, &iter));
+
+  return FALSE;
+}
+
+static void
+select_symbol_by_filename (GschemCompselectDockable *compselect,
+                           const gchar *filename)
+{
+  g_return_if_fail (filename != NULL);
+
+  GtkTreeView *tree_view = NULL;
+  switch (gtk_notebook_get_current_page (compselect->viewtabs)) {
+  case 0:
+    tree_view = compselect->inusetreeview;
+    break;
+  case 1:
+    tree_view = compselect->libtreeview;
+    break;
+  default:
+    g_assert_not_reached ();
+  }
+
+  GtkTreeModel *model = gtk_tree_view_get_model (tree_view);
+  GtkTreeIter iter;
+  if (!find_tree_iter_by_filename (model, &iter, NULL, filename))
+    /* no matching symbol found */
+    return;
+
+  /* expand the path to the node so it can be selected */
+  GtkTreePath *path = gtk_tree_model_get_path (model, &iter);
+  if (gtk_tree_path_up (path))
+    gtk_tree_view_expand_to_path (tree_view, path);
+  gtk_tree_path_free (path);
+
+  /* now select the node */
+  gtk_tree_selection_select_iter (
+    gtk_tree_view_get_selection (tree_view), &iter);
+}
+
 /* \brief On-demand refresh of the component library.
  * \par Function Description
  * Requests a rescan of the component library in order to pick up any
@@ -831,6 +916,7 @@ static void
 compselect_callback_refresh_library (GtkButton *button, gpointer user_data)
 {
   GschemCompselectDockable *compselect = GSCHEM_COMPSELECT_DOCKABLE (user_data);
+  gchar *filename = g_strdup (compselect->selected_filename);
 
   /* Rescan the libraries for symbols */
   s_clib_refresh ();
@@ -840,6 +926,11 @@ compselect_callback_refresh_library (GtkButton *button, gpointer user_data)
 
   /* Refresh the "In Use" view */
   create_inuse_tree_model (compselect);
+
+  /* re-select previously selected symbol */
+  if (filename != NULL)
+    select_symbol_by_filename (compselect, filename);
+  g_free (filename);
 }
 
 /*! \brief Creates the treeview for the "In Use" view. */
@@ -1770,6 +1861,8 @@ static void
 compselect_finalize (GObject *object)
 {
   GschemCompselectDockable *compselect = GSCHEM_COMPSELECT_DOCKABLE (object);
+
+  g_free (compselect->selected_filename);
 
   if (compselect->filter_timeout != 0) {
     g_source_remove (compselect->filter_timeout);

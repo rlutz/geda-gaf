@@ -62,6 +62,7 @@ struct _GschemCompselectDockable {
   gboolean   preview_size_allocated,         attribs_size_allocated;
 
   CLibSymbol *selected_symbol;
+  gchar *selected_filename;
 };
 
 
