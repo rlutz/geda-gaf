@@ -2248,11 +2248,14 @@ DEFINE_ACTION (hierarchy_down_symbol,
       sym = s_clib_get_symbol_by_name (object->complex_basename);
       if (sym == NULL)
 	return;
-      if (s_clib_symbol_get_filename(sym) == NULL) {
+      gchar *filename = s_clib_symbol_get_filename(sym);
+      if (filename == NULL) {
 	s_log_message(_("Symbol is not a real file."
 			" Symbol cannot be loaded.\n"));
+        g_free (filename);
 	return;
       }
+      g_free (filename);
       s_hierarchy_down_symbol(gschem_toplevel_get_toplevel (w_current), sym,
 			      gschem_toplevel_get_toplevel (w_current)->page_current);
       gschem_toplevel_page_changed (w_current);
