@@ -66,6 +66,8 @@ enum compselect_behavior {
 
 static gboolean
 is_symbol (GtkTreeModel *tree_model, GtkTreeIter *iter);
+static void
+update_attributes_model (GschemCompselectDockable *compselect, gchar *filename);
 
 
 /*! \brief Return currently active component-selector view
@@ -172,6 +174,27 @@ compselect_place (GschemCompselectDockable *compselect)
           /* Otherwise set the new symbol to place */
           o_complex_prepare_place (w_current, symbol);
         }
+}
+
+
+static void
+select_symbol (GschemCompselectDockable *compselect, CLibSymbol *symbol)
+{
+  /* update the preview with new symbol data */
+  gchar *buffer = symbol ? s_clib_symbol_get_data (symbol) : NULL;
+  g_object_set (compselect->preview,
+                "buffer", buffer,
+                "active", buffer != NULL,
+                NULL);
+  g_free (buffer);
+
+  /* update the attributes with the toplevel of the preview widget*/
+  gchar *filename = symbol ? s_clib_symbol_get_filename (symbol) : NULL;
+  update_attributes_model (compselect, filename);
+  g_free (filename);
+
+  /* signal a component has been selected to parent of dockable */
+  compselect_place (compselect);
 }
 
 
@@ -506,9 +529,7 @@ compselect_callback_tree_selection_changed (GtkTreeSelection *selection,
   GtkTreeModel *model;
   GtkTreeIter iter;
   GschemCompselectDockable *compselect = GSCHEM_COMPSELECT_DOCKABLE (user_data);
-  const CLibSymbol *sym = NULL;
-  gchar *buffer = NULL;
-  gchar *filename = NULL;
+  CLibSymbol *sym = NULL;
 
   if (gtk_tree_selection_get_selected (selection, &model, &iter)) {
 
@@ -519,24 +540,10 @@ compselect_callback_tree_selection_changed (GtkTreeSelection *selection,
          /* Tree view needs to check that we're at a symbol node */
 
       gtk_tree_model_get (model, &iter, 0, &sym, -1);
-      buffer = s_clib_symbol_get_data (sym);
-      filename = s_clib_symbol_get_filename (sym);
     }
   }
 
-  /* update the preview with new symbol data */
-  g_object_set (compselect->preview,
-                "buffer", buffer,
-                "active", (buffer != NULL),
-                NULL);
-
-  /* update the attributes with the toplevel of the preview widget*/
-  update_attributes_model (compselect, filename);
-
-  /* signal a component has been selected to parent of dockable */
-  compselect_place (compselect);
-
-  g_free (buffer);
+  select_symbol (compselect, sym);
 }
 
 /*! \brief Requests re-evaluation of the filter.
