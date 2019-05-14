@@ -18,6 +18,40 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
+/*! \file gschem_action.c
+ * \brief Action mechanism.
+ *
+ * Actions are represented by a GschemAction struct which contains a
+ * pointer to the callback function as well as some metadata (action
+ * name, icon, etc.).  To Scheme code, actions are visible as SMOBs,
+ * applicable foreign object wrappers around the action structs which
+ * behave like procedures but make it trivial to retrieve the
+ * GschemAction struct for a given Scheme action object.
+ *
+ * This design made several improvements possible:
+ *
+ * - Actions are defined in a single place: the DEFINE_ACTION macro in
+ *   actions.c declares a global symbol referring to the action, sets
+ *   the action metadata, and defines the action callback function.
+ *   Menu items, toolbar buttons, and the context menu all share the
+ *   same set of actions.
+ *
+ * - The state of actions representing an option (e.g., "Show/Hide
+ *   Invisible Text") is indicated by a checkbox in the menu item and
+ *   by the toolbar button being depressed.  The state of mode actions
+ *   (e.g., "Add Rectangle") is indicated by the toolbar button being
+ *   depressed.  When an action can't be executed (e.g., "Redo"), the
+ *   menu item and toolbar button are insensitive.
+ *
+ * - Toolbar and context menu are configured the same way menus are.
+ *
+ * - "Repeat Last Action" (usually bound to ".") uses the same logic
+ *   as the middle mouse button repeat action does, i.e., only actions
+ *   that "make sense" qualify for repeating.
+ *
+ * Written by Roland Lutz 2019.
+ */
+
 #include <config.h>
 
 #include <stdio.h>
@@ -42,6 +76,15 @@
 static scm_t_bits action_tag;
 
 
+/*! \brief Register statically-defined gschem action.
+ *
+ * Allocates a new GschemAction struct, sets the meta-information
+ * passed as arguments, and creates a public top-level Scheme binding
+ * for the action in the current environment.
+ *
+ * \note This function should only be used indirectly by defining an
+ *       action in actions.c.
+ */
 GschemAction *
 gschem_action_register (gchar *id,
                         gchar *icon_name,
@@ -84,6 +127,13 @@ gschem_action_register (gchar *id,
 }
 
 
+/*! \brief Run an action.
+ *
+ * If you want to invoke an action explicitly, use this function.
+ *
+ * Runs the activation function associated with \a action in the
+ * Scheme toplevel context of \a w_current.
+ */
 void
 gschem_action_activate (GschemAction *action,
                         GschemToplevel *w_current)
@@ -101,12 +151,28 @@ gschem_action_activate (GschemAction *action,
 /******************************************************************************/
 
 
+/* The following functions define the Guile SMOB type which represents
+ * GschemAction structures in Scheme.
+ *
+ * Pointer identity is preserved by storing the SMOB representation of
+ * a GschemAction structure in its "smob" member.  This means you can
+ * safely compare #<action ...> objects using "eq?".
+ *
+ * A GschemAction structure does not own its "smob" member; on the
+ * contrary, a user-defined action may be freed if its SMOB is
+ * garbage collected before an associated widget has been created.
+ */
+
+/*! \brief Return whether a given Guile expression represents an action.
+ */
 int
 scm_is_action (SCM x)
 {
   return SCM_SMOB_PREDICATE (action_tag, x);
 }
 
+/*! \brief Return the action represented by a Guile expression.
+ */
 GschemAction *
 scm_to_action (SCM smob)
 {
@@ -115,6 +181,12 @@ scm_to_action (SCM smob)
 }
 
 
+/*! \brief Callback function for activating user-defined actions.
+ *
+ * Actions defined from Scheme code don't have a hard-coded C callback
+ * function.  Instead, this function is used, which calls the Scheme
+ * thunk stored in the action structure.
+ */
 static void
 activate_scheme_thunk (GschemAction *action, GschemToplevel *w_current)
 {
@@ -122,6 +194,12 @@ activate_scheme_thunk (GschemAction *action, GschemToplevel *w_current)
   g_scm_eval_protected (scm_list_1 (action->thunk), SCM_UNDEFINED);
 }
 
+/*! \brief Guile interface for creating user-defined actions.
+ *
+ * Creates a new action wrapping the given Guile "thunk" (that is,
+ * parameter-less function) and meta-information and returns a SMOB
+ * representing it.
+ */
 static SCM
 make_action (SCM s_icon_name, SCM s_name, SCM s_label, SCM s_menu_label,
              SCM s_tooltip, SCM s_thunk)
@@ -196,6 +274,11 @@ make_action (SCM s_icon_name, SCM s_name, SCM s_label, SCM s_menu_label,
   return smob;
 }
 
+/*! \brief Guile subr for testing whether a given Scheme expression
+ *         represents an action.
+ *
+ * This is like scm_is_action but returns #t or #f instead of 1 or 0.
+ */
 static SCM
 action_p (SCM smob)
 {
@@ -280,6 +363,12 @@ apply_action (SCM smob)
   return SCM_UNDEFINED;
 }
 
+/*! \brief Initialize Scheme action interface.
+ *
+ * Sets up the action SMOB type and defines the modules <tt>(gschem
+ * core action)</tt> and <tt>(gschem core builtins)</tt>.  Must be
+ * called before calling any other action-related functions.
+ */
 void
 gschem_action_init (void)
 {
@@ -300,6 +389,24 @@ gschem_action_init (void)
 
 /******************************************************************************/
 
+
+/*! \class _Dispatcher
+ *  \brief Action state dispatcher.
+ *
+ * Actions are global objects which aren't associated with a specific
+ * GschemToplevel.  This means that there is no global "state" of an
+ * action--a given action may be sensitive in one toplevel and not in
+ * another with, say, a different selection.
+ *
+ * In order to resolve this, a GschemToplevel has one action state
+ * dispatcher object for each action that has widgets associated with
+ * it.  The dispatcher object keeps track of the state of the action
+ * (whether it is currently sensitive and/or active) and provides a
+ * point for widgets to connect to in order to react to state changes.
+ *
+ * The dispatchers are stored in the \ref action_state_dispatchers
+ * field of the toplevel and created on-demand by \ref get_dispatcher.
+ */
 
 #define TYPE_DISPATCHER \
   (gschem_action_state_dispatcher_get_type ())
@@ -426,6 +533,16 @@ get_dispatcher (GschemAction *action,
 }
 
 
+/*! \brief Set whether an action is "sensitive", i.e., clickable.
+ *
+ * Updates all widgets associated with the action to indicate the new
+ * status.  If \a sensitive is \c FALSE, menu items and tool buttons
+ * are displayed greyed-out and can't be selected by the user; if \a
+ * sensitive is \c TRUE, they can be selected normally.
+ *
+ * Even if an action has been marked as insensitive, it can still be
+ * activated normally via a hotkey.
+ */
 void
 gschem_action_set_sensitive (GschemAction *action, gboolean sensitive,
                              GschemToplevel *w_current)
@@ -436,6 +553,13 @@ gschem_action_set_sensitive (GschemAction *action, gboolean sensitive,
 }
 
 
+/*! \brief Set whether an action is displayed as "active".
+ *
+ * Updates all widgets associated with the action to indicate the new
+ * status.  Menu items are rendered depending on the action type.
+ * Toolbar buttons are rendered in "depressed" state if \a is_active
+ * is \c TRUE and in normal state if \a is_active is \c FALSE.
+ */
 void
 gschem_action_set_active (GschemAction *action, gboolean is_active,
                           GschemToplevel *w_current)
@@ -446,6 +570,12 @@ gschem_action_set_active (GschemAction *action, gboolean is_active,
 }
 
 
+/*! \brief Dispatcher class closure for "set-sensitive" signal.
+ *
+ * Invoked whenever a "set-sensitive" signal is emitted for a
+ * dispatcher.  Updates the dispatcher's \a sensitive flag so new
+ * widgets can be constructed in the correct state.
+ */
 static void
 dispatcher_set_sensitive (Dispatcher *dispatcher, gboolean sensitive)
 {
@@ -453,6 +583,12 @@ dispatcher_set_sensitive (Dispatcher *dispatcher, gboolean sensitive)
 }
 
 
+/*! \brief Dispatcher class closure for "set-active" signal.
+ *
+ * Invoked whenever a "set-active" signal is emitted for a dispatcher.
+ * Updates the dispatcher's \a active flag so new widgets can be
+ * constructed in the correct state.
+ */
 static void
 dispatcher_set_active (Dispatcher *dispatcher, gboolean is_active)
 {
@@ -510,6 +646,14 @@ get_accel_string (GschemAction *action)
   return scm_is_true (s_keys) ? scm_to_utf8_string (s_keys) : NULL;
 }
 
+/*! \brief Create action menu item.
+ *
+ * Creates a GtkMenuItem, GtkImageMenuItem, or GtkCheckMenuItem widget
+ * (depending on the action type), configures it according to the
+ * action metadata, attaches the appropriate submenu (if applicable),
+ * and hooks the widget up with the corresponding dispatcher object so
+ * it will be updated when the action status changes.
+ */
 GtkWidget *
 gschem_action_create_menu_item (GschemAction *action,
                                 gboolean use_menu_label,
@@ -635,6 +779,13 @@ tool_button_toggled (GtkToggleToolButton *button, gpointer user_data)
   gschem_action_activate (action, w_current);
 }
 
+/*! \brief Create action toolbar button.
+ *
+ * Creates a GtkToolButton or GtkToggleToolButton widget (depending on
+ * the action type), configures it according to the action metadata,
+ * and hooks it up with the corresponding dispatcher object so it will
+ * be updated when the action status changes.
+ */
 GtkToolItem *
 gschem_action_create_tool_button (GschemAction *action,
                                   GschemToplevel *w_current)
