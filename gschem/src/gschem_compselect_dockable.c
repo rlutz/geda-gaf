@@ -57,6 +57,17 @@ enum compselect_view {
 };
 
 
+enum compselect_behavior {
+  BEHAVIOR_REFERENCE,
+  BEHAVIOR_EMBED,
+  BEHAVIOR_INCLUDE
+};
+
+
+static gboolean
+is_symbol (GtkTreeModel *tree_model, GtkTreeIter *iter);
+
+
 /*! \brief Return currently active component-selector view
  *
  *  \par Function Description
@@ -83,28 +94,57 @@ compselect_get_view (GschemCompselectDockable *compselect)
 }
 
 
+/*! \brief Return currently selected symbol.
+ *
+ * If nothing or a directory node is selected, returns \c NULL.
+ */
+static CLibSymbol *
+compselect_get_symbol (GschemCompselectDockable *compselect)
+{
+  GtkTreeModel *model;
+  GtkTreeIter iter;
+  CLibSymbol *symbol = NULL;
+
+  switch (compselect_get_view (compselect)) {
+  case VIEW_INUSE:
+    if (gtk_tree_selection_get_selected (
+          gtk_tree_view_get_selection (compselect->inusetreeview),
+          &model, &iter))
+      gtk_tree_model_get (model, &iter, 0, &symbol, -1);
+    break;
+  case VIEW_CLIB:
+    if (gtk_tree_selection_get_selected (
+          gtk_tree_view_get_selection (compselect->libtreeview),
+          &model, &iter)
+        && is_symbol (model, &iter))
+      gtk_tree_model_get (model, &iter, 0, &symbol, -1);
+    break;
+  default:
+    g_assert_not_reached ();
+  }
+
+  return symbol;
+}
+
+
 static void
 compselect_place (GschemCompselectDockable *compselect)
 {
   GschemToplevel *w_current = GSCHEM_DOCKABLE (compselect)->w_current;
   TOPLEVEL *toplevel = gschem_toplevel_get_toplevel (w_current);
 
-        CLibSymbol *symbol = NULL;
-        CompselectBehavior behavior;
-
-        g_object_get (compselect,
-                      "symbol", &symbol,
-                      "behavior", &behavior,
-                      NULL);
+  CLibSymbol *symbol = compselect_get_symbol (compselect);
+  enum compselect_behavior behavior =
+    gtk_combo_box_get_active (compselect->combobox_behaviors);
 
         w_current->include_complex = w_current->embed_complex = 0;
         switch (behavior) {
-            case COMPSELECT_BEHAVIOR_REFERENCE:
+            case BEHAVIOR_REFERENCE:
               break;
-            case COMPSELECT_BEHAVIOR_EMBED:
+            case BEHAVIOR_EMBED:
               w_current->embed_complex   = 1;
               break;
-            case COMPSELECT_BEHAVIOR_INCLUDE:
+            case BEHAVIOR_INCLUDE:
               w_current->include_complex = 1;
               break;
             default:
@@ -194,25 +234,12 @@ x_compselect_deselect (GschemToplevel *w_current)
 }
 
 
-enum {
-  PROP_SYMBOL=1,
-  PROP_BEHAVIOR
-};
-
 static GObjectClass *compselect_parent_class = NULL;
 
 
 static void compselect_class_init      (GschemCompselectDockableClass *class);
 static void compselect_dispose         (GObject *object);
 static void compselect_finalize        (GObject *object);
-static void compselect_set_property    (GObject *object,
-                                        guint property_id,
-                                        const GValue *value,
-                                        GParamSpec *pspec);
-static void compselect_get_property    (GObject *object,
-                                        guint property_id,
-                                        GValue *value,
-                                        GParamSpec *pspec);
 
 static GtkWidget *compselect_create_widget (GschemDockable *dockable);
 
@@ -1214,13 +1241,13 @@ create_behaviors_combo_box (void)
   combobox = gtk_combo_box_new_text ();
 
   /* Note: order of items in menu is important */
-  /* COMPSELECT_BEHAVIOR_REFERENCE */
+  /* BEHAVIOR_REFERENCE */
   gtk_combo_box_append_text (GTK_COMBO_BOX (combobox),
                              _("Default behavior - reference component"));
-  /* COMPSELECT_BEHAVIOR_EMBED */
+  /* BEHAVIOR_EMBED */
   gtk_combo_box_append_text (GTK_COMBO_BOX (combobox),
                              _("Embed component in schematic"));
-  /* COMPSELECT_BEHAVIOR_INCLUDE */
+  /* BEHAVIOR_INCLUDE */
   gtk_combo_box_append_text (GTK_COMBO_BOX (combobox),
                              _("Include component as individual objects"));
 
@@ -1362,25 +1389,8 @@ compselect_class_init (GschemCompselectDockableClass *klass)
 
   gobject_class->dispose      = compselect_dispose;
   gobject_class->finalize     = compselect_finalize;
-  gobject_class->set_property = compselect_set_property;
-  gobject_class->get_property = compselect_get_property;
 
   compselect_parent_class = g_type_class_peek_parent (klass);
-
-  g_object_class_install_property (
-    gobject_class, PROP_SYMBOL,
-    g_param_spec_pointer ("symbol",
-                          "",
-                          "",
-                          G_PARAM_READABLE));
-  g_object_class_install_property (
-    gobject_class, PROP_BEHAVIOR,
-    g_param_spec_enum ("behavior",
-                       "",
-                       "",
-                       COMPSELECT_TYPE_BEHAVIOR,
-                       COMPSELECT_BEHAVIOR_REFERENCE,
-                       G_PARAM_READWRITE));
 }
 
 /*! \brief Make <widget> the child of <container>, removing other
@@ -1826,95 +1836,4 @@ compselect_finalize (GObject *object)
   }
 
   G_OBJECT_CLASS (compselect_parent_class)->finalize (object);
-}
-
-static void
-compselect_set_property (GObject *object,
-                         guint property_id,
-                         const GValue *value,
-                         GParamSpec *pspec)
-{
-  GschemCompselectDockable *compselect = GSCHEM_COMPSELECT_DOCKABLE (object);
-
-  switch (property_id) {
-    case PROP_BEHAVIOR:
-      gtk_combo_box_set_active (compselect->combobox_behaviors,
-                                g_value_get_enum (value));
-      break;
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
-  }
-
-}
-
-static void
-compselect_get_property (GObject *object,
-                         guint property_id,
-                         GValue *value,
-                         GParamSpec *pspec)
-{
-  GschemCompselectDockable *compselect = GSCHEM_COMPSELECT_DOCKABLE (object);
-
-  switch (property_id) {
-      case PROP_SYMBOL:
-        {
-          GtkTreeModel *model;
-          GtkTreeIter iter;
-          CLibSymbol *symbol = NULL;
-
-          switch (compselect_get_view (compselect)) {
-          case VIEW_INUSE:
-            if (gtk_tree_selection_get_selected (
-                  gtk_tree_view_get_selection (compselect->inusetreeview),
-                  &model,
-                  &iter)) {
-              gtk_tree_model_get (model, &iter, 0, &symbol, -1);
-            }
-            break;
-          case VIEW_CLIB:
-            if (gtk_tree_selection_get_selected (
-                  gtk_tree_view_get_selection (compselect->libtreeview),
-                  &model,
-                  &iter)
-                && is_symbol (model, &iter)) {
-              gtk_tree_model_get (model, &iter, 0, &symbol, -1);
-            }
-            break;
-          default:
-            g_assert_not_reached ();
-          }
-
-          g_value_set_pointer (value, symbol);
-          break;
-        }
-      case PROP_BEHAVIOR:
-        g_value_set_enum (value,
-                          gtk_combo_box_get_active (
-                            compselect->combobox_behaviors));
-        break;
-      default:
-        G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
-  }
-
-}
-
-
-
-GType
-compselect_behavior_get_type (void)
-{
-  static GType etype = 0;
-
-  if (etype == 0) {
-    static const GEnumValue values[] = {
-      { COMPSELECT_BEHAVIOR_REFERENCE, "COMPSELECT_BEHAVIOR_REFERENCE", "reference" },
-      { COMPSELECT_BEHAVIOR_EMBED,     "COMPSELECT_BEHAVIOR_EMBED",     "embed" },
-      { COMPSELECT_BEHAVIOR_INCLUDE,   "COMPSELECT_BEHAVIOR_INCLUDE",   "include" },
-      { 0, NULL, NULL }
-    };
-
-    etype = g_enum_register_static ("CompselectBehavior", values);
-  }
-
-  return etype;
 }

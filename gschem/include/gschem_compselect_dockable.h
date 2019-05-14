@@ -24,21 +24,6 @@
 
 
 /*
- * CompselectBehavior
- */
-
-typedef enum {
-  COMPSELECT_BEHAVIOR_REFERENCE,
-  COMPSELECT_BEHAVIOR_EMBED,
-  COMPSELECT_BEHAVIOR_INCLUDE
-} CompselectBehavior;
-
-
-GType compselect_behavior_get_type (void);
-#define COMPSELECT_TYPE_BEHAVIOR  (compselect_behavior_get_type ())
-
-
-/*
  * GschemCompselectDockable
  */
 
