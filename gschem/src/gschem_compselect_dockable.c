@@ -64,8 +64,6 @@ enum compselect_behavior {
 };
 
 
-static gboolean
-is_symbol (GtkTreeModel *tree_model, GtkTreeIter *iter);
 static void
 update_attributes_model (GschemCompselectDockable *compselect, gchar *filename);
 
@@ -96,46 +94,12 @@ compselect_get_view (GschemCompselectDockable *compselect)
 }
 
 
-/*! \brief Return currently selected symbol.
- *
- * If nothing or a directory node is selected, returns \c NULL.
- */
-static CLibSymbol *
-compselect_get_symbol (GschemCompselectDockable *compselect)
-{
-  GtkTreeModel *model;
-  GtkTreeIter iter;
-  CLibSymbol *symbol = NULL;
-
-  switch (compselect_get_view (compselect)) {
-  case VIEW_INUSE:
-    if (gtk_tree_selection_get_selected (
-          gtk_tree_view_get_selection (compselect->inusetreeview),
-          &model, &iter))
-      gtk_tree_model_get (model, &iter, 0, &symbol, -1);
-    break;
-  case VIEW_CLIB:
-    if (gtk_tree_selection_get_selected (
-          gtk_tree_view_get_selection (compselect->libtreeview),
-          &model, &iter)
-        && is_symbol (model, &iter))
-      gtk_tree_model_get (model, &iter, 0, &symbol, -1);
-    break;
-  default:
-    g_assert_not_reached ();
-  }
-
-  return symbol;
-}
-
-
 static void
 compselect_place (GschemCompselectDockable *compselect)
 {
   GschemToplevel *w_current = GSCHEM_DOCKABLE (compselect)->w_current;
   TOPLEVEL *toplevel = gschem_toplevel_get_toplevel (w_current);
 
-  CLibSymbol *symbol = compselect_get_symbol (compselect);
   enum compselect_behavior behavior =
     gtk_combo_box_get_active (compselect->combobox_behaviors);
 
@@ -166,13 +130,13 @@ compselect_place (GschemCompselectDockable *compselect)
           o_redraw_cleanstates (w_current);
         }
 
-        if (symbol == NULL) {
+        if (compselect->selected_symbol == NULL) {
           /* If there is no symbol selected, switch to SELECT mode */
           i_set_state (w_current, SELECT);
           i_action_stop (w_current);
         } else {
           /* Otherwise set the new symbol to place */
-          o_complex_prepare_place (w_current, symbol);
+          o_complex_prepare_place (w_current, compselect->selected_symbol);
         }
 }
 
@@ -180,6 +144,10 @@ compselect_place (GschemCompselectDockable *compselect)
 static void
 select_symbol (GschemCompselectDockable *compselect, CLibSymbol *symbol)
 {
+  if (symbol == compselect->selected_symbol)
+    return;
+  compselect->selected_symbol = symbol;
+
   /* update the preview with new symbol data */
   gchar *buffer = symbol ? s_clib_symbol_get_data (symbol) : NULL;
   g_object_set (compselect->preview,
