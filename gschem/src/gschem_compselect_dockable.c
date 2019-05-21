@@ -822,6 +822,11 @@ create_lib_tree_model (GschemCompselectDockable *compselect)
 
   gtk_tree_view_set_model (compselect->libtreeview, model);
   g_object_unref (model);  /* release initially owned reference */
+
+  /* re-expand library tree if filter text is not-empty */
+  if (compselect->entry_filter != NULL &&
+      gtk_entry_get_text (compselect->entry_filter)[0] != '\0')
+    gtk_tree_view_expand_all (compselect->libtreeview);
 }
 
 /*! \brief Helper function for \ref select_symbol_by_filename.
