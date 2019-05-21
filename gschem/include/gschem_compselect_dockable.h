@@ -54,9 +54,6 @@ typedef struct _GschemCompselectDockable      GschemCompselectDockable;
 
 struct _GschemCompselectDockableClass {
   GschemDockableClass parent_class;
-
-  guint behavior_changed_signal_id;
-
 };
 
 struct _GschemCompselectDockable {
