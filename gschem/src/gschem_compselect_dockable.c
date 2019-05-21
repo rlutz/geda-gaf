@@ -384,7 +384,10 @@ tree_row_activated (GtkTreeView       *tree_view,
   model = gtk_tree_view_get_model (tree_view);
   gtk_tree_model_get_iter (model, &iter, path);
 
-  if (is_symbol (model, &iter)) {
+  if (tree_view == compselect->inusetreeview ||
+      /* No special handling required */
+      (tree_view == compselect->libtreeview && is_symbol (model, &iter))) {
+       /* Tree view needs to check that we're at a symbol node */
     compselect_place (compselect);
 
     GschemDockable *dockable = GSCHEM_DOCKABLE (compselect);
