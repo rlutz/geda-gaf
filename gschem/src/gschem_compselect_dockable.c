@@ -66,6 +66,9 @@ enum compselect_behavior {
 
 static void
 update_attributes_model (GschemCompselectDockable *compselect, gchar *filename);
+static void
+compselect_callback_tree_selection_changed (GtkTreeSelection *selection,
+                                            gpointer          user_data);
 
 
 /*! \brief Return currently active component-selector view
@@ -147,6 +150,38 @@ select_symbol (GschemCompselectDockable *compselect, CLibSymbol *symbol)
   if (symbol == compselect->selected_symbol)
     return;
   compselect->selected_symbol = symbol;
+
+  /* update in-use and library selections */
+  GtkTreeSelection *selection;
+  GtkTreeModel *model;
+  GtkTreeIter iter;
+
+  selection = gtk_tree_view_get_selection (compselect->inusetreeview);
+  if (gtk_tree_selection_get_selected (selection, &model, &iter)) {
+    CLibSymbol *sym = NULL;
+    gtk_tree_model_get (model, &iter, 0, &sym, -1);
+    if (sym != symbol) {
+      g_signal_handlers_block_by_func (
+        selection, compselect_callback_tree_selection_changed, compselect);
+      gtk_tree_selection_unselect_all (selection);
+      g_signal_handlers_unblock_by_func (
+        selection, compselect_callback_tree_selection_changed, compselect);
+    }
+  }
+
+  selection = gtk_tree_view_get_selection (compselect->libtreeview);
+  if (gtk_tree_selection_get_selected (selection, &model, &iter)) {
+    CLibSymbol *sym = NULL;
+    gboolean is_sym = FALSE;
+    gtk_tree_model_get (model, &iter, 0, &sym, 2, &is_sym, -1);
+    if (is_sym && sym != symbol) {
+      g_signal_handlers_block_by_func (
+        selection, compselect_callback_tree_selection_changed, compselect);
+      gtk_tree_selection_unselect_all (selection);
+      g_signal_handlers_unblock_by_func (
+        selection, compselect_callback_tree_selection_changed, compselect);
+    }
+  }
 
   /* update the preview with new symbol data */
   gchar *buffer = symbol ? s_clib_symbol_get_data (symbol) : NULL;
