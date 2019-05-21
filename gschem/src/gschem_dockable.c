@@ -858,7 +858,7 @@ create_widget (GschemDockable *dockable)
 
   dockable->widget =
     GSCHEM_DOCKABLE_GET_CLASS (dockable)->create_widget (dockable);
-  g_object_ref (dockable->widget);
+  g_object_ref_sink (dockable->widget);
 
   /* GtkNotebook doesn't allow storing a pointer along with a widget,
    * so store the dockable in the user-data property of the widget */
@@ -974,6 +974,7 @@ create_menu (GschemDockable *dockable)
   g_return_if_fail (dockable->menu == NULL);
 
   dockable->menu = gtk_menu_new ();
+  g_object_ref_sink (dockable->menu);
 
   dockable->detach_item = gtk_menu_item_new_with_mnemonic (_("_Detach"));
   g_signal_connect (dockable->detach_item, "activate",
