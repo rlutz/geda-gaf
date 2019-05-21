@@ -51,12 +51,6 @@
 #define COMPSELECT_FILTER_INTERVAL 200
 
 
-enum compselect_view {
-  VIEW_INUSE=0,
-  VIEW_CLIB
-};
-
-
 enum compselect_behavior {
   BEHAVIOR_REFERENCE,
   BEHAVIOR_EMBED,
@@ -69,32 +63,6 @@ update_attributes_model (GschemCompselectDockable *compselect, gchar *filename);
 static void
 compselect_callback_tree_selection_changed (GtkTreeSelection *selection,
                                             gpointer          user_data);
-
-
-/*! \brief Return currently active component-selector view
- *
- *  \par Function Description
- *  This function returns which one of the possible views is active
- *  in the component selector: VIEW_INUSE for the in-use view, or
- *  VIEW_CLIB for the component library view.
- *
- *  \todo FIXME: This function assumes the GtkNotebook pages displaying the
- *               views are in a specific order.
- *
- *  \param [in] compselect  The component selection dockable.
- *  \returns The currently active view (from the compselect_view enum).
- */
-static enum compselect_view
-compselect_get_view (GschemCompselectDockable *compselect)
-{
-  switch (gtk_notebook_get_current_page (compselect->viewtabs)) {
-    case 0: return VIEW_INUSE;  /* In use page */
-    case 1: return VIEW_CLIB;   /* Component library page */
-    default:
-      g_critical ("compselect_get_view: Unknown tab position\n");
-      return 0;
-  }
-}
 
 
 static void
@@ -245,18 +213,7 @@ x_compselect_deselect (GschemToplevel *w_current)
   GschemCompselectDockable *compselect =
     GSCHEM_COMPSELECT_DOCKABLE (w_current->compselect_dockable);
 
-  switch (compselect_get_view (compselect)) {
-  case VIEW_INUSE:
-    gtk_tree_selection_unselect_all (
-      gtk_tree_view_get_selection (compselect->inusetreeview));
-    break;
-  case VIEW_CLIB:
-    gtk_tree_selection_unselect_all (
-      gtk_tree_view_get_selection (compselect->libtreeview));
-    break;
-  default:
-    g_assert_not_reached ();
-  }
+  select_symbol (compselect, NULL);
 }
 
 
