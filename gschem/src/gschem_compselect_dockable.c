@@ -408,7 +408,7 @@ enum {
  *  \param [in] compselect       The dockable compselect
  *  \param [in] preview_toplevel The toplevel of the preview widget
  */
-void
+static void
 update_attributes_model (GschemCompselectDockable *compselect, gchar *filename)
 {
   GtkListStore *model;
