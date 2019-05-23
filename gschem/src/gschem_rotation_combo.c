@@ -58,25 +58,23 @@ static GtkListStore* rotation_list_store = NULL;
 static GtkListStore*
 create_rotation_list_store ()
 {
-  int angle;
   GtkTreeIter iter;
   GtkListStore *store;
-  GString *string = g_string_new (NULL);
 
   store = gtk_list_store_new (COLUMN_COUNT, G_TYPE_STRING, G_TYPE_INT);
 
-  for (angle = 0; angle < 360; angle += 90) {
-    g_string_printf (string, "%d", angle);
-
-    gtk_list_store_append (store, &iter);
-    gtk_list_store_set (store, &iter,
-      COLUMN_STRING,  string->str,
-      COLUMN_INTEGER, angle,
-      -1
-      );
-  }
-
-  g_string_free (string, TRUE);
+  gtk_list_store_append (store, &iter);
+  gtk_list_store_set (store, &iter, COLUMN_STRING,  pgettext ("angle", "0"),
+                                    COLUMN_INTEGER, 0, -1);
+  gtk_list_store_append (store, &iter);
+  gtk_list_store_set (store, &iter, COLUMN_STRING,  pgettext ("angle", "90"),
+                                    COLUMN_INTEGER, 90, -1);
+  gtk_list_store_append (store, &iter);
+  gtk_list_store_set (store, &iter, COLUMN_STRING,  pgettext ("angle", "180"),
+                                    COLUMN_INTEGER, 180, -1);
+  gtk_list_store_append (store, &iter);
+  gtk_list_store_set (store, &iter, COLUMN_STRING,  pgettext ("angle", "270"),
+                                    COLUMN_INTEGER, 270, -1);
 
   return store;
 }
