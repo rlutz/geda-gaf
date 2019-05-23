@@ -736,7 +736,7 @@ void x_window_create_main(GschemToplevel *w_current)
 
   /* hide text box */
   w_current->hide_text_widget = GTK_WIDGET (g_object_new (GSCHEM_TYPE_SHOW_HIDE_TEXT_WIDGET,
-                                                          "button-text", _("Hide"),
+                                                          "button-text", pgettext ("actuate", "Hide"),
                                                           "label-text",  _("Hide text starting with:"),
                                                           NULL));
 
@@ -753,7 +753,7 @@ void x_window_create_main(GschemToplevel *w_current)
 
   /* show text box */
   w_current->show_text_widget = GTK_WIDGET (g_object_new (GSCHEM_TYPE_SHOW_HIDE_TEXT_WIDGET,
-                                                          "button-text", _("Show"),
+                                                          "button-text", pgettext ("actuate", "Show"),
                                                           "label-text",  _("Show text starting with:"),
                                                           NULL));
 

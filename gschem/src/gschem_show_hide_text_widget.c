@@ -146,7 +146,7 @@ gschem_show_hide_text_widget_class_init (GschemShowHideTextWidgetClass *klass)
                                    g_param_spec_string ("button-text",
                                                         "Button Text",
                                                         "Button Text",
-                                                        _("Hide"),
+                                                        pgettext ("actuate", "Hide"),
                                                         G_PARAM_READWRITE | G_PARAM_CONSTRUCT));
 
   g_object_class_install_property (G_OBJECT_CLASS (klass),

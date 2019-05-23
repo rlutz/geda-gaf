@@ -368,7 +368,7 @@ gschem_find_patch_widget_init (GschemFindPatchWidget *widget)
   gtk_widget_set_visible (button_box, TRUE);
   gtk_box_pack_start (GTK_BOX (content), button_box, FALSE, FALSE, 0);
 
-  widget->find_button = gtk_button_new_with_label (_("Import"));
+  widget->find_button = gtk_button_new_with_label (pgettext ("actuate", "Import"));
   gtk_widget_set_sensitive (widget->find_button, FALSE);
   gtk_widget_set_visible (widget->find_button, TRUE);
   gtk_box_pack_start (GTK_BOX (button_box), widget->find_button, FALSE, FALSE, 0);

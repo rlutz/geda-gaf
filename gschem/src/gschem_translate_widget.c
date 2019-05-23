@@ -401,7 +401,7 @@ instance_init (GschemTranslateWidget *widget)
   gtk_widget_set_visible (button_box, TRUE);
   gtk_box_pack_start (GTK_BOX (content), button_box, FALSE, FALSE, 0);
 
-  widget->evaluate_button = gtk_button_new_with_label (_("Translate"));
+  widget->evaluate_button = gtk_button_new_with_label (pgettext ("actuate", "Translate"));
   gtk_widget_set_sensitive (widget->evaluate_button, FALSE);
   gtk_widget_set_visible (widget->evaluate_button, TRUE);
   gtk_box_pack_start (GTK_BOX (button_box), widget->evaluate_button, FALSE, FALSE, 0);
