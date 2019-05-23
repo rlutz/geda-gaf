@@ -55,7 +55,7 @@ static GtkListStore* color_list_store = NULL;
 
 
 static GtkListStore* create_color_list_store();
-static char* get_color_name(int index);
+static const char* get_color_name(int index);
 
 
 
@@ -90,34 +90,36 @@ create_color_list_store ()
 
 /*! \brief Given the color index, obtain a human readable name
  */
-static char*
+static const char*
 get_color_name (int index)
 {
   switch(index) {
-    case BACKGROUND_COLOR:         return _("Background");
-    case PIN_COLOR:                return _("Pin");
-    case NET_ENDPOINT_COLOR:       return _("Net endpoint");
-    case GRAPHIC_COLOR:            return _("Graphic");
-    case NET_COLOR:                return _("Net");
-    case ATTRIBUTE_COLOR:          return _("Attribute");
-    case LOGIC_BUBBLE_COLOR:       return _("Logic bubble");
-    case DOTS_GRID_COLOR:          return _("Grid point");
-    case DETACHED_ATTRIBUTE_COLOR: return _("Detached attribute");
-    case TEXT_COLOR:               return _("Text");
-    case BUS_COLOR:                return _("Bus");
-    case SELECT_COLOR:             return _("Selection");
-    case BOUNDINGBOX_COLOR:        return _("Bounding box");
-    case ZOOM_BOX_COLOR:           return _("Zoom box");
-    case STROKE_COLOR:             return _("Stroke");
-    case LOCK_COLOR:               return _("Lock");
-    case OUTPUT_BACKGROUND_COLOR:  return _("Output background");
-    case JUNCTION_COLOR:           return _("Net junction");
-    case MESH_GRID_MAJOR_COLOR:    return _("Mesh grid major");
-    case MESH_GRID_MINOR_COLOR:    return _("Mesh grid minor");
+    case BACKGROUND_COLOR:      return pgettext ("color", "Background");
+    case PIN_COLOR:             return pgettext ("color", "Pin");
+    case NET_ENDPOINT_COLOR:    return pgettext ("color", "Net endpoint");
+    case GRAPHIC_COLOR:         return pgettext ("color", "Graphic");
+    case NET_COLOR:             return pgettext ("color", "Net");
+    case ATTRIBUTE_COLOR:       return pgettext ("color", "Attribute");
+    case LOGIC_BUBBLE_COLOR:    return pgettext ("color", "Logic bubble");
+    case DOTS_GRID_COLOR:       return pgettext ("color", "Grid point");
+    case DETACHED_ATTRIBUTE_COLOR:
+                                return pgettext ("color", "Detached attribute");
+    case TEXT_COLOR:            return pgettext ("color", "Text");
+    case BUS_COLOR:             return pgettext ("color", "Bus");
+    case SELECT_COLOR:          return pgettext ("color", "Selection");
+    case BOUNDINGBOX_COLOR:     return pgettext ("color", "Bounding box");
+    case ZOOM_BOX_COLOR:        return pgettext ("color", "Zoom box");
+    case STROKE_COLOR:          return pgettext ("color", "Stroke");
+    case LOCK_COLOR:            return pgettext ("color", "Lock");
+    case OUTPUT_BACKGROUND_COLOR:
+                                return pgettext ("color", "Output background");
+    case JUNCTION_COLOR:        return pgettext ("color", "Net junction");
+    case MESH_GRID_MAJOR_COLOR: return pgettext ("color", "Mesh grid major");
+    case MESH_GRID_MINOR_COLOR: return pgettext ("color", "Mesh grid minor");
     default:
       break;
   }
-  return _("Unknown");
+  return pgettext ("color", "Unknown");
 }
 
 

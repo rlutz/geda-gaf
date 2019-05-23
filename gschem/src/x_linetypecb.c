@@ -71,35 +71,35 @@ create_line_type_list_store ()
 
   gtk_list_store_append (store, &iter);
   gtk_list_store_set (store, &iter,
-    COLUMN_NAME,       _("Solid"),
+    COLUMN_NAME,       pgettext ("line-type", "Solid"),
     COLUMN_INDEX,      TYPE_SOLID,
     -1
     );
 
   gtk_list_store_append (store, &iter);
   gtk_list_store_set (store, &iter,
-    COLUMN_NAME,       _("Dotted"),
+    COLUMN_NAME,       pgettext ("line-type", "Dotted"),
     COLUMN_INDEX,      TYPE_DOTTED,
     -1
     );
 
   gtk_list_store_append (store, &iter);
   gtk_list_store_set (store, &iter,
-    COLUMN_NAME,       _("Dashed"),
+    COLUMN_NAME,       pgettext ("line-type", "Dashed"),
     COLUMN_INDEX,      TYPE_DASHED,
     -1
     );
 
   gtk_list_store_append (store, &iter);
   gtk_list_store_set (store, &iter,
-    COLUMN_NAME,       _("Center"),
+    COLUMN_NAME,       pgettext ("line-type", "Center"),
     COLUMN_INDEX,      TYPE_CENTER,
     -1
     );
 
   gtk_list_store_append (store, &iter);
   gtk_list_store_set (store, &iter,
-    COLUMN_NAME,       _("Phantom"),
+    COLUMN_NAME,       pgettext ("line-type", "Phantom"),
     COLUMN_INDEX,      TYPE_PHANTOM,
     -1
     );

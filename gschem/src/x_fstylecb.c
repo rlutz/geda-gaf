@@ -70,28 +70,28 @@ create_fstyle_list_store ()
 
   gtk_list_store_append (store, &iter);
   gtk_list_store_set (store, &iter,
-    COLUMN_NAME,      _("Hollow"),
+    COLUMN_NAME,      pgettext ("fill-type", "Hollow"),
     COLUMN_INDEX,     FILLING_HOLLOW,
     -1
     );
 
   gtk_list_store_append (store, &iter);
   gtk_list_store_set (store, &iter,
-    COLUMN_NAME,      _("Filled"),
+    COLUMN_NAME,      pgettext ("fill-type", "Filled"),
     COLUMN_INDEX,     FILLING_FILL,
     -1
     );
 
   gtk_list_store_append (store, &iter);
   gtk_list_store_set (store, &iter,
-    COLUMN_NAME,      _("Mesh"),
+    COLUMN_NAME,      pgettext ("fill-type", "Mesh"),
     COLUMN_INDEX,     FILLING_MESH,
     -1
     );
 
   gtk_list_store_append (store, &iter);
   gtk_list_store_set (store, &iter,
-    COLUMN_NAME,      _("Hatch"),
+    COLUMN_NAME,      pgettext ("fill-type", "Hatch"),
     COLUMN_INDEX,     FILLING_HATCH,
     -1
     );

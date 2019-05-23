@@ -71,21 +71,21 @@ create_line_cap_list_store ()
 
   gtk_list_store_append (store, &iter);
   gtk_list_store_set (store, &iter,
-    COLUMN_NAME,       _("Butt"),
+    COLUMN_NAME,       pgettext ("line-cap", "Butt"),
     COLUMN_INDEX,      END_NONE,
     -1
     );
 
   gtk_list_store_append (store, &iter);
   gtk_list_store_set (store, &iter,
-    COLUMN_NAME,       _("Square"),
+    COLUMN_NAME,       pgettext ("line-cap", "Square"),
     COLUMN_INDEX,      END_SQUARE,
     -1
     );
 
   gtk_list_store_append (store, &iter);
   gtk_list_store_set (store, &iter,
-    COLUMN_NAME,       _("Round"),
+    COLUMN_NAME,       pgettext ("line-cap", "Round"),
     COLUMN_INDEX,      END_ROUND,
     -1
     );
