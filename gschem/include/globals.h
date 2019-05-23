@@ -64,6 +64,21 @@ extern SCM complex_place_list_changed_hook;
 # define N_(String) (String)
 #endif
 
+#ifndef pgettext
+# define GETTEXT_CONTEXT_GLUE "\004"
+# define pgettext(Msgctxt, Msgid) \
+   pgettext_aux (Msgctxt GETTEXT_CONTEXT_GLUE Msgid, Msgid)
+  static inline const char *
+  pgettext_aux (const char *msg_ctxt_id, const char *msgid)
+  {
+    const char *translation = gettext (msg_ctxt_id);
+    if (translation == msg_ctxt_id)
+      return msgid;
+    else
+      return translation;
+  }
+#endif
+
 /*
  * __attribute__((unused)) is a gcc extension so define
  * a portable macro, ATTRIBUTE_UNUSED, to use instead
