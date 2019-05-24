@@ -38,7 +38,6 @@ noinst_HEADERS = \
 	gschem_struct.h \
 	gschem_swatch_column_renderer.h \
 	gschem_text_properties_dockable.h \
-	gschem_translate_widget.h \
 	gschem_toplevel.h
 
 MOSTLYCLEANFILES = *.log core FILE *~

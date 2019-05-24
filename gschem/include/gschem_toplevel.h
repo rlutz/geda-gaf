@@ -48,7 +48,6 @@ struct st_gschem_toplevel {
   GtkWidget *hide_text_widget;
   GtkWidget *show_text_widget;
   GtkWidget *macro_widget;
-  GtkWidget *translate_widget;
 
   GtkWidget *bottom_widget;
 
