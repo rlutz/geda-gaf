@@ -164,7 +164,8 @@ static void draw_mesh (GschemToplevel *w_current,
                        cairo_matrix_t *user_to_device_matrix,
                        int color,
                        int x_start, int y_start, int x_end, int y_end,
-                       int incr, int coarse_mult)
+                       int incr, int coarse_mult,
+                       gboolean leave_out_origin)
 {
   int i, j;
   double x1, y1, x2, y2;
@@ -204,6 +205,8 @@ static void draw_mesh (GschemToplevel *w_current,
       next_coarse_y += coarse_incr;
       continue;
     }
+    if (j == 0 && leave_out_origin)
+      continue;
 
     x1 = x_start;
     y1 = j;
@@ -226,6 +229,8 @@ static void draw_mesh (GschemToplevel *w_current,
       next_coarse_x += coarse_incr;
       continue;
     }
+    if (i == 0 && leave_out_origin)
+      continue;
 
     x1 = i;
     y1 = y_start;
@@ -240,6 +245,43 @@ static void draw_mesh (GschemToplevel *w_current,
 
     cairo_stroke (cr);
   }
+}
+
+
+/*! \brief Helper function for draw_mesh_grid_region
+ */
+static void draw_origin (GschemToplevel *w_current,
+                         cairo_t *cr,
+                         cairo_matrix_t *user_to_device_matrix,
+                         int x_start, int y_start, int x_end, int y_end)
+{
+  COLOR *c = x_color_lookup (ORIGIN_COLOR);
+  cairo_set_source_rgba (cr, (double)c->r / 255.,
+                             (double)c->g / 255.,
+                             (double)c->b / 255.,
+                             (double)c->a / 255.);
+  cairo_set_line_width (cr, 1.);
+  cairo_set_line_cap (cr, CAIRO_LINE_CAP_SQUARE);
+
+  double x1, y1, x2, y2;
+
+  x1 = x_start;  y1 = 0;
+  x2 = x_end;    y2 = 0;
+  cairo_matrix_transform_point (user_to_device_matrix, &x1, &y1);
+  cairo_matrix_transform_point (user_to_device_matrix, &x2, &y2);
+
+  cairo_move_to (cr, (int)(x1 + .5), (int)(y1 + .5));
+  cairo_line_to (cr, (int)(x2 + .5), (int)(y2 + .5));
+  cairo_stroke (cr);
+
+  x1 = 0;  y1 = y_start;
+  x2 = 0;  y2 = y_end;
+  cairo_matrix_transform_point (user_to_device_matrix, &x1, &y1);
+  cairo_matrix_transform_point (user_to_device_matrix, &x2, &y2);
+
+  cairo_move_to (cr, (int)(x1 + .5), (int)(y1 + .5));
+  cairo_line_to (cr, (int)(x2 + .5), (int)(y2 + .5));
+  cairo_stroke (cr);
 }
 
 
@@ -298,10 +340,11 @@ draw_mesh_grid_region (GschemToplevel *w_current, cairo_t *cr, int x, int y, int
   int coarse_increment = MESH_COARSE_GRID_MULTIPLIER * snap_size;
   double dummy = 0.0;
   double threshold = w_current->mesh_grid_display_threshold;
+  gboolean show_origin = gschem_options_get_show_origin (w_current->options);
 
   cairo_device_to_user_distance (cr, &threshold, &dummy);
 
-  if (coarse_increment >= threshold) {
+  if (coarse_increment >= threshold || show_origin) {
     cairo_matrix_t user_to_device_matrix;
     double x_start = x - 1;
     double y_start = y + height + 1;
@@ -327,19 +370,31 @@ draw_mesh_grid_region (GschemToplevel *w_current, cairo_t *cr, int x, int y, int
                  ceil (x_end),
                  ceil (y_end),
                  snap_size,
-                 MESH_COARSE_GRID_MULTIPLIER);
+                 MESH_COARSE_GRID_MULTIPLIER,
+                 show_origin);
     }
 
-    draw_mesh (w_current,
-               cr,
-               &user_to_device_matrix,
-               MESH_GRID_MAJOR_COLOR,
-               floor (x_start),
-               floor (y_start),
-               ceil (x_end),
-               ceil (y_end),
-               coarse_increment,
-               0);
+    if (coarse_increment >= threshold)
+      draw_mesh (w_current,
+                 cr,
+                 &user_to_device_matrix,
+                 MESH_GRID_MAJOR_COLOR,
+                 floor (x_start),
+                 floor (y_start),
+                 ceil (x_end),
+                 ceil (y_end),
+                 coarse_increment,
+                 0,
+                 show_origin);
+
+    if (show_origin)
+      draw_origin (w_current,
+                   cr,
+                   &user_to_device_matrix,
+                   floor (x_start),
+                   floor (y_start),
+                   ceil (x_end),
+                   ceil (y_end));
 
     cairo_restore (cr);
   }
