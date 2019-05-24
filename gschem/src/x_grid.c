@@ -222,8 +222,8 @@ static void draw_mesh (GschemToplevel *w_current,
   for (i = x_start; i < x_end; i = i + incr) {
 
     /* Skip lines which will be drawn in the coarser grid */
-    if (j == next_coarse_y) {
-      next_coarse_y += coarse_incr;
+    if (i == next_coarse_x) {
+      next_coarse_x += coarse_incr;
       continue;
     }
 
