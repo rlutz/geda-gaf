@@ -145,6 +145,10 @@ static gboolean
 callback_notebook_key_press_event (GtkWidget *notebook,
                                    GdkEventKey *event,
                                    GschemToplevel *w_current);
+static gboolean
+callback_notebook_button_press_event (GtkWidget *notebook,
+                                      GdkEventButton *event,
+                                      GschemToplevel *w_current);
 
 
 GType
@@ -1364,6 +1368,9 @@ connect_notebook_signals (GschemToplevel *w_current, GtkWidget *notebook)
   g_signal_connect (
     notebook, "key-press-event",
     G_CALLBACK (callback_notebook_key_press_event), w_current);
+  g_signal_connect (
+    notebook, "button-press-event",
+    G_CALLBACK (callback_notebook_button_press_event), w_current);
 }
 
 
@@ -1729,4 +1736,31 @@ callback_notebook_key_press_event (GtkWidget *notebook,
   }
 
   return FALSE;
+}
+
+
+static gboolean
+callback_notebook_button_press_event (GtkWidget *notebook,
+                                      GdkEventButton *event,
+                                      GschemToplevel *w_current)
+{
+  if (event->button != 3 || event->type != GDK_BUTTON_PRESS)
+    return FALSE;
+
+  gpointer data;
+  gdk_window_get_user_data (event->window, &data);
+  if (data != notebook)
+    return FALSE;
+
+  GtkWidget *menu = notebook == w_current->left_notebook ?
+                      w_current->left_docking_area_menu :
+                    notebook == w_current->bottom_notebook ?
+                      w_current->bottom_docking_area_menu :
+                    notebook == w_current->right_notebook ?
+                      w_current->right_docking_area_menu : NULL;
+  g_return_val_if_fail (menu != NULL, FALSE);
+  gtk_menu_popup (GTK_MENU (menu), NULL, NULL, NULL, NULL,
+                  event->button, event->time);
+
+  return TRUE;
 }
