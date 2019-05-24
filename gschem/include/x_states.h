@@ -52,6 +52,7 @@ enum x_states {
   PAN,
   MIRRORMODE,
   ROTATEMODE,
+  OGNRSTMODE,
 };
 
 

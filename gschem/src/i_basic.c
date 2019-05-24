@@ -92,6 +92,7 @@ static const char *i_status_string(GschemToplevel *w_current)
     case ROTATEMODE : return _("Rotate Mode");
     case GRIPS      : return _("Modify Mode");
     case ZOOMBOX    : return _("Zoom Box");
+    case OGNRSTMODE : return _("Reset Origin Mode");
   }
   g_assert_not_reached();
   return ""; /* should not happen */
@@ -352,6 +353,9 @@ void i_update_toolbar(GschemToplevel *w_current)
                             w_current->event_state == PAN, w_current);
   gschem_action_set_active (action_view_zoom_box,
                             w_current->event_state == ZOOMBOX, w_current);
+
+  gschem_action_set_active (action_edit_translate,
+                            w_current->event_state == OGNRSTMODE, w_current);
 }
 
 

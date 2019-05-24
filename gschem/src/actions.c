@@ -2136,15 +2136,14 @@ DEFINE_ACTION (edit_autonumber_text,
 DEFINE_ACTION (edit_translate,
                "edit-translate",
                NULL,
-               _("Translate to Coordinate"),
-               _("Translate to Coordinate..."),
-               _("_Translate to Coordinate..."),
+               _("Reset Origin"),
+               _("Place Origin"),
+               _("_Place Origin"),
                NULL,
-               ACTUATE)
+               TOGGLE_PLAIN)
 {
   SNAP_STATE snap_mode;
-
-  i_update_middle_button (w_current, action, _("Translate"));
+  gint wx, wy;
 
   snap_mode = gschem_options_get_snap_mode (w_current->options);
 
@@ -2164,8 +2163,15 @@ DEFINE_ACTION (edit_translate,
                   "set to 100\n"));
   }
 
-  gtk_widget_show (w_current->translate_widget);
-  gtk_widget_grab_focus (gschem_translate_widget_get_entry (GSCHEM_TRANSLATE_WIDGET (w_current->translate_widget)));
+  o_redraw_cleanstates (w_current);
+  i_set_state (w_current, OGNRSTMODE);
+  i_update_middle_button (w_current, action, _("Reset Origin"));
+
+  i_action_start (w_current);
+  if (g_action_get_position (TRUE, &wx, &wy))
+    o_ognrst_motion (w_current, wx, wy);
+  else
+    w_current->rubber_visible = 0;
 }
 
 DEFINE_ACTION (edit_find_patch,

@@ -250,6 +250,11 @@ void o_net_motion(GschemToplevel *w_current, int x, int y);
 void o_net_draw_rubber(GschemToplevel *w_current, EdaRenderer *renderer);
 void o_net_invalidate_rubber(GschemToplevel *w_current);
 int o_net_add_busrippers(GschemToplevel *w_current, OBJECT *net_obj, GList *other_objects);
+/* o_ognrst.c */
+void o_ognrst_invalidate_rubber (GschemToplevel *w_current);
+void o_ognrst_end (GschemToplevel *w_current, int w_x, int w_y);
+void o_ognrst_motion (GschemToplevel *w_current, int w_x, int w_y);
+void o_ognrst_draw_rubber (GschemToplevel *w_current, EdaRenderer *renderer, int x, int y, int width, int height);
 /* o_picture.c */
 void o_picture_start(GschemToplevel *w_current, int x, int y);
 void o_picture_end(GschemToplevel *w_current, int x, int y);

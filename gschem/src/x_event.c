@@ -161,6 +161,7 @@ x_event_button_pressed(GschemPageView *page_view, GdkEventButton *event, GschemT
           case (PATHMODE)   : o_path_continue (w_current, w_x, w_y); break;
           case (PICTUREMODE): o_picture_end(w_current, w_x, w_y); break;
           case (PINMODE)    : o_pin_end (w_current, w_x, w_y); break;
+          case (OGNRSTMODE) : o_ognrst_end (w_current, w_x, w_y); break;
           default: break;
         }
       }
@@ -201,7 +202,11 @@ x_event_button_pressed(GschemPageView *page_view, GdkEventButton *event, GschemT
 
     /* try this out and see how it behaves */
     if (w_current->inside_action) {
-      if (!(w_current->event_state == COMPMODE||
+      if (w_current->event_state == OGNRSTMODE &&
+          w_current->middle_button == MID_MOUSEPAN_ENABLED)
+        gschem_page_view_pan_start (page_view, (int) event->x, (int) event->y);
+      else if (
+          !(w_current->event_state == COMPMODE||
             w_current->event_state == TEXTMODE||
             w_current->event_state == MOVEMODE||
             w_current->event_state == COPYMODE  ||
@@ -524,6 +529,7 @@ x_event_motion (GschemPageView *page_view, GdkEventMotion *event, GschemToplevel
         case (SBOX)       : o_select_box_motion (w_current, unsnapped_wx, unsnapped_wy); break;
         case (ZOOMBOX)    : a_zoom_box_motion (w_current, unsnapped_wx, unsnapped_wy); break;
         case (SELECT)     : o_select_motion (w_current, w_x, w_y); break;
+        case (OGNRSTMODE) : o_ognrst_motion (w_current, w_x, w_y); break;
         default: break;
       }
     }

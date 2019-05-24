@@ -259,6 +259,9 @@ void o_redraw_rect (GschemToplevel *w_current,
         case GRIPS      : o_grips_draw_rubber (w_current, renderer); break;
         case SBOX       : o_select_box_draw_rubber (w_current, renderer); break;
         case ZOOMBOX    : a_zoom_box_draw_rubber (w_current, renderer); break;
+        case OGNRSTMODE : o_ognrst_draw_rubber (w_current, renderer,
+                            rectangle->x, rectangle->y,
+                            rectangle->width, rectangle->height); break;
         default: break;
       }
     }
@@ -296,6 +299,7 @@ int o_invalidate_rubber (GschemToplevel *w_current)
     case (PATHMODE)   : o_path_invalidate_rubber (w_current); break;
     case (PICTUREMODE): o_picture_invalidate_rubber (w_current); break;
     case (PINMODE)    : o_pin_invalidate_rubber (w_current); break;
+    case (OGNRSTMODE) : o_ognrst_invalidate_rubber (w_current); break;
 
     default:
       return(FALSE);
@@ -347,6 +351,7 @@ int o_redraw_cleanstates(GschemToplevel *w_current)
     case(TEXTMODE):
     case(GRIPS):
     case(ZOOMBOX):
+    case(OGNRSTMODE):
       /* it is possible to cancel in the middle of a place,
        * so lets be sure to clean up the place_list structure */
 
