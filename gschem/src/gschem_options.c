@@ -44,6 +44,7 @@ enum
 {
   PROP_GSCHEM_TOPLEVEL = 1,
   PROP_GRID_MODE,
+  PROP_SHOW_ORIGIN,
   PROP_MAGNETIC_NET_MODE,
   PROP_NET_RUBBER_BAND_MODE,
   PROP_SNAP_MODE,
@@ -80,6 +81,24 @@ gschem_options_cycle_grid_mode (GschemOptions *options)
   next_grid_mode = (options->grid_mode + 1) % GRID_MODE_COUNT;
 
   gschem_options_set_grid_mode (options, next_grid_mode);
+}
+
+
+
+/*! \brief Cycle show origin to the next option
+ *
+ *  \param options These options
+ */
+void
+gschem_options_cycle_show_origin (GschemOptions *options)
+{
+  gboolean next_show_origin;
+
+  g_return_if_fail (options != NULL);
+
+  next_show_origin = !options->show_origin;
+
+  gschem_options_set_show_origin (options, next_show_origin);
 }
 
 
@@ -150,6 +169,21 @@ gschem_options_get_grid_mode (GschemOptions *options)
   g_return_val_if_fail (options != NULL, GRID_MODE_MESH);
 
   return options->grid_mode;
+}
+
+
+
+/*! \brief Get whether to show origin
+ *
+ *  \param [in] options These options
+ *  \return Whether to show the origin
+ */
+gboolean
+gschem_options_get_show_origin (GschemOptions *options)
+{
+  g_return_val_if_fail (options != NULL, DEFAULT_SHOW_ORIGIN);
+
+  return options->show_origin;
 }
 
 
@@ -323,6 +357,27 @@ gschem_options_set_grid_mode (GschemOptions *options, GRID_MODE grid_mode)
 
 
 
+/*! \brief Set whether to show origin
+ *
+ *  \param [in] options These options
+ *  \param [in] show_origin Whether to show the origin
+ */
+void
+gschem_options_set_show_origin (GschemOptions *options, gboolean show_origin)
+{
+  g_return_if_fail (options != NULL);
+
+  options->show_origin = show_origin;
+
+  gschem_action_set_active (action_view_show_origin,
+                            options->show_origin,
+                            options->w_current);
+
+  g_object_notify (G_OBJECT (options), "show-origin");
+}
+
+
+
 /*! \brief Set the magnetic net mode
  *
  *  \param [in] options These options
@@ -451,6 +506,14 @@ class_init (GschemOptionsClass *klass)
                                                      G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_CONSTRUCT));
 
   g_object_class_install_property (G_OBJECT_CLASS (klass),
+                                   PROP_SHOW_ORIGIN,
+                                   g_param_spec_boolean ("show-origin",
+                                                         "Show Origin",
+                                                         "Show Origin",
+                                                         DEFAULT_SHOW_ORIGIN,
+                                                         G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_CONSTRUCT));
+
+  g_object_class_install_property (G_OBJECT_CLASS (klass),
                                    PROP_MAGNETIC_NET_MODE,
                                    g_param_spec_boolean ("magnetic-net-mode",
                                                          "Magnetic Net Mode",
@@ -511,6 +574,10 @@ get_property (GObject *object, guint param_id, GValue *value, GParamSpec *pspec)
       g_value_set_int (value, gschem_options_get_grid_mode (options));
       break;
 
+    case PROP_SHOW_ORIGIN:
+      g_value_set_boolean (value, gschem_options_get_show_origin (options));
+      break;
+
     case PROP_MAGNETIC_NET_MODE:
       g_value_set_boolean (value, gschem_options_get_magnetic_net_mode (options));
       break;
@@ -564,6 +631,10 @@ set_property (GObject *object, guint param_id, const GValue *value, GParamSpec *
 
     case PROP_GRID_MODE:
       gschem_options_set_grid_mode (options, g_value_get_int (value));
+      break;
+
+    case PROP_SHOW_ORIGIN:
+      gschem_options_set_show_origin (options, g_value_get_boolean (value));
       break;
 
     case PROP_MAGNETIC_NET_MODE:

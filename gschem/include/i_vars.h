@@ -54,6 +54,7 @@ extern int default_dots_grid_dot_size;
 extern int default_dots_grid_mode;
 extern int default_dots_grid_fixed_threshold;
 extern int default_mesh_grid_display_threshold;
+extern int default_show_origin;
 extern int default_add_attribute_offset;
 extern int default_auto_save_interval;
 extern int default_mousepan_gain;

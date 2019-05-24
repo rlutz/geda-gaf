@@ -50,6 +50,13 @@
 #define DEFAULT_GRID_MODE (GRID_MODE_MESH)
 
 
+/*! \brief The initial show origin
+ *
+ *  This value will get replaced by user settings.
+ */
+#define DEFAULT_SHOW_ORIGIN (TRUE)
+
+
 /*! \brief The initial snap size
  *
  *  This value will get replaced by user settings.
@@ -92,6 +99,7 @@ struct _GschemOptions {
   GschemToplevel *w_current;
 
   int        grid_mode;
+  gboolean   show_origin;
   gboolean   magnetic_net_mode;
   gboolean   net_rubber_band_mode;
   SNAP_STATE snap_mode;
@@ -100,6 +108,9 @@ struct _GschemOptions {
 
 void
 gschem_options_cycle_grid_mode (GschemOptions *options);
+
+void
+gschem_options_cycle_show_origin (GschemOptions *options);
 
 void
 gschem_options_cycle_magnetic_net_mode (GschemOptions *options);
@@ -112,6 +123,9 @@ gschem_options_cycle_snap_mode (GschemOptions *options);
 
 GRID_MODE
 gschem_options_get_grid_mode (GschemOptions *options);
+
+gboolean
+gschem_options_get_show_origin (GschemOptions *options);
 
 gboolean
 gschem_options_get_magnetic_net_mode (GschemOptions *options);
@@ -139,6 +153,9 @@ gschem_options_scale_snap_up (GschemOptions *options);
 
 void
 gschem_options_set_grid_mode (GschemOptions *options, GRID_MODE grid_mode);
+
+void
+gschem_options_set_show_origin (GschemOptions *options, gboolean show_origin);
 
 void
 gschem_options_set_magnetic_net_mode (GschemOptions *options, gboolean enabled);

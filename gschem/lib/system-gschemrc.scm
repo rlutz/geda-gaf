@@ -1066,6 +1066,7 @@
 
 (global-set-key "V M" &view-menubar)
 (global-set-key "V T" &view-toolbar)
+(global-set-key "V G" &view-show-origin)
 (global-set-key "V R" &view-redraw)
 (global-set-key "V B" &view-zoom-box)
 (global-set-key "V F" &view-zoom-full)
@@ -1240,7 +1241,8 @@
            ,&hierarchy-documentation)))
 
 (define view-menu
-        `((,&edit-show-hidden)
+        `((,&edit-show-hidden
+           ,&view-show-origin)
           (,&view-zoom-in
            ,&view-zoom-out
            ,&view-zoom-extents

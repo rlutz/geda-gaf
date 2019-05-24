@@ -1536,6 +1536,19 @@ DEFINE_ACTION (edit_show_hidden,
                       s_page_objects (gschem_toplevel_get_toplevel (w_current)->page_current));
 }
 
+DEFINE_ACTION (view_show_origin,
+               "view-show-origin",
+               NULL,
+               _("Toggle Origin Visibility"),
+               _("Show Origin"),
+               _("Show Ori_gin"),
+               NULL,
+               TOGGLE_CHECK)
+{
+  gschem_options_cycle_show_origin (w_current->options);
+  i_show_state (w_current, NULL);
+}
+
 DEFINE_ACTION (view_zoom_in,
                "view-zoom-in",
                "gtk-zoom-in",
