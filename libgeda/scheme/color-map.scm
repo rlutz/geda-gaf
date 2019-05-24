@@ -26,6 +26,8 @@
     (junction . 21)
     (mesh-grid-major . 22)
     (mesh-grid-minor . 23)
+    (origin . 24)
+    (place-origin . 25)
    ))
 
 ;; Look up the internal system ID for a symbolic color

@@ -47,7 +47,7 @@
 #define PREPEND_VERSION_STRING ""
 
 /* for color mechanism used in gschem */
-#define MAX_COLORS 25
+#define MAX_COLORS 27
 
 /* X's obsession with *64 */
 #define FULL_CIRCLE 360*64

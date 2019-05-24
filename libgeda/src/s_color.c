@@ -60,6 +60,8 @@ static COLOR default_colors[] = {
   BLACK,           /* 21: junction           */
   GRAY,            /* 22: mesh-grid-major    */
   NOCOLOR,         /* 23: mesh-grid-minor    */
+  BLACK,           /* 24: origin             */
+  BLACK,           /* 25: place-origin       */
   ENDMAP
 };
 

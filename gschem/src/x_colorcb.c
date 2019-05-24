@@ -116,6 +116,8 @@ get_color_name (int index)
     case JUNCTION_COLOR:        return pgettext ("color", "Net junction");
     case MESH_GRID_MAJOR_COLOR: return pgettext ("color", "Mesh grid major");
     case MESH_GRID_MINOR_COLOR: return pgettext ("color", "Mesh grid minor");
+    case ORIGIN_COLOR:          return pgettext ("color", "Origin marker");
+    case PLACE_ORIGIN_COLOR:    return pgettext ("color", "Origin placement");
     default:
       break;
   }
