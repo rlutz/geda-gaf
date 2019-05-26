@@ -135,7 +135,8 @@ static void x_pagesel_callback_response (GtkDialog *dialog,
 
 enum {
   COLUMN_PAGE,
-  COLUMN_NAME,
+  COLUMN_BASENAME,
+  COLUMN_PATH,
   COLUMN_CHANGED,
   NUM_COLUMNS
 };
@@ -375,7 +376,8 @@ static void pagesel_init (Pagesel *pagesel)
   /* create the model for the treeview */
   store = (GtkTreeModel*)gtk_tree_store_new (NUM_COLUMNS,
                                              G_TYPE_POINTER,  /* page */
-                                             G_TYPE_STRING,   /* name */
+                                             G_TYPE_STRING,   /* basename */
+                                             G_TYPE_STRING,   /* path */
                                              G_TYPE_BOOLEAN); /* changed */
 
   /* create a scrolled window for the treeview */
@@ -393,6 +395,7 @@ static void pagesel_init (Pagesel *pagesel)
                                        /* GtkTreeView */
                                        "model",      store,
                                        "rules-hint", TRUE,
+                                       "tooltip-column", COLUMN_PATH,
                                        NULL));
   g_signal_connect (treeview,
                     "button-press-event",
@@ -423,7 +426,7 @@ static void pagesel_init (Pagesel *pagesel)
                   "resizable", TRUE,
                   NULL));
   gtk_tree_view_column_pack_start (column, renderer, TRUE);
-  gtk_tree_view_column_add_attribute (column, renderer, "text", COLUMN_NAME);
+  gtk_tree_view_column_add_attribute (column, renderer, "text", COLUMN_BASENAME);
   gtk_tree_view_append_column (GTK_TREE_VIEW (treeview), column);
   /*   - second column: changed */
   renderer = GTK_CELL_RENDERER (
@@ -499,6 +502,16 @@ static void add_page (GtkTreeModel *model, GtkTreeIter *parent,
   PAGE *p_current;
   GList *p_iter;
 
+  /* get basename and abbreviated path */
+  gchar *basename = g_path_get_basename (page->page_filename);
+  gchar *path = NULL;
+  const gchar *homedir = g_get_home_dir ();
+  size_t hd_len = strlen (homedir);
+  if (hd_len > 1 && strncmp (page->page_filename, homedir, hd_len) == 0 &&
+      (homedir[hd_len - 1] == '/' || page->page_filename[hd_len] == '/'))
+    path = g_strdup_printf (
+      "~/%s", page->page_filename + hd_len + (homedir[hd_len - 1] != '/'));
+
   /* add the page to the store */
   gtk_tree_store_append (GTK_TREE_STORE (model),
                          &iter,
@@ -506,9 +519,13 @@ static void add_page (GtkTreeModel *model, GtkTreeIter *parent,
   gtk_tree_store_set (GTK_TREE_STORE (model),
                       &iter,
                       COLUMN_PAGE, page,
-                      COLUMN_NAME, page->page_filename,
+                      COLUMN_BASENAME, basename,
+                      COLUMN_PATH, path != NULL ? path : page->page_filename,
                       COLUMN_CHANGED, page->CHANGED,
                       -1);
+
+  g_free (path);
+  g_free (basename);
 
   /* search a page that has a up field == p_current->pid */
   for ( p_iter = geda_list_get_glist( pages );
