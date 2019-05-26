@@ -49,6 +49,7 @@ x_fileselect_setup_filechooser_filters (GtkFileChooser *filechooser)
   gtk_file_filter_add_pattern (filter, "*.sym");
   gtk_file_filter_add_pattern (filter, "*.sch");
   gtk_file_chooser_add_filter (filechooser, filter);
+  gtk_file_chooser_set_filter (filechooser, filter);
   /* file filter that match any file */
   filter = gtk_file_filter_new ();
   gtk_file_filter_set_name (filter, _("All files"));
