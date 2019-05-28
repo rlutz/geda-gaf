@@ -388,6 +388,8 @@ void i_update_menus(GschemToplevel *w_current)
   guint sel_attachable = 0;             /* component or net */
 
   gboolean sel_component = FALSE;       /* component */
+  gboolean sel_unlocked = FALSE;        /* unlocked component */
+  gboolean sel_locked = FALSE;          /* locked component */
   gboolean sel_referenced = FALSE;      /* referenced component */
   gboolean sel_slotted = FALSE;         /* slotted component */
   gboolean sel_subsheet = FALSE;        /* subsheet component */
@@ -436,6 +438,11 @@ void i_update_menus(GschemToplevel *w_current)
 
     if (obj->type == OBJ_COMPLEX) {
       sel_component = TRUE;
+
+      if (obj->selectable)
+        sel_unlocked = TRUE;
+      else
+        sel_locked = TRUE;
 
       if (!obj->complex_embedded) {
         /* Can only descend into symbol if it is referenced and it
@@ -487,8 +494,8 @@ void i_update_menus(GschemToplevel *w_current)
   gschem_action_set_sensitive (action_edit_properties,
                                sel_has_properties, w_current);
 
-  gschem_action_set_sensitive (action_edit_lock, sel_component, w_current);
-  gschem_action_set_sensitive (action_edit_unlock, sel_component, w_current);
+  gschem_action_set_sensitive (action_edit_lock, sel_unlocked, w_current);
+  gschem_action_set_sensitive (action_edit_unlock, sel_locked, w_current);
   gschem_action_set_sensitive (action_edit_update, sel_component, w_current);
 
   gschem_action_set_sensitive (action_edit_embed,
