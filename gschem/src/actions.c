@@ -1499,9 +1499,9 @@ DEFINE_ACTION (edit_slot,
 DEFINE_ACTION (hierarchy_documentation,
                "hierarchy-documentation",
                "symbol-datasheet",
-               _("Component Documentation"),
-               _("Component Documentation..."),
-               _("Component D_ocumentation..."),
+               _("Part Documentation"),
+               _("Part Documentation..."),
+               _("Part D_ocumentation..."),
                _("View documentation for selected component"),
                ACTUATE)
 {
