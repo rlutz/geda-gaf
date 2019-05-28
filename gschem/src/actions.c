@@ -271,23 +271,25 @@ DEFINE_ACTION (page_revert,
 
   page_current = gschem_toplevel_get_toplevel (w_current)->page_current;
 
-  dialog = gtk_message_dialog_new ((GtkWindow*) w_current->main_window,
-                                   GTK_DIALOG_DESTROY_WITH_PARENT,
-                                   GTK_MESSAGE_QUESTION,
-                                   GTK_BUTTONS_YES_NO,
-                                   _("Really revert page?"));
+  if (page_current->CHANGED) {
+    dialog = gtk_message_dialog_new ((GtkWindow *) w_current->main_window,
+                                     GTK_DIALOG_DESTROY_WITH_PARENT,
+                                     GTK_MESSAGE_QUESTION,
+                                     GTK_BUTTONS_YES_NO,
+                                     _("Really revert page?"));
 
-  /* Set the alternative button order (ok, cancel, help) for other systems */
-  gtk_dialog_set_alternative_button_order(GTK_DIALOG(dialog),
-					  GTK_RESPONSE_YES,
-					  GTK_RESPONSE_NO,
-					  -1);
+    /* Set the alternative button order (ok, cancel, help) for other systems */
+    gtk_dialog_set_alternative_button_order (GTK_DIALOG (dialog),
+                                             GTK_RESPONSE_YES,
+                                             GTK_RESPONSE_NO,
+                                             -1);
 
-  response = gtk_dialog_run (GTK_DIALOG (dialog));
-  gtk_widget_destroy (dialog);
+    response = gtk_dialog_run (GTK_DIALOG (dialog));
+    gtk_widget_destroy (dialog);
 
-  if (response != GTK_RESPONSE_YES )
-    return;
+    if (response != GTK_RESPONSE_YES)
+      return;
+  }
 
   /* save this for later */
   filename = g_strdup (page_current->page_filename);
