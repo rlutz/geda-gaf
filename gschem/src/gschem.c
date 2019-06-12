@@ -94,6 +94,7 @@ void gschem_quit(void)
   s_slib_free();
   /* o_text_freeallfonts();*/
   s_attrib_free();
+  x_fam_free ();
   x_stroke_free ();
   o_undo_cleanup();
   /* s_stroke_free(); no longer needed */
@@ -261,6 +262,7 @@ void main_prog(void *closure, int argc, char *argv[])
   g_dynwind_window (w_current);
 
   x_stroke_init ();
+  x_fam_init ();
 
   filenames = NULL;
 

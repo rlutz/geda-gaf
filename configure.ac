@@ -165,6 +165,8 @@ AX_OPTION_XDG_DATA
 AX_OPTION_KDE3_DATA
 # XDG database updates
 AX_OPTION_XDG_DB
+# libfam support
+AX_OPTION_FAM
 # gattrib
 AX_OPTION_GATTRIB
 

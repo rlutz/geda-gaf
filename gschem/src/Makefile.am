@@ -105,6 +105,7 @@ gschem_SOURCES = \
 	x_controlfd.c \
 	x_dialog.c \
 	x_event.c \
+	x_fam.c \
 	x_fileselect.c \
 	x_fstylecb.c \
 	x_grid.c \
@@ -127,10 +128,10 @@ gschem_SOURCES = \
 
 gschem_CPPFLAGS = -I$(top_srcdir)/libgeda/include  -I$(srcdir)/../include \
 	-I$(top_srcdir) -I$(includedir)
-gschem_CFLAGS = $(GCC_CFLAGS) \
+gschem_CFLAGS = $(GCC_CFLAGS) $(LIBFAM_CFLAGS) \
 	$(MINGW_CFLAGS) \
 	$(GLIB_CFLAGS) $(GTK_CFLAGS) $(GTHREAD_CFLAGS) $(GUILE_CFLAGS)
-gschem_LDFLAGS = $(GLIB_LIBS) $(GTK_LIBS) \
+gschem_LDFLAGS = $(LIBFAM_LDFLAGS) $(GLIB_LIBS) $(GTK_LIBS) \
 	$(GTHREAD_LIBS) $(GUILE_LIBS) $(MINGW_GUI_LDFLAGS)
 gschem_LDADD = \
 	$(top_builddir)/libgedacairo/libgedacairo.la \

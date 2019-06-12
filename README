@@ -103,6 +103,11 @@ The following tools and libraries are *highly recommended*:
  - The freedesktop.org utilities for manipulating .desktop files.
    <http://www.freedesktop.org/software/desktop-file-utils>
 
+ - The `libfam' or `libgamin' client library to interface the File
+   Alteration Monitor daemon.  If this is available, gschem will
+   detect if files have been changed on disk by another application.
+   <http://oss.sgi.com/projects/fam/>
+
 The following tools and libraries are optional:
 
  - The `doxygen' API documentation tool.  This is required for

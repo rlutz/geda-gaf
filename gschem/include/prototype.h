@@ -399,6 +399,12 @@ gint x_event_scroll(GtkWidget *widget, GdkEventScroll *event, GschemToplevel *w_
 gboolean x_event_get_pointer_position (GschemToplevel *w_current, gboolean snapped, gint *wx, gint *wy);
 /* x_compselect.c */
 void x_compselect_deselect (GschemToplevel *w_current);
+/* x_fam.c */
+enum FAMCodes;
+void x_fam_init (void);
+void x_fam_free (void);
+gpointer x_fam_monitor (const gchar *path, void (*exists_event) (const gchar *path, enum FAMCodes code, gpointer user_data), void (*regular_event) (const gchar *path, enum FAMCodes code, gpointer user_data), gpointer user_data);
+void x_fam_unmonitor (gpointer handle);
 /* x_fileselect.c */
 PAGE *x_fileselect_create (GschemToplevel *w_current, const gchar *dirname, const gchar *basename);
 void x_fileselect_open(GschemToplevel *w_current);

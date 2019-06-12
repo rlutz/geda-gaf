@@ -87,6 +87,7 @@ gschem/src/x_colorcb.c
 gschem/src/x_controlfd.c
 gschem/src/x_dialog.c
 gschem/src/x_event.c
+gschem/src/x_fam.c
 gschem/src/x_fileselect.c
 gschem/src/x_fstylecb.c
 gschem/src/x_grid.c
