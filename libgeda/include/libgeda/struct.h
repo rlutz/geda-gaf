@@ -373,6 +373,8 @@ struct st_page {
   char *page_filename; 
   gboolean is_untitled;
   int CHANGED;			/* changed flag */
+  gboolean exists_on_disk;
+  struct timespec last_modified;
 
   gchar *patch_filename;
   gboolean patch_descend;

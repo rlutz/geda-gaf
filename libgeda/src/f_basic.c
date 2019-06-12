@@ -448,6 +448,15 @@ int f_save(TOPLEVEL *toplevel, PAGE *page, const char *filename, GError **err)
   g_free (only_filename);
   
   if (o_save (toplevel, s_page_objects (page), real_filename, &tmp_err)) {
+    struct stat buf;
+
+    if (stat (filename, &buf) == -1) {
+      page->exists_on_disk = FALSE;
+      memset (&page->last_modified, 0, sizeof page->last_modified);
+    } else {
+      page->exists_on_disk = TRUE;
+      page->last_modified = buf.st_mtim;
+    }
 
     page->saved_since_first_loaded = 1;
 

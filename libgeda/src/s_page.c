@@ -111,6 +111,7 @@ pre_object_removed (TOPLEVEL *toplevel, PAGE *page, OBJECT *object)
 PAGE *s_page_new (TOPLEVEL *toplevel, const gchar *filename)
 {
   PAGE *page;
+  struct stat buf;
 
   /* Now create a blank page */
   page = (PAGE*)g_new0 (PAGE, 1);
@@ -119,6 +120,14 @@ PAGE *s_page_new (TOPLEVEL *toplevel, const gchar *filename)
 
   page->is_untitled = FALSE;
   page->CHANGED = 0;
+
+  if (stat (filename, &buf) == -1) {
+    page->exists_on_disk = FALSE;
+    memset (&page->last_modified, 0, sizeof page->last_modified);
+  } else {
+    page->exists_on_disk = TRUE;
+    page->last_modified = buf.st_mtim;
+  }
 
   /* big assumption here that page_filename isn't null */
   if (g_path_is_absolute (filename)) {
