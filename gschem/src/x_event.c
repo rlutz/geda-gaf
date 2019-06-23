@@ -247,7 +247,16 @@ x_event_button_pressed(GschemPageView *page_view, GdkEventButton *event, GschemT
 
       case(REPEAT):
       if (w_current->last_action != NULL) {
-        gschem_action_activate (w_current->last_action, w_current);
+        scm_dynwind_begin (0);
+        g_dynwind_window (w_current);
+        g_scm_eval_protected (scm_list_2 (
+                                scm_variable_ref (
+                                  scm_c_public_variable (
+                                    "gschem action",
+                                    "eval-action-at-point!")),
+                                w_current->last_action->smob),
+                              SCM_UNDEFINED);
+        scm_dynwind_end ();
       }
       break;
 #ifdef HAVE_LIBSTROKE
