@@ -1428,15 +1428,31 @@ DEFINE_ACTION (edit_lock,
     OBJECT *object = (OBJECT *) l->data;
     g_assert (object != NULL);
 
-    /* check to see if locked_color is already being used */
-    if (object->locked_color != -1) {
+    /* non-component objects can't be locked */
+    if (object->type != OBJ_COMPLEX)
+      continue;
+
+    /* skip already locked components */
+    if (object->selectable == FALSE) {
       s_log_message (_("Object already locked\n"));
       continue;
     }
 
     object->selectable = FALSE;
-    object->locked_color = object->color;
-    object->color = LOCK_COLOR;
+
+    /* apply "locked" color to attached attributes */
+    for (GList *la = object->attribs; la != NULL; la = la->next) {
+      OBJECT *attrib = (OBJECT *) la->data;
+      if (attrib->color == LOCK_COLOR)
+        continue;
+
+      attrib->locked_color = attrib->color;
+      attrib->color = LOCK_COLOR;
+    }
+
+    /* invalidate all since unselected attributes may have been changed */
+    gschem_page_view_invalidate_all (
+      gschem_toplevel_get_current_page_view (w_current));
     gschem_toplevel_page_content_changed (w_current, toplevel->page_current);
   }
 
@@ -1472,6 +1488,10 @@ DEFINE_ACTION (edit_unlock,
     OBJECT *object = (OBJECT *) l->data;
     g_assert (object != NULL);
 
+    /* non-component objects can't be (un-)locked */
+    if (object->type != OBJ_COMPLEX)
+      continue;
+
     /* only unlock if the object is locked */
     if (object->selectable == TRUE) {
       s_log_message (_("Object already unlocked\n"));
@@ -1479,8 +1499,24 @@ DEFINE_ACTION (edit_unlock,
     }
 
     object->selectable = TRUE;
-    object->color = object->locked_color;
-    object->locked_color = -1;
+
+    /* restore color of attached attributes */
+    for (GList *la = object->attribs; la != NULL; la = la->next) {
+      OBJECT *attrib = (OBJECT *) la->data;
+      if (attrib->color != LOCK_COLOR)
+        continue;
+
+      if (attrib->locked_color == -1)
+        attrib->color = ATTRIBUTE_COLOR;
+      else {
+        attrib->color = attrib->locked_color;
+        attrib->locked_color = -1;
+      }
+    }
+
+    /* invalidate all since unselected attributes may have been changed */
+    gschem_page_view_invalidate_all (
+      gschem_toplevel_get_current_page_view (w_current));
     gschem_toplevel_page_content_changed (w_current, toplevel->page_current);
   }
 
