@@ -38,7 +38,7 @@
      #:name       (_ "gEDA Manuals")
      #:label      (_ "gEDA Documentation...")
      #:menu-label (_ "gEDA Docu_mentation...")
-     #:tooltip    (_ "View the front page of the gEDA documentation in a browser."))
+     #:tooltip    (_ "View the front page of the gEDA documentation in a browser"))
   (show-wiki "geda:documentation"))
 
 (define-action-public
@@ -47,7 +47,7 @@
      #:name       (_ "gschem User Guide")
      #:label      (_ "gschem User Guide...")
      #:menu-label (_ "gschem User _Guide...")
-     #:tooltip    (_ "View the gschem User Guide in a browser."))
+     #:tooltip    (_ "View the gschem User Guide in a browser"))
   (show-wiki "geda:gschem_ug"))
 
 (define-action-public
@@ -56,7 +56,7 @@
      #:name       (_ "gschem FAQ")
      #:label      (_ "gschem FAQ...")
      #:menu-label (_ "gschem _FAQ...")
-     #:tooltip    (_ "Frequently Asked Questions about using gschem."))
+     #:tooltip    (_ "Frequently Asked Questions about using gschem"))
   (show-wiki "geda:faq-gschem"))
 
 (define-action-public
@@ -65,7 +65,7 @@
      #:name       (_ "gEDA Wiki")
      #:label      (_ "gEDA Wiki...")
      #:menu-label (_ "gEDA _Wiki...")
-     #:tooltip    (_ "View the front page of the gEDA wiki in a browser."))
+     #:tooltip    (_ "View the front page of the gEDA wiki in a browser"))
   (show-wiki))
 
 ;; Local Variables:
