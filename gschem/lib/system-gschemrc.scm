@@ -889,7 +889,25 @@
     ("3215987"  . ,&edit-select)
     ("32156987" . ,&edit-select)
     ("32148987" . ,&edit-select)
-    ("32145987" . ,&edit-select)))
+    ("32145987" . ,&edit-select)
+
+    ;; Left for previous page
+    ("654" . ,&page-prev)
+
+    ;; Right for next page
+    ("456" . ,&page-next)
+
+    ;; Right and down to edit subschematic
+    ("12369" . ,&hierarchy-down-schematic)
+
+    ;; Left and down to edit symbol
+    ("32147" . ,&hierarchy-down-symbol)
+
+    ;; Up and sideways (any order) to go up
+    ("96321" . ,&hierarchy-up)
+    ("98741" . ,&hierarchy-up)
+    ("74123" . ,&hierarchy-up)
+    ("78963" . ,&hierarchy-up)))
 
 ;
 ; End of stroke related keywords
