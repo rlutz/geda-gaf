@@ -175,8 +175,8 @@ static void draw_mesh (GschemToplevel *w_current,
 
   /* figure starting grid coordinates, work by taking the start
    * and end coordinates and rounding down to the nearest increment */
-  x_start -= (x_start % incr);
-  y_start -= (y_start % incr);
+  x_start -= (x_start % incr) + (x_start < 0 ? incr : 0);
+  y_start -= (y_start % incr) + (y_start < 0 ? incr : 0);
 
   if (coarse_incr == 0) {
     next_coarse_x = x_start - 1; /* Ensures we never hit this when looping */
