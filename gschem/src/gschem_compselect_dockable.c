@@ -1005,7 +1005,7 @@ create_inuse_treeview (GschemCompselectDockable *compselect)
   column = GTK_TREE_VIEW_COLUMN (
     g_object_new (GTK_TYPE_TREE_VIEW_COLUMN,
                   /* GtkTreeViewColumn */
-                  "title", _("Components"),
+                  "title", _("Symbols"),
                   NULL));
   gtk_tree_view_column_pack_start (column, renderer, TRUE);
   gtk_tree_view_column_set_cell_data_func (column, renderer,
@@ -1114,7 +1114,7 @@ create_lib_treeview (GschemCompselectDockable *compselect)
   column = GTK_TREE_VIEW_COLUMN (
     g_object_new (GTK_TYPE_TREE_VIEW_COLUMN,
                   /* GtkTreeViewColumn */
-                  "title", _("Components"),
+                  "title", _("Symbols"),
                   NULL));
   gtk_tree_view_column_pack_start (column, renderer, TRUE);
   gtk_tree_view_column_add_attribute (column, renderer, "text", 1);
@@ -1285,13 +1285,13 @@ create_behaviors_combo_box (void)
   /* Note: order of items in menu is important */
   /* BEHAVIOR_REFERENCE */
   gtk_combo_box_append_text (GTK_COMBO_BOX (combobox),
-                             _("Default behavior - reference component"));
+                             _("Default behavior - reference symbol"));
   /* BEHAVIOR_EMBED */
   gtk_combo_box_append_text (GTK_COMBO_BOX (combobox),
-                             _("Embed component in schematic"));
+                             _("Embed symbol in schematic"));
   /* BEHAVIOR_INCLUDE */
   gtk_combo_box_append_text (GTK_COMBO_BOX (combobox),
-                             _("Include component as individual objects"));
+                             _("Include symbol as individual objects"));
 
   gtk_combo_box_set_active (GTK_COMBO_BOX (combobox), 0);
 

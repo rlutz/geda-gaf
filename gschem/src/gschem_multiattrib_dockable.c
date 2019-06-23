@@ -2556,7 +2556,7 @@ update_dialog_title (GschemMultiattribDockable *multiattrib,
 
   if (multiattrib->num_complex_in_list > 0) {
     append_dialog_title_extra (title_string, &num_title_extras,
-                               ngettext ("%i symbol (%s)", "%i symbols (%s)", multiattrib->num_complex_in_list),
+                               ngettext ("%i component (%s)", "%i components (%s)", multiattrib->num_complex_in_list),
                                multiattrib->num_complex_in_list, complex_title_name);
   }
 
@@ -2589,7 +2589,7 @@ update_dialog_title (GschemMultiattribDockable *multiattrib,
     gtk_label_set_text (GTK_LABEL (multiattrib->status_label), title);
   else
     gtk_label_set_text (GTK_LABEL (multiattrib->status_label),
-                        _("Select a symbol, net, or attribute"));
+                        _("Select a component, net, or attribute"));
   g_free (title);
 }
 
