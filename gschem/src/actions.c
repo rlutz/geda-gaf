@@ -1417,9 +1417,38 @@ DEFINE_ACTION (edit_lock,
 {
   i_update_middle_button (w_current, action, _("Lock"));
 
-  if (o_select_return_first_object(w_current)) {
-    o_lock(w_current);
+  if (!o_select_return_first_object (w_current))
+    return;
+
+  /* This locks the entire selected list.  It does lock components, but
+   * does NOT change the color (of primatives of the components) though */
+
+  OBJECT *object = NULL;
+  GList *s_current = NULL;
+
+  /* skip over head */
+  s_current = geda_list_get_glist( w_current->toplevel->page_current->selection_list );
+
+  while(s_current != NULL) {
+    object = (OBJECT *) s_current->data;
+    if (object) {
+      /* check to see if locked_color is already being used */
+      if (object->locked_color == -1) {
+        object->selectable = FALSE;
+        object->locked_color = object->color;
+        object->color = LOCK_COLOR;
+        gschem_toplevel_page_content_changed (w_current, w_current->toplevel->page_current);
+      } else {
+        s_log_message(_("Object already locked\n"));
+      }
+    }
+
+    s_current = g_list_next(s_current);
   }
+
+  if (!w_current->SHIFTKEY) o_select_unselect_all(w_current);
+  o_undo_savestate_old (w_current, UNDO_ALL, _("Lock"));
+  i_update_menus(w_current);
 }
 
 /*! \brief Unlock all objects in selection list. */
@@ -1434,9 +1463,35 @@ DEFINE_ACTION (edit_unlock,
                ACTUATE)
 {
   i_update_middle_button (w_current, action, _("Unlock"));
-  if (o_select_return_first_object(w_current)) {
-    o_unlock(w_current);
+  if (!o_select_return_first_object(w_current))
+    return;
+
+  /* You can unlock something by selecting it with a bounding box... */
+  /* this will probably change in the future, but for now it's a
+     something.. :-) */
+
+  OBJECT *object = NULL;
+  GList *s_current = NULL;
+
+  s_current = geda_list_get_glist( w_current->toplevel->page_current->selection_list );
+
+  while(s_current != NULL) {
+    object = (OBJECT *) s_current->data;
+    if (object) {
+      /* only unlock if the object is locked */
+      if (object->selectable == FALSE) {
+        object->selectable = TRUE;
+        object->color = object->locked_color;
+        object->locked_color = -1;
+        gschem_toplevel_page_content_changed (w_current, w_current->toplevel->page_current);
+      } else {
+        s_log_message(_("Object already unlocked\n"));
+      }
+    }
+
+    s_current = g_list_next(s_current);
   }
+  o_undo_savestate_old (w_current, UNDO_ALL, _("Unlock"));
 }
 
 DEFINE_ACTION (edit_slot,
