@@ -251,28 +251,29 @@ void i_update_middle_button (GschemToplevel *w_current,
     case(ACTION):
       gschem_bottom_widget_set_middle_button_text (
           GSCHEM_BOTTOM_WIDGET (w_current->bottom_widget),
-          _("Action"));
+          pgettext ("mmb", "Action"));
       break;
 
 #ifdef HAVE_LIBSTROKE
     case(STROKE):
       gschem_bottom_widget_set_middle_button_text (
           GSCHEM_BOTTOM_WIDGET (w_current->bottom_widget),
-          _("Stroke"));
+          pgettext ("mmb", "Stroke"));
     break;
 #else
     /* remove this case eventually and make it a null case */
     case(STROKE):
       gschem_bottom_widget_set_middle_button_text (
           GSCHEM_BOTTOM_WIDGET (w_current->bottom_widget),
-          _("none"));
+          pgettext ("mmb", "none"));
       break;
 #endif
 
     case(REPEAT):
       if ((string != NULL) && (action != NULL))
       {
-        char *temp_string = g_strconcat (_("Repeat/"), string, NULL);
+        char *temp_string = g_strdup_printf (
+            pgettext ("mmb", "Repeat/%s"), string);
 
         gschem_bottom_widget_set_middle_button_text (
             GSCHEM_BOTTOM_WIDGET (w_current->bottom_widget),
@@ -282,20 +283,20 @@ void i_update_middle_button (GschemToplevel *w_current,
       } else {
         gschem_bottom_widget_set_middle_button_text (
             GSCHEM_BOTTOM_WIDGET (w_current->bottom_widget),
-            _("Repeat/none"));
+            pgettext ("mmb", "Repeat/none"));
       }
       break;
 
     case(MID_MOUSEPAN_ENABLED):
       gschem_bottom_widget_set_middle_button_text (
           GSCHEM_BOTTOM_WIDGET (w_current->bottom_widget),
-          _("Pan"));
+          pgettext ("mmb", "Pan"));
       break;
 
     default:
       gschem_bottom_widget_set_middle_button_text (
           GSCHEM_BOTTOM_WIDGET (w_current->bottom_widget),
-          _("none"));
+          pgettext ("mmb", "none"));
   }
 
   if (action != NULL)
