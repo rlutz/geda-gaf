@@ -1058,6 +1058,7 @@
 (global-set-key "T <Shift>P" &edit-find-patch)
 (global-set-key "T H" &edit-hide-text)
 (global-set-key "T <Shift>H" &edit-show-text)
+(global-set-key "T L" &edit-select-locked)
 (global-set-key "T U" &edit-autonumber)
 
 (global-set-key "U" &edit-undo)
@@ -1268,7 +1269,8 @@
            ,&edit-translate
            ,&edit-find-patch
            ,&edit-hide-text
-           ,&edit-show-text)
+           ,&edit-show-text
+           ,&edit-select-locked)
           (,&options-show-log-window
            ,&options-show-coord-window)
           (,&edit-invoke-macro

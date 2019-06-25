@@ -2227,6 +2227,41 @@ DEFINE_ACTION (edit_show_text,
   show_text_dialog(w_current);
 }
 
+DEFINE_ACTION (edit_select_locked,
+               "edit-select-locked",
+               NULL,
+               _("Select Locked Objects"),
+               _("Select Locked Objects"),
+               _("Select Loc_ked Objects"),
+               NULL,
+               ACTUATE)
+{
+  TOPLEVEL *toplevel = gschem_toplevel_get_toplevel (w_current);
+  SELECTION *selection = toplevel->page_current->selection_list;
+  GList *added;
+
+  o_redraw_cleanstates (w_current);
+  o_select_unselect_all (w_current);
+
+  for (const GList *l = s_page_objects (toplevel->page_current);
+       l != NULL; l = l->next) {
+    OBJECT *obj = (OBJECT *) l->data;
+    if (obj->selectable)
+      continue;
+
+    o_selection_add (toplevel, selection, obj);
+    o_attrib_add_selected (w_current, selection, obj);
+  }
+
+  added = geda_list_get_glist (selection);
+  if (added != NULL)
+    g_run_hook_object_list (w_current, "%select-objects-hook", added);
+
+  i_set_state (w_current, SELECT);
+  i_action_stop (w_current);
+  i_update_menus (w_current);
+}
+
 DEFINE_ACTION (options_show_log_window,
                "options-show-log-window",
                NULL,
