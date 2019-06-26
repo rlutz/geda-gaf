@@ -249,7 +249,7 @@ create_snap_section (GschemOptionsDockable *dockable)
 
   label[0] = gschem_dialog_misc_create_property_label (_("Grid Mode:"));
   label[1] = gschem_dialog_misc_create_property_label (_("Snap Mode:"));
-  label[2] = gschem_dialog_misc_create_property_label (_("Snap Size:"));
+  label[2] = gschem_dialog_misc_create_property_label (_("Grid Spacing:"));
 
   editor[0] = create_grid_mode_widget (dockable);
   editor[1] = create_snap_mode_widget (dockable);
@@ -266,7 +266,7 @@ create_snap_section (GschemOptionsDockable *dockable)
                             G_CALLBACK (update_snap_size_model),
                             dockable);
 
-  return gschem_dialog_misc_create_section_widget (_("<b>Snap Options</b>"), table);
+  return gschem_dialog_misc_create_section_widget (_("<b>Grid Options</b>"), table);
 }
 
 
