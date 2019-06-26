@@ -1780,6 +1780,31 @@ DEFINE_ACTION (view_toolbar,
   gschem_action_set_active (action, show, w_current);
 }
 
+DEFINE_ACTION (view_scrollbars,
+               "view-scrollbars",
+               NULL,
+               _("Show/Hide Scrollbars"),
+               _("Show Scrollbars"),
+               _("Show S_crollbars"),
+               NULL,
+               TOGGLE_CHECK)
+{
+  GtkWidget *scrolled_window;
+  GtkPolicyType policy;
+  gboolean show_scrollbars;
+
+  scrolled_window = gtk_widget_get_parent (w_current->drawing_area);
+  g_return_if_fail (GTK_IS_SCROLLED_WINDOW (scrolled_window));
+  gtk_scrolled_window_get_policy (GTK_SCROLLED_WINDOW (scrolled_window),
+                                  &policy, NULL);
+
+  show_scrollbars = policy == GTK_POLICY_NEVER;
+  policy = show_scrollbars ? GTK_POLICY_ALWAYS : GTK_POLICY_NEVER;
+  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_window),
+                                  policy, policy);
+  gschem_action_set_active (action, show_scrollbars, w_current);
+}
+
 DEFINE_ACTION (docking_area_left,
                "docking-area-left",
                NULL,

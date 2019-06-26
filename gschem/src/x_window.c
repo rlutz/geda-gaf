@@ -691,6 +691,8 @@ void x_window_create_main(GschemToplevel *w_current)
 
   policy = (w_current->scrollbars_flag) ? GTK_POLICY_ALWAYS : GTK_POLICY_NEVER;
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled), policy, policy);
+  gschem_action_set_active (action_view_scrollbars, w_current->scrollbars_flag,
+                            w_current);
 
   /* find text box */
   w_current->find_text_widget = GTK_WIDGET (g_object_new (GSCHEM_TYPE_FIND_TEXT_WIDGET, NULL));

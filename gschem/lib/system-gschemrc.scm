@@ -1066,6 +1066,7 @@
 
 (global-set-key "V M" &view-menubar)
 (global-set-key "V T" &view-toolbar)
+(global-set-key "V S" &view-scrollbars)
 (global-set-key "V G" &view-show-origin)
 (global-set-key "V R" &view-redraw)
 (global-set-key "V B" &view-zoom-box)
@@ -1251,7 +1252,8 @@
            ,&view-pan
            ,&view-redraw)
           (,&view-menubar
-           ,&view-toolbar)
+           ,&view-toolbar
+           ,&view-scrollbars)
           (,&docking-area-left
            ,&docking-area-bottom
            ,&docking-area-right)))
