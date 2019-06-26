@@ -41,6 +41,7 @@ struct _GschemBottomWidget
 {
   GtkHBox parent;
 
+  GtkWidget *snap_label;
   GtkWidget *grid_label;
   int       grid_mode;
   int       grid_size;

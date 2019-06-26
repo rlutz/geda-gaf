@@ -82,7 +82,7 @@ static void
 set_property (GObject *object, guint param_id, const GValue *value, GParamSpec *pspec);
 
 static void
-update_grid_label (GschemBottomWidget *widget, GParamSpec *pspec, gpointer unused);
+update_grid_labels (GschemBottomWidget *widget, GParamSpec *pspec, gpointer unused);
 
 
 static GObjectClass *gschem_bottom_widget_parent_class = NULL;
@@ -445,6 +445,13 @@ gschem_bottom_widget_init (GschemBottomWidget *widget)
   separator = gtk_vseparator_new ();
   gtk_box_pack_start (GTK_BOX (widget), separator, FALSE, FALSE, 0);
 
+  widget->snap_label = gtk_label_new (NULL);
+  gtk_misc_set_padding (GTK_MISC (widget->snap_label), LABEL_XPAD, LABEL_YPAD);
+  gtk_box_pack_start (GTK_BOX (widget), widget->snap_label, FALSE, FALSE, 0);
+
+  separator = gtk_vseparator_new ();
+  gtk_box_pack_start (GTK_BOX (widget), separator, FALSE, FALSE, 0);
+
   widget->grid_label = gtk_label_new (NULL);
   gtk_misc_set_padding (GTK_MISC (widget->grid_label), LABEL_XPAD, LABEL_YPAD);
   gtk_box_pack_start (GTK_BOX (widget), widget->grid_label, FALSE, FALSE, 0);
@@ -458,22 +465,22 @@ gschem_bottom_widget_init (GschemBottomWidget *widget)
 
   g_signal_connect (G_OBJECT (widget),
                     "notify::grid-mode",
-                    G_CALLBACK (update_grid_label),
+                    G_CALLBACK (update_grid_labels),
                     NULL);
 
   g_signal_connect (G_OBJECT (widget),
                     "notify::grid-size",
-                    G_CALLBACK (update_grid_label),
+                    G_CALLBACK (update_grid_labels),
                     NULL);
 
   g_signal_connect (G_OBJECT (widget),
                     "notify::snap-mode",
-                    G_CALLBACK (update_grid_label),
+                    G_CALLBACK (update_grid_labels),
                     NULL);
 
   g_signal_connect (G_OBJECT (widget),
                     "notify::snap-size",
-                    G_CALLBACK (update_grid_label),
+                    G_CALLBACK (update_grid_labels),
                     NULL);
 }
 
@@ -698,12 +705,11 @@ set_property (GObject *object, guint param_id, const GValue *value, GParamSpec *
  *  \param [in] unused
  */
 static void
-update_grid_label (GschemBottomWidget *widget, GParamSpec *pspec, gpointer unused)
+update_grid_labels (GschemBottomWidget *widget, GParamSpec *pspec, gpointer unused)
 {
-  if (widget->grid_label != NULL) {
-    gchar *grid_text = NULL;
-    gchar *label_text = NULL;
+  if (widget->snap_label != NULL) {
     gchar *snap_text = NULL;
+    gchar *label_text = NULL;
 
     switch (widget->snap_mode) {
       case SNAP_OFF:
@@ -719,8 +725,19 @@ update_grid_label (GschemBottomWidget *widget, GParamSpec *pspec, gpointer unuse
         break;
 
       default:
-        g_critical ("%s: update_grid_label(): widget->snap_mode out of range: %d\n", __FILE__, widget->snap_mode);
+        g_critical ("%s: update_grid_labels(): widget->snap_mode out of range: %d\n", __FILE__, widget->snap_mode);
     }
+
+    label_text = g_strdup_printf (_("Snap %s"), snap_text);
+    gtk_label_set_text (GTK_LABEL (widget->snap_label), label_text);
+
+    g_free (snap_text);
+    g_free (label_text);
+  }
+
+  if (widget->grid_label != NULL) {
+    gchar *grid_text = NULL;
+    gchar *label_text = NULL;
 
     if (widget->grid_mode == GRID_MODE_NONE) {
       grid_text = g_strdup (_("OFF"));
@@ -732,12 +749,10 @@ update_grid_label (GschemBottomWidget *widget, GParamSpec *pspec, gpointer unuse
       }
     }
 
-    label_text = g_strdup_printf (_("Grid(%s, %s)"), snap_text, grid_text);
-
+    label_text = g_strdup_printf (_("Grid %s"), grid_text);
     gtk_label_set_text (GTK_LABEL (widget->grid_label), label_text);
 
     g_free (grid_text);
     g_free (label_text);
-    g_free (snap_text);
   }
 }
