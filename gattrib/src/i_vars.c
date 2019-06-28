@@ -41,8 +41,6 @@
 #include "../include/prototype.h"  /* function prototypes */
 #include "../include/globals.h"
 
-#include "../include/i_vars.h"
-
 
 
 /*------------------------------------------------------------------*/
