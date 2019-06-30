@@ -755,6 +755,7 @@ int o_net_add_busrippers(GschemToplevel *w_current, OBJECT *net_obj,
   struct {
     int x[2];
     int y[2];
+    int angle;
   } rippers[2];
   int ripper_count = 0;
   int i;
@@ -764,7 +765,6 @@ int o_net_add_busrippers(GschemToplevel *w_current, OBJECT *net_obj,
   int first, second;
   int made_changes = FALSE;
   const int ripper_size = w_current->bus_ripper_size;
-  int complex_angle = 0;
   const CLibSymbol *rippersym = NULL;
 
   GschemPageView *page_view = gschem_toplevel_get_current_page_view (w_current);
@@ -858,13 +858,13 @@ int o_net_add_busrippers(GschemToplevel *w_current, OBJECT *net_obj,
           if (w_current->bus_ripper_rotation == NON_SYMMETRIC) {
             /* non-symmetric */
             if (sign == 1) {
-              complex_angle = 0;
+              rippers[ripper_count].angle = 0;
             } else {
-              complex_angle = 90;
+              rippers[ripper_count].angle = 90;
             }
           } else {
             /* symmetric */
-            complex_angle = 0;
+            rippers[ripper_count].angle = 0;
           }
 
           net_obj->line->y[found_conn->whichone] -= ripper_size;
@@ -895,13 +895,13 @@ int o_net_add_busrippers(GschemToplevel *w_current, OBJECT *net_obj,
           if (w_current->bus_ripper_rotation == NON_SYMMETRIC) {
             /* non-symmetric */
             if (sign == 1) {
-              complex_angle = 270;
+              rippers[ripper_count].angle = 270;
             } else {
-              complex_angle = 180;
+              rippers[ripper_count].angle = 180;
             }
           } else {
             /* symmetric */
-            complex_angle = 180;
+            rippers[ripper_count].angle = 180;
           }
 
           net_obj->line->y[found_conn->whichone] += ripper_size;
@@ -966,13 +966,13 @@ int o_net_add_busrippers(GschemToplevel *w_current, OBJECT *net_obj,
           if (w_current->bus_ripper_rotation == NON_SYMMETRIC) {
             /* non-symmetric */
             if (sign == 1) {
-              complex_angle = 0;
+              rippers[ripper_count].angle = 0;
             } else {
-              complex_angle = 270;
+              rippers[ripper_count].angle = 270;
             }
           } else {
             /* symmetric */
-            complex_angle = 270;
+            rippers[ripper_count].angle = 270;
           }
 
           net_obj->line->x[found_conn->whichone] -= ripper_size;
@@ -1002,13 +1002,13 @@ int o_net_add_busrippers(GschemToplevel *w_current, OBJECT *net_obj,
           if (w_current->bus_ripper_rotation == NON_SYMMETRIC) {
             /* non-symmetric */
             if (sign == 1) {
-              complex_angle = 90;
+              rippers[ripper_count].angle = 90;
             } else {
-              complex_angle = 180;
+              rippers[ripper_count].angle = 180;
             }
           } else {
             /* symmetric */
-            complex_angle = 90;
+            rippers[ripper_count].angle = 90;
           }
 
           net_obj->line->x[found_conn->whichone] += ripper_size;
@@ -1055,7 +1055,7 @@ int o_net_add_busrippers(GschemToplevel *w_current, OBJECT *net_obj,
         if (rippersym != NULL) {
           new_obj = o_complex_new (page->toplevel, OBJ_COMPLEX, DEFAULT_COLOR,
                                    rippers[i].x[0], rippers[i].y[0],
-                                   complex_angle, 0,
+                                   rippers[i].angle, 0,
                                    rippersym,
                                    page->toplevel->bus_ripper_symname, 1);
           s_page_append_list (page->toplevel, page,
