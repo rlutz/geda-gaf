@@ -155,11 +155,6 @@
 #define WINDOW			1
 #define EXTENTS_NOMARGINS	2
 
-/* for output-capstyle */ 
-#define BUTT_CAP 		0
-#define ROUND_CAP 		1
-#define SQUARE_CAP 		2
-
 /* for print dialog box */
 #define LANDSCAPE		0
 #define PORTRAIT 		1
