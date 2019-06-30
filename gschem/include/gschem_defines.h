@@ -34,10 +34,6 @@
 #define COMP_BUS_RIPPER         0
 #define NET_BUS_RIPPER          1
 
-/* for bus_ripper_rotation */
-#define SYMMETRIC               0
-#define NON_SYMMETRIC           1
-
 #define FREE        1
 #define CONSTRAINED 2
 

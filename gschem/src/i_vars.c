@@ -74,7 +74,6 @@ int   default_setpagedevice_orientation = FALSE;
 int   default_setpagedevice_pagesize = FALSE;
 int   default_bus_ripper_size = 200;
 int   default_bus_ripper_type = COMP_BUS_RIPPER;
-int   default_bus_ripper_rotation = NON_SYMMETRIC;
 int   default_force_boundingbox = FALSE;
 int   default_grid_mode = DEFAULT_GRID_MODE;
 int   default_dots_grid_dot_size = 1;
@@ -155,7 +154,6 @@ void i_vars_set(GschemToplevel *w_current)
 
   w_current->bus_ripper_size  = default_bus_ripper_size;
   w_current->bus_ripper_type  = default_bus_ripper_type;
-  w_current->bus_ripper_rotation  = default_bus_ripper_rotation;
 
   toplevel->force_boundingbox  = default_force_boundingbox;
 
