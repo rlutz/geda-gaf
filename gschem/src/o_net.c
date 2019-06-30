@@ -752,7 +752,10 @@ int o_net_add_busrippers(GschemToplevel *w_current, OBJECT *net_obj,
   CONN *found_conn = NULL;
   int done;
   int otherone;
-  BUS_RIPPER rippers[2];
+  struct {
+    int x[2];
+    int y[2];
+  } rippers[2];
   int ripper_count = 0;
   int i;
   double length;
