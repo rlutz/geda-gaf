@@ -52,7 +52,7 @@ void o_delete (GschemToplevel *w_current, OBJECT *object)
  *
  *  \param [in] w_current The GschemToplevel object.
  */
-void o_delete_selected (GschemToplevel *w_current)
+void o_delete_selected (GschemToplevel *w_current, gchar *undo_desc)
 {
   TOPLEVEL *toplevel = gschem_toplevel_get_toplevel (w_current);
   SELECTION *selection = toplevel->page_current->selection_list;
@@ -132,6 +132,6 @@ void o_delete_selected (GschemToplevel *w_current)
   g_list_free (to_remove);
 
   gschem_toplevel_page_content_changed (w_current, toplevel->page_current);
-  o_undo_savestate_old (w_current, UNDO_ALL);
+  o_undo_savestate_old (w_current, UNDO_ALL, undo_desc);
   i_update_menus (w_current);
 }

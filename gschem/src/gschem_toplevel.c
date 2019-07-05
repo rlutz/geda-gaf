@@ -22,7 +22,7 @@
 #include "gschem.h"
 
 static void
-handle_undo (GschemToplevel *w_current);
+handle_undo (GschemToplevel *w_current, gchar *undo_desc);
 
 static void
 notify_options (GschemToplevel *w_current);
@@ -676,7 +676,7 @@ gschem_toplevel_set_toplevel (GschemToplevel *w_current, TOPLEVEL *toplevel)
  *  \param [in] w_current
  */
 static void
-handle_undo (GschemToplevel *w_current)
+handle_undo (GschemToplevel *w_current, gchar *undo_desc)
 {
   TOPLEVEL *toplevel;
 
@@ -686,7 +686,7 @@ handle_undo (GschemToplevel *w_current)
   g_return_if_fail (toplevel != NULL);
 
   gschem_toplevel_page_content_changed (w_current, toplevel->page_current);
-  o_undo_savestate_old (w_current, UNDO_ALL);
+  o_undo_savestate_old (w_current, UNDO_ALL, undo_desc);
 }
 
 

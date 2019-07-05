@@ -76,5 +76,5 @@ void o_copy_end(GschemToplevel *w_current)
 {
   o_place_end (w_current, w_current->second_wx, w_current->second_wy,
                (w_current->event_state == MCOPYMODE),
-               "%paste-objects-hook");
+               "%paste-objects-hook", _("Copy"));
 }

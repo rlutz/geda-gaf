@@ -187,7 +187,7 @@ void o_copy_start(GschemToplevel *w_current, int x, int y);
 void o_copy_end(GschemToplevel *w_current);
 /* o_delete.c */
 void o_delete(GschemToplevel *w_current, OBJECT *object);
-void o_delete_selected(GschemToplevel *w_current);
+void o_delete_selected(GschemToplevel *w_current, gchar *undo_desc);
 /* o_find.c */
 gboolean o_find_object(GschemToplevel *w_current, int x, int y,
 		       gboolean deselect_afterwards);
@@ -284,7 +284,7 @@ void o_pin_draw_rubber(GschemToplevel *w_current, EdaRenderer *renderer);
 void o_pin_invalidate_rubber(GschemToplevel *w_current);
 /* o_place.c */
 void o_place_start(GschemToplevel *w_current, int x, int y);
-void o_place_end(GschemToplevel *w_current, int x, int y, int continue_placing, const char *hook_name);
+void o_place_end(GschemToplevel *w_current, int x, int y, int continue_placing, const char *hook_name, const gchar *undo_desc);
 void o_place_motion(GschemToplevel *w_current, int x, int y);
 void o_place_invalidate_rubber(GschemToplevel *w_current, int drawing);
 void o_place_draw_rubber(GschemToplevel *w_current, EdaRenderer *renderer);
@@ -317,8 +317,8 @@ void o_text_prepare_place(GschemToplevel *w_current, char *text, int color, int 
 void o_text_change(GschemToplevel *w_current, OBJECT *object, char *string, int visibility, int show);
 /* o_undo.c */
 void o_undo_init(void);
-void o_undo_savestate(GschemToplevel *w_current, PAGE *page, int flag);
-void o_undo_savestate_old(GschemToplevel *w_current, int flag);
+void o_undo_savestate(GschemToplevel *w_current, PAGE *page, int flag, const gchar *desc);
+void o_undo_savestate_old(GschemToplevel *w_current, int flag, const gchar *desc);
 char *o_undo_find_prev_filename(UNDO *start);
 GList *o_undo_find_prev_object_head(UNDO *start);
 void o_undo_callback(GschemToplevel *w_current, PAGE *page, int type);

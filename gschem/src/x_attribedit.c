@@ -207,7 +207,8 @@ void attrib_edit_dialog_ok(GtkWidget * w, GschemToplevel *w_current)
         }
         s_current = g_list_next (s_current);
       }
-      o_undo_savestate_old(w_current, UNDO_ALL);
+      o_undo_savestate_old (w_current, UNDO_ALL, NULL);
+      /* shouldn't be reached */
     } else {
       object = o_select_return_first_object(w_current);
       new = o_attrib_add_attrib(w_current, newtext, vis, show, object);
@@ -233,12 +234,12 @@ void attrib_edit_dialog_ok(GtkWidget * w, GschemToplevel *w_current)
 	o_text_recreate(toplevel, new);
       }
       gschem_toplevel_page_content_changed (w_current, toplevel->page_current);
-      o_undo_savestate_old(w_current, UNDO_ALL);
+      o_undo_savestate_old (w_current, UNDO_ALL, _("Add Attribute"));
     }
   } else {
     o_text_change(w_current, attribptr, newtext, vis, show);
     gschem_toplevel_page_content_changed (w_current, toplevel->page_current);
-    o_undo_savestate_old(w_current, UNDO_ALL);
+    o_undo_savestate_old (w_current, UNDO_ALL, _("Edit Attribute"));
   }
   gtk_grab_remove(w_current->aewindow);
   gtk_widget_destroy(w_current->aewindow);

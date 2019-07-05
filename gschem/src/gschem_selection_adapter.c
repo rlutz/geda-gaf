@@ -1034,7 +1034,7 @@ gschem_selection_adapter_set_fill_angle1 (GschemSelectionAdapter *adapter, int a
 
   g_object_notify (G_OBJECT (adapter), "fill-angle1");
 
-  g_signal_emit_by_name (adapter, "handle-undo");
+  g_signal_emit_by_name (adapter, "handle-undo", _("Change Fill Angle 1"));
 }
 
 
@@ -1094,7 +1094,7 @@ gschem_selection_adapter_set_fill_angle2 (GschemSelectionAdapter *adapter, int a
 
   g_object_notify (G_OBJECT (adapter), "fill-angle2");
 
-  g_signal_emit_by_name (adapter, "handle-undo");
+  g_signal_emit_by_name (adapter, "handle-undo", _("Change Fill Angle 2"));
 }
 
 
@@ -1156,7 +1156,7 @@ gschem_selection_adapter_set_fill_pitch1 (GschemSelectionAdapter *adapter, int p
 
   g_object_notify (G_OBJECT (adapter), "fill-pitch1");
 
-  g_signal_emit_by_name (adapter, "handle-undo");
+  g_signal_emit_by_name (adapter, "handle-undo", _("Change Fill Pitch 1"));
 }
 
 
@@ -1216,7 +1216,7 @@ gschem_selection_adapter_set_fill_pitch2 (GschemSelectionAdapter *adapter, int p
 
   g_object_notify (G_OBJECT (adapter), "fill-pitch2");
 
-  g_signal_emit_by_name (adapter, "handle-undo");
+  g_signal_emit_by_name (adapter, "handle-undo", _("Change Fill Pitch 2"));
 }
 
 
@@ -1283,7 +1283,7 @@ gschem_selection_adapter_set_fill_type (GschemSelectionAdapter *adapter, int fil
   g_object_notify (G_OBJECT (adapter), "fill-type");
   g_object_notify (G_OBJECT (adapter), "fill-width");
 
-  g_signal_emit_by_name (adapter, "handle-undo");
+  g_signal_emit_by_name (adapter, "handle-undo", _("Change Fill Properties"));
 }
 
 
@@ -1344,7 +1344,7 @@ gschem_selection_adapter_set_fill_width (GschemSelectionAdapter *adapter, int fi
 
   g_object_notify (G_OBJECT (adapter), "fill-width");
 
-  g_signal_emit_by_name (adapter, "handle-undo");
+  g_signal_emit_by_name (adapter, "handle-undo", _("Change Fill Width"));
 }
 
 
@@ -1404,7 +1404,7 @@ gschem_selection_adapter_set_line_type (GschemSelectionAdapter *adapter, int lin
   g_object_notify (G_OBJECT (adapter), "dash-length");
   g_object_notify (G_OBJECT (adapter), "dash-space");
 
-  g_signal_emit_by_name (adapter, "handle-undo");
+  g_signal_emit_by_name (adapter, "handle-undo", _("Change Line Properties"));
 }
 
 
@@ -1462,7 +1462,7 @@ gschem_selection_adapter_set_line_width (GschemSelectionAdapter *adapter, int li
 
   g_object_notify (G_OBJECT (adapter), "line-width");
 
-  g_signal_emit_by_name (adapter, "handle-undo");
+  g_signal_emit_by_name (adapter, "handle-undo", _("Change Line Width"));
 }
 
 
@@ -1520,7 +1520,7 @@ gschem_selection_adapter_set_dash_length (GschemSelectionAdapter *adapter, int d
 
   g_object_notify (G_OBJECT (adapter), "dash-length");
 
-  g_signal_emit_by_name (adapter, "handle-undo");
+  g_signal_emit_by_name (adapter, "handle-undo", _("Change Line Dash Length"));
 }
 
 
@@ -1578,7 +1578,7 @@ gschem_selection_adapter_set_dash_space (GschemSelectionAdapter *adapter, int da
 
   g_object_notify (G_OBJECT (adapter), "dash-space");
 
-  g_signal_emit_by_name (adapter, "handle-undo");
+  g_signal_emit_by_name (adapter, "handle-undo", _("Change Line Dash Space"));
 }
 
 
@@ -1636,7 +1636,7 @@ gschem_selection_adapter_set_cap_style (GschemSelectionAdapter *adapter, int cap
 
   g_object_notify (G_OBJECT (adapter), "cap-style");
 
-  g_signal_emit_by_name (adapter, "handle-undo");
+  g_signal_emit_by_name (adapter, "handle-undo", _("Change Line Cap Style"));
 }
 
 
@@ -1668,7 +1668,7 @@ gschem_selection_adapter_set_object_color (GschemSelectionAdapter *adapter, int 
   g_object_notify (G_OBJECT (adapter), "object-color");
   g_object_notify (G_OBJECT (adapter), "text-color");
 
-  g_signal_emit_by_name (adapter, "handle-undo");
+  g_signal_emit_by_name (adapter, "handle-undo", _("Change Color"));
 }
 
 
@@ -1702,7 +1702,7 @@ gschem_selection_adapter_set_pin_type (GschemSelectionAdapter *adapter, int type
 
   g_object_notify (G_OBJECT (adapter), "pin-type");
 
-  g_signal_emit_by_name (adapter, "handle-undo");
+  g_signal_emit_by_name (adapter, "handle-undo", _("Change Pin Type"));
 }
 
 
@@ -1782,7 +1782,7 @@ gschem_selection_adapter_set_text_alignment (GschemSelectionAdapter *adapter, in
 
   g_object_notify (G_OBJECT (adapter), "text-alignment");
 
-  g_signal_emit_by_name (adapter, "handle-undo");
+  g_signal_emit_by_name (adapter, "handle-undo", _("Change Alignment"));
 }
 
 
@@ -1816,7 +1816,7 @@ gschem_selection_adapter_set_text_color (GschemSelectionAdapter *adapter, int co
   g_object_notify (G_OBJECT (adapter), "object-color");
   g_object_notify (G_OBJECT (adapter), "text-color");
 
-  g_signal_emit_by_name (adapter, "handle-undo");
+  g_signal_emit_by_name (adapter, "handle-undo", _("Change Color"));
 }
 
 
@@ -1850,7 +1850,7 @@ gschem_selection_adapter_set_text_rotation (GschemSelectionAdapter *adapter, int
 
   g_object_notify (G_OBJECT (adapter), "text-rotation");
 
-  g_signal_emit_by_name (adapter, "handle-undo");
+  g_signal_emit_by_name (adapter, "handle-undo", _("Change Rotation"));
 }
 
 
@@ -1884,7 +1884,7 @@ gschem_selection_adapter_set_text_size (GschemSelectionAdapter *adapter, int siz
 
   g_object_notify (G_OBJECT (adapter), "text-size");
 
-  g_signal_emit_by_name (adapter, "handle-undo");
+  g_signal_emit_by_name (adapter, "handle-undo", _("Change Text Size"));
 }
 
 
@@ -1926,7 +1926,7 @@ gschem_selection_adapter_set_text_string (GschemSelectionAdapter *adapter, const
 
   g_object_notify (G_OBJECT (adapter), "text-string");
 
-  g_signal_emit_by_name (adapter, "handle-undo");
+  g_signal_emit_by_name (adapter, "handle-undo", _("Change Text"));
 }
 
 
@@ -2146,10 +2146,10 @@ class_init (GschemSelectionAdapterClass *klass)
                 0,                                /* class_offset */
                 NULL,                             /* accumulator  */
                 NULL,                             /* accu_data    */
-                g_cclosure_marshal_VOID__VOID,    /* c_marshaller */
+                g_cclosure_marshal_VOID__STRING,  /* c_marshaller */
                 G_TYPE_NONE,                      /* return_type  */
-                0                                 /* n_params     */
-                );
+                1,                                /* n_params     */
+                G_TYPE_STRING);
 }
 
 

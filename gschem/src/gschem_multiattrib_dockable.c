@@ -522,7 +522,7 @@ multiattrib_action_add_attribute (GschemMultiattribDockable *multiattrib,
   }
 
   gschem_toplevel_page_content_changed (w_current, w_current->toplevel->page_current);
-  o_undo_savestate_old (w_current, UNDO_ALL);
+  o_undo_savestate_old (w_current, UNDO_ALL, _("Add Attribute"));
 
   g_free (newtext);
 }
@@ -553,7 +553,7 @@ multiattrib_action_duplicate_attributes (GschemMultiattribDockable *multiattrib,
   }
 
   gschem_toplevel_page_content_changed (w_current, w_current->toplevel->page_current);
-  o_undo_savestate_old (w_current, UNDO_ALL);
+  o_undo_savestate_old (w_current, UNDO_ALL, _("Duplicate Attribute"));
 }
 
 /*! \todo Finish function documentation
@@ -596,7 +596,7 @@ multiattrib_action_promote_attributes (GschemMultiattribDockable *multiattrib,
   }
 
   gschem_toplevel_page_content_changed (w_current, w_current->toplevel->page_current);
-  o_undo_savestate_old (w_current, UNDO_ALL);
+  o_undo_savestate_old (w_current, UNDO_ALL, _("Promote Attribute"));
 }
 
 /*! \todo Finish function documentation
@@ -619,7 +619,7 @@ multiattrib_action_delete_attributes (GschemMultiattribDockable *multiattrib,
   }
 
   gschem_toplevel_page_content_changed (w_current, w_current->toplevel->page_current);
-  o_undo_savestate_old (w_current, UNDO_ALL);
+  o_undo_savestate_old (w_current, UNDO_ALL, _("Delete Attribute"));
 }
 
 /*! \todo Finish function documentation
@@ -666,7 +666,7 @@ multiattrib_action_copy_attribute_to_all (GschemMultiattribDockable *multiattrib
   }
 
   gschem_toplevel_page_content_changed (w_current, w_current->toplevel->page_current);
-  o_undo_savestate_old (w_current, UNDO_ALL);
+  o_undo_savestate_old (w_current, UNDO_ALL, _("Copy Attribute to All"));
 }
 
 /*! \todo Finish function documentation
@@ -905,7 +905,7 @@ multiattrib_callback_edited_name (GtkCellRendererText *cellrenderertext,
   g_free (newtext);
 
   gschem_toplevel_page_content_changed (w_current, w_current->toplevel->page_current);
-  o_undo_savestate_old (w_current, UNDO_ALL);
+  o_undo_savestate_old (w_current, UNDO_ALL, _("Edit Attribute Name"));
 
   /* NB: We don't fix up the model to reflect the edit, we're about to nuke it below... */
 
@@ -990,7 +990,7 @@ multiattrib_callback_edited_value (GtkCellRendererText *cell_renderer,
   g_free (newtext);
 
   gschem_toplevel_page_content_changed (w_current, w_current->toplevel->page_current);
-  o_undo_savestate_old (w_current, UNDO_ALL);
+  o_undo_savestate_old (w_current, UNDO_ALL, _("Edit Attribute"));
 
   /* Fixup the model to reflect the edit */
   gtk_list_store_set (GTK_LIST_STORE (model), &iter,
@@ -1046,7 +1046,7 @@ multiattrib_callback_toggled_visible (GtkCellRendererToggle *cell_renderer,
   g_object_unref (attr_list);
 
   gschem_toplevel_page_content_changed (w_current, w_current->toplevel->page_current);
-  o_undo_savestate_old (w_current, UNDO_ALL);
+  o_undo_savestate_old (w_current, UNDO_ALL, _("Toggle Attribute Visibility"));
 
   /* Fixup the model to reflect the edit */
   gtk_list_store_set (GTK_LIST_STORE (model), &iter,
@@ -1111,7 +1111,7 @@ multiattrib_callback_toggled_show_name (GtkCellRendererToggle *cell_renderer,
   g_object_unref (attr_list);
 
   gschem_toplevel_page_content_changed (w_current, w_current->toplevel->page_current);
-  o_undo_savestate_old (w_current, UNDO_ALL);
+  o_undo_savestate_old (w_current, UNDO_ALL, _("Toggle Show Attribute Name"));
 
   /* NB: We don't fix up the model to reflect the edit, we're about to nuke it below... */
 
@@ -1176,7 +1176,7 @@ multiattrib_callback_toggled_show_value (GtkCellRendererToggle *cell_renderer,
   g_object_unref (attr_list);
 
   gschem_toplevel_page_content_changed (w_current, w_current->toplevel->page_current);
-  o_undo_savestate_old (w_current, UNDO_ALL);
+  o_undo_savestate_old (w_current, UNDO_ALL, _("Toggle Show Attribute Value"));
 
   /* NB: We don't fix up the model to reflect the edit, we're about to nuke it below... */
 

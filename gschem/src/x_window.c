@@ -1108,7 +1108,7 @@ x_window_open_page (GschemToplevel *w_current, const gchar *filename)
     g_run_hook_page (w_current, "%new-page-hook", toplevel->page_current);
   }
 
-  o_undo_savestate (w_current, toplevel->page_current, UNDO_ALL);
+  o_undo_savestate (w_current, toplevel->page_current, UNDO_ALL, NULL);
 
   g_free (fn);
 

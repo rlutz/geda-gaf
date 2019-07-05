@@ -125,7 +125,7 @@ void o_lock(GschemToplevel *w_current)
   }
 
   if (!w_current->SHIFTKEY) o_select_unselect_all(w_current);
-  o_undo_savestate_old(w_current, UNDO_ALL);
+  o_undo_savestate_old (w_current, UNDO_ALL, _("Lock"));
   i_update_menus(w_current);
 }
 
@@ -161,7 +161,7 @@ void o_unlock(GschemToplevel *w_current)
 
     s_current = g_list_next(s_current);
   }
-  o_undo_savestate_old(w_current, UNDO_ALL);
+  o_undo_savestate_old (w_current, UNDO_ALL, _("Unlock"));
 }
 
 /*! \brief Rotate all objects in list.
@@ -227,7 +227,7 @@ void o_rotate_world_update(GschemToplevel *w_current,
   /* This is useful when rotating the selection while moving, for example */
   gschem_toplevel_page_content_changed (w_current, toplevel->page_current);
   if (!w_current->inside_action) {
-    o_undo_savestate_old(w_current, UNDO_ALL);
+    o_undo_savestate_old (w_current, UNDO_ALL, _("Rotate"));
   }
 
   if (w_current->event_state == ROTATEMODE) {
@@ -282,7 +282,7 @@ void o_mirror_world_update(GschemToplevel *w_current, int centerx, int centery, 
   g_run_hook_object_list (w_current, "%mirror-objects-hook", list);
 
   gschem_toplevel_page_content_changed (w_current, toplevel->page_current);
-  o_undo_savestate_old(w_current, UNDO_ALL);
+  o_undo_savestate_old (w_current, UNDO_ALL, _("Mirror"));
 
   if (w_current->event_state == MIRRORMODE) {
     i_set_state(w_current, SELECT);
@@ -379,7 +379,7 @@ void o_edit_hide_specific_text (GschemToplevel *w_current,
     }
     iter = g_list_next (iter);
   }
-  o_undo_savestate_old(w_current, UNDO_ALL);
+  o_undo_savestate_old (w_current, UNDO_ALL, _("Hide Specific Text"));
   gschem_page_view_invalidate_all (gschem_toplevel_get_current_page_view (w_current));
 }
 
@@ -413,7 +413,7 @@ void o_edit_show_specific_text (GschemToplevel *w_current,
     }
     iter = g_list_next (iter);
   }
-  o_undo_savestate_old(w_current, UNDO_ALL);
+  o_undo_savestate_old (w_current, UNDO_ALL, _("Show Specific Text"));
 }
 
 
@@ -523,7 +523,7 @@ o_update_component (GschemToplevel *w_current, OBJECT *o_current)
 
   /* mark the page as modified */
   gschem_toplevel_page_content_changed (w_current, toplevel->page_current);
-  o_undo_savestate_old (w_current, UNDO_ALL);
+  o_undo_savestate_old (w_current, UNDO_ALL, _("Update Symbol"));
 
   return o_new;
 }

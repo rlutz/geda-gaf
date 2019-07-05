@@ -71,7 +71,8 @@ void o_undo_init(void)
  *  </DL>
  */
 void
-o_undo_savestate (GschemToplevel *w_current, PAGE *page, int flag)
+o_undo_savestate (GschemToplevel *w_current, PAGE *page, int flag,
+                  const gchar *desc)
 {
   TOPLEVEL *toplevel = gschem_toplevel_get_toplevel (w_current);
   char *filename = NULL;
@@ -151,7 +152,7 @@ o_undo_savestate (GschemToplevel *w_current, PAGE *page, int flag)
                                   ((double) abs (geometry->viewport_top - geometry->viewport_bottom) / geometry->screen_height)),
                                 page->page_control,
                                 page->up,
-                                NULL);
+                                desc);
   } else {
     page->undo_tos = s_undo_add(page->undo_tos,
                                 flag, filename, object_list,
@@ -160,7 +161,7 @@ o_undo_savestate (GschemToplevel *w_current, PAGE *page, int flag)
                                 0, /* scale */
                                 page->page_control,
                                 page->up,
-                                NULL);
+                                desc);
   }
 
   page->undo_current =
@@ -267,14 +268,14 @@ o_undo_savestate (GschemToplevel *w_current, PAGE *page, int flag)
  *  </DL>
  */
 void
-o_undo_savestate_old (GschemToplevel *w_current, int flag)
+o_undo_savestate_old (GschemToplevel *w_current, int flag, const gchar *desc)
 {
   GschemPageView *page_view = gschem_toplevel_get_current_page_view (w_current);
   g_return_if_fail (page_view != NULL);
 
   PAGE *page = gschem_page_view_get_page (page_view);
 
-  o_undo_savestate (w_current, page, flag);
+  o_undo_savestate (w_current, page, flag, desc);
 }
 
 /*! \todo Finish function documentation!!!

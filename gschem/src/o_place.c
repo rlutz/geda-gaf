@@ -65,7 +65,8 @@ void o_place_start (GschemToplevel *w_current, int w_x, int w_y)
 void o_place_end (GschemToplevel *w_current,
                   int w_x, int w_y,
                   int continue_placing,
-                  const char* hook_name)
+                  const char* hook_name,
+                  const gchar *undo_desc)
 {
   int w_diff_x, w_diff_y;
   OBJECT *o_current;
@@ -130,7 +131,7 @@ void o_place_end (GschemToplevel *w_current,
   o_invalidate_glist (w_current, temp_dest_list); /* only redraw new objects */
   g_list_free (temp_dest_list);
 
-  o_undo_savestate_old (w_current, UNDO_ALL);
+  o_undo_savestate_old (w_current, UNDO_ALL, undo_desc);
   i_update_menus (w_current);
 
   if (!continue_placing) {

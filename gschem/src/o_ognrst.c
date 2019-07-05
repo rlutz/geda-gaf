@@ -91,7 +91,7 @@ o_ognrst_end (GschemToplevel *w_current, int w_x, int w_y)
 
 
   gschem_toplevel_page_content_changed (w_current, page);
-  o_undo_savestate (w_current, page, UNDO_ALL);
+  o_undo_savestate (w_current, page, UNDO_ALL, _("Place Origin"));
 
   i_action_stop (w_current);
   i_set_state (w_current, SELECT);

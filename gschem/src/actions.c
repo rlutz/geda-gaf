@@ -542,7 +542,7 @@ DEFINE_ACTION (edit_delete,
 
   if (o_select_return_first_object(w_current)) {
     o_redraw_cleanstates(w_current);
-    o_delete_selected(w_current);
+    o_delete_selected (w_current, _("Delete"));
     /* if you delete the objects you must go into select
      * mode after the delete */
     i_action_stop (w_current);
@@ -1129,7 +1129,7 @@ DEFINE_ACTION (attributes_attach,
     g_list_free (attached_objects);
   }
 
-  o_undo_savestate_old(w_current, UNDO_ALL);
+  o_undo_savestate_old (w_current, UNDO_ALL, _("Attach Attributes"));
   i_update_menus (w_current);
 }
 
@@ -1175,7 +1175,7 @@ DEFINE_ACTION (attributes_detach,
     g_list_free (detached_attribs);
   }
 
-  o_undo_savestate_old(w_current, UNDO_ALL);
+  o_undo_savestate_old (w_current, UNDO_ALL, _("Detach Attributes"));
   i_update_menus (w_current);
 }
 
@@ -1210,7 +1210,7 @@ DEFINE_ACTION (attributes_show_value,
         o_attrib_toggle_show_name_value (w_current, object, SHOW_VALUE);
     }
 
-    o_undo_savestate_old (w_current, UNDO_ALL);
+    o_undo_savestate_old (w_current, UNDO_ALL, _("Show Value"));
   }
 }
 
@@ -1245,7 +1245,7 @@ DEFINE_ACTION (attributes_show_name,
         o_attrib_toggle_show_name_value (w_current, object, SHOW_NAME);
     }
 
-    o_undo_savestate_old (w_current, UNDO_ALL);
+    o_undo_savestate_old (w_current, UNDO_ALL, _("Show Name"));
   }
 }
 
@@ -1280,7 +1280,7 @@ DEFINE_ACTION (attributes_show_both,
         o_attrib_toggle_show_name_value (w_current, object, SHOW_NAME_VALUE);
     }
 
-    o_undo_savestate_old (w_current, UNDO_ALL);
+    o_undo_savestate_old (w_current, UNDO_ALL, _("Show Name & Value"));
   }
 }
 
@@ -1315,7 +1315,7 @@ DEFINE_ACTION (attributes_visibility_toggle,
         o_attrib_toggle_visibility (w_current, object);
     }
 
-    o_undo_savestate_old (w_current, UNDO_ALL);
+    o_undo_savestate_old (w_current, UNDO_ALL, _("Toggle Visibility"));
   }
 }
 
@@ -1348,7 +1348,7 @@ DEFINE_ACTION (edit_embed,
       }
       s_current = g_list_next(s_current);
     }
-    o_undo_savestate_old(w_current, UNDO_ALL);
+    o_undo_savestate_old (w_current, UNDO_ALL, _("Embed"));
   } else {
     /* nothing selected, go back to select state */
     o_redraw_cleanstates(w_current);
@@ -1386,7 +1386,7 @@ DEFINE_ACTION (edit_unembed,
       }
       s_current = g_list_next(s_current);
     }
-    o_undo_savestate_old(w_current, UNDO_ALL);
+    o_undo_savestate_old (w_current, UNDO_ALL, _("Unembed"));
   } else {
     /* nothing selected, go back to select state */
     o_redraw_cleanstates(w_current);
@@ -1570,7 +1570,7 @@ DEFINE_ACTION (view_zoom_in,
           g_action_get_position (FALSE, NULL, NULL) ? HOTKEY : MENU);
 
   if (w_current->undo_panzoom) {
-    o_undo_savestate_old(w_current, UNDO_VIEWPORT_ONLY);
+    o_undo_savestate_old (w_current, UNDO_VIEWPORT_ONLY, _("Zoom In"));
   }
 }
 
@@ -1593,7 +1593,7 @@ DEFINE_ACTION (view_zoom_out,
          g_action_get_position (FALSE, NULL, NULL) ? HOTKEY : MENU);
 
   if (w_current->undo_panzoom) {
-    o_undo_savestate_old(w_current, UNDO_VIEWPORT_ONLY);
+    o_undo_savestate_old (w_current, UNDO_VIEWPORT_ONLY, _("Zoom Out"));
   }
 }
 
@@ -1613,7 +1613,7 @@ DEFINE_ACTION (view_zoom_extents,
   gschem_page_view_zoom_extents (page_view, NULL);
 
   if (w_current->undo_panzoom) {
-    o_undo_savestate_old(w_current, UNDO_VIEWPORT_ONLY);
+    o_undo_savestate_old (w_current, UNDO_VIEWPORT_ONLY, _("Zoom Extents"));
   }
 }
 
@@ -1634,7 +1634,7 @@ DEFINE_ACTION (view_zoom_full,
   a_zoom(w_current, page_view, ZOOM_FULL, DONTCARE);
 
   if (w_current->undo_panzoom) {
-    o_undo_savestate_old(w_current, UNDO_VIEWPORT_ONLY);
+    o_undo_savestate_old (w_current, UNDO_VIEWPORT_ONLY, _("Zoom Full"));
   }
 }
 
@@ -1682,7 +1682,7 @@ DEFINE_ACTION (view_pan,
   } else {
     gschem_page_view_pan (page_view, wx, wy);
     if (w_current->undo_panzoom) {
-      o_undo_savestate_old(w_current, UNDO_VIEWPORT_ONLY);
+      o_undo_savestate_old (w_current, UNDO_VIEWPORT_ONLY, _("Pan"));
     }
   }
 }
@@ -1907,7 +1907,7 @@ DEFINE_ACTION (hierarchy_down_schematic,
         gschem_toplevel_page_changed (w_current);
         gschem_page_view_zoom_extents (gschem_toplevel_get_current_page_view (w_current),
                                        NULL);
-        o_undo_savestate_old(w_current, UNDO_ALL);
+        o_undo_savestate_old (w_current, UNDO_ALL, NULL);
         s_page_goto (gschem_toplevel_get_toplevel (w_current), parent);
         gschem_toplevel_page_changed (w_current);
       }
@@ -2026,7 +2026,7 @@ DEFINE_ACTION (hierarchy_down_symbol,
       /* s_hierarchy_down_symbol() will not zoom the loaded page */
       gschem_page_view_zoom_extents (gschem_toplevel_get_current_page_view (w_current),
                                      NULL);
-      o_undo_savestate_old(w_current, UNDO_ALL);
+      o_undo_savestate_old (w_current, UNDO_ALL, NULL);
     }
   }
 }

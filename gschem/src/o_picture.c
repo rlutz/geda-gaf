@@ -116,7 +116,7 @@ void o_picture_end(GschemToplevel *w_current, int w_x, int w_y)
     g_run_hook_object (w_current, "%add-objects-hook", new_obj);
 
     gschem_toplevel_page_content_changed (w_current, toplevel->page_current);
-    o_undo_savestate_old(w_current, UNDO_ALL);
+    o_undo_savestate_old (w_current, UNDO_ALL, _("Add Picture"));
   }
   i_action_stop (w_current);
 }
@@ -384,7 +384,7 @@ void picture_change_filename_dialog (GschemToplevel *w_current)
       gtk_widget_destroy(dialog);
     } else {
       gschem_toplevel_page_content_changed (w_current, toplevel->page_current);
-      o_undo_savestate_old (w_current, UNDO_ALL);
+      o_undo_savestate_old (w_current, UNDO_ALL, _("Replace Picture"));
     }
     g_free (filename);
   }

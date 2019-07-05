@@ -143,11 +143,11 @@ x_event_button_pressed(GschemPageView *page_view, GdkEventButton *event, GschemT
       if (page->place_list != NULL) {
         switch(w_current->event_state) {
           case (COMPMODE)   : o_place_end(w_current, w_x, w_y, w_current->continue_component_place,
-                                "%add-objects-hook"); break;
+                                "%add-objects-hook", _("Add Component")); break;
           case (TEXTMODE)   : o_place_end(w_current, w_x, w_y, FALSE,
-                                "%add-objects-hook"); break;
+                                "%add-objects-hook", _("Add Text")); break;
           case (PASTEMODE)  : o_place_end(w_current, w_x, w_y, FALSE,
-                                "%paste-objects-hook"); break;
+                                "%paste-objects-hook", _("Paste")); break;
           default: break;
         }
       } else {
@@ -196,7 +196,7 @@ x_event_button_pressed(GschemPageView *page_view, GdkEventButton *event, GschemT
       case(PAN):
         gschem_page_view_pan (page_view, w_x, w_y);
         if (w_current->undo_panzoom)
-          o_undo_savestate (w_current, page, UNDO_VIEWPORT_ONLY);
+          o_undo_savestate (w_current, page, UNDO_VIEWPORT_ONLY, _("Pan"));
         i_set_state(w_current, SELECT);
         break;
     }
@@ -430,7 +430,7 @@ x_event_button_released (GschemPageView *page_view, GdkEventButton *event, Gsche
 
       case(MID_MOUSEPAN_ENABLED):
         if (gschem_page_view_pan_end (page_view) && w_current->undo_panzoom) {
-          o_undo_savestate_old(w_current, UNDO_VIEWPORT_ONLY);
+          o_undo_savestate_old (w_current, UNDO_VIEWPORT_ONLY, _("Pan"));
         }
       break;
     }
@@ -438,7 +438,7 @@ x_event_button_released (GschemPageView *page_view, GdkEventButton *event, Gsche
   } else if (event->button == 3) {
       /* just for ending a mouse pan */
       if (gschem_page_view_pan_end (page_view) && w_current->undo_panzoom) {
-        o_undo_savestate_old(w_current, UNDO_VIEWPORT_ONLY);
+        o_undo_savestate_old (w_current, UNDO_VIEWPORT_ONLY, _("Pan"));
       }
   }
  end_button_released:
@@ -800,7 +800,8 @@ gint x_event_scroll (GtkWidget *widget, GdkEventScroll *event,
   }
 
   if (w_current->undo_panzoom && (zoom || pan_xaxis || pan_yaxis)) {
-    o_undo_savestate_old(w_current, UNDO_VIEWPORT_ONLY);
+    o_undo_savestate_old (w_current, UNDO_VIEWPORT_ONLY,
+                          zoom ? _("Zoom") : _("Pan"));
   }
 
   x_event_faked_motion (view, NULL);
