@@ -133,5 +133,6 @@ void o_slot_end(GschemToplevel *w_current, OBJECT *object, const char *string)
   s_slot_update_object (toplevel, object);
 
   gschem_toplevel_page_content_changed (w_current, toplevel->page_current);
+  o_undo_savestate_old (w_current, UNDO_ALL);
   g_free (value);
 }

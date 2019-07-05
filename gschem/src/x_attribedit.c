@@ -231,9 +231,9 @@ void attrib_edit_dialog_ok(GtkWidget * w, GschemToplevel *w_current)
 	new->text->x = wx;
 	new->text->y = wy;
 	o_text_recreate(toplevel, new);
-    gschem_toplevel_page_content_changed (w_current, toplevel->page_current);
-	o_undo_savestate_old(w_current, UNDO_ALL);
       }
+      gschem_toplevel_page_content_changed (w_current, toplevel->page_current);
+      o_undo_savestate_old(w_current, UNDO_ALL);
     }
   } else {
     o_text_change(w_current, attribptr, newtext, vis, show);

@@ -195,6 +195,8 @@ x_event_button_pressed(GschemPageView *page_view, GdkEventButton *event, GschemT
 
       case(PAN):
         gschem_page_view_pan (page_view, w_x, w_y);
+        if (w_current->undo_panzoom)
+          o_undo_savestate (w_current, page, UNDO_VIEWPORT_ONLY);
         i_set_state(w_current, SELECT);
         break;
     }
