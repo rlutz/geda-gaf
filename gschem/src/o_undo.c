@@ -150,7 +150,8 @@ o_undo_savestate (GschemToplevel *w_current, PAGE *page, int flag)
                                 max (((double) abs (geometry->viewport_right - geometry->viewport_left) / geometry->screen_width),
                                   ((double) abs (geometry->viewport_top - geometry->viewport_bottom) / geometry->screen_height)),
                                 page->page_control,
-                                page->up);
+                                page->up,
+                                NULL);
   } else {
     page->undo_tos = s_undo_add(page->undo_tos,
                                 flag, filename, object_list,
@@ -158,7 +159,8 @@ o_undo_savestate (GschemToplevel *w_current, PAGE *page, int flag)
                                 0, /* center y */
                                 0, /* scale */
                                 page->page_control,
-                                page->up);
+                                page->up,
+                                NULL);
   }
 
   page->undo_current =

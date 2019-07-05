@@ -348,6 +348,9 @@ struct st_undo {
   /* used to control which pages are viewable when moving around */
   int page_control;
 
+  /* textual description of the action */
+  const char *desc;
+
   UNDO *prev;
   UNDO *next;
 };
