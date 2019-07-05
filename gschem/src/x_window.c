@@ -1149,12 +1149,7 @@ x_window_set_current_page (GschemToplevel *w_current, PAGE *page)
                                             G_FILE_TEST_IS_REGULAR),
                                w_current);
 
-  gschem_action_set_sensitive (action_edit_undo,
-                               page->undo_current != NULL &&
-                               page->undo_current->prev != NULL, w_current);
-  gschem_action_set_sensitive (action_edit_redo,
-                               page->undo_current != NULL &&
-                               page->undo_current->next != NULL, w_current);
+  o_undo_update_actions (w_current, page);
 
   iter = g_list_find (geda_list_get_glist (toplevel->pages), page);
   gschem_action_set_sensitive (action_page_prev,

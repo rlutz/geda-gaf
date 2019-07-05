@@ -322,6 +322,7 @@ void o_undo_savestate_old(GschemToplevel *w_current, int flag);
 char *o_undo_find_prev_filename(UNDO *start);
 GList *o_undo_find_prev_object_head(UNDO *start);
 void o_undo_callback(GschemToplevel *w_current, PAGE *page, int type);
+void o_undo_update_actions(GschemToplevel *w_current, PAGE *page);
 void o_undo_cleanup(void);
 /* parsecmd.c */
 int parse_commandline(int argc, char *argv[]);

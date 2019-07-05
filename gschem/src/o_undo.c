@@ -182,10 +182,7 @@ o_undo_savestate (GschemToplevel *w_current, PAGE *page, int flag)
 
   g_free(filename);
 
-  gschem_action_set_sensitive (action_edit_undo,
-                               page->undo_current->prev != NULL, w_current);
-  gschem_action_set_sensitive (action_edit_redo,
-                               page->undo_current->next != NULL, w_current);
+  o_undo_update_actions (w_current, page);
 
   /* Now go through and see if we need to free/remove some undo levels */
   /* so we stay within the limits */
@@ -492,10 +489,7 @@ o_undo_callback (GschemToplevel *w_current, PAGE *page, int type)
     u_current->object_list = NULL;
   }
 
-  gschem_action_set_sensitive (action_edit_undo,
-                               page->undo_current->prev != NULL, w_current);
-  gschem_action_set_sensitive (action_edit_redo,
-                               page->undo_current->next != NULL, w_current);
+  o_undo_update_actions (w_current, page);
 
 #if DEBUG
   printf("\n\n---Undo----\n");
@@ -504,6 +498,49 @@ o_undo_callback (GschemToplevel *w_current, PAGE *page, int type)
   printf("CURRENT: %s\n", page->undo_current->filename);
   printf("----\n");
 #endif
+}
+
+/*! \brief Update sensitivity and text of undo/redo actions.
+ */
+void
+o_undo_update_actions (GschemToplevel *w_current, PAGE *page)
+{
+  gchar *label, *menu_label;
+
+  gschem_action_set_sensitive (action_edit_undo,
+                               page->undo_current != NULL &&
+                               page->undo_current->prev != NULL, w_current);
+  if (page->undo_current == NULL ||
+      page->undo_current->prev == NULL ||
+      page->undo_current->desc == NULL) {
+    label = NULL;
+    menu_label = NULL;
+  } else {
+    label = g_strdup_printf (_("Undo %s"), page->undo_current->desc);
+    menu_label = g_strdup_printf (_("_Undo %s"), page->undo_current->desc);
+  }
+  gschem_action_set_strings (action_edit_undo, label, label, menu_label,
+                             w_current);
+  g_free (label);
+  g_free (menu_label);
+
+  gschem_action_set_sensitive (action_edit_redo,
+                               page->undo_current != NULL &&
+                               page->undo_current->next != NULL, w_current);
+  if (page->undo_current == NULL ||
+      page->undo_current->next == NULL ||
+      page->undo_current->next->desc == NULL) {
+    label = NULL;
+    menu_label = NULL;
+  } else {
+    label = g_strdup_printf (_("Redo %s"), page->undo_current->next->desc);
+    menu_label = g_strdup_printf (_("_Redo %s"),
+                                  page->undo_current->next->desc);
+  }
+  gschem_action_set_strings (action_edit_redo, label, label, menu_label,
+                             w_current);
+  g_free (label);
+  g_free (menu_label);
 }
 
 /*! \todo Finish function documentation!!!
