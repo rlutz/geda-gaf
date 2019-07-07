@@ -88,6 +88,8 @@ UNDO *s_undo_new_head(void)
   u_new->up = -2;
 
   u_new->desc = NULL;
+  u_new->tx = 0;
+  u_new->ty = 0;
 
   u_new->prev = NULL;
   u_new->next = NULL;
@@ -133,6 +135,8 @@ UNDO *s_undo_add (UNDO *head, int type, char *filename, GList *object_list,
   u_new->up = up;
 
   u_new->desc = desc;
+  u_new->tx = 0;
+  u_new->ty = 0;
 
   if (head == NULL) {
     u_new->prev = NULL; /* setup previous link */

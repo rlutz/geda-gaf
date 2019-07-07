@@ -351,6 +351,9 @@ struct st_undo {
   /* textual description of the action */
   const char *desc;
 
+  /* translation offset (used for origin placement if pan/zoom is disabled) */
+  int tx, ty;
+
   UNDO *prev;
   UNDO *next;
 };

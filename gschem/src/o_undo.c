@@ -440,14 +440,40 @@ o_undo_callback (GschemToplevel *w_current, PAGE *page, int type)
 
   GschemPageGeometry *geometry = gschem_page_view_get_page_geometry (view);
 
-  if (u_current->scale != 0) {
-    gschem_page_geometry_set_viewport (geometry,
-                                       u_current->x,
-                                       u_current->y,
-                                       u_current->scale);
-    gschem_page_view_invalidate_all (view);
+  if (w_current->undo_panzoom) {
+    if (u_current->scale != 0) {
+      gschem_page_geometry_set_viewport (geometry,
+                                         u_current->x,
+                                         u_current->y,
+                                         u_current->scale);
+      gschem_page_view_invalidate_all (view);
+    } else {
+      gschem_page_view_zoom_extents (view, u_current->object_list);
+    }
   } else {
-    gschem_page_view_zoom_extents (view, u_current->object_list);
+    /* Don't pan/zoom on undo.  However, "Tools / Place Origin"
+       translates the whole page contents to somewhere else, so we
+       need to counter for that translation.  tx/ty default to zero,
+       so this doesn't do anything for other operations. */
+
+    UNDO *u_ognrst;
+    int sign;
+
+    if (type == UNDO_ACTION) {
+      u_ognrst = u_next;
+      sign = -1;
+    } else {
+      u_ognrst = u_current;
+      sign = +1;
+    }
+
+    gschem_page_view_pan_general (
+      view,
+      (geometry->viewport_right +
+       geometry->viewport_left) / 2 + sign * u_ognrst->tx,
+      (geometry->viewport_top +
+       geometry->viewport_bottom) / 2 + sign * u_ognrst->ty, 1.);
+    gschem_page_view_invalidate_all (view);
   }
 
   /* restore logging */
