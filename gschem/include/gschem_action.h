@@ -65,6 +65,9 @@ void gschem_action_set_sensitive (GschemAction *action, gboolean sensitive,
                                   GschemToplevel *w_current);
 void gschem_action_set_active (GschemAction *action, gboolean is_active,
                                GschemToplevel *w_current);
+void gschem_action_set_strings (GschemAction *action,
+                                gchar *name, gchar *label, gchar *menu_label,
+                                GschemToplevel *w_current);
 
 GschemAction *gschem_action_register (gchar *id,
                                       gchar *icon_name,

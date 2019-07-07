@@ -428,6 +428,10 @@ struct _DispatcherClass {
 
   void (*set_sensitive) (Dispatcher *dispatcher, gboolean sensitive);
   void (*set_active) (Dispatcher *dispatcher, gboolean is_active);
+
+  void (*set_name) (Dispatcher *dispatcher, gchar *name);
+  void (*set_label) (Dispatcher *dispatcher, gchar *label);
+  void (*set_menu_label) (Dispatcher *dispatcher, gchar *menu_label);
 };
 
 struct _Dispatcher {
@@ -435,22 +439,36 @@ struct _Dispatcher {
 
   guint sensitive : 1;
   guint active : 1;
+
+  gchar *name;
+  gchar *label;
+  gchar *menu_label;
 };
 
 enum {
   SET_SENSITIVE,
   SET_ACTIVE,
+  SET_NAME,
+  SET_LABEL,
+  SET_MENU_LABEL,
   LAST_SIGNAL
 };
 
 static void dispatcher_class_init (DispatcherClass *class);
 static void dispatcher_instance_init (Dispatcher *dispatcher);
+static void dispatcher_finalize (GObject *object);
 
 static void dispatcher_set_sensitive (Dispatcher *dispatcher,
                                       gboolean sensitive);
 static void dispatcher_set_active (Dispatcher *dispatcher,
                                    gboolean is_active);
 
+static void dispatcher_set_name (Dispatcher *dispatcher, gchar *name);
+static void dispatcher_set_label (Dispatcher *dispatcher, gchar *label);
+static void dispatcher_set_menu_label (Dispatcher *dispatcher,
+                                       gchar *menu_label);
+
+static gpointer dispatcher_parent_class = NULL;
 static guint dispatcher_signals[LAST_SIGNAL] = { 0 };
 
 
@@ -485,8 +503,16 @@ gschem_action_state_dispatcher_get_type ()
 static void
 dispatcher_class_init (DispatcherClass *class)
 {
+  dispatcher_parent_class = g_type_class_peek_parent (class);
+
+  G_OBJECT_CLASS (class)->finalize = dispatcher_finalize;
+
   class->set_sensitive = dispatcher_set_sensitive;
   class->set_active = dispatcher_set_active;
+
+  class->set_name = dispatcher_set_name;
+  class->set_label = dispatcher_set_label;
+  class->set_menu_label = dispatcher_set_menu_label;
 
   dispatcher_signals[SET_SENSITIVE] =
     g_signal_new ("set-sensitive",
@@ -507,6 +533,36 @@ dispatcher_class_init (DispatcherClass *class)
                   g_cclosure_marshal_VOID__BOOLEAN,
                   G_TYPE_NONE, 1,
                   G_TYPE_BOOLEAN);
+
+  dispatcher_signals[SET_NAME] =
+    g_signal_new ("set-name",
+                  G_OBJECT_CLASS_TYPE (class),
+                  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                  G_STRUCT_OFFSET (DispatcherClass, set_name),
+                  NULL, NULL,
+                  g_cclosure_marshal_VOID__STRING,
+                  G_TYPE_NONE, 1,
+                  G_TYPE_STRING);
+
+  dispatcher_signals[SET_LABEL] =
+    g_signal_new ("set-label",
+                  G_OBJECT_CLASS_TYPE (class),
+                  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                  G_STRUCT_OFFSET (DispatcherClass, set_label),
+                  NULL, NULL,
+                  g_cclosure_marshal_VOID__STRING,
+                  G_TYPE_NONE, 1,
+                  G_TYPE_STRING);
+
+  dispatcher_signals[SET_MENU_LABEL] =
+    g_signal_new ("set-menu-label",
+                  G_OBJECT_CLASS_TYPE (class),
+                  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                  G_STRUCT_OFFSET (DispatcherClass, set_menu_label),
+                  NULL, NULL,
+                  g_cclosure_marshal_VOID__STRING,
+                  G_TYPE_NONE, 1,
+                  G_TYPE_STRING);
 }
 
 
@@ -514,6 +570,19 @@ static void
 dispatcher_instance_init (Dispatcher *dispatcher)
 {
   dispatcher->sensitive = TRUE;
+}
+
+
+static void
+dispatcher_finalize (GObject *object)
+{
+  Dispatcher *dispatcher = DISPATCHER (object);
+
+  g_free (dispatcher->name);
+  g_free (dispatcher->label);
+  g_free (dispatcher->menu_label);
+
+  G_OBJECT_CLASS (dispatcher_parent_class)->finalize (object);
 }
 
 
@@ -571,6 +640,34 @@ gschem_action_set_active (GschemAction *action, gboolean is_active,
 }
 
 
+/*! \brief Set the displayed strings of an action.
+ *
+ * Updates all widgets associated with the action to show the new
+ * strings.  Menu items show \a label or \a menu_label, depending on
+ * whether they are part of the main menu.  Toolbar buttons show \a
+ * name as tooltip.  All strings can be \c NULL, in which case the
+ * default string for the action is used.
+ *
+ * \note Setting a string to its default value is not the same thing
+ *       as not setting the string at all.
+ */
+void
+gschem_action_set_strings (GschemAction *action,
+                           gchar *name, gchar *label, gchar *menu_label,
+                           GschemToplevel *w_current)
+{
+  Dispatcher *dispatcher = get_dispatcher (action, w_current);
+  g_return_if_fail (IS_DISPATCHER (dispatcher));
+
+  g_signal_emit (dispatcher, dispatcher_signals[SET_NAME], 0,
+                 name != NULL ? name : action->name);
+  g_signal_emit (dispatcher, dispatcher_signals[SET_LABEL], 0,
+                 label != NULL ? label : action->label);
+  g_signal_emit (dispatcher, dispatcher_signals[SET_MENU_LABEL], 0,
+                 menu_label != NULL ? menu_label : action->menu_label);
+}
+
+
 /*! \brief Dispatcher class closure for "set-sensitive" signal.
  *
  * Invoked whenever a "set-sensitive" signal is emitted for a
@@ -594,6 +691,35 @@ static void
 dispatcher_set_active (Dispatcher *dispatcher, gboolean is_active)
 {
   dispatcher->active = is_active;
+}
+
+
+/*! \brief Dispatcher class closures for "set-name", "set-label", and
+ *         "set-menu-label" signals.
+ *
+ * Invoked whenever the corresponding signal is emitted for a
+ * dispatcher.  Updates the dispatcher's stored string so new widgets
+ * can be constructed with the correct label.
+ */
+static void
+dispatcher_set_name (Dispatcher *dispatcher, gchar *name)
+{
+  g_free (dispatcher->name);
+  dispatcher->name = g_strdup (name);
+}
+
+static void
+dispatcher_set_label (Dispatcher *dispatcher, gchar *label)
+{
+  g_free (dispatcher->label);
+  dispatcher->label = g_strdup (label);
+}
+
+static void
+dispatcher_set_menu_label (Dispatcher *dispatcher, gchar *menu_label)
+{
+  g_free (dispatcher->menu_label);
+  dispatcher->menu_label = g_strdup (menu_label);
 }
 
 
@@ -747,6 +873,12 @@ gschem_action_create_menu_item (GschemAction *action,
                               G_CALLBACK (menu_item_set_active), menu_item);
     menu_item_set_active (GTK_CHECK_MENU_ITEM (menu_item), dispatcher->active);
   }
+  g_signal_connect_swapped (dispatcher, use_menu_label ? "set-menu-label"
+                                                       : "set-label",
+                            G_CALLBACK (gtk_label_set_label), label);
+  gchar *l_str = use_menu_label ? dispatcher->menu_label : dispatcher->label;
+  if (l_str != NULL)
+    gtk_label_set_label (GTK_LABEL (label), l_str);
 
   return menu_item;
 }
@@ -974,6 +1106,10 @@ gschem_action_create_tool_button (GschemAction *action,
     tool_button_set_active (GTK_TOGGLE_TOOL_BUTTON (button),
                             dispatcher->active);
   }
+  g_signal_connect_swapped (dispatcher, "set-name",
+                            G_CALLBACK (gtk_widget_set_tooltip_text), button);
+  if (dispatcher->name != NULL)
+    gtk_widget_set_tooltip_text (GTK_WIDGET (button), dispatcher->name);
 
   return button;
 }
