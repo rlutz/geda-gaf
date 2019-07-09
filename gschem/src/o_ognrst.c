@@ -64,6 +64,9 @@ o_ognrst_end (GschemToplevel *w_current, int w_x, int w_y)
   TOPLEVEL *toplevel = page->toplevel;
   g_return_if_fail (toplevel != NULL);
 
+  gschem_bottom_widget_set_coordinates (
+    GSCHEM_BOTTOM_WIDGET (w_current->bottom_widget), 0, 0);
+
 
   /* translate schematic */
   for (const GList *l = s_page_objects (page); l != NULL; l = l->next)

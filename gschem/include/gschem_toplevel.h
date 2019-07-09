@@ -73,9 +73,6 @@ struct st_gschem_toplevel {
   GtkWidget *aawindow;                  /* arc attribs */
   GtkWidget *aewindow;                  /* attribute edit */
   GtkWidget *hkwindow;                  /* Help/Hotkeys... dialog*/
-  GtkWidget *cowindow;                  /* Coordinate window */
-  GtkWidget *coord_world;                 /* World coordinate label */
-  GtkWidget *coord_screen;                /* Screen coordinate window */
 
   /* --------- */
   /* Dockables */

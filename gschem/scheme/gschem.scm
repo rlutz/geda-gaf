@@ -245,7 +245,7 @@
 (define options-rubberband &options-rubberband)
 (define options-magneticnet &options-magneticnet)
 (define options-show-log-window &options-show-log-window)
-(define options-show-coord-window &options-show-coord-window)
+(define options-show-coord-window &options-show-coordinates)
 (define help-about &help-about)
 (define help-hotkeys &help-hotkeys)
 (define cancel &cancel)

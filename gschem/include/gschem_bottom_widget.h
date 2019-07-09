@@ -50,6 +50,8 @@ struct _GschemBottomWidget
   GtkWidget *right_button_label;
   int       snap_mode;
   int       snap_size;
+  GtkWidget *coord_label;
+  GtkWidget *coord_separator;
   GtkWidget *status_label;
 };
 
@@ -108,3 +110,7 @@ gschem_bottom_widget_set_status_text (GschemBottomWidget *widget, const char *te
 
 void
 gschem_bottom_widget_set_status_text_color (GschemBottomWidget *widget, gboolean active);
+
+void
+gschem_bottom_widget_set_coordinates (GschemBottomWidget *bottom_widget,
+                                      int world_x, int world_y);

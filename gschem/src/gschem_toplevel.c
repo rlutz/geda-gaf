@@ -191,9 +191,6 @@ GschemToplevel *gschem_toplevel_new ()
   w_current->aawindow     = NULL;
   w_current->aewindow     = NULL;
   w_current->hkwindow     = NULL;
-  w_current->cowindow     = NULL;
-  w_current->coord_world  = NULL;
-  w_current->coord_screen = NULL;
 
   /* --------- */
   /* Dockables */

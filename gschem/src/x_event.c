@@ -494,9 +494,8 @@ x_event_motion (GschemPageView *page_view, GdkEventMotion *event, GschemToplevel
   w_x = snap_grid (w_current, unsnapped_wx);
   w_y = snap_grid (w_current, unsnapped_wy);
 
-  if (w_current->cowindow) {
-    coord_display_update(w_current, (int) event->x, (int) event->y);
-  }
+  gschem_bottom_widget_set_coordinates (
+    GSCHEM_BOTTOM_WIDGET (w_current->bottom_widget), w_x, w_y);
 
   gschem_page_view_pan_motion (page_view, w_current->mousepan_gain, (int) event->x, (int) event->y);
 

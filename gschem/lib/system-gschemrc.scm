@@ -1051,7 +1051,7 @@
 (global-set-key "O R" &options-rubberband)
 (global-set-key "O M" &options-magneticnet)
 (global-set-key "O L" &options-show-log-window)
-(global-set-key "O C" &options-show-coord-window)
+(global-set-key "O C" &options-show-coordinates)
 
 (global-set-key "P M" &page-manager)
 ;(global-set-key "P N" &page-next)
@@ -1297,7 +1297,7 @@
            ,&edit-show-text
            ,&edit-select-locked)
           (,&options-show-log-window
-           ,&options-show-coord-window)
+           ,&options-show-coordinates)
           (,&edit-invoke-macro
            ,&file-script
            ,&file-repl)))

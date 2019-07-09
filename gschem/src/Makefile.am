@@ -36,7 +36,6 @@ gschem_SOURCES = \
 	gschem_change_notification.c \
 	gschem_close_confirmation_dialog.c \
 	gschem_compselect_dockable.c \
-	gschem_coord_dialog.c \
 	gschem_dialog.c \
 	gschem_dialog_misc.c \
 	gschem_dockable.c \

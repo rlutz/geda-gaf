@@ -459,6 +459,15 @@ gschem_bottom_widget_init (GschemBottomWidget *widget)
   separator = gtk_vseparator_new ();
   gtk_box_pack_start (GTK_BOX (widget), separator, FALSE, FALSE, 0);
 
+  widget->coord_label = gtk_label_new (NULL);
+  gtk_misc_set_padding (GTK_MISC (widget->coord_label), LABEL_XPAD, LABEL_YPAD);
+  gtk_widget_set_no_show_all (widget->coord_label, TRUE);
+  gtk_box_pack_start (GTK_BOX (widget), widget->coord_label, FALSE, FALSE, 0);
+
+  widget->coord_separator = gtk_vseparator_new ();
+  gtk_widget_set_no_show_all (widget->coord_separator, TRUE);
+  gtk_box_pack_start (GTK_BOX (widget), widget->coord_separator, FALSE, FALSE, 0);
+
   widget->status_label = gtk_label_new (NULL);
   gtk_misc_set_padding (GTK_MISC (widget->status_label), LABEL_XPAD, LABEL_YPAD);
   gtk_box_pack_end (GTK_BOX (widget), widget->status_label, FALSE, FALSE, 0);
@@ -643,6 +652,24 @@ gschem_bottom_widget_set_status_text (GschemBottomWidget *widget, const char *te
   gtk_label_set_text (GTK_LABEL (widget->status_label), text);
 
   g_object_notify (G_OBJECT (widget), "status-text");
+}
+
+
+/*! \brief Set the displayed coordinates.
+ *
+ * The coordinate label isn't visible unless "Show Coordinates" has
+ * been enabled.
+ */
+void
+gschem_bottom_widget_set_coordinates (GschemBottomWidget *bottom_widget,
+                                      int world_x, int world_y)
+{
+  char *str;
+  g_return_if_fail (GSCHEM_IS_BOTTOM_WIDGET (bottom_widget));
+
+  str = g_strdup_printf ("%d, %d", world_x, world_y);
+  gtk_label_set_text (GTK_LABEL (bottom_widget->coord_label), str);
+  g_free (str);
 }
 
 

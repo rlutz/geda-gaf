@@ -369,8 +369,6 @@ void text_input_dialog(GschemToplevel *w_current);
 void arc_angle_dialog(GschemToplevel *w_current, OBJECT *arc_object);
 void slot_edit_dialog(GschemToplevel *w_current, const char *count, const char *string);
 void about_dialog(GschemToplevel *w_current);
-void coord_display_update(GschemToplevel *w_current, int x, int y);
-void coord_dialog(GschemToplevel *w_current, int x, int y);
 void x_dialog_hotkeys(GschemToplevel *w_current);
 void x_dialog_raise_all(GschemToplevel *w_current);
 

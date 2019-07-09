@@ -2046,16 +2046,24 @@ DEFINE_ACTION (options_show_log_window,
   gschem_dockable_present (w_current->log_dockable);
 }
 
-DEFINE_ACTION (options_show_coord_window,
-               "options-show-coord-window",
+DEFINE_ACTION (options_show_coordinates,
+               "options-show-coordinates",
                NULL,
-               _("Show Coordinate Window"),
-               _("Coordinate Window..."),
-               _("_Coordinate Window..."),
+               _("Show/Hide Coordinates"),
+               _("Show Coordinates"),
+               _("Show _Coordinates"),
                NULL,
-               ACTUATE)
+               TOGGLE_CHECK)
 {
-  coord_dialog (w_current, 0, 0);
+  GschemBottomWidget *bottom_widget =
+    GSCHEM_BOTTOM_WIDGET (w_current->bottom_widget);
+  gboolean do_show_coords =
+    gtk_widget_get_visible (bottom_widget->coord_label) == FALSE;
+
+  gtk_widget_set_visible (bottom_widget->coord_separator, do_show_coords);
+  gtk_widget_set_visible (bottom_widget->coord_label, do_show_coords);
+
+  gschem_action_set_active (action, do_show_coords, w_current);
 }
 
 DEFINE_ACTION (edit_invoke_macro,
