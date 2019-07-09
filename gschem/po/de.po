@@ -1,16 +1,15 @@
-# translation of de.po to deutsch
-# gEDA/gaf gschem german translation
-# Copyright (C) 2002-2008 Werner Hoch
+# German translation for gschem
+# Copyright (C) 2002, 2005-2010 Werner Hoch <werner.ho@gmx.de>
+# Copyright (C) 2019 Roland Lutz
 # This file is distributed under the same license as the gEDA/gaf package.
 #
-# Werner Hoch <werner.ho@gmx.de>, 2002, 2005, 2006, 2007, 2008, 2009, 2010.
 msgid ""
 msgstr ""
 "Project-Id-Version: geda\n"
 "Report-Msgid-Bugs-To: https://bugs.launchpad.net/geda\n"
 "POT-Creation-Date: 2019-07-09 16:08+0200\n"
-"PO-Revision-Date: 2012-04-12 22:09+0000\n"
-"Last-Translator: Dennis Baudys <Unknown>\n"
+"PO-Revision-Date: 2019-07-09 16:53+0200\n"
+"Last-Translator: Roland Lutz\n"
 "Language-Team: gEDA developers <geda-dev@seul.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -18,6 +17,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Launchpad-Export-Date: 2012-11-14 16:52+0000\n"
 "X-Generator: Launchpad (build 16265)\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: gschem/src/a_zoom.c:156
 msgid "Zoom too small!  Cannot zoom further.\n"
@@ -44,49 +44,55 @@ msgid ""
 "[%s]\n"
 "Please be sure that you have the latest rc file.\n"
 msgstr ""
+"Diese gschem-Version [%s%s.%s] stimmt nicht mit der Version überein,\n"
+"für die die Konfigurationsdatei \"gschemrc\" vorgesehen ist [%s]:\n"
+"[%s]\n"
+"Bitte stellen Sie sicher, dass Sie RC-Dateien für die korrekte\n"
+"gschem-Version benutzen.\n"
 
 #: gschem/src/g_rc.c:222
 #, c-format
 msgid "Invalid size [%d] passed to text-size\n"
-msgstr "Eine ungültige Größe [%d] wurde an text-size übergeben.\n"
+msgstr "Eine ungültige Größenangabe [%d] wurde an text-size übergeben\n"
 
 #: gschem/src/g_rc.c:265
 #, c-format
 msgid "Invalid size [%d] passed to snap-size\n"
-msgstr "Eine ungültige Größe [%d] wurde an snap-size übergeben.\n"
+msgstr "Eine ungültige Größenangabe [%d] wurde an snap-size übergeben\n"
 
 #: gschem/src/g_rc.c:601
 #, c-format
 msgid "Invalid num levels [%d] passed to undo-levels\n"
-msgstr "Eine ungültige Ebenenanzahl [%d] wurde an undo-levels übergeben.\n"
+msgstr "Eine ungültige Ebenenanzahl [%d] wurde an undo-levels übergeben\n"
 
 #: gschem/src/g_rc.c:793
 #, c-format
 msgid "Invalid size [%d] passed to bus-ripper-size\n"
-msgstr "Eine ungültige Größe [%d] wurde an bus-ripper-size übergeben.\n"
+msgstr "Eine ungültige Größenangabe [%d] wurde an bus-ripper-size übergeben\n"
 
 #: gschem/src/g_rc.c:893
 #, c-format
 msgid "Invalid dot size [%d] passed to dots-grid-dot-size\n"
-msgstr "An \"grid-dot-size\" wurde eine falsche Punktgröße [%d] übergeben\n"
+msgstr "An \"grid-dot-size\" wurde eine ungültige Punktgröße [%d] übergeben\n"
 
 #: gschem/src/g_rc.c:934
 #, c-format
 msgid "Invalid pixel spacing [%d] passed to dots-grid-fixed-threshold\n"
 msgstr ""
-"An \"grid-fixed-threshold\" wurde ein falscher Punktabstand [%d] übergeben\n"
+"An \"grid-fixed-threshold\" wurde ein ungültiger Punktabstand [%d] "
+"übergeben\n"
 
 #: gschem/src/g_rc.c:960
 #, c-format
 msgid "Invalid pixel spacing [%d] passed to mesh-grid-display-threshold\n"
 msgstr ""
-"An \"mesh-grid-display-treshold\" wurde ein falscher Punktabstand [%d] "
-"übergeben.\n"
+"An \"mesh-grid-display-treshold\" wurde ein ungültiger Punktabstand [%d] "
+"übergeben\n"
 
 #: gschem/src/g_rc.c:985
 #, c-format
 msgid "Invalid offset [%d] passed to add-attribute-offset\n"
-msgstr "Ein ungültiger Offset [%d] wurde an add-attribute-offset übergeben.\n"
+msgstr "Ein ungültiger Offset [%d] wurde an add-attribute-offset übergeben\n"
 
 #: gschem/src/g_rc.c:1009
 #, c-format
@@ -98,12 +104,12 @@ msgstr ""
 #: gschem/src/g_rc.c:1033
 #, c-format
 msgid "Invalid gain [%d] passed to mousepan-gain\n"
-msgstr "Ein ungültiger Werte [%d] wurde an mousepan-gain übergeben.\n"
+msgstr "Ein ungültiger Wert [%d] wurde an mousepan-gain übergeben\n"
 
 #: gschem/src/g_rc.c:1056
 #, c-format
 msgid "Invalid gain [%d] passed to keyboardpan-gain\n"
-msgstr "Ein ungültiger Wert [%d] wurde an keyboardpan-gain übergeben.\n"
+msgstr "Ein ungültiger Wert [%d] wurde an keyboardpan-gain übergeben\n"
 
 #: gschem/src/g_rc.c:1080
 #, c-format
@@ -145,18 +151,19 @@ msgid ""
 "gEDA/gschem comes with ABSOLUTELY NO WARRANTY; see COPYING for more "
 "details.\n"
 msgstr ""
-"gEDA/gschem kommt OHNE JEGLICHE GARANTIE. Bitte lies die Datei COPYING "
-"fürnähere Informationen.\n"
+"gEDA/gschem kommt OHNE JEGLICHE GARANTIE; siehe COPYING für nähere "
+"Informationen.\n"
 
 #: gschem/src/gschem.c:162
-#, fuzzy
 msgid ""
 "This is free software, and you are welcome to redistribute it under certain\n"
 "conditions; please see the COPYING file for more details.\n"
 "\n"
 msgstr ""
-"Dies ist Freie Software. Sie darf gerne weitergegeben werden. Bitte lies "
-"die\n"
+"Dies ist Freie Software. Sie darf gerne weitergegeben werden. Bitte lesen "
+"Sie die\n"
+"Lizenzbestimmungen in der Datei COPYING für nähere Informationen.\n"
+"\n"
 
 #: gschem/src/gschem.c:166
 #, c-format
@@ -183,28 +190,28 @@ msgstr ""
 #: gschem/src/gschem.c:213
 #, c-format
 msgid "Couldn't find init scm file [%s]\n"
-msgstr "Die init scm Datei wurde nicht gefunden [%s]\n"
+msgstr "Initiale SCM-Datei [%s] nicht gefunden\n"
 
 #: gschem/src/gschem.c:218
 #, c-format
 msgid "Read init scm file [%s]\n"
-msgstr "Lese init scm Datei [%s]\n"
+msgstr "Lese initiale SCM-Datei [%s]\n"
 
 #: gschem/src/gschem.c:222
 #, c-format
 msgid "Failed to read init scm file [%s]\n"
-msgstr "Die Datei init scm [%s] konnte nicht gelesen werden.\n"
+msgstr "Initiale SCM-Datei [%s] konnte nicht gelesen werden\n"
 
 #: gschem/src/gschem.c:286
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "ERROR: Failed to load or evaluate startup script.\n"
 "\n"
 "The gschem log may contain more information.\n"
 msgstr ""
-"%s\n"
+"FEHLER: Startskript konnte nicht geladen oder ausgeführt werden.\n"
 "\n"
-"Das Log-Fenster von gschem sind eventuell Details eingetragen."
+"Das Log-Fenster von gschem enthält eventuell mehr Informationen.\n"
 
 #: gschem/src/gschem_about_dialog.c:52
 #, c-format
@@ -213,7 +220,7 @@ msgstr "%s (g%.7s)"
 
 #: gschem/src/gschem_about_dialog.c:73 gschem/src/actions.c:2622
 msgid "About gschem"
-msgstr "Über gschem"
+msgstr "Informationen über gschem"
 
 #: gschem/src/gschem_about_dialog.c:74
 msgid "gEDA: GPL Electronic Design Automation"
@@ -221,13 +228,12 @@ msgstr "gEDA: GPL Electronic Design Automation"
 
 #. TRANSLATORS: "ChangeLog" is a literal filename; please don't translate it.
 #: gschem/src/gschem_about_dialog.c:77
-#, fuzzy
 msgid ""
 "Copyright © 1998-2012 Ales Hvezda <ahvezda@geda.seul.org>\n"
 "Copyright © 1998-2012 gEDA Contributors (see ChangeLog for details)"
 msgstr ""
 "Copyright © 1998-2012 Ales Hvezda <ahvezda@geda.seul.org>\n"
-"Copyright © 1998-2012 gEDA Contributors (siehe ChangeLog )"
+"Copyright © 1998-2012 gEDA-Mitwirkende (siehe ChangeLog)"
 
 #: gschem/src/gschem_alignment_combo.c:69
 msgid "Upper Left"
@@ -238,9 +244,8 @@ msgid "Upper Middle"
 msgstr "Oben Mitte"
 
 #: gschem/src/gschem_alignment_combo.c:73
-#, fuzzy
 msgid "Upper Right"
-msgstr "Unten Rechts"
+msgstr "Oben Rechts"
 
 #: gschem/src/gschem_alignment_combo.c:78
 msgid "Middle Left"
@@ -268,15 +273,15 @@ msgstr "Unten Rechts"
 
 #: gschem/src/gschem_arc_dialog.c:100
 msgid "Arc Params"
-msgstr "Bogen Parameter"
+msgstr "Kreisbogen-Parameter"
 
 #: gschem/src/gschem_arc_dialog.c:136
 msgid "Arc Radius:"
-msgstr "Bogen Radius:"
+msgstr "Radius:"
 
 #: gschem/src/gschem_arc_dialog.c:137
 msgid "Start Angle:"
-msgstr "Start Winkel:"
+msgstr "Startwinkel:"
 
 #: gschem/src/gschem_arc_dialog.c:138
 msgid "Degrees of Sweep:"
@@ -287,18 +292,18 @@ msgid "OFF"
 msgstr "AUS"
 
 #: gschem/src/gschem_bottom_widget.c:731
-#, fuzzy, c-format
+#, c-format
 msgid "Snap %s"
-msgstr "Am Raster ausrichten aus"
+msgstr "Einrasten %s"
 
 #: gschem/src/gschem_bottom_widget.c:746
 msgid "NONE"
-msgstr "NICHTS"
+msgstr "KEINES"
 
 #: gschem/src/gschem_bottom_widget.c:752
-#, fuzzy, c-format
+#, c-format
 msgid "Grid %s"
-msgstr "Raster (%s, %s)"
+msgstr "Raster %s"
 
 #: gschem/src/gschem_close_confirmation_dialog.c:346
 #: gschem/src/gschem_compselect_dockable.c:1242
@@ -327,12 +332,11 @@ msgstr ""
 
 #: gschem/src/gschem_close_confirmation_dialog.c:498
 msgid "If you don't save, all your changes will be permanently lost."
-msgstr "Wenn Sie nicht speichern, werden alle Änderungen verworfen."
+msgstr "Wenn Sie nicht speichern, gehen alle Änderungen verloren."
 
 #: gschem/src/gschem_close_confirmation_dialog.c:518
-#, fuzzy
 msgid "Close _without saving"
-msgstr "Schließen _ohne Speichern"
+msgstr "Änderungen _verwerfen"
 
 #: gschem/src/gschem_compselect_dockable.c:1008
 #: gschem/src/gschem_compselect_dockable.c:1117 gschem/src/x_fileselect.c:43
@@ -349,19 +353,16 @@ msgid "Value"
 msgstr "Wert"
 
 #: gschem/src/gschem_compselect_dockable.c:1288
-#, fuzzy
 msgid "Default behavior - reference symbol"
-msgstr "Bauteil referenzieren (Voreinstellung)"
+msgstr "Symbol referenzieren (Voreinstellung)"
 
 #: gschem/src/gschem_compselect_dockable.c:1291
-#, fuzzy
 msgid "Embed symbol in schematic"
-msgstr "Bauteil in den Schaltplan einbetten"
+msgstr "Symbol in den Schaltplan einbetten"
 
 #: gschem/src/gschem_compselect_dockable.c:1294
-#, fuzzy
 msgid "Include symbol as individual objects"
-msgstr "Bauteil als Einzelkomponenten einfügen"
+msgstr "Symbol als einzelne Objekte einfügen"
 
 #: gschem/src/gschem_compselect_dockable.c:1736
 msgid "In Use"
@@ -379,12 +380,11 @@ msgstr "Vorschau"
 #: gschem/src/gschem_compselect_dockable.c:1742
 #: gschem/src/gschem_compselect_dockable.c:1825 gschem/src/x_window.c:807
 msgid "Attributes"
-msgstr "Attribut"
+msgstr "Attribute"
 
 #: gschem/src/gschem_coord_dialog.c:86
-#, fuzzy
 msgid "Coordinates"
-msgstr "K_oordinatenfenster anzeigen …"
+msgstr "Koordinaten"
 
 #: gschem/src/gschem_coord_dialog.c:106
 msgid "Screen"
@@ -396,51 +396,47 @@ msgstr "Global (0.001\")"
 
 #: gschem/src/gschem_dockable.c:983
 msgid "_Detach"
-msgstr "_Loslösen"
+msgstr "Als _Fenster anzeigen"
 
 #: gschem/src/gschem_dockable.c:993
 msgid "Move to _left dock"
-msgstr ""
+msgstr "Nach _links verschieben"
 
 #: gschem/src/gschem_dockable.c:1000
-#, fuzzy
 msgid "Move to _bottom dock"
-msgstr "Von oben nach unten"
+msgstr "Nach _unten verschieben"
 
 #: gschem/src/gschem_dockable.c:1007
-#, fuzzy
 msgid "Move to _right dock"
-msgstr "Von links nach rechts"
+msgstr "Nach _rechts verschieben"
 
 #: gschem/src/gschem_find_patch_widget.c:355
 msgid "Patch file name to load:"
-msgstr ""
+msgstr "Dateiname des zu ladenden Patches:"
 
 #: gschem/src/gschem_find_patch_widget.c:363
 #: gschem/src/gschem_find_text_widget.c:402
 msgid "descend into hierarchy"
-msgstr "In der Hierachie hinabsteigen"
+msgstr "In Unterschaltplänen suchen"
 
 #: gschem/src/gschem_find_patch_widget.c:371
 msgctxt "actuate"
 msgid "Import"
-msgstr ""
+msgstr "Importieren"
 
 #: gschem/src/gschem_find_patch_widget.c:483
-#, fuzzy
 msgid "Find Patch:"
-msgstr "Text suchen"
+msgstr ""
 
 #: gschem/src/gschem_find_patch_widget.c:490
 #: gschem/src/gschem_find_text_widget.c:534
 msgid "Find Pattern:"
-msgstr ""
+msgstr "Glob (Wildcards):"
 
 #: gschem/src/gschem_find_patch_widget.c:497
 #: gschem/src/gschem_find_text_widget.c:541
-#, fuzzy
 msgid "Find Regex:"
-msgstr "Text suchen"
+msgstr "Regulärer Ausdruck:"
 
 #: gschem/src/gschem_find_text_dockable.c:908 gschem/src/x_pagesel.c:424
 msgid "Filename"
@@ -452,19 +448,17 @@ msgid "Text"
 msgstr "Text"
 
 #: gschem/src/gschem_find_text_widget.c:410
-#, fuzzy
 msgctxt "actuate"
 msgid "Find"
-msgstr "Text suchen"
+msgstr "Suchen"
 
 #: gschem/src/gschem_find_text_widget.c:527
-#, fuzzy
 msgid "Find Text:"
-msgstr "Text suchen"
+msgstr "Text suchen:"
 
 #: gschem/src/gschem_hotkey_dialog.c:129
 msgid "Hotkeys"
-msgstr "Tastenbelegungen"
+msgstr "Tastenbelegung"
 
 #: gschem/src/gschem_hotkey_dialog.c:173
 msgid "Action"
@@ -472,7 +466,7 @@ msgstr "Aktion"
 
 #: gschem/src/gschem_hotkey_dialog.c:191
 msgid "Keystroke(s)"
-msgstr "Tastenabfolge"
+msgstr "Tastenfolge"
 
 #: gschem/src/gschem_log_dockable.c:164
 msgid "** Invalid UTF-8 in log message. See stderr or gschem.log.\n"
@@ -482,13 +476,12 @@ msgstr ""
 
 #: gschem/src/gschem_macro_widget.c:204
 msgid "Macro:"
-msgstr ""
+msgstr "Guile:"
 
 #: gschem/src/gschem_macro_widget.c:319
-#, fuzzy
 msgctxt "actuate"
 msgid "Evaluate"
-msgstr "Auswerten:"
+msgstr "Auswerten"
 
 #: gschem/src/gschem_multiattrib_dockable.c:525
 #: gschem/src/gschem_multiattrib_dockable.c:2152 gschem/src/x_attribedit.c:237
@@ -497,64 +490,56 @@ msgid "Add Attribute"
 msgstr "Attribut hinzufügen"
 
 #: gschem/src/gschem_multiattrib_dockable.c:556
-#, fuzzy
 msgid "Duplicate Attribute"
-msgstr "Attribute bearbeiten"
+msgstr "Attribut duplizieren"
 
 #: gschem/src/gschem_multiattrib_dockable.c:599
-#, fuzzy
 msgid "Promote Attribute"
-msgstr "Attribut"
+msgstr "Attribut einsetzen"
 
 #: gschem/src/gschem_multiattrib_dockable.c:622
-#, fuzzy
 msgid "Delete Attribute"
-msgstr "Attribut ablösen"
+msgstr "Attribut löschen"
 
 #: gschem/src/gschem_multiattrib_dockable.c:669
-#, fuzzy
 msgid "Copy Attribute to All"
-msgstr "Slot Attribut ist fehlerhaft.\n"
+msgstr "Attribut in alle kopieren"
 
 #: gschem/src/gschem_multiattrib_dockable.c:728
 #: gschem/src/gschem_multiattrib_dockable.c:2653
 msgid "<various>"
-msgstr ""
+msgstr "<verschiedene>"
 
 #: gschem/src/gschem_multiattrib_dockable.c:871
 msgid "Attributes with empty name are not allowed. Please set a name."
 msgstr ""
-"Attribute mit leerem Namen sind nicht erlaubt. Gib bitte einen Namen ein."
+"Attribute mit leerem Namen sind nicht erlaubt. Bitte geben Sie einen Namen "
+"ein."
 
 #: gschem/src/gschem_multiattrib_dockable.c:908
-#, fuzzy
 msgid "Edit Attribute Name"
-msgstr "Attribute bearbeiten"
+msgstr "Attributnamen bearbeiten"
 
 #: gschem/src/gschem_multiattrib_dockable.c:993 gschem/src/x_attribedit.c:242
-#, fuzzy
 msgid "Edit Attribute"
-msgstr "Attribute bearbeiten"
+msgstr "Attribut bearbeiten"
 
 #: gschem/src/gschem_multiattrib_dockable.c:1049
-#, fuzzy
 msgid "Toggle Attribute Visibility"
-msgstr "Sichtbarkeit _umschalten"
+msgstr "Attributsichtbarkeit umschalten"
 
 #: gschem/src/gschem_multiattrib_dockable.c:1114
-#, fuzzy
 msgid "Toggle Show Attribute Name"
-msgstr "Slot Attribut ist fehlerhaft.\n"
+msgstr "Attributnamens-Sichtbarkeit umschalten"
 
 #: gschem/src/gschem_multiattrib_dockable.c:1179
-#, fuzzy
 msgid "Toggle Show Attribute Value"
-msgstr "Slot Attribut ist fehlerhaft.\n"
+msgstr "Attributwerts-Sichtbarkeit umschalten"
 
 #: gschem/src/gschem_multiattrib_dockable.c:1583 gschem/src/x_attribedit.c:425
 #: gschem/src/actions.c:1255 gschem/src/actions.c:1283
 msgid "Show Name & Value"
-msgstr "Name & Wert anzeigen"
+msgstr "Namen & Wert anzeigen"
 
 #: gschem/src/gschem_multiattrib_dockable.c:1585
 msgid "Show Value only"
@@ -562,7 +547,7 @@ msgstr "Nur Wert anzeigen"
 
 #: gschem/src/gschem_multiattrib_dockable.c:1587
 msgid "Show Name only"
-msgstr "Nur Name anzeigen"
+msgstr "Nur Namen anzeigen"
 
 #: gschem/src/gschem_multiattrib_dockable.c:1615
 msgid "Promote"
@@ -578,9 +563,8 @@ msgid "Delete"
 msgstr "Löschen"
 
 #: gschem/src/gschem_multiattrib_dockable.c:1621
-#, fuzzy
 msgid "Copy to all"
-msgstr "Kopieren in 1"
+msgstr "In alle kopieren"
 
 #: gschem/src/gschem_multiattrib_dockable.c:2065
 msgid "Vis?"
@@ -609,49 +593,50 @@ msgstr "Wert:"
 #: gschem/src/gschem_multiattrib_dockable.c:2204
 msgid "Ctrl+Enter inserts new line; Ctrl+Tab inserts Tab"
 msgstr ""
+"Zeilenumbruch eingeben mit Strg+Eingabe; Tabulator eingeben mit Strg+Tab"
 
 #: gschem/src/gschem_multiattrib_dockable.c:2237 gschem/src/x_attribedit.c:402
 msgid "Visible"
 msgstr "Sichtbar"
 
 #: gschem/src/gschem_multiattrib_dockable.c:2559
-#, fuzzy, c-format
+#, c-format
 msgid "%i component (%s)"
 msgid_plural "%i components (%s)"
-msgstr[0] "Bauteile"
-msgstr[1] "Bauteile"
+msgstr[0] "%i Bauteil (%s)"
+msgstr[1] "%i Bauteile (%s)"
 
 #: gschem/src/gschem_multiattrib_dockable.c:2565
-#, fuzzy, c-format
+#, c-format
 msgid "%i pin"
 msgid_plural "%i pins"
-msgstr[0] "Netz-Pin"
-msgstr[1] "Netz-Pin"
+msgstr[0] "%i Pin"
+msgstr[1] "%i Pins"
 
 #: gschem/src/gschem_multiattrib_dockable.c:2571
 #, c-format
 msgid "%i net"
 msgid_plural "%i nets"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%i Verbindung"
+msgstr[1] "%i Verbindungen"
 
 #: gschem/src/gschem_multiattrib_dockable.c:2577
 #, c-format
 msgid "%i bus"
 msgid_plural "%i buses"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%i Bus"
+msgstr[1] "%i Busse"
 
 #: gschem/src/gschem_multiattrib_dockable.c:2583
-#, fuzzy, c-format
+#, c-format
 msgid "%i attribute"
 msgid_plural "%i attributes"
-msgstr[0] "Attribut"
-msgstr[1] "Attribut"
+msgstr[0] "%i Attribut"
+msgstr[1] "%i Attribute"
 
 #: gschem/src/gschem_multiattrib_dockable.c:2592
 msgid "Select a component, net, or attribute"
-msgstr ""
+msgstr "Bauteil, Verbindung oder Attribut auswählen"
 
 #: gschem/src/gschem_object_properties_dockable.c:166
 msgid "Fill Type:"
@@ -659,28 +644,27 @@ msgstr "Füllung:"
 
 #: gschem/src/gschem_object_properties_dockable.c:167
 msgid "Line Width:"
-msgstr "Linienbreite:"
+msgstr "Schraffurbreite:"
 
 #: gschem/src/gschem_object_properties_dockable.c:168
 msgid "Angle 1:"
-msgstr "Winkel 1:"
+msgstr "Schraffurwinkel 1:"
 
 #: gschem/src/gschem_object_properties_dockable.c:169
 msgid "Pitch 1:"
-msgstr "Abstand 1:"
+msgstr "Schraffurabstand 1:"
 
 #: gschem/src/gschem_object_properties_dockable.c:170
 msgid "Angle 2:"
-msgstr "Winkel 2:"
+msgstr "Schraffurwinkel 2:"
 
 #: gschem/src/gschem_object_properties_dockable.c:171
 msgid "Pitch 2:"
-msgstr "Abstand 2:"
+msgstr "Schraffurabstand 2:"
 
 #: gschem/src/gschem_object_properties_dockable.c:231
-#, fuzzy
 msgid "<b>Fill Properties</b>"
-msgstr "<b>Texteigenschaften</b>"
+msgstr "<b>Fülleigenschaften</b>"
 
 #: gschem/src/gschem_object_properties_dockable.c:249
 #: gschem/src/gschem_text_properties_dockable.c:248 gschem/src/x_newtext.c:264
@@ -688,13 +672,12 @@ msgid "Color:"
 msgstr "Farbe:"
 
 #: gschem/src/gschem_object_properties_dockable.c:260
-#, fuzzy
 msgid "<b>General Properties</b>"
-msgstr "<b>Texteigenschaften</b>"
+msgstr "<b>Allgemeine Eigenschaften</b>"
 
 #: gschem/src/gschem_object_properties_dockable.c:278
 msgid "Type:"
-msgstr "Umfang:"
+msgstr "Linienart:"
 
 #: gschem/src/gschem_object_properties_dockable.c:279
 msgid "Width:"
@@ -702,101 +685,89 @@ msgstr "Breite:"
 
 #: gschem/src/gschem_object_properties_dockable.c:280
 msgid "Dash Length:"
-msgstr "Linienlänge:"
+msgstr "Strichlänge:"
 
 #: gschem/src/gschem_object_properties_dockable.c:281
 msgid "Dash Space:"
-msgstr "Linienlücke:"
+msgstr "Strichabstand:"
 
 #: gschem/src/gschem_object_properties_dockable.c:282
 msgid "Cap style:"
-msgstr ""
+msgstr "Linienende:"
 
 #: gschem/src/gschem_object_properties_dockable.c:327
-#, fuzzy
 msgid "<b>Line Properties</b>"
-msgstr "<b>Texteigenschaften</b>"
+msgstr "<b>Linieneigenschaften</b>"
 
 #: gschem/src/gschem_object_properties_dockable.c:345
-#, fuzzy
 msgid "Pin Type:"
-msgstr "Pin-Typ"
+msgstr "Pintyp:"
 
 #: gschem/src/gschem_object_properties_dockable.c:356
-#, fuzzy
 msgid "<b>Pin Properties</b>"
-msgstr "<b>Texteigenschaften</b>"
+msgstr "<b>Pineigenschaften</b>"
 
 #: gschem/src/gschem_options_dockable.c:185
 #: gschem/src/gschem_options_dockable.c:308
 msgid "Off"
-msgstr ""
+msgstr "Aus"
 
 #: gschem/src/gschem_options_dockable.c:188
 msgid "Dots"
-msgstr ""
+msgstr "Punkte"
 
 #: gschem/src/gschem_options_dockable.c:191
 msgid "Mesh"
-msgstr "Gitter"
+msgstr "Linien"
 
 #: gschem/src/gschem_options_dockable.c:213
-#, fuzzy
 msgid "Net Rubber Band Mode:"
-msgstr "_Netzgummifäden umschalten"
+msgstr "Verbindungen nachziehen:"
 
 #: gschem/src/gschem_options_dockable.c:214
-#, fuzzy
 msgid "Magnetic Net Mode:"
-msgstr "Magnetischer Netzmodus"
+msgstr "Magnetische Verbindungen:"
 
 #: gschem/src/gschem_options_dockable.c:218
 #: gschem/src/gschem_options_dockable.c:219
 msgid "Enabled"
-msgstr ""
+msgstr "Ein"
 
 #: gschem/src/gschem_options_dockable.c:233
-#, fuzzy
 msgid "<b>Net Options</b>"
-msgstr "<b>Optionen</b>"
+msgstr "<b>Verbindungsoptionen</b>"
 
 #: gschem/src/gschem_options_dockable.c:250
-#, fuzzy
 msgid "Grid Mode:"
-msgstr "Bogenmodus"
+msgstr "Gittermodus:"
 
 #: gschem/src/gschem_options_dockable.c:251
-#, fuzzy
 msgid "Snap Mode:"
-msgstr "Ausschnittmodus"
+msgstr "Einrasten:"
 
 #: gschem/src/gschem_options_dockable.c:252
-#, fuzzy
 msgid "Grid Spacing:"
-msgstr "Rasterabstand ver_größern"
+msgstr "Rastergröße"
 
 #: gschem/src/gschem_options_dockable.c:269
-#, fuzzy
 msgid "<b>Grid Options</b>"
-msgstr "<b>Optionen</b>"
+msgstr "<b>Gitter-Optionen</b>"
 
 #: gschem/src/gschem_options_dockable.c:311
-#, fuzzy
 msgid "Grid"
-msgstr "Raster AUS\n"
+msgstr "Delta"
 
 #: gschem/src/gschem_options_dockable.c:314
-#, fuzzy
 msgid "Resnap"
-msgstr "Neu Ausrichen"
+msgstr "Einrastend"
 
 #: gschem/src/gschem_pin_type_combo.c:73
 msgid "Net pin"
-msgstr "Netz-Pin"
+msgstr "Normaler Pin"
 
 #: gschem/src/gschem_pin_type_combo.c:80
 msgid "Bus pin (graphical)"
-msgstr "Bus-Pin (grafisch)"
+msgstr "Bus-Pin (ohne Funktion)"
 
 #: gschem/src/gschem_preview.c:217
 msgid "Preview Buffer"
@@ -805,108 +776,96 @@ msgstr "Vorschau"
 #: gschem/src/gschem_rotation_combo.c:67
 msgctxt "angle"
 msgid "0"
-msgstr ""
+msgstr "0°"
 
 #: gschem/src/gschem_rotation_combo.c:70
 msgctxt "angle"
 msgid "90"
-msgstr ""
+msgstr "90°"
 
 #: gschem/src/gschem_rotation_combo.c:73
 msgctxt "angle"
 msgid "180"
-msgstr ""
+msgstr "180°"
 
 #: gschem/src/gschem_rotation_combo.c:76
 msgctxt "angle"
 msgid "270"
-msgstr ""
+msgstr "270°"
 
 #: gschem/src/gschem_selection_adapter.c:1037
 msgid "Change Fill Angle 1"
-msgstr ""
+msgstr "Schraffurwinkel 1 ändern"
 
 #: gschem/src/gschem_selection_adapter.c:1097
 msgid "Change Fill Angle 2"
-msgstr ""
+msgstr "Schraffurwinkel 2 ändern"
 
 #: gschem/src/gschem_selection_adapter.c:1159
 msgid "Change Fill Pitch 1"
-msgstr ""
+msgstr "Schraffurabstand 1 ändern"
 
 #: gschem/src/gschem_selection_adapter.c:1219
 msgid "Change Fill Pitch 2"
-msgstr ""
+msgstr "Schraffurabstand 2 ändern"
 
 #: gschem/src/gschem_selection_adapter.c:1286
-#, fuzzy
 msgid "Change Fill Properties"
-msgstr "<b>Texteigenschaften</b>"
+msgstr "Fülleigenschaften ändern"
 
 #: gschem/src/gschem_selection_adapter.c:1347
 msgid "Change Fill Width"
-msgstr ""
+msgstr "Schraffurbreite ändern"
 
 #: gschem/src/gschem_selection_adapter.c:1407
-#, fuzzy
 msgid "Change Line Properties"
-msgstr "<b>Texteigenschaften</b>"
+msgstr "Linieneigenschaften ändern"
 
 #: gschem/src/gschem_selection_adapter.c:1465
-#, fuzzy
 msgid "Change Line Width"
-msgstr "Linienbreite:"
+msgstr "Linienbreite ändern"
 
 #: gschem/src/gschem_selection_adapter.c:1523
-#, fuzzy
 msgid "Change Line Dash Length"
-msgstr "Linienlänge:"
+msgstr "Linien-Strichlänge ändern"
 
 #: gschem/src/gschem_selection_adapter.c:1581
-#, fuzzy
 msgid "Change Line Dash Space"
-msgstr "Linienlücke:"
+msgstr "Linien-Strichabstand ändern"
 
 #: gschem/src/gschem_selection_adapter.c:1639
 msgid "Change Line Cap Style"
-msgstr ""
+msgstr "Linienende ändern"
 
 #: gschem/src/gschem_selection_adapter.c:1671
 #: gschem/src/gschem_selection_adapter.c:1819
-#, fuzzy
 msgid "Change Color"
-msgstr "Geändert"
+msgstr "Farbe ändern"
 
 #: gschem/src/gschem_selection_adapter.c:1705
-#, fuzzy
 msgid "Change Pin Type"
-msgstr "Pin-Typ"
+msgstr "Pintyp ändern"
 
 #: gschem/src/gschem_selection_adapter.c:1785
-#, fuzzy
 msgid "Change Alignment"
-msgstr "Ausrichtung:"
+msgstr "Textausrichtung ändern"
 
 #: gschem/src/gschem_selection_adapter.c:1853
-#, fuzzy
 msgid "Change Rotation"
-msgstr "Ausrichtung:"
+msgstr "Textdrehung ändern"
 
 #: gschem/src/gschem_selection_adapter.c:1887
-#, fuzzy
 msgid "Change Text Size"
-msgstr "Text Größe"
+msgstr "Textgröße ändern"
 
 #: gschem/src/gschem_selection_adapter.c:1929
-#, fuzzy
 msgid "Change Text"
-msgstr "Geändert"
+msgstr "Text ändern"
 
 #: gschem/src/gschem_show_hide_text_widget.c:149 gschem/src/x_window.c:727
-#, fuzzy
 msgctxt "actuate"
 msgid "Hide"
-msgstr "Text verbergen"
+msgstr "Verbergen"
 
 #: gschem/src/gschem_show_hide_text_widget.c:157 gschem/src/x_window.c:728
 msgid "Hide text starting with:"
@@ -914,16 +873,15 @@ msgstr "Text verbergen, der beginnt mit:"
 
 #: gschem/src/gschem_slot_edit_dialog.c:90
 msgid "Edit slot number"
-msgstr "Slot-Nummer bearbeiten"
+msgstr "Slot"
 
 #: gschem/src/gschem_slot_edit_dialog.c:120
 msgid "Number of Slots:"
-msgstr ""
+msgstr "Anzahl der Slots:"
 
 #: gschem/src/gschem_slot_edit_dialog.c:121
-#, fuzzy
 msgid "Slot Number:"
-msgstr "Slot-Nummer bearbeiten:"
+msgstr "Slot-Nummer:"
 
 #: gschem/src/gschem_text_properties_dockable.c:230 gschem/src/x_newtext.c:258
 msgid "<b>Text Content</b>"
@@ -938,9 +896,8 @@ msgid "Alignment:"
 msgstr "Ausrichtung:"
 
 #: gschem/src/gschem_text_properties_dockable.c:251 gschem/src/x_newtext.c:288
-#, fuzzy
 msgid "Rotation:"
-msgstr "Ausrichtung:"
+msgstr "Drehung:"
 
 #: gschem/src/gschem_text_properties_dockable.c:279 gschem/src/x_newtext.c:246
 msgid "<b>Text Properties</b>"
@@ -951,9 +908,8 @@ msgid "Select Mode"
 msgstr "Auswahlmodus"
 
 #: gschem/src/i_basic.c:67
-#, fuzzy
 msgid "Select Box Mode"
-msgstr "Auswahlmodus"
+msgstr "Rechteckauswahlmodus"
 
 #: gschem/src/i_basic.c:68
 msgid "Text Mode"
@@ -961,24 +917,24 @@ msgstr "Textmodus"
 
 #: gschem/src/i_basic.c:69
 msgid "Pan Mode"
-msgstr "Ausschnittmodus"
+msgstr "Ansichtszentriermodus"
 
 #: gschem/src/i_basic.c:72
 #, c-format
 msgid "Paste %d Mode"
-msgstr "%d-Einfügemodus"
+msgstr "Einfügemodus %d"
 
 #: gschem/src/i_basic.c:76 gschem/src/actions.c:2399
 msgid "Magnetic Net Mode"
-msgstr "Magnetischer Netzmodus"
+msgstr "Magnetischer Verbindungsmodus"
 
 #: gschem/src/i_basic.c:78
 msgid "Net Mode"
-msgstr "Netzmodus"
+msgstr "Verbindungsmodus"
 
 #: gschem/src/i_basic.c:79
 msgid "Arc Mode"
-msgstr "Bogenmodus"
+msgstr "Kreisbogenmodus"
 
 #: gschem/src/i_basic.c:80
 msgid "Box Mode"
@@ -1017,9 +973,8 @@ msgid "Move Mode"
 msgstr "Verschiebemodus"
 
 #: gschem/src/i_basic.c:89
-#, fuzzy
 msgid "Path Mode"
-msgstr "Ausschnittmodus"
+msgstr "Pfadmodus"
 
 #: gschem/src/i_basic.c:90
 msgid "Picture Mode"
@@ -1027,20 +982,19 @@ msgstr "Bildmodus"
 
 #: gschem/src/i_basic.c:91
 msgid "Pin Mode"
-msgstr "Anschlußmodus"
+msgstr "Pinmodus"
 
 #: gschem/src/i_basic.c:92
 msgid "Rotate Mode"
 msgstr "Drehmodus"
 
 #: gschem/src/i_basic.c:93
-#, fuzzy
 msgid "Modify Mode"
-msgstr "Kopiermodus"
+msgstr "Bearbeitungsmodus"
 
 #: gschem/src/i_basic.c:95
 msgid "Reset Origin Mode"
-msgstr ""
+msgstr "Ursprungswahlmodus"
 
 #: gschem/src/i_basic.c:124
 msgid "Show Hidden"
@@ -1049,72 +1003,67 @@ msgstr "Verborgenes anzeigen"
 #: gschem/src/i_basic.c:127 gschem/src/actions.c:2448 gschem/src/actions.c:2449
 #: gschem/src/actions.c:2450
 msgid "Snap Off"
-msgstr "Am Raster ausrichten aus"
+msgstr "Frei positionieren"
 
 #: gschem/src/i_basic.c:129
 msgid "Resnap Active"
 msgstr "Neu Ausrichen"
 
 #: gschem/src/i_basic.c:254
-#, fuzzy
 msgctxt "mmb"
 msgid "Action"
 msgstr "Aktion"
 
 #: gschem/src/i_basic.c:261
-#, fuzzy
 msgctxt "mmb"
 msgid "Stroke"
-msgstr "Taste"
+msgstr "Mausgeste"
 
 #: gschem/src/i_basic.c:268 gschem/src/i_basic.c:299
-#, fuzzy
 msgctxt "mmb"
 msgid "none"
 msgstr "nichts"
 
 #: gschem/src/i_basic.c:276
-#, fuzzy, c-format
+#, c-format
 msgctxt "mmb"
 msgid "Repeat/%s"
-msgstr "Wiederhole/"
+msgstr "Wiederhole/%s"
 
 #: gschem/src/i_basic.c:286
-#, fuzzy
 msgctxt "mmb"
 msgid "Repeat/none"
-msgstr "Wiederholen/Nichts"
+msgstr "Wiederhole/—"
 
 #: gschem/src/i_basic.c:293
-#, fuzzy
 msgctxt "mmb"
 msgid "Pan"
-msgstr "Ausschnitt verschieben"
+msgstr "Ansicht verschieben"
 
 #. TRANSLATORS: The number is the number of the buffer that the
 #. * selection is being copied to.
 #: gschem/src/i_basic.c:678
-#, fuzzy, c-format
+#, c-format
 msgid "Copy %i"
-msgstr "Kopie 1"
+msgstr "Kopieren %i"
 
 #. TRANSLATORS: The number is the number of the buffer that the
 #. * selection is being cut to.
 #: gschem/src/i_basic.c:702
-#, fuzzy, c-format
+#, c-format
 msgid "Cut %i"
-msgstr "Ausschneiden 1"
+msgstr "Ausschneiden %i"
 
 #. TRANSLATORS: The number is the number of the buffer that is being
 #. * pasted to the schematic.
 #: gschem/src/i_basic.c:729
-#, fuzzy, c-format
+#, c-format
 msgid "Paste %i"
-msgstr "Einfügen 1"
+msgstr "Einfügen %i"
 
 #: gschem/src/i_basic.c:738
 msgid "Empty buffer"
-msgstr "Leerer Zwischenspeicher"
+msgstr "Zwischenspeicher ist leer"
 
 #. TRANSLATORS: this string is used to generate a filename for
 #. newly-created files.  It will be used to create a filename of
@@ -1123,20 +1072,19 @@ msgstr "Leerer Zwischenspeicher"
 #. in a filename.
 #: gschem/src/i_vars.c:213
 msgid "untitled"
-msgstr ""
+msgstr "unbenannt"
 
 #: gschem/src/o_arc.c:159 gschem/src/actions.c:813
 msgid "Arc"
-msgstr "Bogen"
+msgstr "Kreisbogen"
 
 #: gschem/src/o_box.c:159 gschem/src/actions.c:769
 msgid "Box"
 msgstr "Rechteck"
 
 #: gschem/src/o_buffer.c:127 gschem/src/actions.c:470 gschem/src/actions.c:471
-#, fuzzy
 msgid "Cut"
-msgstr "_Ausschneiden"
+msgstr "Ausschneiden"
 
 #: gschem/src/o_bus.c:103 gschem/src/actions.c:669
 msgid "Bus"
@@ -1152,16 +1100,15 @@ msgid "Copy"
 msgstr "Kopieren"
 
 #: gschem/src/o_delete.c:80
-#, fuzzy, c-format
+#, c-format
 msgid "Delete locked object?"
 msgid_plural "Delete %u locked objects?"
-msgstr[0] "Ausgewählte Objekte"
-msgstr[1] "Ausgewählte Objekte"
+msgstr[0] "Gesperrtes Objekt löschen?"
+msgstr[1] "%u gesperrte Objekte löschen?"
 
 #: gschem/src/o_grips.c:1408
-#, fuzzy
 msgid "Move Handle"
-msgstr "Verschiebemodus"
+msgstr "Kontrollpunkt verschieben"
 
 #: gschem/src/o_line.c:119 gschem/src/actions.c:726
 msgid "Line"
@@ -1207,14 +1154,12 @@ msgid "Hidden text is now invisible\n"
 msgstr "Verborgener Text ist jetzt unsichbar.\n"
 
 #: gschem/src/o_misc.c:382 gschem/src/actions.c:2224
-#, fuzzy
 msgid "Hide Specific Text"
-msgstr "Text _verbergen …"
+msgstr "Text verbergen"
 
 #: gschem/src/o_misc.c:416 gschem/src/actions.c:2241
-#, fuzzy
 msgid "Show Specific Text"
-msgstr "Text an_zeigen …"
+msgstr "Text anzeigen"
 
 #: gschem/src/o_misc.c:456
 #, c-format
@@ -1224,9 +1169,8 @@ msgstr ""
 "fehlgeschlagen.\n"
 
 #: gschem/src/o_misc.c:526 gschem/src/actions.c:1403 gschem/src/actions.c:1404
-#, fuzzy
 msgid "Update Symbol"
-msgstr "Verschieben nach"
+msgstr "Symbol aktualisieren"
 
 #: gschem/src/o_misc.c:572
 #, c-format
@@ -1254,7 +1198,7 @@ msgstr "Die Backup-Datei [%s] konnte nicht gespeichert werden.\n"
 #: gschem/src/o_move.c:193
 #, c-format
 msgid "ERROR: NULL object in o_move_end!\n"
-msgstr "FEHLER: NULL Objekt innerhalb von o_move_end.\n"
+msgstr "FEHLER: Objekt innerhalb von o_move_end ist NULL.\n"
 
 #: gschem/src/o_move.c:238 gschem/src/actions.c:942 gschem/src/actions.c:943
 #: gschem/src/actions.c:950
@@ -1276,47 +1220,45 @@ msgstr "Da ist ein Objekt in o_move_check_endpoint, welches keine Linie ist.\n"
 #: gschem/src/o_net.c:438
 msgid "Warning: Starting net at off grid coordinate\n"
 msgstr ""
-"Achtung: Der Startpunkt des Netzes befindet sich nicht auf dem Raster\n"
+"Achtung: Der Startpunkt der Verbindung befindet sich nicht auf dem Raster\n"
 
 #: gschem/src/o_net.c:502
 msgid "Warning: Ending net at off grid coordinate\n"
-msgstr "Achtung: Das Ende des Netzes befindet sich nicht auf dem Raster\n"
+msgstr "Achtung: Das Ende der Verbindung befindet sich nicht auf dem Raster\n"
 
 #: gschem/src/o_net.c:568 gschem/src/actions.c:646
 msgid "Net"
-msgstr "Netz"
+msgstr "Verbindung"
 
 #: gschem/src/o_net.c:850 gschem/src/o_net.c:887 gschem/src/o_net.c:958
 #: gschem/src/o_net.c:994
 #, c-format
 msgid "Tried to add more than two bus rippers. Internal gschem error.\n"
 msgstr ""
-"Interner gschem Fehler: Versuchte mehr als zwei Bus Abzweigungen "
+"Interner gschem-Fehler: Versuchte mehr als zwei Bus-Abzweigungen "
 "hinzuzufügen\n"
 
 #: gschem/src/o_net.c:1062
-#, fuzzy, c-format
+#, c-format
 msgid "Bus ripper symbol [%s] was not found in any symbol library\n"
-msgstr "Das Busripper Symbol [%s] wurde in keiner Bauteilbibliothek gefunden\n"
+msgstr "Das Bus-Ripper-Symbol [%s] wurde in keiner Symbolbibliothek gefunden\n"
 
 #: gschem/src/o_path.c:514 gschem/src/actions.c:748
 msgid "Path"
-msgstr ""
+msgstr "Pfad"
 
 #: gschem/src/o_picture.c:119 gschem/src/actions.c:845
-#, fuzzy
 msgid "Add Picture"
-msgstr "Bild"
+msgstr "Bild einfügen"
 
 #: gschem/src/o_picture.c:135 gschem/src/o_picture.c:343
-#, fuzzy
 msgid "Select a picture file..."
-msgstr "PostScript-Dateinamen auswählen …"
+msgstr "Bild einfügen …"
 
 #: gschem/src/o_picture.c:168
 #, c-format
 msgid "Failed to load picture: %s"
-msgstr "Das Bild [%s] konnte nicht geladen werden"
+msgstr "Bild [%s] konnte nicht geladen werden"
 
 #: gschem/src/o_picture.c:182
 msgid "Picture"
@@ -1328,13 +1270,12 @@ msgid "Failed to replace pictures: %s"
 msgstr "Die folgenden Bilder konnten nicht überschrieben werden: %s"
 
 #: gschem/src/o_picture.c:387
-#, fuzzy
 msgid "Replace Picture"
-msgstr "Bild"
+msgstr "Bild ersetzen"
 
 #: gschem/src/o_pin.c:80 gschem/src/actions.c:823 gschem/src/actions.c:824
 msgid "Add Pin"
-msgstr ""
+msgstr "Pin hinzufügen"
 
 #: gschem/src/o_slot.c:81
 msgid "Slot attribute malformed\n"
@@ -1346,40 +1287,39 @@ msgstr "Das numslots Attribut fehlt\n"
 
 #: gschem/src/o_slot.c:90
 msgid "Slotting not allowed for this component\n"
-msgstr "Bei diesem Bauteil ist nur ein slot erlaubt.\n"
+msgstr "Bei diesem Bauteil ist nur ein Slot vorgesehen\n"
 
 #: gschem/src/o_slot.c:105
 msgid "New slot number out of range\n"
-msgstr "Neue slot Nummer außerhalb des gültigen Wertebereichs\n"
+msgstr "Neue Slotnummer liegt außerhalb des gültigen Wertebereichs\n"
 
 #: gschem/src/o_slot.c:136
-#, fuzzy
 msgid "Change Slot"
-msgstr "Geändert"
+msgstr "Slot auswählen"
 
 #: gschem/src/o_undo.c:351
 msgid "Undo/Redo disabled in rc file\n"
-msgstr "Rückgängig/Wiederherstellen wurde in der rc Datei deaktiviert.\n"
+msgstr "Rückgängig/Wiederherstellen wurde in der RC-Datei deaktiviert\n"
 
 #: gschem/src/o_undo.c:520
-#, fuzzy, c-format
+#, c-format
 msgid "Undo %s"
-msgstr "Rückgängig"
+msgstr "Rückgängig: %s"
 
 #: gschem/src/o_undo.c:521
-#, fuzzy, c-format
+#, c-format
 msgid "_Undo %s"
-msgstr "_Rückgängig"
+msgstr "_Rückgängig: %s"
 
 #: gschem/src/o_undo.c:537
-#, fuzzy, c-format
+#, c-format
 msgid "Redo %s"
-msgstr "Wiederherstellen"
+msgstr "Wiederherstellen: %s"
 
 #: gschem/src/o_undo.c:538
-#, fuzzy, c-format
+#, c-format
 msgid "_Redo %s"
-msgstr "_Wiederherstellen"
+msgstr "_Wiederherstellen: %s"
 
 #: gschem/src/parsecmd.c:77
 #, c-format
@@ -1421,16 +1361,16 @@ msgstr ""
 #: gschem/src/x_attribedit.c:121
 #, c-format
 msgid "Got invalid show option; defaulting to show both\n"
-msgstr "Ungültige Anzeigeoption; »Beide anzeigen« wird zur Vorgabe\n"
+msgstr "Ungültige Anzeigeoption; wähle »Beide anzeigen« aus\n"
 
 #: gschem/src/x_attribedit.c:135
 #, c-format
 msgid "ERROR: NULL object!\n"
-msgstr "FEHLER: NULL Objekt!\n"
+msgstr "FEHLER: Objekt ist NULL!\n"
 
 #: gschem/src/x_attribedit.c:321
 msgid "Single Attribute Editor"
-msgstr "Einzel-Attributebearbeitung"
+msgstr "Einzelnes Attribut"
 
 #: gschem/src/x_attribedit.c:351
 msgid "<b>Edit Attribute</b>"
@@ -1446,7 +1386,7 @@ msgstr "Nur Wert anzeigen"
 
 #: gschem/src/x_attribedit.c:423
 msgid "Show Name Only"
-msgstr "Nur Name anzeigen"
+msgstr "Nur Namen anzeigen"
 
 #: gschem/src/x_attribedit.c:432
 msgid "<b>Attach Options</b>"
@@ -1461,6 +1401,7 @@ msgid "Components"
 msgstr "Bauteile"
 
 #: gschem/src/x_attribedit.c:463
+#, fuzzy
 msgid "Nets"
 msgstr "Netz"
 
@@ -1474,7 +1415,7 @@ msgid ""
 "slots\n"
 msgstr ""
 "Objekte mit \"numslot\" Attribut und ohne \"slot\" Attribut können beim "
-"automatischen Nummerieren von Bauteilen Probleme verursachen.\n"
+"automatischen Numerieren von Bauteilen Probleme verursachen.\n"
 
 #: gschem/src/x_autonumber.c:426
 #, c-format
@@ -1493,37 +1434,36 @@ msgid "No '*' or '?' given at the end of the autonumber text.\n"
 msgstr "Am Ende des Suchstrings fehlt ein '*' oder ein '?'.\n"
 
 #: gschem/src/x_autonumber.c:825
-#, fuzzy
 msgid "Autonumber"
-msgstr "Nummeriere Text automatisch"
+msgstr "Automatisch numerieren"
 
 #: gschem/src/x_autonumber.c:864
 msgid "Diagonal"
-msgstr "Diagonal"
+msgstr "diagonal"
 
 #: gschem/src/x_autonumber.c:865
 msgid "Top to bottom"
-msgstr "Von oben nach unten"
+msgstr "von oben nach unten"
 
 #: gschem/src/x_autonumber.c:865
 msgid "Bottom to top"
-msgstr "Von unten nach oben"
+msgstr "von unten nach oben"
 
 #: gschem/src/x_autonumber.c:866
 msgid "Left to right"
-msgstr "Von links nach rechts"
+msgstr "von links nach rechts"
 
 #: gschem/src/x_autonumber.c:866
 msgid "Right to left"
-msgstr "Von rechts nach links"
+msgstr "von rechts nach links"
 
 #: gschem/src/x_autonumber.c:867
 msgid "File order"
-msgstr "Dateireihenfolge"
+msgstr "Reihenfolge in der Datei"
 
 #: gschem/src/x_autonumber.c:1203
 msgid "Autonumber text"
-msgstr "Nummeriere Text automatisch"
+msgstr "Numeriere Text automatisch"
 
 #: gschem/src/x_autonumber.c:1226
 msgid "<b>Scope</b>"
@@ -1531,27 +1471,27 @@ msgstr "<b>Suchbereich</b>"
 
 #: gschem/src/x_autonumber.c:1248
 msgid "Search for:"
-msgstr "Suchen nach:"
+msgstr "Suche nach"
 
 #: gschem/src/x_autonumber.c:1262
 msgid "Autonumber text in:"
-msgstr "Nummeriere Text in:"
+msgstr "Numeriere Text"
 
 #: gschem/src/x_autonumber.c:1269
 msgid "Skip numbers found in:"
-msgstr "Überspringe Nummern:"
+msgstr "Überspringe Nummern"
 
 #: gschem/src/x_autonumber.c:1281 gschem/src/x_autonumber.c:1290
 msgid "Selected objects"
-msgstr "Ausgewählte Objekte"
+msgstr "in den ausgewählten Objekten"
 
 #: gschem/src/x_autonumber.c:1282 gschem/src/x_autonumber.c:1291
 msgid "Current page"
-msgstr "Aktuelle Seite"
+msgstr "auf der aktuellen Seite"
 
 #: gschem/src/x_autonumber.c:1283 gschem/src/x_autonumber.c:1292
 msgid "Whole hierarchy"
-msgstr "Gesamte Hierarchie"
+msgstr "in der gesamten Hierarchie"
 
 #: gschem/src/x_autonumber.c:1294
 msgid "Overwrite existing numbers"
@@ -1563,11 +1503,11 @@ msgstr "<b>Optionen</b>"
 
 #: gschem/src/x_autonumber.c:1321
 msgid "Starting number:"
-msgstr "Startnummer:"
+msgstr "Beginne mit"
 
 #: gschem/src/x_autonumber.c:1328
 msgid "Sort order:"
-msgstr "Sortierung:"
+msgstr "Reihenfolge:"
 
 #: gschem/src/x_autonumber.c:1349
 msgid "Remove numbers"
@@ -1575,7 +1515,7 @@ msgstr "Nummern entfernen"
 
 #: gschem/src/x_autonumber.c:1353
 msgid "Automatic slotting"
-msgstr "Automatische Nummerierung von Slots"
+msgstr "Slots automatisch belegen"
 
 #: gschem/src/x_clipboard.c:244
 #, c-format
@@ -1621,121 +1561,101 @@ msgid "Tried to get an invalid color: %d\n"
 msgstr "Versuchte eine ungültige Farbe zuzuteilen: %d\n"
 
 #: gschem/src/x_colorcb.c:97
-#, fuzzy
 msgctxt "color"
 msgid "Background"
 msgstr "Hintergrund"
 
 #: gschem/src/x_colorcb.c:98
-#, fuzzy
 msgctxt "color"
 msgid "Pin"
-msgstr "Anschluß"
+msgstr "Pin"
 
 #: gschem/src/x_colorcb.c:99
-#, fuzzy
 msgctxt "color"
 msgid "Net endpoint"
-msgstr "Netz-Endemarkierung"
+msgstr "Offenes Verbindungsende"
 
 #: gschem/src/x_colorcb.c:100
-#, fuzzy
 msgctxt "color"
 msgid "Graphic"
-msgstr "Grafik"
+msgstr "Grafisches Element"
 
 #: gschem/src/x_colorcb.c:101
-#, fuzzy
 msgctxt "color"
 msgid "Net"
-msgstr "Netz"
+msgstr "Verbindung"
 
 #: gschem/src/x_colorcb.c:102
-#, fuzzy
 msgctxt "color"
 msgid "Attribute"
 msgstr "Attribut"
 
 #: gschem/src/x_colorcb.c:103
-#, fuzzy
 msgctxt "color"
 msgid "Logic bubble"
-msgstr "Logikmarkierung"
+msgstr "Logikfunktion"
 
 #: gschem/src/x_colorcb.c:104
-#, fuzzy
 msgctxt "color"
 msgid "Grid point"
-msgstr "Rasterpunkt"
+msgstr "Gitterpunkt"
 
 #: gschem/src/x_colorcb.c:106
-#, fuzzy
 msgctxt "color"
 msgid "Detached attribute"
-msgstr "Attribut ablösen"
+msgstr "Schwebendes Attribut"
 
 #: gschem/src/x_colorcb.c:107
-#, fuzzy
 msgctxt "color"
 msgid "Text"
 msgstr "Text"
 
 #: gschem/src/x_colorcb.c:108
-#, fuzzy
 msgctxt "color"
 msgid "Bus"
 msgstr "Bus"
 
 #: gschem/src/x_colorcb.c:109
-#, fuzzy
 msgctxt "color"
 msgid "Selection"
 msgstr "Auswahl"
 
 #: gschem/src/x_colorcb.c:110
-#, fuzzy
 msgctxt "color"
 msgid "Bounding box"
-msgstr "Randmarkierung"
+msgstr "Objektumriss"
 
 #: gschem/src/x_colorcb.c:111
-#, fuzzy
 msgctxt "color"
 msgid "Zoom box"
-msgstr "Ausschnitt wählen"
+msgstr "Zoomrahmen"
 
 #: gschem/src/x_colorcb.c:112
-#, fuzzy
 msgctxt "color"
 msgid "Stroke"
-msgstr "Taste"
+msgstr "Mausgeste"
 
 #: gschem/src/x_colorcb.c:113
-#, fuzzy
 msgctxt "color"
 msgid "Lock"
-msgstr "Sperren"
+msgstr "Gesperrtes Objekt"
 
 #: gschem/src/x_colorcb.c:115
-#, fuzzy
 msgctxt "color"
 msgid "Output background"
 msgstr "Ausgabehintergrund"
 
 #: gschem/src/x_colorcb.c:116
-#, fuzzy
 msgctxt "color"
 msgid "Net junction"
-msgstr "Netzverbindung"
+msgstr "Treffpunkt von Verbindungen"
 
 #: gschem/src/x_colorcb.c:117
-#, fuzzy
 msgctxt "color"
 msgid "Mesh grid major"
 msgstr "Grobes Gitternetz"
 
 #: gschem/src/x_colorcb.c:118
-#, fuzzy
 msgctxt "color"
 msgid "Mesh grid minor"
 msgstr "Feines Gitternetz"
@@ -1743,15 +1663,14 @@ msgstr "Feines Gitternetz"
 #: gschem/src/x_colorcb.c:119
 msgctxt "color"
 msgid "Origin marker"
-msgstr ""
+msgstr "Ursprungsmarkierung"
 
 #: gschem/src/x_colorcb.c:120
 msgctxt "color"
 msgid "Origin placement"
-msgstr ""
+msgstr "Ursprungsneuauswahl"
 
 #: gschem/src/x_colorcb.c:124
-#, fuzzy
 msgctxt "color"
 msgid "Unknown"
 msgstr "Unbekannt"
@@ -1768,9 +1687,8 @@ msgid ""
 msgstr ""
 
 #: gschem/src/x_dialog.c:368
-#, fuzzy
 msgid "Symbol"
-msgstr "Symbole"
+msgstr ""
 
 #: gschem/src/x_dialog.c:405
 #, c-format
@@ -1795,30 +1713,26 @@ msgid "Invalid Attribute"
 msgstr "Fehlerhaftes Attribut"
 
 #: gschem/src/x_event.c:146 gschem/src/actions.c:616
-#, fuzzy
 msgid "Add Component"
-msgstr "/Bauteil hinzufügen …"
+msgstr "Bauteil hinzufügen"
 
 #: gschem/src/x_event.c:148 gschem/src/actions.c:695
-#, fuzzy
 msgid "Add Text"
-msgstr "/Text einfügen"
+msgstr "Text einfügen"
 
 #: gschem/src/x_event.c:150 gschem/src/actions.c:507 gschem/src/actions.c:508
-#, fuzzy
 msgid "Paste"
-msgstr "E_infügen"
+msgstr "Einfügen"
 
 #: gschem/src/x_event.c:199 gschem/src/x_event.c:433 gschem/src/x_event.c:441
 #: gschem/src/x_event.c:804 gschem/src/actions.c:1665 gschem/src/actions.c:1666
 #: gschem/src/actions.c:1676 gschem/src/actions.c:1685
 msgid "Pan"
-msgstr "Ausschnitt verschieben"
+msgstr "Ansichtsmittelpunkt wählen"
 
 #: gschem/src/x_event.c:804
-#, fuzzy
 msgid "Zoom"
-msgstr "/Vergrößern"
+msgstr "Zoom"
 
 #: gschem/src/x_fileselect.c:38
 msgid "Schematics"
@@ -1867,30 +1781,31 @@ msgid ""
 "\n"
 "Do you want to load the backup file?\n"
 msgstr ""
+"\n"
+"Wenn Sie die Originaldatei laden, wird die Backupdatei bei der nächsten "
+"automatischen Sicherung überschrieben und ist damit verloren.\n"
+"\n"
+"Möchten Sie die Backupdatei laden?\n"
 
 #: gschem/src/x_fstylecb.c:73
-#, fuzzy
 msgctxt "fill-type"
 msgid "Hollow"
-msgstr "Leer"
+msgstr "leer"
 
 #: gschem/src/x_fstylecb.c:80
-#, fuzzy
 msgctxt "fill-type"
 msgid "Filled"
-msgstr "Gefüllt"
+msgstr "ausgefüllt"
 
 #: gschem/src/x_fstylecb.c:87
-#, fuzzy
 msgctxt "fill-type"
 msgid "Mesh"
-msgstr "Gitter"
+msgstr "kreuzweise schraffiert"
 
 #: gschem/src/x_fstylecb.c:94
-#, fuzzy
 msgctxt "fill-type"
 msgid "Hatch"
-msgstr "Schraffiert"
+msgstr "schraffiert"
 
 #: gschem/src/x_image.c:276
 #, c-format
@@ -1913,12 +1828,12 @@ msgstr ""
 #: gschem/src/x_image.c:305
 #, c-format
 msgid "Wrote color image to [%s] [%d x %d]\n"
-msgstr "Farbiges Bild als [%s] gespeichert. Größe [%d x %d]\n"
+msgstr "Farbbild als [%s] gespeichert (Größe: %d x %d)\n"
 
 #: gschem/src/x_image.c:307
 #, c-format
 msgid "Wrote black and white image to [%s] [%d x %d]\n"
-msgstr "Schwarz & weiß Bild als [%s] gespeichert. Größe [%d x %d]\n"
+msgstr "Schwarzweißbild als [%s] gespeichert (Größe: %d x %d)\n"
 
 #: gschem/src/x_image.c:315
 msgid "x_image_lowlevel: Unable to get pixbuf from gschem's window.\n"
@@ -1934,83 +1849,75 @@ msgstr "Bildformat"
 
 #: gschem/src/x_image.c:392
 msgid "Write image..."
-msgstr "Bild exportieren …"
+msgstr "Als Bild exportieren …"
 
 #: gschem/src/x_linecapcb.c:74
 msgctxt "line-cap"
 msgid "Butt"
-msgstr ""
+msgstr "glatt"
 
 #: gschem/src/x_linecapcb.c:81
 msgctxt "line-cap"
 msgid "Square"
-msgstr ""
+msgstr "rechteckig"
 
 #: gschem/src/x_linecapcb.c:88
 msgctxt "line-cap"
 msgid "Round"
-msgstr ""
+msgstr "abgerundet"
 
 #: gschem/src/x_linetypecb.c:74
-#, fuzzy
 msgctxt "line-type"
 msgid "Solid"
-msgstr "Durchgehend"
+msgstr "durchgezogen"
 
 #: gschem/src/x_linetypecb.c:81
-#, fuzzy
 msgctxt "line-type"
 msgid "Dotted"
-msgstr "Gepunktet"
+msgstr "gepunktet"
 
 #: gschem/src/x_linetypecb.c:88
-#, fuzzy
 msgctxt "line-type"
 msgid "Dashed"
-msgstr "Gestrichelt"
+msgstr "gestrichelt"
 
 #: gschem/src/x_linetypecb.c:95
-#, fuzzy
 msgctxt "line-type"
 msgid "Center"
-msgstr "Strich-Punkt"
+msgstr "Striche und Punkte"
 
 #: gschem/src/x_linetypecb.c:102
-#, fuzzy
 msgctxt "line-type"
 msgid "Phantom"
-msgstr "Strich-Zwei-Punkt"
+msgstr ""
 
 #: gschem/src/x_menus.c:86
-#, fuzzy
 msgid "No menubar definition found\n"
-msgstr "Dokumentation konnte nicht gefunden werden"
+msgstr "Definition der Menuleiste nicht gefunden\n"
 
 #: gschem/src/x_menus.c:92
 msgid "Empty or malformed menubar definition\n"
-msgstr ""
+msgstr "Definition der Menuleiste ist leer oder fehlerhaft\n"
 
 #: gschem/src/x_menus.c:141
-#, fuzzy
 msgid "No context menu definition found\n"
-msgstr "Dokumentation konnte nicht gefunden werden"
+msgstr "Definition des Kontextmenus nicht gefunden\n"
 
 #: gschem/src/x_menus.c:147
 msgid "Empty or malformed context menu definition\n"
-msgstr ""
+msgstr "Definition des Kontextmenus ist leer oder fehlerhaft\n"
 
 #: gschem/src/x_menus.c:251
-#, fuzzy
 msgid "No toolbar definition found\n"
-msgstr "Dokumentation konnte nicht gefunden werden"
+msgstr "Definition der Werkzeugleiste nicht gefunden\n"
 
 #: gschem/src/x_menus.c:257
 msgid "Empty or malformed toolbar definition\n"
-msgstr ""
+msgstr "Definition der Werkzeugleiste ist leer oder fehlerhaft\n"
 
 #: gschem/src/x_misc.c:70
 msgid "The operating system is out of memory or resources."
-msgstr "Zu wenig Speicher, oder andere Resoucen."
+msgstr "Zu wenig Systemspeicher oder -ressourcen."
 
 #: gschem/src/x_misc.c:151
 #, c-format
@@ -2047,12 +1954,12 @@ msgstr "Geändert"
 
 #: gschem/src/x_pagesel.c:460
 msgid "Right click on the filename for more options..."
-msgstr "Rechtsklick auf den Dateinamen zeigt mehr Optionen …"
+msgstr "Rechtsklick auf den Dateinamen zeigt mehr Optionen…"
 
 #: gschem/src/x_print.c:307 gschem/src/x_print.c:365
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to write PDF to '%s': %s\n"
-msgstr "Die folgenden Bilder konnten nicht überschrieben werden: %s"
+msgstr "PDF '%s' konnte nicht geschrieben werden: %s\n"
 
 #: gschem/src/x_print.c:419
 #, c-format
@@ -2060,6 +1967,8 @@ msgid ""
 "Error printing file:\n"
 "%s"
 msgstr ""
+"Fehler beim Drucken der Datei:\n"
+"%s"
 
 #: gschem/src/x_rc.c:39
 msgid "ERROR: An unknown error occurred while parsing configuration files.\n"
@@ -2070,7 +1979,10 @@ msgid ""
 "An unknown error occurred while parsing configuration files.\n"
 "\n"
 "The gschem log may contain more information."
-msgstr "Beim Einlesen der Konfigurationsdateien trat ein Fehler auf."
+msgstr ""
+"Beim Einlesen der Konfigurationsdateien trat ein unbekannter Fehler auf.\n"
+"\n"
+"Das Log-Fenster von gschem enthält eventuell mehr Details."
 
 #: gschem/src/x_rc.c:56
 #, c-format
@@ -2086,7 +1998,7 @@ msgid ""
 msgstr ""
 "%s\n"
 "\n"
-"Das Log-Fenster von gschem sind eventuell Details eingetragen."
+"Das Log-Fenster von gschem enthält eventuell mehr Informationen."
 
 #: gschem/src/x_rc.c:67
 msgid "Cannot load gschem configuration."
@@ -2094,46 +2006,41 @@ msgstr "Konfigurationsdateien konnte nicht eingelesen werden."
 
 #: gschem/src/x_script.c:43
 msgid "Execute Script..."
-msgstr "Skript ausführen …"
+msgstr "Guile-Skript ausführen …"
 
 #: gschem/src/x_script.c:62
 #, c-format
 msgid "Executing guile script [%s]\n"
-msgstr "Führe guile scipt aus [%s]\n"
+msgstr "Führe Guile-Skipt [%s] aus\n"
 
 #: gschem/src/x_window.c:744
-#, fuzzy
 msgctxt "actuate"
 msgid "Show"
-msgstr "ShowN"
+msgstr "Anzeigen"
 
 #: gschem/src/x_window.c:745
 msgid "Show text starting with:"
 msgstr "Text anzeigen, der beginnt mit:"
 
 #: gschem/src/x_window.c:776
-#, fuzzy
 msgid "Library"
-msgstr "Bibliotheken"
+msgstr "Bibliothek"
 
 #: gschem/src/x_window.c:787
-#, fuzzy
 msgid "Object"
-msgstr "Objektfarbe:"
+msgstr "Objekt"
 
 #: gschem/src/x_window.c:817 gschem/src/actions.c:2361
-#, fuzzy
 msgid "Options"
-msgstr "_Optionen"
+msgstr "Optionen"
 
 #: gschem/src/x_window.c:827
 msgid "Status"
 msgstr "Status"
 
 #: gschem/src/x_window.c:837
-#, fuzzy
 msgid "Search results"
-msgstr "Suchen nach:"
+msgstr "Suchergebnisse"
 
 #: gschem/src/x_window.c:854
 msgid "Menu/Cancel"
@@ -2141,7 +2048,7 @@ msgstr "Menü/Abbrechen"
 
 #: gschem/src/x_window.c:856
 msgid "Pan/Cancel"
-msgstr "Ausschnitt/Abbrechen"
+msgstr "Ansicht verschieben/Abbrechen"
 
 #: gschem/src/x_window.c:862
 msgid "Pick"
@@ -2165,8 +2072,8 @@ msgid ""
 msgstr ""
 "<b>Fehler beim Laden einer Datei.</b>\n"
 "\n"
-"Laden von '%s' ist gescheitert: %s. Das gschem log enthält eventuell mehr "
-"Details."
+"Laden von '%s' ist gescheitert: %s. Das Log-Fenster von gschem enthält "
+"eventuell mehr Details."
 
 #: gschem/src/x_window.c:1096
 msgid "Failed to load file"
@@ -2180,7 +2087,7 @@ msgstr "Neue Datei [%s]\n"
 #: gschem/src/x_window.c:1209
 #, c-format
 msgid "Could NOT save page [%s]\n"
-msgstr "Die Seite [%s] konnte nicht gespeichert werden.\n"
+msgstr "Die Seite [%s] konnte NICHT gespeichert werden\n"
 
 #: gschem/src/x_window.c:1210
 msgid "Error while trying to save"
@@ -2207,7 +2114,7 @@ msgstr "Gespeichert"
 #: gschem/src/x_window.c:1309
 #, c-format
 msgid "Discarding page [%s]\n"
-msgstr "Schließe Schaltplan [%s]\n"
+msgstr "Verwerfe Schaltplan [%s]\n"
 
 #: gschem/src/x_window.c:1309
 #, c-format
@@ -2215,7 +2122,6 @@ msgid "Closing [%s]\n"
 msgstr "Schließe [%s]\n"
 
 #: gschem/src/actions.c:150
-#, fuzzy
 msgid "New File"
 msgstr "Neue Datei"
 
@@ -2233,27 +2139,24 @@ msgid "New page created [%s]\n"
 msgstr "Neue Seite erzeugt [%s]\n"
 
 #: gschem/src/actions.c:170
-#, fuzzy
 msgid "Open File"
-msgstr "Datei öffnen …"
+msgstr "Datei öffnen"
 
 #: gschem/src/actions.c:172
 msgid "_Open..."
 msgstr "Ö_ffnen …"
 
 #: gschem/src/actions.c:183
-#, fuzzy
 msgid "Open Recent File"
-msgstr "_Zuletzt  geöffnet"
+msgstr "Zuletzt geöffnete Dateien"
 
 #: gschem/src/actions.c:184
-#, fuzzy
 msgid "Open Recent"
-msgstr "_Zuletzt  geöffnet"
+msgstr "Zuletzt geöffnet"
 
 #: gschem/src/actions.c:185
 msgid "Open Recen_t"
-msgstr "_Zuletzt  geöffnet"
+msgstr "_Zuletzt geöffnet"
 
 #: gschem/src/actions.c:195 gschem/src/actions.c:196
 msgid "Save"
@@ -2264,14 +2167,12 @@ msgid "_Save"
 msgstr "_Speichern"
 
 #: gschem/src/actions.c:226
-#, fuzzy
 msgid "Save As"
-msgstr "_Alles speichern"
+msgstr "Speichern unter"
 
 #: gschem/src/actions.c:227
-#, fuzzy
 msgid "Save As..."
-msgstr "Speichern _unter …"
+msgstr "Speichern unter …"
 
 #: gschem/src/actions.c:228
 msgid "Save _As..."
@@ -2290,41 +2191,36 @@ msgid "Saved All"
 msgstr "Alles gespeichert"
 
 #: gschem/src/actions.c:257
-#, fuzzy
 msgid "Revert Changes"
-msgstr "Seite wirklich wiederherstellen?"
+msgstr "Zurücksetzen"
 
 #: gschem/src/actions.c:258
-#, fuzzy
 msgid "Revert"
-msgstr "Neu _laden"
+msgstr "Zurücksetzen"
 
 #: gschem/src/actions.c:259
 msgid "_Revert"
-msgstr "Neu _laden"
+msgstr "_Zurücksetzen"
 
 #: gschem/src/actions.c:279
 msgid "Really revert page?"
-msgstr "Seite wirklich wiederherstellen?"
+msgstr "Seite wirklich zurücksetzen?"
 
 #: gschem/src/actions.c:319
-#, fuzzy
 msgid "Close"
-msgstr "S_chließen"
+msgstr "Schließen"
 
 #: gschem/src/actions.c:320
 msgid "_Close"
 msgstr "S_chließen"
 
 #: gschem/src/actions.c:341
-#, fuzzy
 msgid "Print"
-msgstr "Drucken …"
+msgstr "Drucken"
 
 #: gschem/src/actions.c:342
-#, fuzzy
 msgid "Print..."
-msgstr "_Drucken …"
+msgstr "Drucken …"
 
 #: gschem/src/actions.c:343
 msgid "_Print..."
@@ -2332,21 +2228,19 @@ msgstr "_Drucken …"
 
 #: gschem/src/actions.c:353
 msgid "Export Image"
-msgstr ""
+msgstr "Bild exportieren"
 
 #: gschem/src/actions.c:354
-#, fuzzy
 msgid "Export Image..."
-msgstr "Bild exportieren …"
+msgstr "Als Bild exportieren …"
 
 #: gschem/src/actions.c:355
-#, fuzzy
 msgid "Export _Image..."
-msgstr "Bild e_xportieren …"
+msgstr "Als Bild e_xportieren …"
 
 #: gschem/src/actions.c:365 gschem/src/actions.c:366 gschem/src/actions.c:367
 msgid "New Window"
-msgstr "Neues _Fenster"
+msgstr "Neues Fenster"
 
 #: gschem/src/actions.c:382
 #, c-format
@@ -2354,18 +2248,16 @@ msgid "New Window created [%s]\n"
 msgstr "Neues Fenster geöffnet [%s]\n"
 
 #: gschem/src/actions.c:390 gschem/src/actions.c:391 gschem/src/actions.c:392
-#, fuzzy
 msgid "Close Window"
-msgstr "Fenster s_chließen"
+msgstr "Fenster schließen"
 
 #: gschem/src/actions.c:396
 msgid "Closing Window\n"
 msgstr "Schließe Fenster\n"
 
 #: gschem/src/actions.c:403 gschem/src/actions.c:404
-#, fuzzy
 msgid "Quit"
-msgstr "_Beenden"
+msgstr "Beenden"
 
 #: gschem/src/actions.c:405
 msgid "_Quit"
@@ -2393,7 +2285,7 @@ msgstr "_Ausschneiden"
 
 #: gschem/src/actions.c:478
 msgid "Cut to clipboard"
-msgstr "Einfügen"
+msgstr "Ausschneiden"
 
 #: gschem/src/actions.c:491
 msgid "_Copy"
@@ -2412,9 +2304,8 @@ msgid "Paste from clipboard"
 msgstr "Einfügen"
 
 #: gschem/src/actions.c:528
-#, fuzzy
 msgid "Empty clipboard"
-msgstr "Kopieren"
+msgstr "Zwischenablage ist leer"
 
 #: gschem/src/actions.c:537
 msgid "_Delete"
@@ -2425,9 +2316,8 @@ msgid "Select All"
 msgstr "Alles auswählen"
 
 #: gschem/src/actions.c:561
-#, fuzzy
 msgid "Select _All"
-msgstr "Alles auswählen"
+msgstr "_Alles auswählen"
 
 #: gschem/src/actions.c:579 gschem/src/actions.c:580 gschem/src/actions.c:581
 msgid "Deselect"
@@ -2438,19 +2328,16 @@ msgid "Find Text"
 msgstr "Text suchen"
 
 #: gschem/src/actions.c:598
-#, fuzzy
 msgid "Find..."
-msgstr "Text suchen"
+msgstr "Suchen …"
 
 #: gschem/src/actions.c:599
-#, fuzzy
 msgid "_Find..."
-msgstr "Text suchen"
+msgstr "_Suchen …"
 
 #: gschem/src/actions.c:617
-#, fuzzy
 msgid "Add Component..."
-msgstr "/Bauteil hinzufügen …"
+msgstr "Bauteil hinzufügen …"
 
 #: gschem/src/actions.c:618
 msgid "_Component..."
@@ -2461,27 +2348,24 @@ msgid "Component"
 msgstr "Bauteil"
 
 #: gschem/src/actions.c:635 gschem/src/actions.c:636
-#, fuzzy
 msgid "Add Net"
-msgstr "/Netz einfügen"
+msgstr "Verbindung einfügen"
 
 #: gschem/src/actions.c:637
 msgid "_Net"
-msgstr "_Netz"
+msgstr "_Verbindung"
 
 #: gschem/src/actions.c:657 gschem/src/actions.c:658
-#, fuzzy
 msgid "Add Bus"
-msgstr "/Bus einfügen"
+msgstr "Bus einfügen"
 
 #: gschem/src/actions.c:659
 msgid "B_us"
 msgstr "B_us"
 
 #: gschem/src/actions.c:680
-#, fuzzy
 msgid "Add Attribute..."
-msgstr "/Attribut hinzufügen …"
+msgstr "Attribut hinzufügen …"
 
 #: gschem/src/actions.c:681
 msgid "_Attribute..."
@@ -2500,49 +2384,44 @@ msgid "_Text..."
 msgstr "_Text …"
 
 #: gschem/src/actions.c:714 gschem/src/actions.c:715
-#, fuzzy
 msgid "Add Line"
-msgstr "Linie"
+msgstr "Linie hinzufügen"
 
 #: gschem/src/actions.c:716
 msgid "_Line"
 msgstr "_Linie"
 
 #: gschem/src/actions.c:736 gschem/src/actions.c:737
-#, fuzzy
 msgid "Add Path"
-msgstr "/Netz einfügen"
+msgstr "Pfad einfügen"
 
 #: gschem/src/actions.c:738
 msgid "Pat_h"
-msgstr ""
+msgstr "P_fad"
 
 #: gschem/src/actions.c:757 gschem/src/actions.c:758
-#, fuzzy
 msgid "Add Box"
-msgstr "/Bus einfügen"
+msgstr "Rechteck einfügen"
 
 #: gschem/src/actions.c:759
 msgid "_Box"
-msgstr "_Rechteck"
+msgstr "R_echteck"
 
 #: gschem/src/actions.c:779 gschem/src/actions.c:780
-#, fuzzy
 msgid "Add Circle"
-msgstr "Kreis"
+msgstr "Kreis hinzufügen"
 
 #: gschem/src/actions.c:781
 msgid "C_ircle"
-msgstr "_Kreis"
+msgstr "Kre_is"
 
 #: gschem/src/actions.c:801 gschem/src/actions.c:802
-#, fuzzy
 msgid "Add Arc"
-msgstr "Attribut hinzufügen"
+msgstr "Kreisbogen hinzufügen"
 
 #: gschem/src/actions.c:803
 msgid "A_rc"
-msgstr "Kreisb_ogen"
+msgstr "K_reisbogen"
 
 #: gschem/src/actions.c:825
 msgid "_Pin"
@@ -2550,16 +2429,15 @@ msgstr "_Pin"
 
 #: gschem/src/actions.c:835
 msgid "Pin"
-msgstr "Anschluß"
+msgstr "Pin"
 
 #: gschem/src/actions.c:846
-#, fuzzy
 msgid "Add Picture..."
-msgstr "Bild"
+msgstr "Bild einfügen …"
 
 #: gschem/src/actions.c:847
 msgid "Pictu_re..."
-msgstr "B_ild …"
+msgstr "Bil_d …"
 
 #: gschem/src/actions.c:866 gschem/src/actions.c:872
 msgid "Edit"
@@ -2570,34 +2448,28 @@ msgid "Edit..."
 msgstr "Bearbeiten …"
 
 #: gschem/src/actions.c:868
-#, fuzzy
 msgid "_Edit..."
 msgstr "Bearbeiten …"
 
 #: gschem/src/actions.c:879
-#, fuzzy
 msgid "Object Properties"
-msgstr "<b>Texteigenschaften</b>"
+msgstr "Objekteigenschaften"
 
 #: gschem/src/actions.c:880
-#, fuzzy
 msgid "Object Properties..."
-msgstr "<b>Texteigenschaften</b>"
+msgstr "Objekteigenschaften …"
 
 #: gschem/src/actions.c:881
-#, fuzzy
 msgid "Object _Properties..."
-msgstr "<b>Texteigenschaften</b>"
+msgstr "Objekteigenschaften …"
 
 #: gschem/src/actions.c:885
-#, fuzzy
 msgid "Properties"
-msgstr "Text Eigenschaften bearbeiten"
+msgstr "Eigenschaften"
 
 #: gschem/src/actions.c:896
-#, fuzzy
 msgid "_Copy Mode"
-msgstr "Kopiermodus"
+msgstr "Kopieren"
 
 #: gschem/src/actions.c:911 gschem/src/actions.c:935 gschem/src/actions.c:959
 msgid "Select objs first"
@@ -2605,27 +2477,23 @@ msgstr "Zuerst Objekte auswählen"
 
 #: gschem/src/actions.c:918 gschem/src/actions.c:919 gschem/src/actions.c:926
 msgid "Multiple Copy"
-msgstr "Mehrfaches Kopieren"
+msgstr "Mehrfach kopieren"
 
 #: gschem/src/actions.c:920
-#, fuzzy
 msgid "Multiple Cop_y Mode"
-msgstr "Mehrfach-Kopiermodus"
+msgstr "Mehrfach kopieren"
 
 #: gschem/src/actions.c:944
-#, fuzzy
 msgid "_Move Mode"
-msgstr "Verschiebemodus"
+msgstr "Verschieben"
 
 #: gschem/src/actions.c:968
-#, fuzzy
 msgid "_Rotate 90 Mode"
-msgstr "Drehmodus (90°)"
+msgstr "Drehen um 90°"
 
 #: gschem/src/actions.c:1013
-#, fuzzy
 msgid "M_irror Mode"
-msgstr "Spiegelmodus"
+msgstr "Spiegeln"
 
 #: gschem/src/actions.c:1055 gschem/src/actions.c:1061
 msgid "Edit Text"
@@ -2636,41 +2504,36 @@ msgid "Edit Text..."
 msgstr "Text bearbeiten …"
 
 #: gschem/src/actions.c:1057
-#, fuzzy
 msgid "Edit Te_xt..."
 msgstr "Text bearbeiten …"
 
 #: gschem/src/actions.c:1069 gschem/src/actions.c:1070
 #: gschem/src/actions.c:1132
-#, fuzzy
 msgid "Attach Attributes"
-msgstr "Attribute bearbeiten"
+msgstr "Attribut anheften"
 
 #: gschem/src/actions.c:1071
-#, fuzzy
 msgid "_Attach Attributes"
-msgstr "Attribute bearbeiten"
+msgstr "Attribut anheften"
 
 #: gschem/src/actions.c:1087
 msgid "Attach"
-msgstr "Anbringen"
+msgstr "Anheften"
 
 #: gschem/src/actions.c:1098
 msgid "Multiple suitable base objects selected!\n"
-msgstr ""
+msgstr "Mehrere mögliche Basisobjekte ausgewählt!\n"
 
 #: gschem/src/actions.c:1104
 msgid "No suitable base object selected!\n"
-msgstr ""
+msgstr "Keine möglichen Basisobjekte ausgewählt!\n"
 
 #: gschem/src/actions.c:1139 gschem/src/actions.c:1140
 #: gschem/src/actions.c:1178
-#, fuzzy
 msgid "Detach Attributes"
 msgstr "Attribut ablösen"
 
 #: gschem/src/actions.c:1141
-#, fuzzy
 msgid "_Detach Attributes"
 msgstr "Attribut ablösen"
 
@@ -2679,85 +2542,72 @@ msgid "Detach"
 msgstr "Ablösen"
 
 #: gschem/src/actions.c:1185 gschem/src/actions.c:1186
-#, fuzzy
 msgid "Show Attribute Value"
-msgstr "Slot Attribut ist fehlerhaft.\n"
+msgstr "Nur Attributwert anzeigen"
 
 #: gschem/src/actions.c:1187
-#, fuzzy
 msgid "Show Attribute _Value"
-msgstr "Slot Attribut ist fehlerhaft.\n"
+msgstr "Nur Attributwert anzeigen"
 
 #: gschem/src/actions.c:1199
 msgid "ShowV"
-msgstr "ShowV"
+msgstr "ZeigeW"
 
 #: gschem/src/actions.c:1213
-#, fuzzy
 msgid "Show Value"
-msgstr "_Wert anzeigen"
+msgstr "Nur Wert anzeigen"
 
 #: gschem/src/actions.c:1220 gschem/src/actions.c:1221
-#, fuzzy
 msgid "Show Attribute Name"
-msgstr "Slot Attribut ist fehlerhaft.\n"
+msgstr "Nur Attributnamen anzeigen"
 
 #: gschem/src/actions.c:1222
-#, fuzzy
 msgid "Show Attribute _Name"
-msgstr "Slot Attribut ist fehlerhaft.\n"
+msgstr "Nur Attributnamen anzeigen"
 
 #: gschem/src/actions.c:1234
 msgid "ShowN"
-msgstr "ShowN"
+msgstr "ZeigeN"
 
 #: gschem/src/actions.c:1248
-#, fuzzy
 msgid "Show Name"
-msgstr "_Name anzeigen"
+msgstr "Nur Namen anzeigen"
 
 #: gschem/src/actions.c:1256
-#, fuzzy
 msgid "Show Attribute Name & Value"
-msgstr "Slot Attribut ist fehlerhaft.\n"
+msgstr "Attributnamen und -wert anzeigen"
 
 #: gschem/src/actions.c:1257
-#, fuzzy
 msgid "Show Attribute Name _& Value"
-msgstr "Slot Attribut ist fehlerhaft.\n"
+msgstr "Attributnamen und -wert anzeigen"
 
 #: gschem/src/actions.c:1269
 msgid "ShowB"
-msgstr "ShowB"
+msgstr "ZeigeB"
 
 #: gschem/src/actions.c:1290 gschem/src/actions.c:1291
-#, fuzzy
 msgid "Toggle Text Visibility"
-msgstr "Sichtbarkeit _umschalten"
+msgstr "Textsichtbarkeit umschalten"
 
 #: gschem/src/actions.c:1292
-#, fuzzy
 msgid "_Toggle Text Visibility"
-msgstr "Sichtbarkeit _umschalten"
+msgstr "Textsichtbarkeit _umschalten"
 
 #: gschem/src/actions.c:1304
 msgid "VisToggle"
-msgstr "VisToggle"
+msgstr "SichtUmsch"
 
 #: gschem/src/actions.c:1318
-#, fuzzy
 msgid "Toggle Visibility"
-msgstr "Sichtbarkeit _umschalten"
+msgstr "Sichtbarkeit umschalten"
 
 #: gschem/src/actions.c:1327 gschem/src/actions.c:1328
-#, fuzzy
 msgid "Embed Symbol/Picture"
-msgstr "Bauteil/Bild einbetten"
+msgstr "Symbol/Bild einbetten"
 
 #: gschem/src/actions.c:1329
-#, fuzzy
 msgid "Em_bed Symbol/Picture"
-msgstr "Bauteil/Bild einbetten"
+msgstr "Symbol/Bild einbetten"
 
 #: gschem/src/actions.c:1335 gschem/src/actions.c:1351
 msgid "Embed"
@@ -2765,118 +2615,101 @@ msgstr "Einbetten"
 
 #: gschem/src/actions.c:1365 gschem/src/actions.c:1366
 #: gschem/src/actions.c:1367
-#, fuzzy
 msgid "Unembed Symbol/Picture"
-msgstr "Bauteil/Bild ausbetten"
+msgstr "Symbol/Bild ausbetten"
 
 #: gschem/src/actions.c:1373 gschem/src/actions.c:1389
 msgid "Unembed"
 msgstr "Ausbetten"
 
 #: gschem/src/actions.c:1405
-#, fuzzy
 msgid "_Update Symbol"
-msgstr "Verschieben nach"
+msgstr "Symbol aktualisieren"
 
 #: gschem/src/actions.c:1414
 msgid "Update"
 msgstr "Aktualisieren"
 
 #: gschem/src/actions.c:1448
-#, fuzzy
 msgid "Lock Component"
-msgstr "Bauteil"
+msgstr "Bauteil sperren"
 
 #: gschem/src/actions.c:1449
-#, fuzzy
 msgid "_Lock Component"
-msgstr "Bauteil"
+msgstr "Bauteil sperren"
 
 #: gschem/src/actions.c:1466
-#, fuzzy
 msgid "Unlock Component"
-msgstr "Bauteil"
+msgstr "Bauteil entsperren"
 
 #: gschem/src/actions.c:1467
-#, fuzzy
 msgid "Unloc_k Component"
-msgstr "Bauteil"
+msgstr "Bauteil entsperren"
 
 #: gschem/src/actions.c:1480
 msgid "Choose Slot"
-msgstr ""
+msgstr "Slot auswählen"
 
 #: gschem/src/actions.c:1481
 msgid "Slot..."
-msgstr "Slot …"
+msgstr "Slot auswählen …"
 
 #: gschem/src/actions.c:1482
-#, fuzzy
 msgid "_Slot..."
-msgstr "Slot …"
+msgstr "Slot auswählen …"
 
 #: gschem/src/actions.c:1490
 msgid "Slot"
 msgstr "Slot"
 
 #: gschem/src/actions.c:1502
-#, fuzzy
 msgid "Part Documentation"
-msgstr "_Dokumentation …"
+msgstr "Bauteil-Dokumentation"
 
 #: gschem/src/actions.c:1503
-#, fuzzy
 msgid "Part Documentation..."
-msgstr "_Dokumentation …"
+msgstr "Bauteil-Dokumentation …"
 
 #: gschem/src/actions.c:1504
-#, fuzzy
 msgid "Part D_ocumentation..."
-msgstr "_Dokumentation …"
+msgstr "Bauteil-D_okumentation …"
 
 #: gschem/src/actions.c:1505
 msgid "View documentation for selected component"
-msgstr ""
+msgstr "Dokumentation zum ausgewählten Bauteil ansehen"
 
 #: gschem/src/actions.c:1529
-#, fuzzy
 msgid "Show/Hide Invisible Text"
 msgstr "Unsichtbaren Text anzeigen/verbergen"
 
 #: gschem/src/actions.c:1530
-#, fuzzy
 msgid "Show Invisible Text"
-msgstr "Unsichtbaren Text anzeigen/verbergen"
+msgstr "Unsichtbaren Text anzeigen"
 
 #: gschem/src/actions.c:1531
-#, fuzzy
 msgid "_Show Invisible Text"
-msgstr "Unsichtbaren Text anzeigen/verbergen"
+msgstr "U_nsichtbaren Text anzeigen"
 
 #: gschem/src/actions.c:1535
 msgid "ShowHidden"
 msgstr "Verborgenes anzeigen"
 
 #: gschem/src/actions.c:1544
-#, fuzzy
 msgid "Toggle Origin Visibility"
-msgstr "Sichtbarkeit _umschalten"
+msgstr "Ursprung anzeigen/verbergen"
 
 #: gschem/src/actions.c:1545
-#, fuzzy
 msgid "Show Origin"
-msgstr "Verborgenes anzeigen"
+msgstr "Ursprung anzeigen"
 
 #: gschem/src/actions.c:1546
-#, fuzzy
 msgid "Show Ori_gin"
-msgstr "Verborgenes anzeigen"
+msgstr "Ur_sprung anzeigen"
 
 #: gschem/src/actions.c:1557 gschem/src/actions.c:1558
 #: gschem/src/actions.c:1573
-#, fuzzy
 msgid "Zoom In"
-msgstr "/Vergrößern"
+msgstr "Vergrößern"
 
 #: gschem/src/actions.c:1559
 msgid "Zoom _In"
@@ -2884,9 +2717,8 @@ msgstr "Ver_größern"
 
 #: gschem/src/actions.c:1580 gschem/src/actions.c:1581
 #: gschem/src/actions.c:1596
-#, fuzzy
 msgid "Zoom Out"
-msgstr "/Verkleinern"
+msgstr "Verkleinern"
 
 #: gschem/src/actions.c:1582
 msgid "Zoom _Out"
@@ -2894,9 +2726,8 @@ msgstr "Ver_kleinern"
 
 #: gschem/src/actions.c:1603 gschem/src/actions.c:1604
 #: gschem/src/actions.c:1616
-#, fuzzy
 msgid "Zoom Extents"
-msgstr "/Automatisch"
+msgstr "Alles anzeigen"
 
 #: gschem/src/actions.c:1605
 msgid "Zoom _Extents"
@@ -2904,267 +2735,239 @@ msgstr "_Alles anzeigen"
 
 #: gschem/src/actions.c:1623 gschem/src/actions.c:1624
 #: gschem/src/actions.c:1637
-#, fuzzy
 msgid "Zoom Full"
-msgstr "Gesamte _Zeichenfläche"
+msgstr "Gesamte Zeichenfläche"
 
 #: gschem/src/actions.c:1625
 msgid "Zoom _Full"
 msgstr "Gesamte _Zeichenfläche"
 
 #: gschem/src/actions.c:1646
-#, fuzzy
 msgid "Zoom Bo_x"
-msgstr "Ausschnitt wählen"
+msgstr "Auss_chnitt wählen"
 
 #: gschem/src/actions.c:1667
 msgid "_Pan"
-msgstr "Ausschnitt _wechseln"
+msgstr "Ansichtsmittel_punkt wählen"
 
 #: gschem/src/actions.c:1693 gschem/src/actions.c:1694
-#, fuzzy
 msgid "Redraw"
-msgstr "Akt_ualisieren"
+msgstr "Aktualisieren"
 
 #: gschem/src/actions.c:1695
-#, fuzzy
 msgid "Re_draw"
-msgstr "Akt_ualisieren"
+msgstr "Aktualis_ieren"
 
 #: gschem/src/actions.c:1709
-#, fuzzy
 msgid "Show/Hide Menubar"
-msgstr "Verborgenes anzeigen"
+msgstr "Menuleiste anzeigen/verbergen"
 
 #: gschem/src/actions.c:1710
-#, fuzzy
 msgid "Show Menubar"
-msgstr "Verborgenes anzeigen"
+msgstr "Menuleiste anzeigen"
 
 #: gschem/src/actions.c:1711
-#, fuzzy
 msgid "Show _Menubar"
-msgstr "_Name anzeigen"
+msgstr "_Menuleiste anzeigen"
 
 #: gschem/src/actions.c:1766
-#, fuzzy
 msgid "Show/Hide Toolbar"
-msgstr "Unsichtbaren Text anzeigen/verbergen"
+msgstr "Werkzeugleiste anzeigen/verbergen"
 
 #: gschem/src/actions.c:1767
 msgid "Show Toolbar"
-msgstr ""
+msgstr "Werkzeugleiste anzeigen"
 
 #: gschem/src/actions.c:1768
-#, fuzzy
 msgid "Show _Toolbar"
-msgstr "_Name anzeigen"
+msgstr "_Werkzeugleiste anzeigen"
 
 #: gschem/src/actions.c:1786
 msgid "Show/Hide Scrollbars"
-msgstr ""
+msgstr "Bildlaufleisten anzeigen/verbergen"
 
 #: gschem/src/actions.c:1787
 msgid "Show Scrollbars"
-msgstr ""
+msgstr "Bildlaufleisten anzeigen"
 
 #: gschem/src/actions.c:1788
 msgid "Show S_crollbars"
-msgstr ""
+msgstr "_Bildlaufleisten anzeigen"
 
 #: gschem/src/actions.c:1811
 msgid "Left Dock Windows"
-msgstr ""
+msgstr "Links angedockte Fenster"
 
 #: gschem/src/actions.c:1812
 msgid "Left Dock"
-msgstr ""
+msgstr "Linker Dockbereich"
 
 #: gschem/src/actions.c:1813
 msgid "_Left Dock"
-msgstr ""
+msgstr "_Linker Dockbereich"
 
 #: gschem/src/actions.c:1823
-#, fuzzy
 msgid "Bottom Dock Windows"
-msgstr "Von unten nach oben"
+msgstr "Unten angedockte Fenster"
 
 #: gschem/src/actions.c:1824
-#, fuzzy
 msgid "Bottom Dock"
-msgstr "Von unten nach oben"
+msgstr "Unterer Dockbereich"
 
 #: gschem/src/actions.c:1825
-#, fuzzy
 msgid "_Bottom Dock"
-msgstr "Von unten nach oben"
+msgstr "_Unterer Dockbereich"
 
 #: gschem/src/actions.c:1835
-#, fuzzy
 msgid "Right Dock Windows"
-msgstr "Protoko_llfenster anzeigen …"
+msgstr "Rechts angedockte Fenster"
 
 #: gschem/src/actions.c:1836
-#, fuzzy
 msgid "Right Dock"
-msgstr "Von rechts nach links"
+msgstr "Rechter Dockbereich"
 
 #: gschem/src/actions.c:1837
 msgid "_Right Dock"
-msgstr ""
+msgstr "_Rechter Dockbereich"
 
 #: gschem/src/actions.c:1849
-#, fuzzy
 msgid "Down Schematic"
-msgstr "/Zum Schaltplan hinab"
+msgstr "Unterschaltplan bearbeiten"
 
 #: gschem/src/actions.c:1850
-#, fuzzy
 msgid "Edit Subschematic"
-msgstr "Schaltpläne"
+msgstr "Unterschaltplan bearbeiten"
 
 #: gschem/src/actions.c:1851
-#, fuzzy
 msgid "Edit _Subschematic"
-msgstr "Schaltpläne"
+msgstr "Unterschaltplan bearbeiten"
 
 #: gschem/src/actions.c:1895
 #, c-format
 msgid "Searching for source [%s]\n"
-msgstr "Nach der Quelle suchen [%s]\n"
+msgstr "Suche nach Unterschaltplan [%s]\n"
 
 #: gschem/src/actions.c:1924
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Failed to descend hierarchy into '%s': %s\n"
 "\n"
 "The gschem log may contain more information."
 msgstr ""
-"%s\n"
+"Konnte nicht nach '%s' in der Hierarchie absteigen: %s\n"
 "\n"
-"Das Log-Fenster von gschem sind eventuell Details eingetragen."
+"Das Log-Fenster von gschem enthält eventuell mehr Informationen."
 
 #: gschem/src/actions.c:1928
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to descend into '%s': %s\n"
-msgstr "Die folgenden Bilder konnten nicht überschrieben werden: %s"
+msgstr "Konnte nicht nach '%s' absteigen: %s\n"
 
 #: gschem/src/actions.c:1935
-#, fuzzy
 msgid "Failed to descend hierarchy."
-msgstr "In der Hierachie hinabsteigen"
+msgstr "Konnte nicht in der Hierachie absteigen."
 
 #: gschem/src/actions.c:1990
-#, fuzzy
 msgid "Down Symbol"
-msgstr "/Zum Symbol hinab"
+msgstr "Symbol bearbeiten"
 
 #: gschem/src/actions.c:1991
-#, fuzzy
 msgid "Edit Symbol"
-msgstr "Symbole"
+msgstr "Symbol bearbeiten"
 
 #: gschem/src/actions.c:1992
-#, fuzzy
 msgid "Edit S_ymbol"
-msgstr "Symbole"
+msgstr "Symbol bearbeiten"
 
 #: gschem/src/actions.c:2005
 msgid "Cannot descend into embedded symbol!\n"
-msgstr ""
+msgstr "Eingebettete Symbole können nicht bearbeitet werden.\n"
 
 #: gschem/src/actions.c:2008
 #, c-format
 msgid "Searching for symbol [%s]\n"
-msgstr "Nach dem Symbol suchen [%s]\n"
+msgstr "Suche nach Symbol [%s]\n"
 
 #: gschem/src/actions.c:2015
 msgid "Symbol is not a real file. Symbol cannot be loaded.\n"
-msgstr "Das Symbol ist keine reale Datei. Symbol kann nicht geöffnet werden.\n"
+msgstr ""
+"Das Symbol entspricht keiner realen Datei und kann daher nicht geöffnet "
+"werden.\n"
 
 #: gschem/src/actions.c:2039
-#, fuzzy
 msgid "Up"
-msgstr "/Hinauf"
+msgstr "Hinauf"
 
 #: gschem/src/actions.c:2040
 msgid "Leave"
-msgstr ""
+msgstr "Verlassen"
 
 #: gschem/src/actions.c:2041
 msgid "_Leave Subschematic/Symbol"
-msgstr ""
+msgstr "Unterschaltplan/Symbol verlassen"
 
 #: gschem/src/actions.c:2056
 msgid "Cannot find any schematics above the current one!\n"
 msgstr "Konnte keinen übergeordneten Schaltplan finden!\n"
 
 #: gschem/src/actions.c:2068 gschem/src/actions.c:2069
-#, fuzzy
 msgid "Previous Page"
-msgstr "_Vorherige"
+msgstr "Vorherige Seite"
 
 #: gschem/src/actions.c:2070
-#, fuzzy
 msgid "_Previous Page"
-msgstr "_Vorherige"
+msgstr "_Vorherige Seite"
 
 #: gschem/src/actions.c:2101 gschem/src/actions.c:2102
-#, fuzzy
 msgid "Next Page"
-msgstr "Neue Seite"
+msgstr "Nächste Seite"
 
 #: gschem/src/actions.c:2103
-#, fuzzy
 msgid "_Next Page"
-msgstr "Neue Seite"
+msgstr "Nächste Seite"
 
 #: gschem/src/actions.c:2136
-#, fuzzy
 msgid "Page Manager..."
-msgstr "Seitenverwaltung"
+msgstr "Seitenverwaltung …"
 
 #: gschem/src/actions.c:2137
-#, fuzzy
 msgid "Page _Manager..."
-msgstr "Seitenverwaltung"
+msgstr "Seitenverwaltung …"
 
 #: gschem/src/actions.c:2149
-#, fuzzy
 msgid "Autonumber Text"
-msgstr "Nummeriere Text automatisch"
+msgstr "Automatisch numerieren"
 
 #: gschem/src/actions.c:2150
-#, fuzzy
 msgid "Autonumber..."
-msgstr "Text _durchnummerieren …"
+msgstr "Automatisch numerieren …"
 
 #: gschem/src/actions.c:2151
-#, fuzzy
 msgid "A_utonumber..."
-msgstr "Text _durchnummerieren …"
+msgstr "Automatisch _numerieren …"
 
 #: gschem/src/actions.c:2166 gschem/src/actions.c:2195
 msgid "Reset Origin"
-msgstr ""
+msgstr "Ursprung neu definieren"
 
 #: gschem/src/actions.c:2167
 msgid "Place Origin"
-msgstr ""
+msgstr "Ursprung neu festlegen"
 
 #: gschem/src/actions.c:2168
 msgid "_Place Origin"
-msgstr ""
+msgstr "_Ursprung neu festlegen"
 
 #: gschem/src/actions.c:2178
 msgid "WARNING: Do not translate with snap off!\n"
 msgstr ""
-"ACHTUNG: Keine Transformation mit ausgeschalteter Ausrichtung am Raster!\n"
+"ACHTUNG: Nicht verschieben, während die Ausrichtung am Raster abgschaltet "
+"ist!\n"
 
 #: gschem/src/actions.c:2179
 msgid "WARNING: Turning snap on and continuing with translate.\n"
 msgstr ""
-"ACHTUNG:\"am Raster ausrichten\" wird aktiviert und mit der Transformation "
+"ACHTUNG: Ausrichtung am Raster wird eingschaltet und mit der Verschiebung "
 "fortgefahren.\n"
 
 #: gschem/src/actions.c:2186
@@ -3176,78 +2979,68 @@ msgid ""
 "WARNING: If you are translating a symbol to the origin, the snap grid size "
 "should be set to 100\n"
 msgstr ""
-"ACHTUNG: Wenn ein Symbol transformiert wird, sollte das Raster auf 100 "
-"gesetzt sein.\n"
+"ACHTUNG: Wenn ein Symbol verschoben wird, sollte das Raster auf 100 gesetzt "
+"sein.\n"
 
 #: gschem/src/actions.c:2207
 msgid "Import Patch And Find Mismatches"
-msgstr ""
+msgstr "Patch importieren und Fehler finden"
 
 #: gschem/src/actions.c:2208
 msgid "Import Patch..."
-msgstr ""
+msgstr "Patch importieren …"
 
 #: gschem/src/actions.c:2209
 msgid "_Import Patch..."
-msgstr ""
+msgstr "Patch _importieren …"
 
 #: gschem/src/actions.c:2225
-#, fuzzy
 msgid "Hide Specific Text..."
-msgstr "Text _verbergen …"
+msgstr "Text verbergen …"
 
 #: gschem/src/actions.c:2226
 msgid "_Hide Specific Text..."
 msgstr "Text _verbergen …"
 
 #: gschem/src/actions.c:2242
-#, fuzzy
 msgid "Show Specific Text..."
-msgstr "Text an_zeigen …"
+msgstr "Text anzeigen …"
 
 #: gschem/src/actions.c:2243
 msgid "_Show Specific Text..."
 msgstr "Text an_zeigen …"
 
 #: gschem/src/actions.c:2258 gschem/src/actions.c:2259
-#, fuzzy
 msgid "Select Locked Objects"
-msgstr "Ausgewählte Objekte"
+msgstr "Gesperrte Objekte auswählen"
 
 #: gschem/src/actions.c:2260
-#, fuzzy
 msgid "Select Loc_ked Objects"
-msgstr "Ausgewählte Objekte"
+msgstr "_Gesperrte Objekte auswählen"
 
 #: gschem/src/actions.c:2293
-#, fuzzy
 msgid "Show Log Window"
-msgstr "Protoko_llfenster anzeigen …"
+msgstr "Protokollfenster anzeigen"
 
 #: gschem/src/actions.c:2294
-#, fuzzy
 msgid "Log Window..."
-msgstr "Protoko_llfenster anzeigen …"
+msgstr "Protokollfenster …"
 
 #: gschem/src/actions.c:2295
-#, fuzzy
 msgid "_Log Window..."
-msgstr "Protoko_llfenster anzeigen …"
+msgstr "_Protokollfenster …"
 
 #: gschem/src/actions.c:2305
-#, fuzzy
 msgid "Show Coordinate Window"
-msgstr "K_oordinatenfenster anzeigen …"
+msgstr "Koordinatenfenster anzeigen"
 
 #: gschem/src/actions.c:2306
-#, fuzzy
 msgid "Coordinate Window..."
-msgstr "K_oordinatenfenster anzeigen …"
+msgstr "Koordinatenfenster …"
 
 #: gschem/src/actions.c:2307
-#, fuzzy
 msgid "_Coordinate Window..."
-msgstr "K_oordinatenfenster anzeigen …"
+msgstr "_Koordinatenfenster …"
 
 #: gschem/src/actions.c:2317
 msgid "Invoke Macro"
@@ -3255,256 +3048,235 @@ msgstr "Makro ausführen"
 
 #: gschem/src/actions.c:2318
 msgid "Evaluate Guile Expression..."
-msgstr ""
+msgstr "Guile-Ausdruck auswerten …"
 
 #: gschem/src/actions.c:2319
 msgid "_Evaluate Guile Expression..."
-msgstr ""
+msgstr "Guile-_Ausdruck auswerten …"
 
 #: gschem/src/actions.c:2330
 msgid "Run Script"
-msgstr ""
+msgstr "Skript ausführen"
 
 #: gschem/src/actions.c:2331
-#, fuzzy
 msgid "Execute Guile Script..."
-msgstr "Skript ausführen …"
+msgstr "Guile-Skript ausführen …"
 
 #: gschem/src/actions.c:2332
-#, fuzzy
 msgid "E_xecute Guile Script..."
-msgstr "Skript ausführen …"
+msgstr "Guile-_Skript ausführen …"
 
 #: gschem/src/actions.c:2342
 msgid "Terminal REPL"
-msgstr ""
+msgstr "Terminal-REPL"
 
 #: gschem/src/actions.c:2343
 msgid "Start Guile REPL in Terminal..."
-msgstr ""
+msgstr "Guile-REPL im Terminal starten …"
 
 #: gschem/src/actions.c:2344
 msgid "Start Guile _REPL in Terminal..."
-msgstr ""
+msgstr "Guile-_REPL im Terminal starten …"
 
 #: gschem/src/actions.c:2362
-#, fuzzy
 msgid "Options..."
-msgstr "_Optionen"
+msgstr "Optionen …"
 
 #: gschem/src/actions.c:2363
-#, fuzzy
 msgid "_Options..."
-msgstr "_Optionen"
+msgstr "_Optionen …"
 
 #: gschem/src/actions.c:2373
-#, fuzzy
 msgid "Toggle Net Rubber Band"
-msgstr "_Netzgummifäden umschalten"
+msgstr "Nachziehen von Verbindungen umschalten"
 
 #: gschem/src/actions.c:2374
-#, fuzzy
 msgid "Net Rubberband Mode"
-msgstr "_Netzgummifäden umschalten"
+msgstr "Verbindungen nachziehen"
 
 #: gschem/src/actions.c:2375
-#, fuzzy
 msgid "Net _Rubberband Mode"
-msgstr "_Netzgummifäden umschalten"
+msgstr "Verbindungen _nachziehen"
 
 #: gschem/src/actions.c:2376
 msgid ""
 "When moving components or nets, drag the nets which are attached to them"
 msgstr ""
+"Beim Verschieben eines Bauteils oder einer Verbindung werden die Endpunkte "
+"angeschlossener Verbindungen mitgezogen."
 
 #: gschem/src/actions.c:2387
 msgid "Rubber band ON\n"
-msgstr "Gummifäden EIN\n"
+msgstr "Verbindungen nachziehen EIN\n"
 
 #: gschem/src/actions.c:2389
 msgid "Rubber band OFF \n"
-msgstr "Gummifäden AUS \n"
+msgstr "Verbindungen nachziehen AUS \n"
 
 #: gschem/src/actions.c:2398
-#, fuzzy
 msgid "Toggle Magnetic Nets"
-msgstr "_Magnetischen Netzmodus umschalten"
+msgstr "Magnetischen Verbindungsmodus umschalten"
 
 #: gschem/src/actions.c:2400
-#, fuzzy
 msgid "_Magnetic Net Mode"
-msgstr "Magnetischer Netzmodus"
+msgstr "_Magnetische Verbindungen"
 
 #: gschem/src/actions.c:2401
 msgid ""
 "When adding nets, the endpoint snaps to the nearest net or pin (indicated by "
 "a circle)"
 msgstr ""
+"Neue Verbindungen rasten beim Anlegen auf das nächstgelegene Bauteil oder "
+"die nächstgelegene Verbindung ein (wird durch einen Kreis angezeigt)"
 
 #: gschem/src/actions.c:2408
 msgid "magnetic net mode: ON\n"
-msgstr "Magnetischer Netzmodus: EIN\n"
+msgstr "Magnetische Verbindungen: EIN\n"
 
 #: gschem/src/actions.c:2411
 msgid "magnetic net mode: OFF\n"
-msgstr "Magnetischer Netzmodus: AUS\n"
+msgstr "Magnetische Verbindungen: AUS\n"
 
 #: gschem/src/actions.c:2420
-#, fuzzy
 msgid "Toggle Bounding Box Drawing"
-msgstr "_Umrissanzeige umschalten"
+msgstr "Umrissanzeige umschalten"
 
 #: gschem/src/actions.c:2421
-#, fuzzy
 msgid "Draw Bounding Box"
-msgstr "Randmarkierung"
+msgstr "Umrissanzeige"
 
 #: gschem/src/actions.c:2422
-#, fuzzy
 msgid "Draw _Bounding Box"
-msgstr "Randmarkierung"
+msgstr "_Umrissanzeige"
 
 #: gschem/src/actions.c:2423
 msgid ""
 "While moving objects, show their bounding box only (speeds up drawing, may "
 "be useful for older machines)"
 msgstr ""
+"Beim Verschieben von Objekten nur die Umrisse anzeigen (beschleunigt die "
+"Anzeige, möglicherweise bei älteren Geräten hilfreich)"
 
 #: gschem/src/actions.c:2431
 msgid "Action feedback mode set to OUTLINE\n"
-msgstr "Aktions-Rückmeldemodus wurde auf OUTLINE festgelegt.\n"
+msgstr "Aktions-Rückmeldemodus wurde auf OUTLINE gesetzt.\n"
 
 #: gschem/src/actions.c:2434
 msgid "Action feedback mode set to BOUNDINGBOX\n"
-msgstr "Aktions-Rückmeldemodus wurde auf BOUNDINGBOX festgelegt.\n"
+msgstr "Aktions-Rückmeldemodus wurde auf BOUNDINGBOX gesetzt.\n"
 
 #: gschem/src/actions.c:2463 gschem/src/actions.c:2464
 #: gschem/src/actions.c:2465
-#, fuzzy
 msgid "Snap On"
-msgstr "Am Raster ausrichten aus"
+msgstr "Am Gitter ausrichten"
 
 #: gschem/src/actions.c:2466
 msgid ""
 "When moving off-grid points, translate them by multiples of the grid but "
 "preserve their offset relative to the grid"
 msgstr ""
+"Objekte, die nicht am Gitter ausgerichtet sind, werden relativ zum Gitter "
+"verschoben und kommen wieder außerhalb des Gitters zu liegen"
 
 #: gschem/src/actions.c:2479 gschem/src/actions.c:2480
 #: gschem/src/actions.c:2481
 msgid "Snap Back to Nearest Grid Point"
-msgstr ""
+msgstr "Stets neu einrasten"
 
 #: gschem/src/actions.c:2482
 msgid ""
 "When moving off-grid objects, snap them to the nearest location on the grid"
 msgstr ""
+"Objekte, die nicht am Gitter ausgerichtet sind, werden beim Verschieben auf "
+"den nächstgelegenen Gitterpunkt eingerastet"
 
 #: gschem/src/actions.c:2497
-#, fuzzy
 msgid "Increase Grid Spacing"
-msgstr "Rasterabstand ver_größern"
+msgstr "Rasterabstand vergrößern"
 
 #: gschem/src/actions.c:2498
-#, fuzzy
 msgid "Scale up Grid Spacing"
-msgstr "Rasterabstand ver_größern"
+msgstr "Rasterabstand vergrößern"
 
 #: gschem/src/actions.c:2499
 msgid "Scale _up Grid Spacing"
 msgstr "Rasterabstand ver_größern"
 
 #: gschem/src/actions.c:2511
-#, fuzzy
 msgid "Decrease Grid Spacing"
-msgstr "Rasterabstand ver_größern"
+msgstr "Rasterabstand verkleinern"
 
 #: gschem/src/actions.c:2512
-#, fuzzy
 msgid "Scale down Grid Spacing"
-msgstr "Rasterabstand ver_kleinern"
+msgstr "Rasterabstand verkleinern"
 
 #: gschem/src/actions.c:2513
 msgid "Scale _down Grid Spacing"
 msgstr "Rasterabstand ver_kleinern"
 
 #: gschem/src/actions.c:2523 gschem/src/actions.c:2524
-#, fuzzy
 msgid "Dark Color Scheme"
-msgstr "_Dunkles Farbschema"
+msgstr "Dunkles Farbschema"
 
 #: gschem/src/actions.c:2525
-#, fuzzy
 msgid "D_ark Color Scheme"
 msgstr "_Dunkles Farbschema"
 
 #: gschem/src/actions.c:2540 gschem/src/actions.c:2541
-#, fuzzy
 msgid "Light Color Scheme"
-msgstr "_Helles Farbschema"
+msgstr "Helles Farbschema"
 
 #: gschem/src/actions.c:2542
-#, fuzzy
 msgid "_Light Color Scheme"
 msgstr "_Helles Farbschema"
 
 #: gschem/src/actions.c:2557
-#, fuzzy
 msgid "Light Monochrome Color Scheme"
-msgstr "_Helles Farbschema"
+msgstr "Helles Farbschema (schwarz/weiß)"
 
 #: gschem/src/actions.c:2558
-#, fuzzy
 msgid "Light Color Scheme (B&W)"
-msgstr "_Helles Farbschema"
+msgstr "Helles Farbschema (schwarz/weiß)"
 
 #: gschem/src/actions.c:2559
-#, fuzzy
 msgid "Light Color Scheme (B&_W)"
-msgstr "_Helles Farbschema"
+msgstr "Helles Farbschema (schwarz/weiß)"
 
 #: gschem/src/actions.c:2574 gschem/src/actions.c:2575
-#, fuzzy
 msgid "Shaded Color Scheme"
-msgstr "_Dunkles Farbschema"
+msgstr "Hellgraues Farbschema"
 
 #: gschem/src/actions.c:2576
-#, fuzzy
 msgid "S_haded Color Scheme"
-msgstr "_Dunkles Farbschema"
+msgstr "Hellgraues Farbschema"
 
 #: gschem/src/actions.c:2591
-#, fuzzy
 msgid "Shaded Monochrome Color Scheme"
-msgstr "_Dunkles Farbschema"
+msgstr "Hellgraues Farbschema (schwarz/weiß)"
 
 #: gschem/src/actions.c:2592 gschem/src/actions.c:2593
-#, fuzzy
 msgid "Shaded Color Scheme (B&W)"
-msgstr "_Dunkles Farbschema"
+msgstr "Hellgraues Farbschema (schwarz/weiß)"
 
 #: gschem/src/actions.c:2610
-#, fuzzy
 msgid "Show Hotkeys"
-msgstr "Tastenbelegungen"
+msgstr "Tastenbelegung anzeigen"
 
 #: gschem/src/actions.c:2611
-#, fuzzy
 msgid "Hotkeys..."
-msgstr "_Tastenbelegungen …"
+msgstr "Tastenbelegung …"
 
 #: gschem/src/actions.c:2612
 msgid "_Hotkeys..."
-msgstr "_Tastenbelegungen …"
+msgstr "_Tastenbelegung …"
 
 #: gschem/src/actions.c:2623
-#, fuzzy
 msgid "About..."
-msgstr "_Info …"
+msgstr "Info über gschem …"
 
 #: gschem/src/actions.c:2624
 msgid "_About..."
-msgstr "_Info …"
+msgstr "_Info über gschem …"
 
 #: gschem/src/actions.c:2636 gschem/src/actions.c:2637
 #: gschem/src/actions.c:2638
@@ -3583,23 +3355,20 @@ msgstr "Einfügen aus 5"
 
 #: gschem/src/actions.c:2818 gschem/src/actions.c:2819
 #: gschem/src/actions.c:2820
-#, fuzzy
 msgid "Grid Size"
-msgstr "Bogenmodus"
+msgstr "Rastergröße"
 
 #: gschem/src/actions.c:2830
 msgid "Switch Grid Style"
-msgstr ""
+msgstr "Gittertyp wechseln"
 
 #: gschem/src/actions.c:2831
-#, fuzzy
 msgid "Cycle Grid Styles"
-msgstr "G_itterstil wechseln"
+msgstr "Gitterstile durchwechseln"
 
 #: gschem/src/actions.c:2832
-#, fuzzy
 msgid "Cycle _Grid Styles"
-msgstr "G_itterstil wechseln"
+msgstr "G_itterstile durchwechseln"
 
 #: gschem/src/actions.c:2843
 msgid "Grid OFF\n"
@@ -3614,41 +3383,35 @@ msgid "Mesh grid selected\n"
 msgstr "Linienraster ausgewählt\n"
 
 #: gschem/src/actions.c:2846
-#, fuzzy
 msgid "Invalid grid mode\n"
-msgstr "Fehlerhaftes Attribut"
+msgstr "Ungültiger Gittermodus\n"
 
 #: gschem/src/actions.c:2853 gschem/src/actions.c:2854
 #: gschem/src/actions.c:2855
-#, fuzzy
 msgid "No Grid"
-msgstr "Raster AUS\n"
+msgstr "Raster unsichtbar"
 
 #: gschem/src/actions.c:2865 gschem/src/actions.c:2866
 #: gschem/src/actions.c:2867
-#, fuzzy
 msgid "Dot Grid"
-msgstr "Raster AUS\n"
+msgstr "Punktraster"
 
 #: gschem/src/actions.c:2877 gschem/src/actions.c:2878
 #: gschem/src/actions.c:2879
-#, fuzzy
 msgid "Mesh Grid"
-msgstr "Grobes Gitternetz"
+msgstr "Linienraster"
 
 #: gschem/src/actions.c:2889
 msgid "Switch Snap Mode"
-msgstr ""
+msgstr "Einrastmodus wechseln"
 
 #: gschem/src/actions.c:2890
-#, fuzzy
 msgid "Cycle Snap Modes"
-msgstr "Ausschnittmodus"
+msgstr "Einrastmodi durchwechseln"
 
 #: gschem/src/actions.c:2891
-#, fuzzy
 msgid "Cycle _Snap Modes"
-msgstr "Ausschnittmodus"
+msgstr "Einrastmodi durchwechseln"
 
 #: gschem/src/actions.c:2903
 msgid "Snap OFF (CAUTION!)\n"
@@ -3660,30 +3423,27 @@ msgstr "Am Raster ausrichten\n"
 
 #: gschem/src/actions.c:2909
 msgid "Snap back to the grid (CAUTION!)\n"
-msgstr "Objekte neu am Raster ausrichten (Achtung!)\n"
+msgstr "Objekte neu am Raster ausrichten (ACHTUNG!)\n"
 
 #: gschem/src/actions.c:2927 gschem/src/actions.c:2928
 #: gschem/src/actions.c:2929
-#, fuzzy
 msgid "Pan Left"
-msgstr "Ausschnittmodus"
+msgstr "Nach links bewegen"
 
 #: gschem/src/actions.c:2946 gschem/src/actions.c:2947
 #: gschem/src/actions.c:2948
-#, fuzzy
 msgid "Pan Right"
-msgstr "0ben Rechts"
+msgstr "Nach rechts bewegen"
 
 #: gschem/src/actions.c:2966 gschem/src/actions.c:2967
 #: gschem/src/actions.c:2968
 msgid "Pan Up"
-msgstr ""
+msgstr "Nach oben bewegen"
 
 #: gschem/src/actions.c:2985 gschem/src/actions.c:2986
 #: gschem/src/actions.c:2987
-#, fuzzy
 msgid "Pan Down"
-msgstr "Ausschnittmodus"
+msgstr "Nach unten bewegen"
 
 #: gschem/src/actions.c:3001 gschem/src/actions.c:3002
 msgid "Select"
@@ -3691,20 +3451,18 @@ msgstr "Auswählen"
 
 #: gschem/src/actions.c:3018 gschem/src/actions.c:3019
 #: gschem/src/actions.c:3020
-#, fuzzy
 msgid "Cancel"
-msgstr "Ausschnitt/Abbrechen"
+msgstr "Abbrechen"
 
 #: gschem/src/actions.c:3030 gschem/src/actions.c:3031
 #: gschem/src/actions.c:3032
-#, fuzzy
 msgid "Print Page"
-msgstr "_Vorherige"
+msgstr "Seite drucken"
 
 #: gschem/src/actions.c:3044 gschem/src/actions.c:3045
 #: gschem/src/actions.c:3046
 msgid "Repeat Last Action"
-msgstr ""
+msgstr "Letzte Aktion wiederholen"
 
 #: gschem/data/geda-gschem.desktop.in:3
 msgid "gEDA Schematic Editor"
@@ -3729,22 +3487,20 @@ msgid "_Add"
 msgstr "_Einfügen"
 
 #: gschem/lib/system-gschemrc.scm:1310
-#, fuzzy
 msgid "O_bject"
-msgstr "Objektfarbe:"
+msgstr "O_bjekt"
 
 #: gschem/lib/system-gschemrc.scm:1311
 msgid "_View"
 msgstr "_Ansicht"
 
 #: gschem/lib/system-gschemrc.scm:1312
-#, fuzzy
 msgid "_Pages"
-msgstr "_Seite"
+msgstr "_Seiten"
 
 #: gschem/lib/system-gschemrc.scm:1313
 msgid "_Tools"
-msgstr ""
+msgstr "_Werkzeuge"
 
 #: gschem/lib/system-gschemrc.scm:1314
 msgid "_Options"
@@ -3755,56 +3511,49 @@ msgid "_Help"
 msgstr "_Hilfe"
 
 #: gschem/scheme/gschem/action.scm:39
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "~S is not a valid gschem action."
-msgstr "~S ist keine gültige Tasten-Kombination."
+msgstr "~S ist keine gültige gschem-Aktion."
 
 #: gschem/scheme/gschem/builtins.scm:38
 msgid "gEDA Manuals"
-msgstr ""
+msgstr "gEDA-Handbücher"
 
 #: gschem/scheme/gschem/builtins.scm:39
-#, fuzzy
 msgid "gEDA Documentation..."
-msgstr "gEDA-_Dokumentation …"
+msgstr "gEDA-Dokumentation …"
 
 #: gschem/scheme/gschem/builtins.scm:40
 msgid "gEDA Docu_mentation..."
-msgstr "gEDA-_Dokumentation …"
+msgstr "gEDA-Doku_mentation …"
 
 #: gschem/scheme/gschem/builtins.scm:41
 msgid "View the front page of the gEDA documentation in a browser"
-msgstr ""
+msgstr "Startseite der gEDA-Dokumentation im Browser anzeigen"
 
 #: gschem/scheme/gschem/builtins.scm:47
-#, fuzzy
 msgid "gschem User Guide"
-msgstr "gschem-_FAQ …"
+msgstr "gschem-Benutzerhandbuch"
 
 #: gschem/scheme/gschem/builtins.scm:48
-#, fuzzy
 msgid "gschem User Guide..."
-msgstr "gschem-_FAQ …"
+msgstr "gschem-Benutzerhandbuch …"
 
 #: gschem/scheme/gschem/builtins.scm:49
-#, fuzzy
 msgid "gschem User _Guide..."
-msgstr "gschem-_FAQ …"
+msgstr "gschem-_Benutzerhandbuch …"
 
 #: gschem/scheme/gschem/builtins.scm:50
-#, fuzzy
 msgid "View the gschem User Guide in a browser"
-msgstr "gschem-_FAQ …"
+msgstr "gschem-Benutzerhandbuch im Browser anzeigen"
 
 #: gschem/scheme/gschem/builtins.scm:56
-#, fuzzy
 msgid "gschem FAQ"
-msgstr "gschem-_FAQ …"
+msgstr "gschem-FAQ"
 
 #: gschem/scheme/gschem/builtins.scm:57
-#, fuzzy
 msgid "gschem FAQ..."
-msgstr "gschem-_FAQ …"
+msgstr "gschem-FAQ …"
 
 #: gschem/scheme/gschem/builtins.scm:58
 msgid "gschem _FAQ..."
@@ -3812,17 +3561,15 @@ msgstr "gschem-_FAQ …"
 
 #: gschem/scheme/gschem/builtins.scm:59
 msgid "Frequently Asked Questions about using gschem"
-msgstr ""
+msgstr "Häufig gestellte Fragen zur Verwendung von gschem"
 
 #: gschem/scheme/gschem/builtins.scm:65
-#, fuzzy
 msgid "gEDA Wiki"
-msgstr "gEDA-_Wiki …"
+msgstr "gEDA-Wiki"
 
 #: gschem/scheme/gschem/builtins.scm:66
-#, fuzzy
 msgid "gEDA Wiki..."
-msgstr "gEDA-_Wiki …"
+msgstr "gEDA-Wiki …"
 
 #: gschem/scheme/gschem/builtins.scm:67
 msgid "gEDA _Wiki..."
@@ -3830,7 +3577,7 @@ msgstr "gEDA-_Wiki …"
 
 #: gschem/scheme/gschem/builtins.scm:68
 msgid "View the front page of the gEDA wiki in a browser"
-msgstr ""
+msgstr "Hauptseite des gEDA-Wikis im Browser anzeigen"
 
 #: gschem/scheme/gschem/deprecated.scm:102
 #, scheme-format
@@ -3846,462 +3593,15 @@ msgid ""
 "Could not show documentation for selected component:\n"
 "\n"
 msgstr ""
+"Dokumentation für ausgewähltes Bauteil konnte nicht angezeigt werden:\n"
+"\n"
 
 #: gschem/scheme/gschem/keymap.scm:39
 #, scheme-format
 msgid "~S is not a valid key combination."
-msgstr "~S ist keine gültige Tasten-Kombination."
+msgstr "~S ist keine gültige Tastenkombination."
 
 #: gschem/scheme/gschem/keymap.scm:160
 #, scheme-format
 msgid "~S is not a prefix key sequence."
 msgstr "~S ist kein gültiger erster Teil einer Tastenkombination."
-
-#, fuzzy
-#~ msgid "You are running gEDA/gaf version [%s%s.%s],\n"
-#~ msgstr "gEDA/gschem Version %s%s.%s\n"
-
-#~ msgid ""
-#~ "conditions; please see the COPYING file for more details.\n"
-#~ "\n"
-#~ msgstr ""
-#~ "Lizenzbestimmungen in der Datei COPYING für nähere Informationen.\n"
-#~ "\n"
-
-#~ msgid "Coords"
-#~ msgstr "Koordinaten"
-
-#, fuzzy
-#~ msgid "Snap Size:"
-#~ msgstr "Rasterabstand"
-
-#, fuzzy
-#~ msgid "<b>Snap Options</b>"
-#~ msgstr "<b>Optionen</b>"
-
-#~ msgid "Translate"
-#~ msgstr "Verschieben nach"
-
-#~ msgid "Edit pin type"
-#~ msgstr "Pin-Typ bearbeiten"
-
-#~ msgid "Color"
-#~ msgstr "Farbe"
-
-#~ msgid "Sorry but this is a non-functioning menu option\n"
-#~ msgstr "Dieser Menupunkt funktioniert nicht. Sorry.\n"
-
-#~ msgid "Translating schematic [%d %d]\n"
-#~ msgstr "Verschiebe Schaltplan [%d %d]\n"
-
-#~ msgid "Select Component..."
-#~ msgstr "Bauteil auswählen …"
-
-#, fuzzy
-#~ msgid "Edit Pin Type..."
-#~ msgstr "/Pin-Typ bearbeiten …"
-
-#~ msgid "Tried to set the sensitivity on non-existent menu item '%s'\n"
-#~ msgstr ""
-#~ "Es wurde versucht die Empfindlichkeit des nicht existenten Menueintrags "
-#~ "'%s' zu setzen\n"
-
-#~ msgid "New file"
-#~ msgstr "Neue Datei"
-
-#~ msgid "Open"
-#~ msgstr "Öffnen"
-
-#, fuzzy
-#~ msgid "Open file"
-#~ msgstr "Datei öffnen …"
-
-#~ msgid "Save file"
-#~ msgstr "Datei speichern"
-
-#~ msgid "Undo last operation"
-#~ msgstr "Letzte Aktion rückgängig machen"
-
-#~ msgid "Redo last undo"
-#~ msgstr "Letzte Aktion wiederherstellen"
-
-#~ msgid ""
-#~ "Add component...\n"
-#~ "Select library and component from list, move the mouse into main window, "
-#~ "click to place\n"
-#~ "Right mouse button to cancel"
-#~ msgstr ""
-#~ "Bauteil hinzufügen …\n"
-#~ "Wählen Sie Bibliothek und Bauteil aus der Liste, bewegen die Maus ins "
-#~ "Hauptfenster,\n"
-#~ "klicken, um es zu platzieren. Rechtsklick zum abbrechen"
-
-#~ msgid ""
-#~ "Add nets mode\n"
-#~ "Right mouse button to cancel"
-#~ msgstr ""
-#~ "Netz einfügen\n"
-#~ "mit rechter Maustaste abbrechen"
-
-#~ msgid ""
-#~ "Add buses mode\n"
-#~ "Right mouse button to cancel"
-#~ msgstr ""
-#~ "Bus einfügen\n"
-#~ "mit rechter Maustaste abbrechen"
-
-#~ msgid "Select mode"
-#~ msgstr "Auswahlmodus"
-
-#~ msgid "_Close Window"
-#~ msgstr "Fenster s_chließen"
-
-#~ msgid "Color..."
-#~ msgstr "Farbe …"
-
-#~ msgid "Line Width & Type..."
-#~ msgstr "Linieneigenschaften …"
-
-#~ msgid "Fill Type..."
-#~ msgstr "Füllung …"
-
-#, fuzzy
-#~ msgid "Pin Type..."
-#~ msgstr "Füllung …"
-
-#~ msgid "Symbol Translate..."
-#~ msgstr "Symbol transferieren …"
-
-#~ msgid "Update Component"
-#~ msgstr "Bauteil aktualisieren"
-
-#~ msgid "_Redraw"
-#~ msgstr "Akt_ualisieren"
-
-#~ msgid "Zoom _Box"
-#~ msgstr "_Rechteck auswählen"
-
-#~ msgid "_Dark color scheme"
-#~ msgstr "_Dunkles Farbschema"
-
-#~ msgid "_Light color scheme"
-#~ msgstr "_Helles Farbschema"
-
-#~ msgid "B_W color scheme"
-#~ msgstr "Schwarz/Weiß"
-
-#~ msgid "_Manager..."
-#~ msgstr "Ver_waltung …"
-
-#~ msgid "_Previous"
-#~ msgstr "_Vorherige"
-
-#~ msgid "_Next"
-#~ msgstr "_Nächste"
-
-#~ msgid "_Down Schematic"
-#~ msgstr "Zum _Schaltplan hinab"
-
-#~ msgid "Down _Symbol"
-#~ msgstr "Zum S_ymbol hinab"
-
-#~ msgid "_Up"
-#~ msgstr "_Hinauf"
-
-#~ msgid "_Attach"
-#~ msgstr "_Anbringen"
-
-#~ msgid "Show _Both"
-#~ msgstr "_Beide anzeigen"
-
-#~ msgid "_Find Specific Text..."
-#~ msgstr "Text _suchen …"
-
-#~ msgid "_Text Size..."
-#~ msgstr "_Textgröße …"
-
-#~ msgid "Toggle _Snap On/Off"
-#~ msgstr "_Raster umschalten"
-
-#~ msgid "Snap Grid S_pacing..."
-#~ msgstr "Raster_abstand …"
-
-#~ msgid "Toggle _Outline/Box"
-#~ msgstr "_Umrissanzeige umschalten"
-
-#~ msgid "Toggle Net _Rubberband"
-#~ msgstr "_Netzgummifäden umschalten"
-
-#~ msgid "Toggle _Magnetic Net"
-#~ msgstr "_Magnetischen Netzmodus umschalten"
-
-#~ msgid "Show _Coord Window..."
-#~ msgstr "K_oordinatenfenster anzeigen …"
-
-#~ msgid "Component D_ocumentation..."
-#~ msgstr "Bauteil-D_okumentation …"
-
-#~ msgid "Hie_rarchy"
-#~ msgstr "Hie_rarchie"
-
-#~ msgid "A_ttributes"
-#~ msgstr "A_ttribut"
-
-#, fuzzy
-#~ msgid "Edit Color"
-#~ msgstr "Farbe"
-
-#~ msgid "Edit Line Width & Type"
-#~ msgstr "Linieneigenschaften bearbeiten"
-
-#~ msgid "Edit Fill Type"
-#~ msgstr "Füllung bearbeiten"
-
-#, fuzzy
-#~ msgid "Edit Pin Type"
-#~ msgstr "Pin-Typ bearbeiten"
-
-#, fuzzy
-#~ msgid "Up Hierarchy"
-#~ msgstr "Hie_rarchie"
-
-#, fuzzy
-#~ msgid "Find Specific Text"
-#~ msgstr "Text _suchen …"
-
-#, fuzzy
-#~ msgid "Set Default Text Size"
-#~ msgstr "Text Größe"
-
-#, fuzzy
-#~ msgid "Component Documentation"
-#~ msgstr "Bauteil-D_okumentation …"
-
-#~ msgid "o_buffer_copy: Invalid buffer %i\n"
-#~ msgstr "o_buffer_copy: fehlerhafter Puffer %i\n"
-
-#~ msgid "o_buffer_cut: Invalid buffer %i\n"
-#~ msgstr "o_buffer_cut: fehlerhafter Puffer %i\n"
-
-#~ msgid "Got an invalid buffer_number [o_buffer_paste_start]\n"
-#~ msgstr ""
-#~ "Eine ungültige Zwischenspeichernummer wurde übergeben "
-#~ "[o_buffer_paste_start]\n"
-
-#~ msgid "Tried to get an invalid outline color: %d\n"
-#~ msgstr "Versuchte eine ungültige Farbe zu holen: %d\n"
-
-#~ msgid ""
-#~ "Offset to translate?\n"
-#~ "(0 for origin)"
-#~ msgstr ""
-#~ "Wie weit soll verschoben werden?\n"
-#~ "(0 verschiebt zum Ursprung)"
-
-#~ msgid "Enter new text size:"
-#~ msgstr "Neue Textgröße eingeben:"
-
-#~ msgid "Enter new snap grid spacing:"
-#~ msgstr "Neuen Rasterabstand eingeben"
-
-#~ msgid "Text to find:"
-#~ msgstr "Zu suchender Text:"
-
-#~ msgid "Show Text"
-#~ msgstr "Text anzeigen"
-
-#~ msgid "Couldn't allocate gc\n"
-#~ msgstr "Konnte gc in x_window_setup_gc nicht zuweisen\n"
-
-#~ msgid "Open file..."
-#~ msgstr "Datei öffnen …"
-
-#, fuzzy
-#~ msgid "Edit Attributes - %s"
-#~ msgstr "Attribute bearbeiten"
-
-#, fuzzy
-#~ msgid "Embed Component/Pictore"
-#~ msgstr "Bauteil/Bild einbetten"
-
-#~ msgid "Function"
-#~ msgstr "Funktion"
-
-#~ msgid "/Zoom Box"
-#~ msgstr "/Ausschnitt wählen"
-
-#~ msgid "/Select"
-#~ msgstr "/Auswählen"
-
-#~ msgid "/Edit..."
-#~ msgstr "/Bearbeiten …"
-
-#~ msgid "/Copy"
-#~ msgstr "/Kopieren"
-
-#~ msgid "/Move"
-#~ msgstr "/Verschieben"
-
-#~ msgid "/Delete"
-#~ msgstr "/Löschen"
-
-#~ msgid "Popup_menu_item_factory doesn't exist!\n"
-#~ msgstr "Popup_menu_item_factory existiert nicht\n"
-
-#~ msgid "Tried to set the sensitivity on a non-existent popup menu_item\n"
-#~ msgstr ""
-#~ "Es wurde versucht die Sensibilität für einen nichtexistierenden "
-#~ "Menueintrag zu setzen\n"
-
-#~ msgid "Ne_w"
-#~ msgstr "N_eu"
-
-#~ msgid "_Buffer"
-#~ msgstr "_Puffer"
-
-#~ msgid "Invalid zoomfactor [%d] passed to %s\n"
-#~ msgstr "Ein ungültiger Vergrösserungsfaktor [%d] wurde an %s übergeben.\n"
-
-#~ msgid "Copy 2"
-#~ msgstr "Kopie 2"
-
-#~ msgid "Copy 3"
-#~ msgstr "Kopie 3"
-
-#~ msgid "Copy 4"
-#~ msgstr "Kopie 4"
-
-#~ msgid "Copy 5"
-#~ msgstr "Kopie 5"
-
-#~ msgid "Cut 2"
-#~ msgstr "Ausschneiden 2"
-
-#~ msgid "Cut 3"
-#~ msgstr "Ausschneiden 3"
-
-#~ msgid "Cut 4"
-#~ msgstr "Ausschneiden 4"
-
-#~ msgid "Cut 5"
-#~ msgstr "Ausschneiden 5"
-
-#~ msgid "Paste 2"
-#~ msgstr "Einfügen 2"
-
-#~ msgid "Paste 3"
-#~ msgstr "Einfügen 3"
-
-#~ msgid "Paste 4"
-#~ msgstr "Einfügen 4"
-
-#~ msgid "Paste 5"
-#~ msgstr "Einfügen 5"
-
-#~ msgid ""
-#~ "Enter text, click apply,\n"
-#~ "move cursor into window, click to place text.\n"
-#~ "Middle button to rotate while placing."
-#~ msgstr ""
-#~ "Geben Sie Text ein, klicken auf Anwenden, bewegen\n"
-#~ "den Cursor ins Fenster, klicken, um den Text zu platzieren.\n"
-#~ "Mittlere Maustaste dreht während dem Platzieren."
-
-#~ msgid "*unchanged*"
-#~ msgstr "*unverändert*"
-
-#~ msgid "ERROR: NULL object in color_edit_dialog_apply!\n"
-#~ msgstr "FEHLER: NULL Objekt innerhalb von color_edit_dialog_apply!\n"
-
-#~ msgid "Color Edit"
-#~ msgstr "Farbe bearbeiten"
-
-#~ msgid "Discard Page"
-#~ msgstr "Seite ablegen"
-
-#~ msgid "_Discard"
-#~ msgstr "_Ablegen"
-
-#~ msgid "Unknown end for line (%d)\n"
-#~ msgstr "Undefiniertes Ende einer Linie (%d)\n"
-
-#~ msgid "Unknown type for stroke (%d) !\n"
-#~ msgstr "Unbekannter Linienstil Typ (%d)!\n"
-
-#~ msgid "cairo context"
-#~ msgstr "cairo-Umgebung"
-
-#~ msgid "the cairo context for the renderer"
-#~ msgstr "cairo-Umgebung für die Darstellung von grafischen Objekten"
-
-#~ msgid "Cannot find source [%s]\n"
-#~ msgstr "Die Quelle [%s] konnte nicht gefunden werden.\n"
-
-#~ msgid "Unknown type for box (fill)!\n"
-#~ msgstr "Undefinierter Typ für das Rechteck (Füllung)!\n"
-
-#~ msgid "Got an invalid which one in o_bus_draw_stretch\n"
-#~ msgstr ""
-#~ "Ungültiger Wert für das Pin-Ende in der Funktion o_bus_draw_stretch\n"
-
-#~ msgid "Unknown type for circle (fill)!\n"
-#~ msgstr "Undefinierter Typ für einen Kreis (Füllung).\n"
-
-#~ msgid "Got an invalid which one in o_net_draw_stretch\n"
-#~ msgstr ""
-#~ "Ungültiger Wert für das Pin-Ende in der Funktion o_net_draw_stretch\n"
-
-#~ msgid "Unknown type for path (fill)!\n"
-#~ msgstr "Unbekannte Füllart einer Pfad-Definition!\n"
-
-#~ msgid "Encapsulated Postscript"
-#~ msgstr "Encapsulated Postscript"
-
-#~ msgid "x_image_lowlevel: Unable to write eps file %s.\n"
-#~ msgstr "x_image_lowlevel: Konnte eps-Datei %s nicht schreiben.\n"
-
-#~ msgid "Extents with margins"
-#~ msgstr "Alles mit Rand"
-
-#~ msgid "Extents no margins"
-#~ msgstr "Alles ohne Rand"
-
-#~ msgid "Current Window"
-#~ msgstr "Aktuelles Fenster"
-
-#~ msgid "Landscape"
-#~ msgstr "Querformat"
-
-#~ msgid "Portrait"
-#~ msgstr "Hochformat"
-
-#~ msgid "Settings"
-#~ msgstr "Einstellungen"
-
-#~ msgid "Output paper size:"
-#~ msgstr "Papiergröße:"
-
-#~ msgid "Destination"
-#~ msgstr "Ziel"
-
-#~ msgid "File:"
-#~ msgstr "Datei:"
-
-#~ msgid "Command:"
-#~ msgstr "Befehl:"
-
-#~ msgid "No print destination specified\n"
-#~ msgstr "Das Ziel für den Ausdruck fehlt\n"
-
-#~ msgid "Cannot print current schematic to [%s]\n"
-#~ msgstr "Aktueller Schaltplan kann nicht in [%s] gedruckt werden.\n"
-
-#~ msgid ""
-#~ "Error printing to file '%s'\n"
-#~ "Check the log window for more information"
-#~ msgstr ""
-#~ "Fehler beim Drucken in die Datei '%s'\n"
-#~ "Nähere Informationen sind im Log-Fenster."
-
-#~ msgid "Printed current schematic to [%s]\n"
-#~ msgstr "Aktueller Schalplan in [%s] ausgedruckt\n"
