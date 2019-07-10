@@ -41,9 +41,9 @@
  * The negative values allow symbols, residing at the origin, to be edited
  * without translation to other coordinates.
  */
-int   default_init_left = -60500;
+int   default_init_left = -121000;
 int   default_init_right = 121000;
-int   default_init_top = -45375;
+int   default_init_top = -90750;
 int   default_init_bottom = 90750;
 
 char *default_bitmap_directory = NULL;
