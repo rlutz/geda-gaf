@@ -62,7 +62,7 @@ patch_parse (gschem_patch_state_t *st, FILE *f, const char *fn)
     ST_STR
   } state = ST_INIT;
 
-  st->lines = NULL;
+  g_assert (st->lines == NULL);
   lineno = 1;
   used = 0;
 
@@ -379,6 +379,8 @@ gschem_patch_state_init (gschem_patch_state_t *st, const char *fn)
 {
   FILE *f;
   int res;
+
+  memset (st, 0, sizeof *st);
 
   f = fopen (fn, "r");
   if (f == NULL)
