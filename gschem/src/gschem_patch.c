@@ -23,8 +23,28 @@
 
 #include "gschem.h"
 
-static void patch_list_free (GList *list);
 
+static void
+free_patch_line (gschem_patch_line_t *line)
+{
+  switch (line->op) {
+    case GSCHEM_PATCH_DEL_CONN:
+    case GSCHEM_PATCH_ADD_CONN:
+      g_free (line->id);
+      g_free (line->arg1.net_name);
+      break;
+    case GSCHEM_PATCH_CHANGE_ATTRIB:
+      g_free (line->id);
+      g_free (line->arg1.attrib_name);
+      g_free (line->arg2.attrib_val);
+      break;
+    case GSCHEM_PATCH_NET_INFO:
+      g_free (line->id);
+      g_list_free_full (line->arg1.ids, g_free);
+      break;
+  }
+  g_free (line);
+}
 
 static int
 patch_parse (gschem_patch_state_t *st, FILE *f, const char *fn)
@@ -293,20 +313,17 @@ patch_parse (gschem_patch_state_t *st, FILE *f, const char *fn)
   } while (c != EOF);
 
   st->lines = g_list_reverse (st->lines);
-  g_free (current);
+  if (current != NULL)
+    free_patch_line (current);
   free (word);
   return 0;
 
 error:
-  patch_list_free (st->lines);
-  g_free (current);
+  g_list_free_full (st->lines, (GDestroyNotify) free_patch_line);
+  if (current != NULL)
+    free_patch_line (current);
   free (word);
   return -1;
-}
-
-static void
-patch_list_free (GList *list)
-{
 }
 
 
@@ -382,8 +399,10 @@ gschem_patch_state_init (gschem_patch_state_t *st, const char *fn)
     st->nets = g_hash_table_new (g_str_hash, g_str_equal);
     for (i = st->lines; i != NULL; i = g_list_next (i)) {
       gschem_patch_line_t *l = i->data;
-      if (l->op == GSCHEM_PATCH_NET_INFO)
+      if (l->op == GSCHEM_PATCH_NET_INFO) {
         g_hash_table_insert (st->nets, l->id, l->arg1.ids);
+        l->arg1.ids = NULL;  /* transfer ownership */
+      }
     }
   }
 
@@ -567,7 +586,7 @@ gschem_patch_state_destroy (gschem_patch_state_t *st)
   g_hash_table_destroy (st->nets);
   g_hash_table_destroy (st->pins);
   g_hash_table_destroy (st->comps);
-  patch_list_free (st->lines);
+  g_list_free_full (st->lines, (GDestroyNotify) free_patch_line);
 }
 
 static GSList *
