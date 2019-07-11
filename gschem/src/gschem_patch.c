@@ -396,8 +396,8 @@ gschem_patch_state_init (gschem_patch_state_t *st, const char *fn)
     GList *i;
 
     /* Create hashes for faster lookups avoiding O(objects*patches) */
-    st->pins = g_hash_table_new (g_str_hash, g_str_equal);
-    st->comps = g_hash_table_new (g_str_hash, g_str_equal);
+    st->pins = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
+    st->comps = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
     st->nets = g_hash_table_new (g_str_hash, g_str_equal);
     for (i = st->lines; i != NULL; i = g_list_next (i)) {
       gschem_patch_line_t *l = i->data;
@@ -416,19 +416,8 @@ gschem_patch_state_init (gschem_patch_state_t *st, const char *fn)
 static void
 build_insert_hash_list (GHashTable *hash, char *full_name, void *item)
 {
-  GSList *lst;
-  int free_name;
-
-  lst = g_hash_table_lookup (hash, full_name);
-  free_name = (lst != NULL);
-  lst = g_slist_prepend (lst, item);
-
-  g_hash_table_insert (hash, full_name, lst);
-
-  /* key already exists, the new one won't end up in the hash and
-     won't get free'd on hash destroy */
-  if (free_name)
-    g_free (full_name);
+  GSList *lst = g_hash_table_lookup (hash, full_name);
+  g_hash_table_insert (hash, full_name, g_slist_prepend (lst, item));
 }
 
 static gschem_patch_pin_t *
@@ -559,15 +548,6 @@ free_key (gpointer key, gpointer value, gpointer user_data)
   return TRUE;
 }
 
-static gboolean
-free_key_list (gpointer key, gpointer value, gpointer user_data)
-{
-  GSList *lst = value;
-  g_slist_free (lst);
-  g_free (key);
-  return TRUE;
-}
-
 /*! \brief Free all memory allocated by a patch state.
  *
  * \note This *does not* free the patch state struct \a st itself.
@@ -575,8 +555,17 @@ free_key_list (gpointer key, gpointer value, gpointer user_data)
 void
 gschem_patch_state_destroy (gschem_patch_state_t *st)
 {
-  g_hash_table_foreach_remove (st->pins, free_key_list, NULL);
-  g_hash_table_foreach_remove (st->comps, free_key_list, NULL);
+  GHashTableIter iter;
+  gpointer key, value;
+
+  g_hash_table_iter_init (&iter, st->pins);
+  while (g_hash_table_iter_next (&iter, &key, &value))
+    g_slist_free ((GSList *) value);
+
+  g_hash_table_iter_init (&iter, st->comps);
+  while (g_hash_table_iter_next (&iter, &key, &value))
+    g_slist_free ((GSList *) value);
+
   g_hash_table_destroy (st->nets);
   g_hash_table_destroy (st->pins);
   g_hash_table_destroy (st->comps);
