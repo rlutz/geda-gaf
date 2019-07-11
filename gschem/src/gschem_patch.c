@@ -27,7 +27,7 @@ static void patch_list_free (GList *list);
 
 
 static int
-patch_parse (gschem_patch_state_t *st, FILE *f)
+patch_parse (gschem_patch_state_t *st, FILE *f, const char *fn)
 {
   char *word = NULL;
   int alloced = 0, used;
@@ -188,8 +188,8 @@ patch_parse (gschem_patch_state_t *st, FILE *f)
         else if (strcmp (word, "net_info") == 0)
           current.op = GSCHEM_PATCH_NET_INFO;
         else {
-          fprintf (stderr, "Syntax error: unknown opcode %s in line %d\n",
-                           word, lineno);
+          fprintf (stderr, "%s:%d: Syntax error: unknown opcode `%s'\n",
+                           fn, lineno, word);
           goto error;
         }
         used = 0;
@@ -212,8 +212,9 @@ patch_parse (gschem_patch_state_t *st, FILE *f)
               else if (current.arg1.net_name == NULL)
                 current.arg1.net_name = strdup (word);
               else {
-                fprintf (stderr, "Need two arguments for the connection: "
-                                 "netname and pinname in line %d\n", lineno);
+                fprintf (stderr, "%s:%d: Need two arguments for the "
+                                 "connection: netname and pinname\n",
+                                 fn, lineno);
                 goto error;
               }
               break;
@@ -225,8 +226,9 @@ patch_parse (gschem_patch_state_t *st, FILE *f)
               else if (current.arg2.attrib_val == NULL)
                 current.arg2.attrib_val = strdup (word);
               else {
-                fprintf (stderr, "Need three arguments for an attrib change: "
-                                 "id attr_name attr_val in line %d\n", lineno);
+                fprintf (stderr, "%s:%d: Need three arguments for an "
+                                 "attrib change: id attr_name attr_val\n",
+                                 fn, lineno);
                 goto error;
               }
               break;
@@ -250,7 +252,7 @@ patch_parse (gschem_patch_state_t *st, FILE *f)
         case GSCHEM_PATCH_ADD_CONN:
           if (current.id == NULL ||
               current.arg1.net_name == NULL) {
-            fprintf (stderr, "Not enough arguments in line %d\n", lineno);
+            fprintf (stderr, "%s:%d: Not enough arguments\n", fn, lineno);
             goto error;
           }
           break;
@@ -258,13 +260,13 @@ patch_parse (gschem_patch_state_t *st, FILE *f)
           if (current.id == NULL ||
               current.arg1.attrib_name == NULL ||
               current.arg2.attrib_val == NULL) {
-            fprintf (stderr, "Not enough arguments in line %d\n", lineno);
+            fprintf (stderr, "%s:%d: Not enough arguments\n", fn, lineno);
             goto error;
           }
           break;
         case GSCHEM_PATCH_NET_INFO:
           if (current.id == NULL) {
-            fprintf (stderr, "Not enough arguments in line %d\n", lineno);
+            fprintf (stderr, "%s:%d: Not enough arguments\n", fn, lineno);
             goto error;
           }
           break;
@@ -352,7 +354,7 @@ gschem_patch_state_init (gschem_patch_state_t *st, const char *fn)
   if (f == NULL)
     return -1;
 
-  res = patch_parse (st, f);
+  res = patch_parse (st, f, fn);
 
 #if DEBUG
   patch_list_print (st);
