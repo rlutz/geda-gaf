@@ -86,12 +86,6 @@ update_snap_mode_model (GschemOptionsDockable *dockable, GtkWidget *button);
 static void
 update_snap_mode_widget (GschemOptionsDockable *dockable);
 
-static void
-update_snap_size_model (GschemOptionsDockable *dockable);
-
-static void
-update_snap_size_widget (GschemOptionsDockable *dockable);
-
 
 
 /*! \brief Get/register options dockable type.
@@ -253,18 +247,9 @@ create_snap_section (GschemOptionsDockable *dockable)
 
   editor[0] = create_grid_mode_widget (dockable);
   editor[1] = create_snap_mode_widget (dockable);
-  editor[2] = dockable->snap_size = gtk_spin_button_new_with_range (MINIMUM_SNAP_SIZE,
-                                                                    MAXIMUM_SNAP_SIZE,
-                                                                    5);
+  editor[2] = x_grid_size_sb_new (GSCHEM_DOCKABLE (dockable)->w_current);
 
   table = gschem_dialog_misc_create_property_table (label, editor, 3);
-
-  // gtk_editable_select_region (GTK_EDITABLE(spin_size), 0, -1);
-
-  g_signal_connect_swapped (G_OBJECT (dockable->snap_size),
-                            "value-changed",
-                            G_CALLBACK (update_snap_size_model),
-                            dockable);
 
   return gschem_dialog_misc_create_section_widget (_("<b>Grid Options</b>"), table);
 }
@@ -396,10 +381,6 @@ set_options (GschemOptionsDockable *dockable, GschemOptions *options)
 {
   if (dockable->options != NULL) {
     g_signal_handlers_disconnect_by_func (dockable->options,
-                                          G_CALLBACK (update_snap_size_widget),
-                                          dockable);
-
-    g_signal_handlers_disconnect_by_func (dockable->options,
                                           G_CALLBACK (update_snap_mode_widget),
                                           dockable);
 
@@ -442,18 +423,12 @@ set_options (GschemOptionsDockable *dockable, GschemOptions *options)
                               "notify::snap-mode",
                               G_CALLBACK (update_snap_mode_widget),
                               dockable);
-
-    g_signal_connect_swapped (dockable->options,
-                              "notify::snap-size",
-                              G_CALLBACK (update_snap_size_widget),
-                              dockable);
   }
 
   update_grid_mode_widget (dockable);
   update_magnetic_net_mode_widget (dockable);
   update_net_rubber_band_mode_widget (dockable);
   update_snap_mode_widget (dockable);
-  update_snap_size_widget (dockable);
 }
 
 
@@ -665,51 +640,5 @@ update_snap_mode_widget (GschemOptionsDockable *dockable)
                                          G_CALLBACK (update_snap_mode_model),
                                          dockable);
     }
-  }
-}
-
-
-
-/*! \private
- *  \brief Update the snap size in the model
- *
- *  \param [in,out] dockable This dockable
- */
-static void
-update_snap_size_model (GschemOptionsDockable *dockable)
-{
-  GschemToplevel *w_current;
-
-  g_return_if_fail (dockable != NULL);
-
-  g_object_get (dockable, "gschem-toplevel", &w_current, NULL);
-
-  g_return_if_fail (w_current != NULL);
-
-  gschem_options_set_snap_size (w_current->options,
-                                gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (dockable->snap_size)));
-}
-
-
-
-/*! \private
- *  \brief Update the snap size widget with the current value
- *
- *  \param [in,out] dockable This dockable
- */
-static void
-update_snap_size_widget (GschemOptionsDockable *dockable)
-{
-  g_return_if_fail (dockable != NULL);
-
-  if (dockable->options != NULL) {
-    GschemToplevel *w_current;
-
-    g_object_get (dockable, "gschem-toplevel", &w_current, NULL);
-
-    g_return_if_fail (w_current != NULL);
-
-    gtk_spin_button_set_value (GTK_SPIN_BUTTON (dockable->snap_size),
-                               gschem_options_get_snap_size (w_current->options));
   }
 }
