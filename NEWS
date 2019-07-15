@@ -7,6 +7,166 @@ Copyright (C) 1998-2015 gEDA Developers
 This file documents important user-visible changes in gEDA/gaf.  For
 more information, please consult the `ChangeLog' file.
 
+Notable changes in gEDA/gaf 1.9.3 (upcoming)
+============================================
+
+* Added the library "xornstorage" and Python package "gaf" as a
+  (currently quite minimal) way to access gEDA/gaf functionality from
+  outside of gschem.  These are on the long term intended to replace
+  libgeda, making the core gEDA/gaf functionality available as a
+  library to both gschem and other applications.
+
+* Refactored gnetlist:
+
+  - gnetlist is now part of the Python package "gaf" and uses the new
+    libraries instead of libgeda to work with gEDA files.
+
+  - Netlist backends can now be written in Python.
+
+  - When reading broken schematics and/or symbols, gnetlist doesn't
+    silently fail or produce bad output any more.  Conversely, this
+    means gnetlist has become more picky about input files: whenever
+    it occurs something that is likely to result in bad output, it
+    issues a warning or an error.
+
+  - In case there should be any problems with the refactored codebase,
+    the "old" gnetlist is still available as "gnetlist-legacy".
+
+* There are new semantics for power and I/O port symbols:
+
+  - Power symbols can now use a netname=NET instead of a net=NET:1
+    attribute.  This allows using the attribute value as a visible
+    label, removing the need for individual power symbols.
+
+  - I/O port symbols in subschematics can now use a portname=PORT
+    instead of a refdes=PORT attribute to distinguish them from
+    regular components.  This allows gnetlist to detect if there are
+    any unconnected port symbols left.
+
+* Hierarchical schematics can now use a simple form of parametrization
+  where the instantiating component contains an attribute of the form
+  `param=NAME=VALUE' and some attribute value in the subschematic
+  contains the pattern `$(NAME)', which will be replaced with `VALUE'.
+  This only works with regular attribute lookup from netlist backends
+  and won't affect special attributes like slot= or netname=, though.
+
+* Added command-line tool `xorn' for low-level schematic and symbol
+  file manipulation.
+
+* Added experimental XML file format (currently only supported by
+  gnetlist and the `xorn' command line utility).
+
+* All tests now use the parallel test harness, speeding up `make
+  check' runs considerably when used with multiple jobs (-jN).
+
+gschem changes
+--------------
+
+* Tool windows are now "dockable", i.e., they can be either used as
+  modal/non-modal dialogs or docked to the edges of the main window.
+
+* The action mechanism used for menu items, tool buttons, and key
+  bindings has been redesigned, making several improvements possbile:
+
+  - Actions can now be used interchangeably in the main menu, toolbar,
+    context menu, and keymap.  They are defined in a single place
+    ("actions.c" for C actions and "builtins.scm" for Guile actions),
+    including metadata like name, icon, and tooltip.
+
+  - Menu items and tool buttons representing options have a little
+    check or radio box beside them indicating their current state.
+
+  - Menu items and tool buttons are greyed out while they can't be
+    used.
+
+  - Toolbar and context menu are customizable.
+
+  - Menu and toolbar definitions are simple Scheme variables, allowing
+    users to add actions to the menu without having to copy the menu
+    definition.  Actions are represented in Scheme code as applicable
+    SMOBs, allowing them to be called like procedures while retaining
+    the action information necessary for rendering the menus/toolbar.
+
+  - "Repeat Last Action" (usually bound to ".") uses the same logic as
+    the middle mouse button repeat action does, i.e., only actions
+    that "make sense" qualify for repeating.
+
+* The menus, toolbar, and keymap have been revamped to more closely
+  resemble the "standards" for a desktop application.  Some actions
+  have been assigned more accessible or memorable keys.
+
+* Attaching and detaching attributes now work as expected:
+
+  - "Attributes / Attach Attributes" used to depend on the order in
+    which objects were selected, taking the first selected object as
+    the base object to attach attributes to, regardless of its type.
+    Now, the selected objects are searched for a base object of
+    suitable type, and only if exactly one is found, the attributes
+    are attached to it.
+
+  - "Attributes / Detach Attributes" used to work on selected
+    components and nets, detaching all attributes from these objects.
+    It now works on the selected *attributes*, allowing the user to
+    selectively detach specific attributes while leaving the rest
+    attached.
+
+* The "Light Color Scheme" (V L) selected from the menu now has a true
+  white background.  For compatibility, selecting the "lightbg"
+  colormap in gschemrc loads the old, light-gray color scheme; the new
+  color scheme can be selected as "whitebg".
+
+* The library window has been made fit to be used as a dock window:
+
+  - When the dialog is resized to be taller than a certain aspect
+    ratio, it switches automatically to a stacked layout where the
+    preview and attribute panes are located below the symbol selector.
+
+  - While in stacked layout, the bottom panes can be expanded and
+    collapsed to give more room to the symbol selector.
+
+  - The window is automatically refreshed on library updates.
+
+* Symbol editing has been improved:
+
+  - The page can now be scrolled to negative coordinates, making it
+    feasible to edit symbols without moving them away from the origin,
+    then translating them back.  This also allows to consciously
+    choose something that makes sense for the symbol as the location
+    of the origin.
+
+  - The coordinate origin is now indicated with slightly darker grid
+    lines.  (This can be enabled/disabled via "View / Show Origin".)
+
+  - The "Symbol Translate" action has been replaced with "Place
+    Origin" which lets the user select the position of the origin
+    interactively.
+
+* Added Igor2's code for back-annotation from pcb-rnd.
+
+* "File / Revert" only asks for confirmation if the file has been
+  modified.
+
+* The "repeat" function of the middle mouse button now evaluates
+  actions at the current mouse position.
+
+* Mouse gestures work properly again.
+
+* Added further menu items:
+
+  - "View / Show Menubar" (V M)
+  - "View / Show Toolbar" (V T)
+  - "View / Show Scrollbars" (V S)
+
+  - "Tools / Select Locked Objects" (T L)
+
+* Adding an attribute, changing the slot of a component, replacing the
+  contents of a picture, and selecting "Pan" from the menu used not to
+  work properly with undo/redo.  This has been fixed.
+
+* "Edit / Undo" and "Edit / Redo" now show the name of the action that
+  will be undone/redone.
+
+
 Notable changes in gEDA/gaf 1.9.2.1p
 ====================================
 
