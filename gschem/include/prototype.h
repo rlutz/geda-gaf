@@ -409,6 +409,8 @@ void x_fstylecb_set_index (GtkWidget *widget, int style);
 /* x_grid.c */
 void x_grid_draw_region(GschemToplevel *w_current, cairo_t *cr, int x, int y, int width, int height);
 int x_grid_query_drawn_spacing(GschemToplevel *w_current);
+/* x_grid_size_sb.c */
+GtkWidget *x_grid_size_sb_new (GschemToplevel *w_current);
 /* x_image.c */
 void x_image_lowlevel(GschemToplevel *w_current, const char* filename,
 		      int desired_width, int desired_height, char *filetype);

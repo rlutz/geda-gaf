@@ -105,6 +105,7 @@ gschem_SOURCES = \
 	x_fileselect.c \
 	x_fstylecb.c \
 	x_grid.c \
+	x_grid_size_sb.c \
 	x_image.c \
 	x_integerls.c \
 	x_linecapcb.c \
