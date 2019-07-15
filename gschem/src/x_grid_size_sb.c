@@ -31,38 +31,29 @@
 #ifdef HAVE_STRING_H
 #include <string.h>
 #endif
-#include <math.h>
 
 #include "gschem.h"
 
+static void
+update_spin_button_internal (GtkSpinButton *spin_button, gdouble value);
 
-static gint
-spin_button_input (GtkSpinButton *spin_button,
-                   gdouble *new_value,
-                   GschemToplevel *w_current)
-{
-  gchar *err = NULL;
-  gdouble num = g_strtod (gtk_entry_get_text (GTK_ENTRY (spin_button)), &err);
-  if (*err)
-    return GTK_INPUT_ERROR;
-  *new_value = round (log2 (num / 25));
-  if (*new_value < 0)
-    *new_value = 0;
-  if (*new_value > 12)
-    *new_value = 12;
-  return TRUE;
-}
 
-static gint
-spin_button_output (GtkSpinButton *spin_button,
-                    GschemToplevel *w_current)
+static gboolean
+is_grid_step (gint v)
 {
-  gint value = gtk_spin_button_get_value_as_int (spin_button);
-  gchar *buf = g_strdup_printf ("%.0f", 25 * exp2 (value));
-  if (strcmp (buf, gtk_entry_get_text (GTK_ENTRY (spin_button))) != 0)
-    gtk_entry_set_text (GTK_ENTRY (spin_button), buf);
-  g_free (buf);
-  return TRUE;
+  return /* base 10 */
+         v == 5 || v == 10 || v == 20 || v == 40 || v == 80 || v == 160 ||
+         v == 320 || v == 640 || v == 1280 || v == 2560 || v == 5120 ||
+         v == 10240 || v == 20480 || v == 40960 || v == 81920 ||
+
+         /* base 100 (default) */
+         v == 25 || v == 50 || v == 100 || v == 200 || v == 400 || v == 800 ||
+         v == 1600 || v == 3200 || v == 6400 || v == 12800 || v == 25600 ||
+         v == 51200 ||
+
+         /* base 1000 */
+         v == 125 || v == 250 || v == 500 || v == 1000 || v == 2000 ||
+         v == 4000 || v == 8000 || v == 16000 || v == 32000 || v == 64000;
 }
 
 static void
@@ -70,7 +61,27 @@ spin_button_value_changed (GtkSpinButton *spin_button,
                            GschemToplevel *w_current)
 {
   gint value = gtk_spin_button_get_value_as_int (spin_button);
-  gschem_options_set_snap_size (w_current->options, 25 * exp2 (value));
+  gint prev_value = gschem_options_get_snap_size (w_current->options);
+
+  /* Gtk doesn't allow handling the increment/decrement events
+     directly, so we have to observe the new value and guess whether
+     they are the result of pressing up/down on the previous value. */
+  if (!is_grid_step (value) && is_grid_step (prev_value)) {
+    if (value == prev_value - 1) {
+      if (prev_value % 2 == 0 && is_grid_step (prev_value / 2))
+        value = prev_value / 2;
+      else
+        value = prev_value;
+    } else if (value == prev_value + 1) {
+      if (is_grid_step (prev_value * 2))
+        value = prev_value * 2;
+      else
+        value = prev_value;
+    }
+  }
+
+  update_spin_button_internal (spin_button, value);
+  gschem_options_set_snap_size (w_current->options, value);
 }
 
 static void
@@ -78,16 +89,22 @@ update_spin_button (GschemOptions *options,
                     GParamSpec *pspec,
                     gpointer user_data)
 {
-  gdouble value = round (log2 (gschem_options_get_snap_size (options) / 25));
+  update_spin_button_internal (GTK_SPIN_BUTTON (user_data),
+                               gschem_options_get_snap_size (options));
+}
 
+static void
+update_spin_button_internal (GtkSpinButton *spin_button,
+                             gdouble value)
+{
   g_signal_handlers_block_matched (
-    GTK_WIDGET (user_data), G_SIGNAL_MATCH_FUNC, 0, 0, NULL,
+    spin_button, G_SIGNAL_MATCH_FUNC, 0, 0, NULL,
     G_CALLBACK (spin_button_value_changed), NULL);
 
-  gtk_spin_button_set_value (GTK_SPIN_BUTTON (user_data), value);
+  gtk_spin_button_set_value (spin_button, value);
 
   g_signal_handlers_unblock_matched (
-    GTK_WIDGET (user_data), G_SIGNAL_MATCH_FUNC, 0, 0, NULL,
+    spin_button, G_SIGNAL_MATCH_FUNC, 0, 0, NULL,
     G_CALLBACK (spin_button_value_changed), NULL);
 }
 
@@ -96,17 +113,15 @@ update_spin_button (GschemOptions *options,
 GtkWidget *
 x_grid_size_sb_new (GschemToplevel *w_current)
 {
-  GtkObject *adjustment = gtk_adjustment_new (2, 0, 12, 1, 0, 0);
+  GtkObject *adjustment = gtk_adjustment_new (1, MINIMUM_SNAP_SIZE,
+                                                 MAXIMUM_SNAP_SIZE, 1, 1, 0);
   GtkWidget *spin_button = g_object_new (GTK_TYPE_SPIN_BUTTON, NULL);
   gtk_spin_button_set_adjustment (GTK_SPIN_BUTTON (spin_button),
                                   GTK_ADJUSTMENT (adjustment));
-  gtk_spin_button_set_update_policy (GTK_SPIN_BUTTON (spin_button),
-                                     GTK_UPDATE_IF_VALID);
+  gtk_spin_button_set_value (GTK_SPIN_BUTTON (spin_button),
+                             gschem_options_get_snap_size (w_current->options));
+  gtk_entry_set_width_chars (GTK_ENTRY (spin_button), 5);
 
-  g_signal_connect (spin_button, "input",
-                    G_CALLBACK (spin_button_input), w_current);
-  g_signal_connect (spin_button, "output",
-                    G_CALLBACK (spin_button_output), w_current);
   g_signal_connect (spin_button, "value-changed",
                     G_CALLBACK (spin_button_value_changed), w_current);
   g_signal_connect (w_current->options, "notify::snap-size",
