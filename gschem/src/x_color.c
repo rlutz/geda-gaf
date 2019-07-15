@@ -146,6 +146,8 @@ void x_color_allocate (void)
       gdk_outline_colors[i] = NULL;
     }
   }
+
+  x_colorcb_update_store ();
 }
 
 /*! \todo Finish function documentation!!!

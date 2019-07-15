@@ -214,3 +214,27 @@ x_colorcb_set_index (GtkWidget *widget, int color_index)
     gtk_combo_box_set_active_iter (GTK_COMBO_BOX(widget), NULL);
   }
 }
+
+
+
+/*! \brief Update the colors in the GtkListStore.
+ */
+void
+x_colorcb_update_store ()
+{
+  if (color_list_store == NULL)
+    return;
+
+  GtkTreeIter iter;
+  gtk_tree_model_get_iter_first (GTK_TREE_MODEL (color_list_store), &iter);
+
+  for (int i = 0; i < MAX_COLORS; i++) {
+    if (!x_color_display_enabled (i))
+      continue;
+
+    gtk_list_store_set (color_list_store, &iter,
+                        COLUMN_COLOR, x_get_color (i),
+                        -1);
+    gtk_tree_model_iter_next (GTK_TREE_MODEL (color_list_store), &iter);
+  }
+}
