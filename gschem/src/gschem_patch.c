@@ -739,10 +739,10 @@ exec_check_conn (GSList *diffs, gschem_patch_line_t *patch,
     }
     *buff = OBJ_NET;
     memcpy (buff + 1, patch->arg1.net_name, len + 1);
-    connected = (g_hash_table_lookup (connections, buff) != NULL);
+    connected = g_hash_table_lookup (connections, buff) != NULL;
     offs = 1;
   } else {
-    connected = (strcmp (patch->arg1.net_name, pin->net) == 0);
+    connected = strcmp (patch->arg1.net_name, pin->net) == 0;
     buff = g_strdup (pin->net);
     offs = 0;
   }
@@ -857,14 +857,14 @@ gschem_patch_state_execute (gschem_patch_state_t *st, GSList *diffs)
     switch (l->op) {
       case GSCHEM_PATCH_DEL_CONN:
       case GSCHEM_PATCH_ADD_CONN:
-        del = (l->op == GSCHEM_PATCH_DEL_CONN);
+        del = l->op == GSCHEM_PATCH_DEL_CONN;
         net = onet = g_hash_table_lookup (st->nets, l->arg1.net_name);
         pins = g_hash_table_lookup (st->pins, l->id);
         if (pins == NULL) {
           /* pin not found on open schematics */
           gchar *msg =
             g_strdup_printf ("%s pin %s (NOT FOUND) from net %s",
-                             (del ? "Disconnect" : "Connect"), l->id,
+                             del ? "Disconnect" : "Connect", l->id,
                              l->arg1.net_name);
           diffs = add_hit (diffs, NULL, msg);
           exec_conn_pretend (l, &net, del);
