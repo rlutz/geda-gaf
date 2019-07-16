@@ -419,8 +419,7 @@ build_insert_hash_list (GHashTable *hash, char *full_name, void *item)
 static gschem_patch_pin_t *
 alloc_pin (OBJECT *pin_obj, char *net)
 {
-  gschem_patch_pin_t *p;
-  p = g_new (gschem_patch_pin_t, 1);
+  gschem_patch_pin_t *p = g_new (gschem_patch_pin_t, 1);
   p->obj = pin_obj;
   p->net = net;
   return p;
@@ -571,8 +570,7 @@ gschem_patch_state_destroy (gschem_patch_state_t *st)
 static GSList *
 add_hit (GSList *hits, OBJECT *obj, char *text)
 {
-  gschem_patch_hit_t *hit;
-  hit = g_new (gschem_patch_hit_t, 1);
+  gschem_patch_hit_t *hit = g_new (gschem_patch_hit_t, 1);
   hit->object = obj;
   hit->text = text;
   return g_slist_prepend (hits, hit);
@@ -666,12 +664,9 @@ exec_check_conn_hashval (void *user_ctx, OBJECT *o)
 static GHashTable *
 exec_list_conns (OBJECT *pin)
 {
-  GHashTable *found, *connections;
-  GList *open = NULL;
-
-  connections = g_hash_table_new (g_str_hash, g_str_equal);
-  found = g_hash_table_new (g_direct_hash, NULL);
-  open = g_list_prepend (open, pin);
+  GHashTable *connections = g_hash_table_new (g_str_hash, g_str_equal);
+  GHashTable *found = g_hash_table_new (g_direct_hash, NULL);
+  GList *open = g_list_prepend (NULL, pin);
   open = s_conn_find_all (found, open, exec_check_conn_hashval, connections);
 
   g_hash_table_destroy (found);
@@ -819,8 +814,7 @@ exec_check_conn (GSList *diffs, gschem_patch_line_t *patch,
 static GSList *
 exec_check_attrib (GSList *diffs, gschem_patch_line_t *patch, OBJECT *comp)
 {
-  gchar *attr_val;
-  attr_val =
+  gchar *attr_val =
     o_attrib_search_object_attribs_by_name (comp, patch->arg1.attrib_name, 0);
   if (attr_val == NULL)
     return diffs;
