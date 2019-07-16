@@ -32,7 +32,7 @@ patch_parse (gschem_patch_state_t *st, FILE *f, const char *fn)
   char *word = NULL;
   int alloced = 0, used;
   int c, lineno;
-  gschem_patch_line_t current;
+  gschem_patch_line_t *current = NULL;
 
   enum {
     ST_INIT,
@@ -45,7 +45,6 @@ patch_parse (gschem_patch_state_t *st, FILE *f, const char *fn)
   st->lines = NULL;
   lineno = 1;
   used = 0;
-  memset (&current, 0, sizeof current);
 
   do {
     enum {
@@ -179,14 +178,20 @@ patch_parse (gschem_patch_state_t *st, FILE *f, const char *fn)
         word[used] = '\0';
         used++;
 
+        if (current != NULL) {
+          fprintf (stderr, "%s:%d: Internal error\n", fn, lineno);
+          goto error;
+        }
+        current = g_new0 (gschem_patch_line_t, 1);
+
         if (strcmp (word, "add_conn") == 0)
-          current.op = GSCHEM_PATCH_ADD_CONN;
+          current->op = GSCHEM_PATCH_ADD_CONN;
         else if (strcmp (word, "del_conn") == 0)
-          current.op = GSCHEM_PATCH_DEL_CONN;
+          current->op = GSCHEM_PATCH_DEL_CONN;
         else if (strcmp (word, "change_attrib") == 0)
-          current.op = GSCHEM_PATCH_CHANGE_ATTRIB;
+          current->op = GSCHEM_PATCH_CHANGE_ATTRIB;
         else if (strcmp (word, "net_info") == 0)
-          current.op = GSCHEM_PATCH_NET_INFO;
+          current->op = GSCHEM_PATCH_NET_INFO;
         else {
           fprintf (stderr, "%s:%d: Syntax error: unknown opcode `%s'\n",
                            fn, lineno, word);
@@ -204,13 +209,17 @@ patch_parse (gschem_patch_state_t *st, FILE *f, const char *fn)
         used++;
 
         if (*word != '\0') {
-          switch (current.op) {
+          if (current == NULL) {
+            fprintf (stderr, "%s:%d: Internal error\n", fn, lineno);
+            goto error;
+          }
+          switch (current->op) {
             case GSCHEM_PATCH_DEL_CONN:
             case GSCHEM_PATCH_ADD_CONN:
-              if (current.id == NULL)
-                current.id = strdup (word);
-              else if (current.arg1.net_name == NULL)
-                current.arg1.net_name = strdup (word);
+              if (current->id == NULL)
+                current->id = strdup (word);
+              else if (current->arg1.net_name == NULL)
+                current->arg1.net_name = strdup (word);
               else {
                 fprintf (stderr, "%s:%d: Need two arguments for the "
                                  "connection: netname and pinname\n",
@@ -219,12 +228,12 @@ patch_parse (gschem_patch_state_t *st, FILE *f, const char *fn)
               }
               break;
             case GSCHEM_PATCH_CHANGE_ATTRIB:
-              if (current.id == NULL)
-                current.id = strdup (word);
-              else if (current.arg1.attrib_name == NULL)
-                current.arg1.attrib_name = strdup (word);
-              else if (current.arg2.attrib_val == NULL)
-                current.arg2.attrib_val = strdup (word);
+              if (current->id == NULL)
+                current->id = strdup (word);
+              else if (current->arg1.attrib_name == NULL)
+                current->arg1.attrib_name = strdup (word);
+              else if (current->arg2.attrib_val == NULL)
+                current->arg2.attrib_val = strdup (word);
               else {
                 fprintf (stderr, "%s:%d: Need three arguments for an "
                                  "attrib change: id attr_name attr_val\n",
@@ -233,11 +242,11 @@ patch_parse (gschem_patch_state_t *st, FILE *f, const char *fn)
               }
               break;
             case GSCHEM_PATCH_NET_INFO:
-              if (current.id == NULL)
-                current.id = strdup (word);
+              if (current->id == NULL)
+                current->id = strdup (word);
               else
-                current.arg1.ids =
-                  g_list_prepend (current.arg1.ids, strdup (word));
+                current->arg1.ids =
+                  g_list_prepend (current->arg1.ids, strdup (word));
               break;
           }
         }
@@ -246,36 +255,37 @@ patch_parse (gschem_patch_state_t *st, FILE *f, const char *fn)
     }
 
     if (end_line) {
-      gschem_patch_line_t *n;
-      switch (current.op) {
+      if (current == NULL) {
+        fprintf (stderr, "%s:%d: Internal error\n", fn, lineno);
+        goto error;
+      }
+      switch (current->op) {
         case GSCHEM_PATCH_DEL_CONN:
         case GSCHEM_PATCH_ADD_CONN:
-          if (current.id == NULL ||
-              current.arg1.net_name == NULL) {
+          if (current->id == NULL ||
+              current->arg1.net_name == NULL) {
             fprintf (stderr, "%s:%d: Not enough arguments\n", fn, lineno);
             goto error;
           }
           break;
         case GSCHEM_PATCH_CHANGE_ATTRIB:
-          if (current.id == NULL ||
-              current.arg1.attrib_name == NULL ||
-              current.arg2.attrib_val == NULL) {
+          if (current->id == NULL ||
+              current->arg1.attrib_name == NULL ||
+              current->arg2.attrib_val == NULL) {
             fprintf (stderr, "%s:%d: Not enough arguments\n", fn, lineno);
             goto error;
           }
           break;
         case GSCHEM_PATCH_NET_INFO:
-          if (current.id == NULL) {
+          if (current->id == NULL) {
             fprintf (stderr, "%s:%d: Not enough arguments\n", fn, lineno);
             goto error;
           }
           break;
       }
-      n = malloc (sizeof (gschem_patch_line_t));
-      memcpy (n, &current, sizeof (gschem_patch_line_t));
-      st->lines = g_list_prepend (st->lines, n);
+      st->lines = g_list_prepend (st->lines, current);
+      current = NULL;
       used = 0;
-      memset (&current, 0, sizeof current);
     }
 
     if (c == '\n')
@@ -283,11 +293,13 @@ patch_parse (gschem_patch_state_t *st, FILE *f, const char *fn)
   } while (c != EOF);
 
   st->lines = g_list_reverse (st->lines);
+  g_free (current);
   free (word);
   return 0;
 
 error:
   patch_list_free (st->lines);
+  g_free (current);
   free (word);
   return -1;
 }
