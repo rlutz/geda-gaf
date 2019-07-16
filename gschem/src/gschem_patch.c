@@ -460,7 +460,6 @@ gschem_patch_state_build (gschem_patch_state_t *st, OBJECT *o)
 {
   GList *i, *l;
   gchar *refdes, *pin;
-  int refdes_len, pin_len;
 
   switch (o->type) {
     case OBJ_COMPLEX:
@@ -472,7 +471,6 @@ gschem_patch_state_build (gschem_patch_state_t *st, OBJECT *o)
       build_insert_hash_list (st->comps, g_strdup (refdes), o);
 
       /* map pins */
-      refdes_len = strlen (refdes);
       for (i = o->complex->prim_objs; i != NULL; i = g_list_next (i)) {
         OBJECT *sub = i->data;
         switch (sub->type) {
@@ -480,9 +478,7 @@ gschem_patch_state_build (gschem_patch_state_t *st, OBJECT *o)
             pin = o_attrib_search_object_attribs_by_name (sub, "pinnumber", 0);
             if (pin != NULL) {
               char *full_name;
-              pin_len = strlen (pin);
-              full_name = g_malloc (refdes_len + pin_len + 2);
-              sprintf (full_name, "%s-%s", refdes, pin);
+              full_name = g_strdup_printf ("%s-%s", refdes, pin);
               //printf ("add: '%s' -> '%p' o=%p at=%p p=%p\n",
               //        full_name, sub, o, sub->attached_to, sub->parent);
               //fflush (stdout);
@@ -508,20 +504,18 @@ gschem_patch_state_build (gschem_patch_state_t *st, OBJECT *o)
           char *pinno = strchr (net, ':');
           char *full_name;
           if (pinno != NULL) {
-            int pin_len, net_len;
+            int net_len;
             char *net_name = NULL;
 
             net_len = pinno - net;
             pinno++;
-            pin_len = strlen (pinno);
-            full_name = g_malloc (refdes_len + pin_len + 2);
 
             if (net_len > 0)
               net_name = g_strndup (net, net_len);
             else
               net_name = NULL;
 
-            sprintf (full_name, "%s-%s", refdes, pinno);
+            full_name = g_strdup_printf ("%s-%s", refdes, pinno);
             //printf ("add: '%s' -> '%p';'%s'\n", full_name, o, net_name);
             //fflush (stdout);
             build_insert_hash_list (st->pins, full_name,
@@ -657,10 +651,7 @@ exec_check_conn_hashval (void *user_ctx, OBJECT *o)
     case OBJ_NET:
       tmp = o_attrib_search_object_attribs_by_name (o, "netname", 0);
       if (tmp != NULL) {
-        int len = strlen (tmp);
-        name = g_malloc (len + 2);
-        *name = OBJ_NET;
-        memcpy (name + 1, tmp, len + 1);
+        name = g_strdup_printf ("%c%s", OBJ_NET, tmp);
         g_free (tmp);
         g_hash_table_insert (name2obj, name, o);
       } else
@@ -677,8 +668,8 @@ exec_check_conn_hashval (void *user_ctx, OBJECT *o)
         if (oname == NULL)
           break;
         pname = o_attrib_search_object_attribs_by_name (o, "pinnumber", 0);
-        name = g_malloc (strlen (oname) + strlen (pname) + 3);
-        sprintf (name, "%c%s-%s", OBJ_PIN, (char *) oname, (char *) pname);
+        name = g_strdup_printf ("%c%s-%s", OBJ_PIN, (char *) oname,
+                                                    (char *) pname);
         g_free (oname);
         g_free (pname);
         g_hash_table_insert (name2obj, name, o);
