@@ -283,6 +283,7 @@ patch_parse (gschem_patch_state_t *st, FILE *f, const char *fn)
   } while (c != EOF);
 
   st->lines = g_list_reverse (st->lines);
+  free (word);
   return 0;
 
 error:
