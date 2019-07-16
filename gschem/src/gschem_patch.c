@@ -17,8 +17,9 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
-/* This file hosts the back annotation code; it is handling patches
-   coming from external tools. */
+/*! \file gschem_patch.c
+ * \brief Back-annotation from pcb-rnd.
+ */
 
 #include "gschem.h"
 
@@ -328,6 +329,13 @@ patch_list_print (gschem_patch_state_t *st)
 }
 #endif
 
+/*! \brief Initialize a patch state struct and read a patch file.
+ *
+ * If reading the patch file fails, \c -1 is returned and \a st is
+ * left uninitialized.
+ *
+ * \returns \c 0 on success, \c -1 on failure
+ */
 int
 gschem_patch_state_init (gschem_patch_state_t *st, const char *fn)
 {
@@ -402,6 +410,10 @@ free_pin (gschem_patch_pin_t *p)
 }
 */
 
+/*! \brief Make an object known to a patch state.
+ *
+ * \returns \c 0
+ */
 int
 gschem_patch_state_build (gschem_patch_state_t *st, OBJECT *o)
 {
@@ -523,6 +535,10 @@ free_key_list (gpointer key, gpointer value, gpointer user_data)
   return TRUE;
 }
 
+/*! \brief Free all memory allocated by a patch state.
+ *
+ * \note This *does not* free the patch state struct \a st itself.
+ */
 void
 gschem_patch_state_destroy (gschem_patch_state_t *st)
 {
@@ -544,23 +560,24 @@ add_hit (GSList *hits, OBJECT *obj, char *text)
   return g_slist_prepend (hits, hit);
 }
 
-/*! \brief get a list of all objects connected to this one (recursively)
+/*! \brief Get a list of all objects connected to this one (recursively).
  *
- *  \par Function Description
- *  This function gets an open list of objects to be checked and maps all connections
- *  of all objects on the list. The resulting new open list is empty, while the
- *  found hash is non-empty. For each new object on the found hash, the value
- *  is determined by calling the user provided hashval() callback.
+ * Gets an open list of objects to be checked and maps all connections
+ * of all objects on the list.  The resulting new open list is empty,
+ * while the found hash is non-empty.  For each new object on the
+ * found hash, the value is determined by calling the user provided
+ * hashval() callback.
  *
- *  \param [in/out] found    (OBJECT*) -> (value) hash of all objects found
- *  \param [in] open         GList of OBJECT's to start the sarch from
- *  \param [in] hashval()    a callback that generates the value of the object; all object values are NULL if hashval() is NULL
- *  \param [in] user_ctx     user context pointer for hashval()
- *  \return the new open list (empty list)
+ * \param [in/out] found  (OBJECT *) -> (value) hash of all objects found
+ * \param [in] open       GList of OBJECT's to start the sarch from
+ * \param [in] hashval()  a callback that generates the value of the object;
+ *                        all object values are NULL if hashval() is NULL
+ * \param [in] user_ctx   user context pointer for hashval()
  *
- *  \warning
- *  Caller must g_list_free returned GList pointer.
- *  Also free the found hash.
+ * \returns the new open list (empty list)
+ *
+ * \warning The caller must \c g_list_free the returned GList pointer.
+ *          Also free the found hash.
  */
 static GList *
 s_conn_find_all (GHashTable *found, GList *open,
@@ -806,6 +823,10 @@ exec_check_attrib (GSList *diffs, gschem_patch_line_t *patch, OBJECT *comp)
 }
 
 
+/*! \brief Retrieve a list of hits from a fully built patch state.
+ *
+ * \returns a singly-linked list of hits in reverse order
+ */
 GSList *
 gschem_patch_state_execute (gschem_patch_state_t *st, GSList *diffs)
 {

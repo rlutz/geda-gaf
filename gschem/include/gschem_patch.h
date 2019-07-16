@@ -17,10 +17,8 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
-/*!
- * \file gschem_patch.h
- *
- * \brief Back annotation code; handling patches coming from external tools.
+/*! \file gschem_patch.h
+ * \brief Back-annotation from pcb-rnd.
  */
 
 typedef enum {
