@@ -495,7 +495,7 @@ x_window_restore_geometry (GschemToplevel *w_current)
   dock_size = eda_config_get_int (eda_config_get_user_context (),
                                   "gschem.dock-geometry.bottom", "size", NULL);
   if (dock_size <= 0)
-    dock_size = 200;
+    dock_size = 150;
   gtk_widget_set_size_request (w_current->bottom_notebook, 0, dock_size);
 
   dock_size = eda_config_get_int (eda_config_get_user_context (),
@@ -776,7 +776,7 @@ void x_window_create_main(GschemToplevel *w_current)
     "title", _("Library"),
     "settings-name", "compselect",
     "cancellable", TRUE,
-    "initial-state", GSCHEM_DOCKABLE_STATE_HIDDEN,
+    "initial-state", GSCHEM_DOCKABLE_STATE_DOCKED_RIGHT,
     "initial-width", 500,
     "initial-height", 600,
     "gschem-toplevel", w_current,
@@ -826,7 +826,7 @@ void x_window_create_main(GschemToplevel *w_current)
     GSCHEM_TYPE_LOG_DOCKABLE,
     "title", _("Status"),
     "settings-name", "log",
-    "initial-state", GSCHEM_DOCKABLE_STATE_HIDDEN,
+    "initial-state", GSCHEM_DOCKABLE_STATE_DOCKED_BOTTOM,
     "initial-width", 640,
     "initial-height", 480,
     "gschem-toplevel", w_current,
@@ -836,7 +836,7 @@ void x_window_create_main(GschemToplevel *w_current)
     GSCHEM_TYPE_FIND_TEXT_DOCKABLE,
     "title", _("Search results"),
     "settings-name", "find-text",
-    "initial-state", GSCHEM_DOCKABLE_STATE_HIDDEN,
+    "initial-state", GSCHEM_DOCKABLE_STATE_DOCKED_BOTTOM,
     "initial-width", 500,
     "initial-height", 300,
     "gschem-toplevel", w_current,

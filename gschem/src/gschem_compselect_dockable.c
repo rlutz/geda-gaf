@@ -1406,7 +1406,7 @@ compselect_restore_internal_geometry (GschemDockable *dockable,
 
   expanded = eda_config_get_boolean (cfg, group_name, "attribs-expanded", &error);
   if (error != NULL) {
-    expanded = FALSE;
+    expanded = TRUE;
     g_clear_error (&error);
   }
   gtk_expander_set_expanded (GTK_EXPANDER (compselect->attribs_expander),
@@ -1689,12 +1689,12 @@ compselect_content_size_allocate (GtkWidget *widget,
   if (widget == compselect->preview_content) {
     size_allocated = &compselect->preview_size_allocated;
     key = "preview-height";
-    default_height = 160;
+    default_height = 150;
     vpaned = GTK_PANED (compselect->preview_paned);
   } else if (widget == compselect->attribs_content) {
     size_allocated = &compselect->attribs_size_allocated;
     key = "attribs-height";
-    default_height = 100;
+    default_height = 150;
     vpaned = GTK_PANED (compselect->attribs_paned);
   } else
     g_assert_not_reached ();
