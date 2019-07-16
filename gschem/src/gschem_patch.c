@@ -36,22 +36,6 @@ do { \
 } while(0)
 
 
-#define append(c) \
-do { \
-	if (used >= alloced) { \
-		alloced += 64; \
-		word = realloc(word, alloced); \
-	} \
-	word[used] = c; \
-	used++; \
-} while(0)
-
-#define require(s) \
-do { \
-	if (s == NULL) \
-		error("Not enough arguments"); \
-} while(0)
-
 static int patch_parse(gschem_patch_state_t *st, FILE *f)
 {
 	char *word = NULL;
@@ -184,11 +168,22 @@ static int patch_parse(gschem_patch_state_t *st, FILE *f)
 				break;
 
 			case DO_APPEND:
-				append(c);
+				if (used >= alloced) {
+					alloced += 64;
+					word = realloc(word, alloced);
+				}
+				word[used] = c;
+				used++;
 				break;
 
 			case DO_END_OP:
-				append('\0');
+				if (used >= alloced) {
+					alloced += 64;
+					word = realloc(word, alloced);
+				}
+				word[used] = '\0';
+				used++;
+
 				if (strcmp(word, "add_conn") == 0) current.op = GSCHEM_PATCH_ADD_CONN;
 				else if (strcmp(word, "del_conn") == 0) current.op = GSCHEM_PATCH_DEL_CONN;
 				else if (strcmp(word, "change_attrib") == 0) current.op = GSCHEM_PATCH_CHANGE_ATTRIB;
@@ -199,7 +194,13 @@ static int patch_parse(gschem_patch_state_t *st, FILE *f)
 				break;
 
 			case DO_END_STR:
-				append('\0');
+				if (used >= alloced) {
+					alloced += 64;
+					word = realloc(word, alloced);
+				}
+				word[used] = '\0';
+				used++;
+
 				if (*word != '\0') {
 					switch(current.op) {
 						case GSCHEM_PATCH_DEL_CONN:
@@ -228,16 +229,19 @@ static int patch_parse(gschem_patch_state_t *st, FILE *f)
 			switch(current.op) {
 				case GSCHEM_PATCH_DEL_CONN:
 				case GSCHEM_PATCH_ADD_CONN:
-					require(current.id);
-					require(current.arg1.net_name);
+					if (current.id == NULL ||
+					    current.arg1.net_name == NULL)
+						error("Not enough arguments");
 					break;
 				case GSCHEM_PATCH_CHANGE_ATTRIB:
-					require(current.id);
-					require(current.arg1.attrib_name);
-					require(current.arg2.attrib_val);
+					if (current.id == NULL ||
+					    current.arg1.attrib_name == NULL ||
+					    current.arg2.attrib_val == NULL)
+						error("Not enough arguments");
 					break;
 				case GSCHEM_PATCH_NET_INFO:
-					require(current.id);
+					if (current.id == NULL)
+						error("Not enough arguments");
 					break;
 			}
 			n = malloc(sizeof(gschem_patch_line_t));
