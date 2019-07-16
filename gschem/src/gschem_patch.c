@@ -94,7 +94,6 @@ patch_parse (gschem_patch_state_t *st, FILE *f)
             break;
           default:
             what_to_do = DO_APPEND;
-            break;
         }
         break;
       case ST_PRE_STR:
@@ -116,7 +115,6 @@ patch_parse (gschem_patch_state_t *st, FILE *f)
             used = 0;
             what_to_do = DO_APPEND;
             state = ST_STR;
-            break;
         }
         break;
       case ST_STR:
@@ -140,7 +138,6 @@ patch_parse (gschem_patch_state_t *st, FILE *f)
             break;
           default:
             what_to_do = DO_APPEND;
-            break;
         }
         break;
       case ST_COMMENT:
@@ -232,6 +229,7 @@ patch_parse (gschem_patch_state_t *st, FILE *f)
               else
                 current.arg1.ids =
                   g_list_prepend (current.arg1.ids, strdup (word));
+              break;
           }
         }
         used = 0;
@@ -642,6 +640,7 @@ exec_check_conn_hashval (void *user_ctx, OBJECT *o)
         g_free (pname);
         g_hash_table_insert (name2obj, name, o);
       }
+      break;
   }
   return name;
 }
