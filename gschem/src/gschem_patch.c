@@ -654,7 +654,7 @@ do { \
 	if (to > alloced) { \
 		alloced = to+256; \
 		free(buff); \
-		buff = malloc(to); \
+		buff = malloc(alloced); \
 	} \
 } while(0)
 static GSList *exec_check_conn(GSList *diffs, gschem_patch_line_t *patch, gschem_patch_pin_t *pin, GList **net, int del)
