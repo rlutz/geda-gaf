@@ -46,23 +46,6 @@ do { \
 	used++; \
 } while(0)
 
-#define reset_current() \
-do { \
-	used = 0; \
-	memset(&current, 0, sizeof(current)); \
-} while(0)
-
-#define reset_word() \
-do { \
-	used = 0; \
-} while(0)
-
-#define restart(c) \
-do { \
-	reset_word(); \
-	append(c); \
-} while(0)
-
 #define END_OP() \
 do { \
 	append('\0'); \
@@ -72,7 +55,7 @@ do { \
 	else if (strcmp(word, "net_info") == 0) current.op = GSCHEM_PATCH_NET_INFO; \
 	else \
 		error("Syntax error: unknown opcode %s\n", word); \
-	reset_word(); \
+	used = 0; \
 } while(0)
 
 #define END_STR() \
@@ -97,7 +80,7 @@ do { \
 				else current.arg1.ids = g_list_prepend(current.arg1.ids, strdup(word)); \
 		} \
 	} \
-	reset_word(); \
+	used = 0; \
 } while(0)
 
 #define require(s) \
@@ -127,7 +110,8 @@ do { \
 	n = malloc(sizeof(gschem_patch_line_t)); \
 	memcpy(n, &current, sizeof(gschem_patch_line_t)); \
 	st->lines = g_list_prepend(st->lines, n); \
-	reset_current(); \
+	used = 0; \
+	memset(&current, 0, sizeof(current)); \
 } while(0)
 
 static int patch_parse(gschem_patch_state_t *st, FILE *f)
@@ -146,7 +130,8 @@ static int patch_parse(gschem_patch_state_t *st, FILE *f)
 
 	st->lines = NULL;
 	lineno = 1;
-	reset_current();
+	used = 0;
+	memset(&current, 0, sizeof(current));
 	do {
 		c = fgetc(f);
 		switch(state) {
@@ -160,7 +145,8 @@ static int patch_parse(gschem_patch_state_t *st, FILE *f)
 					case '\t':
 						break;
 					default:
-						restart(c);
+						used = 0;
+						append(c);
 						state = ST_OP;
 				}
 				break;
@@ -197,7 +183,8 @@ static int patch_parse(gschem_patch_state_t *st, FILE *f)
 						state = ST_INIT;
 						break;
 					default:
-						restart(c);
+						used = 0;
+						append(c);
 						state = ST_STR;
 						break;
 				}
