@@ -133,11 +133,21 @@ static int patch_parse(gschem_patch_state_t *st, FILE *f)
 	used = 0;
 	memset(&current, 0, sizeof(current));
 	do {
+		enum {
+			DO_NOP,
+			DO_APPEND,
+			DO_END_OP,
+			DO_END_STR
+		} what_to_do = DO_NOP;
+		gboolean end_line = FALSE;
+
 		c = fgetc(f);
 		switch(state) {
 			case ST_INIT:
 				switch(c) {
-					case '#': state = ST_COMMENT; break;
+					case '#':
+						state = ST_COMMENT;
+						break;
 					case '\r':
 					case '\n':
 					case EOF:
@@ -146,66 +156,77 @@ static int patch_parse(gschem_patch_state_t *st, FILE *f)
 						break;
 					default:
 						used = 0;
-						append(c);
+						what_to_do = DO_APPEND;
 						state = ST_OP;
 				}
 				break;
 			case ST_OP:
 				switch(c) {
-					case '#': END_OP(); END_LINE(); state = ST_COMMENT; break;
+					case '#':
+						what_to_do = DO_END_OP;
+						end_line = TRUE;
+						state = ST_COMMENT;
+						break;
 					case ' ':
 					case '\t':
-						END_OP();
+						what_to_do = DO_END_OP;
 						state = ST_PRE_STR;
 						break;
 					case '\r':
 					case '\n':
 					case EOF:
-						END_OP();
-						END_LINE();
+						what_to_do = DO_END_OP;
+						end_line = TRUE;
 						state = ST_INIT;
 						break;
 					default:
-						append(c);
+						what_to_do = DO_APPEND;
 						break;
 				}
 				break;
 			case ST_PRE_STR:
 				switch(c) {
-					case '#': END_LINE(); state = ST_COMMENT; break;
+					case '#':
+						end_line = TRUE;
+						state = ST_COMMENT;
+						break;
 					case ' ':
 					case '\t':
 						break;
 					case '\r':
 					case '\n':
 					case EOF:
-						END_LINE();
+						end_line = TRUE;
 						state = ST_INIT;
 						break;
 					default:
 						used = 0;
-						append(c);
+						what_to_do = DO_APPEND;
 						state = ST_STR;
 						break;
 				}
 				break;
 			case ST_STR:
 				switch(c) {
-					case '#': END_STR(); END_LINE(); state = ST_COMMENT; break;
+					case '#':
+						what_to_do = DO_END_STR;
+						end_line = TRUE;
+						state = ST_COMMENT;
+						break;
 					case ' ':
 					case '\t':
-						END_STR();
+						what_to_do = DO_END_STR;
 						state = ST_PRE_STR;
 						break;
 					case '\r':
 					case '\n':
 					case EOF:
-						END_STR();
-						END_LINE();
+						what_to_do = DO_END_STR;
+						end_line = TRUE;
 						state = ST_INIT;
 						break;
 					default:
-						append(c);
+						what_to_do = DO_APPEND;
 						break;
 				}
 				break;
@@ -219,6 +240,27 @@ static int patch_parse(gschem_patch_state_t *st, FILE *f)
 				}
 				break;
 		}
+
+		switch (what_to_do) {
+			case DO_NOP:
+				break;
+
+			case DO_APPEND:
+				append(c);
+				break;
+
+			case DO_END_OP:
+				END_OP();
+				break;
+
+			case DO_END_STR:
+				END_STR();
+				break;
+		}
+
+		if (end_line)
+			END_LINE();
+
 		if (c == '\n')
 			lineno++;
 	} while(c != EOF);
