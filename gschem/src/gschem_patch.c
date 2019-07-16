@@ -50,8 +50,8 @@ static int
 patch_parse (gschem_patch_state_t *st, FILE *f, const char *fn)
 {
   char *word = NULL;
-  int alloced = 0, used;
-  int c, lineno;
+  int alloced = 0, used = 0;
+  int c, lineno = 1;
   gschem_patch_line_t *current = NULL;
 
   enum {
@@ -63,8 +63,6 @@ patch_parse (gschem_patch_state_t *st, FILE *f, const char *fn)
   } state = ST_INIT;
 
   g_assert (st->lines == NULL);
-  lineno = 1;
-  used = 0;
 
   do {
     enum {
