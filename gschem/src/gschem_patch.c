@@ -708,7 +708,7 @@ exec_conn_pretend (gschem_patch_line_t *patch, GList **net, int del)
 }
 
 static GSList *
-exec_check_conn (GSList *diffs, gschem_patch_line_t *patch,
+exec_check_conn (GSList *hits, gschem_patch_line_t *patch,
                  gschem_patch_pin_t *pin, GList **net, int del)
 {
   GHashTable *connections = NULL;
@@ -803,29 +803,29 @@ exec_check_conn (GSList *diffs, gschem_patch_line_t *patch,
 
   if (msg != NULL) {
     g_string_prepend (msg, patch->id);
-    return g_slist_prepend (diffs, alloc_hit (pin->obj,
-                                              g_string_free (msg, FALSE)));
+    return g_slist_prepend (hits, alloc_hit (pin->obj,
+                                             g_string_free (msg, FALSE)));
   }
 
-  return diffs;
+  return hits;
 }
 
 static GSList *
-exec_check_attrib (GSList *diffs, gschem_patch_line_t *patch, OBJECT *comp)
+exec_check_attrib (GSList *hits, gschem_patch_line_t *patch, OBJECT *comp)
 {
   gchar *attr_val =
     o_attrib_search_object_attribs_by_name (comp, patch->arg1.attrib_name, 0);
   if (attr_val == NULL)
-    return diffs;
+    return hits;
   if (strcmp (attr_val, patch->arg2.attrib_val) != 0) {
     gchar *msg = g_strdup_printf ("%s: change attribute %s from %s to %s",
                                   patch->id,
                                   patch->arg1.attrib_name, attr_val,
                                   patch->arg2.attrib_val);
-    diffs = g_slist_prepend (diffs, alloc_hit (comp, msg));
+    hits = g_slist_prepend (hits, alloc_hit (comp, msg));
   }
   g_free (attr_val);
-  return diffs;
+  return hits;
 }
 
 
@@ -834,7 +834,7 @@ exec_check_attrib (GSList *diffs, gschem_patch_line_t *patch, OBJECT *comp)
  * \returns a singly-linked list of hits in reverse order
  */
 GSList *
-gschem_patch_state_execute (gschem_patch_state_t *st, GSList *diffs)
+gschem_patch_state_execute (gschem_patch_state_t *st, GSList *hits)
 {
   GList *onet, *net;
   GSList *pins, *comps;
@@ -859,13 +859,13 @@ gschem_patch_state_execute (gschem_patch_state_t *st, GSList *diffs)
             g_strdup_printf ("%s pin %s (NOT FOUND) from net %s",
                              del ? "Disconnect" : "Connect", l->id,
                              l->arg1.net_name);
-          diffs = g_slist_prepend (diffs, alloc_hit (NULL, msg));
+          hits = g_slist_prepend (hits, alloc_hit (NULL, msg));
           exec_conn_pretend (l, &net, del);
         } else {
           /* pin found */
           for (; pins != NULL; pins = g_slist_next (pins))
-            diffs = exec_check_conn (
-              diffs, l, (gschem_patch_pin_t *) pins->data, &net, del);
+            hits = exec_check_conn (
+              hits, l, (gschem_patch_pin_t *) pins->data, &net, del);
         }
 
         /* executing a diff may update the list */
@@ -876,14 +876,14 @@ gschem_patch_state_execute (gschem_patch_state_t *st, GSList *diffs)
       case GSCHEM_PATCH_CHANGE_ATTRIB:
         comps = g_hash_table_lookup (st->comps, l->id);
         for (found = 0; comps != NULL; comps = g_slist_next (comps)) {
-          diffs = exec_check_attrib (diffs, l, (OBJECT *) comps->data);
+          hits = exec_check_attrib (hits, l, (OBJECT *) comps->data);
           found++;
         }
         if (found == 0) {
           gchar *msg =
             g_strdup_printf ("%s (NOT FOUND): change attribute %s to %s",
                              l->id, l->arg1.attrib_name, l->arg2.attrib_val);
-          diffs = g_slist_prepend (diffs, alloc_hit (NULL, msg));
+          hits = g_slist_prepend (hits, alloc_hit (NULL, msg));
         }
         break;
 
@@ -893,5 +893,5 @@ gschem_patch_state_execute (gschem_patch_state_t *st, GSList *diffs)
     }
   }
 
-  return diffs;
+  return hits;
 }

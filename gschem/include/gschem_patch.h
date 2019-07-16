@@ -69,5 +69,5 @@ typedef struct {
 
 int gschem_patch_state_init (gschem_patch_state_t *st, const char *fn);
 int gschem_patch_state_build (gschem_patch_state_t *st, OBJECT *o);
-GSList *gschem_patch_state_execute (gschem_patch_state_t *st, GSList *diffs);
+GSList *gschem_patch_state_execute (gschem_patch_state_t *st, GSList *hits);
 void gschem_patch_state_destroy (gschem_patch_state_t *st);
