@@ -413,16 +413,6 @@ alloc_pin (OBJECT *pin_obj, char *net)
   return p;
 }
 
-/*
-static void
-free_pin (gschem_patch_pin_t *p)
-{
-  if (p->net != NULL)
-    g_free (p->net);
-  g_free (p);
-}
-*/
-
 /*! \brief Make an object known to a patch state.
  *
  * \returns \c 0
@@ -496,10 +486,11 @@ gschem_patch_state_build (gschem_patch_state_t *st, OBJECT *o)
               //printf ("add: '%s' -> '%p';'%s'\n", full_name, o, net_name);
               //fflush (stdout);
               build_insert_hash_list (st->pins, full_name,
-                                      alloc_pin (o, net_name));
+                                      alloc_pin (o, g_strdup (net_name)));
             }
 
             g_free (pinlist);
+            g_free (net_name);
           }
         }
       }
@@ -902,6 +893,13 @@ free_patch_line (gschem_patch_line_t *line)
   g_free (line);
 }
 
+static void
+free_pin (gschem_patch_pin_t *pin)
+{
+  g_free (pin->net);
+  g_free (pin);
+}
+
 /*! \brief Free all memory allocated by a patch state.
  *
  * \note This *does not* free the patch state struct \a st itself.
@@ -914,7 +912,7 @@ gschem_patch_state_destroy (gschem_patch_state_t *st)
 
   g_hash_table_iter_init (&iter, st->pins);
   while (g_hash_table_iter_next (&iter, &key, &value))
-    g_slist_free ((GSList *) value);
+    g_slist_free_full ((GSList *) value, (GDestroyNotify) free_pin);
 
   g_hash_table_iter_init (&iter, st->comps);
   while (g_hash_table_iter_next (&iter, &key, &value))
