@@ -435,7 +435,7 @@ static gschem_patch_pin_t *
 alloc_pin (OBJECT *pin_obj, char *net)
 {
   gschem_patch_pin_t *p;
-  p = g_malloc (sizeof (gschem_patch_pin_t));
+  p = g_new (gschem_patch_pin_t, 1);
   p->obj = pin_obj;
   p->net = net;
   return p;
@@ -516,11 +516,9 @@ gschem_patch_state_build (gschem_patch_state_t *st, OBJECT *o)
             pin_len = strlen (pinno);
             full_name = g_malloc (refdes_len + pin_len + 2);
 
-            if (net_len > 0) {
-              net_name = g_malloc (net_len + 1);
-              memcpy (net_name, net, net_len);
-              net_name[net_len] = '\0';
-            } else
+            if (net_len > 0)
+              net_name = g_strndup (net, net_len);
+            else
               net_name = NULL;
 
             sprintf (full_name, "%s-%s", refdes, pinno);
@@ -595,7 +593,7 @@ static GSList *
 add_hit (GSList *hits, OBJECT *obj, char *text)
 {
   gschem_patch_hit_t *hit;
-  hit = calloc (sizeof (gschem_patch_hit_t), 1);
+  hit = g_new (gschem_patch_hit_t, 1);
   hit->object = obj;
   hit->text = text;
   return g_slist_prepend (hits, hit);
