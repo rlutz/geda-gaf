@@ -46,72 +46,10 @@ do { \
 	used++; \
 } while(0)
 
-#define END_OP() \
-do { \
-	append('\0'); \
-	if (strcmp(word, "add_conn") == 0) current.op = GSCHEM_PATCH_ADD_CONN; \
-	else if (strcmp(word, "del_conn") == 0) current.op = GSCHEM_PATCH_DEL_CONN; \
-	else if (strcmp(word, "change_attrib") == 0) current.op = GSCHEM_PATCH_CHANGE_ATTRIB; \
-	else if (strcmp(word, "net_info") == 0) current.op = GSCHEM_PATCH_NET_INFO; \
-	else \
-		error("Syntax error: unknown opcode %s\n", word); \
-	used = 0; \
-} while(0)
-
-#define END_STR() \
-do { \
-	append('\0'); \
-	if (*word != '\0') {\
-		switch(current.op) { \
-			case GSCHEM_PATCH_DEL_CONN: \
-			case GSCHEM_PATCH_ADD_CONN: \
-				if (current.id == NULL) current.id = strdup(word); \
-				else if (current.arg1.net_name == NULL) current.arg1.net_name = strdup(word); \
-				else error("Need two arguments for the connection: netname and pinname"); \
-				break; \
-			case GSCHEM_PATCH_CHANGE_ATTRIB: \
-				if (current.id == NULL) current.id = strdup(word); \
-				else if (current.arg1.attrib_name == NULL) current.arg1.attrib_name = strdup(word); \
-				else if (current.arg2.attrib_val == NULL) current.arg2.attrib_val = strdup(word); \
-				else error("Need three arguments for an attrib change: id attr_name attr_val"); \
-				break; \
-			case GSCHEM_PATCH_NET_INFO: \
-				if (current.id == NULL) current.id = strdup(word); \
-				else current.arg1.ids = g_list_prepend(current.arg1.ids, strdup(word)); \
-		} \
-	} \
-	used = 0; \
-} while(0)
-
 #define require(s) \
 do { \
 	if (s == NULL) \
 		error("Not enough arguments"); \
-} while(0)
-
-#define END_LINE() \
-do { \
-	gschem_patch_line_t *n; \
-	switch(current.op) { \
-		case GSCHEM_PATCH_DEL_CONN: \
-		case GSCHEM_PATCH_ADD_CONN: \
-			require(current.id); \
-			require(current.arg1.net_name); \
-			break; \
-		case GSCHEM_PATCH_CHANGE_ATTRIB: \
-			require(current.id); \
-			require(current.arg1.attrib_name); \
-			require(current.arg2.attrib_val); \
-			break; \
-		case GSCHEM_PATCH_NET_INFO: \
-			require(current.id); \
-			break; \
-	} \
-	n = malloc(sizeof(gschem_patch_line_t)); \
-	memcpy(n, &current, sizeof(gschem_patch_line_t)); \
-	st->lines = g_list_prepend(st->lines, n); \
-	used = 0; \
-	memset(&current, 0, sizeof(current)); \
 } while(0)
 
 static int patch_parse(gschem_patch_state_t *st, FILE *f)
@@ -250,16 +188,64 @@ static int patch_parse(gschem_patch_state_t *st, FILE *f)
 				break;
 
 			case DO_END_OP:
-				END_OP();
+				append('\0');
+				if (strcmp(word, "add_conn") == 0) current.op = GSCHEM_PATCH_ADD_CONN;
+				else if (strcmp(word, "del_conn") == 0) current.op = GSCHEM_PATCH_DEL_CONN;
+				else if (strcmp(word, "change_attrib") == 0) current.op = GSCHEM_PATCH_CHANGE_ATTRIB;
+				else if (strcmp(word, "net_info") == 0) current.op = GSCHEM_PATCH_NET_INFO;
+				else
+					error("Syntax error: unknown opcode %s\n", word);
+				used = 0;
 				break;
 
 			case DO_END_STR:
-				END_STR();
+				append('\0');
+				if (*word != '\0') {
+					switch(current.op) {
+						case GSCHEM_PATCH_DEL_CONN:
+						case GSCHEM_PATCH_ADD_CONN:
+							if (current.id == NULL) current.id = strdup(word);
+							else if (current.arg1.net_name == NULL) current.arg1.net_name = strdup(word);
+							else error("Need two arguments for the connection: netname and pinname");
+							break;
+						case GSCHEM_PATCH_CHANGE_ATTRIB:
+							if (current.id == NULL) current.id = strdup(word);
+							else if (current.arg1.attrib_name == NULL) current.arg1.attrib_name = strdup(word);
+							else if (current.arg2.attrib_val == NULL) current.arg2.attrib_val = strdup(word);
+							else error("Need three arguments for an attrib change: id attr_name attr_val");
+							break;
+						case GSCHEM_PATCH_NET_INFO:
+							if (current.id == NULL) current.id = strdup(word);
+							else current.arg1.ids = g_list_prepend(current.arg1.ids, strdup(word));
+					}
+				}
+				used = 0;
 				break;
 		}
 
-		if (end_line)
-			END_LINE();
+		if (end_line) {
+			gschem_patch_line_t *n;
+			switch(current.op) {
+				case GSCHEM_PATCH_DEL_CONN:
+				case GSCHEM_PATCH_ADD_CONN:
+					require(current.id);
+					require(current.arg1.net_name);
+					break;
+				case GSCHEM_PATCH_CHANGE_ATTRIB:
+					require(current.id);
+					require(current.arg1.attrib_name);
+					require(current.arg2.attrib_val);
+					break;
+				case GSCHEM_PATCH_NET_INFO:
+					require(current.id);
+					break;
+			}
+			n = malloc(sizeof(gschem_patch_line_t));
+			memcpy(n, &current, sizeof(gschem_patch_line_t));
+			st->lines = g_list_prepend(st->lines, n);
+			used = 0;
+			memset(&current, 0, sizeof(current));
+		}
 
 		if (c == '\n')
 			lineno++;
