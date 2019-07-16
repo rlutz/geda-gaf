@@ -338,10 +338,8 @@ static char *op_names[] = {
 static void
 patch_list_print (gschem_patch_state_t *st)
 {
-  GList *i;
-  for (i = st->lines; i != NULL; i = g_list_next (i)) {
+  for (GList *i = st->lines; i != NULL; i = i->next) {
     gschem_patch_line_t *l = i->data;
-    GList *p;
     if (l == NULL) {
       fprintf (stderr, "NULL data on list\n");
       continue;
@@ -358,7 +356,7 @@ patch_list_print (gschem_patch_state_t *st)
         break;
       case GSCHEM_PATCH_NET_INFO:
         fprintf (stderr, "%s %s", op_names[l->op], l->id);
-        for (p = l->arg1.ids; p != NULL; p = g_list_next (p))
+        for (GList *p = l->arg1.ids; p != NULL; p = p->next)
           fprintf (stderr, " %s", p->data);
         fprintf (stderr, "\n");
         break;
@@ -393,13 +391,11 @@ gschem_patch_state_init (gschem_patch_state_t *st, const char *fn)
 #endif
 
   if (res == 0) {
-    GList *i;
-
     /* Create hashes for faster lookups avoiding O(objects*patches) */
     st->pins = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
     st->comps = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
     st->nets = g_hash_table_new (g_str_hash, g_str_equal);
-    for (i = st->lines; i != NULL; i = g_list_next (i)) {
+    for (GList *i = st->lines; i != NULL; i = i->next) {
       gschem_patch_line_t *l = i->data;
       if (l->op == GSCHEM_PATCH_NET_INFO) {
         g_hash_table_insert (st->nets, l->id, l->arg1.ids);
@@ -447,7 +443,7 @@ free_pin (gschem_patch_pin_t *p)
 int
 gschem_patch_state_build (gschem_patch_state_t *st, OBJECT *o)
 {
-  GList *i, *l;
+  GList *l;
   gchar *refdes, *pin;
 
   switch (o->type) {
@@ -460,7 +456,7 @@ gschem_patch_state_build (gschem_patch_state_t *st, OBJECT *o)
       build_insert_hash_list (st->comps, g_strdup (refdes), o);
 
       /* map pins */
-      for (i = o->complex->prim_objs; i != NULL; i = g_list_next (i)) {
+      for (GList *i = o->complex->prim_objs; i != NULL; i = i->next) {
         OBJECT *sub = i->data;
         switch (sub->type) {
           case OBJ_PIN:
@@ -481,7 +477,7 @@ gschem_patch_state_build (gschem_patch_state_t *st, OBJECT *o)
 
       /* map net attribute connections */
       l = o_attrib_return_attribs (o);
-      for (i = l; i != NULL; i = g_list_next (i)) {
+      for (GList *i = l; i != NULL; i = i->next) {
         OBJECT *attrib = i->data;
         /* I know, I know, I should use o_attrib_get_name_value(), but it'd be
            ridicolous to get everything strdup'd */
@@ -605,10 +601,8 @@ static GList *
 s_conn_find_all (GHashTable *found, GList *open,
                  void *(*hashval) (void *user_ctx, OBJECT *o), void *user_ctx)
 {
-  GList *i;
-
   /* iterate by consuming the first element of the list */
-  for (i = open; i != NULL; i = open) {
+  for (GList *i = open; i != NULL; i = open) {
     OBJECT *o = i->data;
 
     open = g_list_remove (open, o);
@@ -710,10 +704,9 @@ static void
 exec_conn_pretend (gschem_patch_line_t *patch, GList **net, int del)
 {
   if (del) {
-    GList *np;
-    for (np = *net; np != NULL;) {
+    for (GList *np = *net; np != NULL; ) {
       const char *lname = np->data;
-      np = g_list_next (np);
+      np = np->next;
       if (strcmp (lname, patch->id) == 0)
         *net = g_list_remove (*net, lname);
     }
@@ -725,7 +718,6 @@ static GSList *
 exec_check_conn (GSList *diffs, gschem_patch_line_t *patch,
                  gschem_patch_pin_t *pin, GList **net, int del)
 {
-  GList *np;
   GHashTable *connections = NULL;
   int len, pin_hdr, offs;
   char *buff = NULL;
@@ -773,7 +765,7 @@ exec_check_conn (GSList *diffs, gschem_patch_line_t *patch,
   if (connections != NULL) {
     /* check if we still have a connection to any of the pins */
     pin_hdr = 0;
-    for (np = *net; np != NULL; np = g_list_next (np)) {
+    for (GList *np = *net; np != NULL; np = np->next) {
       const char *action = NULL;
       OBJECT *target;
       len = strlen (np->data);
@@ -851,11 +843,11 @@ exec_check_attrib (GSList *diffs, gschem_patch_line_t *patch, OBJECT *comp)
 GSList *
 gschem_patch_state_execute (gschem_patch_state_t *st, GSList *diffs)
 {
-  GList *i, *onet, *net;
+  GList *onet, *net;
   GSList *pins, *comps;
   int found, del;
 
-  for (i = st->lines; i != NULL; i = g_list_next (i)) {
+  for (GList *i = st->lines; i != NULL; i = i->next) {
     gschem_patch_line_t *l = i->data;
     if (l == NULL) {
       fprintf (stderr, "NULL data on list\n");
