@@ -565,13 +565,13 @@ gschem_patch_state_destroy (gschem_patch_state_t *st)
   g_list_free_full (st->lines, (GDestroyNotify) free_patch_line);
 }
 
-static GSList *
-add_hit (GSList *hits, OBJECT *obj, char *text)
+static gschem_patch_hit_t *
+alloc_hit (OBJECT *obj, char *text)
 {
   gschem_patch_hit_t *hit = g_new (gschem_patch_hit_t, 1);
   hit->object = obj;
   hit->text = text;
-  return g_slist_prepend (hits, hit);
+  return hit;
 }
 
 /*! \brief Get a list of all objects connected to this one (recursively).
@@ -803,7 +803,8 @@ exec_check_conn (GSList *diffs, gschem_patch_line_t *patch,
 
   if (msg != NULL) {
     g_string_prepend (msg, patch->id);
-    return add_hit (diffs, pin->obj, g_string_free (msg, FALSE));
+    return g_slist_prepend (diffs, alloc_hit (pin->obj,
+                                              g_string_free (msg, FALSE)));
   }
 
   return diffs;
@@ -821,7 +822,7 @@ exec_check_attrib (GSList *diffs, gschem_patch_line_t *patch, OBJECT *comp)
                                   patch->id,
                                   patch->arg1.attrib_name, attr_val,
                                   patch->arg2.attrib_val);
-    diffs = add_hit (diffs, comp, msg);
+    diffs = g_slist_prepend (diffs, alloc_hit (comp, msg));
   }
   g_free (attr_val);
   return diffs;
@@ -858,7 +859,7 @@ gschem_patch_state_execute (gschem_patch_state_t *st, GSList *diffs)
             g_strdup_printf ("%s pin %s (NOT FOUND) from net %s",
                              del ? "Disconnect" : "Connect", l->id,
                              l->arg1.net_name);
-          diffs = add_hit (diffs, NULL, msg);
+          diffs = g_slist_prepend (diffs, alloc_hit (NULL, msg));
           exec_conn_pretend (l, &net, del);
         } else {
           /* pin found */
@@ -882,7 +883,7 @@ gschem_patch_state_execute (gschem_patch_state_t *st, GSList *diffs)
           gchar *msg =
             g_strdup_printf ("%s (NOT FOUND): change attribute %s to %s",
                              l->id, l->arg1.attrib_name, l->arg2.attrib_val);
-          diffs = add_hit (diffs, NULL, msg);
+          diffs = g_slist_prepend (diffs, alloc_hit (NULL, msg));
         }
         break;
 
