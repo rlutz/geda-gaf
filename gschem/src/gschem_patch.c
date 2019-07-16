@@ -30,9 +30,7 @@ static void patch_list_free(GList *list);
 do { \
 	fprintf(stderr, __VA_ARGS__); \
 	fprintf(stderr, " in line %d\n", lineno); \
-	patch_list_free(st->lines); \
-	free(word); \
-	return -1; \
+	goto error; \
 } while(0)
 
 
@@ -256,6 +254,11 @@ static int patch_parse(gschem_patch_state_t *st, FILE *f)
 	} while(c != EOF);
 	st->lines = g_list_reverse(st->lines);
 	return 0;
+
+error:
+	patch_list_free(st->lines);
+	free(word);
+	return -1;
 }
 
 static void patch_list_free(GList *list)
