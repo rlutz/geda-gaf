@@ -23,6 +23,8 @@
 
 #include "gschem.h"
 
+#define NETATTRIB_DELIMITERS ",; "
+
 
 static void
 free_patch_line (gschem_patch_line_t *line)
@@ -483,25 +485,33 @@ gschem_patch_state_build (gschem_patch_state_t *st, OBJECT *o)
 
         if (strncmp (attrib->text->string, "net=", 4) == 0) {
           char *net = attrib->text->string + 4;
-          char *pinno = strchr (net, ':');
+          char *pinlist = strchr (net, ':');
           char *full_name;
-          if (pinno != NULL) {
+          if (pinlist != NULL) {
             int net_len;
             char *net_name = NULL;
 
-            net_len = pinno - net;
-            pinno++;
-
+            net_len = pinlist - net;
             if (net_len > 0)
               net_name = g_strndup (net, net_len);
             else
               net_name = NULL;
 
-            full_name = g_strdup_printf ("%s-%s", refdes, pinno);
-            //printf ("add: '%s' -> '%p';'%s'\n", full_name, o, net_name);
-            //fflush (stdout);
-            build_insert_hash_list (st->pins, full_name,
-                                    alloc_pin (o, net_name));
+            /* create a copy of the pin list on which to run strtok_r(3) */
+            pinlist = g_strdup(pinlist + 1);
+
+            char *pinno, *saveptr = NULL;
+            for (pinno = strtok_r (pinlist, NETATTRIB_DELIMITERS, &saveptr);
+                 pinno != NULL;
+                 pinno = strtok_r (NULL, NETATTRIB_DELIMITERS, &saveptr)) {
+              full_name = g_strdup_printf ("%s-%s", refdes, pinno);
+              //printf ("add: '%s' -> '%p';'%s'\n", full_name, o, net_name);
+              //fflush (stdout);
+              build_insert_hash_list (st->pins, full_name,
+                                      alloc_pin (o, net_name));
+            }
+
+            g_free (pinlist);
           }
         }
       }
