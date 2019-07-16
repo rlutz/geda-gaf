@@ -26,13 +26,6 @@ coming from external tools. */
 
 static void patch_list_free(GList *list);
 
-#define error(...) \
-do { \
-	fprintf(stderr, __VA_ARGS__); \
-	fprintf(stderr, " in line %d\n", lineno); \
-	goto error; \
-} while(0)
-
 
 static int patch_parse(gschem_patch_state_t *st, FILE *f)
 {
@@ -186,8 +179,11 @@ static int patch_parse(gschem_patch_state_t *st, FILE *f)
 				else if (strcmp(word, "del_conn") == 0) current.op = GSCHEM_PATCH_DEL_CONN;
 				else if (strcmp(word, "change_attrib") == 0) current.op = GSCHEM_PATCH_CHANGE_ATTRIB;
 				else if (strcmp(word, "net_info") == 0) current.op = GSCHEM_PATCH_NET_INFO;
-				else
-					error("Syntax error: unknown opcode %s\n", word);
+				else {
+					fprintf(stderr, "Syntax error: unknown opcode %s"
+							" in line %d\n", word, lineno);
+					goto error;
+				}
 				used = 0;
 				break;
 
@@ -205,13 +201,21 @@ static int patch_parse(gschem_patch_state_t *st, FILE *f)
 						case GSCHEM_PATCH_ADD_CONN:
 							if (current.id == NULL) current.id = strdup(word);
 							else if (current.arg1.net_name == NULL) current.arg1.net_name = strdup(word);
-							else error("Need two arguments for the connection: netname and pinname");
+							else {
+								fprintf(stderr, "Need two arguments for the connection: netname and pinname"
+										" in line %d\n", lineno);
+								goto error;
+							}
 							break;
 						case GSCHEM_PATCH_CHANGE_ATTRIB:
 							if (current.id == NULL) current.id = strdup(word);
 							else if (current.arg1.attrib_name == NULL) current.arg1.attrib_name = strdup(word);
 							else if (current.arg2.attrib_val == NULL) current.arg2.attrib_val = strdup(word);
-							else error("Need three arguments for an attrib change: id attr_name attr_val");
+							else {
+								fprintf(stderr, "Need three arguments for an attrib change: id attr_name attr_val"
+										" in line %d\n", lineno);
+								goto error;
+							}
 							break;
 						case GSCHEM_PATCH_NET_INFO:
 							if (current.id == NULL) current.id = strdup(word);
@@ -228,18 +232,27 @@ static int patch_parse(gschem_patch_state_t *st, FILE *f)
 				case GSCHEM_PATCH_DEL_CONN:
 				case GSCHEM_PATCH_ADD_CONN:
 					if (current.id == NULL ||
-					    current.arg1.net_name == NULL)
-						error("Not enough arguments");
+					    current.arg1.net_name == NULL) {
+						fprintf(stderr, "Not enough arguments"
+								" in line %d\n", lineno);
+						goto error;
+					}
 					break;
 				case GSCHEM_PATCH_CHANGE_ATTRIB:
 					if (current.id == NULL ||
 					    current.arg1.attrib_name == NULL ||
-					    current.arg2.attrib_val == NULL)
-						error("Not enough arguments");
+					    current.arg2.attrib_val == NULL) {
+						fprintf(stderr, "Not enough arguments"
+								" in line %d\n", lineno);
+						goto error;
+					}
 					break;
 				case GSCHEM_PATCH_NET_INFO:
-					if (current.id == NULL)
-						error("Not enough arguments");
+					if (current.id == NULL) {
+						fprintf(stderr, "Not enough arguments"
+								" in line %d\n", lineno);
+						goto error;
+					}
 					break;
 			}
 			n = malloc(sizeof(gschem_patch_line_t));
