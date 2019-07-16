@@ -25,28 +25,11 @@
 
 #define NETATTRIB_DELIMITERS ",; "
 
+static void free_patch_line (gschem_patch_line_t *line);
 
-static void
-free_patch_line (gschem_patch_line_t *line)
-{
-  switch (line->op) {
-    case GSCHEM_PATCH_DEL_CONN:
-    case GSCHEM_PATCH_ADD_CONN:
-      g_free (line->id);
-      g_free (line->arg1.net_name);
-      break;
-    case GSCHEM_PATCH_CHANGE_ATTRIB:
-      g_free (line->id);
-      g_free (line->arg1.attrib_name);
-      g_free (line->arg2.attrib_val);
-      break;
-    case GSCHEM_PATCH_NET_INFO:
-      g_free (line->id);
-      g_list_free_full (line->arg1.ids, g_free);
-      break;
-  }
-  g_free (line);
-}
+
+/******************************************************************************/
+/*! \section init  Initializing the patch state.                              */
 
 static int
 patch_parse (gschem_patch_state_t *st, FILE *f, const char *fn)
@@ -408,6 +391,11 @@ gschem_patch_state_init (gschem_patch_state_t *st, const char *fn)
   return res;
 }
 
+
+/******************************************************************************/
+/*! \section build  Populating the patch state hashes.                        */
+
+
 /* insert item in a hash table of slists */
 static void
 build_insert_hash_list (GHashTable *hash, char *full_name, void *item)
@@ -544,35 +532,16 @@ gschem_patch_state_build (gschem_patch_state_t *st, OBJECT *o)
   return 0;
 }
 
+
+/******************************************************************************/
+/*! \section execute  Executing the patch state.                              */
+
+
 static gboolean
 free_key (gpointer key, gpointer value, gpointer user_data)
 {
   free (key);
   return TRUE;
-}
-
-/*! \brief Free all memory allocated by a patch state.
- *
- * \note This *does not* free the patch state struct \a st itself.
- */
-void
-gschem_patch_state_destroy (gschem_patch_state_t *st)
-{
-  GHashTableIter iter;
-  gpointer key, value;
-
-  g_hash_table_iter_init (&iter, st->pins);
-  while (g_hash_table_iter_next (&iter, &key, &value))
-    g_slist_free ((GSList *) value);
-
-  g_hash_table_iter_init (&iter, st->comps);
-  while (g_hash_table_iter_next (&iter, &key, &value))
-    g_slist_free ((GSList *) value);
-
-  g_hash_table_destroy (st->nets);
-  g_hash_table_destroy (st->pins);
-  g_hash_table_destroy (st->comps);
-  g_list_free_full (st->lines, (GDestroyNotify) free_patch_line);
 }
 
 static gschem_patch_hit_t *
@@ -904,4 +873,55 @@ gschem_patch_state_execute (gschem_patch_state_t *st, GSList *hits)
   }
 
   return hits;
+}
+
+
+/******************************************************************************/
+/*! \section destroy  Freeing the patch structures.                           */
+
+
+static void
+free_patch_line (gschem_patch_line_t *line)
+{
+  switch (line->op) {
+    case GSCHEM_PATCH_DEL_CONN:
+    case GSCHEM_PATCH_ADD_CONN:
+      g_free (line->id);
+      g_free (line->arg1.net_name);
+      break;
+    case GSCHEM_PATCH_CHANGE_ATTRIB:
+      g_free (line->id);
+      g_free (line->arg1.attrib_name);
+      g_free (line->arg2.attrib_val);
+      break;
+    case GSCHEM_PATCH_NET_INFO:
+      g_free (line->id);
+      g_list_free_full (line->arg1.ids, g_free);
+      break;
+  }
+  g_free (line);
+}
+
+/*! \brief Free all memory allocated by a patch state.
+ *
+ * \note This *does not* free the patch state struct \a st itself.
+ */
+void
+gschem_patch_state_destroy (gschem_patch_state_t *st)
+{
+  GHashTableIter iter;
+  gpointer key, value;
+
+  g_hash_table_iter_init (&iter, st->pins);
+  while (g_hash_table_iter_next (&iter, &key, &value))
+    g_slist_free ((GSList *) value);
+
+  g_hash_table_iter_init (&iter, st->comps);
+  while (g_hash_table_iter_next (&iter, &key, &value))
+    g_slist_free ((GSList *) value);
+
+  g_hash_table_destroy (st->nets);
+  g_hash_table_destroy (st->pins);
+  g_hash_table_destroy (st->comps);
+  g_list_free_full (st->lines, (GDestroyNotify) free_patch_line);
 }
