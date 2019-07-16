@@ -649,14 +649,6 @@ static void exec_conn_pretend(gschem_patch_line_t *patch, GList **net, int del)
 		*net = g_list_prepend(*net, patch->id);
 }
 
-#define enlarge(to) \
-do { \
-	if (to > alloced) { \
-		alloced = to+256; \
-		free(buff); \
-		buff = malloc(alloced); \
-	} \
-} while(0)
 static GSList *exec_check_conn(GSList *diffs, gschem_patch_line_t *patch, gschem_patch_pin_t *pin, GList **net, int del)
 {
 	GList *np;
@@ -674,7 +666,11 @@ static GSList *exec_check_conn(GSList *diffs, gschem_patch_line_t *patch, gschem
 
 		/* check if we are connected to the network */
 		len = strlen(patch->arg1.net_name);
-		enlarge(len+2);
+		if (len+2 > alloced) {
+			alloced = len+2+256;
+			free(buff);
+			buff = malloc(alloced);
+		}
 		*buff = OBJ_NET;
 		memcpy(buff+1, patch->arg1.net_name, len+1);
 		connected = (g_hash_table_lookup(connections, buff) != NULL);
@@ -709,7 +705,11 @@ static GSList *exec_check_conn(GSList *diffs, gschem_patch_line_t *patch, gschem
 			const char *action = NULL;
 			OBJECT *target;
 			len = strlen(np->data);
-			enlarge(len+2);
+			if (len+2 > alloced) {
+				alloced = len+2+256;
+				free(buff);
+				buff = malloc(alloced);
+			}
 			*buff = OBJ_PIN;
 			memcpy(buff+1, np->data, len+1);
 			target = g_hash_table_lookup(connections, buff);
@@ -753,7 +753,6 @@ static GSList *exec_check_conn(GSList *diffs, gschem_patch_line_t *patch, gschem
 
 	return diffs;
 }
-#undef enlarge
 
 static GSList *exec_check_attrib(GSList *diffs, gschem_patch_line_t *patch, OBJECT *comp)
 {
