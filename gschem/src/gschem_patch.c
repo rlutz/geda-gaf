@@ -33,6 +33,7 @@ patch_parse (gschem_patch_state_t *st, FILE *f)
   int alloced = 0, used;
   int c, lineno;
   gschem_patch_line_t current;
+
   enum {
     ST_INIT,
     ST_COMMENT,
@@ -44,7 +45,8 @@ patch_parse (gschem_patch_state_t *st, FILE *f)
   st->lines = NULL;
   lineno = 1;
   used = 0;
-  memset (&current, 0, sizeof (current));
+  memset (&current, 0, sizeof current);
+
   do {
     enum {
       DO_NOP,
@@ -55,6 +57,7 @@ patch_parse (gschem_patch_state_t *st, FILE *f)
     gboolean end_line = FALSE;
 
     c = fgetc (f);
+
     switch (state) {
       case ST_INIT:
         switch (c) {
@@ -73,6 +76,7 @@ patch_parse (gschem_patch_state_t *st, FILE *f)
             state = ST_OP;
         }
         break;
+
       case ST_OP:
         switch (c) {
           case '#':
@@ -96,6 +100,7 @@ patch_parse (gschem_patch_state_t *st, FILE *f)
             what_to_do = DO_APPEND;
         }
         break;
+
       case ST_PRE_STR:
         switch (c) {
           case '#':
@@ -117,6 +122,7 @@ patch_parse (gschem_patch_state_t *st, FILE *f)
             state = ST_STR;
         }
         break;
+
       case ST_STR:
         switch (c) {
           case '#':
@@ -140,6 +146,7 @@ patch_parse (gschem_patch_state_t *st, FILE *f)
             what_to_do = DO_APPEND;
         }
         break;
+
       case ST_COMMENT:
         switch (c) {
           case '\r':
@@ -266,12 +273,13 @@ patch_parse (gschem_patch_state_t *st, FILE *f)
       memcpy (n, &current, sizeof (gschem_patch_line_t));
       st->lines = g_list_prepend (st->lines, n);
       used = 0;
-      memset (&current, 0, sizeof (current));
+      memset (&current, 0, sizeof current);
     }
 
     if (c == '\n')
       lineno++;
   } while (c != EOF);
+
   st->lines = g_list_reverse (st->lines);
   return 0;
 
@@ -385,7 +393,6 @@ build_insert_hash_list (GHashTable *hash, char *full_name, void *item)
      won't get free'd on hash destroy */
   if (free_name)
     g_free (full_name);
-
 }
 
 static gschem_patch_pin_t *
@@ -600,6 +607,7 @@ s_conn_find_all (GHashTable *found, GList *open,
       open = s_conn_return_others (open, o);
     }
   }
+
   return open;
 }
 
@@ -626,6 +634,7 @@ exec_check_conn_hashval (void *user_ctx, OBJECT *o)
                          should be a static string as it doesn't end up
                          on name2obj where we free these strings */
       break;
+
     case OBJ_PIN:
       if (o->parent != NULL) {
         gchar *oname, *pname;
@@ -678,9 +687,8 @@ exec_print_conns (GHashTable *connections)
   GHashTableIter cni;
 
   for (g_hash_table_iter_init (&cni, connections);
-       g_hash_table_iter_next (&cni, &key, &val);) {
+       g_hash_table_iter_next (&cni, &key, &val); )
     printf (" cn=%s %p\n", (char *) key, val);
-  }
 }
 #endif
 
@@ -839,6 +847,7 @@ gschem_patch_state_execute (gschem_patch_state_t *st, GSList *diffs)
       fprintf (stderr, "NULL data on list\n");
       continue;
     }
+
     switch (l->op) {
       case GSCHEM_PATCH_DEL_CONN:
       case GSCHEM_PATCH_ADD_CONN:
@@ -864,6 +873,7 @@ gschem_patch_state_execute (gschem_patch_state_t *st, GSList *diffs)
         if (net != onet)
           g_hash_table_insert (st->nets, l->arg1.net_name, net);
         break;
+
       case GSCHEM_PATCH_CHANGE_ATTRIB:
         comps = g_hash_table_lookup (st->comps, l->id);
         for (found = 0; comps != NULL; comps = g_slist_next (comps)) {
@@ -877,10 +887,12 @@ gschem_patch_state_execute (gschem_patch_state_t *st, GSList *diffs)
           diffs = add_hit (diffs, NULL, msg);
         }
         break;
+
       case GSCHEM_PATCH_NET_INFO:
         /* just ignore them, we've already built data structs while parsing */
         break;
     }
   }
+
   return diffs;
 }

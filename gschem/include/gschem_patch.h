@@ -21,15 +21,15 @@
  * \brief Back-annotation from pcb-rnd.
  */
 
+/* this type of object should be only on a search list */
+#define OBJ_PATCH 'p'
+
 typedef enum {
   GSCHEM_PATCH_DEL_CONN,
   GSCHEM_PATCH_ADD_CONN,
   GSCHEM_PATCH_CHANGE_ATTRIB,
   GSCHEM_PATCH_NET_INFO,
 } gschem_patch_op_t;
-
-/* this type of object should be only on a search list */
-#define OBJ_PATCH 'p'
 
 typedef struct gschem_patch_line_s gschem_patch_line_t;
 struct gschem_patch_line_s {
