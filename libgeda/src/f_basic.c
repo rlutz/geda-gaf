@@ -221,13 +221,17 @@ int f_open_flags(TOPLEVEL *toplevel, PAGE *page,
 
   /* Before we open the page, let's load the corresponding gafrc. */
   /* First cd into file's directory. */
-  file_directory = g_dirname (full_filename);
+  file_directory = g_path_get_dirname (full_filename);
 
-  if (file_directory) { 
-    if (chdir (file_directory)) {
-      /* Error occurred with chdir */
-#warning FIXME: What do we do?
-    }
+  if (chdir (file_directory) == -1) {
+    int chdir_errno = errno;
+    g_set_error (err, G_FILE_ERROR, g_file_error_from_errno (chdir_errno),
+                 _("Failed to chdir to [%s]: %s"),
+                 file_directory, g_strerror (chdir_errno));
+    g_free (file_directory);
+    g_free (full_filename);
+    g_free (saved_cwd);
+    return 0;
   }
 
   /* Now open RC and process file */
@@ -311,10 +315,9 @@ int f_open_flags(TOPLEVEL *toplevel, PAGE *page,
   /* Reset the directory to the value it had when f_open was
    * called. */
   if (flags & F_OPEN_RESTORE_CWD) {
-    if (chdir (saved_cwd)) {
-      /* Error occurred with chdir */
-#warning FIXME: What do we do?
-    }
+    if (chdir (saved_cwd) == -1)
+      g_warning (_("Failed to restore working directory to [%s]: %s\n"),
+                 saved_cwd, g_strerror (errno));
     g_free(saved_cwd);
   }
 

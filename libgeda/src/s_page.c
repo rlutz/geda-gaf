@@ -49,6 +49,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>
+#include <errno.h>
 
 #include "libgeda_priv.h"
 
@@ -382,11 +383,10 @@ void s_page_goto (TOPLEVEL *toplevel, PAGE *p_new)
 
   s_toplevel_set_page_current (toplevel, p_new);
 
-  dirname = g_dirname (p_new->page_filename);
-  if (chdir (dirname)) {
-    /* An error occured with chdir */
-#warning FIXME: What do we do?
-  }
+  dirname = g_path_get_dirname (p_new->page_filename);
+  if (chdir (dirname) == -1)
+    g_warning (_("Failed to change working directory to [%s]: %s\n"),
+               dirname, g_strerror (errno));
   g_free (dirname);
 
 }
