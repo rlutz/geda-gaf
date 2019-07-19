@@ -296,7 +296,7 @@ assign_store_patch (GschemPatchDockable *patch_dockable, GSList *objects)
       else
         basename = NULL;
  }
-    s_object_weak_ref (hit->object, (NotifyFunc) object_weakref_cb,
+    s_object_weak_ref (final_object, (NotifyFunc) object_weakref_cb,
                        patch_dockable);
 
     gtk_list_store_append (patch_dockable->store, &tree_iter);
@@ -356,8 +356,9 @@ clear_store (GschemPatchDockable *patch_dockable)
     if (G_VALUE_HOLDS_POINTER (&value)) {
       OBJECT *object = g_value_get_pointer (&value);
 
-      s_object_weak_unref (object, (NotifyFunc) object_weakref_cb,
-                           patch_dockable);
+      if (object != NULL)
+        s_object_weak_unref (object, (NotifyFunc) object_weakref_cb,
+                             patch_dockable);
     }
 
     g_value_unset (&value);
