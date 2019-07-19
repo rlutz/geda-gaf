@@ -51,13 +51,13 @@ typedef void (*NotifyFunc)(void*, void*);
 
 
 static void
-assign_store_patch (GschemPatchDockable *state, GSList *objects);
+assign_store_patch (GschemPatchDockable *patch_dockable, GSList *objects);
 
 static void
 class_init (GschemPatchDockableClass *klass);
 
 static void
-clear_store (GschemPatchDockable *state);
+clear_store (GschemPatchDockable *patch_dockable);
 
 static void
 dispose (GObject *object);
@@ -72,19 +72,19 @@ static GList*
 get_subpages (PAGE *page);
 
 static void
-instance_init (GschemPatchDockable *state);
+instance_init (GschemPatchDockable *patch_dockable);
 
 static GtkWidget *
 create_widget (GschemDockable *parent);
 
 static void
-object_weakref_cb (OBJECT *object, GschemPatchDockable *state);
+object_weakref_cb (OBJECT *object, GschemPatchDockable *patch_dockable);
 
 static void
-remove_object (GschemPatchDockable *state, OBJECT *object);
+remove_object (GschemPatchDockable *patch_dockable, OBJECT *object);
 
 static void
-select_cb (GtkTreeSelection *selection, GschemPatchDockable *state);
+select_cb (GtkTreeSelection *selection, GschemPatchDockable *patch_dockable);
 
 
 static GObjectClass *gschem_patch_dockable_parent_class = NULL;
@@ -95,14 +95,15 @@ static GObjectClass *gschem_patch_dockable_parent_class = NULL;
  *  Finds instances of a given string and displays the result inside this
  *  widget.
  *
- *  \param [in] state
+ *  \param [in] patch_dockable
  *  \param [in] pages a list of pages to search
  *  \param [in] text the text to find
  *  \param [in] descend decend the page heirarchy
  *  \return the number of objects found
  */
 int
-gschem_patch_dockable_find (GschemPatchDockable *state, GList *pages, const char *text, gboolean descend)
+gschem_patch_dockable_find (GschemPatchDockable *patch_dockable,
+                            GList *pages, const char *text, gboolean descend)
 {
   int count;
   GSList *objects = NULL;
@@ -114,7 +115,7 @@ gschem_patch_dockable_find (GschemPatchDockable *state, GList *pages, const char
 
   g_slist_free (all_pages);
 
-  assign_store_patch (state, objects);
+  assign_store_patch (patch_dockable, objects);
 
   count = g_slist_length (objects);
   g_slist_free (objects);
@@ -161,19 +162,19 @@ gschem_patch_dockable_get_type ()
 
 /*! \brief places object in the store so the user can see them
  *
- *  \param [in] state
+ *  \param [in] patch_dockable
  *  \param [in] objects the list of objects to put in the store
  */
 static void
-assign_store_patch (GschemPatchDockable *state, GSList *objects)
+assign_store_patch (GschemPatchDockable *patch_dockable, GSList *objects)
 {
   GSList *object_iter;
 	static const char *UNKNOWN_FILE_NAME = "N/A";
 
-  g_return_if_fail (state != NULL);
-  g_return_if_fail (state->store != NULL);
+  g_return_if_fail (patch_dockable != NULL);
+  g_return_if_fail (patch_dockable->store != NULL);
 
-  clear_store (state);
+  clear_store (patch_dockable);
 
   object_iter = objects;
 
@@ -200,8 +201,8 @@ assign_store_patch (GschemPatchDockable *state, GSList *objects)
         l = NULL;
 
       if (l == NULL) {
-        gtk_list_store_append (state->store, &tree_iter);
-        gtk_list_store_set (state->store,
+        gtk_list_store_append (patch_dockable->store, &tree_iter);
+        gtk_list_store_set (patch_dockable->store,
                             &tree_iter,
                             COLUMN_FILENAME, UNKNOWN_FILE_NAME,
                             COLUMN_STRING, hit->text,
@@ -237,12 +238,13 @@ assign_store_patch (GschemPatchDockable *state, GSList *objects)
       else
         basename = NULL;
  }
-    s_object_weak_ref (hit->object, (NotifyFunc) object_weakref_cb, state);
+    s_object_weak_ref (hit->object, (NotifyFunc) object_weakref_cb,
+                       patch_dockable);
 
-    gtk_list_store_append (state->store, &tree_iter);
+    gtk_list_store_append (patch_dockable->store, &tree_iter);
 
     if (basename != NULL) {
-      gtk_list_store_set (state->store,
+      gtk_list_store_set (patch_dockable->store,
                           &tree_iter,
                           COLUMN_FILENAME, basename,
                           COLUMN_STRING, hit->text,
@@ -251,7 +253,7 @@ assign_store_patch (GschemPatchDockable *state, GSList *objects)
       g_free (basename);
     }
     else {
-      gtk_list_store_set (state->store,
+      gtk_list_store_set (patch_dockable->store,
                           &tree_iter,
                           COLUMN_FILENAME, UNKNOWN_FILE_NAME,
                           COLUMN_STRING, hit->text,
@@ -298,23 +300,24 @@ class_init (GschemPatchDockableClass *klass)
  *  This function deletes all items in the list store and removes all the weak
  *  references to the objects.
  *
- *  \param [in] state
+ *  \param [in] patch_dockable
  */
 static void
-clear_store (GschemPatchDockable *state)
+clear_store (GschemPatchDockable *patch_dockable)
 {
   GtkTreeIter iter;
   gboolean valid;
 
-  g_return_if_fail (state != NULL);
-  g_return_if_fail (state->store != NULL);
+  g_return_if_fail (patch_dockable != NULL);
+  g_return_if_fail (patch_dockable->store != NULL);
 
-  valid = gtk_tree_model_get_iter_first (GTK_TREE_MODEL (state->store), &iter);
+  valid = gtk_tree_model_get_iter_first (
+    GTK_TREE_MODEL (patch_dockable->store), &iter);
 
   while (valid) {
     GValue value = G_VALUE_INIT;
 
-    gtk_tree_model_get_value (GTK_TREE_MODEL (state->store),
+    gtk_tree_model_get_value (GTK_TREE_MODEL (patch_dockable->store),
                               &iter,
                               COLUMN_OBJECT,
                               &value);
@@ -322,15 +325,17 @@ clear_store (GschemPatchDockable *state)
     if (G_VALUE_HOLDS_POINTER (&value)) {
       OBJECT *object = g_value_get_pointer (&value);
 
-      s_object_weak_unref (object, (NotifyFunc) object_weakref_cb, state);
+      s_object_weak_unref (object, (NotifyFunc) object_weakref_cb,
+                           patch_dockable);
     }
 
     g_value_unset (&value);
 
-    valid = gtk_tree_model_iter_next (GTK_TREE_MODEL (state->store), &iter);
+    valid = gtk_tree_model_iter_next (
+      GTK_TREE_MODEL (patch_dockable->store), &iter);
   }
 
-  gtk_list_store_clear (state->store);
+  gtk_list_store_clear (patch_dockable->store);
 }
 
 
@@ -339,12 +344,12 @@ clear_store (GschemPatchDockable *state)
 static void
 dispose (GObject *object)
 {
-  GschemPatchDockable *state = GSCHEM_PATCH_DOCKABLE (object);
+  GschemPatchDockable *patch_dockable = GSCHEM_PATCH_DOCKABLE (object);
 
-  if (state->store) {
-    clear_store (state);
-    g_object_unref (state->store);
-    state->store = NULL;
+  if (patch_dockable->store) {
+    clear_store (patch_dockable);
+    g_object_unref (patch_dockable->store);
+    patch_dockable->store = NULL;
   }
 
   /* lastly, chain up to the parent dispose */
@@ -524,21 +529,21 @@ get_subpages (PAGE *page)
 
 /*! \brief initialize a new instance
  *
- *  \param [in] state the new instance
+ *  \param [in] patch_dockable the new instance
  */
 static void
-instance_init (GschemPatchDockable *state)
+instance_init (GschemPatchDockable *patch_dockable)
 {
-  state->store = gtk_list_store_new(COLUMN_COUNT,
-                                    G_TYPE_STRING,
-                                    G_TYPE_STRING,
-                                    G_TYPE_POINTER);
+  patch_dockable->store = gtk_list_store_new (COLUMN_COUNT,
+                                              G_TYPE_STRING,
+                                              G_TYPE_STRING,
+                                              G_TYPE_POINTER);
 }
 
 static GtkWidget *
 create_widget (GschemDockable *parent)
 {
-  GschemPatchDockable *state = GSCHEM_PATCH_DOCKABLE (parent);
+  GschemPatchDockable *patch_dockable = GSCHEM_PATCH_DOCKABLE (parent);
 
   GtkTreeViewColumn *column;
   GtkCellRenderer *renderer;
@@ -548,7 +553,8 @@ create_widget (GschemDockable *parent)
 
   scrolled = gtk_scrolled_window_new (NULL, NULL);
 
-  tree_widget = gtk_tree_view_new_with_model (GTK_TREE_MODEL (state->store));
+  tree_widget = gtk_tree_view_new_with_model (
+    GTK_TREE_MODEL (patch_dockable->store));
   gtk_container_add (GTK_CONTAINER (scrolled), tree_widget);
 
   /* filename column */
@@ -578,7 +584,8 @@ create_widget (GschemDockable *parent)
   /* attach signal to detect user selection */
 
   selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (tree_widget));
-  g_signal_connect (selection, "changed", G_CALLBACK (select_cb), state);
+  g_signal_connect (selection, "changed",
+                    G_CALLBACK (select_cb), patch_dockable);
 
   gtk_widget_show_all (scrolled);
   return scrolled;
@@ -588,14 +595,14 @@ create_widget (GschemDockable *parent)
 /*! \brief callback for an object that has been destroyed
  *
  *  \param [in] object the object that has been destroyed
- *  \param [in] state
+ *  \param [in] patch_dockable
  */
 static void
-object_weakref_cb (OBJECT *object, GschemPatchDockable *state)
+object_weakref_cb (OBJECT *object, GschemPatchDockable *patch_dockable)
 {
-  g_return_if_fail (state != NULL);
+  g_return_if_fail (patch_dockable != NULL);
 
-  remove_object (state, object);
+  remove_object (patch_dockable, object);
 }
 
 
@@ -607,25 +614,26 @@ object_weakref_cb (OBJECT *object, GschemPatchDockable *state)
  *  This function doesn't remove the weak reference, under the assumption that
  *  the object is being destroyed.
  *
- *  \param [in] state
+ *  \param [in] patch_dockable
  *  \param [in] object the object to remove from the store
  */
 static void
-remove_object (GschemPatchDockable *state, OBJECT *object)
+remove_object (GschemPatchDockable *patch_dockable, OBJECT *object)
 {
   GtkTreeIter iter;
   gboolean valid;
 
   g_return_if_fail (object != NULL);
-  g_return_if_fail (state != NULL);
-  g_return_if_fail (state->store != NULL);
+  g_return_if_fail (patch_dockable != NULL);
+  g_return_if_fail (patch_dockable->store != NULL);
 
-  valid = gtk_tree_model_get_iter_first (GTK_TREE_MODEL (state->store), &iter);
+  valid = gtk_tree_model_get_iter_first (
+    GTK_TREE_MODEL (patch_dockable->store), &iter);
 
   while (valid) {
     GValue value = G_VALUE_INIT;
 
-    gtk_tree_model_get_value (GTK_TREE_MODEL (state->store),
+    gtk_tree_model_get_value (GTK_TREE_MODEL (patch_dockable->store),
                               &iter,
                               COLUMN_OBJECT,
                               &value);
@@ -635,13 +643,14 @@ remove_object (GschemPatchDockable *state, OBJECT *object)
 
       if (object == other) {
         g_value_unset (&value);
-        valid = gtk_list_store_remove (state->store, &iter);
+        valid = gtk_list_store_remove (patch_dockable->store, &iter);
         continue;
       }
     }
 
     g_value_unset (&value);
-    valid = gtk_tree_model_iter_next (GTK_TREE_MODEL (state->store), &iter);
+    valid = gtk_tree_model_iter_next (
+      GTK_TREE_MODEL (patch_dockable->store), &iter);
   }
 }
 
@@ -649,23 +658,23 @@ remove_object (GschemPatchDockable *state, OBJECT *object)
 /*! \brief callback for user selecting an item
  *
  *  \param [in] selection
- *  \param [in] state
+ *  \param [in] patch_dockable
  */
 static void
-select_cb (GtkTreeSelection *selection, GschemPatchDockable *state)
+select_cb (GtkTreeSelection *selection, GschemPatchDockable *patch_dockable)
 {
   GtkTreeIter iter;
   gboolean success;
 
   g_return_if_fail (selection != NULL);
-  g_return_if_fail (state != NULL);
+  g_return_if_fail (patch_dockable != NULL);
 
   success = gtk_tree_selection_get_selected (selection, NULL, &iter);
 
   if (success) {
     GValue value = G_VALUE_INIT;
 
-    gtk_tree_model_get_value (GTK_TREE_MODEL (state->store),
+    gtk_tree_model_get_value (GTK_TREE_MODEL (patch_dockable->store),
                               &iter,
                               COLUMN_OBJECT,
                               &value);
@@ -674,7 +683,7 @@ select_cb (GtkTreeSelection *selection, GschemPatchDockable *state)
       OBJECT *object = g_value_get_pointer (&value);
 
       if (object != NULL) {
-        g_signal_emit_by_name (state, "select-object", object);
+        g_signal_emit_by_name (patch_dockable, "select-object", object);
       } else {
         g_warning ("NULL object encountered");
       }
