@@ -102,17 +102,6 @@ class_init (GschemPatchDockableClass *class)
   GSCHEM_DOCKABLE_CLASS (class)->create_widget = create_widget;
 
   G_OBJECT_CLASS (class)->dispose = dispose;
-
-  g_signal_new ("select-object",                     /* signal_name  */
-                G_OBJECT_CLASS_TYPE (class),         /* itype        */
-                0,                                   /* signal_flags */
-                0,                                   /* class_offset */
-                NULL,                                /* accumulator  */
-                NULL,                                /* accu_data    */
-                g_cclosure_marshal_VOID__POINTER,    /* c_marshaller */
-                G_TYPE_NONE,                         /* return_type  */
-                1,                                   /* n_params     */
-                G_TYPE_POINTER);
 }
 
 
@@ -639,7 +628,22 @@ select_cb (GtkTreeSelection *selection, GschemPatchDockable *patch_dockable)
       OBJECT *object = g_value_get_pointer (&value);
 
       if (object != NULL) {
-        g_signal_emit_by_name (patch_dockable, "select-object", object);
+        GschemPageView *view = gschem_toplevel_get_current_page_view (
+          GSCHEM_DOCKABLE (patch_dockable)->w_current);
+        g_return_if_fail (view != NULL);
+
+        PAGE *page = gschem_page_view_get_page (view);
+        g_return_if_fail (page != NULL);
+        OBJECT *page_obj;
+
+        g_return_if_fail (object != NULL);
+        page_obj = gschem_page_get_page_object (object);
+        g_return_if_fail (page_obj != NULL);
+
+        if (page != page_obj->page)
+          gschem_page_view_set_page (view, page_obj->page);
+
+        gschem_page_view_zoom_text (view, object, TRUE);
       } else {
         g_warning ("NULL object encountered");
       }

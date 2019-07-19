@@ -855,10 +855,6 @@ void x_window_create_main(GschemToplevel *w_current)
     "initial-height", 300,
     "gschem-toplevel", w_current,
     NULL);
-  g_signal_connect (w_current->patch_dockable,
-                    "select-object",
-                    G_CALLBACK (&x_window_select_text),
-                    w_current);
 
   gschem_dockable_initialize_toplevel (w_current);
 
