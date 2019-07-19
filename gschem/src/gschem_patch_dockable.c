@@ -18,7 +18,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 /*!
- * \file gschem_find_text_dockable.c
+ * \file gschem_patch_dockable.c
  *
  * \brief Stores state of a find text operation
  */
@@ -35,7 +35,7 @@
 
 #include "gschem.h"
 
-#include "../include/gschem_find_text_dockable.h"
+#include "../include/gschem_patch_dockable.h"
 
 
 enum
@@ -51,13 +51,13 @@ typedef void (*NotifyFunc)(void*, void*);
 
 
 static void
-assign_store (GschemFindTextDockable *state, GSList *objects);
+assign_store_patch (GschemPatchDockable *state, GSList *objects);
 
 static void
-class_init (GschemFindTextDockableClass *klass);
+class_init (GschemPatchDockableClass *klass);
 
 static void
-clear_store (GschemFindTextDockable *state);
+clear_store (GschemPatchDockable *state);
 
 static void
 dispose (GObject *object);
@@ -66,13 +66,7 @@ static void
 finalize (GObject *object);
 
 static GSList*
-find_objects_using_pattern (GSList *pages, const char *text);
-
-static GSList*
-find_objects_using_regex (GSList *pages, const char *text, GError **error);
-
-static GSList*
-find_objects_using_substring (GSList *pages, const char *text);
+find_objects_using_patch (GSList *pages, const char *text);
 
 static GSList*
 get_pages (GList *pages, gboolean descend);
@@ -84,25 +78,25 @@ static GList*
 get_subpages (PAGE *page);
 
 static void
-instance_init (GschemFindTextDockable *state);
+instance_init (GschemPatchDockable *state);
 
 static GtkWidget *
 create_widget (GschemDockable *parent);
 
 static void
-object_weakref_cb (OBJECT *object, GschemFindTextDockable *state);
+object_weakref_cb (OBJECT *object, GschemPatchDockable *state);
 
 static void
-remove_object (GschemFindTextDockable *state, OBJECT *object);
+remove_object (GschemPatchDockable *state, OBJECT *object);
 
 static void
-select_cb (GtkTreeSelection *selection, GschemFindTextDockable *state);
+select_cb (GtkTreeSelection *selection, GschemPatchDockable *state);
 
 static void
 set_property (GObject *object, guint param_id, const GValue *value, GParamSpec *pspec);
 
 
-static GObjectClass *gschem_find_text_dockable_parent_class = NULL;
+static GObjectClass *gschem_patch_dockable_parent_class = NULL;
 
 
 /*! \brief find instances of a given string
@@ -112,13 +106,12 @@ static GObjectClass *gschem_find_text_dockable_parent_class = NULL;
  *
  *  \param [in] state
  *  \param [in] pages a list of pages to search
- *  \param [in] type the type of find to perform
  *  \param [in] text the text to find
  *  \param [in] descend decend the page heirarchy
  *  \return the number of objects found
  */
 int
-gschem_find_text_dockable_find (GschemFindTextDockable *state, GList *pages, int type, const char *text, gboolean descend)
+gschem_patch_dockable_find (GschemPatchDockable *state, GList *pages, const char *text, gboolean descend)
 {
   int count;
   GSList *objects = NULL;
@@ -126,26 +119,11 @@ gschem_find_text_dockable_find (GschemFindTextDockable *state, GList *pages, int
 
   all_pages = get_pages (pages, descend);
 
-  switch (type) {
-    case FIND_TYPE_SUBSTRING:
-      objects = find_objects_using_substring (all_pages, text);
-      break;
-
-    case FIND_TYPE_PATTERN:
-      objects = find_objects_using_pattern (all_pages, text);
-      break;
-
-    case FIND_TYPE_REGEX:
-      objects = find_objects_using_regex (all_pages, text, NULL);
-      break;
-
-    default:
-      break;
-  }
+  objects = find_objects_using_patch (all_pages, text);
 
   g_slist_free (all_pages);
 
-  assign_store (state, objects);
+  assign_store_patch (state, objects);
 
   count = g_slist_length (objects);
   g_slist_free (objects);
@@ -154,28 +132,28 @@ gschem_find_text_dockable_find (GschemFindTextDockable *state, GList *pages, int
 }
 
 
-/*! \brief Get/register GschemFindTextDockable type.
+/*! \brief Get/register GschemPatchDockable type.
  */
 GType
-gschem_find_text_dockable_get_type ()
+gschem_patch_dockable_get_type ()
 {
   static GType type = 0;
 
   if (type == 0) {
     static const GTypeInfo info = {
-      sizeof(GschemFindTextDockableClass),
+      sizeof(GschemPatchDockableClass),
       NULL,                                /* base_init */
       NULL,                                /* base_finalize */
       (GClassInitFunc) class_init,
       NULL,                                /* class_finalize */
       NULL,                                /* class_data */
-      sizeof(GschemFindTextDockable),
+      sizeof(GschemPatchDockable),
       0,                                   /* n_preallocs */
       (GInstanceInitFunc) instance_init,
     };
 
     type = g_type_register_static (GSCHEM_TYPE_DOCKABLE,
-                                   "GschemFindTextDockable",
+                                   "GschemPatchDockable",
                                    &info,
                                    0);
   }
@@ -196,9 +174,10 @@ gschem_find_text_dockable_get_type ()
  *  \param [in] objects the list of objects to put in the store
  */
 static void
-assign_store (GschemFindTextDockable *state, GSList *objects)
+assign_store_patch (GschemPatchDockable *state, GSList *objects)
 {
   GSList *object_iter;
+	static const char *UNKNOWN_FILE_NAME = "N/A";
 
   g_return_if_fail (state != NULL);
   g_return_if_fail (state->store != NULL);
@@ -209,48 +188,89 @@ assign_store (GschemFindTextDockable *state, GSList *objects)
 
   while (object_iter != NULL) {
     char *basename;
-    OBJECT *object = (OBJECT*) object_iter->data;
-    const char *str;
+    OBJECT *final_object = NULL;
+    gschem_patch_hit_t *hit = (gschem_patch_hit_t*) object_iter->data;
     GtkTreeIter tree_iter;
 
-    object_iter = g_slist_next (object_iter);
 
-    if (object == NULL) {
-      g_warning ("NULL object encountered");
-      continue;
-    }
+    /* TODO: this is an ugly workaround: can't put pins or objects
+       directly on the list because they have no object page; use
+       their complex object's first visible text instead 
+       Fix: be able to jump to any OBJECT
+       */
+ {
+      OBJECT *page_obj;
+      GList *i, *l;
+      int found_pin;
 
-    if (object->page == NULL) {
-      g_warning ("NULL page encountered");
-      continue;
-    }
+      if (hit->object != NULL)
+        l = o_attrib_return_attribs (hit->object);
+      else
+        l = NULL;
 
-    if (object->type != OBJ_TEXT) {
-      g_warning ("expecting a text object");
-      continue;
-    }
+      if (l == NULL) {
+        gtk_list_store_append (state->store, &tree_iter);
+        gtk_list_store_set (state->store,
+                            &tree_iter,
+                            COLUMN_FILENAME, UNKNOWN_FILE_NAME,
+                            COLUMN_STRING, hit->text,
+                            COLUMN_OBJECT, final_object,
+                            -1);
+        goto next;
+      }
 
-    str = o_text_get_string (object->page->toplevel, object);
 
-    if (str == NULL) {
-      g_warning ("NULL string encountered");
-      continue;
-    }
+      found_pin = 0;
+      for(i = l; i != NULL; i = g_list_next(i)) {
+        final_object = i->data;
+        if (final_object->type == OBJ_TEXT) {
+          page_obj = gschem_page_get_page_object(final_object);
+          if (o_is_visible (page_obj)) {
+            found_pin = 1;
+            break;
+          }
+        }
+      }
+      g_list_free(l);
+      if (!found_pin) {
+        g_warning ("no pin text to zoom to");
+        page_obj = final_object = NULL;
+      }
 
-    s_object_weak_ref (object, (NotifyFunc) object_weakref_cb, state);
+      if (final_object == NULL) {
+        g_warning ("no text attrib?");
+        page_obj = final_object = NULL;
+      }
+      if (page_obj != NULL)
+        basename = g_path_get_basename (page_obj->page->page_filename);
+      else
+        basename = NULL;
+ }
+    s_object_weak_ref (hit->object, (NotifyFunc) object_weakref_cb, state);
 
     gtk_list_store_append (state->store, &tree_iter);
 
-    basename = g_path_get_basename (object->page->page_filename);
-
-    gtk_list_store_set (state->store,
-                        &tree_iter,
-                        COLUMN_FILENAME, basename,
-                        COLUMN_STRING, str,
-                        COLUMN_OBJECT, object,
-                        -1);
-
-    g_free (basename);
+    if (basename != NULL) {
+      gtk_list_store_set (state->store,
+                          &tree_iter,
+                          COLUMN_FILENAME, basename,
+                          COLUMN_STRING, hit->text,
+                          COLUMN_OBJECT, final_object,
+                          -1);
+      g_free (basename);
+    }
+    else {
+      gtk_list_store_set (state->store,
+                          &tree_iter,
+                          COLUMN_FILENAME, UNKNOWN_FILE_NAME,
+                          COLUMN_STRING, hit->text,
+                          COLUMN_OBJECT, final_object,
+                          -1);
+    }
+    free(hit);
+    next:;
+    object_iter->data = NULL;
+    object_iter = g_slist_next (object_iter);
   }
 }
 
@@ -260,9 +280,9 @@ assign_store (GschemFindTextDockable *state, GSList *objects)
  *  \param [in] klass The class for initialization
  */
 static void
-class_init (GschemFindTextDockableClass *klass)
+class_init (GschemPatchDockableClass *klass)
 {
-  gschem_find_text_dockable_parent_class = G_OBJECT_CLASS (g_type_class_peek_parent (klass));
+  gschem_patch_dockable_parent_class = G_OBJECT_CLASS (g_type_class_peek_parent (klass));
 
   GSCHEM_DOCKABLE_CLASS (klass)->create_widget = create_widget;
 
@@ -294,7 +314,7 @@ class_init (GschemFindTextDockableClass *klass)
  *  \param [in] state
  */
 static void
-clear_store (GschemFindTextDockable *state)
+clear_store (GschemPatchDockable *state)
 {
   GtkTreeIter iter;
   gboolean valid;
@@ -332,7 +352,7 @@ clear_store (GschemFindTextDockable *state)
 static void
 dispose (GObject *object)
 {
-  GschemFindTextDockable *state = GSCHEM_FIND_TEXT_DOCKABLE (object);
+  GschemPatchDockable *state = GSCHEM_PATCH_DOCKABLE (object);
 
   if (state->store) {
     clear_store (state);
@@ -342,8 +362,8 @@ dispose (GObject *object)
 
   /* lastly, chain up to the parent dispose */
 
-  g_return_if_fail (gschem_find_text_dockable_parent_class != NULL);
-  gschem_find_text_dockable_parent_class->dispose (object);
+  g_return_if_fail (gschem_patch_dockable_parent_class != NULL);
+  gschem_patch_dockable_parent_class->dispose (object);
 }
 
 
@@ -354,102 +374,26 @@ finalize (GObject *object)
 {
   /* lastly, chain up to the parent finalize */
 
-  g_return_if_fail (gschem_find_text_dockable_parent_class != NULL);
-  gschem_find_text_dockable_parent_class->finalize (object);
+  g_return_if_fail (gschem_patch_dockable_parent_class != NULL);
+  gschem_patch_dockable_parent_class->finalize (object);
 }
 
 
-/*! \brief Find all text objects that match a pattern
+/*! \brief Find all objects that have outstanding patch mismatch
  *
  *  \param pages the list of pages to search
- *  \param text the pattern to match
- *  \return a list of objects that match the given pattern
+ *  \param text ???
+ *  \return a list of objects that have mismatch
  */
 static GSList*
-find_objects_using_pattern (GSList *pages, const char *text)
+find_objects_using_patch (GSList *pages, const char *text)
 {
   GSList *object_list = NULL;
   GSList *page_iter = pages;
-  GPatternSpec *pattern;
+  gschem_patch_state_t st;
 
-  g_return_val_if_fail (text != NULL, NULL);
-
-  pattern = g_pattern_spec_new (text);
-
-  while (page_iter != NULL) {
-    const GList *object_iter;
-    PAGE *page = (PAGE*) page_iter->data;
-
-    page_iter = g_slist_next (page_iter);
-
-    if (page == NULL) {
-      g_warning ("NULL page encountered");
-      continue;
-    }
-
-    object_iter = s_page_objects (page);
-
-    while (object_iter != NULL) {
-      OBJECT *object = (OBJECT*) object_iter->data;
-      const char *str;
-
-      object_iter = g_list_next (object_iter);
-
-      if (object == NULL) {
-        g_warning ("NULL object encountered");
-        continue;
-      }
-
-      if (object->type != OBJ_TEXT) {
-        continue;
-      }
-
-      if (!(o_is_visible (object) || page->toplevel->show_hidden_text)) {
-        continue;
-      }
-
-      str = o_text_get_string (object->page->toplevel, object);
-
-      if (str == NULL) {
-        g_warning ("NULL string encountered");
-        continue;
-      }
-
-      if (g_pattern_match_string (pattern, str)) {
-        object_list = g_slist_prepend (object_list, object);
-      }
-    }
-  }
-
-  g_pattern_spec_free (pattern);
-
-  return g_slist_reverse (object_list);
-}
-
-
-/*! \brief Find all text objects that match a regex
- *
- *  \param pages the list of pages to search
- *  \param text the regex to match
- *  \return a list of objects that match the given regex
- */
-static GSList*
-find_objects_using_regex (GSList *pages, const char *text, GError **error)
-{
-  GError *ierror = NULL;
-  GSList *object_list = NULL;
-  GSList *page_iter = pages;
-  GRegex *regex;
-
-  g_return_val_if_fail (text != NULL, NULL);
-
-  regex = g_regex_new (text,
-                       0,
-                       0,
-                       &ierror);
-
-  if (ierror != NULL) {
-    g_propagate_error (error, ierror);
+  if (gschem_patch_state_init(&st, text) != 0) {
+    g_warning("Unable to open patch file %s\n", text);
     return NULL;
   }
 
@@ -468,7 +412,6 @@ find_objects_using_regex (GSList *pages, const char *text, GError **error)
 
     while (object_iter != NULL) {
       OBJECT *object = (OBJECT*) object_iter->data;
-      const char *str;
 
       object_iter = g_list_next (object_iter);
 
@@ -477,91 +420,12 @@ find_objects_using_regex (GSList *pages, const char *text, GError **error)
         continue;
       }
 
-      if (object->type != OBJ_TEXT) {
-        continue;
-      }
-
-      if (!(o_is_visible (object) || page->toplevel->show_hidden_text)) {
-        continue;
-      }
-
-      str = o_text_get_string (object->page->toplevel, object);
-
-      if (str == NULL) {
-        g_warning ("NULL string encountered");
-        continue;
-      }
-
-      if (g_regex_match (regex, str, 0, NULL)) {
-        object_list = g_slist_prepend (object_list, object);
-      }
+      gschem_patch_state_build(&st, object);
     }
   }
 
-  g_regex_unref (regex);
-
-  return g_slist_reverse (object_list);
-}
-
-
-/*! \brief Find all text objects that contain a substring
- *
- *  \param pages the list of pages to search
- *  \param text the substring to find
- *  \return a list of objects that contain the given substring
- */
-static GSList*
-find_objects_using_substring (GSList *pages, const char *text)
-{
-  GSList *object_list = NULL;
-  GSList *page_iter = pages;
-
-  g_return_val_if_fail (text != NULL, NULL);
-
-  while (page_iter != NULL) {
-    const GList *object_iter;
-    PAGE *page = (PAGE*) page_iter->data;
-
-    page_iter = g_slist_next (page_iter);
-
-    if (page == NULL) {
-      g_warning ("NULL page encountered");
-      continue;
-    }
-
-    object_iter = s_page_objects (page);
-
-    while (object_iter != NULL) {
-      OBJECT *object = (OBJECT*) object_iter->data;
-      const char *str;
-
-      object_iter = g_list_next (object_iter);
-
-      if (object == NULL) {
-        g_warning ("NULL object encountered");
-        continue;
-      }
-
-      if (object->type != OBJ_TEXT) {
-        continue;
-      }
-
-      if (!(o_is_visible (object) || page->toplevel->show_hidden_text)) {
-        continue;
-      }
-
-      str = o_text_get_string (object->page->toplevel, object);
-
-      if (str == NULL) {
-        g_warning ("NULL string encountered");
-        continue;
-      }
-
-      if (strstr (str, text) != NULL) {
-        object_list = g_slist_prepend (object_list, object);
-      }
-    }
-  }
+  object_list = gschem_patch_state_execute(&st, object_list);
+  gschem_patch_state_destroy(&st);
 
   return g_slist_reverse (object_list);
 }
@@ -624,7 +488,7 @@ get_pages (GList *pages, gboolean descend)
 static void
 get_property (GObject *object, guint param_id, GValue *value, GParamSpec *pspec)
 {
-  /* GschemFindTextDockable *state = GSCHEM_FIND_TEXT_DOCKABLE (object); */
+  /* GschemPatchDockable *state = GSCHEM_PATCH_DOCKABLE (object); */
 
   switch (param_id) {
     default:
@@ -707,7 +571,7 @@ get_subpages (PAGE *page)
  *  \param [in] state the new instance
  */
 static void
-instance_init (GschemFindTextDockable *state)
+instance_init (GschemPatchDockable *state)
 {
   state->store = gtk_list_store_new(COLUMN_COUNT,
                                     G_TYPE_STRING,
@@ -718,7 +582,7 @@ instance_init (GschemFindTextDockable *state)
 static GtkWidget *
 create_widget (GschemDockable *parent)
 {
-  GschemFindTextDockable *state = GSCHEM_FIND_TEXT_DOCKABLE (parent);
+  GschemPatchDockable *state = GSCHEM_PATCH_DOCKABLE (parent);
 
   GtkTreeViewColumn *column;
   GtkCellRenderer *renderer;
@@ -771,7 +635,7 @@ create_widget (GschemDockable *parent)
  *  \param [in] state
  */
 static void
-object_weakref_cb (OBJECT *object, GschemFindTextDockable *state)
+object_weakref_cb (OBJECT *object, GschemPatchDockable *state)
 {
   g_return_if_fail (state != NULL);
 
@@ -791,7 +655,7 @@ object_weakref_cb (OBJECT *object, GschemFindTextDockable *state)
  *  \param [in] object the object to remove from the store
  */
 static void
-remove_object (GschemFindTextDockable *state, OBJECT *object)
+remove_object (GschemPatchDockable *state, OBJECT *object)
 {
   GtkTreeIter iter;
   gboolean valid;
@@ -832,7 +696,7 @@ remove_object (GschemFindTextDockable *state, OBJECT *object)
  *  \param [in] state
  */
 static void
-select_cb (GtkTreeSelection *selection, GschemFindTextDockable *state)
+select_cb (GtkTreeSelection *selection, GschemPatchDockable *state)
 {
   GtkTreeIter iter;
   gboolean success;
@@ -875,7 +739,7 @@ select_cb (GtkTreeSelection *selection, GschemFindTextDockable *state)
 static void
 set_property (GObject *object, guint param_id, const GValue *value, GParamSpec *pspec)
 {
-  /* GschemFindTextDockable *state = GSCHEM_FIND_TEXT_DOCKABLE (object); */
+  /* GschemPatchDockable *state = GSCHEM_PATCH_DOCKABLE (object); */
 
   switch (param_id) {
     default:

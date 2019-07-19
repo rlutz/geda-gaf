@@ -87,6 +87,7 @@ struct st_gschem_toplevel {
   GschemDockable *options_dockable;     /* snap size dialog */
   GschemDockable *log_dockable;
   GschemDockable *find_text_dockable;
+  GschemDockable *patch_dockable;
 
   /* -------------------------------------- */
   /* Models for widgets inside dialog boxes */

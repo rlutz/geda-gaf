@@ -32,6 +32,7 @@
 #include "gschem_options_dockable.h"
 #include "gschem_log_dockable.h"
 #include "gschem_find_text_dockable.h"
+#include "gschem_patch_dockable.h"
 
 #define GSCHEM_THEME_ICON_NAME "geda-gschem"
 
@@ -196,14 +197,13 @@ x_window_find_patch (GtkWidget *widget, gint response, GschemToplevel *w_current
 
   switch (response) {
   case GTK_RESPONSE_OK:
-    count = gschem_find_text_dockable_find (
-        GSCHEM_FIND_TEXT_DOCKABLE (w_current->find_text_dockable),
+    count = gschem_patch_dockable_find (
+        GSCHEM_PATCH_DOCKABLE (w_current->patch_dockable),
         geda_list_get_glist (w_current->toplevel->pages),
-        FIND_TYPE_PATCH,
         gschem_find_patch_widget_get_find_patch_string (GSCHEM_FIND_PATCH_WIDGET (w_current->find_patch_widget)),
         gschem_find_patch_widget_get_descend (GSCHEM_FIND_PATCH_WIDGET (w_current->find_patch_widget)));
     if (count > 0) {
-      gschem_dockable_present (w_current->find_text_dockable);
+      gschem_dockable_present (w_current->patch_dockable);
       close = TRUE;
     };
     break;
@@ -846,6 +846,20 @@ void x_window_create_main(GschemToplevel *w_current)
                     G_CALLBACK (&x_window_select_text),
                     w_current);
 
+  w_current->patch_dockable = g_object_new (
+    GSCHEM_TYPE_PATCH_DOCKABLE,
+    "title", _("Patch"),
+    "settings-name", "patch",
+    "initial-state", GSCHEM_DOCKABLE_STATE_HIDDEN,
+    "initial-width", 500,
+    "initial-height", 300,
+    "gschem-toplevel", w_current,
+    NULL);
+  g_signal_connect (w_current->patch_dockable,
+                    "select-object",
+                    G_CALLBACK (&x_window_select_text),
+                    w_current);
+
   gschem_dockable_initialize_toplevel (w_current);
 
 
@@ -953,6 +967,7 @@ void x_window_close(GschemToplevel *w_current)
   g_clear_object (&w_current->options_dockable);
   g_clear_object (&w_current->log_dockable);
   g_clear_object (&w_current->find_text_dockable);
+  g_clear_object (&w_current->patch_dockable);
 
   if (g_list_length (global_window_list) == 1) {
     /* no more window after this one, remember to quit */
