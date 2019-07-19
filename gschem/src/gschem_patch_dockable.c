@@ -62,17 +62,11 @@ clear_store (GschemPatchDockable *state);
 static void
 dispose (GObject *object);
 
-static void
-finalize (GObject *object);
-
 static GSList*
 find_objects_using_patch (GSList *pages, const char *text);
 
 static GSList*
 get_pages (GList *pages, gboolean descend);
-
-static void
-get_property (GObject *object, guint param_id, GValue *value, GParamSpec *pspec);
 
 static GList*
 get_subpages (PAGE *page);
@@ -91,9 +85,6 @@ remove_object (GschemPatchDockable *state, OBJECT *object);
 
 static void
 select_cb (GtkTreeSelection *selection, GschemPatchDockable *state);
-
-static void
-set_property (GObject *object, guint param_id, const GValue *value, GParamSpec *pspec);
 
 
 static GObjectClass *gschem_patch_dockable_parent_class = NULL;
@@ -287,10 +278,6 @@ class_init (GschemPatchDockableClass *klass)
   GSCHEM_DOCKABLE_CLASS (klass)->create_widget = create_widget;
 
   G_OBJECT_CLASS (klass)->dispose  = dispose;
-  G_OBJECT_CLASS (klass)->finalize = finalize;
-
-  G_OBJECT_CLASS (klass)->get_property = get_property;
-  G_OBJECT_CLASS (klass)->set_property = set_property;
 
   g_signal_new ("select-object",                     /* signal_name  */
                 G_OBJECT_CLASS_TYPE (klass),         /* itype        */
@@ -364,18 +351,6 @@ dispose (GObject *object)
 
   g_return_if_fail (gschem_patch_dockable_parent_class != NULL);
   gschem_patch_dockable_parent_class->dispose (object);
-}
-
-
-/*! \brief Finalize object
- */
-static void
-finalize (GObject *object)
-{
-  /* lastly, chain up to the parent finalize */
-
-  g_return_if_fail (gschem_patch_dockable_parent_class != NULL);
-  gschem_patch_dockable_parent_class->finalize (object);
 }
 
 
@@ -475,25 +450,6 @@ get_pages (GList *pages, gboolean descend)
   g_hash_table_destroy (visit_list);
 
   return g_slist_reverse (output_list);
-}
-
-
-/*! \brief Get a property
- *
- *  \param [in]     object
- *  \param [in]     param_id
- *  \param [in,out] value
- *  \param [in]     pspec
- */
-static void
-get_property (GObject *object, guint param_id, GValue *value, GParamSpec *pspec)
-{
-  /* GschemPatchDockable *state = GSCHEM_PATCH_DOCKABLE (object); */
-
-  switch (param_id) {
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
-  }
 }
 
 
@@ -725,24 +681,5 @@ select_cb (GtkTreeSelection *selection, GschemPatchDockable *state)
     }
 
     g_value_unset (&value);
-  }
-}
-
-
-/*! \brief Set a gobject property
- *
- *  \param [in]     object
- *  \param [in]     param_id
- *  \param [in,out] value
- *  \param [in]     pspec
- */
-static void
-set_property (GObject *object, guint param_id, const GValue *value, GParamSpec *pspec)
-{
-  /* GschemPatchDockable *state = GSCHEM_PATCH_DOCKABLE (object); */
-
-  switch (param_id) {
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
   }
 }
