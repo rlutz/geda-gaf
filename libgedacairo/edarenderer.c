@@ -79,10 +79,12 @@ static inline gboolean
 EDA_RENDERER_CHECK_FLAG (EdaRenderer *r, int f) {
   return r->priv->flags & f;
 }
+/*
 static inline void
 EDA_RENDERER_SET_FLAG (EdaRenderer *r, int f, gboolean e) {
   if (e) { r->priv->flags |= f; } else { r->priv->flags &= ~f; }
 }
+*/
 static inline unsigned int
 EDA_RENDERER_CAIRO_FLAGS (EdaRenderer *r) {
   return EDA_RENDERER_CHECK_FLAG (r, FLAG_HINTING) ? EDA_CAIRO_ENABLE_HINTS : 0;
@@ -135,7 +137,7 @@ static void eda_renderer_draw_picture (EdaRenderer *renderer, OBJECT *object);
 static void eda_renderer_draw_complex (EdaRenderer *renderer, OBJECT *object);
 
 static void eda_renderer_default_draw_grips (EdaRenderer *renderer, OBJECT *object);
-static void eda_renderer_draw_grips_list (EdaRenderer *renderer, GList *objects);
+/*static void eda_renderer_draw_grips_list (EdaRenderer *renderer, GList *objects);*/
 static void eda_renderer_draw_grips_impl (EdaRenderer *renderer, int type, int n_grips, ...);
 static void eda_renderer_draw_arc_grips (EdaRenderer *renderer, OBJECT *object);
 static void eda_renderer_draw_path_grips (EdaRenderer *renderer, OBJECT *object);
@@ -1068,6 +1070,7 @@ eda_renderer_draw_picture (EdaRenderer *renderer, OBJECT *object)
  * GRIP DRAWING
  * ================================================================ */
 
+/*
 static void
 eda_renderer_draw_grips_list (EdaRenderer *renderer, GList *objects)
 {
@@ -1076,6 +1079,7 @@ eda_renderer_draw_grips_list (EdaRenderer *renderer, GList *objects)
     eda_renderer_draw_grips (renderer, (OBJECT *) iter->data);
   }
 }
+*/
 
 void
 eda_renderer_draw_grips (EdaRenderer *renderer, OBJECT *object)
