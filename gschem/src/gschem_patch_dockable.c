@@ -17,10 +17,9 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
-/*!
- * \file gschem_patch_dockable.c
- *
- * \brief Stores state of a find text operation
+
+/*! \file gschem_patch_dockable.c
+ * \brief List diffs resulting from a patch.
  */
 
 #include <config.h>
@@ -34,60 +33,166 @@
 #endif
 
 #include "gschem.h"
-
 #include "../include/gschem_patch_dockable.h"
 
-
-enum
-{
+enum {
   COLUMN_FILENAME,
   COLUMN_STRING,
   COLUMN_OBJECT,
   COLUMN_COUNT
 };
 
+typedef void (*NotifyFunc) (void *, void *);
 
-typedef void (*NotifyFunc)(void*, void*);
+
+static gpointer parent_class = NULL;
+
+static void class_init (GschemPatchDockableClass *class);
+static void instance_init (GschemPatchDockable *patch_dockable);
+static void dispose (GObject *object);
+static GtkWidget *create_widget (GschemDockable *dockable);
+
+static void assign_store_patch (GschemPatchDockable *patch_dockable,
+                                GSList *objects);
+static void clear_store (GschemPatchDockable *patch_dockable);
+static GSList *find_objects_using_patch (GSList *pages, const char *text);
+static GSList *get_pages (GList *pages, gboolean descend);
+static GList *get_subpages (PAGE *page);
+static void object_weakref_cb (OBJECT *object,
+                               GschemPatchDockable *patch_dockable);
+static void remove_object (GschemPatchDockable *patch_dockable,
+                           OBJECT *object);
+static void select_cb (GtkTreeSelection *selection,
+                       GschemPatchDockable *patch_dockable);
+
+
+GType
+gschem_patch_dockable_get_type ()
+{
+  static GType type = 0;
+
+  if (type == 0) {
+    static const GTypeInfo info = {
+      sizeof (GschemPatchDockableClass),
+      NULL,                                     /* base_init */
+      NULL,                                     /* base_finalize */
+      (GClassInitFunc) class_init,
+      NULL,                                     /* class_finalize */
+      NULL,                                     /* class_data */
+      sizeof (GschemPatchDockable),
+      0,                                        /* n_preallocs */
+      (GInstanceInitFunc) instance_init,
+      NULL                                      /* value_table */
+    };
+
+    type = g_type_register_static (GSCHEM_TYPE_DOCKABLE,
+                                   "GschemPatchDockable",
+                                   &info, 0);
+  }
+
+  return type;
+}
 
 
 static void
-assign_store_patch (GschemPatchDockable *patch_dockable, GSList *objects);
+class_init (GschemPatchDockableClass *class)
+{
+  parent_class = g_type_class_peek_parent (class);
+
+  GSCHEM_DOCKABLE_CLASS (class)->create_widget = create_widget;
+
+  G_OBJECT_CLASS (class)->dispose = dispose;
+
+  g_signal_new ("select-object",                     /* signal_name  */
+                G_OBJECT_CLASS_TYPE (class),         /* itype        */
+                0,                                   /* signal_flags */
+                0,                                   /* class_offset */
+                NULL,                                /* accumulator  */
+                NULL,                                /* accu_data    */
+                g_cclosure_marshal_VOID__POINTER,    /* c_marshaller */
+                G_TYPE_NONE,                         /* return_type  */
+                1,                                   /* n_params     */
+                G_TYPE_POINTER);
+}
+
 
 static void
-class_init (GschemPatchDockableClass *klass);
+instance_init (GschemPatchDockable *patch_dockable)
+{
+  patch_dockable->store = gtk_list_store_new (COLUMN_COUNT,
+                                              G_TYPE_STRING,
+                                              G_TYPE_STRING,
+                                              G_TYPE_POINTER);
+}
+
 
 static void
-clear_store (GschemPatchDockable *patch_dockable);
+dispose (GObject *object)
+{
+  GschemPatchDockable *patch_dockable = GSCHEM_PATCH_DOCKABLE (object);
 
-static void
-dispose (GObject *object);
+  if (patch_dockable->store) {
+    clear_store (patch_dockable);
+    g_clear_object (&patch_dockable->store);
+  }
 
-static GSList*
-find_objects_using_patch (GSList *pages, const char *text);
+  G_OBJECT_CLASS (parent_class)->dispose (object);
+}
 
-static GSList*
-get_pages (GList *pages, gboolean descend);
-
-static GList*
-get_subpages (PAGE *page);
-
-static void
-instance_init (GschemPatchDockable *patch_dockable);
 
 static GtkWidget *
-create_widget (GschemDockable *parent);
+create_widget (GschemDockable *dockable)
+{
+  GschemPatchDockable *patch_dockable = GSCHEM_PATCH_DOCKABLE (dockable);
 
-static void
-object_weakref_cb (OBJECT *object, GschemPatchDockable *patch_dockable);
+  GtkTreeViewColumn *column;
+  GtkCellRenderer *renderer;
+  GtkWidget *scrolled;
+  GtkTreeSelection *selection;
+  GtkWidget *tree_widget;
 
-static void
-remove_object (GschemPatchDockable *patch_dockable, OBJECT *object);
+  scrolled = gtk_scrolled_window_new (NULL, NULL);
 
-static void
-select_cb (GtkTreeSelection *selection, GschemPatchDockable *patch_dockable);
+  tree_widget = gtk_tree_view_new_with_model (
+    GTK_TREE_MODEL (patch_dockable->store));
+  gtk_container_add (GTK_CONTAINER (scrolled), tree_widget);
+
+  /* filename column */
+
+  column = gtk_tree_view_column_new();
+  gtk_tree_view_column_set_resizable (column, TRUE);
+  gtk_tree_view_column_set_title (column, _("Filename"));
+
+  gtk_tree_view_append_column (GTK_TREE_VIEW (tree_widget), column);
+
+  renderer = gtk_cell_renderer_text_new();
+  gtk_tree_view_column_pack_start(column, renderer, TRUE);
+  gtk_tree_view_column_add_attribute(column, renderer, "text", 0);
+
+  /* text column */
+
+  column = gtk_tree_view_column_new();
+  gtk_tree_view_column_set_resizable (column, TRUE);
+  gtk_tree_view_column_set_title (column, _("Text"));
+
+  gtk_tree_view_append_column (GTK_TREE_VIEW (tree_widget), column);
+
+  renderer = gtk_cell_renderer_text_new();
+  gtk_tree_view_column_pack_start(column, renderer, TRUE);
+  gtk_tree_view_column_add_attribute(column, renderer, "text", 1);
+
+  /* attach signal to detect user selection */
+
+  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (tree_widget));
+  g_signal_connect (selection, "changed",
+                    G_CALLBACK (select_cb), patch_dockable);
+
+  gtk_widget_show_all (scrolled);
+  return scrolled;
+}
 
 
-static GObjectClass *gschem_patch_dockable_parent_class = NULL;
+/******************************************************************************/
 
 
 /*! \brief find instances of a given string
@@ -122,42 +227,6 @@ gschem_patch_dockable_find (GschemPatchDockable *patch_dockable,
 
   return count;
 }
-
-
-/*! \brief Get/register GschemPatchDockable type.
- */
-GType
-gschem_patch_dockable_get_type ()
-{
-  static GType type = 0;
-
-  if (type == 0) {
-    static const GTypeInfo info = {
-      sizeof(GschemPatchDockableClass),
-      NULL,                                /* base_init */
-      NULL,                                /* base_finalize */
-      (GClassInitFunc) class_init,
-      NULL,                                /* class_finalize */
-      NULL,                                /* class_data */
-      sizeof(GschemPatchDockable),
-      0,                                   /* n_preallocs */
-      (GInstanceInitFunc) instance_init,
-    };
-
-    type = g_type_register_static (GSCHEM_TYPE_DOCKABLE,
-                                   "GschemPatchDockable",
-                                   &info,
-                                   0);
-  }
-
-  return type;
-}
-
-
-
-
-
-
 
 
 /*! \brief places object in the store so the user can see them
@@ -268,33 +337,6 @@ assign_store_patch (GschemPatchDockable *patch_dockable, GSList *objects)
 }
 
 
-/*! \brief initialize class
- *
- *  \param [in] klass The class for initialization
- */
-static void
-class_init (GschemPatchDockableClass *klass)
-{
-  gschem_patch_dockable_parent_class = G_OBJECT_CLASS (g_type_class_peek_parent (klass));
-
-  GSCHEM_DOCKABLE_CLASS (klass)->create_widget = create_widget;
-
-  G_OBJECT_CLASS (klass)->dispose  = dispose;
-
-  g_signal_new ("select-object",                     /* signal_name  */
-                G_OBJECT_CLASS_TYPE (klass),         /* itype        */
-                0,                                   /* signal_flags */
-                0,                                   /* class_offset */
-                NULL,                                /* accumulator  */
-                NULL,                                /* accu_data    */
-                g_cclosure_marshal_VOID__POINTER,    /* c_marshaller */
-                G_TYPE_NONE,                         /* return_type  */
-                1,                                   /* n_params     */
-                G_TYPE_POINTER
-                );
-}
-
-
 /*! \brief delete all items from the list store
  *
  *  This function deletes all items in the list store and removes all the weak
@@ -336,26 +378,6 @@ clear_store (GschemPatchDockable *patch_dockable)
   }
 
   gtk_list_store_clear (patch_dockable->store);
-}
-
-
-/*! \brief Dispose of the object
- */
-static void
-dispose (GObject *object)
-{
-  GschemPatchDockable *patch_dockable = GSCHEM_PATCH_DOCKABLE (object);
-
-  if (patch_dockable->store) {
-    clear_store (patch_dockable);
-    g_object_unref (patch_dockable->store);
-    patch_dockable->store = NULL;
-  }
-
-  /* lastly, chain up to the parent dispose */
-
-  g_return_if_fail (gschem_patch_dockable_parent_class != NULL);
-  gschem_patch_dockable_parent_class->dispose (object);
 }
 
 
@@ -409,7 +431,6 @@ find_objects_using_patch (GSList *pages, const char *text)
 
   return g_slist_reverse (object_list);
 }
-
 
 
 /*! \brief obtain a list of pages for an operation
@@ -524,71 +545,6 @@ get_subpages (PAGE *page)
   }
 
   return g_list_reverse (page_list);
-}
-
-
-/*! \brief initialize a new instance
- *
- *  \param [in] patch_dockable the new instance
- */
-static void
-instance_init (GschemPatchDockable *patch_dockable)
-{
-  patch_dockable->store = gtk_list_store_new (COLUMN_COUNT,
-                                              G_TYPE_STRING,
-                                              G_TYPE_STRING,
-                                              G_TYPE_POINTER);
-}
-
-static GtkWidget *
-create_widget (GschemDockable *parent)
-{
-  GschemPatchDockable *patch_dockable = GSCHEM_PATCH_DOCKABLE (parent);
-
-  GtkTreeViewColumn *column;
-  GtkCellRenderer *renderer;
-  GtkWidget *scrolled;
-  GtkTreeSelection *selection;
-  GtkWidget *tree_widget;
-
-  scrolled = gtk_scrolled_window_new (NULL, NULL);
-
-  tree_widget = gtk_tree_view_new_with_model (
-    GTK_TREE_MODEL (patch_dockable->store));
-  gtk_container_add (GTK_CONTAINER (scrolled), tree_widget);
-
-  /* filename column */
-
-  column = gtk_tree_view_column_new();
-  gtk_tree_view_column_set_resizable (column, TRUE);
-  gtk_tree_view_column_set_title (column, _("Filename"));
-
-  gtk_tree_view_append_column (GTK_TREE_VIEW (tree_widget), column);
-
-  renderer = gtk_cell_renderer_text_new();
-  gtk_tree_view_column_pack_start(column, renderer, TRUE);
-  gtk_tree_view_column_add_attribute(column, renderer, "text", 0);
-
-  /* text column */
-
-  column = gtk_tree_view_column_new();
-  gtk_tree_view_column_set_resizable (column, TRUE);
-  gtk_tree_view_column_set_title (column, _("Text"));
-
-  gtk_tree_view_append_column (GTK_TREE_VIEW (tree_widget), column);
-
-  renderer = gtk_cell_renderer_text_new();
-  gtk_tree_view_column_pack_start(column, renderer, TRUE);
-  gtk_tree_view_column_add_attribute(column, renderer, "text", 1);
-
-  /* attach signal to detect user selection */
-
-  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (tree_widget));
-  g_signal_connect (selection, "changed",
-                    G_CALLBACK (select_cb), patch_dockable);
-
-  gtk_widget_show_all (scrolled);
-  return scrolled;
 }
 
 
