@@ -42,7 +42,7 @@ struct _GschemPatchDockable {
 
 gboolean
 gschem_patch_dockable_find (GschemPatchDockable *patch_dockable,
-                            const char *text, gboolean descend);
+                            const char *path, gboolean descend);
 
 GType
 gschem_patch_dockable_get_type (void);

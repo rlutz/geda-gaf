@@ -55,7 +55,7 @@ static GtkWidget *create_widget (GschemDockable *dockable);
 static void assign_store_patch (GschemPatchDockable *patch_dockable,
                                 GSList *objects);
 static void clear_store (GschemPatchDockable *patch_dockable);
-static GSList *find_objects_using_patch (GSList *pages, const char *text);
+static GSList *find_objects_using_patch (GSList *pages, const char *path);
 static GSList *get_pages (GList *pages, gboolean descend);
 static GList *get_subpages (PAGE *page);
 static void object_weakref_cb (OBJECT *object,
@@ -184,40 +184,35 @@ create_widget (GschemDockable *dockable)
 /******************************************************************************/
 
 
-/*! \brief find instances of a given string
+/*! \brief Find all objects that have an outstanding patch mismatch.
  *
- *  Finds instances of a given string and displays the result inside this
- *  widget.
+ * The results are placed in the dockable's GtkListStore.
  *
- *  \param [in] patch_dockable
- *  \param [in] pages a list of pages to search
- *  \param [in] text the text to find
- *  \param [in] descend decend the page heirarchy
- *  \return the number of objects found
+ * \param [in] patch_dockable this dockable
+ * \param [in] pages          list of pages to search
+ * \param [in] path           path to the patch file (.bap)
+ * \param [in] descend        whether to descend the page hierarchy
+ *
+ * \returns whether any mismatches have been found
  */
 gboolean
 gschem_patch_dockable_find (GschemPatchDockable *patch_dockable,
-                            const char *text, gboolean descend)
+                            const char *path, gboolean descend)
 {
   GschemToplevel *w_current = GSCHEM_DOCKABLE (patch_dockable)->w_current;
   GList *pages = geda_list_get_glist (w_current->toplevel->pages);
-
-  int count;
-  GSList *objects = NULL;
-  GSList *all_pages;
+  GSList *all_pages, *objects;
 
   all_pages = get_pages (pages, descend);
 
-  objects = find_objects_using_patch (all_pages, text);
+  objects = find_objects_using_patch (all_pages, path);
 
   g_slist_free (all_pages);
 
   assign_store_patch (patch_dockable, objects);
 
-  count = g_slist_length (objects);
   g_slist_free (objects);
-
-  return count != 0;
+  return objects != NULL;
 }
 
 
@@ -379,13 +374,13 @@ clear_store (GschemPatchDockable *patch_dockable)
  *  \return a list of objects that have mismatch
  */
 static GSList*
-find_objects_using_patch (GSList *pages, const char *text)
+find_objects_using_patch (GSList *pages, const char *path)
 {
   GSList *object_list = NULL;
   gschem_patch_state_t st;
 
-  if (gschem_patch_state_init(&st, text) != 0) {
-    g_warning("Unable to open patch file %s\n", text);
+  if (gschem_patch_state_init(&st, path) != 0) {
+    g_warning("Unable to open patch file %s\n", path);
     return NULL;
   }
 
