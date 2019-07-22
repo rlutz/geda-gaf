@@ -373,6 +373,9 @@ struct st_page {
   char *page_filename; 
   int CHANGED;			/* changed flag */
 
+  gchar *patch_filename;
+  gboolean patch_descend;
+
   /* Undo/Redo Stacks and pointers */	
   /* needs to go into page mechanism actually */
   UNDO *undo_bottom;	

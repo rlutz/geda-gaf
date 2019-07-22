@@ -127,6 +127,9 @@ PAGE *s_page_new (TOPLEVEL *toplevel, const gchar *filename)
     page->page_filename = g_build_filename (pwd, filename, NULL);
     g_free (pwd);
   }
+
+  page->patch_filename = NULL;
+  page->patch_descend = FALSE;
 	
   g_assert (toplevel->init_bottom != 0);
 
@@ -246,6 +249,7 @@ void s_page_delete (TOPLEVEL *toplevel, PAGE *page)
   /* ouch, deal with parents going away and the children still around */
   page->up = -2;
   g_free (page->page_filename);
+  g_free (page->patch_filename);
 
   geda_list_remove( toplevel->pages, page );
 
