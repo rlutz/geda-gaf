@@ -52,8 +52,8 @@ static void instance_init (GschemPatchDockable *patch_dockable);
 static void dispose (GObject *object);
 static GtkWidget *create_widget (GschemDockable *dockable);
 
-static void assign_store_patch (GschemPatchDockable *patch_dockable,
-                                GSList *objects);
+static void add_hit_to_store (GschemPatchDockable *patch_dockable,
+                              gschem_patch_hit_t *hit);
 static void clear_store (GschemPatchDockable *patch_dockable);
 static GSList *find_objects_using_patch (GSList *pages, const char *path);
 static GSList *get_pages (GList *pages, gboolean descend);
@@ -203,37 +203,36 @@ gschem_patch_dockable_find (GschemPatchDockable *patch_dockable,
   GList *pages = geda_list_get_glist (w_current->toplevel->pages);
   GSList *all_pages, *objects;
 
+  g_return_val_if_fail (patch_dockable != NULL, FALSE);
+  g_return_val_if_fail (patch_dockable->store != NULL, FALSE);
+
   all_pages = get_pages (pages, descend);
 
   objects = find_objects_using_patch (all_pages, path);
 
   g_slist_free (all_pages);
 
-  assign_store_patch (patch_dockable, objects);
+  clear_store (patch_dockable);
+
+  for (GSList *object_iter = objects;
+       object_iter != NULL; object_iter = object_iter->next) {
+    gschem_patch_hit_t *hit = (gschem_patch_hit_t *) object_iter->data;
+    add_hit_to_store (patch_dockable, hit);
+    object_iter->data = NULL;
+  }
 
   g_slist_free (objects);
   return objects != NULL;
 }
 
 
-/*! \brief places object in the store so the user can see them
- *
- *  \param [in] patch_dockable
- *  \param [in] objects the list of objects to put in the store
+/*! \brief Place a result in the store so the user can see and select it.
  */
 static void
-assign_store_patch (GschemPatchDockable *patch_dockable, GSList *objects)
+add_hit_to_store (GschemPatchDockable *patch_dockable, gschem_patch_hit_t *hit)
 {
 	static const char *UNKNOWN_FILE_NAME = "N/A";
 
-  g_return_if_fail (patch_dockable != NULL);
-  g_return_if_fail (patch_dockable->store != NULL);
-
-  clear_store (patch_dockable);
-
-  for (GSList *object_iter = objects;
-       object_iter != NULL; object_iter = object_iter->next) {
-    gschem_patch_hit_t *hit = (gschem_patch_hit_t *) object_iter->data;
     char *basename;
     OBJECT *final_object = NULL;
     GtkTreeIter tree_iter;
@@ -262,8 +261,7 @@ assign_store_patch (GschemPatchDockable *patch_dockable, GSList *objects)
                             COLUMN_STRING, hit->text,
                             COLUMN_OBJECT, final_object,
                             -1);
-        object_iter->data = NULL;
-        continue;
+        return;
       }
 
 
@@ -316,9 +314,6 @@ assign_store_patch (GschemPatchDockable *patch_dockable, GSList *objects)
                           -1);
     }
     free(hit);
-
-    object_iter->data = NULL;
-  }
 }
 
 
