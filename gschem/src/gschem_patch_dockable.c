@@ -195,7 +195,7 @@ create_widget (GschemDockable *dockable)
  *  \param [in] descend decend the page heirarchy
  *  \return the number of objects found
  */
-int
+gboolean
 gschem_patch_dockable_find (GschemPatchDockable *patch_dockable,
                             GList *pages, const char *text, gboolean descend)
 {
@@ -214,7 +214,7 @@ gschem_patch_dockable_find (GschemPatchDockable *patch_dockable,
   count = g_slist_length (objects);
   g_slist_free (objects);
 
-  return count;
+  return count != 0;
 }
 
 

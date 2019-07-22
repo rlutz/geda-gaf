@@ -40,7 +40,7 @@ struct _GschemPatchDockable {
   GtkListStore *store;
 };
 
-int
+gboolean
 gschem_patch_dockable_find (GschemPatchDockable *patch_dockable,
                             GList *pages, const char *text, gboolean descend);
 
