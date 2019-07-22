@@ -197,8 +197,11 @@ create_widget (GschemDockable *dockable)
  */
 gboolean
 gschem_patch_dockable_find (GschemPatchDockable *patch_dockable,
-                            GList *pages, const char *text, gboolean descend)
+                            const char *text, gboolean descend)
 {
+  GschemToplevel *w_current = GSCHEM_DOCKABLE (patch_dockable)->w_current;
+  GList *pages = geda_list_get_glist (w_current->toplevel->pages);
+
   int count;
   GSList *objects = NULL;
   GSList *all_pages;

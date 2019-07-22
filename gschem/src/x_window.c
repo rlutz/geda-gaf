@@ -198,7 +198,6 @@ x_window_find_patch (GtkWidget *widget, gint response, GschemToplevel *w_current
   case GTK_RESPONSE_OK:
     if (gschem_patch_dockable_find (
           GSCHEM_PATCH_DOCKABLE (w_current->patch_dockable),
-          geda_list_get_glist (w_current->toplevel->pages),
           gschem_find_patch_widget_get_find_patch_string (GSCHEM_FIND_PATCH_WIDGET (w_current->find_patch_widget)),
           gschem_find_patch_widget_get_descend (GSCHEM_FIND_PATCH_WIDGET (w_current->find_patch_widget)))) {
       gschem_dockable_present (w_current->patch_dockable);
