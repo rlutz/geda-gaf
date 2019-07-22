@@ -226,7 +226,6 @@ gschem_patch_dockable_find (GschemPatchDockable *patch_dockable,
 static void
 assign_store_patch (GschemPatchDockable *patch_dockable, GSList *objects)
 {
-  GSList *object_iter;
 	static const char *UNKNOWN_FILE_NAME = "N/A";
 
   g_return_if_fail (patch_dockable != NULL);
@@ -234,12 +233,11 @@ assign_store_patch (GschemPatchDockable *patch_dockable, GSList *objects)
 
   clear_store (patch_dockable);
 
-  object_iter = objects;
-
-  while (object_iter != NULL) {
+  for (GSList *object_iter = objects;
+       object_iter != NULL; object_iter = object_iter->next) {
+    gschem_patch_hit_t *hit = (gschem_patch_hit_t *) object_iter->data;
     char *basename;
     OBJECT *final_object = NULL;
-    gschem_patch_hit_t *hit = (gschem_patch_hit_t*) object_iter->data;
     GtkTreeIter tree_iter;
 
 
@@ -250,7 +248,7 @@ assign_store_patch (GschemPatchDockable *patch_dockable, GSList *objects)
        */
  {
       OBJECT *page_obj;
-      GList *i, *l;
+      GList *l;
       int found_pin;
 
       if (hit->object != NULL)
@@ -266,12 +264,13 @@ assign_store_patch (GschemPatchDockable *patch_dockable, GSList *objects)
                             COLUMN_STRING, hit->text,
                             COLUMN_OBJECT, final_object,
                             -1);
-        goto next;
+        object_iter->data = NULL;
+        continue;
       }
 
 
       found_pin = 0;
-      for(i = l; i != NULL; i = g_list_next(i)) {
+      for (GList *i = l; i != NULL; i = i->next) {
         final_object = i->data;
         if (final_object->type == OBJ_TEXT) {
           page_obj = gschem_page_get_page_object(final_object);
@@ -319,9 +318,8 @@ assign_store_patch (GschemPatchDockable *patch_dockable, GSList *objects)
                           -1);
     }
     free(hit);
-    next:;
+
     object_iter->data = NULL;
-    object_iter = g_slist_next (object_iter);
   }
 }
 
@@ -381,7 +379,6 @@ static GSList*
 find_objects_using_patch (GSList *pages, const char *text)
 {
   GSList *object_list = NULL;
-  GSList *page_iter = pages;
   gschem_patch_state_t st;
 
   if (gschem_patch_state_init(&st, text) != 0) {
@@ -389,23 +386,18 @@ find_objects_using_patch (GSList *pages, const char *text)
     return NULL;
   }
 
-  while (page_iter != NULL) {
-    const GList *object_iter;
-    PAGE *page = (PAGE*) page_iter->data;
-
-    page_iter = g_slist_next (page_iter);
+  for (GSList *page_iter = pages;
+       page_iter != NULL; page_iter = page_iter->next) {
+    PAGE *page = (PAGE *) page_iter->data;
 
     if (page == NULL) {
       g_warning ("NULL page encountered");
       continue;
     }
 
-    object_iter = s_page_objects (page);
-
-    while (object_iter != NULL) {
-      OBJECT *object = (OBJECT*) object_iter->data;
-
-      object_iter = g_list_next (object_iter);
+    for (const GList *object_iter = s_page_objects (page);
+         object_iter != NULL; object_iter = object_iter->next) {
+      OBJECT *object = (OBJECT *) object_iter->data;
 
       if (object == NULL) {
         g_warning ("NULL object encountered");
@@ -479,20 +471,15 @@ get_pages (GList *pages, gboolean descend)
 static GList*
 get_subpages (PAGE *page)
 {
-  const GList *object_iter;
   GList *page_list = NULL;
 
   g_return_val_if_fail (page != NULL, NULL);
 
-  object_iter = s_page_objects (page);
-
-  while (object_iter != NULL) {
+  for (const GList *object_iter = s_page_objects (page);
+       object_iter != NULL; object_iter = object_iter->next) {
+    OBJECT *object = (OBJECT *) object_iter->data;
     char *attrib;
     char **filenames;
-    char **iter;
-    OBJECT *object = (OBJECT*) object_iter->data;
-
-    object_iter = g_list_next (object_iter);
 
     if (object == NULL) {
       g_warning ("NULL object encountered");
@@ -523,7 +510,7 @@ get_subpages (PAGE *page)
       continue;
     }
 
-    for (iter = filenames; *iter != NULL; iter++) {
+    for (char **iter = filenames; *iter != NULL; iter++) {
       PAGE *subpage = s_hierarchy_load_subpage (page, *iter, NULL);
 
       if (subpage != NULL) {
