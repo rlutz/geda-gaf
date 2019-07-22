@@ -62,8 +62,8 @@ static void object_weakref_cb (OBJECT *object,
                                GschemPatchDockable *patch_dockable);
 static void remove_object (GschemPatchDockable *patch_dockable,
                            OBJECT *object);
-static void select_cb (GtkTreeSelection *selection,
-                       GschemPatchDockable *patch_dockable);
+static void tree_selection_changed (GtkTreeSelection *selection,
+                                    gpointer user_data);
 
 
 GType
@@ -174,7 +174,7 @@ create_widget (GschemDockable *dockable)
 
   selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (tree_widget));
   g_signal_connect (selection, "changed",
-                    G_CALLBACK (select_cb), patch_dockable);
+                    G_CALLBACK (tree_selection_changed), patch_dockable);
 
   gtk_widget_show_all (scrolled);
   return scrolled;
@@ -588,55 +588,48 @@ remove_object (GschemPatchDockable *patch_dockable, OBJECT *object)
 }
 
 
-/*! \brief callback for user selecting an item
+/*! \brief Callback for tree selection "changed" signal.
  *
- *  \param [in] selection
- *  \param [in] patch_dockable
+ * Switches to the page (if applicable) and zooms to the location of
+ * the mismatch.
  */
 static void
-select_cb (GtkTreeSelection *selection, GschemPatchDockable *patch_dockable)
+tree_selection_changed (GtkTreeSelection *selection, gpointer user_data)
 {
-  GtkTreeIter iter;
-  gboolean success;
-
+  GschemPatchDockable *patch_dockable = GSCHEM_PATCH_DOCKABLE (user_data);
   g_return_if_fail (selection != NULL);
   g_return_if_fail (patch_dockable != NULL);
 
-  success = gtk_tree_selection_get_selected (selection, NULL, &iter);
+  GtkTreeIter iter;
+  if (!gtk_tree_selection_get_selected (selection, NULL, &iter))
+    return;
 
-  if (success) {
-    GValue value = G_VALUE_INIT;
-
-    gtk_tree_model_get_value (GTK_TREE_MODEL (patch_dockable->store),
-                              &iter,
-                              COLUMN_OBJECT,
-                              &value);
-
-    if (G_VALUE_HOLDS_POINTER (&value)) {
-      OBJECT *object = g_value_get_pointer (&value);
-
-      if (object != NULL) {
-        GschemPageView *view = gschem_toplevel_get_current_page_view (
-          GSCHEM_DOCKABLE (patch_dockable)->w_current);
-        g_return_if_fail (view != NULL);
-
-        PAGE *page = gschem_page_view_get_page (view);
-        g_return_if_fail (page != NULL);
-        OBJECT *page_obj;
-
-        g_return_if_fail (object != NULL);
-        page_obj = gschem_page_get_page_object (object);
-        g_return_if_fail (page_obj != NULL);
-
-        if (page != page_obj->page)
-          gschem_page_view_set_page (view, page_obj->page);
-
-        gschem_page_view_zoom_text (view, object, TRUE);
-      } else {
-        g_warning ("NULL object encountered");
-      }
-    }
-
+  GValue value = G_VALUE_INIT;
+  gtk_tree_model_get_value (GTK_TREE_MODEL (patch_dockable->store), &iter,
+                            COLUMN_OBJECT, &value);
+  if (!G_VALUE_HOLDS_POINTER (&value)) {
     g_value_unset (&value);
+    return;
   }
+
+  OBJECT *object = g_value_get_pointer (&value);
+  g_value_unset (&value);
+  if (object == NULL)
+    return;
+
+  OBJECT *page_obj = gschem_page_get_page_object (object);
+  g_return_if_fail (page_obj != NULL);
+
+
+  GschemPageView *view = gschem_toplevel_get_current_page_view (
+    GSCHEM_DOCKABLE (patch_dockable)->w_current);
+  g_return_if_fail (view != NULL);
+
+  PAGE *page = gschem_page_view_get_page (view);
+  g_return_if_fail (page != NULL);
+
+  if (page != page_obj->page)
+    gschem_page_view_set_page (view, page_obj->page);
+
+  gschem_page_view_zoom_text (view, object, TRUE);
 }
