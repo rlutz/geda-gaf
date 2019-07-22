@@ -55,7 +55,6 @@ static GtkWidget *create_widget (GschemDockable *dockable);
 static void add_hit_to_store (GschemPatchDockable *patch_dockable,
                               gschem_patch_hit_t *hit);
 static void clear_store (GschemPatchDockable *patch_dockable);
-static GSList *find_objects_using_patch (GSList *pages, const char *path);
 static GSList *get_pages (GList *pages, gboolean descend);
 static GList *get_subpages (PAGE *page);
 static void object_weakref_cb (OBJECT *object,
@@ -201,16 +200,47 @@ gschem_patch_dockable_find (GschemPatchDockable *patch_dockable,
 {
   GschemToplevel *w_current = GSCHEM_DOCKABLE (patch_dockable)->w_current;
   GList *pages = geda_list_get_glist (w_current->toplevel->pages);
+  gschem_patch_state_t st;
   GSList *all_pages, *objects;
 
   g_return_val_if_fail (patch_dockable != NULL, FALSE);
   g_return_val_if_fail (patch_dockable->store != NULL, FALSE);
 
+  if (gschem_patch_state_init(&st, path) != 0) {
+    g_warning("Unable to open patch file %s\n", path);
+    return FALSE;
+  }
+
   all_pages = get_pages (pages, descend);
 
-  objects = find_objects_using_patch (all_pages, path);
+  for (GSList *page_iter = all_pages;
+       page_iter != NULL; page_iter = page_iter->next) {
+    PAGE *page = (PAGE *) page_iter->data;
+
+    if (page == NULL) {
+      g_warning ("NULL page encountered");
+      continue;
+    }
+
+    for (const GList *object_iter = s_page_objects (page);
+         object_iter != NULL; object_iter = object_iter->next) {
+      OBJECT *object = (OBJECT *) object_iter->data;
+
+      if (object == NULL) {
+        g_warning ("NULL object encountered");
+        continue;
+      }
+
+      gschem_patch_state_build(&st, object);
+    }
+  }
 
   g_slist_free (all_pages);
+
+  objects = gschem_patch_state_execute(&st, NULL);
+  gschem_patch_state_destroy(&st);
+
+  objects = g_slist_reverse (objects);
 
   clear_store (patch_dockable);
 
@@ -359,52 +389,6 @@ clear_store (GschemPatchDockable *patch_dockable)
   }
 
   gtk_list_store_clear (patch_dockable->store);
-}
-
-
-/*! \brief Find all objects that have outstanding patch mismatch
- *
- *  \param pages the list of pages to search
- *  \param text ???
- *  \return a list of objects that have mismatch
- */
-static GSList*
-find_objects_using_patch (GSList *pages, const char *path)
-{
-  GSList *object_list = NULL;
-  gschem_patch_state_t st;
-
-  if (gschem_patch_state_init(&st, path) != 0) {
-    g_warning("Unable to open patch file %s\n", path);
-    return NULL;
-  }
-
-  for (GSList *page_iter = pages;
-       page_iter != NULL; page_iter = page_iter->next) {
-    PAGE *page = (PAGE *) page_iter->data;
-
-    if (page == NULL) {
-      g_warning ("NULL page encountered");
-      continue;
-    }
-
-    for (const GList *object_iter = s_page_objects (page);
-         object_iter != NULL; object_iter = object_iter->next) {
-      OBJECT *object = (OBJECT *) object_iter->data;
-
-      if (object == NULL) {
-        g_warning ("NULL object encountered");
-        continue;
-      }
-
-      gschem_patch_state_build(&st, object);
-    }
-  }
-
-  object_list = gschem_patch_state_execute(&st, object_list);
-  gschem_patch_state_destroy(&st);
-
-  return g_slist_reverse (object_list);
 }
 
 
