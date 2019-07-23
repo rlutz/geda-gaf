@@ -251,11 +251,7 @@ x_patch_import (GschemToplevel *w_current)
     page->patch_descend =
       gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (extra_widget));
 
-    if (gschem_patch_dockable_find (
-          GSCHEM_PATCH_DOCKABLE (w_current->patch_dockable),
-          page->patch_filename,
-          page->patch_descend))
-      gschem_dockable_present (w_current->patch_dockable);
+    x_patch_do_import (w_current, page);
   }
 
   gtk_widget_destroy (dialog);
@@ -264,33 +260,31 @@ x_patch_import (GschemToplevel *w_current)
 
 /*! \brief Find all objects that have an outstanding patch mismatch.
  *
+ * Uses the page's current patch filename and descent flag.
+ *
  * The results are placed in the dockable's GtkListStore.
- *
- * \param [in] patch_dockable this dockable
- * \param [in] pages          list of pages to search
- * \param [in] path           path to the patch file (.bap)
- * \param [in] descend        whether to descend the page hierarchy
- *
- * \returns whether any mismatches have been found
  */
-gboolean
-gschem_patch_dockable_find (GschemPatchDockable *patch_dockable,
-                            const char *path, gboolean descend)
+void
+x_patch_do_import (GschemToplevel *w_current, PAGE *page)
 {
-  GschemToplevel *w_current = GSCHEM_DOCKABLE (patch_dockable)->w_current;
+  GschemPatchDockable *patch_dockable =
+    GSCHEM_PATCH_DOCKABLE (w_current->patch_dockable);
+
   GList *pages = geda_list_get_glist (w_current->toplevel->pages);
   gschem_patch_state_t st;
   GSList *all_pages, *objects;
 
-  g_return_val_if_fail (patch_dockable != NULL, FALSE);
-  g_return_val_if_fail (patch_dockable->store != NULL, FALSE);
+  g_return_if_fail (patch_dockable != NULL);
+  g_return_if_fail (patch_dockable->store != NULL);
 
-  if (gschem_patch_state_init(&st, path) != 0) {
-    g_warning("Unable to open patch file %s\n", path);
-    return FALSE;
+  g_return_if_fail (page->patch_filename != NULL);
+
+  if (gschem_patch_state_init(&st, page->patch_filename) != 0) {
+    g_warning("Unable to open patch file %s\n", page->patch_filename);
+    return;
   }
 
-  all_pages = get_pages (pages, descend);
+  all_pages = get_pages (pages, page->patch_descend);
 
   for (GSList *page_iter = all_pages;
        page_iter != NULL; page_iter = page_iter->next) {
@@ -331,7 +325,9 @@ gschem_patch_dockable_find (GschemPatchDockable *patch_dockable,
   }
 
   g_slist_free (objects);
-  return objects != NULL;
+
+  if (objects != NULL)
+    gschem_dockable_present (GSCHEM_DOCKABLE (patch_dockable));
 }
 
 
