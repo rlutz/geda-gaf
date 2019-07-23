@@ -340,89 +340,86 @@ gschem_patch_dockable_find (GschemPatchDockable *patch_dockable,
 static void
 add_hit_to_store (GschemPatchDockable *patch_dockable, gschem_patch_hit_t *hit)
 {
-	static const char *UNKNOWN_FILE_NAME = "N/A";
+  static const char *UNKNOWN_FILE_NAME = "N/A";
 
-    char *basename;
-    OBJECT *final_object = NULL;
-    GtkTreeIter tree_iter;
+  char *basename;
+  OBJECT *final_object = NULL;
+  GtkTreeIter tree_iter;
 
+  /* TODO: this is an ugly workaround: can't put pins or objects
+     directly on the list because they have no object page; use
+     their complex object's first visible text instead
+     Fix: be able to jump to any OBJECT
+   */
+  {
+    OBJECT *page_obj;
+    GList *l;
+    int found_pin;
 
-    /* TODO: this is an ugly workaround: can't put pins or objects
-       directly on the list because they have no object page; use
-       their complex object's first visible text instead 
-       Fix: be able to jump to any OBJECT
-       */
- {
-      OBJECT *page_obj;
-      GList *l;
-      int found_pin;
+    if (hit->object != NULL)
+      l = o_attrib_return_attribs (hit->object);
+    else
+      l = NULL;
 
-      if (hit->object != NULL)
-        l = o_attrib_return_attribs (hit->object);
-      else
-        l = NULL;
-
-      if (l == NULL) {
-        gtk_list_store_append (patch_dockable->store, &tree_iter);
-        gtk_list_store_set (patch_dockable->store,
-                            &tree_iter,
-                            COLUMN_FILENAME, UNKNOWN_FILE_NAME,
-                            COLUMN_STRING, hit->text,
-                            COLUMN_OBJECT, final_object,
-                            -1);
-        return;
-      }
-
-
-      found_pin = 0;
-      for (GList *i = l; i != NULL; i = i->next) {
-        final_object = i->data;
-        if (final_object->type == OBJ_TEXT) {
-          page_obj = gschem_page_get_page_object(final_object);
-          if (o_is_visible (page_obj)) {
-            found_pin = 1;
-            break;
-          }
-        }
-      }
-      g_list_free(l);
-      if (!found_pin) {
-        g_warning ("no pin text to zoom to");
-        page_obj = final_object = NULL;
-      }
-
-      if (final_object == NULL) {
-        g_warning ("no text attrib?");
-        page_obj = final_object = NULL;
-      }
-      if (page_obj != NULL)
-        basename = g_path_get_basename (page_obj->page->page_filename);
-      else
-        basename = NULL;
- }
-    s_object_weak_ref (final_object, (NotifyFunc) object_weakref_cb,
-                       patch_dockable);
-
-    gtk_list_store_append (patch_dockable->store, &tree_iter);
-
-    if (basename != NULL) {
-      gtk_list_store_set (patch_dockable->store,
-                          &tree_iter,
-                          COLUMN_FILENAME, basename,
-                          COLUMN_STRING, hit->text,
-                          COLUMN_OBJECT, final_object,
-                          -1);
-      g_free (basename);
-    }
-    else {
+    if (l == NULL) {
+      gtk_list_store_append (patch_dockable->store, &tree_iter);
       gtk_list_store_set (patch_dockable->store,
                           &tree_iter,
                           COLUMN_FILENAME, UNKNOWN_FILE_NAME,
                           COLUMN_STRING, hit->text,
                           COLUMN_OBJECT, final_object,
                           -1);
+      return;
     }
-    free(hit);
+
+    found_pin = 0;
+    for (GList *i = l; i != NULL; i = i->next) {
+      final_object = i->data;
+      if (final_object->type == OBJ_TEXT) {
+        page_obj = gschem_page_get_page_object (final_object);
+        if (o_is_visible (page_obj)) {
+          found_pin = 1;
+          break;
+        }
+      }
+    }
+    g_list_free (l);
+    if (!found_pin) {
+      g_warning ("no pin text to zoom to");
+      page_obj = final_object = NULL;
+    }
+
+    if (final_object == NULL) {
+      g_warning ("no text attrib?");
+      page_obj = final_object = NULL;
+    }
+    if (page_obj != NULL)
+      basename = g_path_get_basename (page_obj->page->page_filename);
+    else
+      basename = NULL;
+  }
+  s_object_weak_ref (final_object, (NotifyFunc) object_weakref_cb,
+                     patch_dockable);
+
+  gtk_list_store_append (patch_dockable->store, &tree_iter);
+
+  if (basename != NULL) {
+    gtk_list_store_set (patch_dockable->store,
+                        &tree_iter,
+                        COLUMN_FILENAME, basename,
+                        COLUMN_STRING, hit->text,
+                        COLUMN_OBJECT, final_object,
+                        -1);
+    g_free (basename);
+  } else {
+    gtk_list_store_set (patch_dockable->store,
+                        &tree_iter,
+                        COLUMN_FILENAME, UNKNOWN_FILE_NAME,
+                        COLUMN_STRING, hit->text,
+                        COLUMN_OBJECT, final_object,
+                        -1);
+  }
+  free (hit);
 }
 
 
