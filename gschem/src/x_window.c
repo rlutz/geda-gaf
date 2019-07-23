@@ -186,40 +186,6 @@ x_window_find_text (GtkWidget *widget, gint response, GschemToplevel *w_current)
   }
 }
 
-static void
-x_window_find_patch (GtkWidget *widget, gint response, GschemToplevel *w_current)
-{
-  gint close = FALSE;
-
-  g_return_if_fail (w_current != NULL);
-  g_return_if_fail (w_current->toplevel != NULL);
-
-  switch (response) {
-  case GTK_RESPONSE_OK:
-    if (gschem_patch_dockable_find (
-          GSCHEM_PATCH_DOCKABLE (w_current->patch_dockable),
-          gschem_find_patch_widget_get_find_patch_string (GSCHEM_FIND_PATCH_WIDGET (w_current->find_patch_widget)),
-          gschem_find_patch_widget_get_descend (GSCHEM_FIND_PATCH_WIDGET (w_current->find_patch_widget)))) {
-      gschem_dockable_present (w_current->patch_dockable);
-      close = TRUE;
-    };
-    break;
-
-  case GTK_RESPONSE_CANCEL:
-  case GTK_RESPONSE_DELETE_EVENT:
-    close = TRUE;
-    break;
-
-  default:
-    printf("x_window_find_patch(): strange signal %d\n", response);
-  }
-
-  if (close) {
-    gtk_widget_grab_focus (w_current->drawing_area);
-    gtk_widget_hide (GTK_WIDGET (widget));
-  }
-}
-
 
 
 static void
@@ -703,20 +669,6 @@ void x_window_create_main(GschemToplevel *w_current)
   g_signal_connect (w_current->find_text_widget,
                     "response",
                     G_CALLBACK (&x_window_find_text),
-                    w_current);
-
-  /* find text box */
-  w_current->find_patch_widget = GTK_WIDGET (g_object_new (GSCHEM_TYPE_FIND_PATCH_WIDGET, NULL));
-
-  gtk_box_pack_start (GTK_BOX (work_box),
-                      w_current->find_patch_widget,
-                      FALSE,
-                      FALSE,
-                      0);
-
-  g_signal_connect (w_current->find_patch_widget,
-                    "response",
-                    G_CALLBACK (&x_window_find_patch),
                     w_current);
 
   /* hide text box */

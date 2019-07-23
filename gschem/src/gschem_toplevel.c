@@ -171,7 +171,6 @@ GschemToplevel *gschem_toplevel_new ()
      automatically destroyed when the hash table is */
 
   w_current->find_text_widget = NULL;
-  w_current->find_patch_widget = NULL;
   w_current->macro_widget  = NULL;
   w_current->bottom_widget = NULL;
 

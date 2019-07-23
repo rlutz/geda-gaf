@@ -40,7 +40,6 @@ gschem_SOURCES = \
 	gschem_dialog_misc.c \
 	gschem_dockable.c \
 	gschem_fill_swatch_cell_renderer.c \
-	gschem_find_patch_widget.c \
 	gschem_find_text_dockable.c \
 	gschem_find_text_widget.c \
 	gschem_hotkey_dialog.c \
