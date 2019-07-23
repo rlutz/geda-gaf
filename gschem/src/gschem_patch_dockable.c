@@ -32,6 +32,8 @@
 #include <string.h>
 #endif
 
+#include <libgen.h>  /* for dirname(3) */
+
 #include "gschem.h"
 #include "../include/gschem_patch_dockable.h"
 
@@ -181,6 +183,83 @@ create_widget (GschemDockable *dockable)
 
 
 /******************************************************************************/
+
+
+/*! \brief Let the user select a patch file, and import that patch file.
+ */
+void
+x_patch_import (GschemToplevel *w_current)
+{
+  PAGE *page = gschem_toplevel_get_toplevel (w_current)->page_current;
+  GtkWidget *dialog;
+  gchar *patch_filename;
+  GtkWidget *extra_widget;
+  GtkFileFilter *filter;
+
+  dialog = gtk_file_chooser_dialog_new (_("Import Patch..."),
+                                        GTK_WINDOW (w_current->main_window),
+                                        GTK_FILE_CHOOSER_ACTION_OPEN,
+                                        GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+                                        GTK_STOCK_OPEN,   GTK_RESPONSE_ACCEPT,
+                                        NULL);
+  gtk_dialog_set_alternative_button_order (GTK_DIALOG (dialog),
+                                           GTK_RESPONSE_ACCEPT,
+                                           GTK_RESPONSE_CANCEL, -1);
+
+  if (page->patch_filename != NULL)
+    patch_filename = g_strdup (page->patch_filename);
+  else {
+    size_t len = strlen (page->page_filename);
+    if (len >= 4 &&
+        (g_ascii_strcasecmp (page->page_filename + len - 4, ".sch") == 0 ||
+         g_ascii_strcasecmp (page->page_filename + len - 4, ".sym") == 0)) {
+      patch_filename = g_strdup (page->page_filename);
+      strcpy (patch_filename + len - 4, ".bap");
+    } else
+      patch_filename = g_strdup_printf ("%s.bap", page->page_filename);
+  }
+
+  if (g_file_test (patch_filename, G_FILE_TEST_EXISTS |
+                                   G_FILE_TEST_IS_REGULAR))
+    gtk_file_chooser_set_filename (GTK_FILE_CHOOSER (dialog), patch_filename);
+  else
+    /* dirname(3) modifies its argument, but that's fine here */
+    gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (dialog),
+                                         dirname (patch_filename));
+
+  g_free (patch_filename);
+
+  extra_widget = gtk_check_button_new_with_label (_("Descend into hierarchy"));
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (extra_widget),
+                                page->patch_descend);
+  gtk_file_chooser_set_extra_widget (GTK_FILE_CHOOSER (dialog), extra_widget);
+
+  filter = gtk_file_filter_new ();
+  gtk_file_filter_set_name (filter, _("Back-annotation patches"));
+  gtk_file_filter_add_pattern (filter, "*.bap");
+  gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (dialog), filter);
+
+  filter = gtk_file_filter_new ();
+  gtk_file_filter_set_name (filter, _("All files"));
+  gtk_file_filter_add_pattern (filter, "*");
+  gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (dialog), filter);
+
+  if (gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_ACCEPT) {
+    g_free (page->patch_filename);
+    page->patch_filename =
+      gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
+    page->patch_descend =
+      gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (extra_widget));
+
+    if (gschem_patch_dockable_find (
+          GSCHEM_PATCH_DOCKABLE (w_current->patch_dockable),
+          page->patch_filename,
+          page->patch_descend))
+      gschem_dockable_present (w_current->patch_dockable);
+  }
+
+  gtk_widget_destroy (dialog);
+}
 
 
 /*! \brief Find all objects that have an outstanding patch mismatch.

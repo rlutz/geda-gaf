@@ -443,6 +443,8 @@ void x_multiattrib_update (GschemToplevel *w_current);
 void x_pagesel_open (GschemToplevel *w_current);
 void x_pagesel_close (GschemToplevel *w_current);
 void x_pagesel_update (GschemToplevel *w_current);
+/* gschem_patch_dockable.c */
+void x_patch_import (GschemToplevel *w_current);
 /* x_preview.c */
 /* x_print.c */
 gboolean x_print_export_pdf_page (GschemToplevel *w_current, const gchar *filename);

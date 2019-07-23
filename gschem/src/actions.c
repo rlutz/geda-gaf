@@ -2217,12 +2217,7 @@ DEFINE_ACTION (edit_find_patch,
                NULL,
                ACTUATE)
 {
-  /* This is a new addition 3/15 to prevent this from executing
-   * inside an action */
-  if (w_current->inside_action)
-    return;
-
-  find_patch_dialog(w_current);
+  x_patch_import (w_current);
 }
 
 DEFINE_ACTION (edit_hide_text,

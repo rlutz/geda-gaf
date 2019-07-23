@@ -40,6 +40,8 @@ struct _GschemPatchDockable {
   GtkListStore *store;
 };
 
+/* x_patch_import is defined in prototype.h */
+
 gboolean
 gschem_patch_dockable_find (GschemPatchDockable *patch_dockable,
                             const char *path, gboolean descend);
