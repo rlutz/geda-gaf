@@ -84,6 +84,7 @@ gschem/src/x_basic.c
 gschem/src/x_clipboard.c
 gschem/src/x_color.c
 gschem/src/x_colorcb.c
+gschem/src/x_controlfd.c
 gschem/src/x_dialog.c
 gschem/src/x_event.c
 gschem/src/x_fileselect.c

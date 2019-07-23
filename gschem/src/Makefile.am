@@ -102,6 +102,7 @@ gschem_SOURCES = \
 	x_clipboard.c \
 	x_color.c \
 	x_colorcb.c \
+	x_controlfd.c \
 	x_dialog.c \
 	x_event.c \
 	x_fileselect.c \

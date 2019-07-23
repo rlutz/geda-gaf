@@ -88,6 +88,8 @@ void gschem_quit(void)
   }
   g_list_free(exit_functions);
 
+  x_controlfd_free ();
+
   s_clib_free();
   s_slib_free();
   /* o_text_freeallfonts();*/
@@ -304,6 +306,8 @@ void main_prog(void *closure, int argc, char *argv[])
   }
 
   scm_dynwind_end ();
+
+  x_controlfd_init ();
 
   /* enter main loop */
   gtk_main();

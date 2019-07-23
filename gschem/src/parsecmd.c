@@ -48,6 +48,7 @@ struct option long_options[] =
     {"verbose", 0, 0, 'v'},
     {"config-file", 0, 0, 'r'},
     {"output", 0, 0, 'o'},
+    {"control-fd", required_argument, NULL, -4},
     {0, 0, 0, 0}
   };
 #endif
@@ -89,6 +90,7 @@ usage(char *cmd)
 "  -s FILE                  Scheme script to run at startup.\n"
 "  -o, --output=FILE        Output filename (for printing).\n"
 "  -p                       Automatically place the window.\n"
+"  --control-fd=stdin|FD    Read control commands from file descriptor.\n"
 "  -V, --version            Show version information.\n"
 "  -h, --help               Help; this message.\n"
 "  --                       Treat all remaining arguments as filenames.\n"
@@ -195,6 +197,10 @@ parse_commandline(int argc, char *argv[])
                                             scm_from_locale_string (optarg),
                                             sym_load_path)),
                     s_pre_load_expr);
+        break;
+
+      case -4:
+        x_controlfd_parsearg (optarg);
         break;
 
       case 'h':
