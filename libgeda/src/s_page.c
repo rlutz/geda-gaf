@@ -117,6 +117,7 @@ PAGE *s_page_new (TOPLEVEL *toplevel, const gchar *filename)
 
   page->pid = global_pid++;
 
+  page->is_untitled = FALSE;
   page->CHANGED = 0;
 
   /* big assumption here that page_filename isn't null */
@@ -417,7 +418,7 @@ PAGE *s_page_search (TOPLEVEL *toplevel, const gchar *filename)
     page = (PAGE *)iter->data;
     /* FIXME this may not be correct on platforms with
      * case-insensitive filesystems. */
-    if ( strcmp( page->page_filename, filename ) == 0 )
+    if (!page->is_untitled && strcmp (page->page_filename, filename) == 0)
       return page;
   }
   return NULL;

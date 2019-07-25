@@ -343,6 +343,7 @@ o_undo_callback (GschemToplevel *w_current, PAGE *page, int type)
   int find_prev_data=FALSE;
 
   char *save_filename;
+  gboolean save_untitled;
 
   g_return_if_fail (w_current != NULL);
   g_return_if_fail (page != NULL);
@@ -384,6 +385,7 @@ o_undo_callback (GschemToplevel *w_current, PAGE *page, int type)
 
   /* save filename */
   save_filename = g_strdup (page->page_filename);
+  save_untitled = page->is_untitled;
 
   /* save structure so it's not nuked */
   save_bottom = page->undo_bottom;
@@ -482,6 +484,7 @@ o_undo_callback (GschemToplevel *w_current, PAGE *page, int type)
   /* set filename right */
   g_free(page->page_filename);
   page->page_filename = save_filename;
+  page->is_untitled = save_untitled;
 
   /* final redraw */
   x_pagesel_update (w_current);

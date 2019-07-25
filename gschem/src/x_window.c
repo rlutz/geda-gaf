@@ -1017,6 +1017,7 @@ x_window_set_current_page (GschemToplevel *w_current, PAGE *page)
   gschem_page_view_set_page (page_view, page);
 
   gschem_action_set_sensitive (action_page_revert,
+                               page->is_untitled == FALSE &&
                                g_file_test (page->page_filename,
                                             G_FILE_TEST_EXISTS |
                                             G_FILE_TEST_IS_REGULAR),

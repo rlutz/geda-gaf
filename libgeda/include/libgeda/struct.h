@@ -371,6 +371,7 @@ struct st_page {
   GList *connectible_list;  /* connectible page objects */
 
   char *page_filename; 
+  gboolean is_untitled;
   int CHANGED;			/* changed flag */
 
   gchar *patch_filename;

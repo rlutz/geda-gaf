@@ -161,6 +161,7 @@ SCM_DEFINE (set_page_filename_x, "%set-page-filename!", 2, 0, 0,
     g_free (page->page_filename);
   }
   page->page_filename = g_strdup (new_fn);
+  page->is_untitled = FALSE;
   free (new_fn);
 
   return page_s;

@@ -144,26 +144,16 @@ gboolean
 x_highlevel_save_page (GschemToplevel *w_current, PAGE *page)
 {
   TOPLEVEL *toplevel = gschem_toplevel_get_toplevel (w_current);
-  EdaConfig *cfg;
-  gchar *untitled_name;
-  gboolean success;
 
   if (page == NULL) {
     page = toplevel->page_current;
     g_return_val_if_fail (page != NULL, FALSE);
   }
 
-  /*! \bug This is a dreadful way of figuring out whether a page is
-   *  newly-created or not. */
-  cfg = eda_config_get_context_for_path (page->page_filename);
-  untitled_name = eda_config_get_string (cfg, "gschem", "default-filename",
-                                         NULL);
-  if (strstr (page->page_filename, untitled_name) != NULL)
-    success = x_fileselect_save (w_current);
-  else
-    success = x_lowlevel_save_page (w_current, page, page->page_filename);
-  g_free (untitled_name);
-  return success;
+  if (page->is_untitled)
+    return x_fileselect_save (w_current);
+
+  return x_lowlevel_save_page (w_current, page, page->page_filename);
 }
 
 

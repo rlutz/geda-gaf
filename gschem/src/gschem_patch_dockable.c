@@ -249,7 +249,8 @@ x_patch_import (GschemToplevel *w_current)
       patch_filename = g_strdup_printf ("%s.bap", page->page_filename);
   }
 
-  if (g_file_test (patch_filename, G_FILE_TEST_EXISTS |
+  if (!page->is_untitled &&
+      g_file_test (patch_filename, G_FILE_TEST_EXISTS |
                                    G_FILE_TEST_IS_REGULAR))
     gtk_file_chooser_set_filename (GTK_FILE_CHOOSER (dialog), patch_filename);
   else
@@ -430,7 +431,7 @@ add_hit_to_store (GschemPatchDockable *patch_dockable, gschem_patch_hit_t *hit)
       g_warning ("no text attrib?");
       page_obj = final_object = NULL;
     }
-    if (page_obj != NULL)
+    if (page_obj != NULL && !page_obj->page->is_untitled)
       basename = g_path_get_basename (page_obj->page->page_filename);
     else
       basename = NULL;

@@ -221,6 +221,8 @@ get_page_name (GtkTreeModel *model, GtkTreeIter *piter)
                       COLUMN_PAGE, &page,
                       -1);
   g_assert (page != NULL && page->page_filename != NULL);
+  if (page->is_untitled)
+    return g_strdup (_("Untitled page"));
   return g_path_get_basename (page->page_filename);
 }
 
@@ -455,14 +457,25 @@ close_confirmation_dialog_constructor (GType type,
   /* primary label */
   if (single_page) {
     /* single page */
-    gchar *page_name;
+    GtkTreeModel *model = GTK_TREE_MODEL (dialog->store_unsaved_pages);
+    GtkTreeIter iter;
+    PAGE *page;
 
-    page_name = get_page_name (GTK_TREE_MODEL (dialog->store_unsaved_pages),
-                               NULL);
-    tmp = g_strdup_printf (
-      _("Save the changes to schematic \"%s\" before closing?"),
-      page_name);
-    g_free (page_name);
+    gtk_tree_model_get_iter_first (model, &iter);
+    gtk_tree_model_get (model, &iter,
+                        COLUMN_PAGE, &page,
+                        -1);
+    g_assert (page != NULL);
+
+    if (page->is_untitled)
+      tmp = g_strdup (_("Save changes before closing?"));
+    else {
+      gchar *page_name = g_path_get_basename (page->page_filename);
+      tmp = g_strdup_printf (
+        _("Save the changes to schematic \"%s\" before closing?"),
+        page_name);
+      g_free (page_name);
+    }
   } else {
     /* multi page */
     tmp = g_strdup_printf (

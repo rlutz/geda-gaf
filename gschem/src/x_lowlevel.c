@@ -99,6 +99,7 @@ x_lowlevel_new_page (GschemToplevel *w_current, const gchar *filename)
   PAGE *saved_page = toplevel->page_current;
 
   page = s_page_new (toplevel, fn);
+  page->is_untitled = filename == NULL;
   s_page_goto (toplevel, page);
   gschem_toplevel_page_changed (w_current);
 
@@ -268,6 +269,8 @@ x_lowlevel_save_page (GschemToplevel *w_current, PAGE *page,
 
     state_msg = _("Saved");
 
+    page->is_untitled = FALSE;
+
     /* reset page CHANGED flag */
     page->CHANGED = 0;
 
@@ -312,6 +315,10 @@ x_lowlevel_revert_page (GschemToplevel *w_current, PAGE *page)
   g_return_val_if_fail (toplevel != NULL, FALSE);
   g_return_val_if_fail (page != NULL,     FALSE);
   g_return_val_if_fail (page->pid != -1,  FALSE);
+
+  if (page->is_untitled)
+    /* can't revert untitled page */
+    return FALSE;
 
   /* If we're reverting whilst inside an action, re-wind the
      page contents back to their state before we started */

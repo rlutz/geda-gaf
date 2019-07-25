@@ -241,7 +241,10 @@ assign_store (GschemFindTextDockable *state, GSList *objects)
 
     gtk_list_store_append (state->store, &tree_iter);
 
-    basename = g_path_get_basename (object->page->page_filename);
+    if (object->page->is_untitled)
+      basename = g_strdup (_("Untitled page"));
+    else
+      basename = g_path_get_basename (object->page->page_filename);
 
     gtk_list_store_set (state->store,
                         &tree_iter,

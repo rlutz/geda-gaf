@@ -252,7 +252,8 @@ x_fileselect_save (GschemToplevel *w_current)
   /* add file filters to dialog */
   x_fileselect_setup_filechooser_filters (GTK_FILE_CHOOSER (dialog));
   /* set the current filename or directory name if new document */
-  if ((toplevel->page_current->page_filename != NULL) &&
+  if (toplevel->page_current->is_untitled == FALSE &&
+      toplevel->page_current->page_filename != NULL &&
       g_file_test (toplevel->page_current->page_filename,
                    G_FILE_TEST_EXISTS)) {
     gtk_file_chooser_set_filename (GTK_FILE_CHOOSER (dialog),

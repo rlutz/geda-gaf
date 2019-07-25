@@ -534,8 +534,9 @@ void i_update_filename(GschemToplevel *w_current)
   g_return_if_fail (w_current->main_window != NULL);
 
   gchar *filename = g_path_get_basename (page->page_filename);
-  gchar *title = g_strdup_printf (_("%s%s - gschem"),
-                                  page->CHANGED ? "* " : "", filename);
+  gchar *title = page->is_untitled ?
+    g_strdup_printf (_("%sgschem"),      page->CHANGED ? "* " : "") :
+    g_strdup_printf (_("%s%s - gschem"), page->CHANGED ? "* " : "", filename);
 
   gtk_window_set_title (GTK_WINDOW (w_current->main_window), title);
 

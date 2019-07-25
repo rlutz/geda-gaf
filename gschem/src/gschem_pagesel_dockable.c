@@ -418,30 +418,41 @@ static void add_page (GtkTreeModel *model, GtkTreeIter *parent,
   PAGE *p_current;
   GList *p_iter;
 
-  /* get basename and abbreviated path */
-  gchar *basename = g_path_get_basename (page->page_filename);
-  gchar *path = NULL;
-  const gchar *homedir = g_get_home_dir ();
-  size_t hd_len = strlen (homedir);
-  if (hd_len > 1 && strncmp (page->page_filename, homedir, hd_len) == 0 &&
-      (homedir[hd_len - 1] == '/' || page->page_filename[hd_len] == '/'))
-    path = g_strdup_printf (
-      "~/%s", page->page_filename + hd_len + (homedir[hd_len - 1] != '/'));
-
   /* add the page to the store */
   gtk_tree_store_append (GTK_TREE_STORE (model),
                          &iter,
                          parent);
-  gtk_tree_store_set (GTK_TREE_STORE (model),
-                      &iter,
-                      COLUMN_PAGE, page,
-                      COLUMN_BASENAME, basename,
-                      COLUMN_PATH, path != NULL ? path : page->page_filename,
-                      COLUMN_CHANGED, page->CHANGED,
-                      -1);
 
-  g_free (path);
-  g_free (basename);
+  if (page->is_untitled)
+    gtk_tree_store_set (GTK_TREE_STORE (model),
+                        &iter,
+                        COLUMN_PAGE, page,
+                        COLUMN_BASENAME, _("(untitled page)"),
+                        COLUMN_PATH, NULL,
+                        COLUMN_CHANGED, page->CHANGED,
+                        -1);
+  else {
+    /* get basename and abbreviated path */
+    gchar *basename = g_path_get_basename (page->page_filename);
+    gchar *path = NULL;
+    const gchar *homedir = g_get_home_dir ();
+    size_t hd_len = strlen (homedir);
+    if (hd_len > 1 && strncmp (page->page_filename, homedir, hd_len) == 0 &&
+        (homedir[hd_len - 1] == '/' || page->page_filename[hd_len] == '/'))
+      path = g_strdup_printf (
+        "~/%s", page->page_filename + hd_len + (homedir[hd_len - 1] != '/'));
+
+    gtk_tree_store_set (GTK_TREE_STORE (model),
+                        &iter,
+                        COLUMN_PAGE, page,
+                        COLUMN_BASENAME, basename,
+                        COLUMN_PATH, path != NULL ? path : page->page_filename,
+                        COLUMN_CHANGED, page->CHANGED,
+                        -1);
+
+    g_free (path);
+    g_free (basename);
+  }
 
   /* search a page that has a up field == p_current->pid */
   for ( p_iter = geda_list_get_glist( pages );
