@@ -277,6 +277,14 @@ void
 x_lowlevel_revert_page (GschemToplevel *w_current, PAGE *page)
 {
   TOPLEVEL *toplevel = gschem_toplevel_get_toplevel (w_current);
+  g_return_if_fail (toplevel != NULL);
+  g_return_if_fail (page != NULL);
+  g_return_if_fail (page->pid != -1);
+
+  /* If we're reverting whilst inside an action, re-wind the
+     page contents back to their state before we started */
+  if (w_current->inside_action)
+    i_cancel (w_current);
 
   /* save this for later */
   gchar *filename = g_strdup (page->page_filename);
@@ -287,14 +295,35 @@ x_lowlevel_revert_page (GschemToplevel *w_current, PAGE *page)
   gboolean was_current_page = page == toplevel->page_current;
 
   /* delete the page, then re-open the file as a new page */
-  x_lowlevel_close_page (w_current, page);
+  s_log_message (page->CHANGED ? _("Discarding page [%s]\n")
+                               : _("Closing [%s]\n"),
+                 page->page_filename);
+  s_page_delete (toplevel, page);
+  gschem_toplevel_page_changed (w_current);
 
   /* Force symbols to be re-loaded from disk */
   s_clib_refresh ();
 
   page = x_lowlevel_open_page (w_current, filename);
   g_free (filename);
-  g_return_if_fail (page != NULL);
+
+  if (page == NULL) {
+    /* don't leave without a current page set */
+    if (was_current_page) {
+      GList *pages = geda_list_get_glist (toplevel->pages);
+      if (pages != NULL)
+        page = (PAGE *) pages->data;
+
+      /* create a new page if we closed the last one */
+      if (page == NULL)
+        page = x_lowlevel_new_page (w_current, NULL);
+
+      x_window_set_current_page (w_current, page);
+    }
+
+    /* x_lowlevel_open_page has already displayed an error message */
+    return;
+  }
 
   /* make sure we maintain the hierarchy info */
   page->page_control = page_control;
