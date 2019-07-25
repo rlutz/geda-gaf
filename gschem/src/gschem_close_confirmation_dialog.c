@@ -54,6 +54,8 @@ struct _CloseConfirmationDialog
 {
   GtkDialog parent;
 
+  GschemToplevel *w_current;
+
   GtkListStore *store_unsaved_pages;
 };
 
@@ -64,7 +66,8 @@ struct _CloseConfirmationDialogClass
 
 
 enum {
-  PROP_UNSAVED_PAGE=1,
+  PROP_GSCHEM_TOPLEVEL = 1,
+  PROP_UNSAVED_PAGE,
   PROP_UNSAVED_PAGES,
   PROP_SELECTED_PAGES
 };
@@ -135,6 +138,12 @@ close_confirmation_dialog_class_init (CloseConfirmationDialogClass *klass)
   gobject_class->set_property = close_confirmation_dialog_set_property;
   gobject_class->get_property = close_confirmation_dialog_get_property;
 
+  g_object_class_install_property (
+    gobject_class, PROP_GSCHEM_TOPLEVEL,
+    g_param_spec_pointer ("gschem-toplevel",
+                          "",
+                          "",
+                          G_PARAM_CONSTRUCT_ONLY | G_PARAM_READWRITE));
   g_object_class_install_property (
     gobject_class, PROP_UNSAVED_PAGE,
     g_param_spec_pointer ("unsaved-page",
@@ -563,6 +572,10 @@ close_confirmation_dialog_set_property (GObject      *object,
   GList *p_current;
 
   switch(property_id) {
+    case PROP_GSCHEM_TOPLEVEL:
+      dialog->w_current = GSCHEM_TOPLEVEL (g_value_get_pointer (value));
+      break;
+
     case PROP_UNSAVED_PAGE:
       data = g_value_get_pointer (value);
       if (data != NULL) {
@@ -608,6 +621,10 @@ close_confirmation_dialog_get_property (GObject    *object,
   CloseConfirmationDialog *dialog = CLOSE_CONFIRMATION_DIALOG (object);
 
   switch(property_id) {
+    case PROP_GSCHEM_TOPLEVEL:
+      g_value_set_pointer (value, dialog->w_current);
+      break;
+
     case PROP_SELECTED_PAGES:
       g_value_set_pointer (
         value,
@@ -706,6 +723,7 @@ x_dialog_close_changed_page (GschemToplevel *w_current, PAGE *page)
   keep_page = w_current->toplevel->page_current;
 
   dialog = GTK_WIDGET (g_object_new (TYPE_CLOSE_CONFIRMATION_DIALOG,
+                                     "gschem-toplevel", w_current,
                                      "unsaved-page", page,
                                      NULL));
   /* set default response signal. This is usually triggered by the
@@ -795,6 +813,7 @@ x_dialog_close_window (GschemToplevel *w_current)
   }
 
   dialog = GTK_WIDGET (g_object_new (TYPE_CLOSE_CONFIRMATION_DIALOG,
+                                     "gschem-toplevel", w_current,
                                      "unsaved-pages", unsaved_pages,
                                      NULL));
 
