@@ -367,7 +367,7 @@ close_confirmation_dialog_build_page_list (CloseConfirmationDialog *dialog)
                                     "wrap",            TRUE,
                                     "mnemonic-widget", treeview,
                                     NULL));
-  text = _("S_elect the schematics you want to save:");
+  text = _("S_elect the files you want to save:");
   gtk_label_set_text_with_mnemonic (GTK_LABEL (label), text);
   gtk_label_set_mnemonic_widget (GTK_LABEL (label), treeview);
   gtk_box_pack_start (GTK_BOX (vbox), label,
@@ -472,14 +472,14 @@ close_confirmation_dialog_constructor (GType type,
     else {
       gchar *page_name = g_path_get_basename (page->page_filename);
       tmp = g_strdup_printf (
-        _("Save the changes to schematic \"%s\" before closing?"),
+        _("Save the changes to \"%s\" before closing?"),
         page_name);
       g_free (page_name);
     }
   } else {
     /* multi page */
     tmp = g_strdup_printf (
-      _("There are %d schematics with unsaved changes. "
+      _("There are %d files with unsaved changes.\n"
         "Save changes before closing?"),
       count_pages (GTK_TREE_MODEL (dialog->store_unsaved_pages)));
   }
