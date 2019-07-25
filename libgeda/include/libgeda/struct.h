@@ -378,6 +378,8 @@ struct st_page {
 
   gchar *patch_filename;
   gboolean patch_descend;
+  gboolean patch_seen_on_disk;
+  struct timespec patch_mtime;
 
   /* Undo/Redo Stacks and pointers */	
   /* needs to go into page mechanism actually */

@@ -32,6 +32,7 @@
 #include <string.h>
 #endif
 
+#include <sys/stat.h>
 #include <libgen.h>  /* for dirname(3) */
 
 #include "gschem.h"
@@ -303,6 +304,7 @@ x_patch_do_import (GschemToplevel *w_current, PAGE *page)
 
   GList *pages = geda_list_get_glist (w_current->toplevel->pages);
   gschem_patch_state_t st;
+  struct stat buf;
   GSList *all_pages, *objects;
 
   g_return_if_fail (patch_dockable != NULL);
@@ -325,6 +327,11 @@ x_patch_do_import (GschemToplevel *w_current, PAGE *page)
     gtk_dialog_run (GTK_DIALOG (dialog));
     gtk_widget_destroy (dialog);
     return;
+  }
+
+  if (stat (page->patch_filename, &buf) != -1) {
+    page->patch_seen_on_disk = TRUE;
+    page->patch_mtime = buf.st_mtim;
   }
 
   all_pages = get_pages (pages, page->patch_descend);

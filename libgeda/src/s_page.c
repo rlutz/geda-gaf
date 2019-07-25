@@ -140,6 +140,7 @@ PAGE *s_page_new (TOPLEVEL *toplevel, const gchar *filename)
 
   page->patch_filename = NULL;
   page->patch_descend = FALSE;
+  page->patch_seen_on_disk = FALSE;
 	
   g_assert (toplevel->init_bottom != 0);
 
