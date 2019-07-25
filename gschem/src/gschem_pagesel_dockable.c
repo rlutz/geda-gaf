@@ -53,12 +53,7 @@ void x_pagesel_update (GschemToplevel *w_current)
   if (w_current->pagesel_dockable != NULL)
     pagesel_update (GSCHEM_PAGESEL_DOCKABLE (w_current->pagesel_dockable));
 
-  PAGE *page = gschem_page_view_get_page (gschem_toplevel_get_current_page_view (w_current));
-  if (page == NULL) {
-    return;
-  }
-
-  i_set_filename (w_current, page->page_filename, page->CHANGED ? "* " : "");
+  i_update_filename (w_current);
 }
 
 enum {

@@ -516,35 +516,31 @@ void i_update_menus(GschemToplevel *w_current)
                                sel_text, w_current);
 }
 
-/*! \brief Set filename as gschem window title
+/*! \brief Update gschem window title
  *
  *  \par Function Description
- *  Set filename as gschem window title using
+ *  Set the filename of the current page as the window title using
  *  the gnome HID format style.
  *
  *  \param [in] w_current GschemToplevel structure
- *  \param [in] string The filename
- *  \param [in] string 'Page changed' indication in window's title
  */
-void i_set_filename(GschemToplevel *w_current, const gchar *string, const gchar *changed)
+void i_update_filename(GschemToplevel *w_current)
 {
-  gchar *print_string=NULL;
-  gchar *filename=NULL;
-
-  if (!w_current->main_window)
+  PAGE *page = gschem_page_view_get_page (
+    gschem_toplevel_get_current_page_view (w_current));
+  if (page == NULL)
     return;
-  if (string == NULL)
-    return;
+  g_return_if_fail (page->page_filename != NULL);
+  g_return_if_fail (w_current->main_window != NULL);
 
-  filename = g_path_get_basename(string);
+  gchar *filename = g_path_get_basename (page->page_filename);
+  gchar *title = g_strdup_printf (_("%s%s - gschem"),
+                                  page->CHANGED ? "* " : "", filename);
 
-  print_string = g_strdup_printf("%s%s - gschem", changed, filename);
+  gtk_window_set_title (GTK_WINDOW (w_current->main_window), title);
 
-  gtk_window_set_title(GTK_WINDOW(w_current->main_window),
-		       print_string);
-
-  g_free(print_string);
-  g_free(filename);
+  g_free (title);
+  g_free (filename);
 }
 
 /*! \brief Write the grid settings to the gschem status bar
