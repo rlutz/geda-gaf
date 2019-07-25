@@ -476,6 +476,8 @@ close_confirmation_dialog_constructor (GType type,
                         -1);
     g_assert (page != NULL);
 
+    x_window_set_current_page (dialog->w_current, page);
+
     if (page->is_untitled)
       tmp = g_strdup (_("Save changes before closing?"));
     else {
