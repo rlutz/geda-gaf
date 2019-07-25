@@ -184,7 +184,7 @@ x_highlevel_save_page (GschemToplevel *w_current, PAGE *page)
 
 /*! \brief Save all changed pages.
  *
- * Saves all pages in \a w_current to their respective filenames.
+ * For untitled pages, a file chooser dialog is shown.
  *
  * \param [in] w_current  the toplevel environment
  *
@@ -203,14 +203,10 @@ x_highlevel_save_all (GschemToplevel *w_current)
       /* ignore unchanged pages */
       continue;
 
-    if (f_save (toplevel, page, page->page_filename, NULL) == 1) {
-      s_log_message (_("Saved [%s]\n"), page->page_filename);
-      page->CHANGED = 0;
+    if (x_highlevel_save_page (w_current, page))
       saved_any = TRUE;
-    } else {
-      s_log_message (_("Could NOT save [%s]\n"), page->page_filename);
+    else
       success = FALSE;
-    }
   }
 
   if (!success)
@@ -219,9 +215,6 @@ x_highlevel_save_all (GschemToplevel *w_current)
     i_set_state_msg (w_current, SELECT, _("Saved All"));
   else
     i_set_state_msg (w_current, SELECT, _("No files need saving"));
-
-  x_pagesel_update (w_current);
-  i_update_menus (w_current);
 
   return success;
 }
