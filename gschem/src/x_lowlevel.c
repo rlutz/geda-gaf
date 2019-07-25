@@ -259,8 +259,6 @@ x_lowlevel_save_page (GschemToplevel *w_current, PAGE *page, const gchar *filena
  *
  * \param [in] w_current  the toplevel environment
  * \param [in] page       the page to revert
- *
- * \bug may have memory leak?
  */
 void
 x_lowlevel_revert_page (GschemToplevel *w_current, PAGE *page)
@@ -285,6 +283,7 @@ x_lowlevel_revert_page (GschemToplevel *w_current, PAGE *page)
   s_clib_refresh();
 
   page = x_lowlevel_open_page (w_current, filename);
+  g_free (filename);
   g_return_if_fail (page != NULL);
 
   /* make sure we maintain the hierarchy info */
