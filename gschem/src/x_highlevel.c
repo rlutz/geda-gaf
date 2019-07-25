@@ -65,7 +65,9 @@ x_highlevel_new_page (GschemToplevel *w_current, const gchar *filename)
  * If there is already a matching page in \a w_current, returns a
  * pointer to the existing page instead.
  *
- * The page becomes the new current page of \a w_current.
+ * The page becomes the new current page of \a w_current.  If there
+ * was exactly one untitled, unchanged page before this operation, the
+ * existing page is closed.
  *
  * \param [in] w_current  the toplevel environment
  * \param [in] filename   the name of the file to open
@@ -76,10 +78,18 @@ x_highlevel_new_page (GschemToplevel *w_current, const gchar *filename)
 PAGE *
 x_highlevel_open_page (GschemToplevel *w_current, const gchar *filename)
 {
+  TOPLEVEL *toplevel = gschem_toplevel_get_toplevel (w_current);
+  GList *pages = geda_list_get_glist (toplevel->pages);
+  PAGE *sole_page = g_list_length (pages) == 1 ? (PAGE *) pages->data : NULL;
+
   PAGE *page = x_lowlevel_open_page (w_current, filename);
 
   if (page != NULL)
     x_window_set_current_page (w_current, page);
+
+  if (sole_page != NULL && toplevel->page_current != sole_page &&
+      sole_page->is_untitled && !sole_page->CHANGED)
+    x_lowlevel_close_page (w_current, sole_page);
 
   /* if there were any symbols which had major changes, put up an
      error dialog box */
@@ -97,7 +107,9 @@ x_highlevel_open_page (GschemToplevel *w_current, const gchar *filename)
  * changes" dialog is shown.
  *
  * The first page that could be opened or already existed becomes the
- * new current page of \a w_current.
+ * new current page of \a w_current.  If there was exactly one
+ * untitled, unchanged page before this operation, the existing page
+ * is closed.
  *
  * \param [in] w_current  the toplevel environment
  * \param [in] filenames  a GSList of filenames to open
@@ -107,6 +119,10 @@ x_highlevel_open_page (GschemToplevel *w_current, const gchar *filename)
 gboolean
 x_highlevel_open_pages (GschemToplevel *w_current, GSList *filenames)
 {
+  TOPLEVEL *toplevel = gschem_toplevel_get_toplevel (w_current);
+  GList *pages = geda_list_get_glist (toplevel->pages);
+  PAGE *sole_page = g_list_length (pages) == 1 ? (PAGE *) pages->data : NULL;
+
   PAGE *first_page = NULL;
   gboolean success = TRUE;
 
@@ -121,6 +137,10 @@ x_highlevel_open_pages (GschemToplevel *w_current, GSList *filenames)
 
   if (first_page != NULL)
     x_window_set_current_page (w_current, first_page);
+
+  if (sole_page != NULL && toplevel->page_current != sole_page &&
+      sole_page->is_untitled && !sole_page->CHANGED)
+    x_lowlevel_close_page (w_current, sole_page);
 
   /* if there were any symbols which had major changes, put up an
      error dialog box */
