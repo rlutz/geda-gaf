@@ -843,7 +843,8 @@ x_dialog_close_window (GschemToplevel *w_current)
           x_window_set_current_page (w_current, p_current);
           gschem_action_activate (action_file_save, w_current);
           /* if user cancelled previous, do not close window */
-          ret &= !p_current->CHANGED;
+          if (p_current->CHANGED)
+            ret = FALSE;
         }
         g_list_free (unsaved_pages);
         break;
