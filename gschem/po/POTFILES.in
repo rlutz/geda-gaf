@@ -69,6 +69,7 @@ gschem/src/o_line.c
 gschem/src/o_misc.c
 gschem/src/o_move.c
 gschem/src/o_net.c
+gschem/src/o_ognrst.c
 gschem/src/o_path.c
 gschem/src/o_picture.c
 gschem/src/o_pin.c
