@@ -321,7 +321,8 @@ x_patch_do_import (GschemToplevel *w_current, PAGE *page)
        object_iter != NULL; object_iter = object_iter->next) {
     gschem_patch_hit_t *hit = (gschem_patch_hit_t *) object_iter->data;
     add_hit_to_store (patch_dockable, hit);
-    object_iter->data = NULL;
+    g_free (hit->text);
+    g_free (hit);
   }
 
   g_slist_free (objects);
@@ -415,7 +416,6 @@ add_hit_to_store (GschemPatchDockable *patch_dockable, gschem_patch_hit_t *hit)
                         COLUMN_OBJECT, final_object,
                         -1);
   }
-  free (hit);
 }
 
 
