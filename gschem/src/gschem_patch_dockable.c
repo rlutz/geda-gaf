@@ -149,27 +149,27 @@ create_widget (GschemDockable *dockable)
 
   /* filename column */
 
-  column = gtk_tree_view_column_new();
+  column = gtk_tree_view_column_new ();
   gtk_tree_view_column_set_resizable (column, TRUE);
   gtk_tree_view_column_set_title (column, _("Filename"));
 
   gtk_tree_view_append_column (GTK_TREE_VIEW (tree_widget), column);
 
-  renderer = gtk_cell_renderer_text_new();
-  gtk_tree_view_column_pack_start(column, renderer, TRUE);
-  gtk_tree_view_column_add_attribute(column, renderer, "text", 0);
+  renderer = gtk_cell_renderer_text_new ();
+  gtk_tree_view_column_pack_start (column, renderer, TRUE);
+  gtk_tree_view_column_add_attribute (column, renderer, "text", 0);
 
   /* text column */
 
-  column = gtk_tree_view_column_new();
+  column = gtk_tree_view_column_new ();
   gtk_tree_view_column_set_resizable (column, TRUE);
   gtk_tree_view_column_set_title (column, _("Text"));
 
   gtk_tree_view_append_column (GTK_TREE_VIEW (tree_widget), column);
 
-  renderer = gtk_cell_renderer_text_new();
-  gtk_tree_view_column_pack_start(column, renderer, TRUE);
-  gtk_tree_view_column_add_attribute(column, renderer, "text", 1);
+  renderer = gtk_cell_renderer_text_new ();
+  gtk_tree_view_column_pack_start (column, renderer, TRUE);
+  gtk_tree_view_column_add_attribute (column, renderer, "text", 1);
 
   /* attach signal to detect user selection */
 
@@ -279,8 +279,8 @@ x_patch_do_import (GschemToplevel *w_current, PAGE *page)
 
   g_return_if_fail (page->patch_filename != NULL);
 
-  if (gschem_patch_state_init(&st, page->patch_filename) != 0) {
-    g_warning("Unable to open patch file %s\n", page->patch_filename);
+  if (gschem_patch_state_init (&st, page->patch_filename) != 0) {
+    g_warning ("Unable to open patch file %s\n", page->patch_filename);
     return;
   }
 
@@ -304,14 +304,14 @@ x_patch_do_import (GschemToplevel *w_current, PAGE *page)
         continue;
       }
 
-      gschem_patch_state_build(&st, object);
+      gschem_patch_state_build (&st, object);
     }
   }
 
   g_slist_free (all_pages);
 
-  objects = gschem_patch_state_execute(&st, NULL);
-  gschem_patch_state_destroy(&st);
+  objects = gschem_patch_state_execute (&st, NULL);
+  gschem_patch_state_destroy (&st);
 
   objects = g_slist_reverse (objects);
 
