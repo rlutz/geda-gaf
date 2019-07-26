@@ -66,6 +66,7 @@ backend_PYTHON = \
 	gnet_switcap.py \
 	gnet_systemc.py \
 	gnet_tango.py \
+	gnet_tedax.py \
 	gnet_vams.py \
 	gnet_verilog.py \
 	gnet_vhdl.py \
