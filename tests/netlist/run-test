@@ -97,6 +97,7 @@ ${top_builddir}/src/command/xorn netlist \
     ${extra_symbol_library} ${extra_source_library} \
     -o "${output}" -g "${backend}" ${backend_options} "${input}"
 status=$?
+[ "$status" = 99 ] && exit 99  # propagate hard errors
 [ "$status" = 0 ] || exit 1
 
 # Compare netlist with reference file
