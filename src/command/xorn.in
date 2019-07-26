@@ -119,7 +119,10 @@ def main():
         sys.stderr.write(_("This is an error.  Please report it to %s\n")
                          % xorn.command.bugreport)
         sys.stderr.write('\n')
-        raise
+
+        import traceback
+        traceback.print_exc()
+        sys.exit(99)
 
     try:
         if 'main' in module.__dict__:
@@ -132,7 +135,10 @@ def main():
         sys.stderr.write(_("This is an error.  Please report it to %s\n")
                          % xorn.command.bugreport)
         sys.stderr.write('\n')
-        raise
+
+        import traceback
+        traceback.print_exc()
+        sys.exit(99)
 
     return
 
