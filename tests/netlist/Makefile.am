@@ -52,6 +52,7 @@ TESTS = stack_1-geda.out \
 	param_attr-geda.out \
 	regression/component_refdes-dumptext.out \
 	regression/duplicate_local_net-geda.out \
+	regression/duplicate_pinlabel-geda.out \
 	regression/missing_pinseq-geda.out \
 	regression/named_unconnected_net-geda.out \
 	regression/override_netname-geda.out \
@@ -424,6 +425,7 @@ TESTS = stack_1-geda.out \
 	common/singlenet-vipec.out
 
 XFAIL_TESTS = \
+	regression/duplicate_pinlabel-geda.out \
 	regression/missing_pinseq-geda.out \
 	regression/unnumbered_component-geda.out \
 	common/SlottedOpamps-futurenet2.out \
@@ -492,6 +494,11 @@ testdata = \
 	regression/duplicate_local_net-symbols/sub.sym \
 	regression/duplicate_local_net-symbols/sym.sym \
 	regression/duplicate_local_net.sch \
+	regression/duplicate_pinlabel-sources/dp-sub.sch \
+	regression/duplicate_pinlabel-symbols/dp-in.sym \
+	regression/duplicate_pinlabel-symbols/dp-res.sym \
+	regression/duplicate_pinlabel-symbols/dp-sub.sym \
+	regression/duplicate_pinlabel.sch \
 	regression/missing_pinseq-symbols/missing_pinseq.sym \
 	regression/missing_pinseq.sch \
 	regression/named_unconnected_net.sch \
