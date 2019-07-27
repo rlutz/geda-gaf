@@ -165,6 +165,7 @@ void
 x_fileselect_open(GschemToplevel *w_current)
 {
   GtkWidget *dialog;
+  PAGE *page_current;
   gchar *cwd;
   GSList *filenames = NULL;
 
@@ -189,7 +190,11 @@ x_fileselect_open(GschemToplevel *w_current)
   /* add file filters to dialog */
   x_fileselect_setup_filechooser_filters (GTK_FILE_CHOOSER (dialog));
   /* force start in current working directory, not in 'Recently Used' */
-  cwd = g_get_current_dir ();
+  page_current = gschem_toplevel_get_toplevel (w_current)->page_current;
+  if (page_current == NULL || page_current->is_untitled)
+    cwd = g_get_current_dir ();
+  else
+    cwd = g_path_get_dirname (page_current->page_filename);
   gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (dialog), cwd);
   g_free (cwd);
   gtk_widget_show (dialog);
