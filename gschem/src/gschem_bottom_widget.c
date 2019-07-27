@@ -729,7 +729,15 @@ update_grid_labels (GschemBottomWidget *widget, GParamSpec *pspec, gpointer unus
     }
 
     label_text = g_strdup_printf (_("Snap %s"), snap_text);
-    gtk_label_set_text (GTK_LABEL (widget->snap_label), label_text);
+
+    if (widget->snap_mode != SNAP_OFF)
+      gtk_label_set_text (GTK_LABEL (widget->snap_label), label_text);
+    else {
+      gchar *markup = g_markup_printf_escaped (
+        "<span weight=\"bold\" color=\"red\">%s</span>", label_text);
+      gtk_label_set_markup (GTK_LABEL (widget->snap_label), markup);
+      g_free (markup);
+    }
 
     g_free (snap_text);
     g_free (label_text);
