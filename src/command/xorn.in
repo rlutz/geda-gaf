@@ -112,7 +112,7 @@ def main():
             module = imp.load_module(short_name, *res)
         finally:
             res[0].close()
-    except SystemExit:
+    except SystemExit, KeyboardInterrupt:
         raise
     except:
         sys.stderr.write(_("`%s' failed to load.\n") % short_name)
@@ -127,7 +127,7 @@ def main():
     try:
         if 'main' in module.__dict__:
             module.main()
-    except SystemExit:
+    except SystemExit, KeyboardInterrupt:
         raise
     except:
         sys.stderr.write(_("`%s' raised an uncaught exception.\n")
