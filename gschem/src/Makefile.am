@@ -109,6 +109,7 @@ gschem_SOURCES = \
 	x_fstylecb.c \
 	x_grid.c \
 	x_grid_size_sb.c \
+	x_hierarchy.c \
 	x_highlevel.c \
 	x_image.c \
 	x_integerls.c \

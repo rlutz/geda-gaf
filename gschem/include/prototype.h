@@ -411,6 +411,10 @@ void x_grid_draw_region(GschemToplevel *w_current, cairo_t *cr, int x, int y, in
 int x_grid_query_drawn_spacing(GschemToplevel *w_current);
 /* x_grid_size_sb.c */
 GtkWidget *x_grid_size_sb_new (GschemToplevel *w_current);
+/* x_hierarchy.c */
+void x_hierarchy_down_schematic (GschemToplevel *w_current, OBJECT *object);
+void x_hierarchy_down_symbol (GschemToplevel *w_current, OBJECT *object);
+void x_hierarchy_up (GschemToplevel *w_current);
 /* x_highlevel.c */
 PAGE *x_highlevel_new_page (GschemToplevel *w_current, const gchar *filename);
 PAGE *x_highlevel_open_page (GschemToplevel *w_current, const gchar *filename);

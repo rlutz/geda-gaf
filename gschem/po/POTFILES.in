@@ -91,6 +91,7 @@ gschem/src/x_fileselect.c
 gschem/src/x_fstylecb.c
 gschem/src/x_grid.c
 gschem/src/x_grid_size_sb.c
+gschem/src/x_hierarchy.c
 gschem/src/x_highlevel.c
 gschem/src/x_image.c
 gschem/src/x_linecapcb.c
