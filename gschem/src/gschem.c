@@ -210,7 +210,21 @@ void main_prog(void *closure, int argc, char *argv[])
    * we can take advantage of that.  */
   scm_tmp = scm_sys_search_load_path (scm_from_utf8_string ("gschem.scm"));
   if (scm_is_false (scm_tmp)) {
-    s_log_message (_("Couldn't find init scm file [%s]\n"), "gschem.scm");
+    fprintf (stderr, _("*** Can't find Scheme initialization file \"%s\" "
+                       "***\n\n"
+                       "It appears the gschem data files are missing, or they "
+                       "are not where the\ngschem binary expects them to be.  "
+                       "Are you sure you installed gschem?\n\n"
+                       "The following directories have been searched for "
+                       "\"%s\":\n"),
+             "gschem.scm", "gschem.scm");
+    for (SCM l = scm_variable_ref (scm_c_lookup ("%load-path"));
+         scm_is_pair (l); l = scm_cdr (l)) {
+      char *path = scm_to_utf8_string (scm_car (l));
+      fprintf (stderr, "\t%s\n", path);
+      free (path);
+    }
+    exit (1);
   }
   input_str = scm_to_utf8_string (scm_tmp);
   toplevel = s_toplevel_new ();
