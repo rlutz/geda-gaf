@@ -211,6 +211,7 @@ int f_open_flags(TOPLEVEL *toplevel, PAGE *page,
                  _("Cannot find file %s: %s"),
                  filename, tmp_err->message);
     g_error_free(tmp_err);
+    g_free (saved_cwd);
     return 0;
   }
 
