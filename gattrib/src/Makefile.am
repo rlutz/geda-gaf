@@ -36,7 +36,7 @@ gattrib_CPPFLAGS = -I$(top_srcdir)/libgeda/include \
 gattrib_CFLAGS = $(GCC_CFLAGS) $(GLIB_CFLAGS) \
 	$(MINGW_CFLAGS) \
 	$(GTK_CFLAGS) $(GTHREAD_CFLAGS) $(GUILE_CFLAGS) \
-	-Wno-unused-function -Wno-misleading-indentation
+	-Wno-unused-function $(Wno_misleading_indentation_IF_SUPPORTED)
 gattrib_LDFLAGS = $(GLIB_LIBS) $(GTK_LIBS) $(GTHREAD_LIBS) \
 	$(GUILE_LIBS) $(MINGW_GUI_LDFLAGS)
 gattrib_LDADD = $(top_builddir)/libgeda/src/libgeda.la

@@ -49,7 +49,11 @@ AC_DISABLE_STATIC
 AC_PROG_LIBTOOL
 
 AM_PROG_CC_C_O
-AX_GCC_FLAGS([-Wall -Werror=maybe-uninitialized])
+
+AX_PROG_CC_WARNING([maybe_uninitialized], [maybe-uninitialized])
+AX_PROG_CC_WARNING([misleading_indentation], [misleading-indentation])
+
+AX_GCC_FLAGS([-Wall $Werror_maybe_uninitialized_IF_SUPPORTED])
 
 AC_PROG_MKDIR_P
 AM_PROG_LEX
