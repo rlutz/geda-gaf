@@ -32,6 +32,8 @@
 #include <string.h>
 #endif
 
+#include <gdk/gdkkeysyms.h>
+
 #include "gschem.h"
 
 
@@ -43,6 +45,9 @@ enum
   PROP_TEXT_STRING
 };
 
+
+static gboolean
+key_press_event (GtkWidget *widget, GdkEventKey *event, gpointer user_data);
 
 static void
 activate_entry (GtkWidget *entry, GschemShowHideTextWidget *widget);
@@ -297,6 +302,11 @@ gschem_show_hide_text_widget_init (GschemShowHideTextWidget *widget)
   gtk_widget_set_no_show_all (action, TRUE);
   gtk_widget_set_visible (action, FALSE);
 
+  g_signal_connect (G_OBJECT (widget),
+                    "key-press-event",
+                    G_CALLBACK (key_press_event),
+                    widget);
+
   g_signal_connect (G_OBJECT (widget->entry),
                     "activate",
                     G_CALLBACK (activate_entry),
@@ -367,6 +377,21 @@ gschem_show_hide_text_widget_set_text_string (GschemShowHideTextWidget *widget, 
   gtk_entry_set_text (GTK_ENTRY (widget->entry), str);
 
   g_object_notify (G_OBJECT (widget), "text-string");
+}
+
+
+
+/* Callback for when the user presses a key in the infobar
+ */
+static gboolean
+key_press_event (GtkWidget *widget, GdkEventKey *event, gpointer user_data)
+{
+  if (event->keyval == GDK_KEY_Escape && event->state == 0) {
+    gtk_info_bar_response (GTK_INFO_BAR (user_data), GTK_RESPONSE_CANCEL);
+    return TRUE;
+  }
+
+  return FALSE;
 }
 
 

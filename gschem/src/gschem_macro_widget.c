@@ -36,6 +36,8 @@
 #include <math.h>
 #endif
 
+#include <gdk/gdkkeysyms.h>
+
 #include "gschem.h"
 
 
@@ -49,6 +51,9 @@ enum
 
 
 
+
+static gboolean
+key_press_event (GtkWidget *widget, GdkEventKey *event, gpointer user_data);
 
 static void
 activate_entry (GtkWidget *entry, GschemMacroWidget *widget);
@@ -83,6 +88,21 @@ notify_entry_text (GtkWidget *entry, GParamSpec *pspec, GschemMacroWidget *widge
 
 
 static GObjectClass *gschem_macro_widget_parent_class = NULL;
+
+
+
+/* Callback for when the user presses a key in the infobar
+ */
+static gboolean
+key_press_event (GtkWidget *widget, GdkEventKey *event, gpointer user_data)
+{
+  if (event->keyval == GDK_KEY_Escape && event->state == 0) {
+    gtk_info_bar_response (GTK_INFO_BAR (user_data), GTK_RESPONSE_CANCEL);
+    return TRUE;
+  }
+
+  return FALSE;
+}
 
 
 
@@ -327,6 +347,11 @@ gschem_macro_widget_init (GschemMacroWidget *widget)
 
   gtk_widget_set_no_show_all (action, TRUE);
   gtk_widget_set_visible (action, FALSE);
+
+  g_signal_connect (G_OBJECT (widget),
+                    "key-press-event",
+                    G_CALLBACK (key_press_event),
+                    widget);
 
   g_signal_connect (G_OBJECT (widget->entry),
                     "activate",
