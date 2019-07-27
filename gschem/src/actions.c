@@ -781,7 +781,7 @@ DEFINE_ACTION (edit_edit,
                ACTUATE)
 {
   i_update_middle_button (w_current, action, _("Edit"));
-  o_edit(w_current, geda_list_get_glist( gschem_toplevel_get_toplevel (w_current)->page_current->selection_list ) );
+  o_edit (w_current, geda_list_get_glist (gschem_toplevel_get_toplevel (w_current)->page_current->selection_list), FALSE);
 }
 
 DEFINE_ACTION (edit_properties,

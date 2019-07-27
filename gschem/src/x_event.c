@@ -122,7 +122,7 @@ x_event_button_pressed(GschemPageView *page_view, GdkEventButton *event, GschemT
      * allow resetting of the inside_action flag so we do it
      * manually here before processing the double-click event. */
     i_action_stop (w_current);
-    o_edit(w_current, geda_list_get_glist( page->selection_list ));
+    o_edit (w_current, geda_list_get_glist (page->selection_list), TRUE);
     scm_dynwind_end ();
     return(0);
   }

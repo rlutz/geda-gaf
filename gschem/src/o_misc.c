@@ -42,7 +42,7 @@
  *  \par Function Description
  *
  */
-void o_edit(GschemToplevel *w_current, GList *list)
+void o_edit(GschemToplevel *w_current, GList *list, gboolean double_click)
 {
   OBJECT *o_current;
   const gchar *str = NULL;
@@ -56,6 +56,13 @@ void o_edit(GschemToplevel *w_current, GList *list)
     fprintf(stderr, _("Got an unexpected NULL in o_edit\n"));
     exit(-1);
   }
+
+  /* on double-click, see if we can enter a subschematic */
+  if (double_click && !w_current->SHIFTKEY &&
+      (o_current->type == OBJ_COMPLEX ||
+       o_current->type == OBJ_PLACEHOLDER) &&
+      x_hierarchy_down_schematic (w_current, o_current))
+    return;
 
   /* for now deal with only the first item */
   switch(o_current->type) {
