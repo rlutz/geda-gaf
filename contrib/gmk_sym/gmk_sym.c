@@ -186,6 +186,9 @@ int main(int argc,char **argv)
 	  }
         }
 
+  if (Debug)
+    fprintf(stderr, "note: debug flag is currently ignored\n");
+
   for(i=0;i<MAX_FIELDS;i++)
      pFields[i]=NULL;
 
