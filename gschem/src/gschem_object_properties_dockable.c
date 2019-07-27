@@ -615,7 +615,7 @@ update_cap_style_widget (GschemObjectPropertiesDockable *dialog)
   g_return_if_fail (dialog->line_end != NULL);
 
   if (dialog->adapter != NULL) {
-    OBJECT_END end = gschem_selection_adapter_get_cap_style (dialog->adapter);
+    int end = gschem_selection_adapter_get_cap_style (dialog->adapter);
 
     g_signal_handlers_block_by_func (G_OBJECT (dialog->line_end),
                                      G_CALLBACK (update_cap_style_model),
@@ -746,7 +746,7 @@ update_line_type_widget (GschemObjectPropertiesDockable *dialog)
   g_return_if_fail (dialog->line_type != NULL);
 
   if (dialog->adapter != NULL) {
-    OBJECT_TYPE type = gschem_selection_adapter_get_line_type (dialog->adapter);
+    int type = gschem_selection_adapter_get_line_type (dialog->adapter);
 
     g_signal_handlers_block_by_func (G_OBJECT (dialog->line_type),
                                      G_CALLBACK (update_line_type_model),
