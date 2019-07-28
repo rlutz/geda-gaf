@@ -313,8 +313,6 @@ x_patch_do_import (GschemToplevel *w_current, PAGE *page)
   objects = gschem_patch_state_execute (&st);
   gschem_patch_state_destroy (&st);
 
-  objects = g_slist_reverse (objects);
-
   clear_store (patch_dockable);
 
   for (GSList *object_iter = objects;

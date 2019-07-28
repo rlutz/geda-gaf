@@ -864,7 +864,7 @@ gschem_patch_state_execute (gschem_patch_state_t *st)
     }
   }
 
-  return hits;
+  return g_slist_reverse (hits);
 }
 
 
