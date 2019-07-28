@@ -25,6 +25,13 @@
 
 #define NETATTRIB_DELIMITERS ",; "
 
+static const gboolean debug =
+#if DEBUG_PATCH
+	TRUE;
+#else
+	FALSE;
+#endif
+
 static void free_patch_line (gschem_patch_line_t *line);
 
 
@@ -310,17 +317,16 @@ error:
 }
 
 
-#if DEBUG
-static char *op_names[] = {
-  "disconnect",
-  "connect",
-  "chnage attribute",
-  "net_info"
-};
-
 static void
-patch_list_print (gschem_patch_state_t *st)
+debug_print_lines (gschem_patch_state_t *st)
 {
+  static const char *op_names[] = {
+    "disconnect",
+    "connect",
+    "chnage attribute",
+    "net_info"
+  };
+
   for (GList *i = st->lines; i != NULL; i = i->next) {
     gschem_patch_line_t *l = i->data;
     if (l == NULL) {
@@ -340,13 +346,12 @@ patch_list_print (gschem_patch_state_t *st)
       case GSCHEM_PATCH_NET_INFO:
         fprintf (stderr, "%s %s", op_names[l->op], l->id);
         for (GList *p = l->arg1.ids; p != NULL; p = p->next)
-          fprintf (stderr, " %s", p->data);
+          fprintf (stderr, " %s", (char *) p->data);
         fprintf (stderr, "\n");
         break;
     }
   }
 }
-#endif
 
 /*! \brief Initialize a patch state struct and read a patch file.
  *
@@ -369,9 +374,8 @@ gschem_patch_state_init (gschem_patch_state_t *st, const char *fn)
 
   res = patch_parse (st, f, fn);
 
-#if DEBUG
-  patch_list_print (st);
-#endif
+  if (debug)
+    debug_print_lines (st);
 
   if (res == 0) {
     /* Create hashes for faster lookups avoiding O(objects*patches) */
@@ -649,10 +653,8 @@ exec_free_conns (GHashTable *connections)
   g_hash_table_destroy (connections);
 }
 
-#define DEBUG
-#ifdef DEBUG
 static void
-exec_print_conns (GHashTable *connections)
+exec_debug_print_conns (GHashTable *connections)
 {
   gpointer key, val;
   GHashTableIter cni;
@@ -661,7 +663,6 @@ exec_print_conns (GHashTable *connections)
        g_hash_table_iter_next (&cni, &key, &val); )
     printf (" cn=%s %p\n", (char *) key, val);
 }
-#endif
 
 static void
 exec_conn_pretend (gschem_patch_line_t *patch, GList **net, int del)
@@ -689,11 +690,13 @@ exec_check_conn (GSList *hits, gschem_patch_line_t *patch,
   int alloced = 0, connected;
   GString *msg = NULL;
 
-  printf ("exec %d:\n", del);
+  if (debug)
+    printf ("exec %d:\n", del);
 
   if (pin->net == NULL) {
     connections = exec_list_conns (pin->obj);
-    exec_print_conns (connections);
+    if (debug)
+      exec_debug_print_conns (connections);
 
     /* check if we are connected to the network */
     len = strlen (patch->arg1.net_name);
