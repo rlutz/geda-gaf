@@ -185,7 +185,7 @@ patch_parse (gschem_patch_state_t *st, FILE *f, const char *fn)
           fprintf (stderr, "%s:%d: Internal error\n", fn, lineno);
           goto error;
         }
-        current = g_new0 (gschem_patch_line_t, 1);
+        current = g_slice_new0 (gschem_patch_line_t);
 
         if (strcmp (word, "add_conn") == 0)
           current->op = GSCHEM_PATCH_ADD_CONN;
@@ -407,7 +407,7 @@ build_insert_hash_list (GHashTable *hash, char *full_name, void *item)
 static gschem_patch_pin_t *
 alloc_pin (OBJECT *pin_obj, char *net)
 {
-  gschem_patch_pin_t *p = g_new (gschem_patch_pin_t, 1);
+  gschem_patch_pin_t *p = g_slice_new (gschem_patch_pin_t);
   p->obj = pin_obj;
   p->net = net;
   return p;
@@ -538,7 +538,7 @@ free_key (gpointer key, gpointer value, gpointer user_data)
 static gschem_patch_hit_t *
 alloc_hit (OBJECT *obj, char *text)
 {
-  gschem_patch_hit_t *hit = g_new (gschem_patch_hit_t, 1);
+  gschem_patch_hit_t *hit = g_slice_new (gschem_patch_hit_t);
   hit->object = obj;
   hit->text = text;
   return hit;
@@ -891,14 +891,14 @@ free_patch_line (gschem_patch_line_t *line)
       g_list_free_full (line->arg1.ids, g_free);
       break;
   }
-  g_free (line);
+  g_slice_free (gschem_patch_line_t, line);
 }
 
 static void
 free_pin (gschem_patch_pin_t *pin)
 {
   g_free (pin->net);
-  g_free (pin);
+  g_slice_free (gschem_patch_pin_t, pin);
 }
 
 /*! \brief Free all memory allocated by a patch state.
@@ -930,7 +930,7 @@ static void
 free_hit (gschem_patch_hit_t *hit)
 {
   g_free (hit->text);
-  g_free (hit);
+  g_slice_free (gschem_patch_hit_t, hit);
 }
 
 /*! \brief Free a list of hits returned by \ref gschem_patch_state_execute.
