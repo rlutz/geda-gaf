@@ -39,7 +39,8 @@
 
 enum {
   COLUMN_FILENAME,
-  COLUMN_STRING,
+  COLUMN_LOCATION,
+  COLUMN_ACTION,
   COLUMN_OBJECT,
   COLUMN_COUNT
 };
@@ -112,6 +113,7 @@ instance_init (GschemPatchDockable *patch_dockable)
   patch_dockable->store = gtk_list_store_new (COLUMN_COUNT,
                                               G_TYPE_STRING,
                                               G_TYPE_STRING,
+                                              G_TYPE_STRING,
                                               G_TYPE_POINTER);
 }
 
@@ -160,18 +162,31 @@ create_widget (GschemDockable *dockable)
   gtk_tree_view_column_add_attribute (
     column, renderer, "text", COLUMN_FILENAME);
 
-  /* text column */
+  /* location column */
 
   column = gtk_tree_view_column_new ();
   gtk_tree_view_column_set_resizable (column, TRUE);
-  gtk_tree_view_column_set_title (column, _("Text"));
+  gtk_tree_view_column_set_title (column, _("Comp/Pin"));
 
   gtk_tree_view_append_column (GTK_TREE_VIEW (tree_widget), column);
 
   renderer = gtk_cell_renderer_text_new ();
   gtk_tree_view_column_pack_start (column, renderer, TRUE);
   gtk_tree_view_column_add_attribute (
-    column, renderer, "text", COLUMN_STRING);
+    column, renderer, "text", COLUMN_LOCATION);
+
+  /* action column */
+
+  column = gtk_tree_view_column_new ();
+  gtk_tree_view_column_set_resizable (column, TRUE);
+  gtk_tree_view_column_set_title (column, _("Required action"));
+
+  gtk_tree_view_append_column (GTK_TREE_VIEW (tree_widget), column);
+
+  renderer = gtk_cell_renderer_text_new ();
+  gtk_tree_view_column_pack_start (column, renderer, TRUE);
+  gtk_tree_view_column_add_attribute (
+    column, renderer, "text", COLUMN_ACTION);
 
   /* attach signal to detect user selection */
 
@@ -373,7 +388,8 @@ add_hit_to_store (GschemPatchDockable *patch_dockable, gschem_patch_hit_t *hit)
       gtk_list_store_set (patch_dockable->store,
                           &tree_iter,
                           COLUMN_FILENAME, UNKNOWN_FILE_NAME,
-                          COLUMN_STRING, hit->text,
+                          COLUMN_LOCATION, hit->loc_name,
+                          COLUMN_ACTION, hit->action,
                           COLUMN_OBJECT, final_object,
                           -1);
       return;
@@ -414,7 +430,8 @@ add_hit_to_store (GschemPatchDockable *patch_dockable, gschem_patch_hit_t *hit)
     gtk_list_store_set (patch_dockable->store,
                         &tree_iter,
                         COLUMN_FILENAME, basename,
-                        COLUMN_STRING, hit->text,
+                        COLUMN_LOCATION, hit->loc_name,
+                        COLUMN_ACTION, hit->action,
                         COLUMN_OBJECT, final_object,
                         -1);
     g_free (basename);
@@ -422,7 +439,8 @@ add_hit_to_store (GschemPatchDockable *patch_dockable, gschem_patch_hit_t *hit)
     gtk_list_store_set (patch_dockable->store,
                         &tree_iter,
                         COLUMN_FILENAME, UNKNOWN_FILE_NAME,
-                        COLUMN_STRING, hit->text,
+                        COLUMN_LOCATION, hit->loc_name,
+                        COLUMN_ACTION, hit->action,
                         COLUMN_OBJECT, final_object,
                         -1);
   }

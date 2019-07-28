@@ -57,7 +57,8 @@ typedef struct {
 
 typedef struct {
   OBJECT *object;
-  char *text;
+  gchar *loc_name;
+  gchar *action;
 } gschem_patch_hit_t;
 
 typedef struct {

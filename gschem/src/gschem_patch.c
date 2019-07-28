@@ -540,11 +540,12 @@ free_key (gpointer key, gpointer value, gpointer user_data)
 }
 
 static gschem_patch_hit_t *
-alloc_hit (OBJECT *obj, char *text)
+alloc_hit (OBJECT *obj, gchar *loc_name, gchar *action)
 {
   gschem_patch_hit_t *hit = g_slice_new (gschem_patch_hit_t);
   hit->object = obj;
-  hit->text = text;
+  hit->loc_name = loc_name;
+  hit->action = action;
   return hit;
 }
 
@@ -719,12 +720,12 @@ exec_check_conn (GSList *hits, gschem_patch_line_t *patch,
   if (strncmp (buff + offs, "unnamed_net", 11) != 0) {
     if (connected) {
       if (del) {
-        msg = g_string_new (": disconnect from net ");
+        msg = g_string_new ("disconnect from net ");
         g_string_append (msg, buff + offs);
       }
     } else {
       if (!del) {
-        msg = g_string_new (": connect to net ");
+        msg = g_string_new ("connect to net ");
         g_string_append (msg, buff + offs);
       }
     }
@@ -757,7 +758,7 @@ exec_check_conn (GSList *hits, gschem_patch_line_t *patch,
       if (action != NULL) {
         if (!pin_hdr) {
           if (msg == NULL)
-            msg = g_string_new (": ");
+            msg = g_string_new (NULL);
           else
             g_string_append (msg, "; ");
           g_string_append (msg, action);
@@ -777,8 +778,8 @@ exec_check_conn (GSList *hits, gschem_patch_line_t *patch,
   exec_conn_pretend (patch, net, del);
 
   if (msg != NULL) {
-    g_string_prepend (msg, patch->id);
     return g_slist_prepend (hits, alloc_hit (pin->obj,
+                                             g_strdup (patch->id),
                                              g_string_free (msg, FALSE)));
   }
 
@@ -793,11 +794,10 @@ exec_check_attrib (GSList *hits, gschem_patch_line_t *patch, OBJECT *comp)
   if (attr_val == NULL)
     return hits;
   if (strcmp (attr_val, patch->arg2.attrib_val) != 0) {
-    gchar *msg = g_strdup_printf ("%s: change attribute %s from %s to %s",
-                                  patch->id,
+    gchar *msg = g_strdup_printf ("change attribute %s from %s to %s",
                                   patch->arg1.attrib_name, attr_val,
                                   patch->arg2.attrib_val);
-    hits = g_slist_prepend (hits, alloc_hit (comp, msg));
+    hits = g_slist_prepend (hits, alloc_hit (comp, g_strdup (patch->id), msg));
   }
   g_free (attr_val);
   return hits;
@@ -831,11 +831,11 @@ gschem_patch_state_execute (gschem_patch_state_t *st)
         pins = g_hash_table_lookup (st->pins, l->id);
         if (pins == NULL) {
           /* pin not found on open schematics */
-          gchar *msg =
-            g_strdup_printf ("%s pin %s (NOT FOUND) from net %s",
-                             del ? "Disconnect" : "Connect", l->id,
-                             l->arg1.net_name);
-          hits = g_slist_prepend (hits, alloc_hit (NULL, msg));
+          gchar *not_found = g_strdup_printf ("%s (NOT FOUND)", l->id);
+          gchar *msg = g_strdup_printf ("%s net %s",
+                                        del ? "disconnect from" : "connect to",
+                                        l->arg1.net_name);
+          hits = g_slist_prepend (hits, alloc_hit (NULL, not_found, msg));
           exec_conn_pretend (l, &net, del);
         } else {
           /* pin found */
@@ -856,10 +856,11 @@ gschem_patch_state_execute (gschem_patch_state_t *st)
           found++;
         }
         if (found == 0) {
-          gchar *msg =
-            g_strdup_printf ("%s (NOT FOUND): change attribute %s to %s",
-                             l->id, l->arg1.attrib_name, l->arg2.attrib_val);
-          hits = g_slist_prepend (hits, alloc_hit (NULL, msg));
+          gchar *not_found = g_strdup_printf ("%s (NOT FOUND)", l->id);
+          gchar *msg = g_strdup_printf ("change attribute %s to %s",
+                                        l->arg1.attrib_name,
+                                        l->arg2.attrib_val);
+          hits = g_slist_prepend (hits, alloc_hit (NULL, not_found, msg));
         }
         break;
 
@@ -938,7 +939,8 @@ gschem_patch_state_destroy (gschem_patch_state_t *st)
 static void
 free_hit (gschem_patch_hit_t *hit)
 {
-  g_free (hit->text);
+  g_free (hit->loc_name);
+  g_free (hit->action);
   g_slice_free (gschem_patch_hit_t, hit);
 }
 
