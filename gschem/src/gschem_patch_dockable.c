@@ -149,6 +149,8 @@ create_widget (GschemDockable *dockable)
 
   tree_widget = gtk_tree_view_new_with_model (
     GTK_TREE_MODEL (patch_dockable->store));
+  gtk_tree_view_set_search_column (GTK_TREE_VIEW (tree_widget),
+                                   COLUMN_LOCATION);
   gtk_container_add (GTK_CONTAINER (scrolled), tree_widget);
 
   /* filename column */
