@@ -801,7 +801,8 @@ exec_check_attrib (GSList *hits, gschem_patch_line_t *patch, OBJECT *comp)
   if (attr_val == NULL)
     return hits;
   if (strcmp (attr_val, patch->arg2.attrib_val) != 0) {
-    gchar *msg = g_strdup_printf (_("change attribute %s from %s to %s"),
+    gchar *msg = g_strdup_printf (_("change attribute \"%s\" "
+                                    "from \"%s\" to \"%s\""),
                                   patch->arg1.attrib_name, attr_val,
                                   patch->arg2.attrib_val);
     hits = g_slist_prepend (hits, alloc_hit (comp, g_strdup (patch->id), msg));
@@ -864,7 +865,7 @@ gschem_patch_state_execute (gschem_patch_state_t *st)
         }
         if (found == 0) {
           gchar *not_found = g_strdup_printf (_("%s (NOT FOUND)"), l->id);
-          gchar *msg = g_strdup_printf (_("change attribute %s to %s"),
+          gchar *msg = g_strdup_printf (_("change attribute \"%s\" to \"%s\""),
                                         l->arg1.attrib_name,
                                         l->arg2.attrib_val);
           hits = g_slist_prepend (hits, alloc_hit (NULL, not_found, msg));
