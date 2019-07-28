@@ -157,7 +157,8 @@ create_widget (GschemDockable *dockable)
 
   renderer = gtk_cell_renderer_text_new ();
   gtk_tree_view_column_pack_start (column, renderer, TRUE);
-  gtk_tree_view_column_add_attribute (column, renderer, "text", 0);
+  gtk_tree_view_column_add_attribute (
+    column, renderer, "text", COLUMN_FILENAME);
 
   /* text column */
 
@@ -169,7 +170,8 @@ create_widget (GschemDockable *dockable)
 
   renderer = gtk_cell_renderer_text_new ();
   gtk_tree_view_column_pack_start (column, renderer, TRUE);
-  gtk_tree_view_column_add_attribute (column, renderer, "text", 1);
+  gtk_tree_view_column_add_attribute (
+    column, renderer, "text", COLUMN_STRING);
 
   /* attach signal to detect user selection */
 
