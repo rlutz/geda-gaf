@@ -319,11 +319,9 @@ x_patch_do_import (GschemToplevel *w_current, PAGE *page)
        object_iter != NULL; object_iter = object_iter->next) {
     gschem_patch_hit_t *hit = (gschem_patch_hit_t *) object_iter->data;
     add_hit_to_store (patch_dockable, hit);
-    g_free (hit->text);
-    g_free (hit);
   }
 
-  g_slist_free (objects);
+  gschem_patch_free_hit_list (objects);
 
   if (objects != NULL)
     gschem_dockable_present (GSCHEM_DOCKABLE (patch_dockable));

@@ -71,3 +71,4 @@ int gschem_patch_state_init (gschem_patch_state_t *st, const char *fn);
 int gschem_patch_state_build (gschem_patch_state_t *st, OBJECT *o);
 GSList *gschem_patch_state_execute (gschem_patch_state_t *st);
 void gschem_patch_state_destroy (gschem_patch_state_t *st);
+void gschem_patch_free_hit_list (GSList *hits);

@@ -924,3 +924,21 @@ gschem_patch_state_destroy (gschem_patch_state_t *st)
   g_hash_table_destroy (st->comps);
   g_list_free_full (st->lines, (GDestroyNotify) free_patch_line);
 }
+
+
+static void
+free_hit (gschem_patch_hit_t *hit)
+{
+  g_free (hit->text);
+  g_free (hit);
+}
+
+/*! \brief Free a list of hits returned by \ref gschem_patch_state_execute.
+ *
+ * \note This frees all hits in the list as well as the list itself.
+ */
+void
+gschem_patch_free_hit_list (GSList *hits)
+{
+  g_slist_free_full (hits, (GDestroyNotify) free_hit);
+}
