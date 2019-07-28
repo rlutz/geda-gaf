@@ -41,6 +41,7 @@ enum {
   COLUMN_FILENAME,
   COLUMN_LOCATION,
   COLUMN_ACTION,
+  COLUMN_HAS_ERROR,
   COLUMN_OBJECT,
   COLUMN_COUNT
 };
@@ -114,6 +115,7 @@ instance_init (GschemPatchDockable *patch_dockable)
                                               G_TYPE_STRING,
                                               G_TYPE_STRING,
                                               G_TYPE_STRING,
+                                              G_TYPE_BOOLEAN,
                                               G_TYPE_POINTER);
 }
 
@@ -161,6 +163,9 @@ create_widget (GschemDockable *dockable)
   gtk_tree_view_column_pack_start (column, renderer, TRUE);
   gtk_tree_view_column_add_attribute (
     column, renderer, "text", COLUMN_FILENAME);
+  gtk_tree_view_column_add_attribute (
+    column, renderer, "foreground-set", COLUMN_HAS_ERROR);
+  g_object_set (renderer, "foreground", "red", NULL);
 
   /* location column */
 
@@ -174,6 +179,9 @@ create_widget (GschemDockable *dockable)
   gtk_tree_view_column_pack_start (column, renderer, TRUE);
   gtk_tree_view_column_add_attribute (
     column, renderer, "text", COLUMN_LOCATION);
+  gtk_tree_view_column_add_attribute (
+    column, renderer, "foreground-set", COLUMN_HAS_ERROR);
+  g_object_set (renderer, "foreground", "red", NULL);
 
   /* action column */
 
@@ -187,6 +195,9 @@ create_widget (GschemDockable *dockable)
   gtk_tree_view_column_pack_start (column, renderer, TRUE);
   gtk_tree_view_column_add_attribute (
     column, renderer, "text", COLUMN_ACTION);
+  gtk_tree_view_column_add_attribute (
+    column, renderer, "foreground-set", COLUMN_HAS_ERROR);
+  g_object_set (renderer, "foreground", "red", NULL);
 
   /* attach signal to detect user selection */
 
@@ -390,6 +401,7 @@ add_hit_to_store (GschemPatchDockable *patch_dockable, gschem_patch_hit_t *hit)
                           COLUMN_FILENAME, UNKNOWN_FILE_NAME,
                           COLUMN_LOCATION, hit->loc_name,
                           COLUMN_ACTION, hit->action,
+                          COLUMN_HAS_ERROR, hit->object == NULL,
                           COLUMN_OBJECT, final_object,
                           -1);
       return;
@@ -432,6 +444,7 @@ add_hit_to_store (GschemPatchDockable *patch_dockable, gschem_patch_hit_t *hit)
                         COLUMN_FILENAME, basename,
                         COLUMN_LOCATION, hit->loc_name,
                         COLUMN_ACTION, hit->action,
+                        COLUMN_HAS_ERROR, hit->object == NULL,
                         COLUMN_OBJECT, final_object,
                         -1);
     g_free (basename);
@@ -441,6 +454,7 @@ add_hit_to_store (GschemPatchDockable *patch_dockable, gschem_patch_hit_t *hit)
                         COLUMN_FILENAME, UNKNOWN_FILE_NAME,
                         COLUMN_LOCATION, hit->loc_name,
                         COLUMN_ACTION, hit->action,
+                        COLUMN_HAS_ERROR, hit->object == NULL,
                         COLUMN_OBJECT, final_object,
                         -1);
   }
