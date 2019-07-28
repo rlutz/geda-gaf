@@ -21,6 +21,7 @@
  * \brief Back-annotation from pcb-rnd.
  */
 
+#include <config.h>
 #include "gschem.h"
 
 #define NETATTRIB_DELIMITERS ",; "
@@ -686,7 +687,7 @@ exec_check_conn (GSList *hits, gschem_patch_line_t *patch,
                  gschem_patch_pin_t *pin, GList **net, int del)
 {
   GHashTable *connections = NULL;
-  int len, pin_hdr, offs;
+  int len, offs;
   char *buff = NULL;
   int alloced = 0, connected;
   GString *msg = NULL;
@@ -720,22 +721,24 @@ exec_check_conn (GSList *hits, gschem_patch_line_t *patch,
   if (strncmp (buff + offs, "unnamed_net", 11) != 0) {
     if (connected) {
       if (del) {
-        msg = g_string_new ("disconnect from net ");
-        g_string_append (msg, buff + offs);
+        gchar *tmp = g_strdup_printf (_("disconnect from net %s"), buff + offs);
+        msg = g_string_new (tmp);
+        g_free (tmp);
       }
     } else {
       if (!del) {
-        msg = g_string_new ("connect to net ");
-        g_string_append (msg, buff + offs);
+        gchar *tmp = g_strdup_printf (_("connect to net %s"), buff + offs);
+        msg = g_string_new (tmp);
+        g_free (tmp);
       }
     }
   }
 
   if (connections != NULL) {
     /* check if we still have a connection to any of the pins */
-    pin_hdr = 0;
+    GString *pin_msg = NULL;
+    int pin_count = 0;
     for (GList *np = *net; np != NULL; np = np->next) {
-      const char *action = NULL;
       OBJECT *target;
       len = strlen (np->data);
       if (len + 2 > alloced) {
@@ -748,25 +751,29 @@ exec_check_conn (GSList *hits, gschem_patch_line_t *patch,
       target = g_hash_table_lookup (connections, buff);
       if (target == pin->obj)
         continue;
-      if (target != NULL) {
-        if (del)
-          action = "disconnect from pin ";
-      } else {
-        if (!del)
-          action = "connect to pin ";
+      if ((target != NULL && del) || (target == NULL && !del)) {
+        if (pin_msg == NULL)
+          pin_msg = g_string_new (NULL);
+        else
+          g_string_append (pin_msg, ", ");
+        g_string_append (pin_msg, buff + 1);
+        pin_count++;
       }
-      if (action != NULL) {
-        if (!pin_hdr) {
-          if (msg == NULL)
-            msg = g_string_new (NULL);
-          else
-            g_string_append (msg, "; ");
-          g_string_append (msg, action);
-          pin_hdr = 1;
-        } else
-          g_string_append (msg, ", ");
-        g_string_append (msg, buff + 1);
-      }
+    }
+    if (pin_msg != NULL) {
+      if (msg == NULL)
+        msg = g_string_new (NULL);
+      else
+        g_string_append (msg, "; ");
+      gchar *tmp = g_strdup_printf (del ? ngettext ("disconnect from pin %s",
+                                                    "disconnect from pins %s",
+                                                    pin_count)
+                                        : ngettext ("connect to pin %s",
+                                                    "connect to pins %s",
+                                                    pin_count),
+                                    g_string_free (pin_msg, FALSE));
+      g_string_append (msg, tmp);
+      g_free (tmp);
     }
     exec_free_conns (connections);
   }
@@ -794,7 +801,7 @@ exec_check_attrib (GSList *hits, gschem_patch_line_t *patch, OBJECT *comp)
   if (attr_val == NULL)
     return hits;
   if (strcmp (attr_val, patch->arg2.attrib_val) != 0) {
-    gchar *msg = g_strdup_printf ("change attribute %s from %s to %s",
+    gchar *msg = g_strdup_printf (_("change attribute %s from %s to %s"),
                                   patch->arg1.attrib_name, attr_val,
                                   patch->arg2.attrib_val);
     hits = g_slist_prepend (hits, alloc_hit (comp, g_strdup (patch->id), msg));
@@ -831,9 +838,9 @@ gschem_patch_state_execute (gschem_patch_state_t *st)
         pins = g_hash_table_lookup (st->pins, l->id);
         if (pins == NULL) {
           /* pin not found on open schematics */
-          gchar *not_found = g_strdup_printf ("%s (NOT FOUND)", l->id);
-          gchar *msg = g_strdup_printf ("%s net %s",
-                                        del ? "disconnect from" : "connect to",
+          gchar *not_found = g_strdup_printf (_("%s (NOT FOUND)"), l->id);
+          gchar *msg = g_strdup_printf (del ? _("disconnect from net %s")
+                                            : _("connect to net %s"),
                                         l->arg1.net_name);
           hits = g_slist_prepend (hits, alloc_hit (NULL, not_found, msg));
           exec_conn_pretend (l, &net, del);
@@ -856,8 +863,8 @@ gschem_patch_state_execute (gschem_patch_state_t *st)
           found++;
         }
         if (found == 0) {
-          gchar *not_found = g_strdup_printf ("%s (NOT FOUND)", l->id);
-          gchar *msg = g_strdup_printf ("change attribute %s to %s",
+          gchar *not_found = g_strdup_printf (_("%s (NOT FOUND)"), l->id);
+          gchar *msg = g_strdup_printf (_("change attribute %s to %s"),
                                         l->arg1.attrib_name,
                                         l->arg2.attrib_val);
           hits = g_slist_prepend (hits, alloc_hit (NULL, not_found, msg));
