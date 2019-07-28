@@ -310,7 +310,7 @@ x_patch_do_import (GschemToplevel *w_current, PAGE *page)
 
   g_slist_free (all_pages);
 
-  objects = gschem_patch_state_execute (&st, NULL);
+  objects = gschem_patch_state_execute (&st);
   gschem_patch_state_destroy (&st);
 
   objects = g_slist_reverse (objects);

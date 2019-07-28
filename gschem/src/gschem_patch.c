@@ -804,11 +804,12 @@ exec_check_attrib (GSList *hits, gschem_patch_line_t *patch, OBJECT *comp)
  * \returns a singly-linked list of hits in reverse order
  */
 GSList *
-gschem_patch_state_execute (gschem_patch_state_t *st, GSList *hits)
+gschem_patch_state_execute (gschem_patch_state_t *st)
 {
   GList *onet, *net;
   GSList *pins, *comps;
   int found, del;
+  GSList *hits = NULL;
 
   for (GList *i = st->lines; i != NULL; i = i->next) {
     gschem_patch_line_t *l = i->data;
