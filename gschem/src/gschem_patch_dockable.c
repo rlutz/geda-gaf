@@ -281,6 +281,18 @@ x_patch_do_import (GschemToplevel *w_current, PAGE *page)
 
   if (gschem_patch_state_init (&st, page->patch_filename) != 0) {
     g_warning ("Unable to open patch file %s\n", page->patch_filename);
+
+    GtkWidget *dialog = gtk_message_dialog_new (
+      GTK_WINDOW (w_current->main_window),
+      GTK_DIALOG_DESTROY_WITH_PARENT,
+      GTK_MESSAGE_ERROR,
+      GTK_BUTTONS_CLOSE,
+      _("Failed to load patch file \"%s\".\n"
+        "See the standard error output for more information."),
+      page->patch_filename);
+    gtk_window_set_title (GTK_WINDOW (dialog), _("Failed to import patch"));
+    gtk_dialog_run (GTK_DIALOG (dialog));
+    gtk_widget_destroy (dialog);
     return;
   }
 
