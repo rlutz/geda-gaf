@@ -668,13 +668,15 @@ exec_conn_pretend (gschem_patch_line_t *patch, GList **net, int del)
 {
   if (del) {
     for (GList *np = *net; np != NULL; ) {
-      const char *lname = np->data;
+      char *lname = np->data;
       np = np->next;
-      if (strcmp (lname, patch->id) == 0)
+      if (strcmp (lname, patch->id) == 0) {
         *net = g_list_remove (*net, lname);
+        g_free (lname);
+      }
     }
   } else
-    *net = g_list_prepend (*net, patch->id);
+    *net = g_list_prepend (*net, g_strdup (patch->id));
 }
 
 static GSList *
@@ -918,6 +920,10 @@ gschem_patch_state_destroy (gschem_patch_state_t *st)
   g_hash_table_iter_init (&iter, st->comps);
   while (g_hash_table_iter_next (&iter, &key, &value))
     g_slist_free ((GSList *) value);
+
+  g_hash_table_iter_init (&iter, st->nets);
+  while (g_hash_table_iter_next (&iter, &key, &value))
+    g_slist_free_full ((GSList *) value, g_free);
 
   g_hash_table_destroy (st->nets);
   g_hash_table_destroy (st->pins);
