@@ -55,10 +55,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <stdio.h>
 #include <math.h>
 
-#ifdef STROKE_MOUSE_FOOTPRINTS
-#include <X11/Xutil.h>
-#endif
-
 #ifndef TRUE
 #define TRUE 1
 #define FALSE 0
@@ -97,15 +93,6 @@ static int max_x = -1;
 static int max_y = -1;
 static int point_count = 0;
 
-#ifdef STROKE_MOUSE_FOOTPRINTS
-/*FIXME: Maybe these should be put in a structure, and not static...*/
-static Display * stroke_disp;
-static Window stroke_window;
-static GC stroke_gc;
-
-static int use_mouse_footprints; /* True if using mouse footprints */
-#endif
-
 static void init_stroke_data (void)
 {
   while (point_list_head != NULL) {
@@ -116,85 +103,8 @@ static void init_stroke_data (void)
   point_list_tail = NULL;
 }
 
-#ifdef STROKE_MOUSE_FOOTPRINTS
-void stroke_init_with_mouse_footprints (Display *disp, Window wind)
-{
-  XSetWindowAttributes w_attr;
-  XWindowAttributes orig_w_attr;
-  unsigned long mask, col_border, col_background;
-  unsigned int border_width;
-  int screen = DefaultScreen (disp);
-  XSizeHints hints;
-
-  stroke_disp = disp;
-
-  XGetWindowAttributes (stroke_disp, wind, &orig_w_attr);
-  hints.x = orig_w_attr.x;
-  hints.y = orig_w_attr.y;
-  hints.width = orig_w_attr.width;
-  hints.height = orig_w_attr.height;
-
-  /* Let the X server take care of whats underneath this window,
-     rather than the client applications, it'll also prevent needless
-     Expose events.  NOTE: Not all X servers support this */
-  mask = CWSaveUnder;
-  w_attr.save_under = True;
-
-  /* inhibit all the decorations */
-  mask |= CWOverrideRedirect;
-  w_attr.override_redirect = True;
-
-  /* Don't set a background, transparent window */
-  mask |= CWBackPixmap;
-  w_attr.background_pixmap = None;
-
-  /* Default input window look */
-  col_background = WhitePixel (stroke_disp, screen);
-
-  /* no border for the window */
-  border_width = 0;
-  col_border = BlackPixel (stroke_disp, screen);
-
-  stroke_window = XCreateSimpleWindow (stroke_disp, wind,
-                                       hints.x, hints.y,
-                                       hints.width, hints.height,
-                                       border_width,
-                                       col_border, col_background);
-
-  stroke_gc = XCreateGC (stroke_disp, stroke_window, 0, NULL);
-
-  XSetFunction (stroke_disp, stroke_gc, GXinvert);
-
-  XChangeWindowAttributes (stroke_disp, stroke_window, mask, &w_attr);
-
-  XSetLineAttributes (stroke_disp, stroke_gc, 2, LineSolid,
-                      CapButt, JoinMiter);
-
-  /*FIXME: is this call really needed? If yes, does it need the real
-    argc and argv? */
-  hints.flags = PPosition | PSize;
-  XSetStandardProperties (stroke_disp, stroke_window, "stroke_test", NULL,
-			 (Pixmap)NULL, NULL, 0, &hints);
-
-
-  /* Receive the close window client message */
-  {
-    /* FIXME: is this really needed? If yes, something should be done
-       with wmdelete...*/
-    Atom wmdelete = XInternAtom (stroke_disp, "WM_DELETE_WINDOW",
-                                False);
-    XSetWMProtocols (stroke_disp, stroke_window, &wmdelete, True);
-  }
-  use_mouse_footprints = 1;
-  init_stroke_data ();
-}
-#endif
-
 void stroke_init (void)
 {
-#ifdef STROKE_MOUSE_FOOTPRINTS
-  use_mouse_footprints = 0;
-#endif
   init_stroke_data ();
 }
 
@@ -217,14 +127,6 @@ int stroke_trans (char *sequence)
   int delta_x, delta_y;
   int bound_x_1, bound_x_2;
   int bound_y_1, bound_y_2;
-
-#ifdef STROKE_MOUSE_FOOTPRINTS
-  if (use_mouse_footprints)
-    {
-      XUnmapWindow (stroke_disp, stroke_window);
-      XFlush (stroke_disp);
-    }
-#endif
 
   /* determine size of grid */
   delta_x = max_x - min_x;
@@ -349,16 +251,6 @@ void stroke_record (int x, int y)
       point_count = 0;
 
     } else {
-#ifdef STROKE_MOUSE_FOOTPRINTS
-      if (use_mouse_footprints)
-        {
-          XMapRaised(stroke_disp, stroke_window);
-          XDrawLine (stroke_disp, stroke_window, stroke_gc,
-                     x, y, point_list_tail->x, point_list_tail->y);
-          XFlush (stroke_disp);
-        }
-#endif
-
       /* interpolate between last and current point */
       delx = x - point_list_tail->x;
       dely = y - point_list_tail->y;

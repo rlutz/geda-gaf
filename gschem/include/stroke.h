@@ -68,14 +68,5 @@ int stroke_trans (char *sequence);
 /* record point in stroke */
 void stroke_record (int x, int y);
 
-/* initialize stroke functions
-   There are 2 ways to initialize the stroke library:
-   stroke_init_with_mouse_footprints will draw mouse footprints
-   Use stroke_init if that is not desired, or if you have your own
-   implementation of footprints. */
-#ifdef STROKE_MOUSE_FOOTPRINTS
-#include <X11/Xlib.h>
-void stroke_init_with_mouse_footprints (Display *disp, Window wind);
-#else
+/* initialize stroke functions */
 void stroke_init (void);
-#endif
