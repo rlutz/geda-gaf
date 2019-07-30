@@ -88,7 +88,7 @@ x_highlevel_open_page (GschemToplevel *w_current, const gchar *filename)
  * For each file specified in \a filenames that is not already opened,
  * creates a new page and loads the file in it.
  *
- * The last page that could be opened or already existed becomes the
+ * The first page that could be opened or already existed becomes the
  * new current page of \a w_current.
  *
  * \param [in] w_current  the toplevel environment
@@ -97,12 +97,18 @@ x_highlevel_open_page (GschemToplevel *w_current, const gchar *filename)
 void
 x_highlevel_open_pages (GschemToplevel *w_current, GSList *filenames)
 {
+  PAGE *first_page = NULL;
   GSList *tmp;
 
   /* open each file */
   for (tmp = filenames; tmp != NULL;tmp = g_slist_next (tmp)) {
-    x_highlevel_open_page (w_current, (gchar *) tmp->data);
+    PAGE *page = x_lowlevel_open_page (w_current, (gchar *) tmp->data);
+    if (first_page == NULL)
+      first_page = page;
   }
+
+  if (first_page != NULL)
+    x_window_set_current_page (w_current, first_page);
 }
 
 
