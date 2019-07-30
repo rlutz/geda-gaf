@@ -279,6 +279,9 @@ major_changed_dialog (GschemToplevel* w_current)
                         -1);
   }
 
+  g_list_free_full (w_current->toplevel->major_changed_refdes, g_free);
+  w_current->toplevel->major_changed_refdes = NULL;
+
   /*! \todo this would be much easier using
    * gtk_message_dialog_get_message_area(). */
   dialog = g_object_new (GTK_TYPE_DIALOG,

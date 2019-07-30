@@ -303,10 +303,6 @@ void main_prog(void *closure, int argc, char *argv[])
     exit (1);
   }
 
-  /* if there were any symbols which had major changes, put up an error */
-  /* dialog box */
-  major_changed_dialog(w_current);
-
   scm_dynwind_end ();
 
   /* enter main loop */
