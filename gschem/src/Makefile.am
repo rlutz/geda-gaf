@@ -94,6 +94,7 @@ gschem_SOURCES = \
 	o_undo.c \
 	parsecmd.c \
 	s_stretch.c \
+	stroke.c \
 	x_attribedit.c \
 	x_autonumber.c \
 	x_basic.c \
@@ -122,10 +123,10 @@ gschem_SOURCES = \
 
 gschem_CPPFLAGS = -I$(top_srcdir)/libgeda/include  -I$(srcdir)/../include \
 	-I$(top_srcdir) -I$(includedir)
-gschem_CFLAGS = $(GCC_CFLAGS) $(LIBSTROKE_CFLAGS) \
+gschem_CFLAGS = $(GCC_CFLAGS) \
 	$(MINGW_CFLAGS) \
 	$(GLIB_CFLAGS) $(GTK_CFLAGS) $(GTHREAD_CFLAGS) $(GUILE_CFLAGS)
-gschem_LDFLAGS = $(LIBSTROKE_LDFLAGS) $(GLIB_LIBS) $(GTK_LIBS) \
+gschem_LDFLAGS = $(GLIB_LIBS) $(GTK_LIBS) \
 	$(GTHREAD_LIBS) $(GUILE_LIBS) $(MINGW_GUI_LDFLAGS)
 gschem_LDADD = \
 	$(top_builddir)/libgedacairo/libgedacairo.la \

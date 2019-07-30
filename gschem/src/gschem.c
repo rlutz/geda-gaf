@@ -92,9 +92,7 @@ void gschem_quit(void)
   s_slib_free();
   /* o_text_freeallfonts();*/
   s_attrib_free();
-#ifdef HAVE_LIBSTROKE
   x_stroke_free ();
-#endif /* HAVE_LIBSTROKE */
   o_undo_cleanup();
   /* s_stroke_free(); no longer needed */
 
@@ -259,9 +257,7 @@ void main_prog(void *closure, int argc, char *argv[])
 
   g_dynwind_window (w_current);
 
-#ifdef HAVE_LIBSTROKE
   x_stroke_init ();
-#endif /* HAVE_LIBSTROKE */
 
   for (i = argv_index; i < argc; i++) {
 

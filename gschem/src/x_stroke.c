@@ -21,7 +21,6 @@
 
 #include "gschem.h"
 
-#ifdef HAVE_LIBSTROKE
 #include <stroke.h>
 
 /*
@@ -203,5 +202,3 @@ x_stroke_translate_and_execute (GschemToplevel *w_current)
 
   return 0;
 }
-
-#endif /* HAVE_LIBSTROKE */

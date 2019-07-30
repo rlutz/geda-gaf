@@ -30,9 +30,7 @@
 
 
 /* used for the stroke stuff */
-#ifdef HAVE_LIBSTROKE
 static int DOING_STROKE = FALSE;
-#endif /* HAVE_LIBSTROKE */
 
 /*! \brief Redraws the view when widget is exposed.
  *
@@ -261,11 +259,9 @@ x_event_button_pressed(GschemPageView *page_view, GdkEventButton *event, GschemT
         scm_dynwind_end ();
       }
       break;
-#ifdef HAVE_LIBSTROKE
       case(STROKE):
       DOING_STROKE=TRUE;
       break;
-#endif /* HAVE_LIBSTROKE */
 
       case(MID_MOUSEPAN_ENABLED):
       gschem_page_view_pan_start (page_view, (int) event->x, (int) event->y);
@@ -421,12 +417,10 @@ x_event_button_released (GschemPageView *page_view, GdkEventButton *event, Gsche
         }
       break;
 
-#ifdef HAVE_LIBSTROKE
       case(STROKE):
-      DOING_STROKE = FALSE;
-      x_stroke_translate_and_execute (w_current);
+        DOING_STROKE = FALSE;
+        x_stroke_translate_and_execute (w_current);
       break;
-#endif /* HAVE_LIBSTROKE */
 
       case(MID_MOUSEPAN_ENABLED):
         if (gschem_page_view_pan_end (page_view) && w_current->undo_panzoom) {
@@ -475,12 +469,10 @@ x_event_motion (GschemPageView *page_view, GdkEventMotion *event, GschemToplevel
   /*  printf("MOTION!\n");*/
 #endif
 
-#ifdef HAVE_LIBSTROKE
   if (DOING_STROKE == TRUE) {
     x_stroke_record (w_current, event->x, event->y);
     return(0);
   }
-#endif /* HAVE_LIBSTROKE */
 
   /* skip the moving event if there are other moving events in the
      gdk event queue (Werner)

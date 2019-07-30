@@ -52,11 +52,7 @@ int   default_log_window = MAP_ON_STARTUP;
 int   default_log_window_type = DECORATED;
 int   default_third_button = POPUP_ENABLED;
 int   default_third_button_cancel = TRUE;
-#ifdef HAVE_LIBSTROKE
 int   default_middle_button = STROKE;
-#else
-int   default_middle_button = REPEAT;
-#endif
 int   default_scroll_wheel = SCROLL_WHEEL_CLASSIC;
 int   default_net_consolidate = TRUE;
 int   default_file_preview = FALSE;

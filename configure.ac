@@ -165,8 +165,6 @@ AX_OPTION_XDG_DATA
 AX_OPTION_KDE3_DATA
 # XDG database updates
 AX_OPTION_XDG_DB
-# libstroke support
-AX_OPTION_STROKE
 # gattrib
 AX_OPTION_GATTRIB
 

@@ -254,20 +254,11 @@ void i_update_middle_button (GschemToplevel *w_current,
           pgettext ("mmb", "Action"));
       break;
 
-#ifdef HAVE_LIBSTROKE
     case(STROKE):
       gschem_bottom_widget_set_middle_button_text (
           GSCHEM_BOTTOM_WIDGET (w_current->bottom_widget),
           pgettext ("mmb", "Stroke"));
-    break;
-#else
-    /* remove this case eventually and make it a null case */
-    case(STROKE):
-      gschem_bottom_widget_set_middle_button_text (
-          GSCHEM_BOTTOM_WIDGET (w_current->bottom_widget),
-          pgettext ("mmb", "none"));
       break;
-#endif
 
     case(REPEAT):
       if ((string != NULL) && (action != NULL))

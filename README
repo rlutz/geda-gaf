@@ -105,10 +105,6 @@ The following tools and libraries are *highly recommended*:
 
 The following tools and libraries are optional:
 
- - `libstroke', a stroke and gesture recognition library.  If this is
-   available, gschem will support mouse gesture recognition.
-   <http://www.etla.net/libstroke/>
-
  - The `doxygen' API documentation tool.  This is required for
    building the gEDA developer API documentation, not for the regular
    user documentation.  <http://www.stack.nl/~dimitri/doxygen/>
