@@ -50,10 +50,8 @@ static GtkWidget *pagesel_create_widget (GschemDockable *dockable);
  */
 void x_pagesel_update (GschemToplevel *w_current)
 {
-  if (w_current->pagesel_dockable != NULL) {
-    g_assert (GSCHEM_IS_PAGESEL_DOCKABLE (w_current->pagesel_dockable));
+  if (w_current->pagesel_dockable != NULL)
     pagesel_update (GSCHEM_PAGESEL_DOCKABLE (w_current->pagesel_dockable));
-  }
 
   PAGE *page = gschem_page_view_get_page (gschem_toplevel_get_current_page_view (w_current));
   if (page == NULL) {
@@ -510,7 +508,7 @@ static void pagesel_update (GschemPageselDockable *pagesel)
   PAGE *p_current;
   GList *iter;
 
-  g_assert (GSCHEM_IS_PAGESEL_DOCKABLE (pagesel));
+  g_return_if_fail (GSCHEM_IS_PAGESEL_DOCKABLE (pagesel));
 
   if (GSCHEM_PAGESEL_DOCKABLE (pagesel)->treeview == NULL)
     return;
