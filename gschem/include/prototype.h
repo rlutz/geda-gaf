@@ -154,7 +154,6 @@ void o_invalidate_rect(GschemToplevel *w_current, int x1, int y1, int x2, int y2
 void o_invalidate(GschemToplevel *w_current, OBJECT *object);
 void o_invalidate_glist(GschemToplevel *w_current, GList *list);
 /* o_box.c */
-void o_box_draw(GschemToplevel *w_current, OBJECT *o_current);
 void o_box_invalidate_rubber(GschemToplevel *w_current);
 void o_box_start(GschemToplevel *w_current, int x, int y);
 void o_box_end(GschemToplevel *w_current, int x, int y);
@@ -173,7 +172,6 @@ void o_bus_motion(GschemToplevel *w_current, int x, int y);
 void o_bus_draw_rubber (GschemToplevel *w_current, EdaRenderer *renderer);
 void o_bus_invalidate_rubber(GschemToplevel *w_current);
 /* o_circle.c */
-void o_circle_draw(GschemToplevel *w_current, OBJECT *o_current);
 void o_circle_invalidate_rubber(GschemToplevel *w_current);
 void o_circle_start(GschemToplevel *w_current, int x, int y);
 void o_circle_end(GschemToplevel *w_current, int x, int y);
@@ -369,7 +367,6 @@ void slot_edit_dialog(GschemToplevel *w_current, const char *count, const char *
 void about_dialog(GschemToplevel *w_current);
 void coord_display_update(GschemToplevel *w_current, int x, int y);
 void coord_dialog(GschemToplevel *w_current, int x, int y);
-char *index2functionstring(int index);
 void x_dialog_hotkeys(GschemToplevel *w_current);
 void x_dialog_raise_all(GschemToplevel *w_current);
 
