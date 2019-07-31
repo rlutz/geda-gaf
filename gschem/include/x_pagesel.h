@@ -42,5 +42,3 @@ struct _Pagesel {
 
 
 GType pagesel_get_type (void);
-
-void pagesel_update (Pagesel *pagesel);
