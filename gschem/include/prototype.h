@@ -425,6 +425,10 @@ void x_linecapcb_set_index (GtkWidget *widget, int index);
 GtkWidget* x_linetypecb_new ();
 int x_linetypecb_get_index (GtkWidget *widget);
 void x_linetypecb_set_index (GtkWidget *widget, int index);
+/* x_lowlevel.c */
+PAGE *x_lowlevel_open_page (GschemToplevel *w_current, const gchar *filename);
+gint x_lowlevel_save_page (GschemToplevel *w_current, PAGE *page, const gchar *filename);
+void x_lowlevel_close_page (GschemToplevel *w_current, PAGE *page);
 /* x_misc.c */
 gboolean x_show_uri (GschemToplevel *w_current, const gchar *buf, GError **err);
 /* x_menus.c */
@@ -465,10 +469,7 @@ void x_window_setup_draw_events(GschemToplevel *w_current);
 void x_window_create_main(GschemToplevel *w_current);
 void x_window_close(GschemToplevel *w_current);
 void x_window_close_all(GschemToplevel *w_current);
-PAGE *x_window_open_page (GschemToplevel *w_current, const gchar *filename);
 void x_window_set_current_page (GschemToplevel *w_current, PAGE *page);
-gint x_window_save_page (GschemToplevel *w_current, PAGE *page, const gchar *filename);
-void x_window_close_page (GschemToplevel *w_current, PAGE *page);
 void x_window_set_default_icon (void);
 void x_window_init_icons (void);
 GschemToplevel* x_window_new (TOPLEVEL *toplevel);

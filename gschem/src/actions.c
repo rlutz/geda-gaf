@@ -157,7 +157,7 @@ DEFINE_ACTION (file_new,
   PAGE *page;
 
   /* create a new page */
-  page = x_window_open_page (w_current, NULL);
+  page = x_lowlevel_open_page (w_current, NULL);
   g_return_if_fail (page != NULL);
 
   x_window_set_current_page (w_current, page);
@@ -215,7 +215,7 @@ DEFINE_ACTION (file_save,
   if (strstr(page->page_filename, untitled_name)) {
     x_fileselect_save (w_current);
   } else {
-    x_window_save_page (w_current, page, page->page_filename);
+    x_lowlevel_save_page (w_current, page, page->page_filename);
   }
   g_free (untitled_name);
 }
@@ -301,12 +301,12 @@ DEFINE_ACTION (page_revert,
   patch_descend = page_current->patch_descend;
 
   /* delete the page, then re-open the file as a new page */
-  x_window_close_page (w_current, page_current);
+  x_lowlevel_close_page (w_current, page_current);
 
   /* Force symbols to be re-loaded from disk */
   s_clib_refresh();
 
-  page = x_window_open_page (w_current, filename);
+  page = x_lowlevel_open_page (w_current, filename);
   g_return_if_fail (page != NULL);
 
   /* make sure we maintain the hierarchy info */
@@ -339,7 +339,7 @@ DEFINE_ACTION (page_close,
     return;
   }
 
-  x_window_close_page (w_current, page);
+  x_lowlevel_close_page (w_current, page);
 }
 
 DEFINE_ACTION (file_print,
@@ -381,7 +381,7 @@ DEFINE_ACTION (file_new_window,
   w_current_new = x_window_new (NULL);
   g_return_if_fail (w_current_new != NULL);
 
-  page = x_window_open_page (w_current_new, NULL);
+  page = x_lowlevel_open_page (w_current_new, NULL);
   g_return_if_fail (page != NULL);
 
   x_window_set_current_page (w_current_new, page);
@@ -2071,7 +2071,7 @@ DEFINE_ACTION (hierarchy_up,
   } else {
     if (page->CHANGED && !x_dialog_close_changed_page (w_current, page))
       return;
-    x_window_close_page (w_current, page);
+    x_lowlevel_close_page (w_current, page);
     x_window_set_current_page(w_current, up_page);
   }
 }

@@ -93,6 +93,7 @@ gschem/src/x_grid_size_sb.c
 gschem/src/x_image.c
 gschem/src/x_linecapcb.c
 gschem/src/x_linetypecb.c
+gschem/src/x_lowlevel.c
 gschem/src/x_menus.c
 gschem/src/x_misc.c
 gschem/src/x_newtext.c

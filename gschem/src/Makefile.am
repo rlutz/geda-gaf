@@ -112,6 +112,7 @@ gschem_SOURCES = \
 	x_integerls.c \
 	x_linecapcb.c \
 	x_linetypecb.c \
+	x_lowlevel.c \
 	x_menus.c \
 	x_misc.c \
 	x_newtext.c \
