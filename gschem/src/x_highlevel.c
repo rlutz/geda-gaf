@@ -192,22 +192,37 @@ x_highlevel_revert_page (GschemToplevel *w_current, PAGE *page)
     GtkWidget *dialog;
     int response;
 
-    dialog = gtk_message_dialog_new (GTK_WINDOW (w_current->main_window),
-                                     GTK_DIALOG_DESTROY_WITH_PARENT,
-                                     GTK_MESSAGE_QUESTION,
-                                     GTK_BUTTONS_YES_NO,
-                                     _("Really revert page?"));
+    gchar *basename = g_path_get_basename (page->page_filename);
+    dialog = gtk_message_dialog_new_with_markup (
+      GTK_WINDOW (w_current->main_window),
+      GTK_DIALOG_DESTROY_WITH_PARENT,
+      GTK_MESSAGE_WARNING,
+      GTK_BUTTONS_NONE,
+      _("<big><b>Really revert \"%s\"?</b></big>"),
+      basename);
+    g_free (basename);
+    g_object_set (dialog, "secondary-text",
+                  _("By reverting the file to the state saved on disk, "
+                    "you will lose your unsaved changes, including all "
+                    "undo information."), NULL);
+    gtk_dialog_add_buttons (GTK_DIALOG (dialog),
+                            GTK_STOCK_CANCEL,          GTK_RESPONSE_CANCEL,
+                            GTK_STOCK_REVERT_TO_SAVED, GTK_RESPONSE_ACCEPT,
+                            NULL);
 
     /* Set the alternative button order (ok, cancel, help) for other systems */
     gtk_dialog_set_alternative_button_order (GTK_DIALOG (dialog),
-                                             GTK_RESPONSE_YES,
-                                             GTK_RESPONSE_NO,
+                                             GTK_RESPONSE_ACCEPT,
+                                             GTK_RESPONSE_CANCEL,
                                              -1);
+
+    gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_ACCEPT);
+    gtk_window_set_title (GTK_WINDOW (dialog), _("gschem"));
 
     response = gtk_dialog_run (GTK_DIALOG (dialog));
     gtk_widget_destroy (dialog);
 
-    if (response != GTK_RESPONSE_YES)
+    if (response != GTK_RESPONSE_ACCEPT)
       return FALSE;
   }
 
