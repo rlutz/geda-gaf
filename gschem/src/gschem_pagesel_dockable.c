@@ -105,7 +105,8 @@ static void pagesel_callback_row_activated (GtkTreeView *tree_view,
                                             GtkTreeViewColumn *column,
                                             gpointer user_data)
 {
-  GschemToplevel *w_current = GSCHEM_DOCKABLE (user_data)->w_current;
+  GschemDockable *dockable = GSCHEM_DOCKABLE (user_data);
+  GschemToplevel *w_current = dockable->w_current;
   GtkTreeModel *model;
   GtkTreeIter iter;
   PAGE *page = NULL;
@@ -116,6 +117,9 @@ static void pagesel_callback_row_activated (GtkTreeView *tree_view,
 
   if (page != w_current->toplevel->page_current)
     x_window_set_current_page (w_current, page);
+
+  if (gschem_dockable_get_state (dockable) == GSCHEM_DOCKABLE_STATE_DIALOG)
+    gschem_dockable_hide (dockable);
 
   gtk_window_present (GTK_WINDOW (w_current->main_window));
   gtk_widget_grab_focus (w_current->drawing_area);
