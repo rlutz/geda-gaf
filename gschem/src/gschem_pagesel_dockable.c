@@ -338,7 +338,6 @@ static GtkWidget *pagesel_create_widget (GschemDockable *dockable)
   treeview = GTK_WIDGET (g_object_new (GTK_TYPE_TREE_VIEW,
                                        /* GtkTreeView */
                                        "model",      store,
-                                       "rules-hint", TRUE,
                                        "tooltip-column", COLUMN_PATH,
                                        NULL));
   g_signal_connect (treeview,
