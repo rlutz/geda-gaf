@@ -118,11 +118,8 @@ static void x_pagesel_callback_response (GtkDialog *dialog,
   GschemToplevel *w_current = GSCHEM_TOPLEVEL (user_data);
 
   switch (arg1) {
-      case PAGESEL_RESPONSE_UPDATE:
-        pagesel_update (PAGESEL (dialog));
-        break;
       case GTK_RESPONSE_DELETE_EVENT:
-      case PAGESEL_RESPONSE_CLOSE:
+      case GTK_RESPONSE_CLOSE:
         g_assert (GTK_WIDGET (dialog) == w_current->pswindow);
         gtk_widget_destroy (GTK_WIDGET (dialog));
         w_current->pswindow = NULL;
@@ -255,7 +252,7 @@ static void pagesel_popup_menu (Pagesel *pagesel,
 				GdkEventButton *event)
 {
   GtkTreePath *path;
-  GtkWidget *menu;
+  GtkWidget *menu, *menuitem;
   struct menuitem_t {
     gchar *label;
     GschemAction *action;
@@ -283,8 +280,19 @@ static void pagesel_popup_menu (Pagesel *pagesel,
 
   /* create the context menu */
   menu = gtk_menu_new();
+
+  menuitem = gtk_image_menu_item_new_with_mnemonic (_("_Refresh List"));
+  gtk_image_menu_item_set_image (
+    GTK_IMAGE_MENU_ITEM (menuitem),
+    gtk_image_new_from_stock (GTK_STOCK_REFRESH, GTK_ICON_SIZE_MENU));
+  g_signal_connect_swapped (menuitem, "activate",
+                            G_CALLBACK (pagesel_update), pagesel);
+  gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
+
+  menuitem = gtk_separator_menu_item_new ();
+  gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
+
   for (tmp = menuitems; tmp->label != NULL; tmp++) {
-    GtkWidget *menuitem;
     if (strcmp (tmp->label, "-") == 0) {
       menuitem = gtk_separator_menu_item_new ();
     } else {
@@ -490,17 +498,9 @@ static void pagesel_init (Pagesel *pagesel)
 
   /* now add buttons in the action area */
   gtk_dialog_add_buttons (GTK_DIALOG (pagesel),
-                          /*  - update button */
-                          GTK_STOCK_REFRESH, PAGESEL_RESPONSE_UPDATE,
                           /*  - close button */
-                          GTK_STOCK_CLOSE,   PAGESEL_RESPONSE_CLOSE,
+                          GTK_STOCK_CLOSE,   GTK_RESPONSE_CLOSE,
                           NULL);
-
-  /* Set the alternative button order (ok, cancel, help) for other systems */
-  gtk_dialog_set_alternative_button_order(GTK_DIALOG(pagesel),
-					  PAGESEL_RESPONSE_UPDATE,
-					  PAGESEL_RESPONSE_CLOSE,
-					  -1);
 
   g_signal_connect( pagesel, "notify::gschem-toplevel",
                     G_CALLBACK( notify_gschem_toplevel_cb ), NULL );

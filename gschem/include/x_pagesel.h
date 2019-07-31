@@ -20,12 +20,6 @@
 
 
 
-typedef enum {
-  PAGESEL_RESPONSE_CLOSE  = 1,
-  PAGESEL_RESPONSE_UPDATE = 2
-} PageselResponseType;
-
-
 #define TYPE_PAGESEL         (pagesel_get_type())
 #define PAGESEL(obj)         (G_TYPE_CHECK_INSTANCE_CAST ((obj), TYPE_PAGESEL, Pagesel))
 #define PAGESEL_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), TYPE_PAGESEL, PageselClass))
