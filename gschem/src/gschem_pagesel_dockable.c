@@ -360,7 +360,21 @@ static GtkWidget *pagesel_create_widget (GschemDockable *dockable)
                     "changed",
                     G_CALLBACK (pagesel_callback_selection_changed),
                     pagesel); 
-  /*   - first column: page name */
+  /*   - first column: changed */
+  renderer = GTK_CELL_RENDERER (
+    g_object_new (GTK_TYPE_CELL_RENDERER_TOGGLE,
+                  /* GtkCellRendererToggle */
+                  "activatable", FALSE,
+                  NULL));
+  column = GTK_TREE_VIEW_COLUMN (
+    g_object_new (GTK_TYPE_TREE_VIEW_COLUMN,
+                  /* GtkTreeViewColumn */
+                  "title", _("Chg"),
+                  NULL));
+  gtk_tree_view_column_pack_start (column, renderer, TRUE);
+  gtk_tree_view_column_add_attribute (column, renderer, "active", COLUMN_CHANGED);
+  gtk_tree_view_append_column (GTK_TREE_VIEW (treeview), column);
+  /*   - second column: page name */
   renderer = GTK_CELL_RENDERER (
     g_object_new (GTK_TYPE_CELL_RENDERER_TEXT,
                   /* GtkCellRendererText */
@@ -370,26 +384,11 @@ static GtkWidget *pagesel_create_widget (GschemDockable *dockable)
     g_object_new (GTK_TYPE_TREE_VIEW_COLUMN,
                   /* GtkTreeViewColumn */
                   "title", _("Filename"),
-                  "min-width", 400,
-                  "resizable", TRUE,
                   NULL));
   gtk_tree_view_column_pack_start (column, renderer, TRUE);
   gtk_tree_view_column_add_attribute (column, renderer, "text", COLUMN_BASENAME);
   gtk_tree_view_append_column (GTK_TREE_VIEW (treeview), column);
-  /*   - second column: changed */
-  renderer = GTK_CELL_RENDERER (
-    g_object_new (GTK_TYPE_CELL_RENDERER_TOGGLE,
-                  /* GtkCellRendererToggle */
-                  "activatable", FALSE,
-                  NULL));
-  column = GTK_TREE_VIEW_COLUMN (
-    g_object_new (GTK_TYPE_TREE_VIEW_COLUMN,
-                  /* GtkTreeViewColumn */
-                  "title", _("Changed"),
-                  NULL));
-  gtk_tree_view_column_pack_start (column, renderer, TRUE);
-  gtk_tree_view_column_add_attribute (column, renderer, "active", COLUMN_CHANGED);
-  gtk_tree_view_append_column (GTK_TREE_VIEW (treeview), column);
+  gtk_tree_view_set_expander_column (GTK_TREE_VIEW (treeview), column);
       
   /* add the treeview to the scrolled window */
   gtk_container_add (GTK_CONTAINER (scrolled_win), treeview);
