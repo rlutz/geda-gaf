@@ -386,7 +386,6 @@ static GtkWidget *pagesel_create_widget (GschemDockable *dockable)
     g_object_new (GTK_TYPE_TREE_VIEW_COLUMN,
                   /* GtkTreeViewColumn */
                   "title", _("Changed"),
-                  "sizing", GTK_TREE_VIEW_COLUMN_FIXED,
                   NULL));
   gtk_tree_view_column_pack_start (column, renderer, TRUE);
   gtk_tree_view_column_add_attribute (column, renderer, "active", COLUMN_CHANGED);
