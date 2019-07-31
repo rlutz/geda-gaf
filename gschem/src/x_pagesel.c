@@ -178,6 +178,27 @@ static void pagesel_callback_selection_changed (GtkTreeSelection *selection,
   x_window_set_current_page (w_current, page);
 }
 
+static void pagesel_callback_row_activated (GtkTreeView *tree_view,
+                                            GtkTreePath *path,
+                                            GtkTreeViewColumn *column,
+                                            gpointer user_data)
+{
+  GschemToplevel *w_current = GSCHEM_DIALOG (user_data)->w_current;
+  GtkTreeModel *model;
+  GtkTreeIter iter;
+  PAGE *page = NULL;
+
+  model = gtk_tree_view_get_model (tree_view);
+  gtk_tree_model_get_iter (model, &iter, path);
+  gtk_tree_model_get (model, &iter, COLUMN_PAGE, &page, -1);
+
+  if (page != w_current->toplevel->page_current)
+    x_window_set_current_page (w_current, page);
+
+  gtk_window_present (GTK_WINDOW (w_current->main_window));
+  gtk_widget_grab_focus (w_current->drawing_area);
+}
+
 /*! \todo Finish function documentation!!!
  *  \brief
  *  \par Function Description
@@ -397,6 +418,10 @@ static void pagesel_init (Pagesel *pagesel)
                                        "rules-hint", TRUE,
                                        "tooltip-column", COLUMN_PATH,
                                        NULL));
+  g_signal_connect (treeview,
+                    "row-activated",
+                    G_CALLBACK (pagesel_callback_row_activated),
+                    pagesel);
   g_signal_connect (treeview,
                     "button-press-event",
                     G_CALLBACK (pagesel_callback_button_pressed),
