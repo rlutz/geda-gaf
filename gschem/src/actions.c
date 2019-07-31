@@ -2145,7 +2145,7 @@ DEFINE_ACTION (page_manager,
                NULL,
                ACTUATE)
 {
-  x_pagesel_open (w_current);
+  gschem_dockable_present (w_current->pagesel_dockable);
 }
 
 /*! \section tools-menu Tools Menu Callback Functions */

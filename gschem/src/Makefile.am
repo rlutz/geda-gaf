@@ -53,6 +53,7 @@ gschem_SOURCES = \
 	gschem_options_dockable.c \
 	gschem_page_geometry.c \
 	gschem_page_view.c \
+	gschem_pagesel_dockable.c \
 	gschem_patch.c \
 	gschem_patch_dockable.c \
 	gschem_pin_type_combo.c \
@@ -114,7 +115,6 @@ gschem_SOURCES = \
 	x_menus.c \
 	x_misc.c \
 	x_newtext.c \
-	x_pagesel.c \
 	x_print.c \
 	x_rc.c \
 	x_script.c \

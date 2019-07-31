@@ -438,9 +438,7 @@ void x_menus_create_toolbar(GschemToplevel *w_current);
 /* gschem_multiattrib_dockable.c */
 void x_multiattrib_update (GschemToplevel *w_current);
 /* x_multimulti.c */
-/* x_pagesel.c */
-void x_pagesel_open (GschemToplevel *w_current);
-void x_pagesel_close (GschemToplevel *w_current);
+/* gschem_pagesel_dockable.c */
 void x_pagesel_update (GschemToplevel *w_current);
 /* gschem_patch_dockable.c */
 void x_patch_import (GschemToplevel *w_current);

@@ -33,7 +33,6 @@ typedef struct st_gschem_toplevel GschemToplevel;
 #include "i_vars.h"
 #include "gschem_preview.h"
 #include "x_dialog.h"
-#include "x_pagesel.h"
 #include "x_states.h"
 #include "gschem_swatch_column_renderer.h"
 #include "gschem_fill_swatch_cell_renderer.h"

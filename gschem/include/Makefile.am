@@ -3,7 +3,6 @@
 noinst_HEADERS = \
 	globals.h i_vars.h prototype.h x_dialog.h x_states.h \
 	gettext.h \
-	x_pagesel.h \
 	gschem.h \
 	gschemhotkeystore.h \
 	gschem_accel_label.h \
@@ -29,6 +28,7 @@ noinst_HEADERS = \
 	gschem_options_dockable.h \
 	gschem_page_geometry.h \
 	gschem_page_view.h \
+	gschem_pagesel_dockable.h \
 	gschem_patch.h \
 	gschem_patch_dockable.h \
 	gschem_pin_type_combo.h \

@@ -39,6 +39,7 @@ gschem/src/gschem_options.c
 gschem/src/gschem_options_dockable.c
 gschem/src/gschem_page_geometry.c
 gschem/src/gschem_page_view.c
+gschem/src/gschem_pagesel_dockable.c
 gschem/src/gschem_patch.c
 gschem/src/gschem_patch_dockable.c
 gschem/src/gschem_pin_type_combo.c
@@ -94,7 +95,6 @@ gschem/src/x_linetypecb.c
 gschem/src/x_menus.c
 gschem/src/x_misc.c
 gschem/src/x_newtext.c
-gschem/src/x_pagesel.c
 gschem/src/x_print.c
 gschem/src/x_rc.c
 gschem/src/x_script.c

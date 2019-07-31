@@ -33,6 +33,7 @@
 #include "gschem_log_dockable.h"
 #include "gschem_find_text_dockable.h"
 #include "gschem_patch_dockable.h"
+#include "gschem_pagesel_dockable.h"
 
 #define GSCHEM_THEME_ICON_NAME "geda-gschem"
 
@@ -805,6 +806,16 @@ void x_window_create_main(GschemToplevel *w_current)
     "gschem-toplevel", w_current,
     NULL);
 
+  w_current->pagesel_dockable = g_object_new (
+    GSCHEM_TYPE_PAGESEL_DOCKABLE,
+    "title", _("Pages"),
+    "settings-name", "pagesel",
+    "initial-state", GSCHEM_DOCKABLE_STATE_HIDDEN,
+    "initial-width", 515,
+    "initial-height", 180,
+    "gschem-toplevel", w_current,
+    NULL);
+
   gschem_dockable_initialize_toplevel (w_current);
 
 
@@ -891,8 +902,6 @@ void x_window_close(GschemToplevel *w_current)
   if (w_current->aewindow)
   gtk_widget_destroy(w_current->aewindow);
 
-  x_pagesel_close (w_current);
-
   if (w_current->hkwindow)
   gtk_widget_destroy(w_current->hkwindow);
 
@@ -913,6 +922,7 @@ void x_window_close(GschemToplevel *w_current)
   g_clear_object (&w_current->log_dockable);
   g_clear_object (&w_current->find_text_dockable);
   g_clear_object (&w_current->patch_dockable);
+  g_clear_object (&w_current->pagesel_dockable);
 
   if (g_list_length (global_window_list) == 1) {
     /* no more window after this one, remember to quit */

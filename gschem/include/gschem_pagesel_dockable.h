@@ -20,25 +20,25 @@
 
 
 
-#define TYPE_PAGESEL         (pagesel_get_type())
-#define PAGESEL(obj)         (G_TYPE_CHECK_INSTANCE_CAST ((obj), TYPE_PAGESEL, Pagesel))
-#define PAGESEL_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), TYPE_PAGESEL, PageselClass))
-#define IS_PAGESEL(obj)      (G_TYPE_CHECK_INSTANCE_TYPE ((obj), TYPE_PAGESEL))
+#define GSCHEM_TYPE_PAGESEL_DOCKABLE         (gschem_pagesel_dockable_get_type())
+#define GSCHEM_PAGESEL_DOCKABLE(obj)         (G_TYPE_CHECK_INSTANCE_CAST ((obj), GSCHEM_TYPE_PAGESEL_DOCKABLE, GschemPageselDockable))
+#define GSCHEM_PAGESEL_DOCKABLE_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), GSCHEM_TYPE_PAGESEL_DOCKABLE, GschemPageselDockableClass))
+#define GSCHEM_IS_PAGESEL_DOCKABLE(obj)      (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GSCHEM_TYPE_PAGESEL_DOCKABLE))
 
 
-typedef struct _PageselClass PageselClass;
-typedef struct _Pagesel      Pagesel;
+typedef struct _GschemPageselDockableClass GschemPageselDockableClass;
+typedef struct _GschemPageselDockable      GschemPageselDockable;
 
 
-struct _PageselClass {
+struct _GschemPageselDockableClass {
   GschemDialogClass parent_class;
 };
 
-struct _Pagesel {
+struct _GschemPageselDockable {
   GschemDialog parent_instance;
 
   GtkTreeView *treeview;
 };
 
 
-GType pagesel_get_type (void);
+GType gschem_pagesel_dockable_get_type (void);

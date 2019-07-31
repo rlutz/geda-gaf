@@ -64,7 +64,6 @@ struct st_gschem_toplevel {
   /* ------------ */
   GtkWidget *sowindow;                  /* Script open */
   GtkWidget *pfswindow;                 /* Picture File Selection window */
-  GtkWidget *pswindow;                  /* page select */
   GtkWidget *tiwindow;                  /* text input */
   GtkWidget *sewindow;                  /* slot edit */
   GtkWidget *aawindow;                  /* arc attribs */
@@ -87,6 +86,7 @@ struct st_gschem_toplevel {
   GschemDockable *log_dockable;
   GschemDockable *find_text_dockable;
   GschemDockable *patch_dockable;
+  GschemDockable *pagesel_dockable;
 
   /* -------------------------------------- */
   /* Models for widgets inside dialog boxes */

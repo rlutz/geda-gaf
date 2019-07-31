@@ -186,7 +186,6 @@ GschemToplevel *gschem_toplevel_new ()
   /* ------------ */
   w_current->sowindow     = NULL;
   w_current->pfswindow    = NULL;
-  w_current->pswindow     = NULL;
   w_current->tiwindow     = NULL;
   w_current->sewindow     = NULL;
   w_current->aawindow     = NULL;
@@ -209,6 +208,7 @@ GschemToplevel *gschem_toplevel_new ()
   w_current->log_dockable               = NULL;
   w_current->find_text_dockable         = NULL;
   w_current->patch_dockable             = NULL;
+  w_current->pagesel_dockable           = NULL;
 
   /* -------------------------------------- */
   /* Models for widgets inside dialog boxes */
