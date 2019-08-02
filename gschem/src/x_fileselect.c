@@ -225,12 +225,15 @@ x_fileselect_open(GschemToplevel *w_current)
  *  The function updates the user interface.
  *
  *  \param [in] w_current The GschemToplevel environment.
+ *
+ *  \returns \c TRUE if the file was saved, \c FALSE otherwise
  */
-void
+gboolean
 x_fileselect_save (GschemToplevel *w_current)
 {
   TOPLEVEL *toplevel = gschem_toplevel_get_toplevel (w_current);
   GtkWidget *dialog;
+  gboolean success = FALSE;
 
   dialog = gtk_file_chooser_dialog_new (_("Save as..."),
                                         GTK_WINDOW(w_current->main_window),
@@ -302,15 +305,15 @@ x_fileselect_save (GschemToplevel *w_current)
     }
     /* try saving current page of toplevel to file filename */
     if (filename != NULL) {
-      x_lowlevel_save_page (w_current,
-                            w_current->toplevel->page_current,
-                            filename);
+      success = x_lowlevel_save_page (w_current,
+                                      w_current->toplevel->page_current,
+                                      filename);
     }
 
     g_free (filename);
   }
   gtk_widget_destroy (dialog);
-
+  return success;
 }
 
 /*! \brief Load/Backup selection dialog.

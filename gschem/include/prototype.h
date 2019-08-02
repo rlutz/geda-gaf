@@ -396,7 +396,7 @@ gboolean x_event_get_pointer_position (GschemToplevel *w_current, gboolean snapp
 void x_compselect_deselect (GschemToplevel *w_current);
 /* x_fileselect.c */
 void x_fileselect_open(GschemToplevel *w_current);
-void x_fileselect_save(GschemToplevel *w_current);
+gboolean x_fileselect_save(GschemToplevel *w_current);
 int x_fileselect_load_backup(void *user_data, GString *message);
 /* x_fstylecb.c */
 GtkWidget* x_fstylecb_new ();
@@ -408,9 +408,9 @@ int x_grid_query_drawn_spacing(GschemToplevel *w_current);
 /* x_grid_size_sb.c */
 GtkWidget *x_grid_size_sb_new (GschemToplevel *w_current);
 /* x_highlevel.c */
-void x_highlevel_save_page (GschemToplevel *w_current, PAGE *page);
-void x_highlevel_revert_page (GschemToplevel *w_current, PAGE *page);
-void x_highlevel_close_page (GschemToplevel *w_current, PAGE *page);
+gboolean x_highlevel_save_page (GschemToplevel *w_current, PAGE *page);
+gboolean x_highlevel_revert_page (GschemToplevel *w_current, PAGE *page);
+gboolean x_highlevel_close_page (GschemToplevel *w_current, PAGE *page);
 /* x_image.c */
 void x_image_lowlevel(GschemToplevel *w_current, const char* filename,
 		      int desired_width, int desired_height, char *filetype);
@@ -432,8 +432,8 @@ void x_linetypecb_set_index (GtkWidget *widget, int index);
 /* x_lowlevel.c */
 PAGE *x_lowlevel_new_page (GschemToplevel *w_current, const gchar *filename);
 PAGE *x_lowlevel_open_page (GschemToplevel *w_current, const gchar *filename);
-gint x_lowlevel_save_page (GschemToplevel *w_current, PAGE *page, const gchar *filename);
-void x_lowlevel_revert_page (GschemToplevel *w_current, PAGE *page);
+gboolean x_lowlevel_save_page (GschemToplevel *w_current, PAGE *page, const gchar *filename);
+gboolean x_lowlevel_revert_page (GschemToplevel *w_current, PAGE *page);
 void x_lowlevel_close_page (GschemToplevel *w_current, PAGE *page);
 /* x_misc.c */
 gboolean x_show_uri (GschemToplevel *w_current, const gchar *buf, GError **err);

@@ -220,25 +220,25 @@ x_lowlevel_open_page (GschemToplevel *w_current, const gchar *filename)
  * \param [in] page       the page to save
  * \param [in] filename   the name of the file to which to save the page
  *
- * \returns \c 1 if the page could be saved, \c 0 otherwise
+ * \returns \c TRUE if the page could be saved, \c FALSE otherwise
  */
-gint
+gboolean
 x_lowlevel_save_page (GschemToplevel *w_current, PAGE *page,
                       const gchar *filename)
 {
   TOPLEVEL *toplevel = gschem_toplevel_get_toplevel (w_current);
   const gchar *log_msg, *state_msg;
-  gint ret;
+  gboolean success;
   GError *err = NULL;
 
-  g_return_val_if_fail (toplevel != NULL, 0);
-  g_return_val_if_fail (page     != NULL, 0);
-  g_return_val_if_fail (filename != NULL, 0);
+  g_return_val_if_fail (toplevel != NULL, FALSE);
+  g_return_val_if_fail (page     != NULL, FALSE);
+  g_return_val_if_fail (filename != NULL, FALSE);
 
   /* try saving page to filename */
-  ret = (gint)f_save (toplevel, page, filename, &err);
+  success = f_save (toplevel, page, filename, &err) == 1;
 
-  if (ret != 1) {
+  if (!success) {
     log_msg = _("Could NOT save page [%s]\n");
     state_msg = _("Error while trying to save");
 
@@ -286,7 +286,7 @@ x_lowlevel_save_page (GschemToplevel *w_current, PAGE *page,
 
   i_set_state_msg (w_current, SELECT, state_msg);
 
-  return ret;
+  return success;
 }
 
 
@@ -301,14 +301,16 @@ x_lowlevel_save_page (GschemToplevel *w_current, PAGE *page,
  *
  * \param [in] w_current  the toplevel environment
  * \param [in] page       the page to revert
+ *
+ * \returns \c TRUE if the page was successfully reloaded, \c FALSE otherwise
  */
-void
+gboolean
 x_lowlevel_revert_page (GschemToplevel *w_current, PAGE *page)
 {
   TOPLEVEL *toplevel = gschem_toplevel_get_toplevel (w_current);
-  g_return_if_fail (toplevel != NULL);
-  g_return_if_fail (page != NULL);
-  g_return_if_fail (page->pid != -1);
+  g_return_val_if_fail (toplevel != NULL, FALSE);
+  g_return_val_if_fail (page != NULL,     FALSE);
+  g_return_val_if_fail (page->pid != -1,  FALSE);
 
   /* If we're reverting whilst inside an action, re-wind the
      page contents back to their state before we started */
@@ -351,7 +353,7 @@ x_lowlevel_revert_page (GschemToplevel *w_current, PAGE *page)
     }
 
     /* x_lowlevel_open_page has already displayed an error message */
-    return;
+    return FALSE;
   }
 
   /* make sure we maintain the hierarchy info */
@@ -365,6 +367,7 @@ x_lowlevel_revert_page (GschemToplevel *w_current, PAGE *page)
     x_window_set_current_page (w_current, page);
 
   x_pagesel_update (w_current);
+  return TRUE;
 }
 
 

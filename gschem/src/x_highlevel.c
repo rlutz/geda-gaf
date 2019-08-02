@@ -37,23 +37,27 @@
  *
  * \param [in] w_current  the toplevel environment
  * \param [in] page       the page to save
+ *
+ * \returns \c TRUE if the page was saved, \c FALSE otherwise
  */
-void
+gboolean
 x_highlevel_save_page (GschemToplevel *w_current, PAGE *page)
 {
   EdaConfig *cfg;
   gchar *untitled_name;
+  gboolean success;
 
   /*! \bug This is a dreadful way of figuring out whether a page is
    *  newly-created or not. */
   cfg = eda_config_get_context_for_path (page->page_filename);
   untitled_name = eda_config_get_string (cfg, "gschem", "default-filename", NULL);
   if (strstr(page->page_filename, untitled_name)) {
-    x_fileselect_save (w_current);
+    success = x_fileselect_save (w_current);
   } else {
-    x_lowlevel_save_page (w_current, page, page->page_filename);
+    success = x_lowlevel_save_page (w_current, page, page->page_filename);
   }
   g_free (untitled_name);
+  return success;
 }
 
 
@@ -64,8 +68,10 @@ x_highlevel_save_page (GschemToplevel *w_current, PAGE *page)
  *
  * \param [in] w_current  the toplevel environment
  * \param [in] page       the page to revert
+ *
+ * \returns \c TRUE if the page was successfully reloaded, \c FALSE otherwise
  */
-void
+gboolean
 x_highlevel_revert_page (GschemToplevel *w_current, PAGE *page)
 {
   int response;
@@ -88,10 +94,10 @@ x_highlevel_revert_page (GschemToplevel *w_current, PAGE *page)
     gtk_widget_destroy (dialog);
 
     if (response != GTK_RESPONSE_YES)
-      return;
+      return FALSE;
   }
 
-  x_lowlevel_revert_page (w_current, page);
+  return x_lowlevel_revert_page (w_current, page);
 }
 
 
@@ -104,14 +110,17 @@ x_highlevel_revert_page (GschemToplevel *w_current, PAGE *page)
  *
  * \param [in] w_current  the toplevel environment
  * \param [in] page       the page to close
+ *
+ * \returns \c TRUE if the page was closed, \c FALSE otherwise
  */
-void
+gboolean
 x_highlevel_close_page (GschemToplevel *w_current, PAGE *page)
 {
   if (page->CHANGED
       && !x_dialog_close_changed_page (w_current, page)) {
-    return;
+    return FALSE;
   }
 
   x_lowlevel_close_page (w_current, page);
+  return TRUE;
 }
