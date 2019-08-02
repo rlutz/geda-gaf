@@ -32,28 +32,30 @@
 #include "actions.decl.x"
 
 
-/*! \brief Opens a new page from a file.
- *  \par Function Description
- *  This function opens the file whose name is <B>filename</B> in a
- *  new PAGE of <B>toplevel</B>.
+/*! \brief Open a new page from a file.
  *
- *  If there is no page for <B>filename</B> in <B>toplevel</B>'s list
- *  of pages, it creates a new PAGE, loads the file in it and returns
- *  a pointer on the new page. Otherwise it returns a pointer on the
- *  existing page.
+ * Opens the file whose name is <B>filename</B> in a new PAGE of
+ * <B>toplevel</B>.
  *
- *  If the filename passed is NULL, this function creates an empty,
- *  untitled page.  The name of the untitled page is build from
- *  configuration data ('untitled-name') and a counter for uniqueness.
+ * If there is no page for <B>filename</B> in <B>toplevel</B>'s list
+ * of pages, it creates a new PAGE, loads the file in it and returns a
+ * pointer on the new page.  Otherwise it returns a pointer on the
+ * existing page.
  *
- *  The opened page becomes the current page of <B>toplevel</B>.
+ * If the filename passed is \c NULL, this function creates an empty,
+ * untitled page.  The name of the untitled page is build from
+ * configuration data ('untitled-name') and a counter for uniqueness.
  *
- *  \param [in] w_current The toplevel environment.
- *  \param [in] filename The name of the file to open or NULL for a blank page.
- *  \returns A pointer on the new page.
+ * The opened page becomes the current page of <B>toplevel</B>.
  *
- *  \bug This code should check to make sure any untitled filename
- *  does not conflict with a file on disk.
+ * \param [in] w_current  the toplevel environment
+ * \param [in] filename   the name of the file to open, or \c NULL for
+ *                        a blank page
+ *
+ * \returns a pointer on the new page
+ *
+ * \bug This code should check to make sure any untitled filename does
+ *      not conflict with a file on disk.
  */
 PAGE*
 x_lowlevel_open_page (GschemToplevel *w_current, const gchar *filename)
@@ -140,22 +142,22 @@ x_lowlevel_open_page (GschemToplevel *w_current, const gchar *filename)
 }
 
 
-/*! \brief Saves a page to a file.
- *  \par Function Description
- *  This function saves the page <B>page</B> to a file named
- *  <B>filename</B>.
+/*! \brief Save a page to a file.
  *
- *  It returns the value returned by function <B>f_save()</B> trying
- *  to save page <B>page</B> to file <B>filename</B> (1 on success, 0
- *  on failure).
+ * Saves the page <B>page</B> to a file named <B>filename</B>.
  *
- *  <B>page</B> may not be the current page of <B>toplevel</B>. The
- *  current page of <B>toplevel</B> is not affected by this function.
+ * Returns the value returned by function <B>f_save()</B> trying to
+ * save page <B>page</B> to file <B>filename</B> (1 on success, 0 on
+ * failure).
  *
- *  \param [in] w_current The toplevel environment.
- *  \param [in] page      The page to save.
- *  \param [in] filename  The name of the file in which to save page.
- *  \returns 1 on success, 0 otherwise.
+ * <B>page</B> may not be the current page of <B>toplevel</B>.  The
+ * current page of <B>toplevel</B> is not affected by this function.
+ *
+ * \param [in] w_current  the toplevel environment
+ * \param [in] page       the page to save
+ * \param [in] filename   the name of the file in which to save page
+ *
+ * \returns \c 1 on success, \c 0 otherwise
  */
 gint
 x_lowlevel_save_page (GschemToplevel *w_current, PAGE *page, const gchar *filename)
@@ -223,16 +225,15 @@ x_lowlevel_save_page (GschemToplevel *w_current, PAGE *page, const gchar *filena
 }
 
 
-/*! \brief Closes a page.
- *  \par Function Description
- *  This function closes the page <B>page</B> of toplevel
- *  <B>toplevel</B>.
+/*! \brief Close a page.
  *
- *  If necessary, the current page of <B>toplevel</B> is changed to
- *  the next valid page or to a new untitled page.
+ * Closes the page <B>page</B> of toplevel <B>toplevel</B>.
  *
- *  \param [in] w_current The toplevel environment.
- *  \param [in] page      The page to close.
+ * If necessary, the current page of <B>toplevel</B> is changed to the
+ * next valid page or to a new untitled page.
+ *
+ * \param [in] w_current  the toplevel environment
+ * \param [in] page       the page to close
  */
 void
 x_lowlevel_close_page (GschemToplevel *w_current, PAGE *page)
