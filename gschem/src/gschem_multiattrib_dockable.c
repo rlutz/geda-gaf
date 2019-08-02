@@ -452,6 +452,59 @@ static void multiattrib_popup_menu (GschemMultiattribDockable *multiattrib,
                                     GdkEventButton *event);
 
 
+/*!\brief Invoke the multi-attribute editor to edit a single attribute.
+ */
+void
+x_multiattrib_edit_attribute (GschemToplevel *w_current, OBJECT *object)
+{
+  GschemMultiattribDockable *multiattrib =
+    GSCHEM_MULTIATTRIB_DOCKABLE (w_current->multiattrib_dockable);
+  GtkTreeModel *model;
+  GtkTreeIter iter;
+  gboolean valid;
+  GtkTreePath *path;
+
+  /* present editor first to make sure the widget hierarchy exists */
+  gschem_dockable_present (w_current->multiattrib_dockable);
+
+  /* find tree iterator corresponding to the attribute */
+  model = gtk_tree_view_get_model (multiattrib->treeview);
+
+  for (valid = gtk_tree_model_get_iter_first (model, &iter);
+       valid;
+       valid = gtk_tree_model_iter_next (model, &iter)) {
+    GedaList *attr_list;
+    GList *a_iter;
+    gtk_tree_model_get (model, &iter,
+                        COLUMN_ATTRIBUTE_GEDALIST, &attr_list,
+                        -1);
+    for (a_iter = geda_list_get_glist (attr_list);
+         a_iter != NULL; a_iter = a_iter->next)
+      if ((OBJECT *) a_iter->data == object)
+        /* found attribute in list */
+        break;
+
+    g_object_unref (attr_list);
+    if (a_iter != NULL)
+      break;
+  }
+
+  if (!valid) {
+    /* can't find attribute--fall back to single-attribute editor */
+    attrib_edit_dialog (w_current, object, FROM_MENU);
+    return;
+  }
+
+  /* invoke the editor */
+  path = gtk_tree_model_get_path (model, &iter);
+  gtk_widget_grab_focus (GTK_WIDGET (multiattrib->treeview));
+  gtk_tree_view_set_cursor (
+    multiattrib->treeview, path,
+    gtk_tree_view_get_column (multiattrib->treeview, 1), TRUE);
+  gtk_tree_path_free (path);
+}
+
+
 /*! \brief Returns TRUE/FALSE if the given object may have attributes attached.
  *
  *  \par Function Description
