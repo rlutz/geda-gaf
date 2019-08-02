@@ -716,13 +716,10 @@ gboolean
 x_dialog_close_changed_page (GschemToplevel *w_current, PAGE *page)
 {
   GtkWidget *dialog;
-  PAGE *keep_page;
   gint response_id;
   gboolean result = FALSE;
 
   g_return_val_if_fail (page != NULL && page->CHANGED, TRUE);
-
-  keep_page = w_current->toplevel->page_current;
 
   dialog = GTK_WIDGET (g_object_new (TYPE_CLOSE_CONFIRMATION_DIALOG,
                                      "gschem-toplevel", w_current,
@@ -763,9 +760,6 @@ x_dialog_close_changed_page (GschemToplevel *w_current, PAGE *page)
         break;
   }
 
-  /* Switch back to the page we were on if it wasn't the one being closed */
-  x_window_set_current_page (w_current, keep_page);
-
   return result;
 }
 
@@ -791,11 +785,8 @@ x_dialog_close_window (GschemToplevel *w_current)
   GList *iter;
   GtkWidget *dialog;
   PAGE *p_current;
-  PAGE *keep_page;
   GList *unsaved_pages, *p_unsaved;
   gboolean ret = FALSE;
-
-  keep_page = toplevel->page_current;
 
   for ( iter = geda_list_get_glist( toplevel->pages ), unsaved_pages = NULL;
         iter != NULL;
@@ -862,9 +853,6 @@ x_dialog_close_window (GschemToplevel *w_current)
       ret = FALSE;
   }
   g_list_free (unsaved_pages);
-
-  /* Switch back to the page we were on */
-  x_window_set_current_page (w_current, keep_page);
 
   return ret;
 }
