@@ -426,6 +426,7 @@ GtkWidget* x_linetypecb_new ();
 int x_linetypecb_get_index (GtkWidget *widget);
 void x_linetypecb_set_index (GtkWidget *widget, int index);
 /* x_lowlevel.c */
+PAGE *x_lowlevel_new_page (GschemToplevel *w_current, const gchar *filename);
 PAGE *x_lowlevel_open_page (GschemToplevel *w_current, const gchar *filename);
 gint x_lowlevel_save_page (GschemToplevel *w_current, PAGE *page, const gchar *filename);
 void x_lowlevel_close_page (GschemToplevel *w_current, PAGE *page);

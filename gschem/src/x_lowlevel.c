@@ -32,30 +32,24 @@
 #include "actions.decl.x"
 
 
-/*! \brief Open a new page from a file, create a new untitled page
- *         with a titleblock, or find an existing page.
+/*! \brief Create a new untitled page with a titleblock.
  *
- * Creates a new page and loads the file in it.  If there is already a
- * matching page in \a w_current, returns a pointer to the existing
- * page instead.
- *
- * If \c NULL is passed as a filename, creates an untitled page with a
- * titleblock.  The name of the untitled page is build from
+ * If \a filename is \c NULL, the name of the new page is build from
  * configuration data ('untitled-name') and a counter for uniqueness.
  *
  * This function doesn't change the current page of \a w_current.
  *
  * \param [in] w_current  the toplevel environment
- * \param [in] filename   the name of the file to open, or \c NULL to
- *                        create an untitled page with a titleblock
+ * \param [in] filename   the filename for the new page, or \c NULL to
+ *                        generate an untitled filename
  *
- * \returns a pointer to the page
+ * \returns a pointer to the new page
  *
  * \bug This code should check to make sure any untitled filename does
  *      not conflict with a file on disk.
  */
 PAGE*
-x_lowlevel_open_page (GschemToplevel *w_current, const gchar *filename)
+x_lowlevel_new_page (GschemToplevel *w_current, const gchar *filename)
 {
   PAGE *page;
   gchar *fn;
@@ -81,54 +75,92 @@ x_lowlevel_open_page (GschemToplevel *w_current, const gchar *filename)
     fn = g_strdup (filename);
   }
 
-  /* Return existing page if it is already loaded */
-  page = s_page_search (toplevel, fn);
-  if ( page != NULL ) {
-    g_free(fn);
-    return page;
-  }
-
   PAGE *saved_page = toplevel->page_current;
 
   page = s_page_new (toplevel, fn);
   s_page_goto (toplevel, page);
   gschem_toplevel_page_changed (w_current);
 
-  /* Load from file if necessary, otherwise just print a message */
-  if (filename != NULL) {
-    GError *err = NULL;
-    if (!quiet_mode)
-      s_log_message (_("Loading schematic [%s]\n"), fn);
+  /* print a message */
+  if (!quiet_mode)
+    s_log_message (_("New file [%s]\n"),
+                   toplevel->page_current->page_filename);
 
-    if (!f_open (toplevel, page, (gchar *) fn, &err)) {
-      GtkWidget *dialog;
-
-      g_warning ("%s\n", err->message);
-      dialog = gtk_message_dialog_new_with_markup
-        (GTK_WINDOW (w_current->main_window),
-         GTK_DIALOG_DESTROY_WITH_PARENT,
-         GTK_MESSAGE_ERROR,
-         GTK_BUTTONS_CLOSE,
-         _("<b>An error occurred while loading the requested file.</b>\n\nLoading from '%s' failed: %s. The gschem log may contain more information."),
-         fn, err->message);
-      gtk_window_set_title (GTK_WINDOW (dialog), _("Failed to load file"));
-      gtk_dialog_run (GTK_DIALOG (dialog));
-      gtk_widget_destroy (dialog);
-      g_error_free (err);
-    } else {
-      gtk_recent_manager_add_item (recent_manager, g_filename_to_uri(fn, NULL, NULL));
-    }
-  } else {
-    if (!quiet_mode)
-      s_log_message (_("New file [%s]\n"),
-                     toplevel->page_current->page_filename);
-
-    g_run_hook_page (w_current, "%new-page-hook", toplevel->page_current);
-  }
+  g_run_hook_page (w_current, "%new-page-hook", toplevel->page_current);
 
   o_undo_savestate (w_current, toplevel->page_current, UNDO_ALL, NULL);
 
   g_free (fn);
+
+  if (saved_page != NULL) {
+    s_page_goto (toplevel, saved_page);
+    gschem_toplevel_page_changed (w_current);
+  }
+
+  x_pagesel_update (w_current);
+  return page;
+}
+
+
+/*! \brief Open a new page from a file, or find an existing page.
+ *
+ * Creates a new page and loads the file in it.  If there is already a
+ * matching page in \a w_current, returns a pointer to the existing
+ * page instead.
+ *
+ * This function doesn't change the current page of \a w_current.
+ *
+ * \param [in] w_current  the toplevel environment
+ * \param [in] filename   the name of the file to open
+ *
+ * \returns a pointer to the page
+ */
+PAGE*
+x_lowlevel_open_page (GschemToplevel *w_current, const gchar *filename)
+{
+  PAGE *page;
+
+  TOPLEVEL *toplevel = gschem_toplevel_get_toplevel (w_current);
+  g_return_val_if_fail (toplevel != NULL, NULL);
+  g_return_val_if_fail (filename != NULL, NULL);
+
+  /* Return existing page if it is already loaded */
+  page = s_page_search (toplevel, filename);
+  if ( page != NULL ) {
+    return page;
+  }
+
+  PAGE *saved_page = toplevel->page_current;
+
+  page = s_page_new (toplevel, filename);
+  s_page_goto (toplevel, page);
+  gschem_toplevel_page_changed (w_current);
+
+  /* Load from file */
+  GError *err = NULL;
+  if (!quiet_mode)
+    s_log_message (_("Loading schematic [%s]\n"), filename);
+
+  if (!f_open (toplevel, page, (gchar *) filename, &err)) {
+    GtkWidget *dialog;
+
+    g_warning ("%s\n", err->message);
+    dialog = gtk_message_dialog_new_with_markup
+      (GTK_WINDOW (w_current->main_window),
+       GTK_DIALOG_DESTROY_WITH_PARENT,
+       GTK_MESSAGE_ERROR,
+       GTK_BUTTONS_CLOSE,
+       _("<b>An error occurred while loading the requested file.</b>\n\nLoading from '%s' failed: %s. The gschem log may contain more information."),
+       filename, err->message);
+    gtk_window_set_title (GTK_WINDOW (dialog), _("Failed to load file"));
+    gtk_dialog_run (GTK_DIALOG (dialog));
+    gtk_widget_destroy (dialog);
+    g_error_free (err);
+  } else {
+    gtk_recent_manager_add_item (recent_manager, g_filename_to_uri(filename, NULL, NULL));
+  }
+
+  o_undo_savestate (w_current, toplevel->page_current, UNDO_ALL, NULL);
 
   if (saved_page != NULL) {
     s_page_goto (toplevel, saved_page);
@@ -279,7 +311,7 @@ x_lowlevel_close_page (GschemToplevel *w_current, PAGE *page)
 
     /* Create a new page if there wasn't another to switch to */
     if (new_current == NULL) {
-      new_current = x_lowlevel_open_page (w_current, NULL);
+      new_current = x_lowlevel_new_page (w_current, NULL);
     }
 
     /* change to new_current and update display */

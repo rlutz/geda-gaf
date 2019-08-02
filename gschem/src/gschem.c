@@ -284,7 +284,7 @@ void main_prog(void *closure, int argc, char *argv[])
   /* Update the window to show the current page */
   x_window_set_current_page (w_current,
     (w_current->toplevel->page_current == NULL) ?
-      x_lowlevel_open_page (w_current, NULL) :
+      x_lowlevel_new_page (w_current, NULL) :
       w_current->toplevel->page_current);
 
 
