@@ -743,7 +743,6 @@ x_dialog_close_changed_page (GschemToplevel *w_current, PAGE *page)
 
       case GTK_RESPONSE_YES:
         /* action selected: save */
-        x_window_set_current_page (w_current, page);
         if (x_highlevel_save_page (w_current, page))
           result = TRUE;
         /* no, user has cancelled the save and page has changes */
@@ -847,7 +846,6 @@ x_dialog_close_window (GschemToplevel *w_current)
        p_unsaved = g_list_next (p_unsaved)) {
     p_current = (PAGE *) p_unsaved->data;
 
-    x_window_set_current_page (w_current, p_current);
     if (!x_highlevel_save_page (w_current, p_current))
       /* if user cancelled save, do not close window */
       ret = FALSE;

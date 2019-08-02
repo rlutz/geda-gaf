@@ -24,7 +24,8 @@
  * As opposed to the low-level page functions, the high-level page
  * functions do interact with the user.  They switch to the newly
  * created / opened page, ask for confirmation for potentially
- * destructive actions, and warn about major symbol changes.
+ * destructive actions (switching pages if necessary), and warn about
+ * major symbol changes.
  */
 #include <config.h>
 
@@ -132,7 +133,8 @@ x_highlevel_open_pages (GschemToplevel *w_current, GSList *filenames)
 /*! \brief Save a page.
  *
  * Saves a page to its current filename.  If the page is untitled,
- * shows a file chooser dialog.
+ * makes it the current page of \a w_current and shows a file chooser
+ * dialog.
  *
  * \param [in] w_current  the toplevel environment
  * \param [in] page       the page to save, or \c NULL to save the
@@ -150,8 +152,11 @@ x_highlevel_save_page (GschemToplevel *w_current, PAGE *page)
     g_return_val_if_fail (page != NULL, FALSE);
   }
 
-  if (page->is_untitled)
+  if (page->is_untitled) {
+    x_window_set_current_page (w_current, page);
+
     return x_fileselect_save (w_current);
+  }
 
   return x_lowlevel_save_page (w_current, page, page->page_filename);
 }
@@ -160,7 +165,8 @@ x_highlevel_save_page (GschemToplevel *w_current, PAGE *page)
 /*! \brief Reload a page from disk.
  *
  * Closes the page, creates a new page, and reads the file back from
- * disk.  If the page has been changed, asks the user for confirmation.
+ * disk.  If the page has been changed, makes it the current page of
+ * \a w_current and asks the user for confirmation.
  *
  * \param [in] w_current  the toplevel environment
  * \param [in] page       the page to revert, or \c NULL to revert the
@@ -181,6 +187,8 @@ x_highlevel_revert_page (GschemToplevel *w_current, PAGE *page)
   if (page->CHANGED) {
     GtkWidget *dialog;
     int response;
+
+    x_window_set_current_page (w_current, page);
 
     gchar *basename = g_path_get_basename (page->page_filename);
     dialog = gtk_message_dialog_new_with_markup (
@@ -222,7 +230,8 @@ x_highlevel_revert_page (GschemToplevel *w_current, PAGE *page)
 
 /*! \brief Close a page.
  *
- * If the page has been changed, asks the user for confirmation.
+ * If the page has been changed, makes it the current page of \a
+ * toplevel and asks the user for confirmation.
  *
  * Switches to the next valid page if necessary.  If this was the last
  * page of the toplevel, a new untitled page is created.
@@ -243,8 +252,16 @@ x_highlevel_close_page (GschemToplevel *w_current, PAGE *page)
     g_return_val_if_fail (page != NULL, FALSE);
   }
 
-  if (page->CHANGED && !x_dialog_close_changed_page (w_current, page))
-    return FALSE;
+  if (page->CHANGED) {
+    /* Setting the current page is redundant as the close confirmation
+       dialog switches to the current page (is has to, since it may be
+       called when the window is closed while there's a single changed
+       page in the background), but it doesn't hurt, either. */
+    x_window_set_current_page (w_current, page);
+
+    if (!x_dialog_close_changed_page (w_current, page))
+      return FALSE;
+  }
 
   x_lowlevel_close_page (w_current, page);
   return TRUE;
