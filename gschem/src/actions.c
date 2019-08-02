@@ -2001,9 +2001,8 @@ DEFINE_ACTION (hierarchy_up,
   if (up_page == NULL) {
     s_log_message(_("Cannot find any schematics above the current one!\n"));
   } else {
-    if (page->CHANGED && !x_dialog_close_changed_page (w_current, page))
+    if (!x_highlevel_close_page (w_current, page))
       return;
-    x_lowlevel_close_page (w_current, page);
     x_window_set_current_page(w_current, up_page);
   }
 }
