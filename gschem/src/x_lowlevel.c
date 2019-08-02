@@ -252,6 +252,52 @@ x_lowlevel_save_page (GschemToplevel *w_current, PAGE *page, const gchar *filena
 }
 
 
+/*! \brief Revert a page.
+ *
+ * Closes the page, creates a new page, reads the file back from disk,
+ * and switches to the newly created page.
+ *
+ * \param [in] w_current  the toplevel environment
+ * \param [in] page       the page to revert
+ *
+ * \bug may have memory leak?
+ */
+void
+x_lowlevel_revert_page (GschemToplevel *w_current, PAGE *page)
+{
+  gchar *filename;
+  int page_control;
+  int up;
+  gchar *patch_filename;
+  gboolean patch_descend;
+
+  /* save this for later */
+  filename = g_strdup (page->page_filename);
+  page_control = page->page_control;
+  up = page->up;
+  patch_filename = g_strdup (page->patch_filename);
+  patch_descend = page->patch_descend;
+
+  /* delete the page, then re-open the file as a new page */
+  x_lowlevel_close_page (w_current, page);
+
+  /* Force symbols to be re-loaded from disk */
+  s_clib_refresh();
+
+  page = x_lowlevel_open_page (w_current, filename);
+  g_return_if_fail (page != NULL);
+
+  /* make sure we maintain the hierarchy info */
+  page->page_control = page_control;
+  page->up = up;
+  g_free (page->patch_filename);
+  page->patch_filename = patch_filename;
+  page->patch_descend = patch_descend;
+
+  x_window_set_current_page (w_current, page);
+}
+
+
 /*! \brief Close a page.
  *
  * Switches to the next valid page if necessary.  If this was the last

@@ -260,14 +260,7 @@ DEFINE_ACTION (page_revert,
                NULL,
                ACTUATE)
 {
-  /*! \bug may have memory leak? */
   PAGE *page_current = NULL;
-  PAGE *page = NULL;
-  gchar *filename;
-  int page_control;
-  int up;
-  gchar *patch_filename;
-  gboolean patch_descend;
   int response;
   GtkWidget* dialog;
 
@@ -293,30 +286,7 @@ DEFINE_ACTION (page_revert,
       return;
   }
 
-  /* save this for later */
-  filename = g_strdup (page_current->page_filename);
-  page_control = page_current->page_control;
-  up = page_current->up;
-  patch_filename = g_strdup (page_current->patch_filename);
-  patch_descend = page_current->patch_descend;
-
-  /* delete the page, then re-open the file as a new page */
-  x_lowlevel_close_page (w_current, page_current);
-
-  /* Force symbols to be re-loaded from disk */
-  s_clib_refresh();
-
-  page = x_lowlevel_open_page (w_current, filename);
-  g_return_if_fail (page != NULL);
-
-  /* make sure we maintain the hierarchy info */
-  page->page_control = page_control;
-  page->up = up;
-  g_free (page->patch_filename);
-  page->patch_filename = patch_filename;
-  page->patch_descend = patch_descend;
-
-  x_window_set_current_page (w_current, page);
+  x_lowlevel_revert_page (w_current, page_current);
 }
 
 DEFINE_ACTION (page_close,
