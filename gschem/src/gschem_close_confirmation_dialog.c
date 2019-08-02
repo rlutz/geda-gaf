@@ -29,7 +29,6 @@
 #endif
 
 #include "gschem.h"
-#include "actions.decl.x"
 
 #define GLADE_HOOKUP_OBJECT(component,widget,name) \
   g_object_set_data_full (G_OBJECT (component), name, \
@@ -744,11 +743,8 @@ x_dialog_close_changed_page (GschemToplevel *w_current, PAGE *page)
       case GTK_RESPONSE_YES:
         /* action selected: save */
         x_window_set_current_page (w_current, page);
-        gschem_action_activate (action_file_save, w_current);
-        /* has the page been really saved? */
-        if (!page->CHANGED) {
+        if (x_highlevel_save_page (w_current, page))
           result = TRUE;
-        }
         /* no, user has cancelled the save and page has changes */
         /* do not close page */
         break;
@@ -841,9 +837,8 @@ x_dialog_close_window (GschemToplevel *w_current)
           p_current = (PAGE*)p_unsaved->data;
 
           x_window_set_current_page (w_current, p_current);
-          gschem_action_activate (action_file_save, w_current);
-          /* if user cancelled previous, do not close window */
-          if (p_current->CHANGED)
+          if (!x_highlevel_save_page (w_current, p_current))
+            /* if user cancelled save, do not close window */
             ret = FALSE;
         }
         g_list_free (unsaved_pages);
