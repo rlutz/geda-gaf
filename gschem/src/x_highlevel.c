@@ -83,6 +83,29 @@ x_highlevel_open_page (GschemToplevel *w_current, const gchar *filename)
 }
 
 
+/*! \brief Open multiple pages from files.
+ *
+ * For each file specified in \a filenames that is not already opened,
+ * creates a new page and loads the file in it.
+ *
+ * The last page that could be opened or already existed becomes the
+ * new current page of \a w_current.
+ *
+ * \param [in] w_current  the toplevel environment
+ * \param [in] filenames  a GSList of filenames to open
+ */
+void
+x_highlevel_open_pages (GschemToplevel *w_current, GSList *filenames)
+{
+  GSList *tmp;
+
+  /* open each file */
+  for (tmp = filenames; tmp != NULL;tmp = g_slist_next (tmp)) {
+    x_highlevel_open_page (w_current, (gchar *) tmp->data);
+  }
+}
+
+
 /*! \brief Save a page.
  *
  * Saves a page to its current filename.  If the page is untitled,

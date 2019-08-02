@@ -125,6 +125,7 @@ void main_prog(void *closure, int argc, char *argv[])
   TOPLEVEL *toplevel = NULL;
   char *input_str = NULL;
   int argv_index;
+  GSList *filenames;
   char *filename;
   SCM scm_tmp;
 
@@ -259,6 +260,8 @@ void main_prog(void *closure, int argc, char *argv[])
 
   x_stroke_init ();
 
+  filenames = NULL;
+
   for (i = argv_index; i < argc; i++) {
 
     if (g_path_is_absolute(argv[i]))
@@ -269,15 +272,18 @@ void main_prog(void *closure, int argc, char *argv[])
       filename = g_build_filename (cwd, argv[i], NULL);
     }
 
+    filenames = g_slist_prepend (filenames, filename);
     /*
      * SDB notes:  at this point the filename might be unnormalized, like
      *             /path/to/foo/../bar/baz.sch.  Bad filenames will be
-     *             normalized in f_open (called by x_highlevel_open_page).
+     *             normalized in f_open (called by x_highlevel_open_pages).
      *             This works for Linux and MINGW32.
      */
-    x_highlevel_open_page (w_current, filename);
-    g_free (filename);
   }
+
+  filenames = g_slist_reverse (filenames);
+  x_highlevel_open_pages (w_current, filenames);
+  g_slist_free_full (filenames, g_free);
 
   g_free(cwd);
 

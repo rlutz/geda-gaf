@@ -193,13 +193,10 @@ x_fileselect_open(GschemToplevel *w_current)
   g_free (cwd);
   gtk_widget_show (dialog);
   if (gtk_dialog_run ((GtkDialog*)dialog) == GTK_RESPONSE_ACCEPT) {
-    GSList *tmp, *filenames =
+    GSList *filenames =
       gtk_file_chooser_get_filenames (GTK_FILE_CHOOSER (dialog));
 
-    /* open each file */
-    for (tmp = filenames; tmp != NULL;tmp = g_slist_next (tmp)) {
-      x_highlevel_open_page (w_current, (gchar *) tmp->data);
-    }
+    x_highlevel_open_pages (w_current, filenames);
 
     /* free the list of filenames */
     g_slist_foreach (filenames, (GFunc)g_free, NULL);
