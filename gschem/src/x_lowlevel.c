@@ -48,7 +48,7 @@
  * \bug This code should check to make sure any untitled filename does
  *      not conflict with a file on disk.
  */
-PAGE*
+PAGE *
 x_lowlevel_new_page (GschemToplevel *w_current, const gchar *filename)
 {
   PAGE *page;
@@ -63,14 +63,14 @@ x_lowlevel_new_page (GschemToplevel *w_current, const gchar *filename)
     EdaConfig *cfg;
     cwd = g_get_current_dir ();
     cfg = eda_config_get_context_for_path (cwd);
-    untitled_name = eda_config_get_string (cfg, "gschem", "default-filename", NULL);
-    tmp = g_strdup_printf ("%s_%d.sch",
-                           untitled_name,
+    untitled_name = eda_config_get_string (cfg, "gschem", "default-filename",
+                                           NULL);
+    tmp = g_strdup_printf ("%s_%d.sch", untitled_name,
                            ++w_current->num_untitled);
     fn = g_build_filename (cwd, tmp, NULL);
     g_free (untitled_name);
-    g_free(cwd);
-    g_free(tmp);
+    g_free (cwd);
+    g_free (tmp);
   } else {
     fn = g_strdup (filename);
   }
@@ -115,7 +115,7 @@ x_lowlevel_new_page (GschemToplevel *w_current, const gchar *filename)
  *
  * \returns a pointer to the page
  */
-PAGE*
+PAGE *
 x_lowlevel_open_page (GschemToplevel *w_current, const gchar *filename)
 {
   PAGE *page;
@@ -126,9 +126,8 @@ x_lowlevel_open_page (GschemToplevel *w_current, const gchar *filename)
 
   /* Return existing page if it is already loaded */
   page = s_page_search (toplevel, filename);
-  if ( page != NULL ) {
+  if (page != NULL)
     return page;
-  }
 
   PAGE *saved_page = toplevel->page_current;
 
@@ -145,19 +144,22 @@ x_lowlevel_open_page (GschemToplevel *w_current, const gchar *filename)
     GtkWidget *dialog;
 
     g_warning ("%s\n", err->message);
-    dialog = gtk_message_dialog_new_with_markup
-      (GTK_WINDOW (w_current->main_window),
-       GTK_DIALOG_DESTROY_WITH_PARENT,
-       GTK_MESSAGE_ERROR,
-       GTK_BUTTONS_CLOSE,
-       _("<b>An error occurred while loading the requested file.</b>\n\nLoading from '%s' failed: %s. The gschem log may contain more information."),
-       filename, err->message);
+    dialog = gtk_message_dialog_new_with_markup (
+      GTK_WINDOW (w_current->main_window),
+      GTK_DIALOG_DESTROY_WITH_PARENT,
+      GTK_MESSAGE_ERROR,
+      GTK_BUTTONS_CLOSE,
+      _("<b>An error occurred while loading the requested file.</b>\n\n"
+        "Loading from '%s' failed: %s. "
+        "The gschem log may contain more information."),
+      filename, err->message);
     gtk_window_set_title (GTK_WINDOW (dialog), _("Failed to load file"));
     gtk_dialog_run (GTK_DIALOG (dialog));
     gtk_widget_destroy (dialog);
     g_error_free (err);
   } else {
-    gtk_recent_manager_add_item (recent_manager, g_filename_to_uri(filename, NULL, NULL));
+    gtk_recent_manager_add_item (recent_manager,
+                                 g_filename_to_uri (filename, NULL, NULL));
   }
 
   o_undo_savestate (w_current, toplevel->page_current, UNDO_ALL, NULL);
@@ -187,7 +189,8 @@ x_lowlevel_open_page (GschemToplevel *w_current, const gchar *filename)
  * \returns \c 1 if the page could be saved, \c 0 otherwise
  */
 gint
-x_lowlevel_save_page (GschemToplevel *w_current, PAGE *page, const gchar *filename)
+x_lowlevel_save_page (GschemToplevel *w_current, PAGE *page,
+                      const gchar *filename)
 {
   TOPLEVEL *toplevel = gschem_toplevel_get_toplevel (w_current);
   const gchar *log_msg, *state_msg;
@@ -202,7 +205,7 @@ x_lowlevel_save_page (GschemToplevel *w_current, PAGE *page, const gchar *filena
   ret = (gint)f_save (toplevel, page, filename, &err);
 
   if (ret != 1) {
-    log_msg   = _("Could NOT save page [%s]\n");
+    log_msg = _("Could NOT save page [%s]\n");
     state_msg = _("Error while trying to save");
 
     GtkWidget *dialog;
@@ -225,16 +228,17 @@ x_lowlevel_save_page (GschemToplevel *w_current, PAGE *page, const gchar *filena
       page->page_filename = g_strdup (filename);
 
       log_msg = _("Saved as [%s]\n");
-    } else {
+    } else
       log_msg = _("Saved [%s]\n");
-    }
+
     state_msg = _("Saved");
 
     /* reset page CHANGED flag */
     page->CHANGED = 0;
 
     /* add to recent file list */
-    gtk_recent_manager_add_item (recent_manager, g_filename_to_uri(filename, NULL, NULL));
+    gtk_recent_manager_add_item (recent_manager,
+                                 g_filename_to_uri (filename, NULL, NULL));
 
     /* i_set_filename (w_current, page->page_filename); */
     x_pagesel_update (w_current);
@@ -246,7 +250,7 @@ x_lowlevel_save_page (GschemToplevel *w_current, PAGE *page, const gchar *filena
   /* log status of operation */
   s_log_message (log_msg, filename);
 
-  i_set_state_msg  (w_current, SELECT, state_msg);
+  i_set_state_msg (w_current, SELECT, state_msg);
 
   return ret;
 }
@@ -285,7 +289,7 @@ x_lowlevel_revert_page (GschemToplevel *w_current, PAGE *page)
   x_lowlevel_close_page (w_current, page);
 
   /* Force symbols to be re-loaded from disk */
-  s_clib_refresh();
+  s_clib_refresh ();
 
   page = x_lowlevel_open_page (w_current, filename);
   g_free (filename);
@@ -321,15 +325,14 @@ x_lowlevel_close_page (GschemToplevel *w_current, PAGE *page)
   GList *iter;
 
   g_return_if_fail (toplevel != NULL);
-  g_return_if_fail (page     != NULL);
+  g_return_if_fail (page != NULL);
 
   g_assert (page->pid != -1);
 
   /* If we're closing whilst inside an action, re-wind the
    * page contents back to their state before we started */
-  if (w_current->inside_action) {
+  if (w_current->inside_action)
     i_cancel (w_current);
-  }
 
   if (page == toplevel->page_current) {
     /* as it will delete current page, select new current page */
@@ -338,22 +341,21 @@ x_lowlevel_close_page (GschemToplevel *w_current, PAGE *page)
 
     if (new_current == NULL) {
       /* no up in hierarchy, choice is prev, next, new page */
-      iter = g_list_find( geda_list_get_glist( toplevel->pages ), page );
+      iter = g_list_find (geda_list_get_glist (toplevel->pages), page);
 
-      if ( g_list_previous( iter ) ) {
-        new_current = (PAGE *)g_list_previous( iter )->data;
-      } else if ( g_list_next( iter ) ) {
-        new_current = (PAGE *)g_list_next( iter )->data;
-      } else {
+      if (g_list_previous (iter))
+        new_current = (PAGE *) g_list_previous (iter)->data;
+      else if (g_list_next (iter))
+        new_current = (PAGE *) g_list_next (iter)->data;
+      else
         /* need to add a new untitled page */
         new_current = NULL;
-      }
     }
     /* new_current will be the new current page at the end of the function */
   }
 
-  s_log_message (page->CHANGED ?
-                 _("Discarding page [%s]\n") : _("Closing [%s]\n"),
+  s_log_message (page->CHANGED ? _("Discarding page [%s]\n")
+                               : _("Closing [%s]\n"),
                  page->page_filename);
   /* remove page from toplevel list of page and free */
   s_page_delete (toplevel, page);
@@ -361,11 +363,9 @@ x_lowlevel_close_page (GschemToplevel *w_current, PAGE *page)
 
   /* Switch to a different page if we just removed the current */
   if (toplevel->page_current == NULL) {
-
     /* Create a new page if there wasn't another to switch to */
-    if (new_current == NULL) {
+    if (new_current == NULL)
       new_current = x_lowlevel_new_page (w_current, NULL);
-    }
 
     /* change to new_current and update display */
     x_window_set_current_page (w_current, new_current);
