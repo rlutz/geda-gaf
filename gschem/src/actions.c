@@ -198,15 +198,7 @@ DEFINE_ACTION (file_save,
                NULL,
                ACTUATE)
 {
-  PAGE *page;
-
-  page = gschem_toplevel_get_toplevel (w_current)->page_current;
-
-  if (page == NULL) {
-    return;
-  }
-
-  x_highlevel_save_page (w_current, page);
+  x_highlevel_save_page (w_current, NULL);
 }
 
 DEFINE_ACTION (file_save_as,
@@ -249,11 +241,7 @@ DEFINE_ACTION (page_revert,
                NULL,
                ACTUATE)
 {
-  PAGE *page_current = NULL;
-
-  page_current = gschem_toplevel_get_toplevel (w_current)->page_current;
-
-  x_highlevel_revert_page (w_current, page_current);
+  x_highlevel_revert_page (w_current, NULL);
 }
 
 DEFINE_ACTION (page_close,
@@ -265,13 +253,7 @@ DEFINE_ACTION (page_close,
                NULL,
                ACTUATE)
 {
-  PAGE *page = gschem_toplevel_get_toplevel (w_current)->page_current;
-
-  if (page == NULL) {
-    return;
-  }
-
-  x_highlevel_close_page (w_current, page);
+  x_highlevel_close_page (w_current, NULL);
 }
 
 DEFINE_ACTION (file_print,

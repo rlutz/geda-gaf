@@ -36,16 +36,23 @@
  * shows a file chooser dialog.
  *
  * \param [in] w_current  the toplevel environment
- * \param [in] page       the page to save
+ * \param [in] page       the page to save, or \c NULL to save the
+ *                        current page
  *
  * \returns \c TRUE if the page was saved, \c FALSE otherwise
  */
 gboolean
 x_highlevel_save_page (GschemToplevel *w_current, PAGE *page)
 {
+  TOPLEVEL *toplevel = gschem_toplevel_get_toplevel (w_current);
   EdaConfig *cfg;
   gchar *untitled_name;
   gboolean success;
+
+  if (page == NULL) {
+    page = toplevel->page_current;
+    g_return_val_if_fail (page != NULL, FALSE);
+  }
 
   /*! \bug This is a dreadful way of figuring out whether a page is
    *  newly-created or not. */
@@ -67,15 +74,22 @@ x_highlevel_save_page (GschemToplevel *w_current, PAGE *page)
  * disk.  If the page has been changed, asks the user for confirmation.
  *
  * \param [in] w_current  the toplevel environment
- * \param [in] page       the page to revert
+ * \param [in] page       the page to revert, or \c NULL to revert the
+ *                        current page
  *
  * \returns \c TRUE if the page was successfully reloaded, \c FALSE otherwise
  */
 gboolean
 x_highlevel_revert_page (GschemToplevel *w_current, PAGE *page)
 {
+  TOPLEVEL *toplevel = gschem_toplevel_get_toplevel (w_current);
   int response;
   GtkWidget* dialog;
+
+  if (page == NULL) {
+    page = toplevel->page_current;
+    g_return_val_if_fail (page != NULL, FALSE);
+  }
 
   if (page->CHANGED) {
     dialog = gtk_message_dialog_new ((GtkWindow *) w_current->main_window,
@@ -109,13 +123,21 @@ x_highlevel_revert_page (GschemToplevel *w_current, PAGE *page)
  * page of the toplevel, a new untitled page is created.
  *
  * \param [in] w_current  the toplevel environment
- * \param [in] page       the page to close
+ * \param [in] page       the page to close, or \c NULL to close the
+ *                        current page
  *
  * \returns \c TRUE if the page was closed, \c FALSE otherwise
  */
 gboolean
 x_highlevel_close_page (GschemToplevel *w_current, PAGE *page)
 {
+  TOPLEVEL *toplevel = gschem_toplevel_get_toplevel (w_current);
+
+  if (page == NULL) {
+    page = toplevel->page_current;
+    g_return_val_if_fail (page != NULL, FALSE);
+  }
+
   if (page->CHANGED
       && !x_dialog_close_changed_page (w_current, page)) {
     return FALSE;
