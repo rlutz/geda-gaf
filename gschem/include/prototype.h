@@ -407,6 +407,10 @@ void x_grid_draw_region(GschemToplevel *w_current, cairo_t *cr, int x, int y, in
 int x_grid_query_drawn_spacing(GschemToplevel *w_current);
 /* x_grid_size_sb.c */
 GtkWidget *x_grid_size_sb_new (GschemToplevel *w_current);
+/* x_highlevel.c */
+void x_highlevel_save_page (GschemToplevel *w_current, PAGE *page);
+void x_highlevel_revert_page (GschemToplevel *w_current, PAGE *page);
+void x_highlevel_close_page (GschemToplevel *w_current, PAGE *page);
 /* x_image.c */
 void x_image_lowlevel(GschemToplevel *w_current, const char* filename,
 		      int desired_width, int desired_height, char *filetype);

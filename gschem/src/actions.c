@@ -199,8 +199,6 @@ DEFINE_ACTION (file_save,
                ACTUATE)
 {
   PAGE *page;
-  EdaConfig *cfg;
-  gchar *untitled_name;
 
   page = gschem_toplevel_get_toplevel (w_current)->page_current;
 
@@ -208,16 +206,7 @@ DEFINE_ACTION (file_save,
     return;
   }
 
-  /*! \bug This is a dreadful way of figuring out whether a page is
-   *  newly-created or not. */
-  cfg = eda_config_get_context_for_path (page->page_filename);
-  untitled_name = eda_config_get_string (cfg, "gschem", "default-filename", NULL);
-  if (strstr(page->page_filename, untitled_name)) {
-    x_fileselect_save (w_current);
-  } else {
-    x_lowlevel_save_page (w_current, page, page->page_filename);
-  }
-  g_free (untitled_name);
+  x_highlevel_save_page (w_current, page);
 }
 
 DEFINE_ACTION (file_save_as,
@@ -261,32 +250,10 @@ DEFINE_ACTION (page_revert,
                ACTUATE)
 {
   PAGE *page_current = NULL;
-  int response;
-  GtkWidget* dialog;
 
   page_current = gschem_toplevel_get_toplevel (w_current)->page_current;
 
-  if (page_current->CHANGED) {
-    dialog = gtk_message_dialog_new ((GtkWindow *) w_current->main_window,
-                                     GTK_DIALOG_DESTROY_WITH_PARENT,
-                                     GTK_MESSAGE_QUESTION,
-                                     GTK_BUTTONS_YES_NO,
-                                     _("Really revert page?"));
-
-    /* Set the alternative button order (ok, cancel, help) for other systems */
-    gtk_dialog_set_alternative_button_order (GTK_DIALOG (dialog),
-                                             GTK_RESPONSE_YES,
-                                             GTK_RESPONSE_NO,
-                                             -1);
-
-    response = gtk_dialog_run (GTK_DIALOG (dialog));
-    gtk_widget_destroy (dialog);
-
-    if (response != GTK_RESPONSE_YES)
-      return;
-  }
-
-  x_lowlevel_revert_page (w_current, page_current);
+  x_highlevel_revert_page (w_current, page_current);
 }
 
 DEFINE_ACTION (page_close,
@@ -304,12 +271,7 @@ DEFINE_ACTION (page_close,
     return;
   }
 
-  if (page->CHANGED
-      && !x_dialog_close_changed_page (w_current, page)) {
-    return;
-  }
-
-  x_lowlevel_close_page (w_current, page);
+  x_highlevel_close_page (w_current, page);
 }
 
 DEFINE_ACTION (file_print,

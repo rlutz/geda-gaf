@@ -25,6 +25,9 @@
  * particular, they don't switch pages and don't ask for confirmation
  * before carrying out potentially destructive actions.  However, they
  * *do* warn if an error occurred during an operation.
+ *
+ * For user-interface actions, the functions in x_highlevel.c should
+ * be used instead.
  */
 #include <config.h>
 
@@ -287,11 +290,14 @@ x_lowlevel_save_page (GschemToplevel *w_current, PAGE *page,
 }
 
 
-/*! \brief Revert a page.
+/*! \brief Revert a page, no questions asked.
  *
  * Closes the page, creates a new page, and reads the file back from
  * disk.  If the reverted page was the current page before, switches
  * to the newly created page.
+ *
+ * Does not ask for confirmation.  If the user should be asked for
+ * confirmation, use \ref x_highlevel_revert_page instead.
  *
  * \param [in] w_current  the toplevel environment
  * \param [in] page       the page to revert
@@ -362,10 +368,13 @@ x_lowlevel_revert_page (GschemToplevel *w_current, PAGE *page)
 }
 
 
-/*! \brief Close a page.
+/*! \brief Close a page, no questions asked.
  *
  * Switches to the next valid page if necessary.  If this was the last
  * page of the toplevel, a new untitled page is created.
+ *
+ * Does not ask for confirmation.  If the user should be asked for
+ * confirmation, use \ref x_highlevel_close_page instead.
  *
  * \param [in] w_current  the toplevel environment
  * \param [in] page       the page to close
