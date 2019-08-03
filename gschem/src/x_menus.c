@@ -159,16 +159,13 @@ x_menus_create_main_popup (GschemToplevel *w_current)
 void
 recent_chooser_item_activated (GtkRecentChooser *chooser, GschemToplevel *w_current)
 {
-  PAGE *page;
   gchar *uri;
   gchar *filename;
 
   uri = gtk_recent_chooser_get_current_uri (chooser);
   filename = g_filename_from_uri(uri, NULL, NULL);
   gtk_recent_manager_add_item(recent_manager, uri);
-  page = x_lowlevel_open_page (w_current, (char *) filename);
-  if (page != NULL)
-    x_window_set_current_page (w_current, page);
+  x_highlevel_open_page (w_current, (char *) filename);
 
   g_free(uri);
   g_free(filename);

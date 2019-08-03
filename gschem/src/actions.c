@@ -157,10 +157,9 @@ DEFINE_ACTION (file_new,
   PAGE *page;
 
   /* create a new page */
-  page = x_lowlevel_new_page (w_current, NULL);
+  page = x_highlevel_new_page (w_current, NULL);
   g_return_if_fail (page != NULL);
 
-  x_window_set_current_page (w_current, page);
   s_log_message (_("New page created [%s]\n"), page->page_filename);
 }
 
@@ -295,10 +294,8 @@ DEFINE_ACTION (file_new_window,
   w_current_new = x_window_new (NULL);
   g_return_if_fail (w_current_new != NULL);
 
-  page = x_lowlevel_new_page (w_current_new, NULL);
+  page = x_highlevel_new_page (w_current_new, NULL);
   g_return_if_fail (page != NULL);
-
-  x_window_set_current_page (w_current_new, page);
 
   s_log_message (_("New Window created [%s]\n"), page->page_filename);
 }

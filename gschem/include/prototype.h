@@ -408,6 +408,8 @@ int x_grid_query_drawn_spacing(GschemToplevel *w_current);
 /* x_grid_size_sb.c */
 GtkWidget *x_grid_size_sb_new (GschemToplevel *w_current);
 /* x_highlevel.c */
+PAGE *x_highlevel_new_page (GschemToplevel *w_current, const gchar *filename);
+PAGE *x_highlevel_open_page (GschemToplevel *w_current, const gchar *filename);
 gboolean x_highlevel_save_page (GschemToplevel *w_current, PAGE *page);
 gboolean x_highlevel_revert_page (GschemToplevel *w_current, PAGE *page);
 gboolean x_highlevel_close_page (GschemToplevel *w_current, PAGE *page);

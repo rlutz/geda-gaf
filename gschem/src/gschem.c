@@ -272,20 +272,18 @@ void main_prog(void *closure, int argc, char *argv[])
     /*
      * SDB notes:  at this point the filename might be unnormalized, like
      *             /path/to/foo/../bar/baz.sch.  Bad filenames will be
-     *             normalized in f_open (called by x_lowlevel_open_page).
+     *             normalized in f_open (called by x_highlevel_open_page).
      *             This works for Linux and MINGW32.
      */
-    x_lowlevel_open_page (w_current, filename);
+    x_highlevel_open_page (w_current, filename);
     g_free (filename);
   }
 
   g_free(cwd);
 
-  /* Update the window to show the current page */
-  x_window_set_current_page (w_current,
-    (w_current->toplevel->page_current == NULL) ?
-      x_lowlevel_new_page (w_current, NULL) :
-      w_current->toplevel->page_current);
+  /* Create an empty page if necessary */
+  if (w_current->toplevel->page_current == NULL)
+    x_highlevel_new_page (w_current, NULL);
 
 
 #if DEBUG

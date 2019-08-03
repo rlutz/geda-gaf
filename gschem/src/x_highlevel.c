@@ -22,12 +22,65 @@
  * \brief High-level page-related functions.
  *
  * As opposed to the low-level page functions, the high-level page
- * functions do interact with the user.  They ask for confirmation for
- * potentially destructive actions.
+ * functions do interact with the user.  They switch to the newly
+ * created / opened page and ask for confirmation for potentially
+ * destructive actions.
  */
 #include <config.h>
 
 #include "gschem.h"
+
+
+/*! \brief Create a new untitled page with a titleblock.
+ *
+ * If \a filename is \c NULL, the name of the new page is build from
+ * configuration data ('untitled-name') and a counter for uniqueness.
+ *
+ * The page becomes the new current page of \a w_current.
+ *
+ * \param [in] w_current  the toplevel environment
+ * \param [in] filename   the filename for the new page, or \c NULL to
+ *                        generate an untitled filename
+ *
+ * \returns a pointer to the new page, or \c NULL if a file with the
+ *          specified filename already exists
+ */
+PAGE *
+x_highlevel_new_page (GschemToplevel *w_current, const gchar *filename)
+{
+  PAGE *page = x_lowlevel_new_page (w_current, filename);
+
+  if (page != NULL)
+    x_window_set_current_page (w_current, page);
+
+  return page;
+}
+
+
+/*! \brief Open a new page from a file, or find an existing page.
+ *
+ * Creates a new page and loads the file in it.  If there is already a
+ * matching page in \a w_current, returns a pointer to the existing
+ * page instead.
+ *
+ * The page becomes the new current page of \a w_current.
+ *
+ * \param [in] w_current  the toplevel environment
+ * \param [in] filename   the name of the file to open
+ *
+ * \returns a pointer to the page, or \c NULL if the file couldn't be
+ *          loaded
+ */
+PAGE *
+x_highlevel_open_page (GschemToplevel *w_current, const gchar *filename)
+{
+  PAGE *page = x_lowlevel_open_page (w_current, filename);
+
+  if (page != NULL)
+    x_window_set_current_page (w_current, page);
+
+  return page;
+}
 
 
 /*! \brief Save a page.

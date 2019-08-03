@@ -164,7 +164,6 @@ x_fileselect_add_preview (GtkFileChooser *filechooser)
 void
 x_fileselect_open(GschemToplevel *w_current)
 {
-  PAGE *page = NULL;
   GtkWidget *dialog;
   gchar *cwd;
 
@@ -199,11 +198,8 @@ x_fileselect_open(GschemToplevel *w_current)
 
     /* open each file */
     for (tmp = filenames; tmp != NULL;tmp = g_slist_next (tmp)) {
-      page = x_lowlevel_open_page (w_current, (gchar *) tmp->data);
+      x_highlevel_open_page (w_current, (gchar *) tmp->data);
     }
-    /* Switch to the last page opened */
-    if ( page != NULL )
-      x_window_set_current_page (w_current, page);
 
     /* free the list of filenames */
     g_slist_foreach (filenames, (GFunc)g_free, NULL);
