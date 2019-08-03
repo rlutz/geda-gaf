@@ -182,27 +182,31 @@ x_highlevel_save_page (GschemToplevel *w_current, PAGE *page)
 }
 
 
-/*! \brief Save all pages.
+/*! \brief Save all changed pages.
  *
  * Saves all pages in \a w_current to their respective filenames.
  *
  * \param [in] w_current  the toplevel environment
  *
- * \returns \c TRUE if all pages were saved, \c FALSE otherwise
+ * \returns \c TRUE if all changed pages were saved, \c FALSE otherwise
  */
 gboolean
 x_highlevel_save_all (GschemToplevel *w_current)
 {
   TOPLEVEL *toplevel = gschem_toplevel_get_toplevel (w_current);
-  gboolean success = TRUE;
+  gboolean saved_any = FALSE, success = TRUE;
 
   for (const GList *l = geda_list_get_glist (toplevel->pages);
        l != NULL; l = l->next) {
     PAGE *page = (PAGE *) l->data;
+    if (!page->CHANGED)
+      /* ignore unchanged pages */
+      continue;
 
     if (f_save (toplevel, page, page->page_filename, NULL) == 1) {
       s_log_message (_("Saved [%s]\n"), page->page_filename);
       page->CHANGED = 0;
+      saved_any = TRUE;
     } else {
       s_log_message (_("Could NOT save [%s]\n"), page->page_filename);
       success = FALSE;
@@ -211,8 +215,10 @@ x_highlevel_save_all (GschemToplevel *w_current)
 
   if (!success)
     i_set_state_msg (w_current, SELECT, _("Failed to Save All"));
-  else
+  else if (saved_any)
     i_set_state_msg (w_current, SELECT, _("Saved All"));
+  else
+    i_set_state_msg (w_current, SELECT, _("No files need saving"));
 
   x_pagesel_update (w_current);
   i_update_menus (w_current);
