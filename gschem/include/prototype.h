@@ -469,6 +469,7 @@ void x_multiattrib_edit_attribute (GschemToplevel *w_current, OBJECT *object);
 /* gschem_pagesel_dockable.c */
 void x_pagesel_update (GschemToplevel *w_current);
 /* gschem_patch_dockable.c */
+gchar *x_patch_guess_filename (PAGE *page);
 void x_patch_import (GschemToplevel *w_current);
 void x_patch_do_import (GschemToplevel *w_current, PAGE *page);
 /* x_preview.c */

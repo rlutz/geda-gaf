@@ -40,7 +40,7 @@ struct _GschemPatchDockable {
   GtkListStore *store;
 };
 
-/* x_patch_import and x_patch_do_import are defined in prototype.h */
+/* functions are defined in prototype.h */
 
 GType
 gschem_patch_dockable_get_type (void);

@@ -216,6 +216,27 @@ create_widget (GschemDockable *dockable)
 /******************************************************************************/
 
 
+gchar *
+x_patch_guess_filename (PAGE *page)
+{
+  if (page->patch_filename != NULL)
+    return g_strdup (page->patch_filename);
+
+  if (page->is_untitled)
+    return NULL;
+
+  size_t len = strlen (page->page_filename);
+  if (len < 4 ||
+      (g_ascii_strcasecmp (page->page_filename + len - 4, ".sch") != 0 &&
+       g_ascii_strcasecmp (page->page_filename + len - 4, ".sym") != 0))
+    return g_strdup_printf ("%s.bap", page->page_filename);
+
+  gchar *fn = g_strdup (page->page_filename);
+  strcpy (fn + len - 4, ".bap");
+  return fn;
+}
+
+
 /*! \brief Let the user select a patch file, and import that patch file.
  */
 void
@@ -237,20 +258,9 @@ x_patch_import (GschemToplevel *w_current)
                                            GTK_RESPONSE_ACCEPT,
                                            GTK_RESPONSE_CANCEL, -1);
 
-  if (page->patch_filename != NULL)
-    patch_filename = g_strdup (page->patch_filename);
-  else {
-    size_t len = strlen (page->page_filename);
-    if (len >= 4 &&
-        (g_ascii_strcasecmp (page->page_filename + len - 4, ".sch") == 0 ||
-         g_ascii_strcasecmp (page->page_filename + len - 4, ".sym") == 0)) {
-      patch_filename = g_strdup (page->page_filename);
-      strcpy (patch_filename + len - 4, ".bap");
-    } else
-      patch_filename = g_strdup_printf ("%s.bap", page->page_filename);
-  }
+  patch_filename = x_patch_guess_filename (page);
 
-  if (!page->is_untitled &&
+  if (patch_filename != NULL &&
       g_file_test (patch_filename, G_FILE_TEST_EXISTS |
                                    G_FILE_TEST_IS_REGULAR))
     gtk_file_chooser_set_filename (GTK_FILE_CHOOSER (dialog), patch_filename);
