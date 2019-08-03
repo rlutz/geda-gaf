@@ -221,14 +221,7 @@ DEFINE_ACTION (file_save_all,
                NULL,
                ACTUATE)
 {
-  if (s_page_save_all(gschem_toplevel_get_toplevel (w_current))) {
-     i_set_state_msg(w_current, SELECT, _("Failed to Save All"));
-  } else {
-     i_set_state_msg(w_current, SELECT, _("Saved All"));
-  }
-
-  x_pagesel_update (w_current);
-  i_update_menus(w_current);
+  x_highlevel_save_all (w_current);
 }
 
 DEFINE_ACTION (page_revert,

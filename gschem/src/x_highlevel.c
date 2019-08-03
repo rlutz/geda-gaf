@@ -182,6 +182,26 @@ x_highlevel_save_page (GschemToplevel *w_current, PAGE *page)
 }
 
 
+/*! \brief Save all pages.
+ *
+ * Saves all pages in \a w_current to their respective filenames.
+ *
+ * \param [in] w_current  the toplevel environment
+ */
+void
+x_highlevel_save_all (GschemToplevel *w_current)
+{
+  if (s_page_save_all(gschem_toplevel_get_toplevel (w_current))) {
+     i_set_state_msg(w_current, SELECT, _("Failed to Save All"));
+  } else {
+     i_set_state_msg(w_current, SELECT, _("Saved All"));
+  }
+
+  x_pagesel_update (w_current);
+  i_update_menus(w_current);
+}
+
+
 /*! \brief Reload a page from disk.
  *
  * Closes the page, creates a new page, and reads the file back from
