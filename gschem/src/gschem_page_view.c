@@ -1214,7 +1214,8 @@ page_deleted (PAGE *page, GschemPageView *view)
   g_return_if_fail (view->geometry_table != NULL);
 
   g_hash_table_remove (view->geometry_table, page);
-  gschem_page_view_set_page (view, NULL);
+  if (view->page == page)
+    gschem_page_view_set_page (view, NULL);
 }
 
 
