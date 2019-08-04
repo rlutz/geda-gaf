@@ -327,8 +327,7 @@ x_lowlevel_close_page (GschemToplevel *w_current, PAGE *page)
 
   g_return_if_fail (toplevel != NULL);
   g_return_if_fail (page != NULL);
-
-  g_assert (page->pid != -1);
+  g_return_if_fail (page->pid != -1);
 
   /* If we're closing whilst inside an action, re-wind the
    * page contents back to their state before we started */
