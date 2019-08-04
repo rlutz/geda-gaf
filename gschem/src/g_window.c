@@ -215,7 +215,7 @@ SCM_DEFINE (override_close_page_x, "%close-page!", 1, 0, 0,
   if (reset_page)
     x_window_set_current_page (w_current, page);
 
-  x_lowlevel_close_page (w_current, w_current->toplevel->page_current);
+  x_highlevel_close_page (w_current, page);
 
   if (reset_page)
     x_window_set_current_page (w_current, curr_page);
