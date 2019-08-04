@@ -270,20 +270,13 @@ x_lowlevel_revert_page (GschemToplevel *w_current, PAGE *page)
 {
   TOPLEVEL *toplevel = gschem_toplevel_get_toplevel (w_current);
 
-  gchar *filename;
-  int page_control;
-  int up;
-  gchar *patch_filename;
-  gboolean patch_descend;
-  gboolean was_current_page;
-
   /* save this for later */
-  filename = g_strdup (page->page_filename);
-  page_control = page->page_control;
-  up = page->up;
-  patch_filename = g_strdup (page->patch_filename);
-  patch_descend = page->patch_descend;
-  was_current_page = page == toplevel->page_current;
+  gchar *filename = g_strdup (page->page_filename);
+  int page_control = page->page_control;
+  int up = page->up;
+  gchar *patch_filename = g_strdup (page->patch_filename);
+  gboolean patch_descend = page->patch_descend;
+  gboolean was_current_page = page == toplevel->page_current;
 
   /* delete the page, then re-open the file as a new page */
   x_lowlevel_close_page (w_current, page);
