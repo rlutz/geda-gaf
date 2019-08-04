@@ -265,6 +265,10 @@ major_changed_dialog (GschemToplevel* w_current)
 
   if (w_current->toplevel->major_changed_refdes == NULL) return;
 
+  /* If the page was opened in the background, raise the main window
+     to the front so the user sees what this dialog refers to. */
+  x_window_present (w_current);
+
   list_store = gtk_list_store_new (1, G_TYPE_STRING);
 
   for (curr = w_current->toplevel->major_changed_refdes;

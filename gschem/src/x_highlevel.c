@@ -174,6 +174,7 @@ x_highlevel_save_page (GschemToplevel *w_current, PAGE *page)
 
   if (page->is_untitled) {
     x_window_set_current_page (w_current, page);
+    x_window_present (w_current);
 
     return x_fileselect_save (w_current);
   }
@@ -247,6 +248,7 @@ x_highlevel_revert_page (GschemToplevel *w_current, PAGE *page)
     int response;
 
     x_window_set_current_page (w_current, page);
+    x_window_present (w_current);
 
     gchar *basename = g_path_get_basename (page->page_filename);
     dialog = gtk_message_dialog_new_with_markup (
@@ -316,6 +318,7 @@ x_highlevel_close_page (GschemToplevel *w_current, PAGE *page)
        called when the window is closed while there's a single changed
        page in the background), but it doesn't hurt, either. */
     x_window_set_current_page (w_current, page);
+    x_window_present (w_current);
 
     if (!x_dialog_close_changed_page (w_current, page))
       return FALSE;
