@@ -93,21 +93,28 @@ x_highlevel_open_page (GschemToplevel *w_current, const gchar *filename)
  *
  * \param [in] w_current  the toplevel environment
  * \param [in] filenames  a GSList of filenames to open
+ *
+ * \returns \c TRUE if all files could be opened, \c FALSE otherwise
  */
-void
+gboolean
 x_highlevel_open_pages (GschemToplevel *w_current, GSList *filenames)
 {
   PAGE *first_page = NULL;
+  gboolean success = TRUE;
 
   /* open each file */
   for (GSList *l = filenames; l != NULL; l = l->next) {
     PAGE *page = x_lowlevel_open_page (w_current, (gchar *) l->data);
-    if (first_page == NULL)
+    if (page == NULL)
+      success = FALSE;
+    else if (first_page == NULL)
       first_page = page;
   }
 
   if (first_page != NULL)
     x_window_set_current_page (w_current, first_page);
+
+  return success;
 }
 
 
