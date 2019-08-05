@@ -43,10 +43,8 @@
  * \param [in] filename   the filename for the new page, or \c NULL to
  *                        generate an untitled filename
  *
- * \returns a pointer to the new page
- *
- * \bug This code should check to make sure any untitled filename does
- *      not conflict with a file on disk.
+ * \returns a pointer to the new page, or \c NULL if a file with the
+ *          specified filename already exists
  */
 PAGE *
 x_lowlevel_new_page (GschemToplevel *w_current, const gchar *filename)
@@ -65,13 +63,32 @@ x_lowlevel_new_page (GschemToplevel *w_current, const gchar *filename)
     cfg = eda_config_get_context_for_path (cwd);
     untitled_name = eda_config_get_string (cfg, "gschem", "default-filename",
                                            NULL);
-    tmp = g_strdup_printf ("%s_%d.sch", untitled_name,
-                           ++w_current->num_untitled);
-    fn = g_build_filename (cwd, tmp, NULL);
+    fn = NULL;
+    do {
+      g_free (fn);
+      tmp = g_strdup_printf ("%s_%d.sch", untitled_name,
+                             ++w_current->num_untitled);
+      fn = g_build_filename (cwd, tmp, NULL);
+      g_free (tmp);
+    } while (g_file_test (fn, G_FILE_TEST_EXISTS));
     g_free (untitled_name);
     g_free (cwd);
-    g_free (tmp);
   } else {
+    if (g_file_test (filename, G_FILE_TEST_EXISTS)) {
+      GtkWidget *dialog = gtk_message_dialog_new_with_markup (
+        GTK_WINDOW (w_current->main_window),
+        GTK_DIALOG_DESTROY_WITH_PARENT,
+        GTK_MESSAGE_ERROR,
+        GTK_BUTTONS_CLOSE,
+        _("<b>Can't create \"%s\".</b>"),
+        filename);
+      g_object_set (dialog, "secondary-text",
+                    _("A file with this name already exists."), NULL);
+      gtk_window_set_title (GTK_WINDOW (dialog), _("gschem"));
+      gtk_dialog_run (GTK_DIALOG (dialog));
+      gtk_widget_destroy (dialog);
+      return NULL;
+    }
     fn = g_strdup (filename);
   }
 
