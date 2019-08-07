@@ -272,8 +272,6 @@ x_fileselect_save (GschemToplevel *w_current)
                                        "untitled.sch");
   }
 
-  gtk_dialog_set_default_response(GTK_DIALOG(dialog),
-				  GTK_RESPONSE_ACCEPT);
   gtk_widget_show (dialog);
   if (gtk_dialog_run ((GtkDialog*)dialog) == GTK_RESPONSE_ACCEPT) {
     gchar *filename =
