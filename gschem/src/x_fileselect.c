@@ -272,37 +272,19 @@ x_fileselect_save (GschemToplevel *w_current)
                                        "untitled.sch");
   }
 
+  /* use built-in overwrite confirmation dialog */
+  gtk_file_chooser_set_do_overwrite_confirmation (GTK_FILE_CHOOSER (dialog),
+                                                  TRUE);
+
   gtk_widget_show (dialog);
   if (gtk_dialog_run ((GtkDialog*)dialog) == GTK_RESPONSE_ACCEPT) {
     gchar *filename =
       gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
 
-    /* If the file already exists, display a dialog box to check if
-       the user really wants to overwrite it. */
-    if ((filename != NULL) && g_file_test (filename, G_FILE_TEST_EXISTS)) {
-      GtkWidget *checkdialog =
-        gtk_message_dialog_new (GTK_WINDOW(dialog),
-                                (GTK_DIALOG_MODAL |
-                                 GTK_DIALOG_DESTROY_WITH_PARENT),
-                                GTK_MESSAGE_QUESTION,
-                                GTK_BUTTONS_YES_NO,
-                                _("The selected file `%s' already exists.\n\n"
-                                  "Would you like to overwrite it?"),
-                                filename);
-      gtk_window_set_title (GTK_WINDOW (checkdialog), _("Overwrite file?"));
-      if (gtk_dialog_run (GTK_DIALOG (checkdialog)) != GTK_RESPONSE_YES) {
-        s_log_message (_("Save cancelled on user request\n"));
-        g_free (filename);
-        filename = NULL;
-      }
-      gtk_widget_destroy (checkdialog);
-    }
     /* try saving current page of toplevel to file filename */
-    if (filename != NULL) {
-      success = x_lowlevel_save_page (w_current,
-                                      w_current->toplevel->page_current,
-                                      filename);
-    }
+    success = x_lowlevel_save_page (w_current,
+                                    w_current->toplevel->page_current,
+                                    filename);
 
     g_free (filename);
   }
