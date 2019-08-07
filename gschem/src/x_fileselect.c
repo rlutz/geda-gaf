@@ -208,6 +208,74 @@ x_fileselect_open(GschemToplevel *w_current)
   g_slist_free_full (filenames, g_free);
 }
 
+/*! \brief Show a dialog asking whether to really use a non-canonical
+ *         filename.
+ *
+ * \param [in] parent    the transient parent window
+ * \param [in] basename  the selected non-canonical filename
+ *
+ * \returns whether the user confirmed using the filename
+ */
+static gboolean
+run_extension_confirmation_dialog (GtkWindow *parent, const char *basename)
+{
+  GtkWidget *dialog = gtk_message_dialog_new (
+    parent,
+    GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
+    GTK_MESSAGE_QUESTION,
+    GTK_BUTTONS_NONE,
+    _("The selected filename \"%s\" doesn't have a valid gEDA filename "
+      "extension (\".sch\" for schematics or \".sym\" for symbols).\n\n"
+      "Do you want to save as \"%s\" anyway?"),
+    basename, basename);
+  gtk_dialog_add_buttons (GTK_DIALOG (dialog),
+                          GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+                          GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT,
+                          NULL);
+  gtk_dialog_set_alternative_button_order (GTK_DIALOG (dialog),
+                                           GTK_RESPONSE_ACCEPT,
+                                           GTK_RESPONSE_CANCEL,
+                                           -1);
+  gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_ACCEPT);
+  if (gtk_window_has_group (parent))
+    gtk_window_group_add_window (gtk_window_get_group (parent),
+                                 GTK_WINDOW (dialog));
+  gtk_window_set_title (GTK_WINDOW (dialog), _("Confirm filename"));
+
+  gint response_id = gtk_dialog_run (GTK_DIALOG (dialog));
+  gtk_widget_destroy (dialog);
+  return response_id == GTK_RESPONSE_ACCEPT;
+}
+
+/*! \brief Response callback for file save dialog.
+ *
+ * If the user confirmed the dialog and the selected filename doesn't
+ * have \c ".sch" or \c ".sym" as an extention, asks whether to really
+ * use that filename.  On cancel, returns to the file chooser dialog.
+ *
+ * Doesn't check anything if the user cancelled the file chooser dialog.
+ */
+static void
+check_extension (GtkDialog *dialog, gint response_id, gpointer user_data)
+{
+  if (response_id != GTK_RESPONSE_ACCEPT)
+    return;
+
+  gchar *filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
+  gchar *lowercase_filename = g_ascii_strdown (filename, -1);
+
+  if (!g_str_has_suffix (lowercase_filename, ".sch") &&
+      !g_str_has_suffix (lowercase_filename, ".sym")) {
+    gchar *basename = g_path_get_basename (filename);
+    if (!run_extension_confirmation_dialog (GTK_WINDOW (dialog), basename))
+      g_signal_stop_emission_by_name (dialog, "response");
+    g_free (basename);
+  }
+
+  g_free (lowercase_filename);
+  g_free (filename);
+}
+
 /*! \brief Opens a file chooser for saving the current page.
  *  \par Function Description
  *  This function opens a file chooser dialog and wait for the user to
@@ -275,6 +343,9 @@ x_fileselect_save (GschemToplevel *w_current)
   /* use built-in overwrite confirmation dialog */
   gtk_file_chooser_set_do_overwrite_confirmation (GTK_FILE_CHOOSER (dialog),
                                                   TRUE);
+
+  /* ask for confirmation if the user chooses an unusual filename */
+  g_signal_connect (dialog, "response", G_CALLBACK (check_extension), NULL);
 
   gtk_widget_show (dialog);
   if (gtk_dialog_run ((GtkDialog*)dialog) == GTK_RESPONSE_ACCEPT) {
