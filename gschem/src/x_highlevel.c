@@ -58,6 +58,58 @@ x_highlevel_new_page (GschemToplevel *w_current, const gchar *filename)
 }
 
 
+/*! \brief Helper function for \c x_highlevel_open_page(s).
+ *
+ * If there is a matching page in \a w_current, returns a pointer to
+ * the existing page.  If the file exists, opens a new page from the
+ * file.  Otherwise, asks the user for confirmation and, if confirmed,
+ * creates a new page with that name.
+ *
+ * \param [in] w_current          the toplevel environment
+ * \param [in] filename           the name of the file to open/create
+ * \param [in] already_confirmed  whether the user has already
+ *                                  confirmed creating the file
+ *
+ * \returns a pointer to the page, or \c NULL if the file couldn't be
+ *          loaded or the user didn't confirm creating a page
+ */
+static PAGE *
+open_or_create_page (GschemToplevel *w_current, const gchar *filename,
+                     gboolean already_confirmed)
+{
+  TOPLEVEL *toplevel = gschem_toplevel_get_toplevel (w_current);
+  PAGE *page;
+  gchar *full_filename;
+
+  /* If a page has already been created for this filename, return the
+     existing page.
+     The filename is intentionally not normalized here.  If the file
+     doesn't exists, the normalized filename would be NULL; if it does
+     exist, x_lowlevel_open_page() will take care of finding and
+     returning the correct page. */
+  page = s_page_search (toplevel, filename);
+  if (page != NULL)
+    return page;
+
+  /* open page if file exists */
+  full_filename = f_normalize_filename (filename, NULL);
+  if (full_filename != NULL) {
+    g_free (full_filename);
+    return x_lowlevel_open_page (w_current, filename);
+  }
+
+  if (!already_confirmed &&
+      !x_dialog_confirm_create (
+        GTK_WINDOW (w_current->main_window),
+        _("Couldn't find \"%s\".\n\n"
+          "Do you want to create a new file with this name?"),
+        filename))
+    return NULL;
+
+  return x_lowlevel_new_page (w_current, filename);
+}
+
+
 /*! \brief Open a new page from a file, or find an existing page.
  *
  * Creates a new page, loads the file in it, and shows the "Major
@@ -82,7 +134,7 @@ x_highlevel_open_page (GschemToplevel *w_current, const gchar *filename)
   GList *pages = geda_list_get_glist (toplevel->pages);
   PAGE *sole_page = g_list_length (pages) == 1 ? (PAGE *) pages->data : NULL;
 
-  PAGE *page = x_lowlevel_open_page (w_current, filename);
+  PAGE *page = open_or_create_page (w_current, filename, FALSE);
 
   if (page != NULL)
     x_window_set_current_page (w_current, page);
@@ -111,13 +163,16 @@ x_highlevel_open_page (GschemToplevel *w_current, const gchar *filename)
  * untitled, unchanged page before this operation, the existing page
  * is closed.
  *
- * \param [in] w_current  the toplevel environment
- * \param [in] filenames  a GSList of filenames to open
+ * \param [in] w_current          the toplevel environment
+ * \param [in] filenames          a GSList of filenames to open
+ * \param [in] already_confirmed  whether the user has already
+ *                                  confirmed creating the file(s)
  *
  * \returns \c TRUE if all files could be opened, \c FALSE otherwise
  */
 gboolean
-x_highlevel_open_pages (GschemToplevel *w_current, GSList *filenames)
+x_highlevel_open_pages (GschemToplevel *w_current, GSList *filenames,
+                        gboolean already_confirmed)
 {
   TOPLEVEL *toplevel = gschem_toplevel_get_toplevel (w_current);
   GList *pages = geda_list_get_glist (toplevel->pages);
@@ -128,7 +183,8 @@ x_highlevel_open_pages (GschemToplevel *w_current, GSList *filenames)
 
   /* open each file */
   for (GSList *l = filenames; l != NULL; l = l->next) {
-    PAGE *page = x_lowlevel_open_page (w_current, (gchar *) l->data);
+    PAGE *page = open_or_create_page (w_current, (gchar *) l->data,
+                                      already_confirmed);
     if (page == NULL)
       success = FALSE;
     else if (first_page == NULL)

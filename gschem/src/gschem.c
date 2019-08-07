@@ -284,7 +284,7 @@ void main_prog(void *closure, int argc, char *argv[])
   }
 
   filenames = g_slist_reverse (filenames);
-  x_highlevel_open_pages (w_current, filenames);
+  x_highlevel_open_pages (w_current, filenames, FALSE);
   g_slist_free_full (filenames, g_free);
 
   g_free(cwd);

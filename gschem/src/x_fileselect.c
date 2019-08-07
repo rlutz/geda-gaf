@@ -149,6 +149,44 @@ x_fileselect_add_preview (GtkFileChooser *filechooser)
 
 }
 
+/*! \brief Response callback for file open dialog.
+ *
+ * If the user confirmed the dialog, checks for each filename in turn
+ * whether it exists and if not, asks the user whether to create that
+ * file.  If the user cancels creating a file, returns to the file
+ * chooser dialog.
+ *
+ * Doesn't check anything if the user cancelled the dialog.
+ */
+static void
+confirm_create (GtkDialog *dialog, gint response_id, gpointer user_data)
+{
+  GschemToplevel *w_current = GSCHEM_TOPLEVEL (user_data);
+  TOPLEVEL *toplevel = gschem_toplevel_get_toplevel (w_current);
+  GSList *filenames;
+
+  if (response_id != GTK_RESPONSE_ACCEPT)
+    return;
+
+  filenames = gtk_file_chooser_get_filenames (GTK_FILE_CHOOSER (dialog));
+
+  for (GSList *l = filenames; l != NULL; l = l->next) {
+    gchar *filename = (gchar *) l->data;
+    if (!g_file_test (filename, G_FILE_TEST_EXISTS) &&
+        s_page_search (toplevel, filename) == NULL &&
+        !x_dialog_confirm_create (
+          GTK_WINDOW (dialog),
+          _("The file \"%s\" doesn't exist.\n\n"
+            "Do you want to create it?"),
+          filename)) {
+      g_signal_stop_emission_by_name (dialog, "response");
+      break;
+    }
+  }
+
+  g_slist_free_full (filenames, g_free);
+}
+
 /*! \brief Opens a file chooser for opening one or more schematics.
  *  \par Function Description
  *  This function opens a file chooser dialog and wait for the user to
@@ -197,12 +235,17 @@ x_fileselect_open(GschemToplevel *w_current)
     cwd = g_path_get_dirname (page_current->page_filename);
   gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (dialog), cwd);
   g_free (cwd);
+
+  /* ask for confirmation if selecting a non-existent file */
+  g_signal_connect (dialog, "response",
+                    G_CALLBACK (confirm_create), w_current);
+
   gtk_widget_show (dialog);
   if (gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_ACCEPT)
     filenames = gtk_file_chooser_get_filenames (GTK_FILE_CHOOSER (dialog));
   gtk_widget_destroy (dialog);
 
-  x_highlevel_open_pages (w_current, filenames);
+  x_highlevel_open_pages (w_current, filenames, TRUE);
 
   /* free the list of filenames */
   g_slist_free_full (filenames, g_free);

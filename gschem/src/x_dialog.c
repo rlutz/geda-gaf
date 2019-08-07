@@ -418,3 +418,53 @@ int x_dialog_validate_attribute(GtkWindow* parent, char *attribute)
   return TRUE;
 }
 /***************** End of misc helper dialog boxes **************/
+
+
+/*! \brief Ask the user for confirmation for creating a file.
+ *
+ * Shows a message dialog and lets the user decide whether to create a
+ * file with the given name or not.
+ *
+ * \param [in] parent    the transient parent window
+ * \param [in] message   the message to show, where '%s' is replaced
+ *                       with the filename
+ * \param [in] filename  the name of the file which would be created
+ *
+ * \returns \c TRUE if the user confirmed creating the file,
+ *          \c FALSE otherwise
+ */
+gboolean
+x_dialog_confirm_create (GtkWindow *parent, const gchar *message,
+                                            const gchar *filename)
+{
+  GtkWidget *dialog, *button;
+  gint response_id;
+
+  dialog = gtk_message_dialog_new (parent,
+                                   GTK_DIALOG_MODAL |
+                                     GTK_DIALOG_DESTROY_WITH_PARENT,
+                                   GTK_MESSAGE_QUESTION,
+                                   GTK_BUTTONS_NONE,
+                                   message, filename);
+  gtk_dialog_add_buttons (GTK_DIALOG (dialog),
+                          GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+                          NULL);
+  button = gtk_button_new_with_mnemonic (_("_Create"));
+  gtk_widget_set_can_default (button, TRUE);
+  gtk_button_set_image (GTK_BUTTON (button),
+                        gtk_image_new_from_stock (GTK_STOCK_NEW,
+                                                  GTK_ICON_SIZE_BUTTON));
+  gtk_widget_show (button);
+  gtk_dialog_add_action_widget (GTK_DIALOG (dialog), button,
+                                GTK_RESPONSE_ACCEPT);
+  gtk_dialog_set_alternative_button_order (GTK_DIALOG (dialog),
+                                           GTK_RESPONSE_ACCEPT,
+                                           GTK_RESPONSE_CANCEL,
+                                           -1);
+  gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_ACCEPT);
+  gtk_window_set_title (GTK_WINDOW (dialog), _("gschem"));
+  response_id = gtk_dialog_run (GTK_DIALOG (dialog));
+  gtk_widget_destroy (dialog);
+
+  return response_id == GTK_RESPONSE_ACCEPT;
+}

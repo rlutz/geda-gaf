@@ -384,6 +384,7 @@ void major_changed_dialog(GschemToplevel* w_current);
 gboolean x_dialog_close_changed_page (GschemToplevel *w_current, PAGE *page);
 gboolean x_dialog_close_window (GschemToplevel *w_current);
 int x_dialog_validate_attribute(GtkWindow* parent, char *attribute);
+gboolean x_dialog_confirm_create (GtkWindow *parent, const gchar *message, const gchar *filename);
 /* x_event.c */
 gint x_event_expose(GschemPageView *widget, GdkEventExpose *event, GschemToplevel *w_current);
 gint x_event_raise_dialog_boxes (GschemPageView *view, GdkEventExpose *event, GschemToplevel *w_current);
@@ -418,7 +419,7 @@ gboolean x_hierarchy_up (GschemToplevel *w_current);
 /* x_highlevel.c */
 PAGE *x_highlevel_new_page (GschemToplevel *w_current, const gchar *filename);
 PAGE *x_highlevel_open_page (GschemToplevel *w_current, const gchar *filename);
-gboolean x_highlevel_open_pages (GschemToplevel *w_current, GSList *filenames);
+gboolean x_highlevel_open_pages (GschemToplevel *w_current, GSList *filenames, gboolean already_confirmed);
 gboolean x_highlevel_save_page (GschemToplevel *w_current, PAGE *page);
 gboolean x_highlevel_save_all (GschemToplevel *w_current);
 gboolean x_highlevel_revert_page (GschemToplevel *w_current, PAGE *page);
