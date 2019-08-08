@@ -1900,13 +1900,13 @@ DEFINE_ACTION (hierarchy_down_schematic,
     while(current_filename != NULL) {
       GError *err = NULL;
       s_log_message(_("Searching for source [%s]\n"), current_filename);
+      PAGE *saved_page = gschem_toplevel_get_toplevel (w_current)->page_current;
       child = s_hierarchy_down_schematic_single(gschem_toplevel_get_toplevel (w_current),
                                                 current_filename,
                                                 parent,
                                                 page_control,
                                                 HIERARCHY_NORMAL_LOAD,
                                                 &err);
-      gschem_toplevel_page_changed (w_current);
 
       /* s_hierarchy_down_schematic_single() will not zoom the loaded page */
       if (child != NULL) {
@@ -1915,7 +1915,9 @@ DEFINE_ACTION (hierarchy_down_schematic,
         gschem_page_view_zoom_extents (gschem_toplevel_get_current_page_view (w_current),
                                        NULL);
         o_undo_savestate_old (w_current, UNDO_ALL, NULL);
-        s_page_goto (gschem_toplevel_get_toplevel (w_current), parent);
+      }
+      if (saved_page != NULL) {
+        s_page_goto (gschem_toplevel_get_toplevel (w_current), saved_page);
         gschem_toplevel_page_changed (w_current);
       }
 
@@ -2025,11 +2027,16 @@ DEFINE_ACTION (hierarchy_down_symbol,
 	return;
       }
       g_free (filename);
+      PAGE *saved_page = gschem_toplevel_get_toplevel (w_current)->page_current;
       s_hierarchy_down_symbol(gschem_toplevel_get_toplevel (w_current), sym,
 			      gschem_toplevel_get_toplevel (w_current)->page_current);
-      gschem_toplevel_page_changed (w_current);
+      PAGE *page = gschem_toplevel_get_toplevel (w_current)->page_current;
+      if (saved_page != NULL) {
+        s_page_goto (gschem_toplevel_get_toplevel (w_current), saved_page);
+        gschem_toplevel_page_changed (w_current);
+      }
 
-      x_window_set_current_page(w_current, gschem_toplevel_get_toplevel (w_current)->page_current);
+      x_window_set_current_page (w_current, page);
       /* s_hierarchy_down_symbol() will not zoom the loaded page */
       gschem_page_view_zoom_extents (gschem_toplevel_get_current_page_view (w_current),
                                      NULL);
