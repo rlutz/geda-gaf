@@ -254,8 +254,9 @@ x_lowlevel_save_page (GschemToplevel *w_current, PAGE *page, const gchar *filena
 
 /*! \brief Revert a page.
  *
- * Closes the page, creates a new page, reads the file back from disk,
- * and switches to the newly created page.
+ * Closes the page, creates a new page, and reads the file back from
+ * disk.  If the reverted page was the current page before, switches
+ * to the newly created page.
  *
  * \param [in] w_current  the toplevel environment
  * \param [in] page       the page to revert
@@ -263,11 +264,14 @@ x_lowlevel_save_page (GschemToplevel *w_current, PAGE *page, const gchar *filena
 void
 x_lowlevel_revert_page (GschemToplevel *w_current, PAGE *page)
 {
+  TOPLEVEL *toplevel = gschem_toplevel_get_toplevel (w_current);
+
   gchar *filename;
   int page_control;
   int up;
   gchar *patch_filename;
   gboolean patch_descend;
+  gboolean was_current_page;
 
   /* save this for later */
   filename = g_strdup (page->page_filename);
@@ -275,6 +279,7 @@ x_lowlevel_revert_page (GschemToplevel *w_current, PAGE *page)
   up = page->up;
   patch_filename = g_strdup (page->patch_filename);
   patch_descend = page->patch_descend;
+  was_current_page = page == toplevel->page_current;
 
   /* delete the page, then re-open the file as a new page */
   x_lowlevel_close_page (w_current, page);
@@ -293,7 +298,10 @@ x_lowlevel_revert_page (GschemToplevel *w_current, PAGE *page)
   page->patch_filename = patch_filename;
   page->patch_descend = patch_descend;
 
-  x_window_set_current_page (w_current, page);
+  if (was_current_page)
+    x_window_set_current_page (w_current, page);
+
+  x_pagesel_update (w_current);
 }
 
 
