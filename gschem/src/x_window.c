@@ -257,7 +257,7 @@ x_window_select_text (GschemFindTextDockable *dockable, OBJECT *object, GschemTo
   g_return_if_fail (page_obj != NULL);
 
   if (page != page_obj->page) {
-    gschem_page_view_set_page (view, page_obj->page);
+    x_window_set_current_page (w_current, page_obj->page);
   }
 
   gschem_page_view_zoom_text (view, object, TRUE);
