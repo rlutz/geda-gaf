@@ -248,17 +248,13 @@ x_window_select_text (GschemFindTextDockable *dockable, OBJECT *object, GschemTo
   GschemPageView *view = gschem_toplevel_get_current_page_view (w_current);
   g_return_if_fail (view != NULL);
 
-  PAGE *page = gschem_page_view_get_page (view);
-  g_return_if_fail (page != NULL);
   OBJECT *page_obj;
 
   g_return_if_fail (object != NULL);
   page_obj = gschem_page_get_page_object(object);
   g_return_if_fail (page_obj != NULL);
 
-  if (page != page_obj->page) {
-    x_window_set_current_page (w_current, page_obj->page);
-  }
+  x_window_set_current_page (w_current, page_obj->page);
 
   gschem_page_view_zoom_text (view, object, TRUE);
 }
@@ -1118,6 +1114,10 @@ x_window_set_current_page (GschemToplevel *w_current, PAGE *page)
 
   g_warn_if_fail (page_view->page == toplevel->page_current ||
                   page_view->page == NULL);
+
+  if (page == toplevel->page_current && page_view->page != NULL)
+    /* nothing to do */
+    return;
 
   o_redraw_cleanstates (w_current);
 

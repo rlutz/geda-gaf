@@ -718,12 +718,8 @@ tree_selection_changed (GtkTreeSelection *selection, gpointer user_data)
     GSCHEM_DOCKABLE (patch_dockable)->w_current);
   g_return_if_fail (view != NULL);
 
-  PAGE *page = gschem_page_view_get_page (view);
-  g_return_if_fail (page != NULL);
-
-  if (page != page_obj->page)
-    x_window_set_current_page (GSCHEM_DOCKABLE (patch_dockable)->w_current,
-                               page_obj->page);
+  x_window_set_current_page (GSCHEM_DOCKABLE (patch_dockable)->w_current,
+                             page_obj->page);
 
   gschem_page_view_zoom_text (view, object, TRUE);
 }
