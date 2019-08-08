@@ -113,7 +113,8 @@ x_lowlevel_new_page (GschemToplevel *w_current, const gchar *filename)
  * \param [in] w_current  the toplevel environment
  * \param [in] filename   the name of the file to open
  *
- * \returns a pointer to the page
+ * \returns a pointer to the page, or \c NULL if the file couldn't be
+ *          loaded
  */
 PAGE *
 x_lowlevel_open_page (GschemToplevel *w_current, const gchar *filename)
@@ -143,6 +144,11 @@ x_lowlevel_open_page (GschemToplevel *w_current, const gchar *filename)
   if (!f_open (toplevel, page, (gchar *) filename, &err)) {
     GtkWidget *dialog;
 
+    s_page_delete (toplevel, page);
+    if (saved_page != NULL)
+      s_page_goto (toplevel, saved_page);
+    gschem_toplevel_page_changed (w_current);
+
     g_warning ("%s\n", err->message);
     dialog = gtk_message_dialog_new_with_markup (
       GTK_WINDOW (w_current->main_window),
@@ -157,10 +163,12 @@ x_lowlevel_open_page (GschemToplevel *w_current, const gchar *filename)
     gtk_dialog_run (GTK_DIALOG (dialog));
     gtk_widget_destroy (dialog);
     g_error_free (err);
-  } else {
-    gtk_recent_manager_add_item (recent_manager,
-                                 g_filename_to_uri (filename, NULL, NULL));
+
+    return NULL;
   }
+
+  gtk_recent_manager_add_item (recent_manager,
+                               g_filename_to_uri (filename, NULL, NULL));
 
   o_undo_savestate (w_current, toplevel->page_current, UNDO_ALL, NULL);
 
