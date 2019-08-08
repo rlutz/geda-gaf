@@ -1116,6 +1116,9 @@ x_window_set_current_page (GschemToplevel *w_current, PAGE *page)
   g_return_if_fail (toplevel != NULL);
   g_return_if_fail (page != NULL);
 
+  g_warn_if_fail (page_view->page == toplevel->page_current ||
+                  page_view->page == NULL);
+
   o_redraw_cleanstates (w_current);
 
   gschem_page_view_set_page (page_view, page);
