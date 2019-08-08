@@ -32,27 +32,24 @@
 #include "actions.decl.x"
 
 
-/*! \brief Open a new page from a file.
+/*! \brief Open a new page from a file, create a new untitled page
+ *         with a titleblock, or find an existing page.
  *
- * Opens the file whose name is <B>filename</B> in a new PAGE of
- * <B>toplevel</B>.
+ * Creates a new page and loads the file in it.  If there is already a
+ * matching page in \a w_current, returns a pointer to the existing
+ * page instead.
  *
- * If there is no page for <B>filename</B> in <B>toplevel</B>'s list
- * of pages, it creates a new PAGE, loads the file in it and returns a
- * pointer on the new page.  Otherwise it returns a pointer on the
- * existing page.
- *
- * If the filename passed is \c NULL, this function creates an empty,
- * untitled page.  The name of the untitled page is build from
+ * If \c NULL is passed as a filename, creates an untitled page with a
+ * titleblock.  The name of the untitled page is build from
  * configuration data ('untitled-name') and a counter for uniqueness.
  *
- * The opened page becomes the current page of <B>toplevel</B>.
+ * This function doesn't change the current page of \a w_current.
  *
  * \param [in] w_current  the toplevel environment
- * \param [in] filename   the name of the file to open, or \c NULL for
- *                        a blank page
+ * \param [in] filename   the name of the file to open, or \c NULL to
+ *                        create an untitled page with a titleblock
  *
- * \returns a pointer on the new page
+ * \returns a pointer to the page
  *
  * \bug This code should check to make sure any untitled filename does
  *      not conflict with a file on disk.
@@ -142,22 +139,19 @@ x_lowlevel_open_page (GschemToplevel *w_current, const gchar *filename)
 }
 
 
-/*! \brief Save a page to a file.
+/*! \brief Save a page to a given filename.
  *
- * Saves the page <B>page</B> to a file named <B>filename</B>.
+ * \a page doesn't have to be the current page of \a w_current.
+ * This function doesn't change the current page of \a w_current.
  *
- * Returns the value returned by function <B>f_save()</B> trying to
- * save page <B>page</B> to file <B>filename</B> (1 on success, 0 on
- * failure).
- *
- * <B>page</B> may not be the current page of <B>toplevel</B>.  The
- * current page of <B>toplevel</B> is not affected by this function.
+ * If \a filename is different from the current filename of \a page,
+ * the page's filename is updated.
  *
  * \param [in] w_current  the toplevel environment
  * \param [in] page       the page to save
- * \param [in] filename   the name of the file in which to save page
+ * \param [in] filename   the name of the file to which to save the page
  *
- * \returns \c 1 on success, \c 0 otherwise
+ * \returns \c 1 if the page could be saved, \c 0 otherwise
  */
 gint
 x_lowlevel_save_page (GschemToplevel *w_current, PAGE *page, const gchar *filename)
@@ -227,10 +221,8 @@ x_lowlevel_save_page (GschemToplevel *w_current, PAGE *page, const gchar *filena
 
 /*! \brief Close a page.
  *
- * Closes the page <B>page</B> of toplevel <B>toplevel</B>.
- *
- * If necessary, the current page of <B>toplevel</B> is changed to the
- * next valid page or to a new untitled page.
+ * Switches to the next valid page if necessary.  If this was the last
+ * page of the toplevel, a new untitled page is created.
  *
  * \param [in] w_current  the toplevel environment
  * \param [in] page       the page to close
