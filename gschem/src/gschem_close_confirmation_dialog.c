@@ -710,8 +710,7 @@ x_dialog_close_changed_page (GschemToplevel *w_current, PAGE *page)
 
       case GTK_RESPONSE_YES:
         /* action selected: save */
-        s_page_goto (w_current->toplevel, page);
-        gschem_toplevel_page_changed (w_current);
+        x_window_set_current_page (w_current, page);
         gschem_action_activate (action_file_save, w_current);
         /* has the page been really saved? */
         if (!page->CHANGED) {
@@ -733,11 +732,8 @@ x_dialog_close_changed_page (GschemToplevel *w_current, PAGE *page)
   gtk_widget_destroy (dialog);
 
   /* Switch back to the page we were on if it wasn't the one being closed */
-  g_return_val_if_fail (keep_page != NULL, result);
-  if (keep_page != page) {
-    s_page_goto (w_current->toplevel, keep_page);
-    gschem_toplevel_page_changed (w_current);
-  }
+  x_window_set_current_page (w_current, keep_page);
+
   return result;
 }
 
@@ -810,9 +806,7 @@ x_dialog_close_window (GschemToplevel *w_current)
              p_unsaved = g_list_next (p_unsaved)) {
           p_current = (PAGE*)p_unsaved->data;
 
-          s_page_goto (toplevel, p_current);
-          gschem_toplevel_page_changed (w_current);
-
+          x_window_set_current_page (w_current, p_current);
           gschem_action_activate (action_file_save, w_current);
           /* if user cancelled previous, do not close window */
           ret &= !p_current->CHANGED;
@@ -832,9 +826,7 @@ x_dialog_close_window (GschemToplevel *w_current)
   gtk_widget_destroy (dialog);
 
   /* Switch back to the page we were on */
-  g_return_val_if_fail (keep_page != NULL, ret);
-  s_page_goto (toplevel, keep_page);
-  gschem_toplevel_page_changed (w_current);
+  x_window_set_current_page (w_current, keep_page);
 
   return ret;
 }
