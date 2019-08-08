@@ -135,6 +135,7 @@ x_lowlevel_open_page (GschemToplevel *w_current, const gchar *filename)
     gschem_toplevel_page_changed (w_current);
   }
 
+  x_pagesel_update (w_current);
   return page;
 }
 
@@ -284,4 +285,6 @@ x_lowlevel_close_page (GschemToplevel *w_current, PAGE *page)
     /* change to new_current and update display */
     x_window_set_current_page (w_current, new_current);
   }
+
+  x_pagesel_update (w_current);
 }
