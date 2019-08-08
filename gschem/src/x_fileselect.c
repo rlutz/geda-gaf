@@ -166,6 +166,7 @@ x_fileselect_open(GschemToplevel *w_current)
 {
   GtkWidget *dialog;
   gchar *cwd;
+  GSList *filenames = NULL;
 
   dialog = gtk_file_chooser_dialog_new (_("Open..."),
                                         GTK_WINDOW(w_current->main_window),
@@ -192,18 +193,14 @@ x_fileselect_open(GschemToplevel *w_current)
   gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (dialog), cwd);
   g_free (cwd);
   gtk_widget_show (dialog);
-  if (gtk_dialog_run ((GtkDialog*)dialog) == GTK_RESPONSE_ACCEPT) {
-    GSList *filenames =
-      gtk_file_chooser_get_filenames (GTK_FILE_CHOOSER (dialog));
-
-    x_highlevel_open_pages (w_current, filenames);
-
-    /* free the list of filenames */
-    g_slist_foreach (filenames, (GFunc)g_free, NULL);
-    g_slist_free (filenames);
-  }
+  if (gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_ACCEPT)
+    filenames = gtk_file_chooser_get_filenames (GTK_FILE_CHOOSER (dialog));
   gtk_widget_destroy (dialog);
 
+  x_highlevel_open_pages (w_current, filenames);
+
+  /* free the list of filenames */
+  g_slist_free_full (filenames, g_free);
 }
 
 /*! \brief Opens a file chooser for saving the current page.
