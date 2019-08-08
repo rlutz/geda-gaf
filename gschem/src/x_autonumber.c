@@ -636,6 +636,7 @@ void autonumber_text_autonumber(AUTONUMBER_TEXT *autotext)
   GList *text_item, *obj_item, *page_item;
   OBJECT *o_current;
   GschemToplevel *w_current;
+  PAGE *saved_page;
   gchar *searchtext;
   gchar *scope_text;
   gchar *new_searchtext;
@@ -644,6 +645,7 @@ void autonumber_text_autonumber(AUTONUMBER_TEXT *autotext)
   const GList *iter;
   
   w_current = autotext->w_current;
+  saved_page = w_current->toplevel->page_current;
   autotext->current_searchtext = NULL;
   autotext->root_page = 1;
   autotext->used_numbers = NULL;
@@ -818,8 +820,10 @@ void autonumber_text_autonumber(AUTONUMBER_TEXT *autotext)
   /* cleanup and redraw all*/
   g_list_foreach(searchtext_list, (GFunc) g_free, NULL);
   g_list_free(searchtext_list);
-  s_page_goto(w_current->toplevel, pages->data); /* go back to the root page */
-  gschem_toplevel_page_changed (w_current);
+  if (saved_page != NULL) {
+    s_page_goto (w_current->toplevel, saved_page);
+    gschem_toplevel_page_changed (w_current);
+  }
   gschem_page_view_invalidate_all (gschem_toplevel_get_current_page_view (w_current));
   g_list_free(pages);
   o_undo_savestate_old (w_current, UNDO_ALL, _("Autonumber"));

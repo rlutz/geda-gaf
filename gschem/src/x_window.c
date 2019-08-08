@@ -1042,6 +1042,8 @@ x_window_open_page (GschemToplevel *w_current, const gchar *filename)
     return page;
   }
 
+  PAGE *saved_page = toplevel->page_current;
+
   page = s_page_new (toplevel, fn);
   s_page_goto (toplevel, page);
   gschem_toplevel_page_changed (w_current);
@@ -1081,6 +1083,11 @@ x_window_open_page (GschemToplevel *w_current, const gchar *filename)
   o_undo_savestate (w_current, toplevel->page_current, UNDO_ALL, NULL);
 
   g_free (fn);
+
+  if (saved_page != NULL) {
+    s_page_goto (toplevel, saved_page);
+    gschem_toplevel_page_changed (w_current);
+  }
 
   return page;
 }
