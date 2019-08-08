@@ -98,11 +98,10 @@ void
 x_highlevel_open_pages (GschemToplevel *w_current, GSList *filenames)
 {
   PAGE *first_page = NULL;
-  GSList *tmp;
 
   /* open each file */
-  for (tmp = filenames; tmp != NULL;tmp = g_slist_next (tmp)) {
-    PAGE *page = x_lowlevel_open_page (w_current, (gchar *) tmp->data);
+  for (GSList *l = filenames; l != NULL; l = l->next) {
+    PAGE *page = x_lowlevel_open_page (w_current, (gchar *) l->data);
     if (first_page == NULL)
       first_page = page;
   }
@@ -139,12 +138,12 @@ x_highlevel_save_page (GschemToplevel *w_current, PAGE *page)
   /*! \bug This is a dreadful way of figuring out whether a page is
    *  newly-created or not. */
   cfg = eda_config_get_context_for_path (page->page_filename);
-  untitled_name = eda_config_get_string (cfg, "gschem", "default-filename", NULL);
-  if (strstr(page->page_filename, untitled_name)) {
+  untitled_name = eda_config_get_string (cfg, "gschem", "default-filename",
+                                         NULL);
+  if (strstr (page->page_filename, untitled_name) != NULL)
     success = x_fileselect_save (w_current);
-  } else {
+  else
     success = x_lowlevel_save_page (w_current, page, page->page_filename);
-  }
   g_free (untitled_name);
   return success;
 }
@@ -165,8 +164,6 @@ gboolean
 x_highlevel_revert_page (GschemToplevel *w_current, PAGE *page)
 {
   TOPLEVEL *toplevel = gschem_toplevel_get_toplevel (w_current);
-  int response;
-  GtkWidget* dialog;
 
   if (page == NULL) {
     page = toplevel->page_current;
@@ -174,7 +171,10 @@ x_highlevel_revert_page (GschemToplevel *w_current, PAGE *page)
   }
 
   if (page->CHANGED) {
-    dialog = gtk_message_dialog_new ((GtkWindow *) w_current->main_window,
+    GtkWidget *dialog;
+    int response;
+
+    dialog = gtk_message_dialog_new (GTK_WINDOW (w_current->main_window),
                                      GTK_DIALOG_DESTROY_WITH_PARENT,
                                      GTK_MESSAGE_QUESTION,
                                      GTK_BUTTONS_YES_NO,
@@ -220,10 +220,8 @@ x_highlevel_close_page (GschemToplevel *w_current, PAGE *page)
     g_return_val_if_fail (page != NULL, FALSE);
   }
 
-  if (page->CHANGED
-      && !x_dialog_close_changed_page (w_current, page)) {
+  if (page->CHANGED && !x_dialog_close_changed_page (w_current, page))
     return FALSE;
-  }
 
   x_lowlevel_close_page (w_current, page);
   return TRUE;
