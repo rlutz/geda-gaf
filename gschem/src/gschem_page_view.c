@@ -925,6 +925,7 @@ gschem_page_view_set_page (GschemPageView *view, PAGE *page)
 
       g_return_if_fail (page->toplevel != NULL);
       s_page_goto (page->toplevel, page);
+      /* gschem_toplevel_page_changed is called by the notify::page handler */
 
       /* redraw the current page and update UI */
       gschem_page_view_invalidate_all (view);
