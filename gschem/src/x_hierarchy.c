@@ -133,9 +133,6 @@ x_hierarchy_down_schematic (GschemToplevel *w_current, OBJECT *object)
     attrib =
       o_attrib_search_inherited_attribs_by_name (object, "source", count);
     looking_inside = TRUE;
-#if DEBUG
-    printf ("going to look inside now\n");
-#endif
   }
 
   while (attrib != NULL) {
@@ -216,20 +213,12 @@ x_hierarchy_down_schematic (GschemToplevel *w_current, OBJECT *object)
 
     /* okay we were looking outside and didn't find anything,
      * so now we need to look inside the symbol */
-    if (!looking_inside && attrib == NULL && !loaded_flag) {
+    if (!looking_inside && attrib == NULL && !loaded_flag)
       looking_inside = TRUE;
-#if DEBUG
-      printf ("switching to go to look inside\n");
-#endif
-    }
 
-    if (looking_inside) {
-#if DEBUG
-      printf ("looking inside\n");
-#endif
+    if (looking_inside)
       attrib =
         o_attrib_search_inherited_attribs_by_name (object, "source", count);
-    }
   }
 
   if (loaded_flag && save_first_page != NULL)
