@@ -164,7 +164,6 @@ recent_chooser_item_activated (GtkRecentChooser *chooser, GschemToplevel *w_curr
 
   uri = gtk_recent_chooser_get_current_uri (chooser);
   filename = g_filename_from_uri(uri, NULL, NULL);
-  gtk_recent_manager_add_item(recent_manager, uri);
   x_highlevel_open_page (w_current, (char *) filename);
 
   g_free(uri);

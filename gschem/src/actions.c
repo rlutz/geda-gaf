@@ -1821,6 +1821,10 @@ DEFINE_ACTION (hierarchy_down_schematic,
 
       /* s_hierarchy_down_schematic_single() will not zoom the loaded page */
       if (child != NULL) {
+        gtk_recent_manager_add_item (recent_manager,
+                                     g_filename_to_uri (child->page_filename,
+                                                        NULL, NULL));
+
         s_page_goto (gschem_toplevel_get_toplevel (w_current), child);
         gschem_toplevel_page_changed (w_current);
         gschem_page_view_zoom_extents (gschem_toplevel_get_current_page_view (w_current),
@@ -1946,6 +1950,9 @@ DEFINE_ACTION (hierarchy_down_symbol,
         s_page_goto (gschem_toplevel_get_toplevel (w_current), saved_page);
         gschem_toplevel_page_changed (w_current);
       }
+      gtk_recent_manager_add_item (recent_manager,
+                                   g_filename_to_uri (page->page_filename,
+                                                      NULL, NULL));
 
       x_window_set_current_page (w_current, page);
       /* s_hierarchy_down_symbol() will not zoom the loaded page */
