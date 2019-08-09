@@ -1120,6 +1120,8 @@
 (global-set-key "Delete" &edit-delete)
 (global-set-key "Page_Down" &page-next)
 (global-set-key "Page_Up" &page-prev)
+(global-set-key "<Control>Page_Down" &page-next)
+(global-set-key "<Control>Page_Up" &page-prev)
 (global-set-key "greater" &page-next)
 (global-set-key "less" &page-prev)
 
