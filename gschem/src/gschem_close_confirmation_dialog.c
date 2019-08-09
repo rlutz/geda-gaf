@@ -717,6 +717,7 @@ x_dialog_close_changed_page (GschemToplevel *w_current, PAGE *page)
 {
   GtkWidget *dialog;
   PAGE *keep_page;
+  gint response_id;
   gboolean result = FALSE;
 
   g_return_val_if_fail (page != NULL && page->CHANGED, TRUE);
@@ -732,7 +733,10 @@ x_dialog_close_changed_page (GschemToplevel *w_current, PAGE *page)
   gtk_dialog_set_default_response(GTK_DIALOG(dialog),
                                   GTK_RESPONSE_YES);
 
-  switch (gtk_dialog_run (GTK_DIALOG (dialog))) {
+  response_id = gtk_dialog_run (GTK_DIALOG (dialog));
+  gtk_widget_destroy (dialog);
+
+  switch (response_id) {
       case GTK_RESPONSE_NO:
         /* action selected: close without saving */
         /* close the page, discard changes */
@@ -758,7 +762,6 @@ x_dialog_close_changed_page (GschemToplevel *w_current, PAGE *page)
         /* nothing to do */
         break;
   }
-  gtk_widget_destroy (dialog);
 
   /* Switch back to the page we were on if it wasn't the one being closed */
   x_window_set_current_page (w_current, keep_page);
@@ -819,6 +822,8 @@ x_dialog_close_window (GschemToplevel *w_current)
                                 GTK_WINDOW (w_current->main_window));
 
   g_list_free (unsaved_pages);
+  unsaved_pages = NULL;
+
   switch (gtk_dialog_run (GTK_DIALOG (dialog))) {
       case GTK_RESPONSE_NO:
         /* action selected: close without saving */
@@ -831,17 +836,7 @@ x_dialog_close_window (GschemToplevel *w_current)
         g_object_get (dialog,
                       "selected-pages", &unsaved_pages,
                       NULL);
-        for (p_unsaved = unsaved_pages, ret = TRUE;
-             p_unsaved != NULL;
-             p_unsaved = g_list_next (p_unsaved)) {
-          p_current = (PAGE*)p_unsaved->data;
-
-          x_window_set_current_page (w_current, p_current);
-          if (!x_highlevel_save_page (w_current, p_current))
-            /* if user cancelled save, do not close window */
-            ret = FALSE;
-        }
-        g_list_free (unsaved_pages);
+        ret = TRUE;
         break;
 
       case GTK_RESPONSE_CANCEL:
@@ -854,6 +849,19 @@ x_dialog_close_window (GschemToplevel *w_current)
         break;
   }
   gtk_widget_destroy (dialog);
+
+  /* if response was "save", save all selected pages */
+  for (p_unsaved = unsaved_pages;
+       p_unsaved != NULL;
+       p_unsaved = g_list_next (p_unsaved)) {
+    p_current = (PAGE *) p_unsaved->data;
+
+    x_window_set_current_page (w_current, p_current);
+    if (!x_highlevel_save_page (w_current, p_current))
+      /* if user cancelled save, do not close window */
+      ret = FALSE;
+  }
+  g_list_free (unsaved_pages);
 
   /* Switch back to the page we were on */
   x_window_set_current_page (w_current, keep_page);
