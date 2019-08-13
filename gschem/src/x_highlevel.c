@@ -191,7 +191,34 @@ x_highlevel_save_page (GschemToplevel *w_current, PAGE *page)
 void
 x_highlevel_save_all (GschemToplevel *w_current)
 {
-  if (s_page_save_all(gschem_toplevel_get_toplevel (w_current))) {
+  TOPLEVEL *toplevel = gschem_toplevel_get_toplevel (w_current);
+  const GList *iter;
+  PAGE *p_current;
+  gint status = 0;
+
+  for ( iter = geda_list_get_glist( toplevel->pages );
+        iter != NULL;
+        iter = g_list_next( iter ) ) {
+
+    p_current = (PAGE *)iter->data;
+
+    if (f_save (toplevel, p_current,
+                p_current->page_filename, NULL)) {
+      s_log_message (_("Saved [%s]\n"),
+                     p_current->page_filename);
+      /* reset the CHANGED flag of p_current */
+      p_current->CHANGED = 0;
+
+    } else {
+      s_log_message (_("Could NOT save [%s]\n"),
+                     p_current->page_filename);
+      /* increase the error counter */
+      status++;
+    }
+
+  }
+
+  if (status) {
      i_set_state_msg(w_current, SELECT, _("Failed to Save All"));
   } else {
      i_set_state_msg(w_current, SELECT, _("Saved All"));
