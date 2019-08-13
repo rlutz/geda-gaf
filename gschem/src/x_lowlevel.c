@@ -59,8 +59,8 @@ x_lowlevel_new_page (GschemToplevel *w_current, const gchar *filename)
   TOPLEVEL *toplevel = gschem_toplevel_get_toplevel (w_current);
   g_return_val_if_fail (toplevel != NULL, NULL);
 
-  /* Generate untitled filename if none was specified */
   if (filename == NULL) {
+    /* Generate untitled filename if none was specified */
     gchar *cwd, *tmp, *untitled_name;
     EdaConfig *cfg;
     cwd = g_get_current_dir ();
@@ -440,8 +440,8 @@ x_lowlevel_close_page (GschemToplevel *w_current, PAGE *page)
 
   /* Switch to a different page if we just removed the current */
   if (toplevel->page_current == NULL) {
-    /* Create a new page if there wasn't another to switch to */
     if (new_current == NULL)
+      /* Create a new page if there wasn't another to switch to */
       new_current = x_lowlevel_new_page (w_current, NULL);
 
     /* change to new_current and update display */

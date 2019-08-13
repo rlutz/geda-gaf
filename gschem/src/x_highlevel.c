@@ -22,7 +22,7 @@
  * \brief High-level page-related functions.
  *
  * As opposed to the low-level page functions, the high-level page
- * functions do interact with the user.  They switch to the newly
+ * functions do interact with the user.  They switch to a newly
  * created / opened page, ask for confirmation for potentially
  * destructive actions (switching pages if necessary), and warn about
  * major symbol changes.
@@ -32,7 +32,7 @@
 #include "gschem.h"
 
 
-/*! \brief Create a new untitled page with a titleblock.
+/*! \brief Create a new page with a titleblock.
  *
  * If \a filename is \c NULL, the name of the new page is build from
  * configuration data ('untitled-name') and a counter for uniqueness.
@@ -320,7 +320,7 @@ x_highlevel_close_page (GschemToplevel *w_current, PAGE *page)
     /* Setting the current page is redundant as the close confirmation
        dialog switches to the current page (is has to, since it may be
        called when the window is closed while there's a single changed
-       page in the background), but it doesn't hurt, either. */
+       page in the background) but doesn't hurt, either. */
     x_window_set_current_page (w_current, page);
     x_window_present (w_current);
 
