@@ -384,7 +384,8 @@ loading or saving, and without asking the user.
 @end defun
 
 @defun page-filename page
-Returns the filename associated with @var{page} as a string.
+Returns the filename associated with @var{page} as a string, or
+@samp{#f} if @var{page} is untitled.
 @end defun
 
 @defun set-page-filename! page filename

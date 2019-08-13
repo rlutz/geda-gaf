@@ -702,7 +702,7 @@
 	    ; don't care about the page filename.
 	    (if (provided? 'regex)
 		(not (string-match ".*\\.[sS][yY][mM]"
-				   (get-page-filename page)))
+				   (or (get-page-filename page) "")))
 		#t))
 ;      Syntax             Symbol name        X   Y    angle selectable mirrored
        (add-component-at-xy page default-titleblock 40000 40000   0       #f       #f))

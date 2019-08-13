@@ -133,6 +133,8 @@ SCM_DEFINE (page_filename, "%page-filename", 1, 0, 0,
 
 
   page = edascm_to_page (page_s);
+  if (page->is_untitled)
+    return SCM_BOOL_F;
   return scm_from_utf8_string (page->page_filename);
 }
 
