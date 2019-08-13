@@ -187,8 +187,10 @@ x_highlevel_save_page (GschemToplevel *w_current, PAGE *page)
  * Saves all pages in \a w_current to their respective filenames.
  *
  * \param [in] w_current  the toplevel environment
+ *
+ * \returns \c TRUE if all pages were saved, \c FALSE otherwise
  */
-void
+gboolean
 x_highlevel_save_all (GschemToplevel *w_current)
 {
   TOPLEVEL *toplevel = gschem_toplevel_get_toplevel (w_current);
@@ -214,6 +216,8 @@ x_highlevel_save_all (GschemToplevel *w_current)
 
   x_pagesel_update (w_current);
   i_update_menus (w_current);
+
+  return success;
 }
 
 

@@ -412,7 +412,7 @@ PAGE *x_highlevel_new_page (GschemToplevel *w_current, const gchar *filename);
 PAGE *x_highlevel_open_page (GschemToplevel *w_current, const gchar *filename);
 gboolean x_highlevel_open_pages (GschemToplevel *w_current, GSList *filenames);
 gboolean x_highlevel_save_page (GschemToplevel *w_current, PAGE *page);
-void x_highlevel_save_all (GschemToplevel *w_current);
+gboolean x_highlevel_save_all (GschemToplevel *w_current);
 gboolean x_highlevel_revert_page (GschemToplevel *w_current, PAGE *page);
 gboolean x_highlevel_close_page (GschemToplevel *w_current, PAGE *page);
 /* x_image.c */
