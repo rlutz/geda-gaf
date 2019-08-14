@@ -30,18 +30,13 @@
  *  \brief Search for schematic associated source files and load them.
  *  \par Function Description
  *  This function searches the associated source file refered by the
- *  <B>filename</B> and loads it.  If the <B>flag</B> is set to
- *  <B>HIERARCHY_NORMAL_LOAD</B> and the page is already in the list of
+ *  <B>filename</B> and loads it.  If the page is already in the list of
  *  pages it will return the <B>pid</B> of that page.
- *  If the <B>flag</B> is set to <B>HIERARCHY_FORCE_LOAD</B> then this
- *  function will load the page again with a new page id. The second case
- *  is mainly used by gnetlist where pushed down schematics MUST be unique.
  *
  *  \param [in] toplevel      The TOPLEVEL object.
  *  \param [in] filename      Schematic file name.
  *  \param [in] parent        The parent page of the schematic.
  *  \param [in] page_control
- *  \param [in] flag          sets whether to force load
  *  \param [out] err         Location to return a GError on failure.
  *  \return The page loaded, or NULL if failed.
  *
@@ -50,12 +45,10 @@
  *  loads all up
  *  It only works for schematic files though
  *  this is basically push
- *  flag can either be HIERARCHY_NORMAL_LOAD or HIERARCHY_FORCE_LOAD
- *  flag is mainly used by gnetlist where pushed down schematics MUST be unique
  */
 static PAGE *
 down_schematic_single (TOPLEVEL *toplevel, const gchar *filename,
-                       PAGE *parent, int page_control, int flag,
+                       PAGE *parent, int page_control,
                        GError **err)
 {
   gchar *string;
@@ -73,50 +66,34 @@ down_schematic_single (TOPLEVEL *toplevel, const gchar *filename,
     return NULL;
   }
 
-  switch (flag) {
-  case HIERARCHY_NORMAL_LOAD:
-    {
-      gchar *filename = f_normalize_filename (string, NULL);
-      found = s_page_search (toplevel, filename);
-      g_free (filename);
+  gchar *normalized_filename = f_normalize_filename (string, NULL);
+  found = s_page_search (toplevel, normalized_filename);
+  g_free (normalized_filename);
 
-      if (found) {
-        /* check whether this page is in the parents list */
-        for (forbear = parent;
-             forbear != NULL && found->pid != forbear->pid && forbear->up >= 0;
-             forbear = s_page_search_by_page_id (toplevel->pages, forbear->up))
-          ; /* void */
+  if (found) {
+    /* check whether this page is in the parents list */
+    for (forbear = parent;
+         forbear != NULL && found->pid != forbear->pid && forbear->up >= 0;
+         forbear = s_page_search_by_page_id (toplevel->pages, forbear->up))
+      ; /* void */
 
-        if (forbear != NULL && found->pid == forbear->pid) {
-          g_set_error (err, EDA_ERROR, EDA_ERROR_LOOP,
-                       _("Hierarchy contains a circular dependency."));
-          return NULL;  /* error signal */
-        }
-        s_page_goto (toplevel, found);
-        if (page_control != 0) {
-          found->page_control = page_control;
-        }
-        found->up = parent->pid;
-        g_free (string);
-        return found;
-      }
-
-      found = s_page_new (toplevel, string);
-
-      f_open (toplevel, found, found->page_filename, NULL);
+    if (forbear != NULL && found->pid == forbear->pid) {
+      g_set_error (err, EDA_ERROR, EDA_ERROR_LOOP,
+                   _("Hierarchy contains a circular dependency."));
+      return NULL;  /* error signal */
     }
-    break;
-
-  case HIERARCHY_FORCE_LOAD:
-    {
-      found = s_page_new (toplevel, string);
-      f_open (toplevel, found, found->page_filename, NULL);
+    s_page_goto (toplevel, found);
+    if (page_control != 0) {
+      found->page_control = page_control;
     }
-    break;
-
-  default:
-    g_return_val_if_reached (NULL);
+    found->up = parent->pid;
+    g_free (string);
+    return found;
   }
+
+  found = s_page_new (toplevel, string);
+
+  f_open (toplevel, found, found->page_filename, NULL);
 
   if (page_control == 0) {
     page_control_counter++;
@@ -179,7 +156,6 @@ x_hierarchy_down_schematic (GschemToplevel *w_current, OBJECT *object)
                                      current_filename,
                                      parent,
                                      page_control,
-                                     HIERARCHY_NORMAL_LOAD,
                                      &err);
 
       /* down_schematic_single() will not zoom the loaded page */
