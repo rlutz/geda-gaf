@@ -480,6 +480,7 @@ void x_window_create_main(GschemToplevel *w_current);
 void x_window_close(GschemToplevel *w_current);
 void x_window_close_all(GschemToplevel *w_current);
 void x_window_set_current_page (GschemToplevel *w_current, PAGE *page);
+void x_window_present (GschemToplevel *w_current);
 void x_window_set_default_icon (void);
 void x_window_init_icons (void);
 GschemToplevel* x_window_new (TOPLEVEL *toplevel);

@@ -111,7 +111,7 @@ static void pagesel_callback_row_activated (GtkTreeView *tree_view,
   if (gschem_dockable_get_state (dockable) == GSCHEM_DOCKABLE_STATE_DIALOG)
     gschem_dockable_hide (dockable);
 
-  gtk_window_present (GTK_WINDOW (w_current->main_window));
+  x_window_present (w_current);
   gtk_widget_grab_focus (w_current->drawing_area);
 }
 

@@ -366,7 +366,7 @@ tree_row_activated (GtkTreeView       *tree_view,
       case GSCHEM_DOCKABLE_STATE_WINDOW:
         /* if shown as detached window, focus main window */
         gtk_widget_grab_focus (dockable->w_current->drawing_area);
-        gtk_window_present (GTK_WINDOW (dockable->w_current->main_window));
+        x_window_present (dockable->w_current);
       default:
         /* if docked, focus drawing area */
         gtk_widget_grab_focus (dockable->w_current->drawing_area);

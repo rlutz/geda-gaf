@@ -22,6 +22,11 @@
 #include <stdio.h>
 #include <unistd.h>
 
+#include "gdk/gdk.h"
+#ifdef GDK_WINDOWING_X11
+#include "gdk/gdkx.h"
+#endif
+
 #include "gschem.h"
 #include "actions.decl.x"
 
@@ -1045,6 +1050,33 @@ x_window_set_current_page (GschemToplevel *w_current, PAGE *page)
 
   x_pagesel_update (w_current);
   x_multiattrib_update (w_current);
+}
+
+/*! \brief Raise the main window to the front.
+ *
+ * This is mostly equivalent to
+ *   gtk_window_present (GTK_WINDOW (w_current->main_window));
+ *
+ * One of the two actions that \c gtk_window_present performs on an
+ * already-visible window (\c gdk_window_show) is triggering a bug
+ * with toolbar icon drawing, the other (\c gdk_window_focus) is the
+ * one we actually want.  In order to work around that bug, just call
+ * \c gdk_window_focus directly.
+ *
+ * \param [in] w_current  the toplevel environment
+ */
+void x_window_present (GschemToplevel *w_current)
+{
+  //gdk_window_show (w_current->main_window->window);  /* the culprit */
+
+#ifdef GDK_WINDOWING_X11
+  GdkDisplay *display = gtk_widget_get_display (w_current->main_window);
+  guint32 timestamp = gdk_x11_display_get_user_time (display);
+#else
+  guint32 timestamp = gtk_get_current_event_time ();
+#endif
+
+  gdk_window_focus (w_current->main_window->window, timestamp);
 }
 
 /*! \brief Setup default icon for GTK windows

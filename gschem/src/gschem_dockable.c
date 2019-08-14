@@ -1057,7 +1057,7 @@ present_in_notebook (GschemDockable *dockable)
 
   gtk_notebook_set_current_page (GTK_NOTEBOOK (parent), i);
 
-  gtk_window_present (GTK_WINDOW (dockable->w_current->main_window));
+  x_window_present (dockable->w_current);
   gtk_widget_grab_focus (dockable->widget);
 }
 
@@ -1465,7 +1465,7 @@ callback_after_window_key_press_event (GtkWidget *widget,
       gschem_dockable_hide (dockable);
     else {
       gtk_widget_grab_focus (dockable->w_current->drawing_area);
-      gtk_window_present (GTK_WINDOW (dockable->w_current->main_window));
+      x_window_present (dockable->w_current);
     }
     return TRUE;
   }
@@ -1475,7 +1475,7 @@ callback_after_window_key_press_event (GtkWidget *widget,
       gschem_dockable_hide (dockable);
     else {
       gtk_widget_grab_focus (dockable->w_current->drawing_area);
-      gtk_window_present (GTK_WINDOW (dockable->w_current->main_window));
+      x_window_present (dockable->w_current);
     }
 
     if (dockable->cancellable)
