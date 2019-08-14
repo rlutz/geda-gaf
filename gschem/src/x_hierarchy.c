@@ -106,11 +106,67 @@ down_schematic_single (TOPLEVEL *toplevel, const gchar *filename,
 }
 
 
+static PAGE *
+load_source (GschemToplevel *w_current, const gchar *filename,
+             int *page_control)
+{
+  TOPLEVEL *toplevel = gschem_toplevel_get_toplevel (w_current);
+  PAGE *child;
+
+  GError *err = NULL;
+  s_log_message (_("Searching for source [%s]\n"), filename);
+  PAGE *saved_page = toplevel->page_current;
+  child = down_schematic_single (toplevel, filename, toplevel->page_current,
+                                 *page_control, &err);
+
+  /* down_schematic_single() will not zoom the loaded page */
+  if (child != NULL) {
+    gtk_recent_manager_add_item (recent_manager,
+                                 g_filename_to_uri (child->page_filename,
+                                                    NULL, NULL));
+
+    s_page_goto (toplevel, child);
+    gschem_toplevel_page_changed (w_current);
+    gschem_page_view_zoom_extents (
+      gschem_toplevel_get_current_page_view (w_current), NULL);
+    o_undo_savestate_old (w_current, UNDO_ALL, NULL);
+  }
+  if (saved_page != NULL) {
+    s_page_goto (toplevel, saved_page);
+    gschem_toplevel_page_changed (w_current);
+  }
+
+  /* now do some error fixing */
+  if (child == NULL) {
+    const char *msg = err != NULL ? err->message : "Unknown error.";
+    char *secondary =
+      g_strdup_printf (_("Failed to descend hierarchy into '%s': %s\n\n"
+                         "The gschem log may contain more information."),
+                       filename, msg);
+
+    s_log_message (_("Failed to descend into '%s': %s\n"),
+                   filename, msg);
+
+    GtkWidget *dialog =
+      gtk_message_dialog_new (GTK_WINDOW (w_current->main_window),
+                              GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR,
+                              GTK_BUTTONS_OK,
+                              _("Failed to descend hierarchy."));
+    g_object_set (G_OBJECT (dialog), "secondary-text", secondary, NULL);
+    gtk_dialog_run (GTK_DIALOG (dialog));
+    gtk_widget_destroy (dialog);
+    g_free (secondary);
+    g_error_free (err);
+  } else
+    *page_control = child->page_control;
+
+  return child;
+}
+
+
 void
 x_hierarchy_down_schematic (GschemToplevel *w_current, OBJECT *object)
 {
-  TOPLEVEL *toplevel = gschem_toplevel_get_toplevel (w_current);
-  PAGE *parent = NULL;
   char *attrib = NULL;
   int count = 0;
   int looking_inside = FALSE;
@@ -124,7 +180,6 @@ x_hierarchy_down_schematic (GschemToplevel *w_current, OBJECT *object)
   if (object->type != OBJ_COMPLEX)
     return;
 
-  parent = toplevel->page_current;
   attrib = o_attrib_search_attached_attribs_by_name (object, "source", count);
 
   /* if above is null, then look inside symbol */
@@ -141,56 +196,11 @@ x_hierarchy_down_schematic (GschemToplevel *w_current, OBJECT *object)
 
     /* loop over all filenames */
     while (current_filename != NULL) {
-      GError *err = NULL;
-      s_log_message (_("Searching for source [%s]\n"), current_filename);
-      PAGE *saved_page = toplevel->page_current;
-      child = down_schematic_single (toplevel, current_filename, parent,
-                                     page_control, &err);
-
-      /* down_schematic_single() will not zoom the loaded page */
-      if (child != NULL) {
-        gtk_recent_manager_add_item (recent_manager,
-                                     g_filename_to_uri (child->page_filename,
-                                                        NULL, NULL));
-
-        s_page_goto (toplevel, child);
-        gschem_toplevel_page_changed (w_current);
-        gschem_page_view_zoom_extents (
-          gschem_toplevel_get_current_page_view (w_current), NULL);
-        o_undo_savestate_old (w_current, UNDO_ALL, NULL);
-      }
-      if (saved_page != NULL) {
-        s_page_goto (toplevel, saved_page);
-        gschem_toplevel_page_changed (w_current);
-      }
+      child = load_source (w_current, current_filename, &page_control);
 
       /* save the first page */
       if (first_page == NULL)
         first_page = child;
-
-      /* now do some error fixing */
-      if (child == NULL) {
-        const char *msg = err != NULL ? err->message : "Unknown error.";
-        char *secondary =
-          g_strdup_printf (_("Failed to descend hierarchy into '%s': %s\n\n"
-                             "The gschem log may contain more information."),
-                           current_filename, msg);
-
-        s_log_message (_("Failed to descend into '%s': %s\n"),
-                       current_filename, msg);
-
-        GtkWidget *dialog =
-          gtk_message_dialog_new (GTK_WINDOW (w_current->main_window),
-                                  GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR,
-                                  GTK_BUTTONS_OK,
-                                  _("Failed to descend hierarchy."));
-        g_object_set (G_OBJECT (dialog), "secondary-text", secondary, NULL);
-        gtk_dialog_run (GTK_DIALOG (dialog));
-        gtk_widget_destroy (dialog);
-        g_free (secondary);
-        g_error_free (err);
-      } else
-        page_control = child->page_control;
 
       g_free (current_filename);
       pcount++;
