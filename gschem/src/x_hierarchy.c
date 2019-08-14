@@ -53,13 +53,12 @@ down_schematic_single (TOPLEVEL *toplevel, const gchar *filename,
 {
   gchar *string;
   PAGE *found = NULL;
-  PAGE *forbear;
 
-  g_return_val_if_fail ((toplevel != NULL), NULL);
-  g_return_val_if_fail ((filename != NULL), NULL);
-  g_return_val_if_fail ((parent != NULL), NULL);
+  g_return_val_if_fail (toplevel != NULL, NULL);
+  g_return_val_if_fail (filename != NULL, NULL);
+  g_return_val_if_fail (parent != NULL, NULL);
 
-  string = s_slib_search_single(filename);
+  string = s_slib_search_single (filename);
   if (string == NULL) {
     g_set_error (err, EDA_ERROR, EDA_ERROR_NOLIB,
                  _("Schematic not found in source library."));
@@ -72,10 +71,9 @@ down_schematic_single (TOPLEVEL *toplevel, const gchar *filename,
 
   if (found) {
     /* check whether this page is in the parents list */
-    for (forbear = parent;
-         forbear != NULL && found->pid != forbear->pid && forbear->up >= 0;
-         forbear = s_page_search_by_page_id (toplevel->pages, forbear->up))
-      ; /* void */
+    PAGE *forbear = parent;
+    while (forbear != NULL && found->pid != forbear->pid && forbear->up >= 0)
+      forbear = s_page_search_by_page_id (toplevel->pages, forbear->up);
 
     if (forbear != NULL && found->pid == forbear->pid) {
       g_set_error (err, EDA_ERROR, EDA_ERROR_LOOP,
@@ -83,9 +81,8 @@ down_schematic_single (TOPLEVEL *toplevel, const gchar *filename,
       return NULL;  /* error signal */
     }
     s_page_goto (toplevel, found);
-    if (page_control != 0) {
+    if (page_control != 0)
       found->page_control = page_control;
-    }
     found->up = parent->pid;
     g_free (string);
     return found;
@@ -98,9 +95,8 @@ down_schematic_single (TOPLEVEL *toplevel, const gchar *filename,
   if (page_control == 0) {
     page_control_counter++;
     found->page_control = page_control_counter;
-  } else {
+  } else
     found->page_control = page_control;
-  }
 
   found->up = parent->pid;
 
@@ -113,22 +109,23 @@ down_schematic_single (TOPLEVEL *toplevel, const gchar *filename,
 void
 x_hierarchy_down_schematic (GschemToplevel *w_current, OBJECT *object)
 {
-  char *attrib=NULL;
-  char *current_filename=NULL;
-  int count=0;
-  PAGE *save_first_page=NULL;
-  PAGE *parent=NULL;
-  PAGE *child = NULL;
-  int loaded_flag=FALSE;
-  int page_control = 0;
+  TOPLEVEL *toplevel = gschem_toplevel_get_toplevel (w_current);
+  PAGE *parent = NULL;
+  char *attrib = NULL;
+  int count = 0;
+  int looking_inside = FALSE;
   int pcount = 0;
-  int looking_inside=FALSE;
+  char *current_filename = NULL;
+  PAGE *child = NULL;
+  int page_control = 0;
+  int loaded_flag = FALSE;
+  PAGE *save_first_page = NULL;
 
   /* only allow going into symbols */
   if (object->type != OBJ_COMPLEX)
     return;
 
-  parent = gschem_toplevel_get_toplevel (w_current)->page_current;
+  parent = toplevel->page_current;
   attrib = o_attrib_search_attached_attribs_by_name (object, "source", count);
 
   /* if above is null, then look inside symbol */
@@ -137,26 +134,22 @@ x_hierarchy_down_schematic (GschemToplevel *w_current, OBJECT *object)
       o_attrib_search_inherited_attribs_by_name (object, "source", count);
     looking_inside = TRUE;
 #if DEBUG
-    printf("going to look inside now\n");
+    printf ("going to look inside now\n");
 #endif
   }
 
-  while (attrib) {
-
+  while (attrib != NULL) {
     /* look for source=filename,filename, ... */
     pcount = 0;
-    current_filename = u_basic_breakup_string(attrib, ',', pcount);
+    current_filename = u_basic_breakup_string (attrib, ',', pcount);
 
     /* loop over all filenames */
-    while(current_filename != NULL) {
+    while (current_filename != NULL) {
       GError *err = NULL;
-      s_log_message(_("Searching for source [%s]\n"), current_filename);
-      PAGE *saved_page = gschem_toplevel_get_toplevel (w_current)->page_current;
-      child = down_schematic_single (gschem_toplevel_get_toplevel (w_current),
-                                     current_filename,
-                                     parent,
-                                     page_control,
-                                     &err);
+      s_log_message (_("Searching for source [%s]\n"), current_filename);
+      PAGE *saved_page = toplevel->page_current;
+      child = down_schematic_single (toplevel, current_filename, parent,
+                                     page_control, &err);
 
       /* down_schematic_single() will not zoom the loaded page */
       if (child != NULL) {
@@ -164,32 +157,31 @@ x_hierarchy_down_schematic (GschemToplevel *w_current, OBJECT *object)
                                      g_filename_to_uri (child->page_filename,
                                                         NULL, NULL));
 
-        s_page_goto (gschem_toplevel_get_toplevel (w_current), child);
+        s_page_goto (toplevel, child);
         gschem_toplevel_page_changed (w_current);
-        gschem_page_view_zoom_extents (gschem_toplevel_get_current_page_view (w_current),
-                                       NULL);
+        gschem_page_view_zoom_extents (
+          gschem_toplevel_get_current_page_view (w_current), NULL);
         o_undo_savestate_old (w_current, UNDO_ALL, NULL);
       }
       if (saved_page != NULL) {
-        s_page_goto (gschem_toplevel_get_toplevel (w_current), saved_page);
+        s_page_goto (toplevel, saved_page);
         gschem_toplevel_page_changed (w_current);
       }
 
       /* save the first page */
-      if ( !loaded_flag && (child != NULL)) {
+      if (!loaded_flag && child != NULL)
         save_first_page = child;
-      }
 
       /* now do some error fixing */
       if (child == NULL) {
-        const char *msg = (err != NULL) ? err->message : "Unknown error.";
+        const char *msg = err != NULL ? err->message : "Unknown error.";
         char *secondary =
           g_strdup_printf (_("Failed to descend hierarchy into '%s': %s\n\n"
                              "The gschem log may contain more information."),
                            current_filename, msg);
 
-        s_log_message(_("Failed to descend into '%s': %s\n"),
-                      current_filename, msg);
+        s_log_message (_("Failed to descend into '%s': %s\n"),
+                       current_filename, msg);
 
         GtkWidget *dialog =
           gtk_message_dialog_new (GTK_WINDOW (w_current->main_window),
@@ -201,50 +193,47 @@ x_hierarchy_down_schematic (GschemToplevel *w_current, OBJECT *object)
         gtk_widget_destroy (dialog);
         g_free (secondary);
         g_error_free (err);
-
       } else {
         /* this only signifies that we tried */
         loaded_flag = TRUE;
         page_control = child->page_control;
       }
 
-      g_free(current_filename);
+      g_free (current_filename);
       pcount++;
-      current_filename = u_basic_breakup_string(attrib, ',', pcount);
+      current_filename = u_basic_breakup_string (attrib, ',', pcount);
     }
 
-    g_free(attrib);
-    g_free(current_filename);
+    g_free (attrib);
+    g_free (current_filename);
 
     count++;
 
     /* continue looking outside first */
-    if (!looking_inside) {
+    if (!looking_inside)
       attrib =
         o_attrib_search_attached_attribs_by_name (object, "source", count);
-    }
 
     /* okay we were looking outside and didn't find anything,
      * so now we need to look inside the symbol */
-    if (!looking_inside && attrib == NULL && !loaded_flag ) {
+    if (!looking_inside && attrib == NULL && !loaded_flag) {
       looking_inside = TRUE;
 #if DEBUG
-      printf("switching to go to look inside\n");
+      printf ("switching to go to look inside\n");
 #endif
     }
 
     if (looking_inside) {
 #if DEBUG
-      printf("looking inside\n");
+      printf ("looking inside\n");
 #endif
       attrib =
         o_attrib_search_inherited_attribs_by_name (object, "source", count);
     }
   }
 
-  if (loaded_flag && (save_first_page != NULL)) {
+  if (loaded_flag && save_first_page != NULL)
     x_window_set_current_page (w_current, save_first_page);
-  }
 }
 
 
@@ -263,9 +252,8 @@ down_symbol (TOPLEVEL *toplevel, const CLibSymbol *symbol, PAGE *parent)
 
   page = s_page_search (toplevel, filename);
   if (page) {
-    /* change link to parent page since we
-     * can come here from any parent and must
-     * come back to the same page */
+    /* change link to parent page since we can come here from any
+       parent and must come back to the same page */
     page->up = parent->pid;
     s_page_goto (toplevel, page);
     g_free (filename);
@@ -273,16 +261,15 @@ down_symbol (TOPLEVEL *toplevel, const CLibSymbol *symbol, PAGE *parent)
   }
 
   page = s_page_new (toplevel, filename);
-  g_free(filename);
+  g_free (filename);
 
   s_page_goto (toplevel, page);
 
-  f_open(toplevel, page, page->page_filename, NULL);
+  f_open (toplevel, page, page->page_filename, NULL);
 
   page->up = parent->pid;
   page_control_counter++;
   page->page_control = page_control_counter;
-
 }
 
 
@@ -290,45 +277,45 @@ down_symbol (TOPLEVEL *toplevel, const CLibSymbol *symbol, PAGE *parent)
 void
 x_hierarchy_down_symbol (GschemToplevel *w_current, OBJECT *object)
 {
+  TOPLEVEL *toplevel = gschem_toplevel_get_toplevel (w_current);
   const CLibSymbol *sym;
 
   /* only allow going into symbols */
-  if (object->type == OBJ_COMPLEX) {
-    if (object->complex_embedded) {
-      s_log_message(_("Cannot descend into embedded symbol!\n"));
-      return;
-    }
-    s_log_message(_("Searching for symbol [%s]\n"),
-		    object->complex_basename);
-    sym = s_clib_get_symbol_by_name (object->complex_basename);
-    if (sym == NULL)
-	return;
-    gchar *filename = s_clib_symbol_get_filename(sym);
-    if (filename == NULL) {
-	s_log_message(_("Symbol is not a real file."
-			" Symbol cannot be loaded.\n"));
-      g_free (filename);
-	return;
-    }
-    g_free (filename);
-    PAGE *saved_page = gschem_toplevel_get_toplevel (w_current)->page_current;
-    down_symbol (gschem_toplevel_get_toplevel (w_current), sym,
-                 gschem_toplevel_get_toplevel (w_current)->page_current);
-    PAGE *page = gschem_toplevel_get_toplevel (w_current)->page_current;
-    if (saved_page != NULL) {
-      s_page_goto (gschem_toplevel_get_toplevel (w_current), saved_page);
-      gschem_toplevel_page_changed (w_current);
-    }
-    gtk_recent_manager_add_item (recent_manager,
-                                 g_filename_to_uri (page->page_filename,
-                                                    NULL, NULL));
+  if (object->type != OBJ_COMPLEX)
+    return;
 
-    x_window_set_current_page (w_current, page);
-    /* down_symbol() will not zoom the loaded page */
-    gschem_page_view_zoom_extents (gschem_toplevel_get_current_page_view (w_current),
-                                   NULL);
-    o_undo_savestate_old (w_current, UNDO_ALL, NULL);
+  if (object->complex_embedded) {
+    s_log_message (_("Cannot descend into embedded symbol!\n"));
+    return;
   }
+  s_log_message (_("Searching for symbol [%s]\n"),
+                 object->complex_basename);
+  sym = s_clib_get_symbol_by_name (object->complex_basename);
+  if (sym == NULL)
+    return;
+  gchar *filename = s_clib_symbol_get_filename (sym);
+  if (filename == NULL) {
+    s_log_message (_("Symbol is not a real file. Symbol cannot be loaded.\n"));
+    g_free (filename);
+    return;
+  }
+  g_free (filename);
+  PAGE *saved_page = toplevel->page_current;
+  down_symbol (toplevel, sym, toplevel->page_current);
+  PAGE *page = toplevel->page_current;
+  if (saved_page != NULL) {
+    s_page_goto (toplevel, saved_page);
+    gschem_toplevel_page_changed (w_current);
+  }
+  gtk_recent_manager_add_item (recent_manager,
+                               g_filename_to_uri (page->page_filename,
+                                                  NULL, NULL));
+
+  x_window_set_current_page (w_current, page);
+  /* down_symbol() will not zoom the loaded page */
+  gschem_page_view_zoom_extents (
+    gschem_toplevel_get_current_page_view (w_current), NULL);
+  o_undo_savestate_old (w_current, UNDO_ALL, NULL);
 }
 
 
@@ -351,7 +338,7 @@ find_up_page (GedaPageList *page_list, PAGE *current_page)
 {
   g_return_val_if_fail (current_page != NULL, NULL);
   if (current_page->up < 0) {
-    s_log_message(_("There are no schematics above the current one!\n"));
+    s_log_message (_("There are no schematics above the current one!\n"));
     return NULL;
   }
 
@@ -362,21 +349,20 @@ find_up_page (GedaPageList *page_list, PAGE *current_page)
 void
 x_hierarchy_up (GschemToplevel *w_current)
 {
+  TOPLEVEL *toplevel = gschem_toplevel_get_toplevel (w_current);
   PAGE *page = NULL;
   PAGE *up_page = NULL;
 
-  page = gschem_toplevel_get_toplevel (w_current)->page_current;
+  page = toplevel->page_current;
+  g_return_if_fail (page != NULL);
 
-  if (page == NULL) {
+  up_page = find_up_page (toplevel->pages, page);
+  if (up_page == NULL) {
+    s_log_message (_("Cannot find any schematics above the current one!\n"));
     return;
   }
 
-  up_page = find_up_page (gschem_toplevel_get_toplevel (w_current)->pages, page);
-  if (up_page == NULL) {
-    s_log_message(_("Cannot find any schematics above the current one!\n"));
-  } else {
-    if (!x_highlevel_close_page (w_current, page))
-      return;
-    x_window_set_current_page(w_current, up_page);
-  }
+  if (!x_highlevel_close_page (w_current, page))
+    return;
+  x_window_set_current_page (w_current, up_page);
 }
