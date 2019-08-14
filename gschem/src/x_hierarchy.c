@@ -33,7 +33,6 @@ load_source (GschemToplevel *w_current, const gchar *filename,
   TOPLEVEL *toplevel = gschem_toplevel_get_toplevel (w_current);
   PAGE *parent = toplevel->page_current;
   gchar *string;
-  gchar *normalized_filename;
   PAGE *page;
   PAGE *forbear;
 
@@ -62,48 +61,36 @@ load_source (GschemToplevel *w_current, const gchar *filename,
     return NULL;
   }
 
-  normalized_filename = f_normalize_filename (string, NULL);
-  page = s_page_search (toplevel, normalized_filename);
-  g_free (normalized_filename);
-
-  if (page != NULL) {
-    /* check whether this page is in the parents list */
-    forbear = parent;
-    while (forbear != NULL && page->pid != forbear->pid && forbear->up >= 0)
-      forbear = s_page_search_by_page_id (toplevel->pages, forbear->up);
-
-    if (forbear != NULL && page->pid == forbear->pid) {
-      s_log_message (_("Failed to descend into '%s': "
-                       "Hierarchy contains a circular dependency.\n"),
-                     filename);
-
-      GtkWidget *dialog =
-        gtk_message_dialog_new (GTK_WINDOW (w_current->main_window),
-                                GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR,
-                                GTK_BUTTONS_CLOSE,
-                                _("Failed to descend into \"%s\"."), filename);
-      g_object_set (G_OBJECT (dialog), "secondary-text",
-                    _("The hierarchy contains a circular dependency."), NULL);
-      gtk_window_set_title (GTK_WINDOW (dialog), _("gschem"));
-      gtk_dialog_run (GTK_DIALOG (dialog));
-      gtk_widget_destroy (dialog);
-      return NULL;
-    }
-  } else {
-    page = s_page_new (toplevel, string);
-
-    f_open (toplevel, page, page->page_filename, NULL);
-
-    s_page_goto (toplevel, page);
-    gschem_toplevel_page_changed (w_current);
-    o_undo_savestate_old (w_current, UNDO_ALL, NULL);
-
-    if (parent != NULL) {
-      s_page_goto (toplevel, parent);
-      gschem_toplevel_page_changed (w_current);
-    }
-  }
+  page = x_lowlevel_open_page (w_current, string);
   g_free (string);
+
+  if (page == NULL)
+    /* Some error occurred while loading the schematic.  In this case,
+       x_lowlevel_open_page already displayed an error message. */
+    return NULL;
+
+  /* check whether this page is in the parents list */
+  forbear = parent;
+  while (forbear != NULL && page->pid != forbear->pid && forbear->up >= 0)
+    forbear = s_page_search_by_page_id (toplevel->pages, forbear->up);
+
+  if (forbear != NULL && page->pid == forbear->pid) {
+    s_log_message (_("Failed to descend into '%s': "
+                     "Hierarchy contains a circular dependency.\n"),
+                   filename);
+
+    GtkWidget *dialog =
+      gtk_message_dialog_new (GTK_WINDOW (w_current->main_window),
+                              GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR,
+                              GTK_BUTTONS_CLOSE,
+                              _("Failed to descend into \"%s\"."), filename);
+    g_object_set (G_OBJECT (dialog), "secondary-text",
+                  _("The hierarchy contains a circular dependency."), NULL);
+    gtk_window_set_title (GTK_WINDOW (dialog), _("gschem"));
+    gtk_dialog_run (GTK_DIALOG (dialog));
+    gtk_widget_destroy (dialog);
+    return NULL;
+  }
 
   if (*page_control == 0) {
     page_control_counter++;
@@ -111,10 +98,6 @@ load_source (GschemToplevel *w_current, const gchar *filename,
   }
   page->page_control = *page_control;
   page->up = parent->pid;
-
-  gtk_recent_manager_add_item (recent_manager,
-                               g_filename_to_uri (page->page_filename,
-                                                  NULL, NULL));
 
   return page;
 }
@@ -219,33 +202,19 @@ x_hierarchy_down_symbol (GschemToplevel *w_current, OBJECT *object)
     return;
   }
 
-  page = s_page_search (toplevel, filename);
-  if (page == NULL) {
-    page = s_page_new (toplevel, filename);
-
-    s_page_goto (toplevel, page);
-    gschem_toplevel_page_changed (w_current);
-
-    f_open (toplevel, page, page->page_filename, NULL);
-
-    o_undo_savestate_old (w_current, UNDO_ALL, NULL);
-
-    if (parent != NULL) {
-      s_page_goto (toplevel, parent);
-      gschem_toplevel_page_changed (w_current);
-    }
-  }
+  page = x_lowlevel_open_page (w_current, filename);
   g_free (filename);
+
+  if (page == NULL)
+    /* Some error occurred while loading the symbol.  In this case,
+       x_lowlevel_open_page already displayed an error message. */
+    return;
 
   page_control_counter++;
   page->page_control = page_control_counter;
   /* change link to parent page even if the page existed since we can
      come here from any parent and must come back to the same page */
   page->up = parent->pid;
-
-  gtk_recent_manager_add_item (recent_manager,
-                               g_filename_to_uri (page->page_filename,
-                                                  NULL, NULL));
 
   x_window_set_current_page (w_current, page);
 }
