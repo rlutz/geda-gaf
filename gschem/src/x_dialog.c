@@ -285,6 +285,9 @@ major_changed_dialog (GschemToplevel* w_current)
   /*! \todo this would be much easier using
    * gtk_message_dialog_get_message_area(). */
   dialog = g_object_new (GTK_TYPE_DIALOG,
+                         /* GtkWindow */
+                         "default-width",  400,
+                         "default-height", 300,
                          /* GtkContainer */
                          "border-width", 5,
                          NULL);
@@ -292,10 +295,6 @@ major_changed_dialog (GschemToplevel* w_current)
                           GTK_STOCK_OK, GTK_RESPONSE_OK,
                           NULL);
   content_area = gtk_dialog_get_content_area (GTK_DIALOG (dialog));
-  g_object_set (content_area,
-                /* GtkBox */
-                "spacing", 14,
-                NULL);
   /* This box contains the warning image and the vbox */
   hbox = g_object_new (GTK_TYPE_HBOX,
                        /* GtkContainer */
