@@ -31,106 +31,92 @@ load_source (GschemToplevel *w_current, const gchar *filename,
              int *page_control)
 {
   TOPLEVEL *toplevel = gschem_toplevel_get_toplevel (w_current);
-  PAGE *child;
-
-  GError *err = NULL;
-  s_log_message (_("Searching for source [%s]\n"), filename);
-  PAGE *saved_page = toplevel->page_current;
-
   PAGE *parent = toplevel->page_current;
   gchar *string;
-  PAGE *found = NULL;
+  gchar *normalized_filename;
+  PAGE *page;
+  PAGE *forbear;
 
   g_return_val_if_fail (toplevel != NULL, NULL);
   g_return_val_if_fail (filename != NULL, NULL);
   g_return_val_if_fail (parent != NULL, NULL);
 
+  s_log_message (_("Searching for source [%s]\n"), filename);
+
   string = s_slib_search_single (filename);
   if (string == NULL) {
-    g_set_error (&err, EDA_ERROR, EDA_ERROR_NOLIB,
-                 _("Schematic not found in source library."));
-    goto error;
+    s_log_message (_("Failed to descend into '%s': "
+                     "Schematic not found in source library.\n"),
+                   filename);
+
+    GtkWidget *dialog =
+      gtk_message_dialog_new (GTK_WINDOW (w_current->main_window),
+                              GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR,
+                              GTK_BUTTONS_CLOSE,
+                              _("Failed to descend into \"%s\"."), filename);
+    g_object_set (G_OBJECT (dialog), "secondary-text",
+                  _("Schematic not found in source library."), NULL);
+    gtk_window_set_title (GTK_WINDOW (dialog), _("gschem"));
+    gtk_dialog_run (GTK_DIALOG (dialog));
+    gtk_widget_destroy (dialog);
+    return NULL;
   }
 
-  gchar *normalized_filename = f_normalize_filename (string, NULL);
-  found = s_page_search (toplevel, normalized_filename);
+  normalized_filename = f_normalize_filename (string, NULL);
+  page = s_page_search (toplevel, normalized_filename);
   g_free (normalized_filename);
 
-  if (found) {
+  if (page != NULL) {
     /* check whether this page is in the parents list */
-    PAGE *forbear = parent;
-    while (forbear != NULL && found->pid != forbear->pid && forbear->up >= 0)
+    forbear = parent;
+    while (forbear != NULL && page->pid != forbear->pid && forbear->up >= 0)
       forbear = s_page_search_by_page_id (toplevel->pages, forbear->up);
 
-    if (forbear != NULL && found->pid == forbear->pid) {
-      g_set_error (&err, EDA_ERROR, EDA_ERROR_LOOP,
-                   _("Hierarchy contains a circular dependency."));
-      goto error;
+    if (forbear != NULL && page->pid == forbear->pid) {
+      s_log_message (_("Failed to descend into '%s': "
+                       "Hierarchy contains a circular dependency.\n"),
+                     filename);
+
+      GtkWidget *dialog =
+        gtk_message_dialog_new (GTK_WINDOW (w_current->main_window),
+                                GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR,
+                                GTK_BUTTONS_CLOSE,
+                                _("Failed to descend into \"%s\"."), filename);
+      g_object_set (G_OBJECT (dialog), "secondary-text",
+                    _("The hierarchy contains a circular dependency."), NULL);
+      gtk_window_set_title (GTK_WINDOW (dialog), _("gschem"));
+      gtk_dialog_run (GTK_DIALOG (dialog));
+      gtk_widget_destroy (dialog);
+      return NULL;
     }
-    s_page_goto (toplevel, found);
-    if (*page_control != 0)
-      found->page_control = *page_control;
   } else {
-    found = s_page_new (toplevel, string);
+    page = s_page_new (toplevel, string);
 
-    f_open (toplevel, found, found->page_filename, NULL);
+    f_open (toplevel, page, page->page_filename, NULL);
 
-    if (*page_control == 0) {
-      page_control_counter++;
-      found->page_control = page_control_counter;
-    } else
-      found->page_control = *page_control;
+    s_page_goto (toplevel, page);
+    gschem_toplevel_page_changed (w_current);
+    o_undo_savestate_old (w_current, UNDO_ALL, NULL);
+
+    if (parent != NULL) {
+      s_page_goto (toplevel, parent);
+      gschem_toplevel_page_changed (w_current);
+    }
   }
-  found->up = parent->pid;
   g_free (string);
-  child = found;
 
-  /* down_schematic_single() will not zoom the loaded page */
+  if (*page_control == 0) {
+    page_control_counter++;
+    *page_control = page_control_counter;
+  }
+  page->page_control = *page_control;
+  page->up = parent->pid;
+
   gtk_recent_manager_add_item (recent_manager,
-                               g_filename_to_uri (child->page_filename,
+                               g_filename_to_uri (page->page_filename,
                                                   NULL, NULL));
 
-  s_page_goto (toplevel, child);
-  gschem_toplevel_page_changed (w_current);
-  gschem_page_view_zoom_extents (
-    gschem_toplevel_get_current_page_view (w_current), NULL);
-  o_undo_savestate_old (w_current, UNDO_ALL, NULL);
-
-  if (saved_page != NULL) {
-    s_page_goto (toplevel, saved_page);
-    gschem_toplevel_page_changed (w_current);
-  }
-
-  *page_control = child->page_control;
-  return child;
-
-error:
-  if (saved_page != NULL) {
-    s_page_goto (toplevel, saved_page);
-    gschem_toplevel_page_changed (w_current);
-  }
-
-  const char *msg = err != NULL ? err->message : "Unknown error.";
-  char *secondary =
-    g_strdup_printf (_("Failed to descend hierarchy into '%s': %s\n\n"
-                       "The gschem log may contain more information."),
-                     filename, msg);
-
-  s_log_message (_("Failed to descend into '%s': %s\n"),
-                 filename, msg);
-
-  GtkWidget *dialog =
-    gtk_message_dialog_new (GTK_WINDOW (w_current->main_window),
-                            GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR,
-                            GTK_BUTTONS_OK,
-                            _("Failed to descend hierarchy."));
-  g_object_set (G_OBJECT (dialog), "secondary-text", secondary, NULL);
-  gtk_dialog_run (GTK_DIALOG (dialog));
-  gtk_widget_destroy (dialog);
-  g_free (secondary);
-  g_error_free (err);
-
-  return NULL;
+  return page;
 }
 
 
@@ -186,22 +172,17 @@ void
 x_hierarchy_down_schematic (GschemToplevel *w_current, OBJECT *object)
 {
   GSList *filenames = get_source_filenames (w_current, object);
-  PAGE *child = NULL;
   int page_control = 0;
   PAGE *first_page = NULL;
 
   for (const GSList *l = filenames; l != NULL; l = l->next) {
-    gchar *current_filename = (gchar *) l->data;
-    child = load_source (w_current, current_filename, &page_control);
+    PAGE *page = load_source (w_current, (gchar *) l->data, &page_control);
 
-    /* save the first page */
     if (first_page == NULL)
-      first_page = child;
-
-    g_free (current_filename);
+      first_page = page;
   }
 
-  g_slist_free (filenames);
+  g_slist_free_full (filenames, g_free);
 
   if (first_page != NULL)
     x_window_set_current_page (w_current, first_page);
@@ -214,6 +195,9 @@ x_hierarchy_down_symbol (GschemToplevel *w_current, OBJECT *object)
 {
   TOPLEVEL *toplevel = gschem_toplevel_get_toplevel (w_current);
   const CLibSymbol *sym;
+  gchar *filename;
+  PAGE *parent = toplevel->page_current;
+  PAGE *page;
 
   /* only allow going into symbols */
   if (object->type != OBJ_COMPLEX)
@@ -223,58 +207,47 @@ x_hierarchy_down_symbol (GschemToplevel *w_current, OBJECT *object)
     s_log_message (_("Cannot descend into embedded symbol!\n"));
     return;
   }
-  s_log_message (_("Searching for symbol [%s]\n"),
-                 object->complex_basename);
+
+  s_log_message (_("Searching for symbol [%s]\n"), object->complex_basename);
   sym = s_clib_get_symbol_by_name (object->complex_basename);
   if (sym == NULL)
     return;
-  gchar *filename = s_clib_symbol_get_filename (sym);
+
+  filename = s_clib_symbol_get_filename (sym);
   if (filename == NULL) {
     s_log_message (_("Symbol is not a real file. Symbol cannot be loaded.\n"));
     return;
   }
-  g_free (filename);
-  PAGE *saved_page = toplevel->page_current;
-
-  PAGE *parent = toplevel->page_current;
-  PAGE *page;
-
-  filename = s_clib_symbol_get_filename (sym);
 
   page = s_page_search (toplevel, filename);
-  if (page) {
-    /* change link to parent page since we can come here from any
-       parent and must come back to the same page */
-    page->up = parent->pid;
-    s_page_goto (toplevel, page);
-    g_free (filename);
-  } else {
+  if (page == NULL) {
     page = s_page_new (toplevel, filename);
-    g_free (filename);
 
     s_page_goto (toplevel, page);
+    gschem_toplevel_page_changed (w_current);
 
     f_open (toplevel, page, page->page_filename, NULL);
 
-    page->up = parent->pid;
-    page_control_counter++;
-    page->page_control = page_control_counter;
-  }
+    o_undo_savestate_old (w_current, UNDO_ALL, NULL);
 
-  page = toplevel->page_current;
-  if (saved_page != NULL) {
-    s_page_goto (toplevel, saved_page);
-    gschem_toplevel_page_changed (w_current);
+    if (parent != NULL) {
+      s_page_goto (toplevel, parent);
+      gschem_toplevel_page_changed (w_current);
+    }
   }
+  g_free (filename);
+
+  page_control_counter++;
+  page->page_control = page_control_counter;
+  /* change link to parent page even if the page existed since we can
+     come here from any parent and must come back to the same page */
+  page->up = parent->pid;
+
   gtk_recent_manager_add_item (recent_manager,
                                g_filename_to_uri (page->page_filename,
                                                   NULL, NULL));
 
   x_window_set_current_page (w_current, page);
-  /* down_symbol() will not zoom the loaded page */
-  gschem_page_view_zoom_extents (
-    gschem_toplevel_get_current_page_view (w_current), NULL);
-  o_undo_savestate_old (w_current, UNDO_ALL, NULL);
 }
 
 
@@ -282,25 +255,22 @@ void
 x_hierarchy_up (GschemToplevel *w_current)
 {
   TOPLEVEL *toplevel = gschem_toplevel_get_toplevel (w_current);
-  PAGE *page = NULL;
-  PAGE *up_page = NULL;
-
-  page = toplevel->page_current;
+  PAGE *page = toplevel->page_current;
+  PAGE *parent;
   g_return_if_fail (page != NULL);
 
   if (page->up < 0) {
     s_log_message (_("There are no schematics above the current one!\n"));
-    s_log_message (_("Cannot find any schematics above the current one!\n"));
     return;
   }
 
-  up_page = s_page_search_by_page_id (toplevel->pages, page->up);
-  if (up_page == NULL) {
+  parent = s_page_search_by_page_id (toplevel->pages, page->up);
+  if (parent == NULL) {
     s_log_message (_("Cannot find any schematics above the current one!\n"));
     return;
   }
 
   if (!x_highlevel_close_page (w_current, page))
     return;
-  x_window_set_current_page (w_current, up_page);
+  x_window_set_current_page (w_current, parent);
 }
