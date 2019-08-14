@@ -136,14 +136,17 @@ x_lowlevel_new_page (GschemToplevel *w_current, const gchar *filename)
 PAGE *
 x_lowlevel_open_page (GschemToplevel *w_current, const gchar *filename)
 {
-  PAGE *page;
-
   TOPLEVEL *toplevel = gschem_toplevel_get_toplevel (w_current);
   g_return_val_if_fail (toplevel != NULL, NULL);
   g_return_val_if_fail (filename != NULL, NULL);
 
+  gchar *full_filename;
+  PAGE *page;
+
   /* Return existing page if it is already loaded */
-  page = s_page_search (toplevel, filename);
+  full_filename = f_normalize_filename (filename, NULL);
+  page = s_page_search (toplevel, full_filename);
+  g_free (full_filename);
   if (page != NULL)
     return page;
 
@@ -175,7 +178,7 @@ x_lowlevel_open_page (GschemToplevel *w_current, const gchar *filename)
       _("<b>An error occurred while loading the requested file.</b>\n\n"
         "Loading from '%s' failed: %s. "
         "The gschem log may contain more information."),
-      filename, err->message);
+      page->page_filename, err->message);
     gtk_window_set_title (GTK_WINDOW (dialog), _("Failed to load file"));
     gtk_dialog_run (GTK_DIALOG (dialog));
     gtk_widget_destroy (dialog);
@@ -184,8 +187,8 @@ x_lowlevel_open_page (GschemToplevel *w_current, const gchar *filename)
     return NULL;
   }
 
-  gtk_recent_manager_add_item (recent_manager,
-                               g_filename_to_uri (filename, NULL, NULL));
+  gtk_recent_manager_add_item (
+    recent_manager, g_filename_to_uri (page->page_filename, NULL, NULL));
 
   o_undo_savestate (w_current, toplevel->page_current, UNDO_ALL, NULL);
 
