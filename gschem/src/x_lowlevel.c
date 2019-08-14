@@ -147,8 +147,11 @@ x_lowlevel_open_page (GschemToplevel *w_current, const gchar *filename)
   full_filename = f_normalize_filename (filename, NULL);
   page = s_page_search (toplevel, full_filename);
   g_free (full_filename);
-  if (page != NULL)
+  if (page != NULL) {
+    gtk_recent_manager_add_item (
+      recent_manager, g_filename_to_uri (page->page_filename, NULL, NULL));
     return page;
+  }
 
   PAGE *saved_page = toplevel->page_current;
 
