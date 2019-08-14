@@ -164,21 +164,19 @@ load_source (GschemToplevel *w_current, const gchar *filename,
 }
 
 
-void
-x_hierarchy_down_schematic (GschemToplevel *w_current, OBJECT *object)
+static GSList *
+get_source_filenames (GschemToplevel *w_current, OBJECT *object)
 {
   char *attrib = NULL;
   int count = 0;
   int looking_inside = FALSE;
   int pcount = 0;
   char *current_filename = NULL;
-  PAGE *child = NULL;
-  int page_control = 0;
-  PAGE *first_page = NULL;
+  GSList *filenames = NULL;
 
   /* only allow going into symbols */
   if (object->type != OBJ_COMPLEX)
-    return;
+    return NULL;
 
   attrib = o_attrib_search_attached_attribs_by_name (object, "source", count);
 
@@ -196,13 +194,7 @@ x_hierarchy_down_schematic (GschemToplevel *w_current, OBJECT *object)
 
     /* loop over all filenames */
     while (current_filename != NULL) {
-      child = load_source (w_current, current_filename, &page_control);
-
-      /* save the first page */
-      if (first_page == NULL)
-        first_page = child;
-
-      g_free (current_filename);
+      filenames = g_slist_prepend (filenames, current_filename);
       pcount++;
       current_filename = u_basic_breakup_string (attrib, ',', pcount);
     }
@@ -215,6 +207,31 @@ x_hierarchy_down_schematic (GschemToplevel *w_current, OBJECT *object)
       o_attrib_search_inherited_attribs_by_name (object, "source", count) :
       o_attrib_search_attached_attribs_by_name (object, "source", count);
   }
+
+  return g_slist_reverse (filenames);
+}
+
+
+void
+x_hierarchy_down_schematic (GschemToplevel *w_current, OBJECT *object)
+{
+  GSList *filenames = get_source_filenames (w_current, object);
+  PAGE *child = NULL;
+  int page_control = 0;
+  PAGE *first_page = NULL;
+
+  for (const GSList *l = filenames; l != NULL; l = l->next) {
+    gchar *current_filename = (gchar *) l->data;
+    child = load_source (w_current, current_filename, &page_control);
+
+    /* save the first page */
+    if (first_page == NULL)
+      first_page = child;
+
+    g_free (current_filename);
+  }
+
+  g_slist_free (filenames);
 
   if (first_page != NULL)
     x_window_set_current_page (w_current, first_page);
