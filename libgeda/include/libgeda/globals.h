@@ -34,4 +34,6 @@ extern int tab_in_chars;
 /* Color map for printing */
 extern COLOR print_colors[MAX_COLORS];
 
+extern int page_control_counter;
+
 #endif

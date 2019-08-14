@@ -26,6 +26,113 @@
 #include "gschem.h"
 
 
+/*!
+ *  \brief Search for schematic associated source files and load them.
+ *  \par Function Description
+ *  This function searches the associated source file refered by the
+ *  <B>filename</B> and loads it.  If the <B>flag</B> is set to
+ *  <B>HIERARCHY_NORMAL_LOAD</B> and the page is already in the list of
+ *  pages it will return the <B>pid</B> of that page.
+ *  If the <B>flag</B> is set to <B>HIERARCHY_FORCE_LOAD</B> then this
+ *  function will load the page again with a new page id. The second case
+ *  is mainly used by gnetlist where pushed down schematics MUST be unique.
+ *
+ *  \param [in] toplevel      The TOPLEVEL object.
+ *  \param [in] filename      Schematic file name.
+ *  \param [in] parent        The parent page of the schematic.
+ *  \param [in] page_control
+ *  \param [in] flag          sets whether to force load
+ *  \param [out] err         Location to return a GError on failure.
+ *  \return The page loaded, or NULL if failed.
+ *
+ *  \note
+ *  This function finds the associated source files and
+ *  loads all up
+ *  It only works for schematic files though
+ *  this is basically push
+ *  flag can either be HIERARCHY_NORMAL_LOAD or HIERARCHY_FORCE_LOAD
+ *  flag is mainly used by gnetlist where pushed down schematics MUST be unique
+ */
+static PAGE *
+down_schematic_single (TOPLEVEL *toplevel, const gchar *filename,
+                       PAGE *parent, int page_control, int flag,
+                       GError **err)
+{
+  gchar *string;
+  PAGE *found = NULL;
+  PAGE *forbear;
+
+  g_return_val_if_fail ((toplevel != NULL), NULL);
+  g_return_val_if_fail ((filename != NULL), NULL);
+  g_return_val_if_fail ((parent != NULL), NULL);
+
+  string = s_slib_search_single(filename);
+  if (string == NULL) {
+    g_set_error (err, EDA_ERROR, EDA_ERROR_NOLIB,
+                 _("Schematic not found in source library."));
+    return NULL;
+  }
+
+  switch (flag) {
+  case HIERARCHY_NORMAL_LOAD:
+    {
+      gchar *filename = f_normalize_filename (string, NULL);
+      found = s_page_search (toplevel, filename);
+      g_free (filename);
+
+      if (found) {
+        /* check whether this page is in the parents list */
+        for (forbear = parent;
+             forbear != NULL && found->pid != forbear->pid && forbear->up >= 0;
+             forbear = s_page_search_by_page_id (toplevel->pages, forbear->up))
+          ; /* void */
+
+        if (forbear != NULL && found->pid == forbear->pid) {
+          g_set_error (err, EDA_ERROR, EDA_ERROR_LOOP,
+                       _("Hierarchy contains a circular dependency."));
+          return NULL;  /* error signal */
+        }
+        s_page_goto (toplevel, found);
+        if (page_control != 0) {
+          found->page_control = page_control;
+        }
+        found->up = parent->pid;
+        g_free (string);
+        return found;
+      }
+
+      found = s_page_new (toplevel, string);
+
+      f_open (toplevel, found, found->page_filename, NULL);
+    }
+    break;
+
+  case HIERARCHY_FORCE_LOAD:
+    {
+      found = s_page_new (toplevel, string);
+      f_open (toplevel, found, found->page_filename, NULL);
+    }
+    break;
+
+  default:
+    g_return_val_if_reached (NULL);
+  }
+
+  if (page_control == 0) {
+    page_control_counter++;
+    found->page_control = page_control_counter;
+  } else {
+    found->page_control = page_control;
+  }
+
+  found->up = parent->pid;
+
+  g_free (string);
+
+  return found;
+}
+
+
 void
 x_hierarchy_down_schematic (GschemToplevel *w_current, OBJECT *object)
 {
@@ -68,14 +175,14 @@ x_hierarchy_down_schematic (GschemToplevel *w_current, OBJECT *object)
       GError *err = NULL;
       s_log_message(_("Searching for source [%s]\n"), current_filename);
       PAGE *saved_page = gschem_toplevel_get_toplevel (w_current)->page_current;
-      child = s_hierarchy_down_schematic_single(gschem_toplevel_get_toplevel (w_current),
-                                                current_filename,
-                                                parent,
-                                                page_control,
-                                                HIERARCHY_NORMAL_LOAD,
-                                                &err);
+      child = down_schematic_single (gschem_toplevel_get_toplevel (w_current),
+                                     current_filename,
+                                     parent,
+                                     page_control,
+                                     HIERARCHY_NORMAL_LOAD,
+                                     &err);
 
-      /* s_hierarchy_down_schematic_single() will not zoom the loaded page */
+      /* down_schematic_single() will not zoom the loaded page */
       if (child != NULL) {
         gtk_recent_manager_add_item (recent_manager,
                                      g_filename_to_uri (child->page_filename,
@@ -165,6 +272,44 @@ x_hierarchy_down_schematic (GschemToplevel *w_current, OBJECT *object)
 }
 
 
+/*! \todo Finish function documentation!!!
+ *  \brief
+ *  \par Function Description
+ *
+ */
+static void
+down_symbol (TOPLEVEL *toplevel, const CLibSymbol *symbol, PAGE *parent)
+{
+  PAGE *page;
+  gchar *filename;
+
+  filename = s_clib_symbol_get_filename (symbol);
+
+  page = s_page_search (toplevel, filename);
+  if (page) {
+    /* change link to parent page since we
+     * can come here from any parent and must
+     * come back to the same page */
+    page->up = parent->pid;
+    s_page_goto (toplevel, page);
+    g_free (filename);
+    return;
+  }
+
+  page = s_page_new (toplevel, filename);
+  g_free(filename);
+
+  s_page_goto (toplevel, page);
+
+  f_open(toplevel, page, page->page_filename, NULL);
+
+  page->up = parent->pid;
+  page_control_counter++;
+  page->page_control = page_control_counter;
+
+}
+
+
 /*! \bug may cause problems with non-directory symbols */
 void
 x_hierarchy_down_symbol (GschemToplevel *w_current, OBJECT *object)
@@ -191,8 +336,8 @@ x_hierarchy_down_symbol (GschemToplevel *w_current, OBJECT *object)
     }
     g_free (filename);
     PAGE *saved_page = gschem_toplevel_get_toplevel (w_current)->page_current;
-    s_hierarchy_down_symbol(gschem_toplevel_get_toplevel (w_current), sym,
-			      gschem_toplevel_get_toplevel (w_current)->page_current);
+    down_symbol (gschem_toplevel_get_toplevel (w_current), sym,
+                 gschem_toplevel_get_toplevel (w_current)->page_current);
     PAGE *page = gschem_toplevel_get_toplevel (w_current)->page_current;
     if (saved_page != NULL) {
       s_page_goto (gschem_toplevel_get_toplevel (w_current), saved_page);
@@ -203,11 +348,38 @@ x_hierarchy_down_symbol (GschemToplevel *w_current, OBJECT *object)
                                                     NULL, NULL));
 
     x_window_set_current_page (w_current, page);
-    /* s_hierarchy_down_symbol() will not zoom the loaded page */
+    /* down_symbol() will not zoom the loaded page */
     gschem_page_view_zoom_extents (gschem_toplevel_get_current_page_view (w_current),
                                    NULL);
     o_undo_savestate_old (w_current, UNDO_ALL, NULL);
   }
+}
+
+
+/*! \brief Search for the parent page of a page in hierarchy.
+ *  \par Function Description
+ *  This function searches the parent page of page \a page in the
+ *  hierarchy. It checks all the pages in the list \a page_list.
+ *
+ *  It returns a pointer on the page if found, NULL otherwise.
+ *
+ *  \note
+ *  The page \a current_page must be in the list \a page_list.
+ *
+ *  \param [in] page_list    The list of pages in which to search.
+ *  \param [in] current_page The reference page for the search.
+ *  \returns A pointer on the page found or NULL if not found.
+ */
+static PAGE *
+find_up_page (GedaPageList *page_list, PAGE *current_page)
+{
+  g_return_val_if_fail (current_page != NULL, NULL);
+  if (current_page->up < 0) {
+    s_log_message(_("There are no schematics above the current one!\n"));
+    return NULL;
+  }
+
+  return s_page_search_by_page_id (page_list, current_page->up);
 }
 
 
@@ -223,7 +395,7 @@ x_hierarchy_up (GschemToplevel *w_current)
     return;
   }
 
-  up_page = s_hierarchy_find_up_page (gschem_toplevel_get_toplevel (w_current)->pages, page);
+  up_page = find_up_page (gschem_toplevel_get_toplevel (w_current)->pages, page);
   if (up_page == NULL) {
     s_log_message(_("Cannot find any schematics above the current one!\n"));
   } else {

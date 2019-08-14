@@ -27,7 +27,7 @@
 #include "libgeda_priv.h"
 
 /*! \brief */
-static int page_control_counter=0;
+int page_control_counter = 0;
 
 /*!
  *  \brief Search for schematic associated source files and load them.
@@ -134,71 +134,6 @@ s_hierarchy_down_schematic_single(TOPLEVEL *toplevel, const gchar *filename,
 
   return found;
 }
-
-/*! \todo Finish function documentation!!!
- *  \brief
- *  \par Function Description
- *
- */
-void
-s_hierarchy_down_symbol (TOPLEVEL *toplevel, const CLibSymbol *symbol,
-                         PAGE *parent)
-{
-  PAGE *page;
-  gchar *filename;
-
-  filename = s_clib_symbol_get_filename (symbol);
-
-  page = s_page_search (toplevel, filename);
-  if (page) {
-    /* change link to parent page since we
-     * can come here from any parent and must
-     * come back to the same page */
-    page->up = parent->pid;
-    s_page_goto (toplevel, page);
-    g_free (filename);
-    return;
-  }
-
-  page = s_page_new (toplevel, filename);
-  g_free(filename);
-
-  s_page_goto (toplevel, page);
-
-  f_open(toplevel, page, page->page_filename, NULL);
-
-  page->up = parent->pid;
-  page_control_counter++;
-  page->page_control = page_control_counter;
-
-}
-
-/*! \brief Search for the parent page of a page in hierarchy.
- *  \par Function Description
- *  This function searches the parent page of page \a page in the
- *  hierarchy. It checks all the pages in the list \a page_list.
- *
- *  It returns a pointer on the page if found, NULL otherwise.
- *
- *  \note
- *  The page \a current_page must be in the list \a page_list.
- *
- *  \param [in] page_list    The list of pages in which to search.
- *  \param [in] current_page The reference page for the search.
- *  \returns A pointer on the page found or NULL if not found.
- */
-PAGE *
-s_hierarchy_find_up_page (GedaPageList *page_list, PAGE *current_page)
-{
-  g_return_val_if_fail (current_page != NULL, NULL);
-  if (current_page->up < 0) {
-    s_log_message(_("There are no schematics above the current one!\n"));
-    return NULL;
-  }
-
-  return s_page_search_by_page_id (page_list, current_page->up);
-}
-
 
 /*! \brief Load a subpage
  *
