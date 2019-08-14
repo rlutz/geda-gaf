@@ -118,8 +118,7 @@ x_hierarchy_down_schematic (GschemToplevel *w_current, OBJECT *object)
   char *current_filename = NULL;
   PAGE *child = NULL;
   int page_control = 0;
-  int loaded_flag = FALSE;
-  PAGE *save_first_page = NULL;
+  PAGE *first_page = NULL;
 
   /* only allow going into symbols */
   if (object->type != OBJ_COMPLEX)
@@ -166,8 +165,8 @@ x_hierarchy_down_schematic (GschemToplevel *w_current, OBJECT *object)
       }
 
       /* save the first page */
-      if (!loaded_flag && child != NULL)
-        save_first_page = child;
+      if (first_page == NULL)
+        first_page = child;
 
       /* now do some error fixing */
       if (child == NULL) {
@@ -190,11 +189,8 @@ x_hierarchy_down_schematic (GschemToplevel *w_current, OBJECT *object)
         gtk_widget_destroy (dialog);
         g_free (secondary);
         g_error_free (err);
-      } else {
-        /* this only signifies that we tried */
-        loaded_flag = TRUE;
+      } else
         page_control = child->page_control;
-      }
 
       g_free (current_filename);
       pcount++;
@@ -210,8 +206,8 @@ x_hierarchy_down_schematic (GschemToplevel *w_current, OBJECT *object)
       o_attrib_search_attached_attribs_by_name (object, "source", count);
   }
 
-  if (loaded_flag && save_first_page != NULL)
-    x_window_set_current_page (w_current, save_first_page);
+  if (first_page != NULL)
+    x_window_set_current_page (w_current, first_page);
 }
 
 
