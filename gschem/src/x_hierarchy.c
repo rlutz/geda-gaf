@@ -32,7 +32,7 @@ load_source (GschemToplevel *w_current, const gchar *filename,
 {
   TOPLEVEL *toplevel = gschem_toplevel_get_toplevel (w_current);
   PAGE *parent = toplevel->page_current;
-  gchar *string;
+  gchar *source_path;
   PAGE *page;
   PAGE *forbear;
 
@@ -42,8 +42,8 @@ load_source (GschemToplevel *w_current, const gchar *filename,
 
   s_log_message (_("Searching for source [%s]\n"), filename);
 
-  string = s_slib_search_single (filename);
-  if (string == NULL) {
+  source_path = s_slib_search_single (filename);
+  if (source_path == NULL) {
     s_log_message (_("Failed to descend into '%s': "
                      "Schematic not found in source library.\n"),
                    filename);
@@ -61,8 +61,8 @@ load_source (GschemToplevel *w_current, const gchar *filename,
     return NULL;
   }
 
-  page = x_lowlevel_open_page (w_current, string);
-  g_free (string);
+  page = x_lowlevel_open_page (w_current, source_path);
+  g_free (source_path);
 
   if (page == NULL)
     /* Some error occurred while loading the schematic.  In this case,
