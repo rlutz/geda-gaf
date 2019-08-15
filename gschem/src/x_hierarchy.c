@@ -70,10 +70,10 @@ load_source (GschemToplevel *w_current, const gchar *filename,
 
   /* check whether this page is in the parents list */
   forbear = toplevel->page_current;
-  while (forbear != NULL && page->pid != forbear->pid && forbear->up >= 0)
+  while (forbear != NULL && forbear->pid != page->pid && forbear->up >= 0)
     forbear = s_page_search_by_page_id (toplevel->pages, forbear->up);
 
-  if (forbear != NULL && page->pid == forbear->pid) {
+  if (forbear != NULL && forbear->pid == page->pid) {
     s_log_message (_("Failed to descend into '%s': "
                      "Hierarchy contains a circular dependency.\n"),
                    filename);
