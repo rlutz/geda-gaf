@@ -31,14 +31,13 @@ load_source (GschemToplevel *w_current, const gchar *filename,
              int *page_control)
 {
   TOPLEVEL *toplevel = gschem_toplevel_get_toplevel (w_current);
-  PAGE *parent = toplevel->page_current;
   gchar *source_path;
   PAGE *page;
   PAGE *forbear;
 
   g_return_val_if_fail (toplevel != NULL, NULL);
+  g_return_val_if_fail (toplevel->page_current != NULL, NULL);
   g_return_val_if_fail (filename != NULL, NULL);
-  g_return_val_if_fail (parent != NULL, NULL);
 
   s_log_message (_("Searching for source [%s]\n"), filename);
 
@@ -70,7 +69,7 @@ load_source (GschemToplevel *w_current, const gchar *filename,
     return NULL;
 
   /* check whether this page is in the parents list */
-  forbear = parent;
+  forbear = toplevel->page_current;
   while (forbear != NULL && page->pid != forbear->pid && forbear->up >= 0)
     forbear = s_page_search_by_page_id (toplevel->pages, forbear->up);
 
@@ -97,7 +96,7 @@ load_source (GschemToplevel *w_current, const gchar *filename,
     *page_control = page_control_counter;
   }
   page->page_control = *page_control;
-  page->up = parent->pid;
+  page->up = toplevel->page_current->pid;
 
   return page;
 }
@@ -179,7 +178,6 @@ x_hierarchy_down_symbol (GschemToplevel *w_current, OBJECT *object)
   TOPLEVEL *toplevel = gschem_toplevel_get_toplevel (w_current);
   const CLibSymbol *sym;
   gchar *filename;
-  PAGE *parent = toplevel->page_current;
   PAGE *page;
 
   /* only allow going into symbols */
@@ -214,7 +212,7 @@ x_hierarchy_down_symbol (GschemToplevel *w_current, OBJECT *object)
   page->page_control = page_control_counter;
   /* change link to parent page even if the page existed since we can
      come here from any parent and must come back to the same page */
-  page->up = parent->pid;
+  page->up = toplevel->page_current->pid;
 
   x_window_set_current_page (w_current, page);
 }
