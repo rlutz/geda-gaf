@@ -296,7 +296,6 @@ x_hierarchy_down_symbol (GschemToplevel *w_current, OBJECT *object)
   gchar *filename = s_clib_symbol_get_filename (sym);
   if (filename == NULL) {
     s_log_message (_("Symbol is not a real file. Symbol cannot be loaded.\n"));
-    g_free (filename);
     return;
   }
   g_free (filename);
