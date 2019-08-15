@@ -150,7 +150,7 @@ get_source_filenames (GschemToplevel *w_current, OBJECT *object)
 }
 
 
-void
+gboolean
 x_hierarchy_down_schematic (GschemToplevel *w_current, OBJECT *object)
 {
   GSList *filenames = get_source_filenames (w_current, object);
@@ -166,13 +166,16 @@ x_hierarchy_down_schematic (GschemToplevel *w_current, OBJECT *object)
 
   g_slist_free_full (filenames, g_free);
 
-  if (first_page != NULL)
-    x_window_set_current_page (w_current, first_page);
+  if (first_page == NULL)
+    return FALSE;
+
+  x_window_set_current_page (w_current, first_page);
+  return TRUE;
 }
 
 
 /*! \bug may cause problems with non-directory symbols */
-void
+gboolean
 x_hierarchy_down_symbol (GschemToplevel *w_current, OBJECT *object)
 {
   TOPLEVEL *toplevel = gschem_toplevel_get_toplevel (w_current);
@@ -182,22 +185,22 @@ x_hierarchy_down_symbol (GschemToplevel *w_current, OBJECT *object)
 
   /* only allow going into symbols */
   if (object->type != OBJ_COMPLEX)
-    return;
+    return FALSE;
 
   if (object->complex_embedded) {
     s_log_message (_("Cannot descend into embedded symbol!\n"));
-    return;
+    return FALSE;
   }
 
   s_log_message (_("Searching for symbol [%s]\n"), object->complex_basename);
   sym = s_clib_get_symbol_by_name (object->complex_basename);
   if (sym == NULL)
-    return;
+    return FALSE;
 
   filename = s_clib_symbol_get_filename (sym);
   if (filename == NULL) {
     s_log_message (_("Symbol is not a real file. Symbol cannot be loaded.\n"));
-    return;
+    return FALSE;
   }
 
   page = x_lowlevel_open_page (w_current, filename);
@@ -206,7 +209,7 @@ x_hierarchy_down_symbol (GschemToplevel *w_current, OBJECT *object)
   if (page == NULL)
     /* Some error occurred while loading the symbol.  In this case,
        x_lowlevel_open_page already displayed an error message. */
-    return;
+    return FALSE;
 
   page_control_counter++;
   page->page_control = page_control_counter;
@@ -215,29 +218,32 @@ x_hierarchy_down_symbol (GschemToplevel *w_current, OBJECT *object)
   page->up = toplevel->page_current->pid;
 
   x_window_set_current_page (w_current, page);
+  return TRUE;
 }
 
 
-void
+gboolean
 x_hierarchy_up (GschemToplevel *w_current)
 {
   TOPLEVEL *toplevel = gschem_toplevel_get_toplevel (w_current);
   PAGE *page = toplevel->page_current;
   PAGE *parent;
-  g_return_if_fail (page != NULL);
+  g_return_val_if_fail (page != NULL, FALSE);
 
   if (page->up < 0) {
     s_log_message (_("There are no schematics above the current one!\n"));
-    return;
+    return FALSE;
   }
 
   parent = s_page_search_by_page_id (toplevel->pages, page->up);
   if (parent == NULL) {
     s_log_message (_("Cannot find any schematics above the current one!\n"));
-    return;
+    return FALSE;
   }
 
   if (!x_highlevel_close_page (w_current, page))
-    return;
+    return FALSE;
+
   x_window_set_current_page (w_current, parent);
+  return TRUE;
 }
