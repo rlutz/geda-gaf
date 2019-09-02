@@ -99,7 +99,7 @@ x_controlfd_init (void)
   if (control_fd != -1) {
     stream = fdopen (control_fd, "r");
     if (stream == NULL)
-      g_warning (_("Can't open control fd %d: %s"),
+      g_warning (_("Can't open control fd %d: %s\n"),
                  control_fd, strerror (errno));
   }
 
