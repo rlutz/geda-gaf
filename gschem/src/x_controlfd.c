@@ -183,7 +183,7 @@ find_page (GschemToplevel **w_current_return, PAGE **page_return,
  *
  * Modifies \a buf in place.
  *
- * On error, prints a message and doesn't change its arguments.
+ * On error, prints a message and doesn't change the return arguments.
  */
 static void
 split_args (gchar ***args_return, gint *count_return, gchar *buf)
