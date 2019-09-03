@@ -243,6 +243,10 @@ x_highlevel_revert_page (GschemToplevel *w_current, PAGE *page)
     g_return_val_if_fail (page != NULL, FALSE);
   }
 
+  if (page->is_untitled)
+    /* can't revert untitled page */
+    return FALSE;
+
   if (page->CHANGED) {
     GtkWidget *dialog;
     int response;
