@@ -26,21 +26,7 @@
  * protocol and can be enabled via the command-line options
  * `--control-fd=stdin' or `--control-fd=FD'.
  *
- * The following commands are currently supported:
- *
- *     visit FILE
- *     save FILE
- *     save-all
- *     revert FILE
- *     close FILE
- *     patch-filename FILE PATCHFILE
- *     import-patch FILE [PATCHFILE]
- *     quit
- *
- * File paths must be absolute, except for patch filenames which are
- * resolved relative to the main file.  Arguments are separated by
- * spaces; spaces and backslashes inside arguments must be escaped
- * with a backslash.
+ * See \ref help_string for a list of commands.
  */
 
 #include <config.h>
@@ -48,6 +34,23 @@
 #include "gschem.h"
 
 #include <glib-unix.h>
+
+static const char *help_string =
+  "The following commands are supported:\n"
+  "\n"
+  "    visit FILE\n"
+  "    save FILE\n"
+  "    save-all\n"
+  "    revert FILE\n"
+  "    close FILE\n"
+  "    patch-filename FILE PATCHFILE\n"
+  "    import-patch FILE [PATCHFILE]\n"
+  "    quit\n"
+  "    help\n"
+  "\n"
+  "File paths must be absolute, except for patch filenames which are resolved\n"
+  "relative to the main file.  Arguments are separated by spaces; spaces and\n"
+  "backslashes inside arguments must be escaped with a backslash.\n";
 
 static int control_fd = -1;
 static guint tag = 0;
@@ -334,6 +337,15 @@ process_command (gchar *buf)
       fprintf (stderr, "Command usage: quit\n");
     else
       x_window_close_all (NULL);
+  }
+
+  else if (strcmp (args[0], "help") == 0 ||
+           strcmp (args[0], "h") == 0 ||
+           strcmp (args[0], "?") == 0) {
+    if (count != 1)
+      fprintf (stderr, "Command usage: help\n");
+    else
+      fprintf (stderr, help_string);
   }
 
   else
