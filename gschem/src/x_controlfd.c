@@ -165,6 +165,7 @@ find_page (GschemToplevel **w_current_return, PAGE **page_return,
   }
 
   if (!open_if_not_found) {
+    fprintf (stderr, "%s: File hasn't been opened\n", fn);
     g_free (fn);
     return FALSE;
   }
