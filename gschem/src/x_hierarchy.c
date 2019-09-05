@@ -40,55 +40,63 @@ load_source (GschemToplevel *w_current, const gchar *filename,
   g_return_val_if_fail (filename != NULL, NULL);
 
   s_log_message (_("Searching for source [%s]\n"), filename);
-
   source_path = s_slib_search_single (filename);
-  if (source_path == NULL) {
-    s_log_message (_("Failed to descend into '%s': "
-                     "Schematic not found in source library.\n"),
-                   filename);
 
-    GtkWidget *dialog =
-      gtk_message_dialog_new (GTK_WINDOW (w_current->main_window),
-                              GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR,
-                              GTK_BUTTONS_CLOSE,
-                              _("Failed to descend into \"%s\"."), filename);
-    g_object_set (G_OBJECT (dialog), "secondary-text",
-                  _("Schematic not found in source library."), NULL);
-    gtk_window_set_title (GTK_WINDOW (dialog), _("gschem"));
-    gtk_dialog_run (GTK_DIALOG (dialog));
-    gtk_widget_destroy (dialog);
-    return NULL;
-  }
+  if (source_path != NULL) {
+    page = x_lowlevel_open_page (w_current, source_path);
+    g_free (source_path);
 
-  page = x_lowlevel_open_page (w_current, source_path);
-  g_free (source_path);
+    if (page == NULL)
+      /* Some error occurred while loading the schematic.  In this case,
+         x_lowlevel_open_page already displayed an error message. */
+      return NULL;
 
-  if (page == NULL)
-    /* Some error occurred while loading the schematic.  In this case,
-       x_lowlevel_open_page already displayed an error message. */
-    return NULL;
+    /* check whether this page is in the parents list */
+    forbear = toplevel->page_current;
+    while (forbear != NULL && forbear->pid != page->pid && forbear->up >= 0)
+      forbear = s_page_search_by_page_id (toplevel->pages, forbear->up);
 
-  /* check whether this page is in the parents list */
-  forbear = toplevel->page_current;
-  while (forbear != NULL && forbear->pid != page->pid && forbear->up >= 0)
-    forbear = s_page_search_by_page_id (toplevel->pages, forbear->up);
+    if (forbear != NULL && forbear->pid == page->pid) {
+      s_log_message (_("Failed to descend into '%s': "
+                       "Hierarchy contains a circular dependency.\n"),
+                     filename);
 
-  if (forbear != NULL && forbear->pid == page->pid) {
-    s_log_message (_("Failed to descend into '%s': "
-                     "Hierarchy contains a circular dependency.\n"),
-                   filename);
+      GtkWidget *dialog =
+        gtk_message_dialog_new (GTK_WINDOW (w_current->main_window),
+                                GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR,
+                                GTK_BUTTONS_CLOSE,
+                                _("Failed to descend into \"%s\"."), filename);
+      g_object_set (G_OBJECT (dialog), "secondary-text",
+                    _("The hierarchy contains a circular dependency."), NULL);
+      gtk_window_set_title (GTK_WINDOW (dialog), _("gschem"));
+      gtk_dialog_run (GTK_DIALOG (dialog));
+      gtk_widget_destroy (dialog);
+      return NULL;
+    }
+  } else {
+    /* Has a new page with this name already been created? */
+    for (const GList *l = geda_list_get_glist(toplevel->pages);
+         l != NULL; l = l->next) {
+      PAGE *page = (PAGE *) l->data;
+      const gchar *sep = strrchr (page->page_filename, '/');
+      /* FIXME: This may not be correct on platforms with
+                case-insensitive filesystems. */
+      if (page->up == toplevel->page_current->pid && !page->is_untitled &&
+          sep != NULL && strcmp (sep + 1, filename) == 0)
+        /* page control has been set before, just return page */
+        return page;
+    }
 
-    GtkWidget *dialog =
-      gtk_message_dialog_new (GTK_WINDOW (w_current->main_window),
-                              GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR,
-                              GTK_BUTTONS_CLOSE,
-                              _("Failed to descend into \"%s\"."), filename);
-    g_object_set (G_OBJECT (dialog), "secondary-text",
-                  _("The hierarchy contains a circular dependency."), NULL);
-    gtk_window_set_title (GTK_WINDOW (dialog), _("gschem"));
-    gtk_dialog_run (GTK_DIALOG (dialog));
-    gtk_widget_destroy (dialog);
-    return NULL;
+    if (!x_dialog_confirm_create (
+          GTK_WINDOW (w_current->main_window),
+          _("The subschematic \"%s\" doesn't appear to exist.\n\n"
+            "Do you want to create a new schematic with this name?"),
+          filename))
+      return NULL;
+
+    page = x_fileselect_create (w_current, s_slib_getdir (0), filename);
+    if (page == NULL)
+      return NULL;
   }
 
   if (*page_control == 0) {

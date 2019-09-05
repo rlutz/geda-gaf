@@ -400,6 +400,7 @@ gboolean x_event_get_pointer_position (GschemToplevel *w_current, gboolean snapp
 /* x_compselect.c */
 void x_compselect_deselect (GschemToplevel *w_current);
 /* x_fileselect.c */
+PAGE *x_fileselect_create (GschemToplevel *w_current, const gchar *dirname, const gchar *basename);
 void x_fileselect_open(GschemToplevel *w_current);
 gboolean x_fileselect_save(GschemToplevel *w_current);
 int x_fileselect_load_backup(void *user_data, GString *message);

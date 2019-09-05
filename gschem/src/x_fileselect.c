@@ -149,6 +149,88 @@ x_fileselect_add_preview (GtkFileChooser *filechooser)
 
 }
 
+/*! \brief Opens a file chooser for creating a file.
+ *
+ * Opens a file chooser dialog and lets the user select a filename.
+ * If the dialog is confirmed, creates a page with this name.
+ *
+ * \param [in] w_current  the toplevel environment
+ * \param [in] dirname    the directory in which to create the file,
+ *                          or \c NULL to create the file in the
+ *                          current page's directory
+ * \param [in] basename   the basename of the file to create, or
+ *                          \c NULL to not preset a name
+ *
+ * \returns the newly created page, or \c NULL of the dialog was
+ *          cancelled
+ */
+PAGE *
+x_fileselect_create (GschemToplevel *w_current, const gchar *dirname,
+                                                const gchar *basename)
+{
+  gchar *lowercase_basename;
+  const gchar *title;
+  GtkWidget *dialog, *button;
+  PAGE *page = NULL;
+
+  lowercase_basename = g_ascii_strdown (basename, -1);
+  if (g_str_has_suffix (lowercase_basename, ".sch"))
+    title = _("Create schematic...");
+  else if (g_str_has_suffix (lowercase_basename, ".sym"))
+    title = _("Create symbol...");
+  else
+    title = _("Create file...");
+  g_free (lowercase_basename);
+
+  dialog = gtk_file_chooser_dialog_new (title,
+                                        GTK_WINDOW (w_current->main_window),
+                                        GTK_FILE_CHOOSER_ACTION_SAVE,
+                                        GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+                                        NULL);
+  button = gtk_button_new_with_mnemonic (_("_Create"));
+  gtk_widget_set_can_default (button, TRUE);
+  gtk_button_set_image (GTK_BUTTON (button),
+                        gtk_image_new_from_stock (GTK_STOCK_NEW,
+                                                  GTK_ICON_SIZE_BUTTON));
+  gtk_widget_show (button);
+  gtk_dialog_add_action_widget (GTK_DIALOG (dialog), button,
+                                GTK_RESPONSE_ACCEPT);
+  gtk_dialog_set_alternative_button_order (GTK_DIALOG(dialog),
+                                           GTK_RESPONSE_ACCEPT,
+                                           GTK_RESPONSE_CANCEL,
+                                           -1);
+  gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_ACCEPT);
+
+  //x_fileselect_add_preview (GTK_FILE_CHOOSER (dialog));
+  x_fileselect_setup_filechooser_filters (GTK_FILE_CHOOSER (dialog));
+
+  if (dirname != NULL)
+    gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (dialog), dirname);
+  else {
+    TOPLEVEL *toplevel = gschem_toplevel_get_toplevel (w_current);
+    gchar *cwd;
+    if (toplevel->page_current == NULL || toplevel->page_current->is_untitled)
+      cwd = g_get_current_dir ();
+    else
+      cwd = g_path_get_dirname (toplevel->page_current->page_filename);
+    gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (dialog), cwd);
+    g_free (cwd);
+  }
+  gtk_file_chooser_set_current_name (GTK_FILE_CHOOSER (dialog), basename);
+
+  gtk_file_chooser_set_do_overwrite_confirmation (GTK_FILE_CHOOSER (dialog),
+                                                  TRUE);
+
+  if (gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_ACCEPT) {
+    gchar *fn = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
+    page = x_lowlevel_new_page (w_current, fn);
+    g_free (fn);
+  }
+
+  gtk_widget_destroy (dialog);
+  return page;
+}
+
 /*! \brief Response callback for file open dialog.
  *
  * If the user confirmed the dialog, checks for each filename in turn
