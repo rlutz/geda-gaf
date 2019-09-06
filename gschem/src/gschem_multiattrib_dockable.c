@@ -1288,10 +1288,52 @@ multiattrib_callback_key_pressed (GtkWidget *widget,
 }
 
 
+/*! \brief Find model row with given name and inheritance flag.
+ *
+ * Looks for the (first, but there should be only one) row in
+ * \a tree_model that matches \a name and \a inherited.  If found,
+ * sets \a iter_return to an iterator pointing to that row.
+ *
+ * \returns whether a matching row has been found
+ */
+static gboolean
+find_row (GtkTreeModel *tree_model, GtkTreeIter *iter_return,
+          gchar *name, gboolean inherited)
+{
+  GtkTreeIter iter;
+  gboolean valid;
+
+  for (valid = gtk_tree_model_get_iter_first (tree_model, &iter);
+       valid;
+       valid = gtk_tree_model_iter_next (tree_model, &iter)) {
+    gchar *iter_name;
+    gboolean iter_inherited;
+    gboolean matches;
+    gtk_tree_model_get (tree_model, &iter,
+                        COLUMN_NAME,      &iter_name,
+                        COLUMN_INHERITED, &iter_inherited,
+                        -1);
+    matches = iter_inherited == inherited && strcmp (iter_name, name) == 0;
+    g_free (iter_name);
+
+    if (matches) {
+      *iter_return = iter;
+      return TRUE;
+    }
+  }
+
+  return FALSE;
+}
+
+
 /*! \brief Move edit focus to the cell pointed to by a mouse event.
  *  \par Function Description
  *  Uses the X and Y coordinates of a mouse event, to move edit focus
  *  to the cell at those coords.
+ *
+ *  If the cell represents the value of an inherited attribute, edits
+ *  the value of the attached attribute with that name.  If there's no
+ *  attached attribute with that name, promotes the attribute first.
  *
  * NB: The coordinates must be relative to the tree view's bin window, IE.. have
  *     come from en event where event->window == gtk_tree_view_get_bin_window ().
@@ -1304,16 +1346,65 @@ static void
 multiattrib_edit_cell_at_pos (GschemMultiattribDockable *multiattrib,
                               gint x, gint y)
 {
+  GtkTreeModel *model = gtk_tree_view_get_model (multiattrib->treeview);
   GtkTreePath *path;
   GtkTreeViewColumn *column;
+  GtkTreeIter iter;
+  gboolean inherited;
+  gchar *name;
+  GedaList *attr_list;
 
-  if (gtk_tree_view_get_path_at_pos (multiattrib->treeview,
-                                     x, y, &path, &column, NULL, NULL)) {
+  if (!gtk_tree_view_get_path_at_pos (multiattrib->treeview,
+                                      x, y, &path, &column, NULL, NULL))
+    return;
+  if (!gtk_tree_model_get_iter (model, &iter, path)) {
+    gtk_tree_path_free (path);
+    return;
+  }
 
+  gtk_tree_model_get (model, &iter,
+                      COLUMN_INHERITED, &inherited,
+                      -1);
+  if (!inherited) {
+    /* row is editable--just edit it */
     gtk_tree_view_set_cursor_on_cell (multiattrib->treeview,
                                       path, column, NULL, TRUE);
     gtk_tree_path_free (path);
+    return;
   }
+  gtk_tree_path_free (path);
+
+  /* don't promote attributes when trying to edit columns other than "value" */
+  if (column != gtk_tree_view_get_column (multiattrib->treeview, 1))
+    return;
+
+  /* see if there's already a matching attached attribute */
+  gtk_tree_model_get (model, &iter,
+                      COLUMN_NAME, &name,
+                      -1);
+  if (!find_row (model, &iter, name, FALSE)) {
+    /* promote attribute */
+    gtk_tree_model_get (model, &iter,
+                        COLUMN_ATTRIBUTE_GEDALIST, &attr_list,
+                        -1);
+    multiattrib_action_promote_attributes (multiattrib,
+                                           geda_list_get_glist (attr_list));
+    g_object_unref (attr_list);
+    multiattrib_update (multiattrib);
+
+    /* find tree iterator corresponding to the promoted attribute */
+    if (!find_row (model, &iter, name, FALSE)) {
+      g_free (name);
+      return;
+    }
+  }
+  g_free (name);
+
+  /* get new path and invoke editor */
+  path = gtk_tree_model_get_path (model, &iter);
+  gtk_tree_view_set_cursor_on_cell (multiattrib->treeview,
+                                    path, column, NULL, TRUE);
+  gtk_tree_path_free (path);
 }
 
 
