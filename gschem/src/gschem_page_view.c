@@ -929,7 +929,7 @@ gschem_page_view_set_page (GschemPageView *view, PAGE *page)
 
       /* redraw the current page and update UI */
       gschem_page_view_invalidate_all (view);
-      gschem_page_view_update_scroll_adjustments (view);
+      //gschem_page_view_update_scroll_adjustments (view);
 
       g_object_notify (G_OBJECT (view), "page");
       g_object_notify (G_OBJECT (view), "page-geometry");
