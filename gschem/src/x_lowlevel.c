@@ -332,7 +332,7 @@ x_lowlevel_revert_page (GschemToplevel *w_current, PAGE *page)
   int up = page->up;
   gchar *patch_filename = g_strdup (page->patch_filename);
   gboolean patch_descend = page->patch_descend;
-  gboolean was_current_page = page == toplevel->page_current;
+  gboolean was_current_page = toplevel->page_current == page;
 
   /* delete the page, then re-open the file as a new page */
   s_log_message (page->CHANGED ? _("Discarding page [%s]\n")
@@ -353,7 +353,7 @@ x_lowlevel_revert_page (GschemToplevel *w_current, PAGE *page)
 
   if (page == NULL) {
     /* don't leave without a current page set */
-    if (was_current_page) {
+    if (toplevel->page_current == NULL) {
       GList *pages = geda_list_get_glist (toplevel->pages);
       if (pages != NULL)
         page = (PAGE *) pages->data;
