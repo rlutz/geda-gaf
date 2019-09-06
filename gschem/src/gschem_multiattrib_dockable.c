@@ -1312,6 +1312,7 @@ multiattrib_edit_cell_at_pos (GschemMultiattribDockable *multiattrib,
 
     gtk_tree_view_set_cursor_on_cell (multiattrib->treeview,
                                       path, column, NULL, TRUE);
+    gtk_tree_path_free (path);
   }
 }
 
