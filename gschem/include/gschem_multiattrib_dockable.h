@@ -55,6 +55,7 @@ struct _GschemMultiattribDockable {
 
   GtkWidget      *status_label;
   GtkTreeView    *treeview;
+  GtkTreeModel   *store;
 
   GtkWidget      *show_inherited;
   GtkCombo       *combo_name;

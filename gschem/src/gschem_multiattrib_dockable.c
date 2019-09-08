@@ -468,7 +468,7 @@ x_multiattrib_edit_attribute (GschemToplevel *w_current, OBJECT *object)
   gschem_dockable_present (w_current->multiattrib_dockable);
 
   /* find tree iterator corresponding to the attribute */
-  model = gtk_tree_view_get_model (multiattrib->treeview);
+  model = multiattrib->store;
 
   for (valid = gtk_tree_model_get_iter_first (model, &iter);
        valid;
@@ -899,7 +899,7 @@ multiattrib_callback_edited_name (GtkCellRendererText *cellrenderertext,
   gchar *value, *newtext;
   int visibility;
 
-  model = gtk_tree_view_get_model (multiattrib->treeview);
+  model = multiattrib->store;
   w_current = multiattrib->parent.w_current;
 
   if (!gtk_tree_model_get_iter_from_string (model, &iter, arg1)) {
@@ -991,7 +991,7 @@ multiattrib_callback_edited_value (GtkCellRendererText *cell_renderer,
   char *newtext;
   int visibility;
 
-  model = gtk_tree_view_get_model (multiattrib->treeview);
+  model = multiattrib->store;
   w_current = multiattrib->parent.w_current;
 
   if (!gtk_tree_model_get_iter_from_string (model, &iter, arg1)) {
@@ -1072,7 +1072,7 @@ multiattrib_callback_toggled_visible (GtkCellRendererToggle *cell_renderer,
   GedaList *attr_list;
   GList *a_iter;
 
-  model = gtk_tree_view_get_model (multiattrib->treeview);
+  model = multiattrib->store;
   w_current = multiattrib->parent.w_current;
 
   if (!gtk_tree_model_get_iter_from_string (model, &iter, path)) {
@@ -1128,7 +1128,7 @@ multiattrib_callback_toggled_show_name (GtkCellRendererToggle *cell_renderer,
   GList *a_iter;
   gint new_snv;
 
-  model = gtk_tree_view_get_model (multiattrib->treeview);
+  model = multiattrib->store;
   w_current = multiattrib->parent.w_current;
 
   if (!gtk_tree_model_get_iter_from_string (model, &iter, path)) {
@@ -1193,7 +1193,7 @@ multiattrib_callback_toggled_show_value (GtkCellRendererToggle *cell_renderer,
   GList *a_iter;
   gint new_snv;
 
-  model = gtk_tree_view_get_model (multiattrib->treeview);
+  model = multiattrib->store;
   w_current = multiattrib->parent.w_current;
 
   if (!gtk_tree_model_get_iter_from_string (model, &iter, path)) {
@@ -1346,7 +1346,7 @@ static void
 multiattrib_edit_cell_at_pos (GschemMultiattribDockable *multiattrib,
                               gint x, gint y)
 {
-  GtkTreeModel *model = gtk_tree_view_get_model (multiattrib->treeview);
+  GtkTreeModel *model = multiattrib->store;
   GtkTreePath *path;
   GtkTreeViewColumn *column;
   GtkTreeIter iter;
@@ -2084,7 +2084,6 @@ multiattrib_create_widget (GschemDockable *dockable)
   GtkWidget *label, *scrolled_win, *treeview;
   GtkWidget *table, *textview, *combo, *optionm, *button;
   GtkWidget *attrib_vbox, *show_inherited;
-  GtkTreeModel *store;
   GtkCellRenderer *renderer;
   GtkTreeViewColumn *column;
   GtkTreeSelection *selection;
@@ -2099,7 +2098,8 @@ multiattrib_create_widget (GschemDockable *dockable)
                                                       "shadow", GTK_SHADOW_NONE,
                                                       NULL));
   /*   - create the model for the treeview */
-  store = (GtkTreeModel*)gtk_list_store_new (NUM_COLUMNS,
+  multiattrib->store = GTK_TREE_MODEL (
+                         gtk_list_store_new (NUM_COLUMNS,
                                              G_TYPE_BOOLEAN,  /* COLUMN_INHERITED */
                                              G_TYPE_STRING,   /* COLUMN_NAME */
                                              G_TYPE_STRING,   /* COLUMN_VALUE */
@@ -2110,7 +2110,7 @@ multiattrib_create_widget (GschemDockable *dockable)
                                              G_TYPE_BOOLEAN,  /* COLUMN_IDENTICAL_VISIBILITY */
                                              G_TYPE_BOOLEAN,  /* COLUMN_IDENTICAL_SHOW_NAME */
                                              G_TYPE_BOOLEAN,  /* COLUMN_IDENTICAL_SHOW_VALUE */
-                                             G_TYPE_OBJECT);  /* COLUMN_ATTRIBUTE_GEDALIST */
+                                             G_TYPE_OBJECT)); /* COLUMN_ATTRIBUTE_GEDALIST */
 
   /*   - create a scrolled window for the treeview */
   scrolled_win = GTK_WIDGET (
@@ -2128,7 +2128,7 @@ multiattrib_create_widget (GschemDockable *dockable)
   /*   - create the treeview */
   treeview = GTK_WIDGET (g_object_new (GTK_TYPE_TREE_VIEW,
                                        /* GtkTreeView */
-                                       "model",      store,
+                                       "model",      multiattrib->store,
                                        "rules-hint", TRUE,
                                        NULL));
   g_signal_connect (treeview,
@@ -2640,7 +2640,7 @@ multiattrib_populate_liststore (GschemMultiattribDockable *multiattrib,
   GList *m_iter;
 
   /* Clear the existing list of attributes */
-  liststore = (GtkListStore*)gtk_tree_view_get_model (multiattrib->treeview);
+  liststore = GTK_LIST_STORE (multiattrib->store);
   gtk_list_store_clear (liststore);
 
   for (m_iter = model_rows;
