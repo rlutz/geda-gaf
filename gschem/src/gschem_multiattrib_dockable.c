@@ -2053,6 +2053,80 @@ multiattrib_show_inherited_toggled (GtkToggleButton *button,
 }
 
 
+/*! \brief Determine the index of \a name in the list of attributes.
+ *
+ * \returns the index, or \c -1 if the attribute name wasn't found
+ */
+static gint
+lookup_attrib_index (const gchar *name)
+{
+  const char *ref;
+  if (name == NULL)
+    return -1;
+  for (int i = 0; (ref = s_attrib_get (i)) != NULL; i++)
+    if (strcmp (name, ref) == 0)
+      return i;
+  return -1;
+}
+
+/*! \brief Determine the order in which two rows should be sorted.
+ *
+ * Takes the order of attributes set with \c attribute-name into
+ * account and sorts all attached attributes before all inherited
+ * attributes.
+ *
+ * \returns \c -1 , \c 0 or \c 1 depending on whether \a iter0 sorts
+ *          before, with or after \a iter1
+ */
+static gint
+attribute_sort_func (GtkTreeModel *model,
+                     GtkTreeIter *iter0, GtkTreeIter *iter1,
+                     gpointer user_data)
+{
+  GschemMultiattribDockable *multiattrib =
+    GSCHEM_MULTIATTRIB_DOCKABLE (user_data);
+  gboolean inherited0, inherited1;
+  gchar *name0, *name1;
+  gint result;
+
+  gtk_tree_model_get (multiattrib->store, iter0,
+                      COLUMN_INHERITED, &inherited0,
+                      COLUMN_NAME, &name0,
+                      -1);
+  gtk_tree_model_get (multiattrib->store, iter1,
+                      COLUMN_INHERITED, &inherited1,
+                      COLUMN_NAME, &name1,
+                      -1);
+
+  if (inherited1 && !inherited0)
+    result = -1;
+  else if (inherited0 && !inherited1)
+    result = 1;
+  else if (name0 == NULL) {
+    if (name1 == NULL)
+      result = 0;
+    else
+      result = -1;
+  } else if (name1 == NULL)
+    result = 1;
+  else {
+    gint index0 = lookup_attrib_index (name0),
+         index1 = lookup_attrib_index (name1);
+
+    if (index0 != -1 && (index1 == -1 || index1 > index0))
+      result = -1;
+    else if (index1 != -1 && (index0 == -1 || index0 > index1))
+      result = 1;
+    else
+      result = strcmp (name0, name1);
+  }
+
+  g_free (name0);
+  g_free (name1);
+  return result;
+}
+
+
 /*! \brief Create widgets for GschemMultiattribDockable
  *
  *  \par Function Description
@@ -2097,6 +2171,12 @@ multiattrib_create_widget (GschemDockable *dockable)
                                              G_TYPE_BOOLEAN,  /* COLUMN_IDENTICAL_SHOW_NAME */
                                              G_TYPE_BOOLEAN,  /* COLUMN_IDENTICAL_SHOW_VALUE */
                                              G_TYPE_OBJECT)); /* COLUMN_ATTRIBUTE_GEDALIST */
+  gtk_tree_sortable_set_default_sort_func (
+    GTK_TREE_SORTABLE (multiattrib->store),
+    attribute_sort_func, multiattrib, NULL);
+  gtk_tree_sortable_set_sort_column_id (
+    GTK_TREE_SORTABLE (multiattrib->store),
+    GTK_TREE_SORTABLE_DEFAULT_SORT_COLUMN_ID, GTK_SORT_ASCENDING);
 
   /*   - create a scrolled window for the treeview */
   scrolled_win = GTK_WIDGET (
