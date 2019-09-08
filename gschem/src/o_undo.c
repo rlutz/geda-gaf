@@ -435,6 +435,12 @@ o_undo_callback (GschemToplevel *w_current, PAGE *page, int type)
 
   page->page_control = u_current->page_control;
   page->up = u_current->up;
+
+  /* set filename right */
+  g_free(page->page_filename);
+  page->page_filename = save_filename;
+  page->is_untitled = save_untitled;
+
   gschem_toplevel_page_content_changed (w_current, page);
 
   GschemPageView *view = gschem_toplevel_get_current_page_view (w_current);
@@ -480,11 +486,6 @@ o_undo_callback (GschemToplevel *w_current, PAGE *page, int type)
 
   /* restore logging */
   do_logging = save_logging;
-
-  /* set filename right */
-  g_free(page->page_filename);
-  page->page_filename = save_filename;
-  page->is_untitled = save_untitled;
 
   /* final redraw */
   x_pagesel_update (w_current);

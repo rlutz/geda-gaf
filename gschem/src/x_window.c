@@ -21,6 +21,7 @@
 
 #include <stdio.h>
 #include <unistd.h>
+#include <sys/stat.h>
 
 #include "gdk/gdk.h"
 #ifdef GDK_WINDOWING_X11
@@ -498,6 +499,129 @@ x_window_close_wm (GtkWidget *widget, GdkEvent *event, gpointer data)
 }
 
 
+void
+x_window_update_file_change_notification (GschemToplevel *w_current,
+                                          PAGE *page)
+{
+  if (page->is_untitled) {
+    g_object_set (w_current->file_change_notification,
+                  "gschem-page", page,
+                  "path",        NULL,
+                  NULL);
+    return;
+  }
+
+  gchar *basename = g_path_get_basename (page->page_filename);
+  gchar *markup = page->exists_on_disk
+    ? g_markup_printf_escaped (
+        _("<b>The file \"%s\" has changed on disk.</b>\n\n%s"),
+        basename,
+        page->CHANGED
+          ? _("Do you want to drop your changes and reload the file?")
+          : _("Do you want to reload it?"))
+    : g_markup_printf_escaped (
+        _("<b>The file \"%s\" has been created on disk.</b>\n\n%s"),
+        basename,
+        page->CHANGED
+          ? _("Do you want to drop your changes and load the file?")
+          : _("Do you want to open it?"));
+  g_object_set (w_current->file_change_notification,
+                "gschem-page",     page,
+                "path",            page->page_filename,
+                "has-known-mtime", page->exists_on_disk,
+                "known-mtime",     &page->last_modified,
+                "button-stock-id", page->CHANGED
+                                     ? GTK_STOCK_REVERT_TO_SAVED
+                                     : page->exists_on_disk ? GTK_STOCK_REFRESH
+                                                            : GTK_STOCK_OPEN,
+                "button-label",    page->CHANGED
+                                     ? _("_Revert")
+                                     : page->exists_on_disk ? _("_Reload")
+                                                            : _("_Open"),
+                "markup",          markup,
+                NULL);
+  g_free (markup);
+  g_free (basename);
+}
+
+static void
+x_window_file_change_response (GschemChangeNotification *chnot,
+                               gint response_id, gpointer user_data)
+{
+  if (response_id == GTK_RESPONSE_ACCEPT)
+    x_lowlevel_revert_page (chnot->w_current, chnot->page);
+  else {
+    chnot->page->exists_on_disk = chnot->has_current_mtime;
+    chnot->page->last_modified = chnot->current_mtime;
+    x_window_update_file_change_notification (chnot->w_current, chnot->page);
+  }
+}
+
+
+void
+x_window_update_patch_change_notification (GschemToplevel *w_current,
+                                           PAGE *page)
+{
+  gchar *patch_filename = x_patch_guess_filename (page);
+  gchar *basename, *markup;
+
+  if (patch_filename == NULL) {
+    basename = NULL;
+    markup = NULL;
+  } else {
+    struct stat buf;
+    basename = g_path_get_basename (patch_filename);
+    if (page->patch_filename != NULL)
+      markup = g_markup_printf_escaped (
+        _("<b>The back-annotation patch \"%s\" has been updated.</b>\n\n"
+          "Do you want to re-import it?"),
+        basename);
+    else if (page->patch_seen_on_disk)
+      markup = g_markup_printf_escaped (
+        _("<b>The back-annotation patch \"%s\" has been updated.</b>\n\n"
+          "Do you want to import it?"),
+        basename);
+    else if (stat (patch_filename, &buf) != -1)
+      markup = g_markup_printf_escaped (
+        _("<b>This file appears to have a back-annotation patch \"%s\" "
+          "associated with it.</b>\n\nDo you want to import it?"),
+        basename);
+    else
+      markup = g_markup_printf_escaped (
+        _("<b>A back-annotation patch \"%s\" has been created.</b>\n\n"
+          "Do you want to import it?"),
+        basename);
+  }
+
+  g_object_set (w_current->patch_change_notification,
+                "gschem-page",     page,
+                "path",            patch_filename,
+                "has-known-mtime", page->patch_seen_on_disk,
+                "known-mtime",     &page->patch_mtime,
+                "button-label",    _("_Import"),
+                "markup",          markup,
+                NULL);
+  g_free (markup);
+  g_free (basename);
+  g_free (patch_filename);
+}
+
+static void
+x_window_patch_change_response (GschemChangeNotification *chnot,
+                                gint response_id, gpointer user_data)
+{
+  if (response_id == GTK_RESPONSE_ACCEPT) {
+    if (chnot->page->patch_filename == NULL)
+      chnot->page->patch_filename = g_strdup (chnot->path);
+    x_patch_do_import (chnot->w_current, chnot->page);
+  } else {
+    chnot->page->patch_seen_on_disk = chnot->has_current_mtime;
+    chnot->page->patch_mtime = chnot->current_mtime;
+    x_window_update_patch_change_notification (chnot->w_current, chnot->page);
+  }
+}
+
+
 /*! \todo Finish function documentation!!!
  *  \brief
  *  \par Function Description
@@ -629,6 +753,28 @@ void x_window_create_main(GschemToplevel *w_current)
                    work_box,
                    TRUE,
                    TRUE);
+
+  w_current->file_change_notification =
+    g_object_new (GSCHEM_TYPE_CHANGE_NOTIFICATION,
+                  "gschem-toplevel", w_current,
+                  "message-type", GTK_MESSAGE_QUESTION,
+                  NULL);
+  g_signal_connect (w_current->file_change_notification, "response",
+                    G_CALLBACK (x_window_file_change_response), NULL);
+  gtk_box_pack_start (GTK_BOX (work_box),
+                      w_current->file_change_notification->info_bar,
+                      FALSE, FALSE, 0);
+
+  w_current->patch_change_notification =
+    g_object_new (GSCHEM_TYPE_CHANGE_NOTIFICATION,
+                  "gschem-toplevel", w_current,
+                  "message-type", GTK_MESSAGE_INFO,
+                  NULL);
+  g_signal_connect (w_current->patch_change_notification, "response",
+                    G_CALLBACK (x_window_patch_change_response), NULL);
+  gtk_box_pack_start (GTK_BOX (work_box),
+                      w_current->patch_change_notification->info_bar,
+                      FALSE, FALSE, 0);
 
   /*  Try to create popup menu (appears in right mouse button  */
   x_menus_create_main_popup (w_current);
@@ -1047,6 +1193,9 @@ x_window_set_current_page (GschemToplevel *w_current, PAGE *page)
 
   i_update_menus (w_current);
   /* i_set_filename (w_current, page->page_filename); */
+
+  x_window_update_file_change_notification (w_current, page);
+  x_window_update_patch_change_notification (w_current, page);
 
   x_pagesel_update (w_current);
   x_multiattrib_update (w_current);

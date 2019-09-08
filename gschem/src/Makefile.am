@@ -33,6 +33,7 @@ gschem_SOURCES = \
 	gschem_binding.c \
 	gschem_binding_integer.c \
 	gschem_bottom_widget.c \
+	gschem_change_notification.c \
 	gschem_close_confirmation_dialog.c \
 	gschem_compselect_dockable.c \
 	gschem_coord_dialog.c \

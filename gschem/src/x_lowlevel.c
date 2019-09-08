@@ -282,8 +282,11 @@ x_lowlevel_save_page (GschemToplevel *w_current, PAGE *page,
     /* i_set_filename (w_current, page->page_filename); */
     x_pagesel_update (w_current);
 
-    if (page == gschem_toplevel_get_toplevel (w_current)->page_current)
+    if (page == gschem_toplevel_get_toplevel (w_current)->page_current) {
       gschem_action_set_sensitive (action_page_revert, TRUE, w_current);
+      /* if the file change notification bar was visible, hide it */
+      x_window_update_file_change_notification (w_current, page);
+    }
   }
 
   /* log status of operation */

@@ -19,6 +19,7 @@ gschem/src/gschem_arc_dialog.c
 gschem/src/gschem_binding.c
 gschem/src/gschem_binding_integer.c
 gschem/src/gschem_bottom_widget.c
+gschem/src/gschem_change_notification.c
 gschem/src/gschem_close_confirmation_dialog.c
 gschem/src/gschem_compselect_dockable.c
 gschem/src/gschem_coord_dialog.c

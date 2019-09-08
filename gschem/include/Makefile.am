@@ -10,6 +10,7 @@ noinst_HEADERS = \
 	gschem_binding.h \
 	gschem_binding_integer.h \
 	gschem_bottom_widget.h \
+	gschem_change_notification.h \
 	gschem_compselect_dockable.h \
 	gschem_defines.h \
 	gschem_dialog.h \

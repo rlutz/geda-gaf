@@ -494,6 +494,8 @@ gint x_stroke_translate_and_execute (GschemToplevel *w_current);
 void x_window_setup (GschemToplevel *w_current);
 void x_window_create_drawing(GtkWidget *drawbox, GschemToplevel *w_current);
 void x_window_setup_draw_events(GschemToplevel *w_current);
+void x_window_update_file_change_notification (GschemToplevel *w_current, PAGE *page);
+void x_window_update_patch_change_notification (GschemToplevel *w_current, PAGE *page);
 void x_window_create_main(GschemToplevel *w_current);
 void x_window_close(GschemToplevel *w_current);
 void x_window_close_all(GschemToplevel *w_current);

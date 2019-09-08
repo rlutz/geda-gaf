@@ -655,6 +655,11 @@ gschem_toplevel_page_content_changed (GschemToplevel *w_current, PAGE *page)
   page->CHANGED = 1;
 
   x_pagesel_update (w_current);
+
+  if (page == gschem_toplevel_get_toplevel (w_current)->page_current)
+    /* change "Do you want to reload it?"
+       into   "Do you want to drop your changes and reload the file?" */
+    x_window_update_file_change_notification (w_current, page);
 }
 
 

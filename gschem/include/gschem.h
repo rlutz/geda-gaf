@@ -25,6 +25,7 @@ typedef struct st_gschem_toplevel GschemToplevel;
 #include "gschem_options.h"
 #include "gschem_dockable.h"
 #include "gschem_action.h"
+#include "gschem_change_notification.h"
 #include "gschem_toplevel.h"
 #include "gschem_accel_label.h"
 #include "gschem_dialog.h"

@@ -42,6 +42,10 @@ struct st_gschem_toplevel {
   GtkWidget *toolbar;
   GHashTable *action_state_dispatchers;
 
+  /* Widgets at the top of the main view */
+  GschemChangeNotification *file_change_notification;
+  GschemChangeNotification *patch_change_notification;
+
   /* Widgets at inside the bottom of the main view */
   GtkWidget *find_text_widget;
   GtkWidget *hide_text_widget;
