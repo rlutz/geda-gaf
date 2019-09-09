@@ -323,7 +323,7 @@ x_patch_do_import (GschemToplevel *w_current, PAGE *page)
   g_return_if_fail (page->patch_filename != NULL);
 
   if (gschem_patch_state_init (&st, page->patch_filename) != 0) {
-    g_warning ("Unable to open patch file %s\n", page->patch_filename);
+    g_warning (_("Unable to open patch file %s\n"), page->patch_filename);
 
     GtkWidget *dialog = gtk_message_dialog_new (
       GTK_WINDOW (w_current->main_window),
@@ -394,8 +394,6 @@ x_patch_do_import (GschemToplevel *w_current, PAGE *page)
 static void
 add_hit_to_store (GschemPatchDockable *patch_dockable, gschem_patch_hit_t *hit)
 {
-  static const char *UNKNOWN_FILE_NAME = "N/A";
-
   char *basename;
   OBJECT *final_object = NULL;
   GtkTreeIter tree_iter;
@@ -419,7 +417,7 @@ add_hit_to_store (GschemPatchDockable *patch_dockable, gschem_patch_hit_t *hit)
       gtk_list_store_append (patch_dockable->store, &tree_iter);
       gtk_list_store_set (patch_dockable->store,
                           &tree_iter,
-                          COLUMN_FILENAME, UNKNOWN_FILE_NAME,
+                          COLUMN_FILENAME, _("N/A"),
                           COLUMN_LOCATION, hit->loc_name,
                           COLUMN_ACTION, hit->action,
                           COLUMN_HAS_ERROR, hit->object == NULL,
@@ -472,7 +470,7 @@ add_hit_to_store (GschemPatchDockable *patch_dockable, gschem_patch_hit_t *hit)
   } else {
     gtk_list_store_set (patch_dockable->store,
                         &tree_iter,
-                        COLUMN_FILENAME, UNKNOWN_FILE_NAME,
+                        COLUMN_FILENAME, _("N/A"),
                         COLUMN_LOCATION, hit->loc_name,
                         COLUMN_ACTION, hit->action,
                         COLUMN_HAS_ERROR, hit->object == NULL,
