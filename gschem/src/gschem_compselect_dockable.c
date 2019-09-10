@@ -160,11 +160,15 @@ select_symbol (GschemCompselectDockable *compselect, CLibSymbol *symbol)
   g_free (buffer);
 
   /* update the attributes with the toplevel of the preview widget*/
-  gchar *filename = symbol ? s_clib_symbol_get_filename (symbol) : NULL;
-  update_attributes_model (compselect, filename);
-
-  g_free (compselect->selected_filename);
-  compselect->selected_filename = filename;
+  if (symbol == NULL) {
+    compselect->is_selected = FALSE;
+    update_attributes_model (compselect, NULL);
+  } else {
+    g_free (compselect->selected_filename);
+    compselect->selected_filename = s_clib_symbol_get_filename (symbol);
+    compselect->is_selected = TRUE;
+    update_attributes_model (compselect, compselect->selected_filename);
+  }
 
   /* signal a component has been selected to parent of dockable */
   compselect_place (compselect);
@@ -917,7 +921,7 @@ static void
 library_updated (gpointer user_data)
 {
   GschemCompselectDockable *compselect = GSCHEM_COMPSELECT_DOCKABLE (user_data);
-  gchar *filename = g_strdup (compselect->selected_filename);
+  gboolean was_selected = compselect->is_selected;
 
   /* Refresh the "Library" view */
   create_lib_tree_model (compselect);
@@ -926,9 +930,8 @@ library_updated (gpointer user_data)
   create_inuse_tree_model (compselect);
 
   /* re-select previously selected symbol */
-  if (filename != NULL)
-    select_symbol_by_filename (compselect, filename);
-  g_free (filename);
+  if (was_selected && compselect->selected_filename != NULL)
+    select_symbol_by_filename (compselect, compselect->selected_filename);
 }
 
 /* \brief On-demand refresh of the component library.

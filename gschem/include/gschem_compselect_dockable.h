@@ -63,6 +63,7 @@ struct _GschemCompselectDockable {
 
   CLibSymbol *selected_symbol;
   gchar *selected_filename;
+  gboolean is_selected;
 };
 
 
