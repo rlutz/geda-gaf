@@ -397,8 +397,9 @@ gint x_event_enter(GtkWidget *widget, GdkEventCrossing *event, GschemToplevel *w
 gboolean x_event_key(GschemPageView *page_view, GdkEventKey *event, GschemToplevel *w_current);
 gint x_event_scroll(GtkWidget *widget, GdkEventScroll *event, GschemToplevel *w_current);
 gboolean x_event_get_pointer_position (GschemToplevel *w_current, gboolean snapped, gint *wx, gint *wy);
-/* x_compselect.c */
+/* gschem_compselect_dockable.c */
 void x_compselect_deselect (GschemToplevel *w_current);
+void x_compselect_select_previous_symbol (GschemToplevel *w_current);
 /* x_fam.c */
 enum FAMCodes;
 void x_fam_init (void);

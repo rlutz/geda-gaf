@@ -329,6 +329,8 @@ void i_update_toolbar(GschemToplevel *w_current)
 
   gschem_action_set_active (action_add_component,
                             w_current->event_state == COMPMODE, w_current);
+  gschem_action_set_active (action_add_last_component,
+                            w_current->event_state == COMPMODE, w_current);
   gschem_action_set_active (action_add_text,
                             w_current->event_state == TEXTMODE, w_current);
 

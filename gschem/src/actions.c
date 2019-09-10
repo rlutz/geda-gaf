@@ -524,8 +524,8 @@ DEFINE_ACTION (edit_find,
 DEFINE_ACTION (add_component,
                "add-component",
                "insert-symbol",
-               _("Add Component"),
-               _("Add Component..."),
+               _("Component Library"),
+               _("Component Library..."),
                _("_Component..."),
                NULL,
                TOGGLE_PLAIN)
@@ -538,6 +538,22 @@ DEFINE_ACTION (add_component,
   i_update_middle_button (w_current, action, _("Component"));
 
   i_set_state(w_current, SELECT);
+}
+
+DEFINE_ACTION (add_last_component,
+               "add-last-component",
+               "insert-symbol",
+               _("Add Last Component"),
+               _("Add Last Component"),
+               _("La_st Component"),
+               NULL,
+               TOGGLE_PLAIN)
+{
+  GschemPageView *page_view =
+    gschem_toplevel_get_current_page_view (w_current);
+
+  x_compselect_select_previous_symbol (w_current);
+  x_event_faked_motion (page_view, NULL);
 }
 
 DEFINE_ACTION (add_net,

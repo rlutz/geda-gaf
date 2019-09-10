@@ -68,6 +68,8 @@ void x_window_setup (GschemToplevel *w_current)
   x_menus_create_submenus (w_current);
   x_window_create_main (w_current);
 
+  gschem_action_set_sensitive (action_add_last_component, FALSE, w_current);
+
   /* disable terminal REPL action if stdin is not a terminal */
   gschem_action_set_sensitive (action_file_repl, isatty (STDIN_FILENO),
                                w_current);

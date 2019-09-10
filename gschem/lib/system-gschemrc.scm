@@ -945,7 +945,7 @@
 ;;
 ;; Later keybindings override earlier ones.
 
-(global-set-key "A C" &add-component)
+(global-set-key "A C" &add-last-component)
 (global-set-key "A A" &add-attribute)
 (global-set-key "A N" &add-net)
 (global-set-key "A U" &add-bus)
@@ -1210,6 +1210,7 @@
 
 (define add-menu
         `((,&add-component
+           ,&add-last-component
            ,&add-net
            ,&add-bus
            ,&add-attribute
@@ -1321,6 +1322,7 @@
 (define context-menu
         `((,&edit-select
            ,&add-net
+           ,&add-last-component
            ,&add-component
            ,&add-attribute
            ,&add-text)

@@ -34,6 +34,7 @@
 #endif
 
 #include "gschem.h"
+#include "actions.decl.x"
 #include <gdk/gdkkeysyms.h>
 
 #include "../include/gschem_compselect_dockable.h"
@@ -168,6 +169,10 @@ select_symbol (GschemCompselectDockable *compselect, CLibSymbol *symbol)
     compselect->selected_filename = s_clib_symbol_get_filename (symbol);
     compselect->is_selected = TRUE;
     update_attributes_model (compselect, compselect->selected_filename);
+
+    gschem_action_set_sensitive (action_add_last_component,
+                                 compselect->selected_filename != NULL,
+                                 GSCHEM_DOCKABLE (compselect)->w_current);
   }
 
   /* signal a component has been selected to parent of dockable */
@@ -931,6 +936,16 @@ library_updated (gpointer user_data)
 
   /* re-select previously selected symbol */
   if (was_selected && compselect->selected_filename != NULL)
+    select_symbol_by_filename (compselect, compselect->selected_filename);
+}
+
+void
+x_compselect_select_previous_symbol (GschemToplevel *w_current)
+{
+  GschemCompselectDockable *compselect =
+    GSCHEM_COMPSELECT_DOCKABLE (w_current->compselect_dockable);
+
+  if (compselect->selected_filename != NULL)
     select_symbol_by_filename (compselect, compselect->selected_filename);
 }
 
