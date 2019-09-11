@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: geda\n"
 "Report-Msgid-Bugs-To: https://bugs.launchpad.net/geda\n"
 "POT-Creation-Date: 2015-09-26 23:29+0300\n"
-"PO-Revision-Date: 2010-01-31 13:00+0000\n"
+"PO-Revision-Date: 2019-09-11 14:03+0200\n"
 "Last-Translator: Werner Hoch <werner.ho@gmx.de>\n"
 "Language-Team: gEDA developers <geda-dev@seul.org>\n"
 "Language: de\n"
@@ -231,9 +231,9 @@ msgid "Failed to load config from '%s': %s\n"
 msgstr "Das Bild konnte nicht aus der Datei [%s] geladen werden: %s\n"
 
 #: libgeda/src/g_rc.c:206
-#, fuzzy, c-format
+#, c-format
 msgid "Loaded RC file [%s]\n"
-msgstr "Lese vorgegebene %s Datei [%%s]\n"
+msgstr "RC-Datei [%s] geladen\n"
 
 #: libgeda/src/g_rc.c:210
 #, fuzzy, c-format
