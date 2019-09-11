@@ -459,7 +459,6 @@ x_multiattrib_edit_attribute (GschemToplevel *w_current, OBJECT *object)
 {
   GschemMultiattribDockable *multiattrib =
     GSCHEM_MULTIATTRIB_DOCKABLE (w_current->multiattrib_dockable);
-  GtkTreeModel *model;
   GtkTreeIter iter;
   gboolean valid;
   GtkTreePath *path;
@@ -468,14 +467,12 @@ x_multiattrib_edit_attribute (GschemToplevel *w_current, OBJECT *object)
   gschem_dockable_present (w_current->multiattrib_dockable);
 
   /* find tree iterator corresponding to the attribute */
-  model = multiattrib->store;
-
-  for (valid = gtk_tree_model_get_iter_first (model, &iter);
+  for (valid = gtk_tree_model_get_iter_first (multiattrib->store, &iter);
        valid;
-       valid = gtk_tree_model_iter_next (model, &iter)) {
+       valid = gtk_tree_model_iter_next (multiattrib->store, &iter)) {
     GedaList *attr_list;
     GList *a_iter;
-    gtk_tree_model_get (model, &iter,
+    gtk_tree_model_get (multiattrib->store, &iter,
                         COLUMN_ATTRIBUTE_GEDALIST, &attr_list,
                         -1);
     for (a_iter = geda_list_get_glist (attr_list);
@@ -496,7 +493,7 @@ x_multiattrib_edit_attribute (GschemToplevel *w_current, OBJECT *object)
   }
 
   /* invoke the editor */
-  path = gtk_tree_model_get_path (model, &iter);
+  path = gtk_tree_model_get_path (multiattrib->store, &iter);
   gtk_widget_grab_focus (GTK_WIDGET (multiattrib->treeview));
   gtk_tree_view_set_cursor (
     multiattrib->treeview, path,
@@ -889,7 +886,6 @@ multiattrib_callback_edited_name (GtkCellRendererText *cellrenderertext,
 {
   GschemMultiattribDockable *multiattrib =
     GSCHEM_MULTIATTRIB_DOCKABLE (user_data);
-  GtkTreeModel *model;
   GtkTreeIter iter;
   GedaList *attr_list;
   GList *a_iter;
@@ -899,10 +895,9 @@ multiattrib_callback_edited_name (GtkCellRendererText *cellrenderertext,
   gchar *value, *newtext;
   int visibility;
 
-  model = multiattrib->store;
   w_current = multiattrib->parent.w_current;
 
-  if (!gtk_tree_model_get_iter_from_string (model, &iter, arg1)) {
+  if (!gtk_tree_model_get_iter_from_string (multiattrib->store, &iter, arg1)) {
     return;
   }
 
@@ -928,7 +923,7 @@ multiattrib_callback_edited_name (GtkCellRendererText *cellrenderertext,
     return;
   }
 
-  gtk_tree_model_get (model, &iter,
+  gtk_tree_model_get (multiattrib->store, &iter,
                       COLUMN_VALUE, &value,
                       COLUMN_ATTRIBUTE_GEDALIST, &attr_list,
                       -1);
@@ -979,7 +974,6 @@ multiattrib_callback_edited_value (GtkCellRendererText *cell_renderer,
 {
   GschemMultiattribDockable *multiattrib =
     GSCHEM_MULTIATTRIB_DOCKABLE (user_data);
-  GtkTreeModel *model;
   GtkTreeIter iter;
   GedaList *attr_list;
   GList *a_iter;
@@ -991,14 +985,13 @@ multiattrib_callback_edited_value (GtkCellRendererText *cell_renderer,
   char *newtext;
   int visibility;
 
-  model = multiattrib->store;
   w_current = multiattrib->parent.w_current;
 
-  if (!gtk_tree_model_get_iter_from_string (model, &iter, arg1)) {
+  if (!gtk_tree_model_get_iter_from_string (multiattrib->store, &iter, arg1)) {
     return;
   }
 
-  gtk_tree_model_get (model, &iter,
+  gtk_tree_model_get (multiattrib->store, &iter,
                       COLUMN_NAME, &name,
                       COLUMN_VALUE, &old_value,
                       COLUMN_ATTRIBUTE_GEDALIST, &attr_list,
@@ -1046,7 +1039,7 @@ multiattrib_callback_edited_value (GtkCellRendererText *cell_renderer,
   o_undo_savestate_old (w_current, UNDO_ALL, _("Edit Attribute"));
 
   /* Fixup the model to reflect the edit */
-  gtk_list_store_set (GTK_LIST_STORE (model), &iter,
+  gtk_list_store_set (GTK_LIST_STORE (multiattrib->store), &iter,
                       COLUMN_VALUE, new_value,
                       COLUMN_IDENTICAL_VALUE, TRUE,
                       -1);
@@ -1064,7 +1057,6 @@ multiattrib_callback_toggled_visible (GtkCellRendererToggle *cell_renderer,
 {
   GschemMultiattribDockable *multiattrib =
     GSCHEM_MULTIATTRIB_DOCKABLE (user_data);
-  GtkTreeModel *model;
   GtkTreeIter iter;
   OBJECT *o_attrib;
   GschemToplevel *w_current;
@@ -1072,14 +1064,13 @@ multiattrib_callback_toggled_visible (GtkCellRendererToggle *cell_renderer,
   GedaList *attr_list;
   GList *a_iter;
 
-  model = multiattrib->store;
   w_current = multiattrib->parent.w_current;
 
-  if (!gtk_tree_model_get_iter_from_string (model, &iter, path)) {
+  if (!gtk_tree_model_get_iter_from_string (multiattrib->store, &iter, path)) {
     return;
   }
 
-  gtk_tree_model_get (model, &iter,
+  gtk_tree_model_get (multiattrib->store, &iter,
                       COLUMN_ATTRIBUTE_GEDALIST, &attr_list,
                       -1);
 
@@ -1102,7 +1093,7 @@ multiattrib_callback_toggled_visible (GtkCellRendererToggle *cell_renderer,
   o_undo_savestate_old (w_current, UNDO_ALL, _("Toggle Attribute Visibility"));
 
   /* Fixup the model to reflect the edit */
-  gtk_list_store_set (GTK_LIST_STORE (model), &iter,
+  gtk_list_store_set (GTK_LIST_STORE (multiattrib->store), &iter,
                       COLUMN_VISIBILITY, new_visibility,
                       COLUMN_IDENTICAL_VISIBILITY, TRUE,
                       -1);
@@ -1120,7 +1111,6 @@ multiattrib_callback_toggled_show_name (GtkCellRendererToggle *cell_renderer,
 {
   GschemMultiattribDockable *multiattrib =
     GSCHEM_MULTIATTRIB_DOCKABLE (user_data);
-  GtkTreeModel *model;
   GtkTreeIter iter;
   GschemToplevel *w_current;
   gboolean new_name_visible;
@@ -1128,14 +1118,13 @@ multiattrib_callback_toggled_show_name (GtkCellRendererToggle *cell_renderer,
   GList *a_iter;
   gint new_snv;
 
-  model = multiattrib->store;
   w_current = multiattrib->parent.w_current;
 
-  if (!gtk_tree_model_get_iter_from_string (model, &iter, path)) {
+  if (!gtk_tree_model_get_iter_from_string (multiattrib->store, &iter, path)) {
     return;
   }
 
-  gtk_tree_model_get (model, &iter,
+  gtk_tree_model_get (multiattrib->store, &iter,
                       COLUMN_ATTRIBUTE_GEDALIST, &attr_list,
                       -1);
 
@@ -1185,7 +1174,6 @@ multiattrib_callback_toggled_show_value (GtkCellRendererToggle *cell_renderer,
 {
   GschemMultiattribDockable *multiattrib =
     GSCHEM_MULTIATTRIB_DOCKABLE (user_data);
-  GtkTreeModel *model;
   GtkTreeIter iter;
   GschemToplevel *w_current;
   gboolean new_value_visible;
@@ -1193,14 +1181,13 @@ multiattrib_callback_toggled_show_value (GtkCellRendererToggle *cell_renderer,
   GList *a_iter;
   gint new_snv;
 
-  model = multiattrib->store;
   w_current = multiattrib->parent.w_current;
 
-  if (!gtk_tree_model_get_iter_from_string (model, &iter, path)) {
+  if (!gtk_tree_model_get_iter_from_string (multiattrib->store, &iter, path)) {
     return;
   }
 
-  gtk_tree_model_get (model, &iter,
+  gtk_tree_model_get (multiattrib->store, &iter,
                       COLUMN_ATTRIBUTE_GEDALIST, &attr_list,
                       -1);
 
@@ -1346,7 +1333,6 @@ static void
 multiattrib_edit_cell_at_pos (GschemMultiattribDockable *multiattrib,
                               gint x, gint y)
 {
-  GtkTreeModel *model = multiattrib->store;
   GtkTreePath *path;
   GtkTreeViewColumn *column;
   GtkTreeIter iter;
@@ -1357,12 +1343,12 @@ multiattrib_edit_cell_at_pos (GschemMultiattribDockable *multiattrib,
   if (!gtk_tree_view_get_path_at_pos (multiattrib->treeview,
                                       x, y, &path, &column, NULL, NULL))
     return;
-  if (!gtk_tree_model_get_iter (model, &iter, path)) {
+  if (!gtk_tree_model_get_iter (multiattrib->store, &iter, path)) {
     gtk_tree_path_free (path);
     return;
   }
 
-  gtk_tree_model_get (model, &iter,
+  gtk_tree_model_get (multiattrib->store, &iter,
                       COLUMN_INHERITED, &inherited,
                       -1);
   if (!inherited) {
@@ -1379,12 +1365,12 @@ multiattrib_edit_cell_at_pos (GschemMultiattribDockable *multiattrib,
     return;
 
   /* see if there's already a matching attached attribute */
-  gtk_tree_model_get (model, &iter,
+  gtk_tree_model_get (multiattrib->store, &iter,
                       COLUMN_NAME, &name,
                       -1);
-  if (!find_row (model, &iter, name, FALSE)) {
+  if (!find_row (multiattrib->store, &iter, name, FALSE)) {
     /* promote attribute */
-    gtk_tree_model_get (model, &iter,
+    gtk_tree_model_get (multiattrib->store, &iter,
                         COLUMN_ATTRIBUTE_GEDALIST, &attr_list,
                         -1);
     multiattrib_action_promote_attributes (multiattrib,
@@ -1393,7 +1379,7 @@ multiattrib_edit_cell_at_pos (GschemMultiattribDockable *multiattrib,
     multiattrib_update (multiattrib);
 
     /* find tree iterator corresponding to the promoted attribute */
-    if (!find_row (model, &iter, name, FALSE)) {
+    if (!find_row (multiattrib->store, &iter, name, FALSE)) {
       g_free (name);
       return;
     }
@@ -1401,7 +1387,7 @@ multiattrib_edit_cell_at_pos (GschemMultiattribDockable *multiattrib,
   g_free (name);
 
   /* get new path and invoke editor */
-  path = gtk_tree_model_get_path (model, &iter);
+  path = gtk_tree_model_get_path (multiattrib->store, &iter);
   gtk_tree_view_set_cursor_on_cell (multiattrib->treeview,
                                     path, column, NULL, TRUE);
   gtk_tree_path_free (path);
