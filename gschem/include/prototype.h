@@ -313,6 +313,7 @@ void o_slot_end(GschemToplevel *w_current, OBJECT *object, const char *string);
 int o_text_get_rendered_bounds(void *user_data, OBJECT *object, int *min_x, int *min_y, int *max_x, int *max_y);
 void o_text_prepare_place(GschemToplevel *w_current, char *text, int color, int align, int rotate, int size);
 void o_text_change(GschemToplevel *w_current, OBJECT *object, char *string, int visibility, int show);
+gboolean o_text_toggle_overbar (GschemToplevel *w_current, OBJECT *object);
 /* o_undo.c */
 void o_undo_init(void);
 void o_undo_savestate(GschemToplevel *w_current, PAGE *page, int flag, const gchar *desc);

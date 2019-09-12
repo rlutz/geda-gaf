@@ -1074,6 +1074,7 @@
 (global-set-key "T V" &attributes-show-value)
 (global-set-key "T B" &attributes-show-both)
 (global-set-key "T T" &attributes-visibility-toggle)
+(global-set-key "T O" &attributes-overbar-toggle)
 (global-set-key "T <Shift>F" &edit-find-text)
 (global-set-key "T <Shift>P" &edit-find-patch)
 (global-set-key "T H" &edit-hide-text)
@@ -1255,7 +1256,8 @@
            ,&attributes-show-value
            ,&attributes-show-name
            ,&attributes-show-both
-           ,&attributes-visibility-toggle)
+           ,&attributes-visibility-toggle
+           ,&attributes-overbar-toggle)
           (,&edit-embed
            ,&edit-unembed
            ,&edit-update

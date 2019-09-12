@@ -516,6 +516,8 @@ void i_update_menus(GschemToplevel *w_current)
                                sel_text, w_current);
   gschem_action_set_sensitive (action_attributes_visibility_toggle,
                                sel_text, w_current);
+  gschem_action_set_sensitive (action_attributes_overbar_toggle,
+                               sel_text, w_current);
 }
 
 /*! \brief Update gschem window title

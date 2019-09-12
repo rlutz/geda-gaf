@@ -180,3 +180,59 @@ void o_text_change(GschemToplevel *w_current, OBJECT *object, char *string,
 
   gschem_toplevel_page_content_changed (w_current, page);
 }
+
+
+/*! \brief Toggle a text object's overbar.
+ *
+ * Adds an overbar marker (backslash-underline) to the begin and the
+ * end of the text object's contents if there's not already an overbar
+ * marker; otherwise, removes the existing marker.  Begin and end are
+ * treated independently, so the parts of the text with and without
+ * overbar are complemented.
+ *
+ * \returns whether the object has been changed
+ */
+gboolean
+o_text_toggle_overbar (GschemToplevel *w_current, OBJECT *object)
+{
+  TOPLEVEL *toplevel = gschem_toplevel_get_toplevel (w_current);
+  gchar *name, *value, *buf, *ptr, *new_string;
+
+  if (object->type != OBJ_TEXT || object->text->string == NULL
+                               || object->text->string[0] == '\0')
+    return FALSE;
+
+  if (o_attrib_string_get_name_value (object->text->string, &name, &value)) {
+    buf = g_strdup_printf ("\\_%s\\_", value);
+    g_free (value);
+  } else {
+    name = NULL;
+    buf = g_strdup_printf ("\\_%s\\_", object->text->string);
+  }
+
+  ptr = buf + strlen (buf) - 4;
+  if (strncmp (ptr, "\\_\\_", 4) == 0)
+    *ptr = '\0';
+  ptr = buf;
+  if (strncmp (ptr, "\\_\\_", 4) == 0)
+    ptr += 4;
+
+  if (name == NULL)
+    new_string = g_strdup (ptr);
+  else {
+    new_string = g_strdup_printf ("%s=%s", name, ptr);
+    g_free (name);
+  }
+  g_free (buf);
+
+  o_text_set_string (toplevel, object, new_string);
+  /* o_text_recreate is called by o_text_set_string */
+
+  /* handle slot= attribute, it's a special case */
+  if (object->attached_to != NULL &&
+      g_ascii_strncasecmp (new_string, "slot=", 5) == 0)
+    o_slot_end (w_current, object->attached_to, new_string);
+
+  g_free (new_string);
+  return TRUE;
+}

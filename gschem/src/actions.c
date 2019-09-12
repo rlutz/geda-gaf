@@ -1246,6 +1246,44 @@ DEFINE_ACTION (attributes_visibility_toggle,
   }
 }
 
+DEFINE_ACTION (attributes_overbar_toggle,
+               "attributes-overbar-toggle",
+               NULL,
+               _("Toggle Text Overbar"),
+               _("Toggle Text Overbar"),
+               _("To_ggle Text Overbar"),
+               NULL,
+               ACTUATE)
+{
+  TOPLEVEL *toplevel = gschem_toplevel_get_toplevel (w_current);
+  SELECTION *selection = toplevel->page_current->selection_list;
+  GschemSelectionAdapter *adapter =
+    gschem_toplevel_get_selection_adapter (w_current);
+  gboolean changed = FALSE;
+
+  /* This is a new addition 3/15 to prevent this from executing
+   * inside an action */
+  if (w_current->inside_action)
+    return;
+
+  i_update_middle_button (w_current, action, _("OverbarToggle"));
+
+  for (GList *l = geda_list_get_glist (selection); l != NULL; l = l->next) {
+    OBJECT *object = (OBJECT *) l->data;
+    if (o_text_toggle_overbar (w_current, object))
+      changed = TRUE;
+  }
+  if (!changed)
+    return;
+
+  gschem_toplevel_page_content_changed (w_current, toplevel->page_current);
+  o_undo_savestate_old (w_current, UNDO_ALL, _("Toggle Overbar"));
+
+  if (adapter != NULL)
+    g_object_notify (G_OBJECT (adapter), "text-string");
+  x_multiattrib_update (w_current);
+}
+
 /*! \brief Embed all objects in selection list. */
 
 DEFINE_ACTION (edit_embed,
