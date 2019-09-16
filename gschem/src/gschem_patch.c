@@ -19,6 +19,9 @@
 
 /*! \file gschem_patch.c
  * \brief Back-annotation from pcb-rnd.
+ *
+ * \bug Back-annotation definitively needs automated tests, but there
+ *      is currently no easy way to do this.
  */
 
 #include <config.h>
