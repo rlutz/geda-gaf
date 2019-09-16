@@ -33,9 +33,9 @@ struct _GschemPageGeometry
   int screen_height;
 
   int viewport_left;
-  int viewport_top;
+  int viewport_top;     /* actually the bottom */
   int viewport_right;
-  int viewport_bottom;
+  int viewport_bottom;  /* actually the top, very confusing */
 
   int world_left;
   int world_top;
