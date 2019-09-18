@@ -415,9 +415,9 @@ class LoadContext:
 
     def parse(self, x):
         if self.use_hybridnum:
-            return xorn.hybridnum.parse(x, 2)
+            return xorn.hybridnum.parse(x, 3)
         else:
-            return float(xorn.fixednum.parse(x, 2))
+            return float(xorn.fixednum.parse(x, 3))
 
     def parse_attribute(self, d, key, default, processor, msg_fragment):
         try:

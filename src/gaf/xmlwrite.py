@@ -37,9 +37,9 @@ class Writer:
 
     def fmt(self, x):
         if self.use_hybridnum:
-            return xorn.hybridnum.format(x, 2)
+            return xorn.hybridnum.format(x, 3)
         else:
-            return xorn.fixednum.format(int(round(x)), 2)
+            return xorn.fixednum.format(int(round(x)), 3)
 
     def write_line(self, line):
         if line.width:

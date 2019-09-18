@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <schematic xmlns="https://hedmen.org/xorn/schematic/" file-format-features="experimental">
   <content>
-    <arc x="31.41" y="59.26" radius="53.58" startangle="97" sweepangle="93"/>
-    <arc x="0" y="0" radius="0" startangle="0" sweepangle="0" color="freestyle1" linewidth=".01" capstyle="square" dashstyle="dashed" dashlength="31.41" dashspace="59.26"/>
-    <box x="31.41" y="59.26" width="53.58" height="97.93"/>
-    <box x="0" y="0" width="0" height="0" color="freestyle1" linewidth=".01" capstyle="square" dashstyle="dashed" dashlength="31.41" dashspace="59.26" filltype="mesh" fillwidth=".01" angle0="53" pitch0=".58" angle1="97" pitch1=".93"/>
-    <circle x="31.41" y="59.26" radius="53.58"/>
-    <circle x="0" y="0" radius="0" color="freestyle1" linewidth=".01" capstyle="square" dashstyle="dashed" dashlength="31.41" dashspace="59.26" filltype="mesh" fillwidth=".01" angle0="53" pitch0=".58" angle1="97" pitch1=".93"/>
-    <component x="31.41" y="59.26" symbol="a"/>
+    <arc x="3.141" y="5.926" radius="5.358" startangle="97" sweepangle="93"/>
+    <arc x="0" y="0" radius="0" startangle="0" sweepangle="0" color="freestyle1" linewidth=".001" capstyle="square" dashstyle="dashed" dashlength="3.141" dashspace="5.926"/>
+    <box x="3.141" y="5.926" width="5.358" height="9.793"/>
+    <box x="0" y="0" width="0" height="0" color="freestyle1" linewidth=".001" capstyle="square" dashstyle="dashed" dashlength="3.141" dashspace="5.926" filltype="mesh" fillwidth=".001" angle0="53" pitch0=".058" angle1="97" pitch1=".093"/>
+    <circle x="3.141" y="5.926" radius="5.358"/>
+    <circle x="0" y="0" radius="0" color="freestyle1" linewidth=".001" capstyle="square" dashstyle="dashed" dashlength="3.141" dashspace="5.926" filltype="mesh" fillwidth=".001" angle0="53" pitch0=".058" angle1="97" pitch1=".093"/>
+    <component x="3.141" y="5.926" symbol="a"/>
     <component x="0" y="0" selectable="no" angle="270" mirror="yes" symbol="a"/>
     <component x="0" y="0" symbol="b"/>
     <component x="0" y="0" symbol="c"/>
     <component x="0" y="0" symbol="c"/>
     <component x="0" y="0" symbol="d"/>
-    <line x0="31.41" y0="59.26" x1="84.99" y1="157.19"/>
-    <line x0="0" y0="0" x1="0" y1="0" color="freestyle1" linewidth=".01" capstyle="square" dashstyle="dashed" dashlength="31.41" dashspace="59.26"/>
-    <net x0="31.41" y0="59.26" x1="84.99" y1="157.19"/>
+    <line x0="3.141" y0="5.926" x1="8.499" y1="15.719"/>
+    <line x0="0" y0="0" x1="0" y1="0" color="freestyle1" linewidth=".001" capstyle="square" dashstyle="dashed" dashlength="3.141" dashspace="5.926"/>
+    <net x0="3.141" y0="5.926" x1="8.499" y1="15.719"/>
     <net x0="0" y0="0" x1="0" y1="0" color="freestyle1"/>
     <net x0="0" y0="0" x1="0" y1="0" type="bus"/>
     <net x0="0" y0="0" x1="0" y1="0" color="freestyle1" type="bus"/>
@@ -25,15 +25,15 @@
     <pin x0="0" y0="0" x1="0" y1="0" type="bus"/>
     <pin x0="0" y0="0" x1="0" y1="0" color="freestyle1" type="bus"/>
     <path>M 0,0<br/>L 100,100<br/>z</path>
-    <path color="freestyle1" linewidth=".01" capstyle="square" dashstyle="dashed" dashlength="31.41" dashspace="59.26" filltype="mesh" fillwidth=".01" angle0="53" pitch0=".58" angle1="97" pitch1=".93"></path>
-    <picture x="31.41" y="59.26" width="53.58" height="97.93" pixmap="pixmap0"/>
+    <path color="freestyle1" linewidth=".001" capstyle="square" dashstyle="dashed" dashlength="3.141" dashspace="5.926" filltype="mesh" fillwidth=".001" angle0="53" pitch0=".058" angle1="97" pitch1=".093"></path>
+    <picture x="3.141" y="5.926" width="5.358" height="9.793" pixmap="pixmap0"/>
     <picture x="0" y="0" width="0" height="0" angle="270" mirrored="yes" pixmap="pixmap0"/>
     <picture x="0" y="0" width="0" height="0" pixmap="pixmap1"/>
     <picture x="0" y="0" width="0" height="0" pixmap="pixmap2"/>
     <picture x="0" y="0" width="0" height="0" pixmap="pixmap2"/>
     <picture x="0" y="0" width="0" height="0" pixmap="pixmap3"/>
-    <text x="31.41" y="59.26" size="10" show="value">foo</text>
-    <text x="31.41" y="59.26" size="10" show="name" angle="270" alignment="upper-right">foo</text>
+    <text x="3.141" y="5.926" size="10" show="value">foo</text>
+    <text x="3.141" y="5.926" size="10" show="name" angle="270" alignment="upper-right">foo</text>
     <text x="0" y="0" size="10">foo bar</text>
     <text x="0" y="0" size="10">foo<br/>bar</text>
     <text x="0" y="0" size="10">foo<br/>bar=baz</text>
