@@ -131,12 +131,18 @@ def sscanf(s, fmt):
     if s.endswith('\n'):
         raise ValueError
 
-    # gEDA/gaf ignores trailing spaces and, in some older versions,
-    # wrote them for text objects
-    s = s.rstrip(' ')
+    # str.split without an argument treats any whitespace character as
+    # a separator and removes empty strings from the result
+    stok = s.split()
+    # but gEDA/gaf doesn't allow trailing whitespace
+    if stok and stok[0][0] != s[0]:
+        raise ValueError
 
-    stok = s.split(' ')
     fmttok = fmt.split(' ')
+
+    # gEDA/gaf ignores extra fields
+    if len(stok) > len(fmttok):
+        del stok[len(fmttok):]
 
     if len(stok) != len(fmttok):
         raise ValueError
