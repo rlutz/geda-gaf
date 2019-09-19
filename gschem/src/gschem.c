@@ -331,20 +331,36 @@ void main_prog(void *closure, int argc, char *argv[])
    * we can take advantage of that.  */
   scm_tmp = scm_sys_search_load_path (scm_from_utf8_string ("gschem.scm"));
   if (scm_is_false (scm_tmp)) {
-    fprintf (stderr, _("*** Can't find Scheme initialization file \"%s\" "
-                       "***\n\n"
-                       "It appears the gschem data files are missing, or they "
-                       "are not where the\ngschem binary expects them to be.  "
-                       "Are you sure you installed gschem?\n\n"
-                       "The following directories have been searched for "
-                       "\"%s\":\n"),
-             "gschem.scm", "gschem.scm");
+    GtkWidget *dialog;
+    GString *string;
+    gchar *msg;
+    dialog = gtk_message_dialog_new (
+      NULL,
+      GTK_DIALOG_MODAL,
+      GTK_MESSAGE_ERROR,
+      GTK_BUTTONS_CLOSE,
+      _("Can't find Scheme initialization file \"%s\"."),
+      "gschem.scm");
+    string = g_string_new (NULL);
+    g_string_printf (
+      string,
+      _("It appears the gschem data files are missing, or they are not where "
+        "the gschem binary expects them to be.\n\n"
+        "Are you sure you installed gschem?\n\n"
+        "The following directories have been searched for \"%s\":"),
+      "gschem.scm");
     for (SCM l = scm_variable_ref (scm_c_lookup ("%load-path"));
          scm_is_pair (l); l = scm_cdr (l)) {
       char *path = scm_to_utf8_string (scm_car (l));
-      fprintf (stderr, "\t%s\n", path);
+      g_string_append_printf (string, "\n\t%s", path);
       free (path);
     }
+    msg = g_string_free (string, FALSE);
+    g_object_set (dialog, "secondary-text", msg, NULL);
+    g_free (msg);
+    gtk_window_set_title (GTK_WINDOW (dialog), _("gschem"));
+    gtk_dialog_run (GTK_DIALOG (dialog));
+    gtk_widget_destroy (dialog);
     exit (1);
   }
   input_str = scm_to_utf8_string (scm_tmp);
