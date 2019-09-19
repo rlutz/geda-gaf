@@ -15,7 +15,6 @@ symbol_dirs = \
 	dec \
 	diode \
 	ecl \
-	gnetman \
 	idt \
 	io \
 	irf \
@@ -43,9 +42,12 @@ symbol_dirs = \
 	titleblock \
 	transistor \
 	tube \
-	verilog \
-	vhdl \
 	xilinx
+
+extra_symbol_dirs = \
+	gnetman \
+	verilog \
+	vhdl
 
 SUBDIRS = documentation
 
@@ -53,6 +55,7 @@ gafrcddir = $(GEDADATADIR)/gafrc.d
 dist_gafrcd_DATA = geda-clib.scm
 
 datasymdir = $(GEDADATADIR)/sym
+dataextrasymdir = $(GEDADATADIR)/extra-sym
 
 EXTRA_DIST = ChangeLog ChangeLog-1.0 \
 	radio/README AUTHORS
@@ -68,7 +71,7 @@ endif HAVE_GIT_REPO
 
 # Copies symbols into distribution
 dist-hook:
-	@for lib in $(symbol_dirs); do \
+	@for lib in $(symbol_dirs) $(extra_symbol_dirs); do \
 	  $(MKDIR_P) $(distdir)/$$lib && \
 	  list=`(cd $(srcdir)/$$lib && find . -name '*.[sS][yY][mM]' | sed -e 's:^\./::')`; \
 	  for file in $$list; do \
@@ -88,12 +91,29 @@ install-data-local:
 	    (cd $(srcdir)/$$lib && $(INSTALL_DATA) $$list "$$d") || exit $$?; \
 	  fi; \
 	done
+	@for lib in $(extra_symbol_dirs); do \
+	  d="$(DESTDIR)$(dataextrasymdir)/$$lib"; \
+	  $(MKDIR_P) "$$d"; \
+	  list=`(cd $(srcdir)/$$lib && find . -name '*.[sS][yY][mM]' | sed -e 's:^\./::')`; \
+	  if test -n "$$list"; then \
+	    echo " ( cd $(srcdir)/$$lib && $(INSTALL_DATA)" $$list "'$$d' )"; \
+	    (cd $(srcdir)/$$lib && $(INSTALL_DATA) $$list "$$d") || exit $$?; \
+	  fi; \
+	done
 
 # Uninstalls symbols
 uninstall-local:
 	@$(NORMAL_UNINSTALL)
 	@for lib in $(symbol_dirs); do \
 	  d="$(DESTDIR)$(datasymdir)/$$lib"; \
+	  list=`(cd $(srcdir)/$$lib && find . -name '*.[sS][yY][mM]' | sed -e 's:^\./::')`; \
+	  if test -n "$$list"; then \
+	    echo " ( cd '$$d' && rm -f" $$list ")"; \
+	    (cd "$$d" && rm -f $$list) || exit $$?; \
+	  fi; \
+	done
+	@for lib in $(extra_symbol_dirs); do \
+	  d="$(DESTDIR)$(dataextrasymdir)/$$lib"; \
 	  list=`(cd $(srcdir)/$$lib && find . -name '*.[sS][yY][mM]' | sed -e 's:^\./::')`; \
 	  if test -n "$$list"; then \
 	    echo " ( cd '$$d' && rm -f" $$list ")"; \
