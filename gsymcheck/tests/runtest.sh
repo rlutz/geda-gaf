@@ -7,6 +7,9 @@ in="${srcdir}/${stem}.sym"
 ref="${srcdir}/${stem}.output"
 new="${stem}.new"
 
+mkdir -p logs
+
+GEDALOG=logs \
 ../src/gsymcheck -vv "${in}" |
 	grep -v "gEDA/gsymcheck version" |
 	grep -v "ABSOLUTELY NO WARRANTY" |

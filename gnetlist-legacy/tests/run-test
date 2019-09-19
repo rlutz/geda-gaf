@@ -8,8 +8,10 @@ backend="`echo "${tmp}" | sed -e "s:^${stem}-::"`"
 GNETLIST="${abs_top_builddir}/gnetlist-legacy/src/gnetlist-legacy"
 GEDADATA="${abs_top_srcdir}/gnetlist-legacy" # HACKHACKHACK
 GEDADATARC="${abs_top_builddir}/gnetlist-legacy/lib"
+GEDALOG="."
 export GEDADATA
 export GEDADATARC
+export GEDALOG
 
 schematic="${abs_srcdir}/${stem}.sch"
 
