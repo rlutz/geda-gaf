@@ -1411,6 +1411,11 @@ gschem_dockable_initialize_toplevel (GschemToplevel *w_current)
 void
 gschem_dockable_cleanup_toplevel (GschemToplevel *w_current)
 {
+  /* disconnect notebook signals */
+  g_signal_handlers_disconnect_by_data (w_current->left_notebook, w_current);
+  g_signal_handlers_disconnect_by_data (w_current->bottom_notebook, w_current);
+  g_signal_handlers_disconnect_by_data (w_current->right_notebook, w_current);
+
   /* destroy dock windows */
   for (GList *l = w_current->dockables; l != NULL; l = l->next) {
     GschemDockable *dockable = GSCHEM_DOCKABLE (l->data);
@@ -1442,11 +1447,6 @@ gschem_dockable_cleanup_toplevel (GschemToplevel *w_current)
       dockable->widget = NULL;
     }
   }
-
-  /* disconnect notebook signals */
-  g_signal_handlers_disconnect_by_data (w_current->left_notebook, w_current);
-  g_signal_handlers_disconnect_by_data (w_current->bottom_notebook, w_current);
-  g_signal_handlers_disconnect_by_data (w_current->right_notebook, w_current);
 }
 
 
