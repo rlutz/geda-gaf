@@ -114,6 +114,125 @@ void gschem_quit(void)
   gtk_main_quit();
 }
 
+/*! \brief Show warning dialog if certain configuration options are set.
+ *
+ * Some gnetlist configuration options, but not all, have been moved
+ * from gnetlistrc to geda.conf in 1.9.1.  This is not compatible with
+ * the way gnetlist configuration currently works, so the options have
+ * been moved back to gnetlistrc.
+ *
+ * Chances are users which have used gEDA/gaf 1.9.1 or 1.9.2 changed
+ * their gnetlist configuration to geda.conf, so their options are now
+ * ignored.  Unfortunately, I don't see a way to resolve this silently
+ * (short of adding geda.conf support to gnetlist just for these four
+ * options).  Silently producing a broken netlist is a bad thing, so
+ * warn about this issue on gschem startup.
+ */
+static void
+warn_if_using_invalid_config ()
+{
+  EdaConfig *cfg = eda_config_get_context_for_file (NULL);
+  EdaConfig *cfg_hierarchy_traversal =
+    eda_config_get_source (cfg, "gnetlist", "traverse-hierarchy", NULL);
+  EdaConfig *cfg_net_naming_priority =
+    eda_config_get_source (cfg, "gnetlist", "net-naming-priority", NULL);
+  EdaConfig *cfg_unnamed_netname =
+    eda_config_get_source (cfg, "gnetlist", "default-net-name", NULL);
+  EdaConfig *cfg_unnamed_busname =
+    eda_config_get_source (cfg, "gnetlist", "default-bus-name", NULL);
+
+  if (cfg_hierarchy_traversal == NULL && cfg_net_naming_priority == NULL &&
+      cfg_unnamed_netname == NULL && cfg_unnamed_busname == NULL)
+    return;
+
+  GtkWidget *dialog;
+  gchar *hierarchy_traversal_before = "", *hierarchy_traversal_after = "";
+  gchar *net_naming_priority_before = "", *net_naming_priority_after = "";
+  gchar *unnamed_netname_before = "", *unnamed_netname_after = "";
+  gchar *unnamed_busname_before = "", *unnamed_busname_after = "";
+
+  if (cfg_hierarchy_traversal != NULL) {
+    hierarchy_traversal_before = g_strdup_printf (
+      "  traverse-hierarchy (in %s)\n",
+      eda_config_get_filename (cfg_hierarchy_traversal));
+    hierarchy_traversal_after = g_strdup_printf (
+      "  (hierarchy-traversal \"%s\")\n",
+      eda_config_get_boolean (cfg, "gnetlist", "traverse-hierarchy", NULL)
+        ? "enabled" : "disabled");
+  }
+
+  if (cfg_net_naming_priority != NULL) {
+    gchar *str;
+    net_naming_priority_before = g_strdup_printf (
+      "  net-naming-priority (in %s)\n",
+      eda_config_get_filename (cfg_net_naming_priority));
+    str = eda_config_get_string (cfg, "gnetlist", "net-naming-priority", NULL);
+    net_naming_priority_after = g_strdup_printf (
+      "  (net-naming-priority \"%s\")\n",
+      strcmp (str, "netname-attribute") == 0 ? "netname" : "netattrib");
+    g_free (str);
+  }
+
+  if (cfg_unnamed_netname != NULL) {
+    gchar *str;
+    unnamed_netname_before = g_strdup_printf (
+      "  default-net-name (in %s)\n",
+      eda_config_get_filename (cfg_unnamed_netname));
+    str = eda_config_get_string (cfg, "gnetlist", "default-net-name", NULL);
+    unnamed_netname_after = g_strdup_printf (
+      "  (unnamed-netname \"%s\")\n", str);
+    g_free (str);
+  }
+
+  if (cfg_unnamed_busname != NULL) {
+    gchar *str;
+    unnamed_busname_before = g_strdup_printf (
+      "  default-bus-name (in %s)\n",
+      eda_config_get_filename (cfg_unnamed_busname));
+    str = eda_config_get_string (cfg, "gnetlist", "default-bus-name", NULL);
+    unnamed_busname_after = g_strdup_printf (
+      "  (unnamed-busname \"%s\")\n", str);
+    g_free (str);
+  }
+
+  dialog = gtk_message_dialog_new (
+    NULL,
+    GTK_DIALOG_MODAL,
+    GTK_MESSAGE_WARNING,
+    GTK_BUTTONS_OK,
+    _("The following options are present in your configuration:\n\n%s%s%s%s\n"
+      "These options were introduced in gEDA/gaf 1.9.1 as a replacement for "
+      "the corresponding gnetlistrc options but were removed again in "
+      "gEDA/gaf 1.9.3. The current version of gnetlist uses gnetlistrc "
+      "options instead:\n\n%s%s%s%s\n"
+      "Please make sure to update your configuration as the options currently "
+      "set won't have the desired effect."),
+    hierarchy_traversal_before, net_naming_priority_before,
+    unnamed_netname_before, unnamed_busname_before,
+    hierarchy_traversal_after, net_naming_priority_after,
+    unnamed_netname_after, unnamed_busname_after);
+
+  if (cfg_hierarchy_traversal != NULL) {
+    g_free (hierarchy_traversal_before);
+    g_free (hierarchy_traversal_after);
+  }
+  if (cfg_net_naming_priority != NULL) {
+    g_free (net_naming_priority_before);
+    g_free (net_naming_priority_after);
+  }
+  if (cfg_unnamed_netname != NULL) {
+    g_free (unnamed_netname_before);
+    g_free (unnamed_netname_after);
+  }
+  if (cfg_unnamed_busname != NULL) {
+    g_free (unnamed_busname_before);
+    g_free (unnamed_busname_after);
+  }
+
+  gtk_dialog_run (GTK_DIALOG (dialog));
+  gtk_widget_destroy (dialog);
+}
+
 /*! \brief Main Scheme(GUILE) program function.
  *  \par Function Description
  *  This function is the main program called from scm_boot_guile.
@@ -310,6 +429,8 @@ void main_prog(void *closure, int argc, char *argv[])
   scm_dynwind_end ();
 
   x_controlfd_init ();
+
+  warn_if_using_invalid_config ();
 
   /* enter main loop */
   gtk_main();
