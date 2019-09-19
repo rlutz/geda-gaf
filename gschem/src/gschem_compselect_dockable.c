@@ -721,56 +721,26 @@ static void populate_component_store(GtkTreeStore *store, GList **srclist,
     new_srclist = NULL;
   } else if (*name != '/') {
     /* directory added by component-library */
-    text = strdup(name);
-    if (text == NULL) {
-      fprintf(stderr, "Not enough memory\n");
-      return;
-    }
+    text = g_strdup (name);
     new_prefix = NULL;
     new_srclist = NULL;
   } else {
     /* directory added by component-library-search */
-    g_assert(strncmp(name, prefix, strlen(prefix)) == 0);
-    char *p = strchr(name + strlen(prefix) + 1, '/');
+    size_t prefix_len = strlen (prefix);
+    g_assert (strncmp (name, prefix, prefix_len) == 0);
+    char *p = strchr (name + prefix_len + 1, '/');
 
     if (p != NULL) {
       /* There is a parent directory that was skipped
          because it doesn't contain symbols. */
       source = NULL;
-      size_t prefix_len = strlen(prefix);
-      text = malloc(p - name - prefix_len + 1);
-      if (text == NULL) {
-        fprintf(stderr, "Not enough memory\n");
-        return;
-      }
-      memcpy(text, name + prefix_len, p - name - prefix_len);
-      text[p - name - prefix_len] = '\0';
-      new_prefix = malloc(p - name + 2);
-      if (new_prefix == NULL) {
-        fprintf(stderr, "Not enough memory\n");
-        free(text);
-        return;
-      }
-      memcpy(new_prefix, name, p - name + 1);
-      new_prefix[p - name + 1] = '\0';
+      text = g_strndup (name + prefix_len, p - name - prefix_len);
+      new_prefix = g_strndup (name, p - name + 1);
       new_srclist = *srclist;
     } else {
-      size_t prefix_len = strlen(prefix);
       size_t name_len = strlen(name);
-      text = malloc(name_len - prefix_len + 1);
-      if (text == NULL) {
-        fprintf(stderr, "Not enough memory\n");
-        return;
-      }
-      memcpy(text, name + prefix_len, name_len - prefix_len);
-      text[name_len - prefix_len] = '\0';
-      new_prefix = malloc(name_len + 2);
-      if (new_prefix == NULL) {
-        fprintf(stderr, "Not enough memory\n");
-        free(text);
-        return;
-      }
-      memcpy(new_prefix, name, name_len);
+      text = g_strndup (name + prefix_len, name_len - prefix_len);
+      new_prefix = g_strndup (name, name_len + 1); /* reserve one extra byte */
       new_prefix[name_len] = '/';
       new_prefix[name_len + 1] = '\0';
       new_srclist = g_list_next (*srclist);
@@ -784,7 +754,7 @@ static void populate_component_store(GtkTreeStore *store, GList **srclist,
                       LIB_COLUMN_NAME, text,
                       LIB_COLUMN_IS_SYMBOL, FALSE,
                       -1);
-  free(text);
+  g_free (text);
 
   /* Look ahead, adding subdirectories. */
   while (new_srclist != NULL &&
@@ -794,7 +764,7 @@ static void populate_component_store(GtkTreeStore *store, GList **srclist,
     populate_component_store(store, srclist, &iter, new_prefix);
     new_srclist = g_list_next (*srclist);
   }
-  free(new_prefix);
+  g_free (new_prefix);
 
   /* populate symbols */
   GList *symhead, *symlist;
