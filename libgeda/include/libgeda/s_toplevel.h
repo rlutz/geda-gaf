@@ -78,6 +78,8 @@ struct st_toplevel
   GList *always_promote_attributes;
 
   /* gnetlist specific */
+  int net_naming_priority;
+  int hierarchy_traversal;
   int hierarchy_uref_mangle;
   int hierarchy_netname_mangle;
   int hierarchy_netattrib_mangle;
@@ -87,6 +89,8 @@ struct st_toplevel
   int hierarchy_netattrib_order;
   int hierarchy_netname_order;
   int hierarchy_uref_order;
+  char *unnamed_netname;
+  char *unnamed_busname;
 
   /* Callback function for calculating text bounds */
   RenderedBoundsFunc rendered_text_bounds_func;

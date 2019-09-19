@@ -180,23 +180,6 @@ char *s_net_name_search(TOPLEVEL * pr_current, NET * net_head)
 {
     NET *n_current;
     char *name = NULL;
-    EdaConfig *cfg;
-    gint net_naming_priority;
-    gchar *str;
-
-    enum NetNamingPriority {
-      NETNAME_ATTRIBUTE,
-      NETATTRIB_ATTRIBUTE,
-    };
-
-    cfg = eda_config_get_context_for_file (NULL);
-    str = eda_config_get_string (cfg, "gnetlist", "net-naming-priority", NULL);
-    if (g_strcmp0 (str, "netname-attribute") == 0) {
-      net_naming_priority = NETNAME_ATTRIBUTE;
-    } else {
-      net_naming_priority = NETATTRIB_ATTRIBUTE;
-    }
-    g_free (str);
 
     n_current = net_head;
 
@@ -222,7 +205,7 @@ char *s_net_name_search(TOPLEVEL * pr_current, NET * net_head)
 		/* only rename if this net name has priority */
 		/* AND, you are using net= attributes as the */
 		/* netnames which have priority */
-		if (net_naming_priority == NETATTRIB_ATTRIBUTE) {
+		if (pr_current->net_naming_priority == NETATTRIB_ATTRIBUTE) {
 
 #if DEBUG
 		    printf("\nNETATTRIB_ATTRIBUTE\n");
@@ -328,8 +311,7 @@ char *s_net_name (TOPLEVEL * pr_current, NETLIST * netlist_head,
     int found = 0;
     char *temp;
     int *unnamed_counter;
-    char *unnamed_string = NULL;
-    EdaConfig *cfg;
+    char *unnamed_string;
 
     net_name = s_net_name_search(pr_current, net_head);
 
@@ -391,16 +373,14 @@ char *s_net_name (TOPLEVEL * pr_current, NETLIST * netlist_head,
 
     }
 
-    cfg = eda_config_get_context_for_file (NULL);
-
     switch (type) {
       case PIN_TYPE_NET:
         unnamed_counter = &unnamed_net_counter;
-        unnamed_string = eda_config_get_string (cfg, "gnetlist", "default-net-name", NULL);
+        unnamed_string = pr_current->unnamed_netname;
         break;
       case PIN_TYPE_BUS:
         unnamed_counter = &unnamed_bus_counter;
-        unnamed_string = eda_config_get_string (cfg, "gnetlist", "default-bus-name", NULL);
+        unnamed_string = pr_current->unnamed_busname;
         break;
       default:
         g_critical (_("s_net_name: incorrect connectivity type %i\n"), type);
@@ -427,7 +407,6 @@ char *s_net_name (TOPLEVEL * pr_current, NETLIST * netlist_head,
       exit(-1);
     }
 
-    g_free (unnamed_string);
     return string;
 
 }
