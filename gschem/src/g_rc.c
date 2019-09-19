@@ -67,10 +67,7 @@ void g_rc_parse_gtkrc()
  */
 SCM g_rc_gschem_version(SCM scm_version)
 {
-  SCM ret;
   char *version;
-  SCM rc_filename;
-  char *sourcefile;
   
   SCM_ASSERT (scm_is_string (scm_version), scm_version,
               SCM_ARG1, "gschem-version");
@@ -81,25 +78,36 @@ SCM g_rc_gschem_version(SCM scm_version)
 
   if (g_utf8_collate (g_utf8_casefold (version,-1),
 		      g_utf8_casefold (PACKAGE_DATE_VERSION,-1)) != 0) {
-    sourcefile = NULL;
+    SCM rc_filename;
+    char *sourcefile;
+    GtkWidget *dialog;
+
     rc_filename = g_rc_rc_filename ();
-    if (rc_filename == SCM_BOOL_F) {
-      rc_filename = scm_from_utf8_string ("unknown");
-    }
+    if (rc_filename == SCM_BOOL_F)
+      rc_filename = scm_from_utf8_string (_("(filename can't be determined)"));
     sourcefile = scm_to_utf8_string (rc_filename);
     scm_dynwind_free (sourcefile);
-    fprintf(stderr,
-            _("You are running gEDA/gaf version [%s%s.%s],\n"
-              "but you have a version [%s] gschemrc file:\n[%s]\n"
-              "Please be sure that you have the latest rc file.\n"),
-            PREPEND_VERSION_STRING, PACKAGE_DOTTED_VERSION,
-            PACKAGE_DATE_VERSION, version, sourcefile);
-    ret = SCM_BOOL_F;
-  } else {
-    ret = SCM_BOOL_T;
+
+    dialog = gtk_message_dialog_new (
+      NULL,
+      GTK_DIALOG_MODAL,
+      GTK_MESSAGE_ERROR,
+      GTK_BUTTONS_CLOSE,
+      _("You are running gEDA/gaf version %s (%s%s),\n"
+        "but you have a gschemrc file for version %s:\n%s\n"
+        "Please be sure that you have the latest data files installed."),
+      PACKAGE_DATE_VERSION,
+      PREPEND_VERSION_STRING, PACKAGE_DOTTED_VERSION,
+      version, sourcefile);
+    gtk_window_set_title (GTK_WINDOW (dialog), _("gschem"));
+    gtk_dialog_run (GTK_DIALOG (dialog));
+    gtk_widget_destroy (dialog);
+
+    exit (1);
   }
+
   scm_dynwind_end();
-  return ret;
+  return SCM_BOOL_T;
 }
 
 /*! \todo Finish function documentation!!!
