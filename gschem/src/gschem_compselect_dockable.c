@@ -459,7 +459,9 @@ update_attributes_model (GschemCompselectDockable *compselect, gchar *filename)
       o_current = o_iter->data;
       o_attrib_get_name_value (o_current, &name, &value);
       gtk_list_store_append (model, &iter);
-      gtk_list_store_set (model, &iter, 0, name, 1, value, -1);
+      gtk_list_store_set (model, &iter,
+                          ATTRIBUTE_COLUMN_NAME, name,
+                          ATTRIBUTE_COLUMN_VALUE, value, -1);
       g_free (name);
       g_free (value);
     }
@@ -471,7 +473,9 @@ update_attributes_model (GschemCompselectDockable *compselect, gchar *filename)
         if (o_attrib_get_name_value (o_current, &name, &value)) {
           if (strcmp (name, filter_list[i]) == 0) {
             gtk_list_store_append (model, &iter);
-            gtk_list_store_set (model, &iter, 0, name, 1, value, -1);
+            gtk_list_store_set (model, &iter,
+                                ATTRIBUTE_COLUMN_NAME, name,
+                                ATTRIBUTE_COLUMN_VALUE, value, -1);
           }
           g_free (name);
           g_free (value);
@@ -1247,7 +1251,8 @@ create_attributes_treeview (GschemCompselectDockable *compselect)
                                            "model",      model,
                                            "headers-visible", FALSE,
                                            "rules-hint", TRUE,
-                                           "tooltip-column", 1,
+                                           "tooltip-column",
+                                             ATTRIBUTE_COLUMN_VALUE,
                                            NULL));
 
   /* two columns for name and value of the attributes */
