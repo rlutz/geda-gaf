@@ -58,6 +58,23 @@ enum compselect_behavior {
   BEHAVIOR_INCLUDE
 };
 
+enum {
+  ATTRIBUTE_COLUMN_NAME = 0,
+  ATTRIBUTE_COLUMN_VALUE,
+  NUM_ATTRIBUTE_COLUMNS
+};
+
+
+static GObjectClass *compselect_parent_class = NULL;
+
+
+static void compselect_class_init      (GschemCompselectDockableClass *class);
+static void compselect_constructed     (GObject *object);
+static void compselect_dispose         (GObject *object);
+static void compselect_finalize        (GObject *object);
+
+static GtkWidget *compselect_create_widget (GschemDockable *dockable);
+
 
 static void
 update_attributes_model (GschemCompselectDockable *compselect, gchar *filename);
@@ -228,18 +245,6 @@ x_compselect_deselect (GschemToplevel *w_current)
 }
 
 
-static GObjectClass *compselect_parent_class = NULL;
-
-
-static void compselect_class_init      (GschemCompselectDockableClass *class);
-static void compselect_constructed     (GObject *object);
-static void compselect_dispose         (GObject *object);
-static void compselect_finalize        (GObject *object);
-
-static GtkWidget *compselect_create_widget (GschemDockable *dockable);
-
-
-
 /*! \brief Sets data for a particular cell of the in use treeview.
  *  \par Function Description
  *  This function determines what data is to be displayed in the
@@ -396,12 +401,6 @@ sort_object_text (OBJECT *a, OBJECT *b)
 {
   return strcmp (a->text->string, b->text->string);
 }
-
-enum {
-  ATTRIBUTE_COLUMN_NAME = 0,
-  ATTRIBUTE_COLUMN_VALUE,
-  NUM_ATTRIBUTE_COLUMNS
-};
 
 /*! \brief Update the model of the attributes treeview
  *  \par Function Description
