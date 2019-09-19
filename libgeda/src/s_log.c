@@ -78,6 +78,7 @@ void s_log_init (const gchar *prefix)
   struct tm *nowtm;
   gchar *full_prefix = NULL;
   size_t full_prefix_len = 0;
+  const gchar *gedalog_env;
   gchar *dir_path = NULL;
   gchar *filename = NULL;
   int s, i;
@@ -102,11 +103,14 @@ void s_log_init (const gchar *prefix)
   full_prefix_len = strlen (full_prefix);
 
   /* Find/create the directory where we're going to put the logs.
-   * FIXME should this be configured somehow?
    *
    * Then run through it finding the "biggest" existing filename with
    * a matching prefix & date. */
-  dir_path = g_build_filename (s_path_user_config (), "logs", NULL);
+  gedalog_env = g_getenv ("GEDALOG");
+  if (gedalog_env != NULL && *gedalog_env != '\0')
+    dir_path = g_strdup (gedalog_env);
+  else
+    dir_path = g_build_filename (s_path_user_config (), "logs", NULL);
   /* Try to create the directory. */
   s = g_mkdir_with_parents (dir_path, 0777/*octal*/);
   if (s != 0) {
