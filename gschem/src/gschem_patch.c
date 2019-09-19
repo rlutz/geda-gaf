@@ -938,7 +938,7 @@ gschem_patch_state_destroy (gschem_patch_state_t *st)
 
   g_hash_table_iter_init (&iter, st->nets);
   while (g_hash_table_iter_next (&iter, &key, &value))
-    g_slist_free_full ((GSList *) value, g_free);
+    g_list_free_full ((GList *) value, g_free);
 
   g_hash_table_destroy (st->nets);
   g_hash_table_destroy (st->pins);
