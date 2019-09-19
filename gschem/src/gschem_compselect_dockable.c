@@ -59,6 +59,25 @@ enum compselect_behavior {
 };
 
 enum {
+  INUSE_COLUMN_SYMBOL,
+  N_INUSE_COLUMNS
+};
+
+enum {
+  LIB_COLUMN_SYMBOL_OR_SOURCE,
+  LIB_COLUMN_NAME,
+  LIB_COLUMN_IS_SYMBOL,
+  N_LIB_COLUMNS
+};
+
+/* Both the inuse model and symbol rows of the lib model store the
+   symbol pointer in column 0.  Define a special constant which is
+   used whenever we depend on this fact. */
+enum {
+  COMMON_COLUMN_SYMBOL
+};
+
+enum {
   ATTRIBUTE_COLUMN_NAME = 0,
   ATTRIBUTE_COLUMN_VALUE,
   NUM_ATTRIBUTE_COLUMNS
@@ -145,7 +164,7 @@ select_symbol (GschemCompselectDockable *compselect, CLibSymbol *symbol)
   selection = gtk_tree_view_get_selection (compselect->inusetreeview);
   if (gtk_tree_selection_get_selected (selection, &model, &iter)) {
     CLibSymbol *sym = NULL;
-    gtk_tree_model_get (model, &iter, 0, &sym, -1);
+    gtk_tree_model_get (model, &iter, INUSE_COLUMN_SYMBOL, &sym, -1);
     if (sym != symbol) {
       g_signal_handlers_block_by_func (
         selection, compselect_callback_tree_selection_changed, compselect);
@@ -159,7 +178,8 @@ select_symbol (GschemCompselectDockable *compselect, CLibSymbol *symbol)
   if (gtk_tree_selection_get_selected (selection, &model, &iter)) {
     CLibSymbol *sym = NULL;
     gboolean is_sym = FALSE;
-    gtk_tree_model_get (model, &iter, 0, &sym, 2, &is_sym, -1);
+    gtk_tree_model_get (model, &iter, LIB_COLUMN_SYMBOL_OR_SOURCE, &sym,
+                                      LIB_COLUMN_IS_SYMBOL, &is_sym, -1);
     if (is_sym && sym != symbol) {
       g_signal_handlers_block_by_func (
         selection, compselect_callback_tree_selection_changed, compselect);
@@ -262,7 +282,7 @@ inuse_treeview_set_cell_data (GtkTreeViewColumn *tree_column,
 {
   CLibSymbol *symbol;
 
-  gtk_tree_model_get (tree_model, iter, 0, &symbol, -1);
+  gtk_tree_model_get (tree_model, iter, INUSE_COLUMN_SYMBOL, &symbol, -1);
   g_object_set (G_OBJECT (cell), "text", s_clib_symbol_get_name (symbol), NULL);
 }
 
@@ -271,7 +291,7 @@ inuse_treeview_set_cell_data (GtkTreeViewColumn *tree_column,
 static gboolean is_symbol(GtkTreeModel *tree_model, GtkTreeIter *iter)
 {
   gboolean result;
-  gtk_tree_model_get (tree_model, iter, 2, &result, -1);
+  gtk_tree_model_get (tree_model, iter, LIB_COLUMN_IS_SYMBOL, &result, -1);
   return result;
 }
 
@@ -321,7 +341,7 @@ lib_model_filter_visible_func (GtkTreeModel *model,
       } while (gtk_tree_model_iter_next (model, &iter2));
   } else {
     gtk_tree_model_get (model, iter,
-                        0, &sym,
+                        LIB_COLUMN_SYMBOL_OR_SOURCE, &sym,
                         -1);
     compname = s_clib_symbol_get_name (sym);
     /* Do a case insensitive comparison, converting the strings
@@ -368,7 +388,7 @@ tree_row_activated (GtkTreeView       *tree_view,
       (tree_view == compselect->libtreeview && is_symbol (model, &iter))) {
        /* Tree view needs to check that we're at a symbol node */
     CLibSymbol *symbol = NULL;
-    gtk_tree_model_get (model, &iter, 0, &symbol, -1);
+    gtk_tree_model_get (model, &iter, COMMON_COLUMN_SYMBOL, &symbol, -1);
     select_symbol (compselect, symbol);
 
     GschemDockable *dockable = GSCHEM_DOCKABLE (compselect);
@@ -521,7 +541,7 @@ compselect_callback_tree_selection_changed (GtkTreeSelection *selection,
         (view == compselect->libtreeview && is_symbol (model, &iter))) {
          /* Tree view needs to check that we're at a symbol node */
 
-      gtk_tree_model_get (model, &iter, 0, &sym, -1);
+      gtk_tree_model_get (model, &iter, COMMON_COLUMN_SYMBOL, &sym, -1);
     }
   }
 
@@ -662,7 +682,7 @@ create_inuse_tree_model (GschemCompselectDockable *compselect)
   GList *symhead, *symlist;
   GtkTreeIter iter;
 
-  store = GTK_LIST_STORE (gtk_list_store_new (1, G_TYPE_POINTER));
+  store = GTK_LIST_STORE (gtk_list_store_new (N_INUSE_COLUMNS, G_TYPE_POINTER));
 
   symhead = s_toplevel_get_symbols (
     GSCHEM_DOCKABLE (compselect)->w_current->toplevel);
@@ -674,7 +694,7 @@ create_inuse_tree_model (GschemCompselectDockable *compselect)
     gtk_list_store_append (store, &iter);
 
     gtk_list_store_set (store, &iter,
-                        0, symlist->data,
+                        INUSE_COLUMN_SYMBOL, symlist->data,
                         -1);
   }
 
@@ -760,9 +780,9 @@ static void populate_component_store(GtkTreeStore *store, GList **srclist,
   GtkTreeIter iter;
   gtk_tree_store_append (store, &iter, parent);
   gtk_tree_store_set (store, &iter,
-                      0, source,
-                      1, text,
-                      2, FALSE,
+                      LIB_COLUMN_SYMBOL_OR_SOURCE, source,
+                      LIB_COLUMN_NAME, text,
+                      LIB_COLUMN_IS_SYMBOL, FALSE,
                       -1);
   free(text);
 
@@ -786,9 +806,10 @@ static void populate_component_store(GtkTreeStore *store, GList **srclist,
 
     gtk_tree_store_append (store, &iter2, &iter);
     gtk_tree_store_set (store, &iter2,
-                        0, symlist->data,
-                        1, s_clib_symbol_get_name ((CLibSymbol *)symlist->data),
-                        2, TRUE,
+                        LIB_COLUMN_SYMBOL_OR_SOURCE, symlist->data,
+                        LIB_COLUMN_NAME,
+                          s_clib_symbol_get_name ((CLibSymbol *)symlist->data),
+                        LIB_COLUMN_IS_SYMBOL, TRUE,
                         -1);
   }
   g_list_free (symhead);
@@ -807,9 +828,9 @@ create_lib_tree_model (GschemCompselectDockable *compselect)
   EdaConfig *cfg = eda_config_get_user_context ();
   gboolean sort = eda_config_get_boolean (cfg, "gschem.library", "sort", NULL);
 
-  store = GTK_TREE_STORE (gtk_tree_store_new (3, G_TYPE_POINTER,
-                                                 G_TYPE_STRING,
-                                                 G_TYPE_BOOLEAN));
+  store = GTK_TREE_STORE (gtk_tree_store_new (N_LIB_COLUMNS, G_TYPE_POINTER,
+                                                             G_TYPE_STRING,
+                                                             G_TYPE_BOOLEAN));
 
   /* populate component store */
   srchead = s_clib_get_sources (sort);
@@ -854,11 +875,12 @@ find_tree_iter_by_filename (GtkTreeModel *tree_model,
 
   if (gtk_tree_model_iter_children (tree_model, &iter, parent))
     do {
-      if (gtk_tree_model_get_n_columns (tree_model) == 1 ||
+      if (gtk_tree_model_get_n_columns (tree_model) == N_INUSE_COLUMNS ||
           is_symbol (tree_model, &iter)) {
         /* node is a symbol */
         CLibSymbol *symbol;
-        gtk_tree_model_get (tree_model, &iter, 0, &symbol, -1);
+        gtk_tree_model_get (tree_model, &iter,
+                            COMMON_COLUMN_SYMBOL, &symbol, -1);
         gchar *fn = s_clib_symbol_get_filename (symbol);
         if (strcmp (fn, filename) == 0) {
           *iter_return = iter;
@@ -871,7 +893,8 @@ find_tree_iter_by_filename (GtkTreeModel *tree_model,
 
       /* node is a source */
       CLibSource *source;
-      gtk_tree_model_get (tree_model, &iter, 0, &source, -1);
+      gtk_tree_model_get (tree_model, &iter,
+                          LIB_COLUMN_SYMBOL_OR_SOURCE, &source, -1);
 
       gboolean recurse;
       if (source == NULL)
@@ -1138,7 +1161,8 @@ create_lib_treeview (GschemCompselectDockable *compselect)
                   "title", _("Symbols"),
                   NULL));
   gtk_tree_view_column_pack_start (column, renderer, TRUE);
-  gtk_tree_view_column_add_attribute (column, renderer, "text", 1);
+  gtk_tree_view_column_add_attribute (column, renderer, "text",
+                                      LIB_COLUMN_NAME);
   gtk_tree_view_append_column (GTK_TREE_VIEW (libtreeview), column);
 
   /* add the treeview to the scrolled window */
