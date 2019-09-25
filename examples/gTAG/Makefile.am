@@ -1,6 +1,3 @@
-GNETLIST = $(bindir)/gnetlist
-GAF = $(bindir)/gaf
-
 sources = \
 	gafrc \
 	gnetlistrc \
@@ -19,7 +16,7 @@ sources = \
 	max882.sym \
 	sn75240pw.sym
 
-targets = \
+maint_targets = \
 	gTAG.bom \
 	gTAG-pcb.net \
 	gTAG.ps \
@@ -34,32 +31,13 @@ extra = \
 	attribs \
 	crdist.sh
 
-gTAG-pcb.net: $(sources)
-	$(AM_V_GEN)if [ -x $(GNETLIST) ]; then \
-	  cd $(srcdir) && $(GNETLIST) -g PCB -o $@ gTAG.sch; \
-	else \
-	  echo '*** Skipping, re-run "make" after "make install" ***'; \
-	fi
-
-gTAG.bom: $(sources)
-	$(AM_V_GEN)if [ -x $(GNETLIST) ]; then \
-	  cd $(srcdir) && $(GNETLIST) -g bom -o $@ gTAG.sch; \
-	else \
-	  echo '*** Skipping, re-run "make" after "make install" ***'; \
-	fi
-
-.sch.ps:
-	$(AM_V_GEN)if [ -x $(GAF) ]; then \
-	  cd $(srcdir) && ( \
-	    $(GAF) export -p iso_a4 -m "1cm;1cm;1cm;1cm" -o $@ $< && \
-	    sed -e '/^%%CreationDate: /d' -i $@); \
-	else \
-	  echo '*** Skipping, re-run "make" after "make install" ***'; \
-	fi
+maint_scripts = \
+	regen-netlists.sh \
+	regen-postscript.sh
 
 exampledir = $(docdir)/examples/gTAG/
-example_DATA = $(sources) $(targets) $(extra)
+example_DATA = $(sources) $(maint_targets) $(extra)
 
-EXTRA_DIST = $(example_DATA)
+EXTRA_DIST = $(example_DATA) $(maint_scripts)
 
-MAINTAINERCLEANFILES = $(targets)
+MAINTAINERCLEANFILES = $(maint_targets)
