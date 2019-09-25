@@ -739,16 +739,6 @@ def rc1_parse(rcname, rcfile):
         xorn.guile.define('component-library-search',
                           rc_component_library_search)
 
-        # Re-export deprecated RC functions (these are overwritten by
-        # geda-deprecated-config.scm)
-        for name_, value in {
-                'unnamed-netname': rc_unnamed_netname,
-                'unnamed-busname': rc_unnamed_busname,
-                'hierarchy-traversal': rc_hierarchy_traversal,
-                'net-naming-priority': rc_net_naming_priority,
-            }.iteritems():
-            xorn.guile.define(name_, value)
-
 # ----------------------------------------------------------------------------
 
 for name, value in {
