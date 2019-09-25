@@ -576,7 +576,7 @@ def rc_hierarchy_traversal(mode):
 def rc_net_naming_priority(mode):
     check_argument_type('net-naming-priority', 1, mode, basestring)
     global prefer_netname_attribute
-    prefer_netname_attribute = x == 'netname'
+    prefer_netname_attribute = mode == 'netname'
 
 # ============================================================================
 
