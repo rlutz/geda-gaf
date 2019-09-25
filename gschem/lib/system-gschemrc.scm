@@ -19,6 +19,8 @@
 ;
 (gschem-version "@DATE_VERSION@")
 
+(load-from-path "gschem-deprecated-config.scm")
+
 ;
 ; Start of color section
 ;

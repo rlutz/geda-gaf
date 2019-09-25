@@ -57,49 +57,6 @@
     ((_ old-id)
      (define old-id (rc-dead-config (quote old-id))))))
 
-;; Returns an RC function closure to replace the legacy configuration
-;; function OLD-ID. The returned closure takes an arbitrary number of
-;; arguments, and sets the configuration parameter determined by GROUP
-;; and KEY to the result of passing its arguments to
-;; VALUE-TRANSFORMER.  The first time the closure is called, it prints
-;; a deprecation message.
-(define (rc-deprecated-config old-id group key value-transformer)
-  ;; FIXME more helpful error message with link to documentation.
-  (define (deprecation-warning)
-    (format (current-error-port)
-"WARNING: The RC file function '~A' is deprecated.
-
-RC configuration functions will be removed in an upcoming gEDA
-release.  Please use configuration files instead.
-
-" old-id))
-  (let ((warned? #f))
-    (lambda args
-      (or warned?
-          (begin (deprecation-warning) (set! warned? #t)))
-      ((@ (geda config) set-config!)
-       (rc-config) group key (apply value-transformer args)))))
-
-;; Convenience macro for using rc-deprecated-config.
-;;
-;;   define-rc-deprecated-config OLD-ID GROUP KEY VALUE-TRANSFORMER
-;;
-;; Creates a deprecated rc configuration function called OLD-ID that
-;; uses VALUE-TRANSFORMER to set the configuration parameter by GROUP
-;; and KEY.
-(define-syntax define-rc-deprecated-config
-  (syntax-rules ()
-    ((_ old-id group key value-transformer)
-     (define old-id (rc-deprecated-config (quote old-id) group key
-                                           value-transformer)))))
-
-;; Identity value transformer for define-rc-deprecated-config
-(define (rc-deprecated-string-transformer str) str)
-
-;; Transformer for "enabled"/"disabled" to boolean
-(define (rc-deprecated-string-boolean-transformer str)
-  (string=? "enabled" str))
-
 ;; ===================================================================
 ;; Deprecated libgeda configuration functions
 ;; ===================================================================
@@ -120,18 +77,6 @@ release.  Please use configuration files instead.
 (define-rc-dead-config setpagedevice-orientation)
 (define-rc-dead-config setpagedevice-pagesize)
 
-(define-rc-deprecated-config
- print-paper "gschem.printing" "paper"
- rc-deprecated-string-transformer)
-
-(define-rc-deprecated-config
- print-orientation "gschem.printing" "layout"
- rc-deprecated-string-transformer)
-
-(define-rc-deprecated-config
- print-color "gschem.printing" "monochrome"
- (lambda (x) (not (rc-deprecated-string-boolean-transformer x))))
-
 (define-rc-dead-config net-style)
 (define-rc-dead-config bus-style)
 (define-rc-dead-config pin-style)
@@ -143,16 +88,10 @@ release.  Please use configuration files instead.
 (define-rc-dead-config text-display-zoomfactor)
 (define-rc-dead-config text-feedback)
 
-(define-rc-deprecated-config
- untitled-name "gschem" "default-filename"
- rc-deprecated-string-transformer)
+(define (untitled-name arg)
+  (format (current-error-port)
+"WARNING: The RC file function 'untitled-name' should only be used in gschemrc.
+
+"))
 
 (define-rc-dead-config scrollbar-update)
-
-(define-rc-deprecated-config
- sort-component-library "gschem.library" "sort"
- rc-deprecated-string-boolean-transformer)
-
-(define-rc-deprecated-config
- component-dialog-attributes "gschem.library" "component-attributes"
- (lambda (x) x))

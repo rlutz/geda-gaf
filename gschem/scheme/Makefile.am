@@ -12,6 +12,7 @@ nobase_dist_scmdata_DATA = \
 	auto-place-netname.scm \
 	pcb.scm \
 	default-attrib-positions.scm \
+	gschem-deprecated-config.scm \
 	gschem/core/gettext.scm \
 	gschem/gschemdoc.scm \
 	gschem/window.scm \
