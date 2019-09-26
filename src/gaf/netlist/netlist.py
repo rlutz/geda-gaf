@@ -322,6 +322,13 @@ class Netlist:
         gaf.netlist.package.postproc_instances(
             self, flat_package_namespace)
 
+        # see if any unconnected subsheet pins are connected to
+        # multiple I/O ports; these need to be preserved or the
+        # internal connections in the subsheet will be lost
+        for net in self.nets:
+            if net.is_unconnected_pin and len(net.connections) > 1:
+                net.is_unconnected_pin = False
+
         # remove nets for unconnected pins
         self.nets = [net for net in self.nets if not net.is_unconnected_pin]
 

@@ -1,6 +1,7 @@
 (source-library "component_refdes-sources")
 (source-library "duplicate_local_net-sources")
 (source-library "duplicate_pinlabel-sources")
+(source-library "duplicate_port-sources")
 (reset-component-library)
 (component-library-search "../std-symbols")
 (component-library "component_refdes-symbols")

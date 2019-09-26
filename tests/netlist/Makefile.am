@@ -53,6 +53,7 @@ TESTS = stack_1-geda.out \
 	regression/component_refdes-dumptext.out \
 	regression/duplicate_local_net-geda.out \
 	regression/duplicate_pinlabel-geda.out \
+	regression/duplicate_port-geda.out \
 	regression/missing_pinseq-geda.out \
 	regression/named_unconnected_net-geda.out \
 	regression/override_netname-geda.out \
@@ -499,6 +500,8 @@ testdata = \
 	regression/duplicate_pinlabel-symbols/dp-res.sym \
 	regression/duplicate_pinlabel-symbols/dp-sub.sym \
 	regression/duplicate_pinlabel.sch \
+	regression/duplicate_port-sources/inouttest_sub.sch \
+	regression/duplicate_port.sch \
 	regression/missing_pinseq-symbols/missing_pinseq.sym \
 	regression/missing_pinseq.sch \
 	regression/named_unconnected_net.sch \

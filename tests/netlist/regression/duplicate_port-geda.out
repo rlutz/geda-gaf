@@ -1,0 +1,27 @@
+START header
+
+gEDA's netlist format
+Created specifically for testing of gnetlist
+
+END header
+
+START components
+
+R6 device=RESISTOR
+R5 device=RESISTOR
+SUB1/R4 device=RESISTOR
+SUB1/R3 device=RESISTOR
+SUB1/R2 device=RESISTOR
+SUB1/R1 device=RESISTOR
+
+END components
+
+START nets
+
+GND : R6 1, R5 1 
+SUB1/GND : SUB1/R4 2, SUB1/R3 2, SUB1/R2 2, SUB1/R1 2 
+unnamed_net1 : SUB1/R3 1, SUB1/R4 1, R6 2 
+unconnected_pin-1 : SUB1/R1 1, SUB1/R2 1 
+
+END nets
+
