@@ -52,7 +52,7 @@ x_fam_init ()
 
   if (FAMOpen (new_fc) == -1) {
     g_free (new_fc);
-    g_message ("Can't connect to FAM daemon\n");
+    g_warning ("Can't connect to FAM daemon\n");
     return;
   }
 
