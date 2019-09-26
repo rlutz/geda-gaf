@@ -98,7 +98,10 @@ install-data-local:
 	  if test -n "$$list"; then \
 	    echo " ( cd $(srcdir)/$$lib && $(INSTALL_DATA)" $$list "'$$d' )"; \
 	    (cd $(srcdir)/$$lib && $(INSTALL_DATA) $$list "$$d") || exit $$?; \
+	    echo " ( cd '$(DESTDIR)$(datasymdir)/$$lib' && rm -f" $$list ")"; \
+	    (cd "$(DESTDIR)$(datasymdir)/$$lib" && rm -f $$list); \
 	  fi; \
+	  rmdir "$(DESTDIR)$(datasymdir)/$$lib" || true; \
 	done
 
 # Uninstalls symbols
