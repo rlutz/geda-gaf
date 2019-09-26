@@ -41,13 +41,14 @@
 (define (rc-deprecated-config old-id group key value-transformer)
   ;; FIXME more helpful error message with link to documentation.
   (define (deprecation-warning)
-    (format (current-error-port)
-"WARNING: The RC file function '~A' is deprecated.
-
-RC configuration functions will be removed in an upcoming gEDA
-release.  Please use configuration files instead.
-
-" old-id))
+;;    (format (current-error-port)
+;;"WARNING: The RC file function '~A' is deprecated.
+;;
+;;RC configuration functions will be removed in an upcoming gEDA
+;;release.  Please use configuration files instead.
+;;
+;;" old-id)
+    (format (current-error-port) ""))
   (let ((warned? #f))
     (lambda args
       (or warned?
