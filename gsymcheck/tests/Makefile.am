@@ -8,6 +8,7 @@ EXTRA_DIST = $(input_files) $(TESTS)
 
 mostlyclean-local:
 	rm -f *.new
+	rm -rf logs/
 
 input_files = \
 	buses.sym \
