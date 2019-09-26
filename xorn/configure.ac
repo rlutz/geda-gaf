@@ -1,5 +1,5 @@
 # Process this file with autoconf to produce a configure script.
-# Copyright (C) 2013-2018 Roland Lutz
+# Copyright (C) 2013-2019 Roland Lutz
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -37,7 +37,6 @@ AM_GNU_GETTEXT_VERSION([0.18.2])
 
 # use location passed by main configure script
 AC_MSG_CHECKING([where to look for gEDA shared data])
-AC_ARG_VAR([GEDADATADIR], [path to gEDA shared data])
 gedadatadir="$GEDADATADIR"
 AC_MSG_RESULT([$gedadatadir])
 AS_IF([test "x$gedadatadir" = "x"],
@@ -46,7 +45,6 @@ AC_SUBST([gedadatadir])
 
 # use location passed by main configure script
 AC_MSG_CHECKING([where to look for gEDA rc files])
-AC_ARG_VAR([GEDARCDIR], [path to gEDA rc files])
 gedasysconfdir="$GEDARCDIR"
 AC_MSG_RESULT([$gedasysconfdir])
 AC_SUBST([gedasysconfdir])

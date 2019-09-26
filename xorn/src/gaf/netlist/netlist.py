@@ -1,7 +1,7 @@
 # gaf.netlist - gEDA Netlist Extraction and Generation
 # Copyright (C) 1998-2010 Ales Hvezda
 # Copyright (C) 1998-2010 gEDA Contributors (see ChangeLog for details)
-# Copyright (C) 2013-2018 Roland Lutz
+# Copyright (C) 2013-2019 Roland Lutz
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -321,6 +321,13 @@ class Netlist:
         # group components into packages
         gaf.netlist.package.postproc_instances(
             self, flat_package_namespace)
+
+        # see if any unconnected subsheet pins are connected to
+        # multiple I/O ports; these need to be preserved or the
+        # internal connections in the subsheet will be lost
+        for net in self.nets:
+            if net.is_unconnected_pin and len(net.connections) > 1:
+                net.is_unconnected_pin = False
 
         # remove nets for unconnected pins
         self.nets = [net for net in self.nets if not net.is_unconnected_pin]

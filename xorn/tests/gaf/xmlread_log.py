@@ -1,4 +1,4 @@
-# Copyright (C) 2013-2018 Roland Lutz
+# Copyright (C) 2013-2019 Roland Lutz
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -292,15 +292,15 @@ assert_read("""\
 <?xml version="1.0" encoding="UTF-8"?>
 <schematic xmlns="https://hedmen.org/xorn/schematic/">
   <content>
-    <path linewidth=".100" capstyle="0"
-          dashstyle="dashed" dashlength="1.000" dashspace="1.000"/>
+    <path linewidth=".1000" capstyle="0"
+          dashstyle="dashed" dashlength="1.0000" dashspace="1.0000"/>
   </content>
 </schematic>
 """, [
-    '4: error: invalid line width ".100"',
+    '4: error: invalid line width ".1000"',
     '4: error: invalid cap style "0"',
-    '4: error: invalid dash length "1.000"',
-    '4: error: invalid dash space "1.000"'
+    '4: error: invalid dash length "1.0000"',
+    '4: error: invalid dash space "1.0000"'
 ])
 
 assert_read("""\
@@ -403,16 +403,16 @@ assert_read("""\
 <?xml version="1.0" encoding="UTF-8"?>
 <schematic xmlns="https://hedmen.org/xorn/schematic/">
   <content>
-    <path filltype="mesh" fillwidth=".100"
-          angle0="20." pitch0="1.000" angle1="60." pitch1="1.000"/>
+    <path filltype="mesh" fillwidth=".1000"
+          angle0="20." pitch0="1.0000" angle1="60." pitch1="1.0000"/>
   </content>
 </schematic>
 """, [
-    '4: error: invalid fill width ".100"',
+    '4: error: invalid fill width ".1000"',
     '4: error: invalid first fill angle "20."',
-    '4: error: invalid first fill pitch "1.000"',
+    '4: error: invalid first fill pitch "1.0000"',
     '4: error: invalid second fill angle "60."',
-    '4: error: invalid second fill pitch "1.000"'
+    '4: error: invalid second fill pitch "1.0000"'
 ])
 
 ### objects ###
@@ -447,16 +447,16 @@ assert_read("""\
 <?xml version="1.0" encoding="UTF-8"?>
 <schematic xmlns="https://hedmen.org/xorn/schematic/">
   <content>
-    <arc x="0.000" y="0.000" radius="10.000" startangle="0." sweepangle="120."
-         color="freestyle5" filltype="fill">
+    <arc x="0.0000" y="0.0000" radius="10.0000" startangle="0."
+         sweepangle="120." color="freestyle5" filltype="fill">
       foo<br/>
     </arc>
   </content>
 </schematic>
 """, [
-    '4: error: invalid X coordinate "0.000"',
-    '4: error: invalid Y coordinate "0.000"',
-    '4: error: invalid radius "10.000"',
+    '4: error: invalid X coordinate "0.0000"',
+    '4: error: invalid Y coordinate "0.0000"',
+    '4: error: invalid radius "10.0000"',
     '4: error: invalid start angle "0."',
     '4: error: invalid sweep angle "120."',
     '4: error: invalid color "freestyle5"',
@@ -494,17 +494,17 @@ assert_read("""\
 <?xml version="1.0" encoding="UTF-8"?>
 <schematic xmlns="https://hedmen.org/xorn/schematic/">
   <content>
-    <box x="0.000" y="0.000" width="10.000" height="10.000"
+    <box x="0.0000" y="0.0000" width="10.0000" height="10.0000"
          color="freestyle5">
       foo<br/>
     </box>
   </content>
 </schematic>
 """, [
-    '4: error: invalid X coordinate "0.000"',
-    '4: error: invalid Y coordinate "0.000"',
-    '4: error: invalid width "10.000"',
-    '4: error: invalid height "10.000"',
+    '4: error: invalid X coordinate "0.0000"',
+    '4: error: invalid Y coordinate "0.0000"',
+    '4: error: invalid width "10.0000"',
+    '4: error: invalid height "10.0000"',
     '4: error: invalid color "freestyle5"',
     '6: error: unexpected character data "foo"',
     '6: error: unexpected element "br"'
@@ -537,15 +537,15 @@ assert_read("""\
 <?xml version="1.0" encoding="UTF-8"?>
 <schematic xmlns="https://hedmen.org/xorn/schematic/">
   <content>
-    <circle x="0.000" y="0.000" radius="10.000" color="freestyle5">
+    <circle x="0.0000" y="0.0000" radius="10.0000" color="freestyle5">
       foo<br/>
     </circle>
   </content>
 </schematic>
 """, [
-    '4: error: invalid X coordinate "0.000"',
-    '4: error: invalid Y coordinate "0.000"',
-    '4: error: invalid radius "10.000"',
+    '4: error: invalid X coordinate "0.0000"',
+    '4: error: invalid Y coordinate "0.0000"',
+    '4: error: invalid radius "10.0000"',
     '4: error: invalid color "freestyle5"',
     '5: error: unexpected character data "foo"',
     '5: error: unexpected element "br"'
@@ -579,7 +579,7 @@ assert_read("""\
 <?xml version="1.0" encoding="UTF-8"?>
 <schematic xmlns="https://hedmen.org/xorn/schematic/">
   <content>
-    <component x="0.000" y="0.000" selectable="0" angle="1" mirror="0"
+    <component x="0.0000" y="0.0000" selectable="0" angle="1" mirror="0"
                symbol="" linewidth=".1" filltype="fill">
       foo<br/>
     </component>
@@ -587,8 +587,8 @@ assert_read("""\
   <symbol id="" name="bar.sym" mode="omitted"/>
 </schematic>
 """, [
-    '4: error: invalid X coordinate "0.000"',
-    '4: error: invalid Y coordinate "0.000"',
+    '4: error: invalid X coordinate "0.0000"',
+    '4: error: invalid Y coordinate "0.0000"',
     '4: error: invalid selectability "0"',
     '4: error: invalid angle "1"',
     '4: error: invalid mirror flag "0"',
@@ -673,17 +673,17 @@ assert_read("""\
 <?xml version="1.0" encoding="UTF-8"?>
 <schematic xmlns="https://hedmen.org/xorn/schematic/">
   <content>
-    <line x0="0.000" y0="0.000" x1="10.000" y1="10.000" color="freestyle5"
+    <line x0="0.0000" y0="0.0000" x1="10.0000" y1="10.0000" color="freestyle5"
           filltype="fill">
       foo<br/>
     </line>
   </content>
 </schematic>
 """, [
-    '4: error: invalid first X coordinate "0.000"',
-    '4: error: invalid first Y coordinate "0.000"',
-    '4: error: invalid second X coordinate "10.000"',
-    '4: error: invalid second Y coordinate "10.000"',
+    '4: error: invalid first X coordinate "0.0000"',
+    '4: error: invalid first Y coordinate "0.0000"',
+    '4: error: invalid second X coordinate "10.0000"',
+    '4: error: invalid second Y coordinate "10.0000"',
     '4: error: invalid color "freestyle5"',
     '4: error: unexpected attribute(s) "filltype"',
     '6: error: unexpected character data "foo"',
@@ -725,11 +725,11 @@ assert_read("""\
 <?xml version="1.0" encoding="UTF-8"?>
 <schematic xmlns="https://hedmen.org/xorn/schematic/">
   <content>
-    <net x0="0.000" y0="0.000" x1="10.000" y1="10.000" color="freestyle5"
+    <net x0="0.0000" y0="0.0000" x1="10.0000" y1="10.0000" color="freestyle5"
          type="0" inverted="0" linewidth=".1" filltype="fill">
       foo<br/>
     </net>
-    <pin x0="0.000" y0="0.000" x1="10.000" y1="10.000" color="freestyle5"
+    <pin x0="0.0000" y0="0.0000" x1="10.0000" y1="10.0000" color="freestyle5"
          type="0" inverted="0" linewidth=".1" filltype="fill">
       foo<br/>
     </pin>
@@ -737,10 +737,10 @@ assert_read("""\
 </schematic>
 """, [
     '4: error: invalid net/pin type "0"',
-    '4: error: invalid first X coordinate "0.000"',
-    '4: error: invalid first Y coordinate "0.000"',
-    '4: error: invalid second X coordinate "10.000"',
-    '4: error: invalid second Y coordinate "10.000"',
+    '4: error: invalid first X coordinate "0.0000"',
+    '4: error: invalid first Y coordinate "0.0000"',
+    '4: error: invalid second X coordinate "10.0000"',
+    '4: error: invalid second Y coordinate "10.0000"',
     '4: error: invalid color "freestyle5"',
     '4: error: unexpected attribute(s) "filltype", "inverted", "linewidth"',
     '6: error: unexpected character data "foo"',
@@ -748,10 +748,10 @@ assert_read("""\
 
     '8: error: invalid net/pin type "0"',
     '8: error: invalid invertedness "0"',
-    '8: error: invalid first X coordinate "0.000"',
-    '8: error: invalid first Y coordinate "0.000"',
-    '8: error: invalid second X coordinate "10.000"',
-    '8: error: invalid second Y coordinate "10.000"',
+    '8: error: invalid first X coordinate "0.0000"',
+    '8: error: invalid first Y coordinate "0.0000"',
+    '8: error: invalid second X coordinate "10.0000"',
+    '8: error: invalid second Y coordinate "10.0000"',
     '8: error: invalid color "freestyle5"',
     '8: error: unexpected attribute(s) "filltype", "linewidth"',
     '10: error: unexpected character data "foo"',
@@ -891,7 +891,7 @@ assert_read("""\
 <?xml version="1.0" encoding="UTF-8"?>
 <schematic xmlns="https://hedmen.org/xorn/schematic/">
   <content>
-    <picture x="0.000" y="0.000" width="10.000" height="10.000"
+    <picture x="0.0000" y="0.0000" width="10.0000" height="10.0000"
              angle="1" mirrored="0" pixmap="" linewidth=".1" filltype="fill">
       foo<br/>
     </picture>
@@ -899,10 +899,10 @@ assert_read("""\
   <pixmap id="" name="bar.png" mode="omitted"/>
 </schematic>
 """, [
-    '4: error: invalid X coordinate "0.000"',
-    '4: error: invalid Y coordinate "0.000"',
-    '4: error: invalid width "10.000"',
-    '4: error: invalid height "10.000"',
+    '4: error: invalid X coordinate "0.0000"',
+    '4: error: invalid Y coordinate "0.0000"',
+    '4: error: invalid width "10.0000"',
+    '4: error: invalid height "10.0000"',
     '4: error: invalid angle "1"',
     '4: error: invalid mirror flag "0"',
     '4: error: pixmap id can\'t be empty',
@@ -949,17 +949,17 @@ assert_read("""\
 <?xml version="1.0" encoding="UTF-8"?>
 <schematic xmlns="https://hedmen.org/xorn/schematic/">
   <content>
-    <text x="0.000" y="0.000" color="freestyle5" size="10."
+    <text x="0.0000" y="0.0000" color="freestyle5" size="10."
           visible="0" show="0" angle="1" alignment="0"
           linewidth=".1" filltype="fill"/>
-    <attribute name="foo" x="0.000" y="0.000" color="freestyle5" size="10."
+    <attribute name="foo" x="0.0000" y="0.0000" color="freestyle5" size="10."
                visible="0" show="0" angle="1" alignment="0"
                linewidth=".1" filltype="fill"/>
   </content>
 </schematic>
 """, [
-    '4: error: invalid X coordinate "0.000"',
-    '4: error: invalid Y coordinate "0.000"',
+    '4: error: invalid X coordinate "0.0000"',
+    '4: error: invalid Y coordinate "0.0000"',
     '4: error: invalid color "freestyle5"',
     '4: error: invalid text size "10."',
     '4: error: invalid text visibility "0"',
@@ -968,8 +968,8 @@ assert_read("""\
     '4: error: invalid alignment "0"',
     '4: error: unexpected attribute(s) "filltype", "linewidth"',
 
-    '7: error: invalid X coordinate "0.000"',
-    '7: error: invalid Y coordinate "0.000"',
+    '7: error: invalid X coordinate "0.0000"',
+    '7: error: invalid Y coordinate "0.0000"',
     '7: error: invalid color "freestyle5"',
     '7: error: invalid text size "10."',
     '7: error: invalid text visibility "0"',

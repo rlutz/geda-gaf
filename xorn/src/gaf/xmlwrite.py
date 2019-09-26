@@ -1,4 +1,4 @@
-# Copyright (C) 2013-2018 Roland Lutz
+# Copyright (C) 2013-2019 Roland Lutz
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -37,9 +37,9 @@ class Writer:
 
     def fmt(self, x):
         if self.use_hybridnum:
-            return xorn.hybridnum.format(x, 2)
+            return xorn.hybridnum.format(x, 3)
         else:
-            return xorn.fixednum.format(int(round(x)), 2)
+            return xorn.fixednum.format(int(round(x)), 3)
 
     def write_line(self, line):
         if line.width:

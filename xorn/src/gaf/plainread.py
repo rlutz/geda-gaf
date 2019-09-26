@@ -1,7 +1,7 @@
 # gaf - Python library for manipulating gEDA files
 # Copyright (C) 1998-2010 Ales Hvezda
 # Copyright (C) 1998-2010 gEDA Contributors (see ChangeLog for details)
-# Copyright (C) 2013-2018 Roland Lutz
+# Copyright (C) 2013-2019 Roland Lutz
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -131,12 +131,18 @@ def sscanf(s, fmt):
     if s.endswith('\n'):
         raise ValueError
 
-    # gEDA/gaf ignores trailing spaces and, in some older versions,
-    # wrote them for text objects
-    s = s.rstrip(' ')
+    # str.split without an argument treats any whitespace character as
+    # a separator and removes empty strings from the result
+    stok = s.split()
+    # but gEDA/gaf doesn't allow trailing whitespace
+    if stok and stok[0][0] != s[0]:
+        raise ValueError
 
-    stok = s.split(' ')
     fmttok = fmt.split(' ')
+
+    # gEDA/gaf ignores extra fields
+    if len(stok) > len(fmttok):
+        del stok[len(fmttok):]
 
     if len(stok) != len(fmttok):
         raise ValueError
@@ -473,7 +479,7 @@ def read_circle(buf, format, log):
 # A negative or null radius is not allowed.
 #
 # \throw gaf.read.ParseError if the string could not be parsed
-# \throw ValueError          if \a buf doesn't describe a arc object
+# \throw ValueError          if \a buf doesn't describe an arc object
 
 def read_arc(buf, format, log):
     try:

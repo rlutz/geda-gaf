@@ -1,4 +1,4 @@
-# Copyright (C) 2013-2018 Roland Lutz
+# Copyright (C) 2013-2019 Roland Lutz
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -415,9 +415,9 @@ class LoadContext:
 
     def parse(self, x):
         if self.use_hybridnum:
-            return xorn.hybridnum.parse(x, 2)
+            return xorn.hybridnum.parse(x, 3)
         else:
-            return float(xorn.fixednum.parse(x, 2))
+            return float(xorn.fixednum.parse(x, 3))
 
     def parse_attribute(self, d, key, default, processor, msg_fragment):
         try:

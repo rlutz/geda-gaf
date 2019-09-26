@@ -2,7 +2,7 @@
 # gaf.netlist - gEDA Netlist Extraction and Generation
 # Copyright (C) 1998-2010 Ales Hvezda
 # Copyright (C) 1998-2010 gEDA Contributors (see ChangeLog for details)
-# Copyright (C) 2013-2018 Roland Lutz
+# Copyright (C) 2013-2019 Roland Lutz
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -97,6 +97,7 @@ ${top_builddir}/src/command/xorn netlist \
     ${extra_symbol_library} ${extra_source_library} \
     -o "${output}" -g "${backend}" ${backend_options} "${input}"
 status=$?
+[ "$status" = 99 ] && exit 99  # propagate hard errors
 [ "$status" = 0 ] || exit 1
 
 # Compare netlist with reference file

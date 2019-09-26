@@ -1,0 +1,94 @@
+v 20080127 1
+C 40000 40000 0 0 0 title-A3-2.sym
+{
+T 52300 41300 5 30 1 1 0 4 1
+Title=two inout.sym
+T 51400 40300 5 16 1 1 0 4 1
+filename=inouttest_sub.sch
+T 55850 41500 5 16 1 1 0 4 1
+revision=1
+T 56050 40100 5 16 1 1 0 6 1
+page=2
+T 56200 40100 5 16 1 1 0 0 1
+number_of_pages=2
+T 55850 40850 5 12 1 1 0 4 1
+date=08.08.08
+T 54450 40450 5 16 1 1 0 4 1
+author=-<(kmk)>-
+}
+C 47300 46500 1 0 0 in.sym
+{
+T 47400 48300 5 8 0 0 0 0 1
+device=INPUT
+T 47400 47100 5 8 0 0 0 0 1
+footprint=none
+T 48000 46600 5 10 1 1 0 7 1
+refdes=in_kmk
+}
+C 47700 43800 1 0 0 in-1.sym
+{
+T 47700 44100 5 10 0 0 0 0 1
+device=INPUT
+T 47700 44100 5 10 1 1 0 0 1
+refdes=in_geda
+}
+C 47700 44300 1 0 0 in-1.sym
+{
+T 47700 44600 5 10 0 0 0 0 1
+device=INPUT
+T 47700 44600 5 10 1 1 0 0 1
+refdes=in_geda
+}
+C 47300 47400 1 0 0 in.sym
+{
+T 47400 49200 5 8 0 0 0 0 1
+device=INPUT
+T 47400 48000 5 8 0 0 0 0 1
+footprint=none
+T 48000 47500 5 10 1 1 0 7 1
+refdes=in_kmk
+}
+C 48700 47400 1 0 0 resistor-2.sym
+{
+T 49100 47750 5 10 0 0 0 0 1
+device=RESISTOR
+T 48900 47200 5 10 1 1 0 0 1
+refdes=R1
+T 48900 47000 5 10 1 1 0 0 1
+footprint=0805
+}
+C 48800 46500 1 0 0 resistor-2.sym
+{
+T 49200 46850 5 10 0 0 0 0 1
+device=RESISTOR
+T 49000 46300 5 10 1 1 0 0 1
+refdes=R2
+T 49000 46100 5 10 1 1 0 0 1
+footprint=0805
+}
+C 48600 44300 1 0 0 resistor-2.sym
+{
+T 49000 44650 5 10 0 0 0 0 1
+device=RESISTOR
+T 48800 44800 5 10 1 1 0 0 1
+refdes=R3
+T 48800 44600 5 10 1 1 0 0 1
+footprint=0805
+}
+C 48600 43800 1 0 0 resistor-2.sym
+{
+T 49000 44150 5 10 0 0 0 0 1
+device=RESISTOR
+T 48800 43600 5 10 1 1 0 0 1
+refdes=R4
+T 48800 43400 5 10 1 1 0 0 1
+footprint=0805
+}
+N 48600 43900 48300 43900 4
+N 48600 44400 48300 44400 4
+N 48800 46600 48400 46600 4
+N 48700 47500 48400 47500 4
+C 49400 44100 1 0 0 gnd-1.sym
+C 49400 43600 1 0 0 gnd-1.sym
+C 49600 46300 1 0 0 gnd-1.sym
+C 49500 47200 1 0 0 gnd-1.sym

@@ -1,7 +1,7 @@
 # gaf.netlist - gEDA Netlist Extraction and Generation
 # Copyright (C) 1998-2010 Ales Hvezda
 # Copyright (C) 1998-2010 gEDA Contributors (see ChangeLog for details)
-# Copyright (C) 2013-2018 Roland Lutz
+# Copyright (C) 2013-2019 Roland Lutz
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -79,13 +79,21 @@ def postproc_instances(netlist):
                     l = refdes_dict[potential_port.blueprint.refdes] = []
                 l.append(potential_port)
 
+        processed_labels = set()
         for cpin in component.cpins:
+            dest_net = cpin.local_net.net
+            cpin.local_net.cpins.remove(cpin)
+            dest_net.component_pins.remove(cpin)
+
             label = cpin.blueprint.get_attribute('pinlabel', None)
             if label is None:
                 cpin.error(_("pin on composite component is missing a label"))
                 continue
-
-            dest_net = cpin.local_net.net
+            if label in processed_labels:
+                cpin.error(_("duplicate pin for port `%s' "
+                             "on composite component") % label)
+                continue
+            processed_labels.add(label)
 
             # search for the matching port
             ports = [subsheet.components_by_blueprint[port]
@@ -137,10 +145,6 @@ def postproc_instances(netlist):
 
                 port.cpins[0].local_net.cpins.remove(port.cpins[0])
                 dest_net.component_pins.remove(port.cpins[0])
-
-            # After the pin has been connected, remove it.
-            cpin.local_net.cpins.remove(cpin)
-            dest_net.component_pins.remove(cpin)
 
         # After all pins have been connected, remove the component.
         remove_components.add(component)

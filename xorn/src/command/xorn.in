@@ -1,5 +1,5 @@
 #!/usr/bin/env python2
-# Copyright (C) 2013-2018 Roland Lutz
+# Copyright (C) 2013-2019 Roland Lutz
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -112,19 +112,22 @@ def main():
             module = imp.load_module(short_name, *res)
         finally:
             res[0].close()
-    except SystemExit:
+    except SystemExit, KeyboardInterrupt:
         raise
     except:
         sys.stderr.write(_("`%s' failed to load.\n") % short_name)
         sys.stderr.write(_("This is an error.  Please report it to %s\n")
                          % xorn.command.bugreport)
         sys.stderr.write('\n')
-        raise
+
+        import traceback
+        traceback.print_exc()
+        sys.exit(99)
 
     try:
         if 'main' in module.__dict__:
             module.main()
-    except SystemExit:
+    except SystemExit, KeyboardInterrupt:
         raise
     except:
         sys.stderr.write(_("`%s' raised an uncaught exception.\n")
@@ -132,7 +135,10 @@ def main():
         sys.stderr.write(_("This is an error.  Please report it to %s\n")
                          % xorn.command.bugreport)
         sys.stderr.write('\n')
-        raise
+
+        import traceback
+        traceback.print_exc()
+        sys.exit(99)
 
     return
 
