@@ -501,6 +501,12 @@ testdata = \
 	regression/duplicate_pinlabel-symbols/dp-sub.sym \
 	regression/duplicate_pinlabel.sch \
 	regression/duplicate_port-sources/inouttest_sub.sch \
+	regression/duplicate_port-symbols/gnd-1.sym \
+	regression/duplicate_port-symbols/in-1.sym \
+	regression/duplicate_port-symbols/in.sym \
+	regression/duplicate_port-symbols/inouttest.sym \
+	regression/duplicate_port-symbols/resistor-2.sym \
+	regression/duplicate_port-symbols/title-A3-2.sym \
 	regression/duplicate_port.sch \
 	regression/missing_pinseq-symbols/missing_pinseq.sym \
 	regression/missing_pinseq.sch \
