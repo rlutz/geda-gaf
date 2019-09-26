@@ -136,36 +136,50 @@ fam_read (gint fd, GIOCondition condition, gpointer user_data)
   if (fc == NULL)
     return FALSE;
 
-  int ret;
-  while ((ret = FAMPending (fc)) == 1) {
-    FAMEvent fe;
-
-    if (FAMNextEvent (fc, &fe) == -1)
-      g_warning ("FAMNextEvent failed\n");
-    else {
-      struct request *req = fe.userdata;
-
-      if (fe.code == FAMAcknowledge) {
-        g_free (req);
-        continue;
-      }
-
-      if (req->end_exist) {
-        if (req->regular_event != NULL)
-          req->regular_event (fe.filename, fe.code, req->user_data);
-      } else {
-        if (req->exists_event != NULL)
-          req->exists_event (fe.filename, fe.code, req->user_data);
-      }
-
-      if (fe.code == FAMEndExist)
-	req->end_exist = TRUE;
+  do {
+    int ret = FAMPending (fc);
+    if (ret == -1) {
+      g_warning ("FAMPending failed\n");
+      goto error;
     }
-  }
+    if (ret == 0)
+      /* no more events */
+      break;
 
-  if (ret == -1)
-    g_warning ("FAMPending failed\n");
+    FAMEvent fe;
+    if (FAMNextEvent (fc, &fe) == -1) {
+      g_warning ("FAMNextEvent failed (maybe the FAM daemon crashed?)\n");
+      goto error;
+    }
+
+    struct request *req = fe.userdata;
+    if (fe.code == FAMAcknowledge) {
+      g_free (req);
+      continue;
+    }
+
+    if (req->end_exist) {
+      if (req->regular_event != NULL)
+        req->regular_event (fe.filename, fe.code, req->user_data);
+    } else {
+      if (req->exists_event != NULL)
+        req->exists_event (fe.filename, fe.code, req->user_data);
+    }
+
+    if (fe.code == FAMEndExist)
+      req->end_exist = TRUE;
+  } while (TRUE);
 
   return TRUE;
+
+error:
+  if (FAMClose (fc) == -1)
+    g_warning ("FAMClose failed\n");
+
+  g_free (fc);
+  fc = NULL;
+
+  tag = 0;
+  return FALSE;
 }
 #endif
