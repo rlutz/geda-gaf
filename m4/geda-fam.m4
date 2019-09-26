@@ -27,8 +27,10 @@ AC_DEFUN([AX_OPTION_FAM],
 
   # Check what the user wants
   AC_ARG_WITH([libfam],
-    AS_HELP_STRING([--with-libfam[[[=DIR]]]],
-      [use libfam (search in [[DIR]])]),
+[AS_HELP_STRING([--with-libfam@<:@=DIR@:>@],
+               [use libfam/libgamin (search in DIR)])
+AS_HELP_STRING([--without-libfam],
+               [don't use libfam/libgamin])],
     [ if test "X$with_libfam" = "Xno"; then
         libfam_use=no
       else
@@ -38,7 +40,7 @@ AC_DEFUN([AX_OPTION_FAM],
         fi
       fi
       AC_MSG_RESULT([$libfam_use]) ],
-    [ AC_MSG_RESULT([if present])
+    [ AC_MSG_RESULT([yes])
   ])
 
   # Check if libfam is actually available!
@@ -65,12 +67,14 @@ AC_DEFUN([AX_OPTION_FAM],
 
     LIBFAM_LDFLAGS="$LIBFAM_LDFLAGS -lfam"])
 
-    # If --with-libfam was specified, then we *must* have a usable
-    # libfam.
-    if test "X$libfam_use" = "Xyes" -a "X$HAVE_LIBFAM" = "Xno"; then
-      AC_MSG_ERROR([You specified that libfam should be used, but libfam could not
-be found. Ensure that all libfam development files are installed,
-or configure without --with-libfam.])
+    # Only continue without libfam if --without-libfam was specified.
+    if test "X$HAVE_LIBFAM" = "Xno"; then
+      AC_MSG_ERROR([Neither libfam nor libgamin development files could
+be found.  Please ensure that the development files for either library
+are installed.
+
+If you want to continue without File Alteration Monitor support, use
+the configuration option `--without-libfam'.])
     fi
   fi
 
