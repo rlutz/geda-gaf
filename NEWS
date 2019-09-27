@@ -16,40 +16,6 @@ Notable changes in gEDA/gaf 1.9.3 (upcoming)
   libgeda, making the core gEDA/gaf functionality available as a
   library to both gschem and other applications.
 
-* Refactored gnetlist:
-
-  - gnetlist is now part of the Python package "gaf" and uses the new
-    libraries instead of libgeda to work with gEDA files.
-
-  - Netlist backends can now be written in Python.
-
-  - When reading broken schematics and/or symbols, gnetlist doesn't
-    silently fail or produce bad output any more.  Conversely, this
-    means gnetlist has become more picky about input files: whenever
-    it occurs something that is likely to result in bad output, it
-    issues a warning or an error.
-
-  - In case there should be any problems with the refactored codebase,
-    the "old" gnetlist is still available as "gnetlist-legacy".
-
-* There are new semantics for power and I/O port symbols:
-
-  - Power symbols can now use a netname=NET instead of a net=NET:1
-    attribute.  This allows using the attribute value as a visible
-    label, removing the need for individual power symbols.
-
-  - I/O port symbols in subschematics can now use a portname=PORT
-    instead of a refdes=PORT attribute to distinguish them from
-    regular components.  This allows gnetlist to detect if there are
-    any unconnected port symbols left.
-
-* Hierarchical schematics can now use a simple form of parametrization
-  where the instantiating component contains an attribute of the form
-  `param=NAME=VALUE' and some attribute value in the subschematic
-  contains the pattern `$(NAME)', which will be replaced with `VALUE'.
-  This only works with regular attribute lookup from netlist backends
-  and won't affect special attributes like slot= or netname=, though.
-
 * Added command-line tool `xorn' for low-level schematic and symbol
   file manipulation.
 
@@ -165,6 +131,43 @@ gschem changes
 
 * "Edit / Undo" and "Edit / Redo" now show the name of the action that
   will be undone/redone.
+
+gnetlist changes
+----------------
+
+* Refactored gnetlist:
+
+  - gnetlist is now part of the Python package "gaf" and uses the new
+    libraries instead of libgeda to work with gEDA files.
+
+  - Netlist backends can now be written in Python.
+
+  - When reading broken schematics and/or symbols, gnetlist doesn't
+    silently fail or produce bad output any more.  Conversely, this
+    means gnetlist has become more picky about input files: whenever
+    it occurs something that is likely to result in bad output, it
+    issues a warning or an error.
+
+  - In case there should be any problems with the refactored codebase,
+    the "old" gnetlist is still available as "gnetlist-legacy".
+
+* There are new semantics for power and I/O port symbols:
+
+  - Power symbols can now use a netname=NET instead of a net=NET:1
+    attribute.  This allows using the attribute value as a visible
+    label, removing the need for individual power symbols.
+
+  - I/O port symbols in subschematics can now use a portname=PORT
+    instead of a refdes=PORT attribute to distinguish them from
+    regular components.  This allows gnetlist to detect if there are
+    any unconnected port symbols left.
+
+* Hierarchical schematics can now use a simple form of parametrization
+  where the instantiating component contains an attribute of the form
+  `param=NAME=VALUE' and some attribute value in the subschematic
+  contains the pattern `$(NAME)', which will be replaced with `VALUE'.
+  This only works with regular attribute lookup from netlist backends
+  and won't affect special attributes like slot= or netname=, though.
 
 
 Notable changes in gEDA/gaf 1.9.2.1p
