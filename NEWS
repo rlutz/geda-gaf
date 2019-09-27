@@ -10,7 +10,7 @@ more information, please consult the `ChangeLog' file.
 Notable changes in gEDA/gaf 1.9.3 (upcoming)
 ============================================
 
-* Added the library "xornstorage" and Python package "gaf" as a
+* Added the library "xornstorage" and the Python package "gaf" as a
   (currently quite minimal) way to access gEDA/gaf functionality from
   outside of gschem.  These are on the long term intended to replace
   libgeda, making the core gEDA/gaf functionality available as a
@@ -21,6 +21,14 @@ Notable changes in gEDA/gaf 1.9.3 (upcoming)
 
 * Added experimental XML file format (currently only supported by
   gnetlist and the `xorn' command line utility).
+
+* The symbol directories "gnetman", "verilog", and "vhdl" are now
+  installed to the new location PREFIX/share/gEDA/extra-sym/.  This
+  allows adding the default library with "component-library-search".
+
+* The directory to which gEDA programs write log transcripts can be
+  changed by setting the environment variable `GEDALOG' (the default
+  being ~/.gEDA/logs/).
 
 * All tests now use the parallel test harness, speeding up `make
   check' runs considerably when used with multiple jobs (-jN).
@@ -61,6 +69,64 @@ gschem changes
   resemble the "standards" for a desktop application.  Some actions
   have been assigned more accessible or memorable keys.
 
+* Added a command-line option "--control-fd=stdin|FD" which allows
+  remote-controlling gschem via a file descriptor.  This is intended
+  for project managers like Igor2's "genxproj".
+
+* File operations have been consolidated: opening, saving, closing a
+  file and so on should now behave identical regardless of how the
+  operation was initiated.  Related improvements:
+
+  - When opening multiple files, the first one (instead of the last
+    one) is initially shown.
+
+  - The symversion= mismatch dialog is shown whenever a symversion=
+    mismatch is detected while opening a file, not just for files
+    specified on the command line.
+
+  - gschem now keeps track of which files are untitled, listing them
+    as "untitled page" instead of assigning them a temporary filename.
+    The Scheme procedure `page-filename' returns #f for untitled
+    pages.
+
+  - "Save all" used to produce spurious "untitled_1.sch" files.  This
+    was due to three issues working together, which have been fixed:
+
+    - When gschem is invoked without specifying filenames on the
+      command line, an untitled page is created.  This page wasn't
+      removed when opening files, staying invisibly in the background.
+
+    - "Save all" didn't check which files needed saving but just
+      unconditionally saved anything.
+
+    - "Save all" didn't behave like the interactive "Save", asking for
+      a filename for untitled pages, but just saved each page to its
+      internally stored filename.
+
+  - The file chooser dialog on "Open" and "Save As" is now always
+    opened in the current directory.
+
+  - A notification is shown when a file has been modified on disk,
+    offering the user to reload the file.
+
+  - If the user enters a filename with an unusual extension while
+    saving, a confirmation dialog is shown.
+
+  - When trying to open a file or descend into a subschematic which
+    doesn't exist, gschem now offers to create a new file with that
+    name.
+
+* Some improvements have been made to the multi-attribute editor:
+
+  - Editing a single attribute invokes the multi-attribute editor.
+
+  - Trying to edit an inherited attribute edits the attached attribute
+    with the same name if it exists, or promotes the attribute and
+    edits its value if it doesn't exist yet.
+
+  - Attributes are shown in the order in which they are listed in the
+    configuration (via "attribute-name").
+
 * Attaching and detaching attributes now work as expected:
 
   - "Attributes / Attach Attributes" used to depend on the order in
@@ -75,6 +141,21 @@ gschem changes
     It now works on the selected *attributes*, allowing the user to
     selectively detach specific attributes while leaving the rest
     attached.
+
+* "Lock Component" used to lock components as well as non-component
+  objects, bringing the latter into an invalid state that would last
+  until the next "Undo" (or until the page was saved and loaded back
+  from file manually).
+
+  This has been fixed: "Lock Component" and "Unlock Component" now
+  only operate on components, changing the color of attached
+  attributes as they used to do with any selected text.
+
+* The current viewport used to be restored on undo/redo regardless of
+  the "undo-panzoom" setting (which prevents pan and zoom operations
+  from being recorded in the undo history).  This turned out to
+  confuse users, so if the setting is enabled, undo/redo now doesn't
+  change the viewport at all.
 
 * The "Light Color Scheme" (V L) selected from the menu now has a true
   white background.  For compatibility, selecting the "lightbg"
@@ -107,7 +188,9 @@ gschem changes
     Origin" which lets the user select the position of the origin
     interactively.
 
-* Added Igor2's code for back-annotation from pcb-rnd.
+* Added support for back-annotation from pcb-rnd.
+
+* Double-clicking a subschematic component enters the subschematic.
 
 * "File / Revert" only asks for confirmation if the file has been
   modified.
@@ -117,7 +200,24 @@ gschem changes
 
 * Mouse gestures work properly again.
 
+* libstroke has been merged into gEDA/gaf.  This removes the
+  dependency on libstroke and makes mouse gestures always available.
+
+* Added new mouse gestures for page navigation:
+  - swiping left goes to the previous, swiping right to the next page
+  - swiping right and then down enters a subschmatic
+  - swiping left and then down enters a symbol
+  - swiping up and sideways (in any combination) goes back to the
+    parent schematic
+
+* The coordinate dialog has been replaced with an option to display
+  the coordinates in the status bar.
+
 * Added further menu items:
+
+  - "Add / Last Component" (A C)
+
+  - "Object / Toggle Text Overbar" (T O)
 
   - "View / Show Menubar" (V M)
   - "View / Show Toolbar" (V T)
@@ -140,7 +240,7 @@ gnetlist changes
   - gnetlist is now part of the Python package "gaf" and uses the new
     libraries instead of libgeda to work with gEDA files.
 
-  - Netlist backends can now be written in Python.
+  - Netlist backends can also be written in Python.
 
   - When reading broken schematics and/or symbols, gnetlist doesn't
     silently fail or produce bad output any more.  Conversely, this
@@ -155,12 +255,12 @@ gnetlist changes
 
   - Power symbols can now use a netname=NET instead of a net=NET:1
     attribute.  This allows using the attribute value as a visible
-    label, removing the need for individual power symbols.
+    label, removing the need for power symbols for individual rails.
 
   - I/O port symbols in subschematics can now use a portname=PORT
     instead of a refdes=PORT attribute to distinguish them from
-    regular components.  This allows gnetlist to detect if there are
-    any unconnected port symbols left.
+    regular components.  This allows checking that unconnected port
+    symbols aren't silently included in the netlist as components.
 
 * Hierarchical schematics can now use a simple form of parametrization
   where the instantiating component contains an attribute of the form
@@ -168,6 +268,11 @@ gnetlist changes
   contains the pattern `$(NAME)', which will be replaced with `VALUE'.
   This only works with regular attribute lookup from netlist backends
   and won't affect special attributes like slot= or netname=, though.
+
+* The netlisting options "hierarchy-traversal", "net-naming-priority",
+  "unnamed-netname", and "unnamed-busname" are once again configured
+  via gnetlistrc, making them consistent with the refdes=, net=, and
+  netname= mangling options.
 
 
 Notable changes in gEDA/gaf 1.9.2.1p
