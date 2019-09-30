@@ -1178,7 +1178,7 @@ static void o_grips_end_line(GschemToplevel *w_current, OBJECT *o_current,
 {
   TOPLEVEL *toplevel = gschem_toplevel_get_toplevel (w_current);
 
-  /* don't allow zero length nets / lines / pins
+  /* don't allow zero length line
    * this ends the net drawing behavior
    * we want this? hack */
   if ((w_current->first_wx == w_current->second_wx) &&
@@ -1245,8 +1245,8 @@ static void o_grips_end_net(GschemToplevel *w_current, OBJECT *o_current,
  *  pin end.
  *  The connections to the modified pin are checked and recreated if neccessary.
  *
- *  A pin with zero length, i.e. when both ends are identical, is not
- *  allowed. In this case, the process is stopped and the line unchanged.
+ *  \note In contrast to lines, nets, and buses, pins with zero length
+ *        (i.e. when both ends are identical) are allowed.
  *
  *  \param [in] w_current  The GschemToplevel object.
  *  \param [in] o_current  Net OBJECT to end modification on.
@@ -1256,15 +1256,6 @@ static void o_grips_end_pin(GschemToplevel *w_current, OBJECT *o_current,
                             int whichone)
 {
   TOPLEVEL *toplevel = gschem_toplevel_get_toplevel (w_current);
-
-  /* don't allow zero length pin
-   * this ends the pin changing behavior
-   * we want this? hack */
-  if ((w_current->first_wx == w_current->second_wx) &&
-      (w_current->first_wy == w_current->second_wy)) {
-    o_invalidate (w_current, o_current);
-    return;
-  }
 
   s_conn_remove_object_connections (toplevel, o_current);
   o_pin_modify (toplevel, o_current, w_current->second_wx,

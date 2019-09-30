@@ -61,12 +61,6 @@ void o_pin_end(GschemToplevel *w_current, int x, int y)
   /* o_pin_invalidate_rubber (w_current); */
   w_current->rubber_visible = 0;
 
-  /* don't allow zero length pins */
-  if ((w_current->first_wx == w_current->second_wx) &&
-      (w_current->first_wy == w_current->second_wy)) {
-    return;
-  }
-
   new_obj = o_pin_new(toplevel, PIN_COLOR,
                       w_current->first_wx, w_current->first_wy,
                       w_current->second_wx, w_current->second_wy,
