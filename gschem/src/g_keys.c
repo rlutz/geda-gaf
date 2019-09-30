@@ -397,19 +397,22 @@ g_keys_execute(GschemToplevel *w_current, GdkEventKey *event)
   s_retval = g_scm_eval_protected (s_expr, scm_interaction_environment ());
   scm_dynwind_end ();
 
-  /* If the keystroke was not part of a prefix, start a timer to clear
-   * the status bar display. */
-  if (w_current->keyaccel_string_source_id) {
-    /* Cancel any existing timers that haven't fired yet. */
-    GSource *timer =
-      g_main_context_find_source_by_id (NULL,
-                                        w_current->keyaccel_string_source_id);
-    g_source_destroy (timer);
-    w_current->keyaccel_string_source_id = 0;
-  }
-  if (!scm_is_eq (s_retval, prefix_sym)) {
-    w_current->keyaccel_string_source_id =
-      g_timeout_add(400, clear_keyaccel_string, w_current);
+  /* only start timer if window wasn't destroyed during the action */
+  if (g_list_find (global_window_list, w_current) != NULL) {
+    /* If the keystroke was not part of a prefix, start a timer to clear
+     * the status bar display. */
+    if (w_current->keyaccel_string_source_id) {
+      /* Cancel any existing timers that haven't fired yet. */
+      GSource *timer =
+        g_main_context_find_source_by_id (NULL,
+                                          w_current->keyaccel_string_source_id);
+      g_source_destroy (timer);
+      w_current->keyaccel_string_source_id = 0;
+    }
+    if (!scm_is_eq (s_retval, prefix_sym)) {
+      w_current->keyaccel_string_source_id =
+        g_timeout_add(400, clear_keyaccel_string, w_current);
+    }
   }
 
   return !scm_is_false (s_retval);
