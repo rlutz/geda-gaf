@@ -922,14 +922,14 @@ Generate a netlist from one or more gEDA schematic files.
   -q                    quiet mode
   -v, --verbose         verbose mode
   -o FILE               filename for netlist data output
-  -L DIR                add DIR to Scheme search path
-  -g BACKEND            specify Scheme netlist backend to use
+  -L DIR                add DIR to Python and Scheme search path
   -p BACKEND            specify Python netlist backend to use
+  -g BACKEND            specify Scheme netlist backend to use
   -O STRING             pass an option string to backend
   -l FILE               load Scheme file before loading backend
   -m FILE               load Scheme file after loading backend
   -c EXPR               evaluate Scheme expression at startup
-  -i                    enter interactive Scheme REPL after loading
+  -i                    enter interactive Python interpreter after loading
       --report-gui      report warnings and errors in GUI dialog
       --list-backends   print a list of available netlist backends
   -h, --help            help; this message
