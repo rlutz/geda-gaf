@@ -143,8 +143,12 @@ gschem_LDADD = \
 SUFFIXES = .x
 snarf_cpp_opts = $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
 	$(gschem_CPPFLAGS) $(AM_CFLAGS) $(gschem_CFLAGS) $(CPPFLAGS)
+AM_V_SNARF = $(am__v_SNARF_@AM_V@)
+am__v_SNARF_ = $(am__v_SNARF_@AM_DEFAULT_V@)
+am__v_SNARF_0 = @echo "  SNARF   " $@;
+am__v_SNARF_1 =
 .c.x:
-	CPP="$(CPP)" $(GUILE_SNARF) -o $@ $< $(snarf_cpp_opts)
+	$(AM_V_SNARF)CPP="$(CPP)" $(GUILE_SNARF) -o $@ $< $(snarf_cpp_opts)
 
 actions.decl.x: actions.decl.h actions.c Makefile
 	$(AM_V_GEN)$(CPP) -I$(srcdir) -c $< | \

@@ -101,8 +101,12 @@ LIBTOOL=@LIBTOOL@ --silent
 SUFFIXES = .x
 snarf_cpp_opts = $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
 	$(libgeda_la_CPPFLAGS) $(AM_CFLAGS) $(libgeda_la_CFLAGS) $(CPPFLAGS)
+AM_V_SNARF = $(am__v_SNARF_@AM_V@)
+am__v_SNARF_ = $(am__v_SNARF_@AM_DEFAULT_V@)
+am__v_SNARF_0 = @echo "  SNARF   " $@;
+am__v_SNARF_1 =
 .c.x:
-	CPP="$(CPP)" $(GUILE_SNARF) -o $@ $< $(snarf_cpp_opts)
+	$(AM_V_SNARF)CPP="$(CPP)" $(GUILE_SNARF) -o $@ $< $(snarf_cpp_opts)
 
 MOSTLYCLEANFILES = *.log core FILE *~
 CLEANFILES = *.log core FILE *~ $(BUILT_SOURCES)
