@@ -1303,7 +1303,7 @@ create_behaviors_combo_box (void)
   /* Note: order of items in menu is important */
   /* BEHAVIOR_REFERENCE */
   gtk_combo_box_append_text (GTK_COMBO_BOX (combobox),
-                             _("Default behavior - reference symbol"));
+                             _("Reference symbol (default)"));
   /* BEHAVIOR_EMBED */
   gtk_combo_box_append_text (GTK_COMBO_BOX (combobox),
                              _("Embed symbol in schematic"));
