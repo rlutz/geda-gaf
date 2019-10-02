@@ -142,7 +142,7 @@ gschem_LDADD = \
 # in C.
 SUFFIXES = .x
 snarf_cpp_opts = $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
-	$(gschem_CPPFLAGS) $(AM_CFLAGS) $(gschem_CFLAGS)
+	$(gschem_CPPFLAGS) $(AM_CFLAGS) $(gschem_CFLAGS) $(CPPFLAGS)
 .c.x:
 	CPP="$(CPP)" $(GUILE_SNARF) -o $@ $< $(snarf_cpp_opts)
 

@@ -41,7 +41,7 @@ DEFS = -DLOCALEDIR=\"$(localedir)\" @DEFS@
 # This is used to generate boilerplate for defining Scheme functions
 # in C.
 snarf_cpp_opts = $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
-	$(gaf_CPPFLAGS) $(AM_CFLAGS) $(gaf_CFLAGS)
+	$(gaf_CPPFLAGS) $(AM_CFLAGS) $(gaf_CFLAGS) $(CPPFLAGS)
 .c.x:
 	CPP="$(CPP)" $(GUILE_SNARF) -o $@ $< $(snarf_cpp_opts)
 
