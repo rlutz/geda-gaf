@@ -71,7 +71,7 @@ scm_t_bits geda_smob_tag;
  */
 static void
 smob_weakref_notify (void *target, void *smob) {
-  SCM s = (SCM) smob;
+  SCM s = SCM_PACK ((scm_t_bits) smob);
   SCM_SET_SMOB_DATA (s, NULL);
 }
 
@@ -84,7 +84,7 @@ smob_weakref_notify (void *target, void *smob) {
  */
 static void
 smob_weakref2_notify (void *target, void *smob) {
-  SCM s = (SCM) smob;
+  SCM s = SCM_PACK ((scm_t_bits) smob);
   SCM_SET_SMOB_DATA_2 (s, NULL);
 }
 
@@ -107,17 +107,17 @@ smob_free (SCM smob)
   /* Otherwise, clear the weak reference */
   switch (EDASCM_SMOB_TYPE (smob)) {
   case GEDA_SMOB_TOPLEVEL:
-    s_toplevel_weak_unref ((TOPLEVEL *) data, smob_weakref_notify, smob);
+    s_toplevel_weak_unref ((TOPLEVEL *) data, smob_weakref_notify, (void *) SCM_UNPACK (smob));
     break;
   case GEDA_SMOB_PAGE:
-    s_page_weak_unref ((PAGE *) data, smob_weakref_notify, smob);
+    s_page_weak_unref ((PAGE *) data, smob_weakref_notify, (void *) SCM_UNPACK (smob));
     break;
   case GEDA_SMOB_OBJECT:
     /* See edascm_from_object() for an explanation of why OBJECT
      * smobs store a TOPLEVEL in the second data word */
-    s_object_weak_unref ((OBJECT *) data, smob_weakref_notify, smob);
+    s_object_weak_unref ((OBJECT *) data, smob_weakref_notify, (void *) SCM_UNPACK (smob));
     s_toplevel_weak_unref ((TOPLEVEL *) SCM_SMOB_DATA_2 (smob),
-                           smob_weakref2_notify, smob);
+                           smob_weakref2_notify, (void *) SCM_UNPACK (smob));
     break;
   case GEDA_SMOB_CONFIG:
     g_object_unref (G_OBJECT (data));
@@ -253,7 +253,7 @@ edascm_from_toplevel (TOPLEVEL *toplevel)
   SCM_SET_SMOB_FLAGS (smob, GEDA_SMOB_TOPLEVEL);
 
   /* Set weak reference */
-  s_toplevel_weak_ref (toplevel, smob_weakref_notify, smob);
+  s_toplevel_weak_ref (toplevel, smob_weakref_notify, (void *) SCM_UNPACK (smob));
 
   return smob;
 }
@@ -275,7 +275,7 @@ edascm_from_page (PAGE *page)
   SCM_SET_SMOB_FLAGS (smob, GEDA_SMOB_PAGE);
 
   /* Set weak reference */
-  s_page_weak_ref (page, smob_weakref_notify, smob);
+  s_page_weak_ref (page, smob_weakref_notify, (void *) SCM_UNPACK (smob));
 
   return smob;
 }
@@ -333,8 +333,8 @@ edascm_from_object (OBJECT *object)
   SCM_SET_SMOB_FLAGS (smob, GEDA_SMOB_OBJECT);
 
   /* Set weak references */
-  s_object_weak_ref (object, smob_weakref_notify, smob);
-  s_toplevel_weak_ref (toplevel, smob_weakref2_notify, smob);
+  s_object_weak_ref (object, smob_weakref_notify, (void *) SCM_UNPACK (smob));
+  s_toplevel_weak_ref (toplevel, smob_weakref2_notify, (void *) SCM_UNPACK (smob));
 
   return smob;
 }
