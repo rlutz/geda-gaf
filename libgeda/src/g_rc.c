@@ -1010,7 +1010,7 @@ SCM g_rc_always_promote_attributes(SCM attrlist)
     }
     g_strfreev(attr2);
   } else {
-    SCM_ASSERT(scm_list_p(attrlist), attrlist, SCM_ARG1, "always-promote-attributes");
+    SCM_ASSERT(scm_is_true(scm_list_p(attrlist)), attrlist, SCM_ARG1, "always-promote-attributes");
     length = scm_ilength(attrlist);
     /* convert the scm list into a GList */
     for (i=0; i < length; i++) {
