@@ -736,7 +736,7 @@ static void refresh_scm (CLibSource *source)
 
   symlist = scm_call_0 (source->list_fn);
 
-  if (SCM_NCONSP (symlist) && !scm_is_null (symlist)) {
+  if (!scm_is_pair (symlist) && !scm_is_null (symlist)) {
     s_log_message (_("Failed to scan library [%s]: Scheme function returned non-list\n"),
 		   source->name);
     return;
