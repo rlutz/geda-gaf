@@ -1095,7 +1095,7 @@ void x_window_close(GschemToplevel *w_current)
   }
 
   /* Clear Guile smob weak ref */
-  if (w_current->smob != SCM_UNDEFINED) {
+  if (!scm_is_eq (w_current->smob, SCM_UNDEFINED)) {
     SCM_SET_SMOB_DATA (w_current->smob, NULL);
     w_current->smob = SCM_UNDEFINED;
   }

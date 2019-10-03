@@ -83,7 +83,7 @@ SCM g_rc_gschem_version(SCM scm_version)
     GtkWidget *dialog;
 
     rc_filename = g_rc_rc_filename ();
-    if (rc_filename == SCM_BOOL_F)
+    if (scm_is_false (rc_filename))
       rc_filename = scm_from_utf8_string (_("(filename can't be determined)"));
     sourcefile = scm_to_utf8_string (rc_filename);
     scm_dynwind_free (sourcefile);
@@ -1151,7 +1151,7 @@ extern COLOR display_outline_colors[MAX_COLORS];
 
 SCM g_rc_display_color_map (SCM scm_map)
 {
-  if (scm_map == SCM_UNDEFINED) {
+  if (scm_is_eq (scm_map, SCM_UNDEFINED)) {
     return s_color_map_to_scm (display_colors);
   }
 
@@ -1164,7 +1164,7 @@ SCM g_rc_display_color_map (SCM scm_map)
 
 SCM g_rc_display_outline_color_map (SCM scm_map)
 {
-  if (scm_map == SCM_UNDEFINED) {
+  if (scm_is_eq (scm_map, SCM_UNDEFINED)) {
     return s_color_map_to_scm (display_outline_colors);
   }
 

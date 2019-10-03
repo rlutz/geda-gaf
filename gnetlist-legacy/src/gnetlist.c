@@ -76,7 +76,7 @@ gnetlist_backends (TOPLEVEL *pr_current)
   /* Look up the current Guile %load-path */
   s_load_path = scm_variable_ref (scm_c_lookup ("%load-path"));
 
-  for ( ; s_load_path != SCM_EOL; s_load_path = scm_cdr (s_load_path)) {
+  for ( ; !scm_is_null (s_load_path); s_load_path = scm_cdr (s_load_path)) {
     SCM s_dir_name = scm_car (s_load_path);
     char *dir_name;
     DIR *dptr;
