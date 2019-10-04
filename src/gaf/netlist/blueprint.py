@@ -25,6 +25,7 @@
 
 import sys
 from gettext import gettext as _
+import xorn.hybridnum
 import xorn.proxy
 import xorn.storage
 import gaf.attrib
@@ -112,12 +113,7 @@ class Schematic:
 # distance of 100, so most coordinates are multiples of 100.
 
 def format_coord(coord):
-    coord = int(coord)
-    if coord % 100 == 0:
-        return '%d' % (coord / 100, )
-    if coord % 10 == 0:
-        return '%d.%d' % (coord / 100, (coord % 100) / 10)
-    return '%d.%02d' % (coord / 100, coord % 100)
+    return xorn.hybridnum.format(coord, 3)
 
 ## %Component in a single schematic's netlist.
 
