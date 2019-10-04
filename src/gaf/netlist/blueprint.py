@@ -379,7 +379,11 @@ class Pin:
             refdes = '<no refdes>'
         number = self.number
         if number is None:
-            number = '?'
+            try:
+                number = _("%s(raw pinnumber)") % \
+                         self.get_attribute('pinnumber', None)
+            except:
+                number = _("?")
         coords = ''
         if self.component.schematic.netlister_run.show_error_coordinates:
             x, y = self.position()
@@ -394,7 +398,11 @@ class Pin:
             refdes = '<no refdes>'
         number = self.number
         if number is None:
-            number = '?'
+            try:
+                number = _("%s(raw pinnumber)") % \
+                         self.get_attribute('pinnumber', None)
+            except:
+                number = _("?")
         coords = ''
         if self.component.schematic.netlister_run.show_error_coordinates:
             x, y = self.position()
