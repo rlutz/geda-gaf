@@ -251,7 +251,7 @@ OBJECT *o_line_read (TOPLEVEL *toplevel, const char buf[],
                    type, x1, y1, x2, y2, color);
   }
 
-  if (color < 0 || color > MAX_COLORS) {
+  if (color < 0 || color >= MAX_OBJECT_COLORS) {
     s_log_message (_("Found an invalid color [ %s ]\n"), buf);
     s_log_message (_("Setting color to default color\n"));
     color = DEFAULT_COLOR;

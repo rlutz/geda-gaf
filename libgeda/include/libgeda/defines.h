@@ -48,6 +48,8 @@
 
 /* for color mechanism used in gschem */
 #define MAX_COLORS 27
+/* colors usable as object colors */
+#define MAX_OBJECT_COLORS 21
 
 /* X's obsession with *64 */
 #define FULL_CIRCLE 360*64

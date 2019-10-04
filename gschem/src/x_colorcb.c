@@ -70,7 +70,7 @@ create_color_list_store ()
 
   store = gtk_list_store_new (COLUMN_COUNT, G_TYPE_STRING, G_TYPE_INT, GDK_TYPE_COLOR);
 
-  for (color_index = 0; color_index < MAX_COLORS; color_index++) {
+  for (color_index = 0; color_index < MAX_OBJECT_COLORS; color_index++) {
     if (x_color_display_enabled (color_index)) {
       gtk_list_store_append (store, &iter);
 
@@ -117,11 +117,13 @@ get_color_name (int index)
     case FREESTYLE2_COLOR:      return pgettext ("color", "User-defined #2");
     case FREESTYLE3_COLOR:      return pgettext ("color", "User-defined #3");
     case FREESTYLE4_COLOR:      return pgettext ("color", "User-defined #4");
+/*
     case JUNCTION_COLOR:        return pgettext ("color", "Net junction");
     case MESH_GRID_MAJOR_COLOR: return pgettext ("color", "Mesh grid major");
     case MESH_GRID_MINOR_COLOR: return pgettext ("color", "Mesh grid minor");
     case ORIGIN_COLOR:          return pgettext ("color", "Origin marker");
     case PLACE_ORIGIN_COLOR:    return pgettext ("color", "Origin placement");
+*/
     default:
       break;
   }
@@ -232,7 +234,7 @@ x_colorcb_update_store ()
   GtkTreeIter iter;
   gtk_tree_model_get_iter_first (GTK_TREE_MODEL (color_list_store), &iter);
 
-  for (int i = 0; i < MAX_COLORS; i++) {
+  for (int i = 0; i < MAX_OBJECT_COLORS; i++) {
     if (!x_color_display_enabled (i))
       continue;
 
