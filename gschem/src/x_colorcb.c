@@ -113,6 +113,10 @@ get_color_name (int index)
     case LOCK_COLOR:            return pgettext ("color", "Lock");
     case OUTPUT_BACKGROUND_COLOR:
                                 return pgettext ("color", "Output background");
+    case FREESTYLE1_COLOR:      return pgettext ("color", "User-defined #1");
+    case FREESTYLE2_COLOR:      return pgettext ("color", "User-defined #2");
+    case FREESTYLE3_COLOR:      return pgettext ("color", "User-defined #3");
+    case FREESTYLE4_COLOR:      return pgettext ("color", "User-defined #4");
     case JUNCTION_COLOR:        return pgettext ("color", "Net junction");
     case MESH_GRID_MAJOR_COLOR: return pgettext ("color", "Mesh grid major");
     case MESH_GRID_MINOR_COLOR: return pgettext ("color", "Mesh grid minor");
