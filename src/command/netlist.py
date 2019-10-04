@@ -201,6 +201,12 @@ Ignoring errors:
 """))
     sys.stdout.write("\n")
     sys.stdout.write(_("""\
+Reporting errors:
+  --show-error-coordinates
+  --dont-show-error-coordinates             [default]
+"""))
+    sys.stdout.write("\n")
+    sys.stdout.write(_("""\
 Miscellaneous options:
       --list-backends     print a list of available netlist backends
   -h, --help              help; this message
@@ -312,6 +318,7 @@ def main():
     netname_separator = '/'
 
     ignore_errors = False
+    show_error_coordinates = False
 
     list_backends = False
 
@@ -342,6 +349,7 @@ def main():
              'hierarchy-netname-order=',
 
              'ignore-errors', 'dont-ignore-errors',
+             'show-error-coordinates', 'dont-show-error-coordinates',
 
              'list-backends', 'help', 'version'])
     except getopt.GetoptError as e:
@@ -425,6 +433,11 @@ def main():
         elif option == '--dont-ignore-errors':
             ignore_errors = False
 
+        elif option == '--show-error-coordinates':
+            show_error_coordinates = True
+        elif option == '--dont-show-error-coordinates':
+            show_error_coordinates = False
+
         elif option == '--list-backends':
             list_backends = True
         elif option == '-h' or option == '--help':
@@ -466,7 +479,8 @@ def main():
             mangle(basename, sheet, refdes_separator, refdes_order,
                                     netname_separator, netname_order),
         default_net_name = default_net_name,
-        default_bus_name = default_bus_name)
+        default_bus_name = default_bus_name,
+        show_error_coordinates = show_error_coordinates)
 
     if netlist.failed and not ignore_errors:
         # there were errors during netlist creation

@@ -94,15 +94,21 @@ class Schematic:
         sys.stderr.write(_("%s: warning: %s\n") % (self.filename, msg))
 
     def error_object(self, ob, msg):
-        data = ob.data()
-        sys.stderr.write(_("%s:%sx%s: error: %s\n") % (
-            self.filename, format_coord(data.x), format_coord(data.y), msg))
+        coords = ''
+        if self.netlister_run.show_error_coordinates:
+            data = ob.data()
+            coords = _("%sx%s:") % (format_coord(data.x), format_coord(data.y))
+        sys.stderr.write(_("%s:%s error: %s\n") % (
+            self.filename, coords, msg))
         self.netlister_run.failed = True
 
     def warn_object(self, ob, msg):
-        data = ob.data()
-        sys.stderr.write(_("%s:%sx%s: warning: %s\n") % (
-            self.filename, format_coord(data.x), format_coord(data.y), msg))
+        coords = ''
+        if self.netlister_run.show_error_coordinates:
+            data = ob.data()
+            coords = _("%sx%s:") % (format_coord(data.x), format_coord(data.y))
+        sys.stderr.write(_("%s:%s warning: %s\n") % (
+            self.filename, coords, msg))
 
 ## Format an integer coordinate for printing in an error message.
 #
@@ -374,10 +380,12 @@ class Pin:
         number = self.number
         if number is None:
             number = '?'
-        x, y = self.position()
-        sys.stderr.write(_("%s:%s-%s(%sx%s): error: %s\n") % (
-            self.component.schematic.filename, refdes, number,
-            format_coord(x), format_coord(y), msg))
+        coords = ''
+        if self.component.schematic.netlister_run.show_error_coordinates:
+            x, y = self.position()
+            coords = _("(%sx%s)") % (format_coord(x), format_coord(y))
+        sys.stderr.write(_("%s:%s-%s%s: error: %s\n") % (
+            self.component.schematic.filename, refdes, number, coords, msg))
         self.component.schematic.netlister_run.failed = True
 
     def warn(self, msg):
@@ -387,10 +395,12 @@ class Pin:
         number = self.number
         if number is None:
             number = '?'
-        x, y = self.position()
-        sys.stderr.write(_("%s:%s-%s(%sx%s): warning: %s\n") % (
-            self.component.schematic.filename, refdes, number,
-            format_coord(x), format_coord(y), msg))
+        coords = ''
+        if self.component.schematic.netlister_run.show_error_coordinates:
+            x, y = self.position()
+            coords = _("(%sx%s)") % (format_coord(x), format_coord(y))
+        sys.stderr.write(_("%s:%s-%s%s: warning: %s\n") % (
+            self.component.schematic.filename, refdes, number, coords, msg))
 
 ## Visually connected net piece in a single schematic's netlist.
 
