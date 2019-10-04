@@ -47,7 +47,7 @@
 #define PREPEND_VERSION_STRING ""
 
 /* for color mechanism used in gschem */
-#define MAX_COLORS 27
+#define MAX_COLORS 26
 /* colors usable as object colors */
 #define MAX_OBJECT_COLORS 21
 
