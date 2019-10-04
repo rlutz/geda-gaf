@@ -82,7 +82,7 @@ g_scm_from_window (GschemToplevel *w_current)
 {
   g_assert (w_current != NULL);
 
-  if (scm_is_eq (w_current->smob, SCM_UNDEFINED)) {
+  if (SCM_UNBNDP (w_current->smob)) {
     SCM_NEWSMOB (w_current->smob, window_smob_tag, w_current);
     scm_gc_protect_object (w_current->smob);
   }

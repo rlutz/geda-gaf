@@ -54,7 +54,7 @@ value_init_scm (GValue *value) {
 static void
 value_free_scm (GValue *value) {
   SCM val = SCM_PACK (value->data[0].v_long);
-  if (!scm_is_eq (val, SCM_UNDEFINED))
+  if (!SCM_UNBNDP (val))
     scm_gc_unprotect_object (val);
 }
 
@@ -72,7 +72,7 @@ value_free_scm (GValue *value) {
 static void
 value_copy_scm (const GValue *src, GValue *dest) {
   SCM val = SCM_PACK (src->data[0].v_long);
-  if (!scm_is_eq (val, SCM_UNDEFINED)) {
+  if (!SCM_UNBNDP (val)) {
     scm_gc_protect_object (val);
   }
   dest->data[0].v_long = SCM_UNPACK (val);
@@ -113,7 +113,7 @@ value_collect_scm (GValue *value,
 {
   SCM val = SCM_PACK (collect_values[0].v_long);
 
-  if (!scm_is_eq (val, SCM_UNDEFINED)) {
+  if (!SCM_UNBNDP (val)) {
     /* never honour G_VALUE_NOCOPY_CONTENTS for ref-counted types */
     scm_gc_protect_object (val);
     value->data[0].v_long = SCM_UNPACK (val);
@@ -149,7 +149,7 @@ value_lcopy_scm (const GValue *value,
     return g_strdup_printf ("value location for `%s' passed as NULL",
                             G_VALUE_TYPE_NAME (value));
 
-  if (scm_is_eq (val, SCM_UNDEFINED)) {
+  if (SCM_UNBNDP (val)) {
     /* No value */
     *long_p = SCM_UNPACK (SCM_UNDEFINED);
   } else if (collect_flags & G_VALUE_NOCOPY_CONTENTS) {
@@ -230,14 +230,14 @@ edascm_value_set_scm (GValue *value, SCM v_scm)
 
   old = SCM_PACK (value->data[0].v_long);
 
-  if (!scm_is_eq (v_scm, SCM_UNDEFINED)) {
+  if (!SCM_UNBNDP (v_scm)) {
     value->data[0].v_long = SCM_UNPACK (v_scm);
     scm_gc_protect_object (v_scm);
   } else {
     value->data[0].v_long = SCM_UNPACK (SCM_UNDEFINED);
   }
 
-  if (!scm_is_eq (old, SCM_UNDEFINED))
+  if (!SCM_UNBNDP (old))
     scm_gc_unprotect_object (old);
 }
 

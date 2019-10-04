@@ -448,7 +448,7 @@ SCM_DEFINE (set_object_stroke_x, "%set-object-stroke!", 4, 2, 0,
   case TYPE_DASHED:
   case TYPE_CENTER:
   case TYPE_PHANTOM:
-    if (scm_is_eq (length_s, SCM_UNDEFINED)) {
+    if (SCM_UNBNDP (length_s)) {
       scm_misc_error (s_set_object_stroke_x,
                       _("Missing dash length parameter for dash style ~A."),
                       scm_list_1 (length_s));
@@ -458,7 +458,7 @@ SCM_DEFINE (set_object_stroke_x, "%set-object-stroke!", 4, 2, 0,
     length = scm_to_int (length_s);
     /* This case intentionally falls through */
   case TYPE_DOTTED:
-    if (scm_is_eq (space_s, SCM_UNDEFINED)) {
+    if (SCM_UNBNDP (space_s)) {
       scm_misc_error (s_set_object_stroke_x,
                       _("Missing dot/dash space parameter for dash style ~A."),
                       scm_list_1 (space_s));
@@ -577,7 +577,7 @@ SCM_DEFINE (set_object_fill_x, "%set-object-fill!", 2, 5, 0,
 
   switch (type) {
   case FILLING_MESH:
-    if (scm_is_eq (space2_s, SCM_UNDEFINED)) {
+    if (SCM_UNBNDP (space2_s)) {
       scm_misc_error (s_set_object_fill_x,
                       _("Missing second space parameter for fill style ~A."),
                       scm_list_1 (space2_s));
@@ -586,7 +586,7 @@ SCM_DEFINE (set_object_fill_x, "%set-object-fill!", 2, 5, 0,
                 SCM_ARG6, s_set_object_fill_x);
     space2 = scm_to_int (space2_s);
 
-    if (scm_is_eq (angle2_s, SCM_UNDEFINED)) {
+    if (SCM_UNBNDP (angle2_s)) {
       scm_misc_error (s_set_object_fill_x,
                       _("Missing second angle parameter for fill style ~A."),
                       scm_list_1 (angle2_s));
@@ -596,7 +596,7 @@ SCM_DEFINE (set_object_fill_x, "%set-object-fill!", 2, 5, 0,
     angle2 = scm_to_int (angle2_s);
     /* This case intentionally falls through */
   case FILLING_HATCH:
-    if (scm_is_eq (width_s, SCM_UNDEFINED)) {
+    if (SCM_UNBNDP (width_s)) {
       scm_misc_error (s_set_object_fill_x,
                       _("Missing stroke width parameter for fill style ~A."),
                       scm_list_1 (width_s));
@@ -605,7 +605,7 @@ SCM_DEFINE (set_object_fill_x, "%set-object-fill!", 2, 5, 0,
                 SCM_ARG3, s_set_object_fill_x);
     width = scm_to_int (width_s);
 
-    if (scm_is_eq (space1_s, SCM_UNDEFINED)) {
+    if (SCM_UNBNDP (space1_s)) {
       scm_misc_error (s_set_object_fill_x,
                       _("Missing space parameter for fill style ~A."),
                       scm_list_1 (space1_s));
@@ -614,7 +614,7 @@ SCM_DEFINE (set_object_fill_x, "%set-object-fill!", 2, 5, 0,
                 SCM_ARG4, s_set_object_fill_x);
     space1 = scm_to_int (space1_s);
 
-    if (scm_is_eq (angle1_s, SCM_UNDEFINED)) {
+    if (SCM_UNBNDP (angle1_s)) {
       scm_misc_error (s_set_object_fill_x,
                       _("Missing angle parameter for fill style ~A."),
                       scm_list_1 (angle1_s));

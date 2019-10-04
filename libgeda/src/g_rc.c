@@ -186,7 +186,7 @@ g_rc_parse_file (TOPLEVEL *toplevel, const gchar *rcfile,
 
   /* If the fluid for storing the relevant configuration context for
    * RC file reading hasn't been created yet, create it. */
-  if (scm_is_eq (scheme_rc_config_fluid, SCM_UNDEFINED))
+  if (SCM_UNBNDP (scheme_rc_config_fluid))
     scheme_rc_config_fluid = scm_permanent_object (scm_make_fluid ());
 
   /* Normalise filename */
@@ -451,7 +451,7 @@ SCM g_rc_component_library(SCM path, SCM name)
               SCM_ARG1, "component-library");
 
   scm_dynwind_begin (0);
-  if (!scm_is_eq (name, SCM_UNDEFINED)) {
+  if (!SCM_UNBNDP (name)) {
     SCM_ASSERT (scm_is_string (name), name,
 		SCM_ARG2, "component-library");
     namestr = scm_to_utf8_string (name);
@@ -1053,7 +1053,7 @@ SCM g_rc_make_backup_files(SCM mode)
 
 SCM g_rc_print_color_map (SCM scm_map)
 {
-  if (scm_is_eq (scm_map, SCM_UNDEFINED)) {
+  if (SCM_UNBNDP (scm_map)) {
     return s_color_map_to_scm (print_colors);
   }
 

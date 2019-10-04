@@ -1151,7 +1151,7 @@ extern COLOR display_outline_colors[MAX_COLORS];
 
 SCM g_rc_display_color_map (SCM scm_map)
 {
-  if (scm_is_eq (scm_map, SCM_UNDEFINED)) {
+  if (SCM_UNBNDP (scm_map)) {
     return s_color_map_to_scm (display_colors);
   }
 
@@ -1164,7 +1164,7 @@ SCM g_rc_display_color_map (SCM scm_map)
 
 SCM g_rc_display_outline_color_map (SCM scm_map)
 {
-  if (scm_is_eq (scm_map, SCM_UNDEFINED)) {
+  if (SCM_UNBNDP (scm_map)) {
     return s_color_map_to_scm (display_outline_colors);
   }
 
