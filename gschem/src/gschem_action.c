@@ -156,7 +156,7 @@ gschem_action_activate (GschemAction *action,
  *
  * Pointer identity is preserved by storing the SMOB representation of
  * a GschemAction structure in its "smob" member.  This means you can
- * safely compare #<action ...> objects using "eq?".
+ * safely compare #<gschem-action ...> objects using "eq?".
  *
  * A GschemAction structure does not own its "smob" member; on the
  * contrary, a user-defined action may be freed if its SMOB is
@@ -330,15 +330,15 @@ print_action (SCM smob, SCM port, scm_print_state *pstate)
   GschemAction *action = GSCHEM_ACTION (SCM_SMOB_DATA (smob));
 
   if (action->id != NULL) {
-    scm_puts ("#<action ", port);
+    scm_puts ("#<gschem-action ", port);
     scm_puts (action->id, port);
     scm_puts (">", port);
   } else if (action->name != NULL) {
-    scm_puts ("#<action \"", port);
+    scm_puts ("#<gschem-action \"", port);
     scm_puts (action->name, port);
     scm_puts ("\">", port);
   } else
-    scm_puts ("#<action>", port);
+    scm_puts ("#<gschem-action>", port);
 
   scm_remember_upto_here_1 (smob);
   return 1;  /* non-zero means success */
@@ -372,7 +372,7 @@ apply_action (SCM smob)
 void
 gschem_action_init (void)
 {
-  action_tag = scm_make_smob_type ("action", 0);
+  action_tag = scm_make_smob_type ("gschem-action", 0);
   scm_set_smob_mark (action_tag, mark_action);
   scm_set_smob_free (action_tag, free_action);
   scm_set_smob_print (action_tag, print_action);
