@@ -51,4 +51,5 @@ nobase_gafpyexec_PYTHON = \
 	netlist/pp_netattrib.py \
 	netlist/pp_power.py \
 	netlist/pp_slotting.py \
+	netlist/reportgui.py \
 	netlist/slib.py
