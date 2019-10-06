@@ -1416,6 +1416,8 @@ DEFINE_ACTION (edit_lock,
                ACTUATE)
 {
   TOPLEVEL *toplevel = gschem_toplevel_get_toplevel (w_current);
+  gboolean changed = FALSE;
+
   i_update_middle_button (w_current, action, _("Lock"));
   if (!o_select_return_first_object (w_current))
     return;
@@ -1450,16 +1452,21 @@ DEFINE_ACTION (edit_lock,
       attrib->color = LOCK_COLOR;
     }
 
-    /* invalidate all since unselected attributes may have been changed */
-    gschem_page_view_invalidate_all (
-      gschem_toplevel_get_current_page_view (w_current));
-    gschem_toplevel_page_content_changed (w_current, toplevel->page_current);
+    changed = TRUE;
   }
 
   if (!w_current->SHIFTKEY)
     o_select_unselect_all (w_current);
 
-  o_undo_savestate_old (w_current, UNDO_ALL, _("Lock"));
+  if (changed) {
+    gschem_toplevel_page_content_changed (w_current, toplevel->page_current);
+    o_undo_savestate_old (w_current, UNDO_ALL, _("Lock"));
+
+    /* invalidate all since unselected attributes may have been changed */
+    gschem_page_view_invalidate_all (
+      gschem_toplevel_get_current_page_view (w_current));
+  }
+
   i_update_menus (w_current);
 }
 
@@ -1475,6 +1482,8 @@ DEFINE_ACTION (edit_unlock,
                ACTUATE)
 {
   TOPLEVEL *toplevel = gschem_toplevel_get_toplevel (w_current);
+  gboolean changed = FALSE;
+
   i_update_middle_button (w_current, action, _("Unlock"));
   if (!o_select_return_first_object (w_current))
     return;
@@ -1514,13 +1523,18 @@ DEFINE_ACTION (edit_unlock,
       }
     }
 
+    changed = TRUE;
+  }
+
+  if (changed) {
+    gschem_toplevel_page_content_changed (w_current, toplevel->page_current);
+    o_undo_savestate_old (w_current, UNDO_ALL, _("Unlock"));
+
     /* invalidate all since unselected attributes may have been changed */
     gschem_page_view_invalidate_all (
       gschem_toplevel_get_current_page_view (w_current));
-    gschem_toplevel_page_content_changed (w_current, toplevel->page_current);
   }
 
-  o_undo_savestate_old (w_current, UNDO_ALL, _("Unlock"));
   i_update_menus (w_current);
 }
 
