@@ -152,6 +152,7 @@ o_undo_savestate (GschemToplevel *w_current, PAGE *page, int flag,
                                   ((double) abs (geometry->viewport_top - geometry->viewport_bottom) / geometry->screen_height)),
                                 page->page_control,
                                 page->up,
+                                page->CHANGED,
                                 desc);
   } else {
     page->undo_tos = s_undo_add(page->undo_tos,
@@ -161,6 +162,7 @@ o_undo_savestate (GschemToplevel *w_current, PAGE *page, int flag,
                                 0, /* scale */
                                 page->page_control,
                                 page->up,
+                                page->CHANGED,
                                 desc);
   }
 
@@ -404,8 +406,6 @@ o_undo_callback (GschemToplevel *w_current, PAGE *page, int type)
     /* Free the objects in the place list. */
     s_delete_object_glist (toplevel, page->place_list);
     page->place_list = NULL;
-
-    gschem_toplevel_page_content_changed (w_current, page);
   } else if (w_current->undo_type == UNDO_MEMORY && u_current->object_list) {
     /* delete objects of page */
     s_page_delete_objects (toplevel, page);
@@ -413,8 +413,6 @@ o_undo_callback (GschemToplevel *w_current, PAGE *page, int type)
     /* Free the objects in the place list. */
     s_delete_object_glist (toplevel, page->place_list);
     page->place_list = NULL;
-
-    gschem_toplevel_page_content_changed (w_current, page);
   }
 
 
@@ -435,13 +433,18 @@ o_undo_callback (GschemToplevel *w_current, PAGE *page, int type)
 
   page->page_control = u_current->page_control;
   page->up = u_current->up;
+  page->CHANGED = u_current->CHANGED;
 
   /* set filename right */
   g_free(page->page_filename);
   page->page_filename = save_filename;
   page->is_untitled = save_untitled;
 
-  gschem_toplevel_page_content_changed (w_current, page);
+  x_pagesel_update (w_current);
+  if (page == toplevel->page_current)
+    /* change    "Do you want to drop your changes and reload the file?"
+       back into "Do you want to reload it?" */
+    x_window_update_file_change_notification (w_current, page);
 
   GschemPageView *view = gschem_toplevel_get_current_page_view (w_current);
   g_return_if_fail (view != NULL);

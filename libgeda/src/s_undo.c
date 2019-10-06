@@ -86,6 +86,7 @@ UNDO *s_undo_new_head(void)
 
   u_new->page_control = 0;
   u_new->up = -2;
+  u_new->CHANGED = 0;
 
   u_new->desc = NULL;
   u_new->tx = 0;
@@ -114,7 +115,7 @@ void s_undo_destroy_head(UNDO *u_head)
  */
 UNDO *s_undo_add (UNDO *head, int type, char *filename, GList *object_list,
                   int x, int y, double scale, int page_control, int up,
-                  const char *desc)
+                  int CHANGED, const char *desc)
 {
   UNDO *tail;
   UNDO *u_new;
@@ -133,6 +134,7 @@ UNDO *s_undo_add (UNDO *head, int type, char *filename, GList *object_list,
 
   u_new->page_control = page_control;
   u_new->up = up;
+  u_new->CHANGED = CHANGED;
 
   u_new->desc = desc;
   u_new->tx = 0;
