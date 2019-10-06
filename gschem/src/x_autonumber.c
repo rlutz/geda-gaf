@@ -826,6 +826,9 @@ void autonumber_text_autonumber(AUTONUMBER_TEXT *autotext)
   }
   gschem_page_view_invalidate_all (gschem_toplevel_get_current_page_view (w_current));
   g_list_free(pages);
+  /* FIXME: If hierarchy renumbering is enabled, an undo step should be
+   *        added for all pages which were modified.  Also, an undo step
+   *        shouldn't be added if the page wasn't actually modified. */
   o_undo_savestate_old (w_current, UNDO_ALL, _("Autonumber"));
 }
 
