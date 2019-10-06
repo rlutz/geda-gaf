@@ -1513,6 +1513,9 @@ eda_renderer_get_text_user_bounds (EdaRenderer *renderer, OBJECT *object,
                                    double *right, double *bottom)
 {
   PangoRectangle inked_rect, logical_rect;
+  PangoAttrList *attr_list;
+  PangoAttrIterator *attr_iterator;
+  gboolean has_overbars;
 
   /* First check if this is hidden text. */
   if (object->visibility == INVISIBLE
@@ -1534,6 +1537,28 @@ eda_renderer_get_text_user_bounds (EdaRenderer *renderer, OBJECT *object,
    * device coordinates, but we need world coordinates. */
   pango_layout_get_pixel_extents (renderer->priv->pl,
                                   &inked_rect, &logical_rect);
+
+  /* The logic for factoring overbar/strikethrough into the text
+   * extents is hard-coded into Pango, so we need to simulate this
+   * as good as we can here. */
+  attr_list = pango_layout_get_attributes (renderer->priv->pl);
+  attr_iterator = pango_attr_list_get_iterator (attr_list);
+  has_overbars = pango_attr_iterator_next (attr_iterator);
+  pango_attr_iterator_destroy (attr_iterator);
+  if (has_overbars) {
+    /* Since we can't access the values which we'd need for getting
+     * the height exactly right and since the overbar goes up *almost*
+     * to zero, just pretend it does go up to zero. */
+    inked_rect.height += inked_rect.y;
+    inked_rect.y = 0;
+    /* The overbar reaches out beyond the ink dimensions to the left
+     * and right.  Checking whether the left-/rightmost letter is
+     * actually covered by an overbar would be overkill, so just
+     * assume the whole logical width is covered by the overbar. */
+    inked_rect.x = logical_rect.x;
+    inked_rect.width = logical_rect.width;
+  }
+
   *left = (double) inked_rect.x;
   *top = (double) inked_rect.y;
   *right = (double) inked_rect.x + inked_rect.width;
