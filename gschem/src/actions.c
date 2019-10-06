@@ -1054,9 +1054,10 @@ DEFINE_ACTION (attributes_attach,
     g_run_hook_object_list (w_current, "%attach-attribs-hook",
                             attached_objects);
     g_list_free (attached_objects);
+
+    o_undo_savestate_old (w_current, UNDO_ALL, _("Attach Attributes"));
   }
 
-  o_undo_savestate_old (w_current, UNDO_ALL, _("Attach Attributes"));
   i_update_menus (w_current);
 }
 
@@ -1100,9 +1101,10 @@ DEFINE_ACTION (attributes_detach,
     g_run_hook_object_list (w_current, "%detach-attribs-hook",
                             detached_attribs);
     g_list_free (detached_attribs);
+
+    o_undo_savestate_old (w_current, UNDO_ALL, _("Detach Attributes"));
   }
 
-  o_undo_savestate_old (w_current, UNDO_ALL, _("Detach Attributes"));
   i_update_menus (w_current);
 }
 
