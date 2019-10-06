@@ -127,7 +127,6 @@ void o_picture_end(GschemToplevel *w_current, int w_x, int w_y)
  */
 void picture_selection_dialog (GschemToplevel *w_current)
 {
-  TOPLEVEL *toplevel = gschem_toplevel_get_toplevel (w_current);
   gchar *filename;
   GdkPixbuf *pixbuf;
   GError *error = NULL;
@@ -184,7 +183,6 @@ void picture_selection_dialog (GschemToplevel *w_current)
 
       o_picture_set_pixbuf(w_current, pixbuf, filename);
 
-      gschem_toplevel_page_content_changed (w_current, toplevel->page_current);
       i_set_state(w_current, PICTUREMODE);
     }
     g_free (filename);
