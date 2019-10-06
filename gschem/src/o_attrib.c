@@ -372,7 +372,5 @@ OBJECT *o_attrib_add_attrib(GschemToplevel *w_current,
   g_run_hook_object (w_current, "%add-objects-hook", new_obj);
   g_run_hook_object (w_current, "%select-objects-hook", new_obj);
 
-  gschem_toplevel_page_content_changed (w_current, toplevel->page_current);
-
   return new_obj;
 }

@@ -177,8 +177,6 @@ void o_text_change(GschemToplevel *w_current, OBJECT *object, char *string,
       g_ascii_strncasecmp (string, "slot=", 5) == 0) {
     o_slot_end (w_current, object->attached_to, string);
   }
-
-  gschem_toplevel_page_content_changed (w_current, page);
 }
 
 
