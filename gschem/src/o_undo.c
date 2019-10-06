@@ -142,7 +142,11 @@ o_undo_savestate (GschemToplevel *w_current, PAGE *page, int flag,
 
   page->undo_tos = page->undo_current;
 
-  if (geometry != NULL) {
+  /* Don't save a page geometry if this is the root undo node.  The
+   * initial "Zoom to Extents" hasn't been performed yet, and if the
+   * node doesn't specify a page geometry, a "Zoom to Extents" is
+   * performed on undo, which is exactly what we want. */
+  if (geometry != NULL && page->undo_current != NULL) {
     page->undo_tos = s_undo_add(page->undo_tos,
                                 flag, filename, object_list,
                                 (geometry->viewport_left + geometry->viewport_right) / 2,
