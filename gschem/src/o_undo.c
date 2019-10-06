@@ -461,6 +461,8 @@ o_undo_callback (GschemToplevel *w_current, PAGE *page, int type)
                                          u_current->x,
                                          u_current->y,
                                          u_current->scale);
+      g_signal_emit_by_name (view, "update-grid-info");
+      gschem_page_view_update_scroll_adjustments (view);
       gschem_page_view_invalidate_all (view);
     } else {
       gschem_page_view_zoom_extents (view, u_current->object_list);
