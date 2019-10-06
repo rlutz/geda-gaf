@@ -266,6 +266,7 @@ void o_path_start(GschemToplevel *w_current, int x, int y);
 void o_path_continue (GschemToplevel *w_current, int w_x, int w_y);
 void o_path_motion (GschemToplevel *w_current, int w_x, int w_y);
 void o_path_end(GschemToplevel *w_current, int x, int y);
+void o_path_end_path (GschemToplevel *w_current);
 void o_path_invalidate_rubber (GschemToplevel *w_current);
 void o_path_draw_rubber (GschemToplevel *w_current, EdaRenderer *renderer);
 void o_path_invalidate_rubber_grips (GschemToplevel *w_current);

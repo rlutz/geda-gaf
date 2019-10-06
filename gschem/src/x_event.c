@@ -297,7 +297,7 @@ x_event_button_pressed(GschemPageView *page_view, GdkEventButton *event, GschemT
           case (CIRCLEMODE) : o_circle_invalidate_rubber  (w_current); break;
           case (LINEMODE)   : o_line_invalidate_rubber    (w_current); break;
           case (NETMODE)    : o_net_reset                 (w_current); break;
-          case (PATHMODE)   : o_path_invalidate_rubber    (w_current); break;
+          case (PATHMODE)   : o_path_end_path             (w_current); break;
           case (PICTUREMODE): o_picture_invalidate_rubber (w_current); break;
           case (PINMODE)    : o_pin_invalidate_rubber     (w_current); break;
 

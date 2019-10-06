@@ -527,6 +527,31 @@ o_path_end(GschemToplevel *w_current, int w_x, int w_y)
   }
 }
 
+/*! \brief End the input of a path.
+ *
+ * Called on right-click.  Confirms all path segments except for the
+ * current one.  If there is only one path segment, cancels the path.
+ *
+ * \param [in] w_current  The GschemToplevel object.
+ */
+void
+o_path_end_path (GschemToplevel *w_current)
+{
+  PATH *p = w_current->temp_path;
+  PATH_SECTION *prev_section;
+
+  if (p->num_sections < 2) {
+    o_path_invalidate_rubber (w_current);
+    i_action_stop (w_current);
+    return;
+  }
+
+  prev_section = &p->sections[p->num_sections - 1];
+  w_current->first_wx = prev_section->x3;
+  w_current->first_wy = prev_section->y3;
+  o_path_end (w_current, 0, 0);
+}
+
 /*! \brief Draw path creation preview.
  * \par Function Description
  * Draw a preview of the path currently being drawn, including a
