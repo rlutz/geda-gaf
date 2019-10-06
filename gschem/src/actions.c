@@ -1330,17 +1330,20 @@ DEFINE_ACTION (edit_embed,
     /* yes, embed each selected component */
     GList *s_current =
       geda_list_get_glist (toplevel->page_current->selection_list);
+    gboolean changed = FALSE;
 
     while (s_current != NULL) {
       o_current = (OBJECT *) s_current->data;
       g_assert (o_current != NULL);
       if ( (o_current->type == OBJ_COMPLEX) ||
 	   (o_current->type == OBJ_PICTURE) ) {
-        o_embed (toplevel, o_current);
+        if (o_embed (toplevel, o_current))
+          changed = TRUE;
       }
       s_current = g_list_next(s_current);
     }
-    o_undo_savestate_old (w_current, UNDO_ALL, _("Embed"));
+    if (changed)
+      o_undo_savestate_old (w_current, UNDO_ALL, _("Embed"));
   } else {
     /* nothing selected, go back to select state */
     o_redraw_cleanstates(w_current);
@@ -1369,17 +1372,20 @@ DEFINE_ACTION (edit_unembed,
     /* yes, unembed each selected component */
     GList *s_current =
       geda_list_get_glist (toplevel->page_current->selection_list);
+    gboolean changed = FALSE;
 
     while (s_current != NULL) {
       o_current = (OBJECT *) s_current->data;
       g_assert (o_current != NULL);
       if ( (o_current->type == OBJ_COMPLEX) ||
            (o_current->type == OBJ_PICTURE) ) {
-        o_unembed (toplevel, o_current);
+        if (o_unembed (toplevel, o_current))
+          changed = TRUE;
       }
       s_current = g_list_next(s_current);
     }
-    o_undo_savestate_old (w_current, UNDO_ALL, _("Unembed"));
+    if (changed)
+      o_undo_savestate_old (w_current, UNDO_ALL, _("Unembed"));
   } else {
     /* nothing selected, go back to select state */
     o_redraw_cleanstates(w_current);
