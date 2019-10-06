@@ -1046,7 +1046,6 @@ DEFINE_ACTION (attributes_attach,
       continue;
 
     attached_objects = g_list_prepend (attached_objects, obj);
-    toplevel->page_current->CHANGED = 1;
   }
 
   if (attached_objects != NULL) {
@@ -1055,6 +1054,7 @@ DEFINE_ACTION (attributes_attach,
                             attached_objects);
     g_list_free (attached_objects);
 
+    gschem_toplevel_page_content_changed (w_current, toplevel->page_current);
     o_undo_savestate_old (w_current, UNDO_ALL, _("Attach Attributes"));
   }
 
@@ -1092,7 +1092,6 @@ DEFINE_ACTION (attributes_detach,
       obj->attached_to = NULL;
       o_set_color (toplevel, obj, DETACHED_ATTRIBUTE_COLOR);
       detached_attribs = g_list_prepend (detached_attribs, obj);
-      toplevel->page_current->CHANGED = 1;
     }
   }
 
@@ -1102,6 +1101,7 @@ DEFINE_ACTION (attributes_detach,
                             detached_attribs);
     g_list_free (detached_attribs);
 
+    gschem_toplevel_page_content_changed (w_current, toplevel->page_current);
     o_undo_savestate_old (w_current, UNDO_ALL, _("Detach Attributes"));
   }
 
