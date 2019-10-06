@@ -80,9 +80,6 @@ static void
 gschem_page_view_update_vadjustment (GschemPageView *view);
 
 static void
-gschem_page_view_update_scroll_adjustments (GschemPageView *view);
-
-static void
 hadjustment_value_changed (GtkAdjustment *vadjustment, GschemPageView *view);
 
 static void
@@ -1108,7 +1105,7 @@ gschem_page_view_update_hadjustment (GschemPageView *view)
 
 /*! \brief Update the scroll adjustments
  */
-static void
+void
 gschem_page_view_update_scroll_adjustments (GschemPageView *view)
 {
   g_return_if_fail (view != NULL);

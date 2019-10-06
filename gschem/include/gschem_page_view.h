@@ -140,3 +140,6 @@ gschem_page_get_page_object(OBJECT *object);
 
 void
 gschem_page_view_zoom_text (GschemPageView *view, OBJECT *object, gboolean zoom_hidden);
+
+void
+gschem_page_view_update_scroll_adjustments (GschemPageView *view);
