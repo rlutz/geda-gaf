@@ -455,9 +455,7 @@ o_update_component (GschemToplevel *w_current, OBJECT *o_current)
   /* Select new OBJECT */
   o_selection_add (toplevel, page->selection_list, o_new);
 
-  /* mark the page as modified */
-  gschem_toplevel_page_content_changed (w_current, toplevel->page_current);
-  o_undo_savestate_old (w_current, UNDO_ALL, _("Update Symbol"));
+  /* Can't undo this, so there's no point in adding an undo step. */
 
   return o_new;
 }
