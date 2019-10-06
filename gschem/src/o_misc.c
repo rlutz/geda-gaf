@@ -295,6 +295,7 @@ void o_edit_hide_specific_text (GschemToplevel *w_current,
   TOPLEVEL *toplevel = gschem_toplevel_get_toplevel (w_current);
   OBJECT *o_current;
   const GList *iter;
+  gboolean changed = FALSE;
 
   iter = o_list;
   while (iter != NULL) {
@@ -307,13 +308,16 @@ void o_edit_hide_specific_text (GschemToplevel *w_current,
           o_set_visibility (toplevel, o_current, INVISIBLE);
           o_text_recreate(toplevel, o_current);
 
-          gschem_toplevel_page_content_changed (w_current, toplevel->page_current);
+          changed = TRUE;
         }
       }
     }
     iter = g_list_next (iter);
   }
-  o_undo_savestate_old (w_current, UNDO_ALL, _("Hide Specific Text"));
+  if (changed) {
+    gschem_toplevel_page_content_changed (w_current, toplevel->page_current);
+    o_undo_savestate_old (w_current, UNDO_ALL, _("Hide Specific Text"));
+  }
   gschem_page_view_invalidate_all (gschem_toplevel_get_current_page_view (w_current));
 }
 
@@ -329,6 +333,7 @@ void o_edit_show_specific_text (GschemToplevel *w_current,
   TOPLEVEL *toplevel = gschem_toplevel_get_toplevel (w_current);
   OBJECT *o_current;
   const GList *iter;
+  gboolean changed = FALSE;
 
   iter = o_list;
   while (iter != NULL) {
@@ -341,13 +346,16 @@ void o_edit_show_specific_text (GschemToplevel *w_current,
           o_set_visibility (toplevel, o_current, VISIBLE);
           o_text_recreate(toplevel, o_current);
 
-          gschem_toplevel_page_content_changed (w_current, toplevel->page_current);
+          changed = TRUE;
         }
       }
     }
     iter = g_list_next (iter);
   }
-  o_undo_savestate_old (w_current, UNDO_ALL, _("Show Specific Text"));
+  if (changed) {
+    gschem_toplevel_page_content_changed (w_current, toplevel->page_current);
+    o_undo_savestate_old (w_current, UNDO_ALL, _("Show Specific Text"));
+  }
 }
 
 
