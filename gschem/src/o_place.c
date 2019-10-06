@@ -127,10 +127,10 @@ void o_place_end (GschemToplevel *w_current,
   g_list_free (connected_objects);
   connected_objects = NULL;
 
-  gschem_toplevel_page_content_changed (w_current, page);
   o_invalidate_glist (w_current, temp_dest_list); /* only redraw new objects */
   g_list_free (temp_dest_list);
 
+  gschem_toplevel_page_content_changed (w_current, page);
   o_undo_savestate_old (w_current, UNDO_ALL, undo_desc);
   i_update_menus (w_current);
 
