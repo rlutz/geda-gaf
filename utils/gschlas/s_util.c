@@ -59,10 +59,11 @@ s_util_embed(TOPLEVEL *pr_current, int embed_mode)
 
       if (o_current->type == OBJ_COMPLEX ||
                 o_current->type == OBJ_PICTURE) {
-        if (embed_mode == TRUE) {
-          o_embed(pr_current, o_current);
-        } else {
-          o_unembed(pr_current, o_current);
+        if (embed_mode ? o_embed(pr_current, o_current)
+                       : o_unembed(pr_current, o_current)) {
+          PAGE *page = o_get_page (pr_current, o_current);
+          if (page != NULL)
+            page->CHANGED = 1;
         }
       }
 

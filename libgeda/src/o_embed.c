@@ -42,7 +42,6 @@
  */
 gboolean o_embed(TOPLEVEL *toplevel, OBJECT *o_current)
 {
-  PAGE *page = o_get_page (toplevel, o_current);
   gboolean page_modified = FALSE;
 
   /* check o_current is a complex and is not already embedded */
@@ -66,11 +65,6 @@ gboolean o_embed(TOPLEVEL *toplevel, OBJECT *o_current)
     page_modified = TRUE;
   }
 
-  if (page_modified && page != NULL) {
-    /* page content has been modified */
-    page->CHANGED = 1;
-  }
-
   return page_modified;
 }
 
@@ -88,7 +82,6 @@ gboolean o_embed(TOPLEVEL *toplevel, OBJECT *o_current)
 gboolean o_unembed(TOPLEVEL *toplevel, OBJECT *o_current)
 {
   const CLibSymbol *sym;
-  PAGE *page = o_get_page (toplevel, o_current);
   gboolean page_modified = FALSE;
 
   /* check o_current is an embedded complex */
@@ -122,10 +115,6 @@ gboolean o_unembed(TOPLEVEL *toplevel, OBJECT *o_current)
     o_picture_unembed (toplevel, o_current);
 
     page_modified = TRUE;
-  }
-
-  if (page_modified && page != NULL) {
-    page->CHANGED = 1;
   }
 
   return page_modified;

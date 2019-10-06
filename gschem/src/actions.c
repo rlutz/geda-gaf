@@ -1342,8 +1342,10 @@ DEFINE_ACTION (edit_embed,
       }
       s_current = g_list_next(s_current);
     }
-    if (changed)
+    if (changed) {
+      gschem_toplevel_page_content_changed (w_current, toplevel->page_current);
       o_undo_savestate_old (w_current, UNDO_ALL, _("Embed"));
+    }
   } else {
     /* nothing selected, go back to select state */
     o_redraw_cleanstates(w_current);
@@ -1384,8 +1386,10 @@ DEFINE_ACTION (edit_unembed,
       }
       s_current = g_list_next(s_current);
     }
-    if (changed)
+    if (changed) {
+      gschem_toplevel_page_content_changed (w_current, toplevel->page_current);
       o_undo_savestate_old (w_current, UNDO_ALL, _("Unembed"));
+    }
   } else {
     /* nothing selected, go back to select state */
     o_redraw_cleanstates(w_current);
