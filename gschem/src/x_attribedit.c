@@ -142,6 +142,7 @@ void attrib_edit_dialog_ok(GtkWidget * w, GschemToplevel *w_current)
     }
     s_current = geda_list_get_glist( toplevel->page_current->selection_list );
     if (nsel > 1) {
+      gboolean changed = FALSE;
 
       addtoallbutton =
         g_object_get_data (G_OBJECT (w_current->aewindow), "addtoallbutton");
@@ -194,7 +195,7 @@ void attrib_edit_dialog_ok(GtkWidget * w, GschemToplevel *w_current)
                   if (!strncmp (str, newtext, strchr (newtext, '=') - newtext)) {
                     o_text_change(w_current, a_current, newtext, vis, show);
                     replaced = TRUE;
-                    gschem_toplevel_page_content_changed (w_current, toplevel->page_current);
+                    changed = TRUE;
                   }
                 }
                 a_iter = g_list_next (a_iter);
@@ -202,12 +203,17 @@ void attrib_edit_dialog_ok(GtkWidget * w, GschemToplevel *w_current)
             }
             if (!replaced) {
               o_attrib_add_attrib(w_current, newtext, vis, show, object);
+              changed = TRUE;
             }
           }
         }
         s_current = g_list_next (s_current);
       }
-      o_undo_savestate_old (w_current, UNDO_ALL, NULL);
+      if (changed) {
+        gschem_toplevel_page_content_changed (w_current,
+                                              toplevel->page_current);
+        o_undo_savestate_old (w_current, UNDO_ALL, NULL);
+      }
       /* shouldn't be reached */
     } else {
       object = o_select_return_first_object(w_current);
