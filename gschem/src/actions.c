@@ -1321,6 +1321,7 @@ DEFINE_ACTION (edit_embed,
                NULL,
                ACTUATE)
 {
+  TOPLEVEL *toplevel = gschem_toplevel_get_toplevel (w_current);
   OBJECT *o_current;
 
   i_update_middle_button (w_current, action, _("Embed"));
@@ -1328,14 +1329,14 @@ DEFINE_ACTION (edit_embed,
   if (o_select_selected(w_current)) {
     /* yes, embed each selected component */
     GList *s_current =
-      geda_list_get_glist( gschem_toplevel_get_toplevel (w_current)->page_current->selection_list );
+      geda_list_get_glist (toplevel->page_current->selection_list);
 
     while (s_current != NULL) {
       o_current = (OBJECT *) s_current->data;
       g_assert (o_current != NULL);
       if ( (o_current->type == OBJ_COMPLEX) ||
 	   (o_current->type == OBJ_PICTURE) ) {
-        o_embed (gschem_toplevel_get_toplevel (w_current), o_current);
+        o_embed (toplevel, o_current);
       }
       s_current = g_list_next(s_current);
     }
@@ -1359,6 +1360,7 @@ DEFINE_ACTION (edit_unembed,
                NULL,
                ACTUATE)
 {
+  TOPLEVEL *toplevel = gschem_toplevel_get_toplevel (w_current);
   OBJECT *o_current;
 
   i_update_middle_button (w_current, action, _("Unembed"));
@@ -1366,14 +1368,14 @@ DEFINE_ACTION (edit_unembed,
   if (o_select_selected(w_current)) {
     /* yes, unembed each selected component */
     GList *s_current =
-      geda_list_get_glist( gschem_toplevel_get_toplevel (w_current)->page_current->selection_list );
+      geda_list_get_glist (toplevel->page_current->selection_list);
 
     while (s_current != NULL) {
       o_current = (OBJECT *) s_current->data;
       g_assert (o_current != NULL);
       if ( (o_current->type == OBJ_COMPLEX) ||
            (o_current->type == OBJ_PICTURE) ) {
-        o_unembed (gschem_toplevel_get_toplevel (w_current), o_current);
+        o_unembed (toplevel, o_current);
       }
       s_current = g_list_next(s_current);
     }
