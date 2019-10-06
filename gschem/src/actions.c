@@ -1128,16 +1128,22 @@ DEFINE_ACTION (attributes_show_value,
   if (o_select_selected (w_current)) {
     SELECTION *selection = toplevel->page_current->selection_list;
     GList *s_current;
+    gboolean changed = FALSE;
 
     for (s_current = geda_list_get_glist (selection);
          s_current != NULL;
          s_current = g_list_next (s_current)) {
       OBJECT *object = (OBJECT*)s_current->data;
-      if (object->type == OBJ_TEXT)
+      if (object->type == OBJ_TEXT) {
         o_attrib_toggle_show_name_value (w_current, object, SHOW_VALUE);
+        changed = TRUE;
+      }
     }
 
-    o_undo_savestate_old (w_current, UNDO_ALL, _("Show Value"));
+    if (changed) {
+      gschem_toplevel_page_content_changed (w_current, toplevel->page_current);
+      o_undo_savestate_old (w_current, UNDO_ALL, _("Show Value"));
+    }
   }
 }
 
@@ -1163,16 +1169,22 @@ DEFINE_ACTION (attributes_show_name,
   if (o_select_selected (w_current)) {
     SELECTION *selection = toplevel->page_current->selection_list;
     GList *s_current;
+    gboolean changed = FALSE;
 
     for (s_current = geda_list_get_glist (selection);
          s_current != NULL;
          s_current = g_list_next (s_current)) {
       OBJECT *object = (OBJECT*)s_current->data;
-      if (object->type == OBJ_TEXT)
+      if (object->type == OBJ_TEXT) {
         o_attrib_toggle_show_name_value (w_current, object, SHOW_NAME);
+        changed = TRUE;
+      }
     }
 
-    o_undo_savestate_old (w_current, UNDO_ALL, _("Show Name"));
+    if (changed) {
+      gschem_toplevel_page_content_changed (w_current, toplevel->page_current);
+      o_undo_savestate_old (w_current, UNDO_ALL, _("Show Name"));
+    }
   }
 }
 
@@ -1198,16 +1210,22 @@ DEFINE_ACTION (attributes_show_both,
   if (o_select_selected (w_current)) {
     SELECTION *selection = toplevel->page_current->selection_list;
     GList *s_current;
+    gboolean changed = FALSE;
 
     for (s_current = geda_list_get_glist (selection);
          s_current != NULL;
          s_current = g_list_next (s_current)) {
       OBJECT *object = (OBJECT*)s_current->data;
-      if (object->type == OBJ_TEXT)
+      if (object->type == OBJ_TEXT) {
         o_attrib_toggle_show_name_value (w_current, object, SHOW_NAME_VALUE);
+        changed = TRUE;
+      }
     }
 
-    o_undo_savestate_old (w_current, UNDO_ALL, _("Show Name & Value"));
+    if (changed) {
+      gschem_toplevel_page_content_changed (w_current, toplevel->page_current);
+      o_undo_savestate_old (w_current, UNDO_ALL, _("Show Name & Value"));
+    }
   }
 }
 
@@ -1233,16 +1251,22 @@ DEFINE_ACTION (attributes_visibility_toggle,
   if (o_select_selected (w_current)) {
     SELECTION *selection = toplevel->page_current->selection_list;
     GList *s_current;
+    gboolean changed = FALSE;
 
     for (s_current = geda_list_get_glist (selection);
          s_current != NULL;
          s_current = g_list_next (s_current)) {
       OBJECT *object = (OBJECT*)s_current->data;
-      if (object->type == OBJ_TEXT)
+      if (object->type == OBJ_TEXT) {
         o_attrib_toggle_visibility (w_current, object);
+        changed = TRUE;
+      }
     }
 
-    o_undo_savestate_old (w_current, UNDO_ALL, _("Toggle Visibility"));
+    if (changed) {
+      gschem_toplevel_page_content_changed (w_current, toplevel->page_current);
+      o_undo_savestate_old (w_current, UNDO_ALL, _("Toggle Visibility"));
+    }
   }
 }
 

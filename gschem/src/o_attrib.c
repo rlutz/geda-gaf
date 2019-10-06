@@ -185,8 +185,6 @@ void o_attrib_toggle_visibility(GschemToplevel *w_current, OBJECT *object)
     o_set_visibility (toplevel, object, VISIBLE);
     o_text_recreate(toplevel, object);
   }
-
-  gschem_toplevel_page_content_changed (w_current, toplevel->page_current);
 }
 
 /*! \brief Set what part of an attribute is shown.
@@ -209,8 +207,6 @@ void o_attrib_toggle_show_name_value(GschemToplevel *w_current,
   o_invalidate (w_current, object);
   object->show_name_value = show_name_value;
   o_text_recreate(toplevel, object);
-
-  gschem_toplevel_page_content_changed (w_current, toplevel->page_current);
 }
 
 
