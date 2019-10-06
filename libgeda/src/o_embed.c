@@ -37,11 +37,13 @@
  *
  *  \param toplevel  The TOPLEVEL object
  *  \param o_current The OBJECT to embed
+ *
+ *  \returns whether the function was successful
  */
-void o_embed(TOPLEVEL *toplevel, OBJECT *o_current)
+gboolean o_embed(TOPLEVEL *toplevel, OBJECT *o_current)
 {
   PAGE *page = o_get_page (toplevel, o_current);
-  int page_modified = 0;
+  gboolean page_modified = FALSE;
 
   /* check o_current is a complex and is not already embedded */
   if (o_current->type == OBJ_COMPLEX &&
@@ -53,7 +55,7 @@ void o_embed(TOPLEVEL *toplevel, OBJECT *o_current)
 
     s_log_message (_("Component [%s] has been embedded\n"),
                    o_current->complex_basename);
-    page_modified = 1;
+    page_modified = TRUE;
   }
 
   /* If it's a picture and it's not embedded */
@@ -61,13 +63,15 @@ void o_embed(TOPLEVEL *toplevel, OBJECT *o_current)
        !o_picture_is_embedded (o_current) ) {
     o_picture_embed (toplevel, o_current);
 
-    page_modified = 1;
+    page_modified = TRUE;
   }
 
   if (page_modified && page != NULL) {
     /* page content has been modified */
     page->CHANGED = 1;
   }
+
+  return page_modified;
 }
 
 /*! \brief unembed an object from a schematic
@@ -78,12 +82,14 @@ void o_embed(TOPLEVEL *toplevel, OBJECT *o_current)
  *
  *  \param toplevel  The TOPLEVEL object
  *  \param o_current The OBJECT to unembed
+ *
+ *  \returns whether the function was successful
  */
-void o_unembed(TOPLEVEL *toplevel, OBJECT *o_current)
+gboolean o_unembed(TOPLEVEL *toplevel, OBJECT *o_current)
 {
   const CLibSymbol *sym;
   PAGE *page = o_get_page (toplevel, o_current);
-  int page_modified = 0;
+  gboolean page_modified = FALSE;
 
   /* check o_current is an embedded complex */
   if (o_current->type == OBJ_COMPLEX &&
@@ -106,7 +112,7 @@ void o_unembed(TOPLEVEL *toplevel, OBJECT *o_current)
       s_log_message (_("Component [%s] has been successfully unembedded\n"),
                      o_current->complex_basename);
 
-      page_modified = 1;
+      page_modified = TRUE;
     }
   }
 
@@ -115,10 +121,12 @@ void o_unembed(TOPLEVEL *toplevel, OBJECT *o_current)
        o_picture_is_embedded (o_current)) {
     o_picture_unembed (toplevel, o_current);
 
-    page_modified = 1;
+    page_modified = TRUE;
   }
 
   if (page_modified && page != NULL) {
     page->CHANGED = 1;
   }
+
+  return page_modified;
 }
