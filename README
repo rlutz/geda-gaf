@@ -103,10 +103,10 @@ The following tools and libraries are *highly recommended*:
  - The freedesktop.org utilities for manipulating .desktop files.
    <http://www.freedesktop.org/software/desktop-file-utils>
 
- - The `libfam' or `libgamin' client library to interface the File
-   Alteration Monitor daemon.  If this is available, gschem will
-   detect if files have been changed on disk by another application.
-   <http://oss.sgi.com/projects/fam/>
+ - The FAM or Gamin daemon and corresponding `libfam' or `libgamin'
+   client library (Gamin is recommended).  If this is available,
+   gschem will detect if files have been changed on disk by another
+   application.  <https://people.gnome.org/~veillard/gamin/>
 
 The following tools and libraries are optional:
 
