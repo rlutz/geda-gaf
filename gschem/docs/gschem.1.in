@@ -3,19 +3,20 @@
 gschem - gEDA/gaf Schematic Capture
 .SH SYNOPSIS
 .B gschem
-[\fIOPTION\fR ...] [\fI--\fR] [\fIFILE\fR ...]
+[\fIOPTION\fR...] [--] [\fIFILE\fR...]
 .SH DESCRIPTION
 .PP
 .B gschem
-is a schematic capture application, and is part of the
+is a schematic capture application and is part of the
 gEDA (GPL Electronic Design Automation) toolset.  It is used to draw
-electronic schematics, which describe the logical structure of an
-circuit.  Schematics are made up of symbols, which represent the
-various components in the circuit, and are obtained either from a
+electronic schematics which describe the logical structure of a
+circuit.  Schematics are made up of symbols which represent the
+various components in the circuit and are obtained either from a
 standard library or created by the user.  The connections between
-components represented by nets (wires).  Schematics may be printed to
-a PostScript file for printing or further conversion to other output
-formats.  Output to various image formats is also supported.
+components represented by nets (wires).  Schematics may be exported
+to PDF and PostScript files for printing or to other output formats
+for further conversion.  Output to various image formats is also
+supported.
 
 .B gschem
 can also be used for editing symbols for use in
