@@ -46,7 +46,7 @@ struct _GschemChangeNotification {
   GschemToplevel *w_current;
   PAGE *page;
 
-  const gchar *path;
+  gchar *path;
   gpointer fam_handle;
   gboolean has_known_mtime, has_current_mtime;
   struct timespec known_mtime, current_mtime;
