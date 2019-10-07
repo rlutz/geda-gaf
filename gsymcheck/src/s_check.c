@@ -780,7 +780,7 @@ s_check_slotdef (const GList *obj_list, SYMCHECK *s_current)
   int slot;
   int i,j;
   char *message;
-  char tempstr1[10];
+  char tempstr1[11];
   /*  pinlist will store the pin definitions for each slot */
   /* example: pinlist[0] = 3,2,8,4,1 ; pinlist[1] = 5,6,8,4,7 */
   char** pinlist = NULL;
