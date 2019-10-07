@@ -1,3 +1,38 @@
+October 2019
+============
+
+- A new gnetlist command-line option `--report-gui' has been added
+  which shows errors and warnings in a GUI dialog
+
+- Netlister error and warning messages now only contain coordinates if
+  this has been requested
+
+- The number of allowed colors has been changed to 21
+
+
+September 2019
+==============
+
+- Duplicate I/O ports in a subschematic as well as duplicate I/O pins
+  in a subschematic symbol are now treated correctly
+
+- The python package `gaf' accepts the same kind of whitespace in
+  symbol and schematic files as libgeda does
+
+- The number of fixed places in error message and XML file format
+  coordinates has been changed to 3 in order to match the concept of
+  gEDA/gaf units being "mils" (which isn't necessarily correct but may
+  help avoid confusion)
+
+
+July 2019
+=========
+
+- The command-line tool `xorn' returns exit status 99 on an internal
+  error and doesn't print error-reporting information any more when
+  interrupted with Ctrl+C
+
+
 September 2018
 ==============
 
