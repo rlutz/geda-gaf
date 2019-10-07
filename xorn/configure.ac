@@ -40,7 +40,11 @@ AC_MSG_CHECKING([where to look for gEDA shared data])
 gedadatadir="$GEDADATADIR"
 AC_MSG_RESULT([$gedadatadir])
 AS_IF([test "x$gedadatadir" = "x"],
-      [AC_MSG_ERROR([No gEDA shared data location given])])
+      [AC_MSG_ERROR([No gEDA shared data location given
+
+==> This sometimes happens when the configuration scripts aren't run in
+    the correct order.  Re-running `configure' should solve the issue.
+])])
 AC_SUBST([gedadatadir])
 
 # use location passed by main configure script
