@@ -99,6 +99,10 @@ specifies where the various required scheme and rc files are located
 (the default is ${prefix}/share/gEDA).  This environment variables does
 not need to be set by the end user unless they are moving the executables
 to a new install ${prefix}.
+.TP 8
+.B GEDALOG
+specifies the directory to which to write log files.  The default is
+`~/.gEDA/logs'.
 
 .SH "AUTHOR"
 Ales Hvezda and many others

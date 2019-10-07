@@ -83,6 +83,10 @@ is `${prefix}/share/gEDA'.
 .TP 8
 .B GEDADATARC
 specifies the search directory for rc files.  The default is `$GEDADATA'.
+.TP 8
+.B GEDALOG
+specifies the directory to which to write log files.  The default is
+`~/.gEDA/logs'.
 
 .SH AUTHORS
 See the `AUTHORS' file included with this program.
