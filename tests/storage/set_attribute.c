@@ -157,31 +157,31 @@ int main(void)
 	rev4 = xorn_new_revision(rev3);
 	assert(rev4 != NULL);
 
-	assert(xornsch_set_color(rev4, sel0, 20, NULL) == 0);
+	assert(xornsch_set_color(rev4, sel0, 17, NULL) == 0);
 	assert_color(rev4, ob0, true, 4);
 	assert_color(rev4, ob1a, false, 0);
 	assert_color(rev4, ob1b, true, 3);
 
-	assert(xornsch_set_color(rev4, sel1, 21, NULL) == 0);
-	assert_color(rev4, ob0, true, 21);
+	assert(xornsch_set_color(rev4, sel1, 18, NULL) == 0);
+	assert_color(rev4, ob0, true, 18);
 	assert_color(rev4, ob1a, false, 0);
 	assert_color(rev4, ob1b, true, 3);
 
-	assert(xornsch_set_color(rev4, sel2, 22, NULL) == 0);
-	assert_color(rev4, ob0, true, 22);
+	assert(xornsch_set_color(rev4, sel2, 19, NULL) == 0);
+	assert_color(rev4, ob0, true, 19);
 	assert_color(rev4, ob1a, false, 0);
-	assert_color(rev4, ob1b, true, 22);
+	assert_color(rev4, ob1b, true, 19);
 
-	assert(xornsch_set_color(rev4, sel3, 23, NULL) == 0);
-	assert_color(rev4, ob0, true, 23);
+	assert(xornsch_set_color(rev4, sel3, 20, NULL) == 0);
+	assert_color(rev4, ob0, true, 20);
 	assert_color(rev4, ob1a, false, 0);
-	assert_color(rev4, ob1b, true, 23);
+	assert_color(rev4, ob1b, true, 20);
 
-	assert(xornsch_set_color(rev4, sel3, 24, NULL) == 0);
+	assert(xornsch_set_color(rev4, sel3, 21, NULL) == 0);
 	/* I'd prefer to have this raise an error */
-	assert_color(rev4, ob0, true, 23);
+	assert_color(rev4, ob0, true, 20);
 	assert_color(rev4, ob1a, false, 0);
-	assert_color(rev4, ob1b, true, 23);
+	assert_color(rev4, ob1b, true, 20);
 
 	assert(xornsch_set_line_width(rev4, sel0, 8.0, NULL) == 0);
 	assert_line_width(rev4, ob0, false, 0.);
