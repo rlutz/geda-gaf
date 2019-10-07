@@ -30,7 +30,7 @@ integrate them, please try to follow the following guidelines:
     *offensively ugly*) then please do so as a separate patch.
 
   - Ensure that each of your patches applies cleanly against the
-    `master' branch of the gaf main git repository.
+    `master' branch of the geda-gaf main git repository.
 
   - Please format your patches with `git format-patch' [2], and ensure
     that they contain good commit messages.  The commit messages
