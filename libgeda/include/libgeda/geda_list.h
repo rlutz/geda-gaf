@@ -2,6 +2,7 @@
  * libgeda - gEDA's library
  * Copyright (C) 1998-2010 Ales Hvezda
  * Copyright (C) 2007-2010 Peter Clifton
+ * Copyright (C) 1998-2019 gEDA Contributors (see ChangeLog for details)
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
