@@ -150,10 +150,10 @@ First extract the archive to a sensible place:
 
   tar -xzvf gEDA-gaf-<version>.tar.gz && cd gEDA-gaf-<version>
 
-Run the configuration script.  You'll probably want to specify a
-custom directory to install gEDA to, for example:
+Run the configuration script.  You'll probably want to specify silent
+rules and a custom directory to install gEDA to, for example:
 
-  ./configure --prefix=$HOME/geda
+  ./configure --prefix=$HOME/geda --enable-silent-rules
 
 You can then compile gEDA:
 
