@@ -207,8 +207,8 @@ static void check_arc(void)
 	memset(&data, 0, sizeof data);
 	data.color = -1;		test(xornsch_obtype_arc, &data, 1);
 	data.color = 0;			test(xornsch_obtype_arc, &data, 0);
-	data.color = 23;		test(xornsch_obtype_arc, &data, 0);
-	data.color = 24;		test(xornsch_obtype_arc, &data, 1);
+	data.color = 20;		test(xornsch_obtype_arc, &data, 0);
+	data.color = 21;		test(xornsch_obtype_arc, &data, 1);
 
 	check_line_attr(xornsch_obtype_arc,
 			offsetof(struct xornsch_arc, line),
@@ -246,8 +246,8 @@ static void check_box(void)
 	memset(&data, 0, sizeof data);
 	data.color = -1;		test(xornsch_obtype_box, &data, 1);
 	data.color = 0;			test(xornsch_obtype_box, &data, 0);
-	data.color = 23;		test(xornsch_obtype_box, &data, 0);
-	data.color = 24;		test(xornsch_obtype_box, &data, 1);
+	data.color = 20;		test(xornsch_obtype_box, &data, 0);
+	data.color = 21;		test(xornsch_obtype_box, &data, 1);
 
 	check_line_attr(xornsch_obtype_box,
 			offsetof(struct xornsch_box, line),
@@ -283,8 +283,8 @@ static void check_circle(void)
 	memset(&data, 0, sizeof data);
 	data.color = -1;		test(xornsch_obtype_circle, &data, 1);
 	data.color = 0;			test(xornsch_obtype_circle, &data, 0);
-	data.color = 23;		test(xornsch_obtype_circle, &data, 0);
-	data.color = 24;		test(xornsch_obtype_circle, &data, 1);
+	data.color = 20;		test(xornsch_obtype_circle, &data, 0);
+	data.color = 21;		test(xornsch_obtype_circle, &data, 1);
 
 	check_line_attr(xornsch_obtype_circle,
 			offsetof(struct xornsch_circle, line),
@@ -350,8 +350,8 @@ static void check_line(void)
 	memset(&data, 0, sizeof data);
 	data.color = -1;		test(xornsch_obtype_line, &data, 1);
 	data.color = 0;			test(xornsch_obtype_line, &data, 0);
-	data.color = 23;		test(xornsch_obtype_line, &data, 0);
-	data.color = 24;		test(xornsch_obtype_line, &data, 1);
+	data.color = 20;		test(xornsch_obtype_line, &data, 0);
+	data.color = 21;		test(xornsch_obtype_line, &data, 1);
 
 	check_line_attr(xornsch_obtype_line,
 			offsetof(struct xornsch_line, line),
@@ -389,8 +389,8 @@ static void check_net(void)
 	memset(&data, 0, sizeof data);
 	data.color = -1;		test(xornsch_obtype_net, &data, 1);
 	data.color = 0;			test(xornsch_obtype_net, &data, 0);
-	data.color = 23;		test(xornsch_obtype_net, &data, 0);
-	data.color = 24;		test(xornsch_obtype_net, &data, 1);
+	data.color = 20;		test(xornsch_obtype_net, &data, 0);
+	data.color = 21;		test(xornsch_obtype_net, &data, 1);
 
 	memset(&data, 0, sizeof data);
 	data.is_inverted = false;	test(xornsch_obtype_net, &data, 0);
@@ -407,8 +407,8 @@ static void check_path(void)
 	memset(&data, 0, sizeof data);
 	data.color = -1;		test(xornsch_obtype_path, &data, 1);
 	data.color = 0;			test(xornsch_obtype_path, &data, 0);
-	data.color = 23;		test(xornsch_obtype_path, &data, 0);
-	data.color = 24;		test(xornsch_obtype_path, &data, 1);
+	data.color = 20;		test(xornsch_obtype_path, &data, 0);
+	data.color = 21;		test(xornsch_obtype_path, &data, 1);
 
 	check_line_attr(xornsch_obtype_path,
 			offsetof(struct xornsch_path, line),
@@ -474,8 +474,8 @@ static void check_text(void)
 	memset(&data, 0, sizeof data);
 	data.color = -1;		test(xornsch_obtype_text, &data, 1);
 	data.color = 0;			test(xornsch_obtype_text, &data, 0);
-	data.color = 23;		test(xornsch_obtype_text, &data, 0);
-	data.color = 24;		test(xornsch_obtype_text, &data, 1);
+	data.color = 20;		test(xornsch_obtype_text, &data, 0);
+	data.color = 21;		test(xornsch_obtype_text, &data, 1);
 
 	memset(&data, 0, sizeof data);
 	data.text_size = -1;		test(xornsch_obtype_text, &data, 1);

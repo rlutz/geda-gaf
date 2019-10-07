@@ -71,7 +71,7 @@ bool data_is_valid(xorn_obtype_t type, void const *data)
 		return double_is_valid(d.pos.x)
 		    && double_is_valid(d.pos.y)
 		    && double_is_valid_nonnegative(d.radius)
-		    && d.color >= 0 && d.color < 24
+		    && d.color >= 0 && d.color < 21
 		    && line_is_valid(d.line);
 	}
 	case xornsch_obtype_box: {
@@ -80,7 +80,7 @@ bool data_is_valid(xorn_obtype_t type, void const *data)
 		    && double_is_valid(d.pos.y)
 		    && double_is_valid(d.size.x)
 		    && double_is_valid(d.size.y)
-		    && d.color >= 0 && d.color < 24
+		    && d.color >= 0 && d.color < 21
 		    && line_is_valid(d.line)
 		    && fill_is_valid(d.fill);
 	}
@@ -89,7 +89,7 @@ bool data_is_valid(xorn_obtype_t type, void const *data)
 		return double_is_valid(d.pos.x)
 		    && double_is_valid(d.pos.y)
 		    && double_is_valid_nonnegative(d.radius)
-		    && d.color >= 0 && d.color < 24
+		    && d.color >= 0 && d.color < 21
 		    && line_is_valid(d.line)
 		    && fill_is_valid(d.fill);
 	}
@@ -107,7 +107,7 @@ bool data_is_valid(xorn_obtype_t type, void const *data)
 		    && double_is_valid(d.pos.y)
 		    && double_is_valid(d.size.x)
 		    && double_is_valid(d.size.y)
-		    && d.color >= 0 && d.color < 24
+		    && d.color >= 0 && d.color < 21
 		    && line_is_valid(d.line);
 	}
 	case xornsch_obtype_net: {
@@ -116,7 +116,7 @@ bool data_is_valid(xorn_obtype_t type, void const *data)
 		    && double_is_valid(d.pos.y)
 		    && double_is_valid(d.size.x)
 		    && double_is_valid(d.size.y)
-		    && d.color >= 0 && d.color < 24
+		    && d.color >= 0 && d.color < 21
 		    && bool_is_valid(d.is_bus)
 		    && bool_is_valid(d.is_pin)
 		    && bool_is_valid(d.is_inverted)
@@ -125,7 +125,7 @@ bool data_is_valid(xorn_obtype_t type, void const *data)
 	case xornsch_obtype_path: {
 		xornsch_path const &d = *(xornsch_path const *)data;
 		return string_is_valid(d.pathdata)
-		    && d.color >= 0 && d.color < 24
+		    && d.color >= 0 && d.color < 21
 		    && line_is_valid(d.line)
 		    && fill_is_valid(d.fill);
 	}
@@ -142,7 +142,7 @@ bool data_is_valid(xorn_obtype_t type, void const *data)
 		xornsch_text const &d = *(xornsch_text const *)data;
 		return double_is_valid(d.pos.x)
 		    && double_is_valid(d.pos.y)
-		    && d.color >= 0 && d.color < 24
+		    && d.color >= 0 && d.color < 21
 		    && d.text_size >= 0
 		    && bool_is_valid(d.visibility)
 		    && d.show_name_value >= 0 && d.show_name_value < 3

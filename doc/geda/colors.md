@@ -29,9 +29,6 @@ Index|Object type
 18|FREESTYLE2_COLOR
 19|FREESTYLE3_COLOR
 20|FREESTYLE4_COLOR
-21|JUNCTION_COLOR
-22|MESH_GRID_MAJOR_COLOR
-23|MESH_GRID_MINOR_COLOR
 
 The actual color associated with the color index is defined on a per
 tool bases.  Objects are typically assigned their corresponding color

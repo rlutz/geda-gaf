@@ -61,7 +61,7 @@ VERSION_CHAR = 'v'
 COMMENT = '#'
 
 # for color mechanism used in gschem
-MAX_COLORS = 25
+MAX_OBJECT_COLORS = 21
 DEFAULT_COLOR = 3
 
 # for text alignment

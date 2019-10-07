@@ -145,11 +145,11 @@
          linewidth=".01" capstyle="square" filltype="fill"/>
     <box x="11.1" y="8.1" width=".5" height=".3" color="output-background"
          linewidth=".01" capstyle="square" filltype="fill"/>
-    <box x="11.1" y="7.6" width=".5" height=".3" color="junction"
+    <box x="11.1" y="7.6" width=".5" height=".3" color="freestyle1"
          linewidth=".01" capstyle="square" filltype="fill"/>
-    <box x="11.1" y="7.1" width=".5" height=".3" color="mesh-grid-major"
+    <box x="11.1" y="7.1" width=".5" height=".3" color="freestyle3"
          linewidth=".01" capstyle="square" filltype="fill"/>
-    <box x="11.1" y="6.6" width=".5" height=".3" color="mesh-grid-minor"
+    <box x="11.1" y="6.6" width=".5" height=".3" color="freestyle4"
          linewidth=".01" capstyle="square" filltype="fill"/>
 
     <text x="9" y="5.9" size="12">Line attributes</text>

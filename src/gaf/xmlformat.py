@@ -32,5 +32,4 @@ ENUM_COLOR = ['background', 'pin', 'net-endpoint', 'graphic', 'net',
               'attribute', 'logic-bubble', 'dots-grid', 'detached-attribute',
               'text', 'bus', 'select', 'boundingbox', 'zoom-box', 'stroke',
               'lock', 'output-background',
-              'freestyle1', 'freestyle2', 'freestyle3', 'freestyle4',
-              'junction', 'mesh-grid-major', 'mesh-grid-minor']
+              'freestyle1', 'freestyle2', 'freestyle3', 'freestyle4']

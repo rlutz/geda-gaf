@@ -450,7 +450,7 @@ def read_circle(buf, format, log):
         log.warn(_("circle has negative radius (%d), setting to 0") % radius)
         radius = 0
 
-    if color < 0 or color > MAX_COLORS:
+    if color < 0 or color >= MAX_OBJECT_COLORS:
         log.warn(_("circle has invalid color (%d), setting to %d")
                  % (color, DEFAULT_COLOR))
         color = DEFAULT_COLOR
@@ -508,7 +508,7 @@ def read_arc(buf, format, log):
         log.warn(_("arc has negative radius (%d), setting to 0") % radius)
         radius = 0
 
-    if color < 0 or color > MAX_COLORS:
+    if color < 0 or color >= MAX_OBJECT_COLORS:
         log.warn(_("arc has invalid color (%d), setting to %d")
                  % (color, DEFAULT_COLOR))
         color = DEFAULT_COLOR
@@ -566,7 +566,7 @@ def read_box(buf, format, log):
     if width == 0 or height == 0:
         log.warn(_("box has width/height zero"))
 
-    if color < 0 or color > MAX_COLORS:
+    if color < 0 or color >= MAX_OBJECT_COLORS:
         log.warn(_("box has invalid color (%d), setting to %d")
                  % (color, DEFAULT_COLOR))
         color = DEFAULT_COLOR
@@ -621,7 +621,7 @@ def read_bus(buf, format, log):
     if x1 == x2 and y1 == y2:
         log.warn(_("bus has length zero"))
 
-    if color < 0 or color > MAX_COLORS:
+    if color < 0 or color >= MAX_OBJECT_COLORS:
         log.warn(_("bus has invalid color (%d), setting to %d")
                  % (color, DEFAULT_COLOR))
         color = DEFAULT_COLOR
@@ -714,7 +714,7 @@ def read_line(buf, format, log):
     if x1 == x2 and y1 == y2:
         log.warn(_("line has length zero"))
 
-    if color < 0 or color > MAX_COLORS:
+    if color < 0 or color >= MAX_OBJECT_COLORS:
         log.warn(_("line has invalid color (%d), setting to %d")
                  % (color, DEFAULT_COLOR))
         color = DEFAULT_COLOR
@@ -750,7 +750,7 @@ def read_net(buf, format, log):
     if x1 == x2 and y1 == y2:
         log.warn(_("net has length zero"))
 
-    if color < 0 or color > MAX_COLORS:
+    if color < 0 or color >= MAX_OBJECT_COLORS:
         log.warn(_("net has invalid color (%d), setting to %d")
                  % (color, DEFAULT_COLOR))
         color = DEFAULT_COLOR
@@ -789,7 +789,7 @@ def read_path(first_line, f, format, log):
         raise ValueError
 
     # Checks if the required color is valid.
-    if color < 0 or color > MAX_COLORS:
+    if color < 0 or color >= MAX_OBJECT_COLORS:
         log.warn(_("path has invalid color (%d), setting to %d")
                  % (color, DEFAULT_COLOR))
         color = DEFAULT_COLOR
@@ -927,7 +927,7 @@ def read_pin(buf, format, log):
                    "setting to first end") % whichend)
         whichend = 0
 
-    if color < 0 or color > MAX_COLORS:
+    if color < 0 or color >= MAX_OBJECT_COLORS:
         log.warn(_("pin has invalid color (%d), setting to %d")
                  % (color, DEFAULT_COLOR))
         color = DEFAULT_COLOR
@@ -1002,7 +1002,7 @@ def read_text(first_line, f, format, log):
                    "setting to LOWER_LEFT") % alignment)
         alignment = LOWER_LEFT
 
-    if color < 0 or color > MAX_COLORS:
+    if color < 0 or color >= MAX_OBJECT_COLORS:
         log.warn(_("text has invalid color (%d), setting to %d")
                  % (color, DEFAULT_COLOR))
         color = DEFAULT_COLOR
