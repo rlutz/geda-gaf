@@ -41,6 +41,7 @@ docsmandir=$(docdir)/man
 dist_docsman_DATA=$(html_man_files)
 if ENABLE_GROFF_HTML
 .1.html:
+	$(AM_V_GEN)\
 	rm -rf $@.tmp && \
 	LC_NUMERIC=C $(GROFF) -man -T html  $< >$@.tmp && \
 	mv -f $@.tmp $@
