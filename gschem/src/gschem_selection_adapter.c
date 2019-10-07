@@ -2149,7 +2149,7 @@ class_init (GschemSelectionAdapterClass *klass)
                 g_cclosure_marshal_VOID__STRING,  /* c_marshaller */
                 G_TYPE_NONE,                      /* return_type  */
                 1,                                /* n_params     */
-                G_TYPE_STRING);
+                G_TYPE_POINTER);
 }
 
 
