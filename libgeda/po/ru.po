@@ -1,5 +1,5 @@
 # Russian translation for gEDA libgeda
-# Copyright (c) 2009-2014 gEDA Developers
+# Copyright (c) 2009-2019 gEDA Developers
 # Copyright (c) Sergey Alyoshin <alyoshin.s@gmail.com>, 2009, 2012.
 # Copyright (c) Vladimir Zhbanov <vzhbanov@gmail.com>, 2011, 2014.
 #

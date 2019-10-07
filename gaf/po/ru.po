@@ -1,5 +1,5 @@
 # Russian translation for gEDA gaf
-# Copyright (c) 2012-2014 gEDA Developers
+# Copyright (c) 2012-2019 gEDA Developers
 # Copyright (c) Sergey Alyoshin <alyoshin.s@gmail.com>, 2012.
 # Copyright (c) Vladimir Zhbanov <vzhbanov@gmail.com>, 2014.
 #
@@ -59,14 +59,14 @@ msgstr ""
 #, c-format
 msgid ""
 "gEDA/gaf %s (g%.7s)\n"
-"Copyright (C) 1998-2012 gEDA developers\n"
+"Copyright (C) 1998-2019 gEDA developers\n"
 "This is free software, and you are welcome to redistribute it under\n"
 "certain conditions. For details, see the file `COPYING', which is\n"
 "included in the gEDA distribution.\n"
 "There is NO WARRANTY, to the extent permitted by law.\n"
 msgstr ""
 "gEDA/gaf %s (g%.7s)\n"
-"Copyright (C) 1998-2012 разработчики gEDA\n"
+"Copyright (C) 1998-2019 разработчики gEDA\n"
 "Это свободное программное обеспечение, и вы можете его распространять\n"
 "на определённых условиях. Подробности см. в файле COPYING в дистрибутиве\n"
 "gEDA. Нет НИКАКИХ ГАРАНТИЙ в рамках, допустимых имеющимся "
