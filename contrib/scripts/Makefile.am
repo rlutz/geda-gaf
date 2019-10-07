@@ -11,6 +11,7 @@ EXTRA_DIST = gnet_hier_verilog.sh sarlacc_sym pads_backannotate \
 	pads_backannotate.1.in sarlacc_sym.1.in sw2asc.1.in
 
 .1.in.1:
+	$(AM_V_GEN)\
 	d=`$(GUILE) -c '(setlocale LC_ALL "C") \
 	  (display (strftime "%B %-d, %Y" \
 	  (car (strptime "%Y%m%d" (cadr (program-arguments))))))' $(DATE_VERSION)` ; \

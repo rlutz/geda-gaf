@@ -50,6 +50,7 @@ am__v_SNARF_1 =
 	$(AM_V_SNARF)CPP="$(CPP)" $(GUILE_SNARF) -o $@ $< $(snarf_cpp_opts)
 
 .1.in.1:
+	$(AM_V_GEN)\
 	d=`$(GUILE) -c '(setlocale LC_ALL "C") \
 	  (display (strftime "%B %-d, %Y" \
 	  (car (strptime "%Y%m%d" (cadr (program-arguments))))))' $(DATE_VERSION)` ; \

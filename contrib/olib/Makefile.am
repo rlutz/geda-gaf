@@ -10,6 +10,7 @@ dist_noinst_MANS = olib.1
 EXTRA_DIST = olib.1 olib.1.in README.olib
 
 .1.in.1:
+	$(AM_V_GEN)\
 	d=`$(GUILE) -c '(setlocale LC_ALL "C") \
 	  (display (strftime "%B %-d, %Y" \
 	  (car (strptime "%Y%m%d" (cadr (program-arguments))))))' $(DATE_VERSION)` ; \

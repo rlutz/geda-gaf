@@ -15,6 +15,7 @@ dist_noinst_MANS = sarlacc_schem.1
 EXTRA_DIST = sarlacc_schem.1.in sarlacc_schem.1
 
 .1.in.1:
+	$(AM_V_GEN)\
 	d=`$(GUILE) -c '(setlocale LC_ALL "C") \
 	  (display (strftime "%B %-d, %Y" \
 	  (car (strptime "%Y%m%d" (cadr (program-arguments))))))' $(DATE_VERSION)` ; \
