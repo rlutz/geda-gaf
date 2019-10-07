@@ -944,9 +944,8 @@ gEDA/gaf homepage: http://www.geda-project.org/
 
         elif option == '-V' or option == '--version':
             sys.stdout.write('''\
-gnetlist (%s) - Wrapper script for invoking the gEDA netlister
-Copyright (C) 1998-2012 gEDA developers
-Copyright (C) 2019 Roland Lutz
+gnetlist - gEDA netlister (%s)
+Copyright (C) 1998-2019 gEDA developers
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
