@@ -9,13 +9,12 @@
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 </head>
 <body>
-<div class="dokuwiki export">
 
-<h2 class="sectionedit1"><a name="improvements_not_contained_in_the_new_concept" id="improvements_not_contained_in_the_new_concept">Improvements not contained in the new concept</a></h2>
+<h2 id="improvementsnotcontainedinthenewconcept">Improvements not contained in the new concept</h2>
 <div class="level2">
 
 <p>
-“New layout” templates and wizards. (instead of defaulting to 4&times;4 8-layer)
+&quot;New layout&quot; templates and wizards. (instead of defaulting to 4x4 8-layer)
 </p>
 
 <p>
@@ -23,22 +22,22 @@ Ability to hook into layer exporters (i.e. thindraw as a HID)
 </p>
 
 <p>
-Also, trim polygons against “outline” layer.  Fix polygons in general.
+Also, trim polygons against &quot;outline&quot; layer.  Fix polygons in general.
 </p>
 
 </div>
-<!-- EDIT1 SECTION "Improvements not contained in the new concept" [1-270] -->
-<h1 class="sectionedit2"><a name="new_concept_proposal" id="new_concept_proposal">New concept proposal</a></h1>
+
+<h1 id="newconceptproposal">New concept proposal</h1>
 <div class="level1">
 
 </div>
-<!-- EDIT2 SECTION "New concept proposal" [271-305] -->
-<h2 class="sectionedit3"><a name="old_concept" id="old_concept">Old concept</a></h2>
+
+<h2 id="oldconcept">Old concept</h2>
 <div class="level2">
 
 <p>
-There are “Layer groups” which contain “conductive layers”. One “Layer group” is actually one “physical layer”.
-There is max 10 layer groups. Number of layers is 16 + 2 silk screen layers. Layers have no “type”.
+There are &quot;Layer groups&quot; which contain &quot;conductive layers&quot;. One &quot;Layer group&quot; is actually one &quot;physical layer&quot;.
+There is max 10 layer groups. Number of layers is 16 + 2 silk screen layers. Layers have no &quot;type&quot;.
 </p>
 
 <p>
@@ -54,7 +53,7 @@ Layer:<br/>
 
 Name<br/>
 
-Contained lines, arcs, polygons,…<br/>
+Contained lines, arcs, polygons,...<br/>
 
 Rtree of contained ^^^^<br/>
 
@@ -70,40 +69,40 @@ Attributes<br/>
 </p>
 
 </div>
-<!-- EDIT3 SECTION "Old concept" [306-741] -->
-<h2 class="sectionedit4"><a name="new_concept" id="new_concept">New concept</a></h2>
+
+<h2 id="newconcept">New concept</h2>
 <div class="level2">
 
 <p>
-In the next part terms “physical layer” and “layer” are used. It can be changed to better names. Having just “layer” for
-“physical layer” and something else for “layer” will be great. Would “surface” go? Layer for one layer on PCB and surface for
+In the next part terms &quot;physical layer&quot; and &quot;layer&quot; are used. It can be changed to better names. Having just &quot;layer&quot; for
+&quot;physical layer&quot; and something else for &quot;layer&quot; will be great. Would &quot;surface&quot; go? Layer for one layer on PCB and surface for
 one drawing surface.
 </p>
 
 <p>
-Layers are contained in a linked list, so there is no bounds on the number of them. “Physical layers” should probably be also
+Layers are contained in a linked list, so there is no bounds on the number of them. &quot;Physical layers&quot; should probably be also
 in a linked list.
 </p>
 
 <p>
-The Z-order of “physical layers” and “layers” is determined by the order in linked list and in layout file.
+The Z-order of &quot;physical layers&quot; and &quot;layers&quot; is determined by the order in linked list and in layout file.
 </p>
 
 <p>
-Active “layer” of each type is represented as pointer in “physical layer”. There is
-an array of size “number of layer types”, pointer on right place is the active layer.
+Active &quot;layer&quot; of each type is represented as pointer in &quot;physical layer&quot;. There is
+an array of size &quot;number of layer types&quot;, pointer on right place is the active layer.
 There is no need to have an active layer of each type.
 </p>
 
 <p>
-One “physical layer” can be marked as “top” and one as “bottom”, so new footprints have some default layers assignment.
+One &quot;physical layer&quot; can be marked as &quot;top&quot; and one as &quot;bottom&quot;, so new footprints have some default layers assignment.
 This marks are useful just for footprint importing, there is no other use for them.
 </p>
 
 <p>
-When adding anything (components, lines, polygons), all parts goes to the active layer of the right type for current “physical layer”.
-So line is added to active “conductive layer”, its mask to active “mask layer”,…. If there is no such layer, nothing happens.
-If the current layer is not conductive, something else can happen. Like adding polygon to “mask layer” will just mask/unmask that part….
+When adding anything (components, lines, polygons), all parts goes to the active layer of the right type for current &quot;physical layer&quot;.
+So line is added to active &quot;conductive layer&quot;, its mask to active &quot;mask layer&quot;,.... If there is no such layer, nothing happens.
+If the current layer is not conductive, something else can happen. Like adding polygon to &quot;mask layer&quot; will just mask/unmask that part....
 </p>
 
 <p>
@@ -116,41 +115,41 @@ Colors in preferences are assigned to layer names, not layer numbers.
 </p>
 
 <p>
-There is no concept of “layer number” everything is referred by name or pointer.
+There is no concept of &quot;layer number&quot; everything is referred by name or pointer.
 </p>
 
 <p>
-Each “physical layer” has Dimension property and can also have an Outline layer.
+Each &quot;physical layer&quot; has Dimension property and can also have an Outline layer.
 The difference is, that NOTHING can be drawn out of dimension. The Outline is just
 hint how to manufactor the board. The Dimension is just one rectangle, Outline can have any
-shape. This Dimension property should replace the “Board dimension” currently defined in preferences.
+shape. This Dimension property should replace the &quot;Board dimension&quot; currently defined in preferences.
 </p>
 
 <p>
-Gerber output names will contain “physical layer” name.
+Gerber output names will contain &quot;physical layer&quot; name.
 </p>
 
 <p>
-The “Show Pin/Pads/Vias” flags in “Physical layer” is just inspecting and printing use.
+The &quot;Show Pin/Pads/Vias&quot; flags in &quot;Physical layer&quot; is just inspecting and printing use.
 It doesn&#039;t hurt to have and can aid documentation generation.
 </p>
 
 <p>
 <code>Physical layer:<br/>
 
-Name ← this will be used in gerber export<br/>
+Name &lt;- this will be used in gerber export<br/>
 
-Dimentions ← layer doesn&#039;t have to be across whole board<br/>
+Dimentions &lt;- layer doesn&#039;t have to be across whole board<br/>
 
-Attributes ← we can come up with a list of “expected attributes” like “permittivity, thickness,..”<br/>
+Attributes &lt;- we can come up with a list of &quot;expected attributes&quot; like &quot;permittivity, thickness,..&quot;<br/>
 
-Flags ← some “physical layer” wide flags<br/>
+Flags &lt;- some &quot;physical layer&quot; wide flags<br/>
 
-Layers ← linked list of layers in this “physical layer”<br/>
+Layers &lt;- linked list of layers in this &quot;physical layer&quot;<br/>
 
-Pointer to layers ← linked list of all layers in this physical layer<br/>
+Pointer to layers &lt;- linked list of all layers in this physical layer<br/>
 
-Array of pointers to “active layers”<br/>
+Array of pointers to &quot;active layers&quot;<br/>
 
 <br/>
 
@@ -158,39 +157,39 @@ Layer:<br/>
 
 Name<br/>
 
-Placement list ← Contained lines, arcs, polygons,…<br/>
+Placement list &lt;- Contained lines, arcs, polygons,...<br/>
 
 Rtree of contained ^^^^<br/>
 
-Flag ← flags described below<br/>
+Flag &lt;- flags described below<br/>
 
-Type ← type list below<br/>
+Type &lt;- type list below<br/>
 
 Color<br/>
 
 Attributes<br/>
 
-Pointer for linked list of “layers”<br/>
+Pointer for linked list of &quot;layers&quot;<br/>
 
-Pointer for linked list contained in “physical layer”<br/>
+Pointer for linked list contained in &quot;physical layer&quot;<br/>
 
 <br/>
 
 Layer types:<br/>
 
-Conductive ← the only conductive layer<br/>
+Conductive &lt;- the only conductive layer<br/>
 
-Mechanical ← some additional non-conductive stuff<br/>
+Mechanical &lt;- some additional non-conductive stuff<br/>
 
-Outline ← outline of board<br/>
+Outline &lt;- outline of board<br/>
 
-Silk ← Texts, component oulines,…<br/>
+Silk &lt;- Texts, component oulines,...<br/>
 
-Mask ← mask on the board<br/>
+Mask &lt;- mask on the board<br/>
 
-Paste ← solder paste definition<br/>
+Paste &lt;- solder paste definition<br/>
 
-Countryard ← component spacing definition<br/>
+Countryard &lt;- component spacing definition<br/>
 
 Rat<br/>
 
@@ -198,24 +197,24 @@ Rat<br/>
 
 Physical layer flags:<br/>
 
-Show Pin/Via/Pads ← Show/Hide Pin/Via/Pads, 3 separate flags – NOT SAVED, the one in “Layer” is saved<br/>
+Show Pin/Via/Pads &lt;- Show/Hide Pin/Via/Pads, 3 separate flags -- NOT SAVED, the one in &quot;Layer&quot; is saved<br/>
 
 <br/>
 
 Layer flags:<br/>
 
-Visible ← Show/Hide this layer – just temporal use, NOT SAVED<br/>
+Visible &lt;- Show/Hide this layer -- just temporal use, NOT SAVED<br/>
 
-Show Pin/Via/Pads ← 3 separate flags, On some layers for special purpose it make sense to not include Via/Pin/Pads<br/>
+Show Pin/Via/Pads &lt;- 3 separate flags, On some layers for special purpose it make sense to not include Via/Pin/Pads<br/>
 
-Negativness ← Layer is negative layer<br/>
+Negativness &lt;- Layer is negative layer<br/>
 
 </code>
 </p>
 
 </div>
-<!-- EDIT4 SECTION "New concept" [742-4385] -->
-<h2 class="sectionedit5"><a name="object_placements" id="object_placements">Object &amp; Placements</a></h2>
+
+<h2 id="objectplacements">Object &amp; Placements</h2>
 <div class="level2">
 
 <p>
@@ -248,9 +247,9 @@ ReferenceCounter<br/>
 
 Pointer to the object<br/>
 
-Pointer to composite ← when I am at some composite<br/>
+Pointer to composite &lt;- when I am at some composite<br/>
 
-Pointer to next object ← next object in the composite<br/>
+Pointer to next object &lt;- next object in the composite<br/>
 
 <br/>
 
@@ -264,8 +263,8 @@ CopyOnWrite<br/>
 </p>
 
 </div>
-<!-- EDIT5 SECTION "Object & Placements" [4386-4992] -->
-<h2 class="sectionedit6"><a name="composite_objects" id="composite_objects">Composite objects</a></h2>
+
+<h2 id="compositeobjects">Composite objects</h2>
 <div class="level2">
 
 <p>
@@ -284,7 +283,7 @@ All elements of composite object has placement relative to the origin of the com
 <code>
 Composite object:<br/>
 
-Type ← type list below<br/>
+Type &lt;- type list below<br/>
 
 Attributes<br/>
 
@@ -306,8 +305,8 @@ Other<br/>
 </p>
 
 </div>
-<!-- EDIT6 SECTION "Composite objects" [4993-5443] -->
-<h3 class="sectionedit7"><a name="via" id="via">Via</a></h3>
+
+<h3 id="via">Via</h3>
 <div class="level3">
 
 <p>
@@ -323,8 +322,8 @@ The hole is represented as an object on &#039;outline&#039; layer on each &#039;
 </p>
 
 </div>
-<!-- EDIT7 SECTION "Via" [5444-5678] -->
-<h3 class="sectionedit8"><a name="footprint" id="footprint">Footprint</a></h3>
+
+<h3 id="footprint">Footprint</h3>
 <div class="level3">
 
 <p>
@@ -341,7 +340,7 @@ Expected properties:
 <ol>
 <li class="level1"><div class="li"> Footprint contains layers with predefined names: Conductive, Silkscreen, Paste, Mask, Countryard</div>
 </li>
-<li class="level1"><div class="li"> Footprint can contain more conductive layers, each grouped with Paste and Mask layers ← useful for 2 sides mounting connectors</div>
+<li class="level1"><div class="li"> Footprint can contain more conductive layers, each grouped with Paste and Mask layers &lt;- useful for 2 sides mounting connectors</div>
 </li>
 <li class="level1"><div class="li"> Any connected element on conductive layer can be marked as Pin/Pad</div>
 </li>
@@ -350,18 +349,17 @@ Expected properties:
 </ol>
 
 </div>
-<!-- EDIT8 SECTION "Footprint" [5679-6158] -->
-<h2 class="sectionedit9"><a name="named_attributes" id="named_attributes">Named attributes</a></h2>
+
+<h2 id="namedattributes">Named attributes</h2>
 <div class="level2">
 
 <p>
-This is just my personal “To look at” section. – Martin Kupec<br/>
+This is just my personal &quot;To look at&quot; section. -- Martin Kupec<br/>
 
 Refdefs should be distinguishable from the rest of Silk
 so they can be put on different Silk Layer.
 </p>
 
 </div>
-<!-- EDIT9 SECTION "Named attributes" [6159-] --></div>
 </body>
 </html>

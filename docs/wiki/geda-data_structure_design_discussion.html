@@ -9,14 +9,13 @@
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 </head>
 <body>
-<div class="dokuwiki export">
 
-<h1 class="sectionedit1"><a name="data_structure_design_discussion" id="data_structure_design_discussion">Data structure design discussion</a></h1>
+<h1 id="datastructuredesigndiscussion">Data structure design discussion</h1>
 <div class="level1">
 
 </div>
-<!-- EDIT1 SECTION "Data structure design discussion" [1-48] -->
-<h1 class="sectionedit2"><a name="concept_diagram" id="concept_diagram">Concept diagram</a></h1>
+
+<h1 id="conceptdiagram">Concept diagram</h1>
 <div class="level1">
 
 <p>
@@ -24,26 +23,26 @@
 </p>
 
 <p>
-<a href="/./lib/exe/fetch.php?hash=d4505f&media=http%3A%2F%2Fwww2.eng.cam.ac.uk%2F~pcjc2%2Fgeda%2Fdatastructures.png" class="media" title="http://www2.eng.cam.ac.uk/~pcjc2/geda/datastructures.png"><img src="exe/fetch.php?hash=d4505f&media=http%3A%2F%2Fwww2.eng.cam.ac.uk%2F~pcjc2%2Fgeda%2Fdatastructures.png" class="media" alt="" /></a>
+<a href="/./lib/exe/fetch.php?tok=2fc1e8&amp;media=http%3A%2F%2Fwww2.eng.cam.ac.uk%2F~pcjc2%2Fgeda%2Fdatastructures.png" class="media mediafile mf_png" title="http://www2.eng.cam.ac.uk/~pcjc2/geda/datastructures.png">http://www2.eng.cam.ac.uk/~pcjc2/geda/datastructures.png</a>
 </p>
 
 </div>
-<!-- EDIT2 SECTION "Concept diagram" [49-178] -->
-<h2 class="sectionedit3"><a name="concepts_behind_the_structures" id="concepts_behind_the_structures">Concepts behind the structures</a></h2>
+
+<h2 id="conceptsbehindthestructures">Concepts behind the structures</h2>
 <div class="level2">
 
 </div>
-<!-- EDIT3 SECTION "Concepts behind the structures" [179-222] -->
-<h3 class="sectionedit4"><a name="design" id="design">Design</a></h3>
+
+<h3 id="design">Design</h3>
 <div class="level3">
 
 <p>
-This is might not exist as a “file”, as such, but exists as a data structure entity to be the owner of the circuits required in a particular design. The “root circuit” is the uppermost level of hierarchy.
+This is might not exist as a &quot;file&quot;, as such, but exists as a data structure entity to be the owner of the circuits required in a particular design. The &quot;root circuit&quot; is the uppermost level of hierarchy.
 </p>
 
 </div>
-<!-- EDIT4 SECTION "Design" [223-446] -->
-<h3 class="sectionedit5"><a name="circuit" id="circuit">Circuit</a></h3>
+
+<h3 id="circuit">Circuit</h3>
 <div class="level3">
 
 <p>
@@ -55,8 +54,8 @@ We may also define a <strong>symbolic</strong> (graphic) representation of a cir
 </p>
 
 </div>
-<!-- EDIT5 SECTION "Circuit" [447-1004] -->
-<h3 class="sectionedit6"><a name="mport" id="mport">MPort</a></h3>
+
+<h3 id="mport">MPort</h3>
 <div class="level3">
 
 <p>
@@ -64,8 +63,8 @@ If it is to be useful as a re-usable block, a sub-<strong>circuit</strong> must 
 </p>
 
 </div>
-<!-- EDIT6 SECTION "MPort" [1005-1541] -->
-<h3 class="sectionedit7"><a name="instance" id="instance">Instance</a></h3>
+
+<h3 id="instance">Instance</h3>
 <div class="level3">
 
 <p>
@@ -73,8 +72,8 @@ A <strong>circuit</strong> represents a re-usable electrical entity which we may
 </p>
 
 </div>
-<!-- EDIT7 SECTION "Instance" [1542-1929] -->
-<h3 class="sectionedit8"><a name="attrib" id="attrib">Attrib</a></h3>
+
+<h3 id="attrib">Attrib</h3>
 <div class="level3">
 
 <p>
@@ -86,8 +85,8 @@ In a break from gEDA&#039;s current <strong>attrib</strong> model, it makes sens
 </p>
 
 </div>
-<!-- EDIT8 SECTION "Attrib" [1930-2569] -->
-<h3 class="sectionedit9"><a name="netlist" id="netlist">Netlist</a></h3>
+
+<h3 id="netlist">Netlist</h3>
 <div class="level3">
 
 <p>
@@ -107,8 +106,8 @@ This has real applications in back-annotation and in design verification.
 </p>
 
 </div>
-<!-- EDIT9 SECTION "Netlist" [2570-3435] -->
-<h3 class="sectionedit10"><a name="net" id="net">Net</a></h3>
+
+<h3 id="net">Net</h3>
 <div class="level3">
 
 <p>
@@ -120,8 +119,8 @@ As we also have a graphical representation of the wires (<strong>ConnSegment</st
 </p>
 
 </div>
-<!-- EDIT10 SECTION "Net" [3436-3940] -->
-<h3 class="sectionedit11"><a name="page" id="page">Page</a></h3>
+
+<h3 id="page">Page</h3>
 <div class="level3">
 
 <p>
@@ -132,7 +131,7 @@ A <strong>page</strong> is a canvas for placing graphical objects representing a
 Whilst most objects on a <strong>page</strong> are graphic primitives, there are some which have a relation to the <strong>circuit</strong>&#039;s electrical specification.
 </p>
 <ul>
-<li class="level1"><div class="li"> <strong>ConnSegments</strong> (or <strong>net</strong>s) represent connected electrical signals within the circuit represented.</div>
+<li class="level1 node"><div class="li"> <strong>ConnSegments</strong> (or <strong>net</strong>s) represent connected electrical signals within the circuit represented.</div>
 <ul>
 <li class="level2"><div class="li"> A connectivity representation (<strong>netlist</strong>) can be built by considering the end-point positioning of these objects.</div>
 </li>
@@ -142,7 +141,7 @@ Whilst most objects on a <strong>page</strong> are graphic primitives, there are
 </li>
 </ul>
 <ul>
-<li class="level1"><div class="li"> <strong>Pins</strong> represent a connection outside this circuit.</div>
+<li class="level1 node"><div class="li"> <strong>Pins</strong> represent a connection outside this circuit.</div>
 <ul>
 <li class="level2"><div class="li"> When constructing a netlist, coincidence of a <strong>ConnSegment</strong> end on these implies an electrical connection to that external port.</div>
 </li>
@@ -154,7 +153,7 @@ Whilst most objects on a <strong>page</strong> are graphic primitives, there are
 </li>
 </ul>
 <ul>
-<li class="level1"><div class="li"> <strong>complex</strong> objects represent instantiating a sub-<strong>circuit</strong>, and will be linked to a specific <strong>instance</strong> structure.</div>
+<li class="level1 node"><div class="li"> <strong>complex</strong> objects represent instantiating a sub-<strong>circuit</strong>, and will be linked to a specific <strong>instance</strong> structure.</div>
 <ul>
 <li class="level2"><div class="li"> Graphically, this means a <strong>symbolic</strong> representation of the instantiated circuit will be placed on the page.</div>
 </li>
@@ -165,15 +164,15 @@ Whilst most objects on a <strong>page</strong> are graphic primitives, there are
 </ul>
 
 </div>
-<!-- EDIT11 SECTION "Page" [3941-5460] -->
-<h1 class="sectionedit12"><a name="brainstorms" id="brainstorms">Brainstorms</a></h1>
+
+<h1 id="brainstorms">Brainstorms</h1>
 <div class="level1">
 
 <p>
-(from conversation on MSN/<acronym title="Internet Relay Chat">IRC</acronym> on 10th April 2007 – Peter Brett / Peter Clifton)
+(from conversation on MSN/IRC on 10th April 2007 -- Peter Brett / Peter Clifton)
 </p>
 <ul>
-<li class="level1"><div class="li"> In order to do back annotation, need to be able to change the board part references for anywhere in the schematic.  It then makes sense to dissociate the concepts of <strong>InstanceID</strong> and <strong>Board Reference</strong>, and use an <strong>override table</strong> that can override an attribute at any given path within the current <strong>circuit</strong> based on a path composed of <strong>InstanceID</strong>s.  <strong>InstanceID</strong>s would be special-cased throughout libgeda as a means for uniquely identifying circuits and instances.  An entry in the override table might have the form ”/id1/id2/id3:refdes:U3”</div>
+<li class="level1"><div class="li"> In order to do back annotation, need to be able to change the board part references for anywhere in the schematic.  It then makes sense to dissociate the concepts of <strong>InstanceID</strong> and <strong>Board Reference</strong>, and use an <strong>override table</strong> that can override an attribute at any given path within the current <strong>circuit</strong> based on a path composed of <strong>InstanceID</strong>s.  <strong>InstanceID</strong>s would be special-cased throughout libgeda as a means for uniquely identifying circuits and instances.  An entry in the override table might have the form &quot;/id1/id2/id3:refdes:U3&quot;</div>
 </li>
 </ul>
 <ul>
@@ -185,7 +184,7 @@ Whilst most objects on a <strong>page</strong> are graphic primitives, there are
 </li>
 </ul>
 <ul>
-<li class="level1"><div class="li"> We need to do lazy netlisting, on a circuit-by-circuit basis – the netlists should only be combined into a flat netlist when required by a tool (and even then, most tools can potentially make good use of hierarchy information).</div>
+<li class="level1"><div class="li"> We need to do lazy netlisting, on a circuit-by-circuit basis -- the netlists should only be combined into a flat netlist when required by a tool (and even then, most tools can potentially make good use of hierarchy information).</div>
 </li>
 </ul>
 <ul>
@@ -194,6 +193,5 @@ Whilst most objects on a <strong>page</strong> are graphic primitives, there are
 </ul>
 
 </div>
-<!-- EDIT12 SECTION "Brainstorms" [5461-] --></div>
 </body>
 </html>

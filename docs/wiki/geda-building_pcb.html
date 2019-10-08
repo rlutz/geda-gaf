@@ -1,0 +1,129 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+  <link rel="stylesheet" media="screen" type="text/css" href="./style.css" />
+  <link rel="stylesheet" media="screen" type="text/css" href="./design.css" />
+  <link rel="stylesheet" media="print" type="text/css" href="./print.css" />
+
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+</head>
+<body>
+
+<h2 id="buildsystem">Build system</h2>
+<div class="level2">
+
+<p>
+You must have a working build system before you even can think about hacking the source code. Make sure you can build a git clone.<br/>
+
+Try building the sources from git before you try anything else.<br/>
+
+The wiki page http://wiki.geda-project.org/geda:developer shows the git command to get the geda-gaf repository. We are talking about pcb here.<br/>
+For pcb we need to do:
+</p>
+<pre class="code">git clone git://git.geda-project.org/pcb.git</pre>
+
+<p>
+For the other repositories take a look at http://git.geda-project.org/
+</p>
+
+<p>
+Next get your build system working. http://wiki.geda-project.org/geda:gaf_building_git_version
+</p>
+
+<p>
+While working on the pcb sources remember that PCB uses The AutoTools as there build system.<br/>
+This isn&#039;t as daunting as it sounds, for the newbie developer.<br/>
+The PCB development team has made it easy for us.
+</p>
+
+<p>
+Generally just run:
+</p>
+<pre class="code">./autogen.sh</pre>
+
+<p>
+and the scary part is over ;-)
+</p>
+
+<p>
+Then do the usual:
+</p>
+<pre class="code">./configure
+make</pre>
+
+<p>
+The autogen.sh script is usually only needed once, after a git clone or if a file is added to be build into PCB. See <a href="geda-pcb_developer_introduction.html#example" class="wikilink1" title="geda-pcb_developer_introduction.html">Example</a> on when to use the autogen.sh script.
+</p>
+
+<p>
+For more information on the AutoTools take a look at: https://www.gnu.org/software/automake/manual/html_node/Autotools-Introduction.html
+</p>
+
+<p>
+If you want to know more about git take a look at: https://git-scm.com/docs/gittutorial
+</p>
+
+</div>
+
+<h2 id="dependencies">Dependencies</h2>
+<div class="level2">
+
+<p>
+PCB is a open source program and it uses open source libraries and tools to do what it does.
+Doing a <code>repoquery --requires pcb</code> on my Fedora 20 system show the following dependencies:
+</p>
+<div class="table sectionedit1"><table class="inline">
+	<tr class="row0">
+		<td class="col0 rightalign">  perl</td><td class="col1 rightalign">  libdl.so.2()</td><td class="col2 rightalign">  libm.so.6(GLIBC_2.2.5)</td>
+	</tr>
+	<tr class="row1">
+		<td class="col0 rightalign">  wish</td><td class="col1 rightalign">  libdl.so.2(GLIBC_2.2.5)</td><td class="col2 rightalign">  libpango-1.0.so.0()</td>
+	</tr>
+	<tr class="row2">
+		<td class="col0 rightalign">  libGL.so.1()</td><td class="col1 rightalign">  libfontconfig.so.1()</td><td class="col2 rightalign">  libpangocairo-1.0.so.0()</td>
+	</tr>
+	<tr class="row3">
+		<td class="col0 rightalign">  libGLU.so.1()</td><td class="col1 rightalign">  libfreetype.so.6()</td><td class="col2 rightalign">  libpangoft2-1.0.so.0()</td>
+	</tr>
+	<tr class="row4">
+		<td class="col0 rightalign">  libICE.so.6()</td><td class="col1 rightalign">  libgd.so.3()</td><td class="col2 rightalign">  libpangox-1.0.so.0()</td>
+	</tr>
+	<tr class="row5">
+		<td class="col0 rightalign">  libSM.so.6()</td><td class="col1 rightalign">  libgdk-x11-2.0.so.0()</td><td class="col2 rightalign">  libpng16.so.16()</td>
+	</tr>
+	<tr class="row6">
+		<td class="col0 rightalign">  libX11.so.6()</td><td class="col1 rightalign">  libgdk_pixbuf-2.0.so.0()</td><td class="col2 rightalign">  libpthread.so.0()</td>
+	</tr>
+	<tr class="row7">
+		<td class="col0 rightalign">  libXinerama.so.1()</td><td class="col1 rightalign">  libgdkglext-x11-1.0.so.0()</td><td class="col2 rightalign">  libpthread.so.0(GLIBC_2.2.5)</td>
+	</tr>
+	<tr class="row8">
+		<td class="col0 rightalign">  libXmu.so.6()</td><td class="col1 rightalign">  libgio-2.0.so.0()</td><td class="col2 rightalign">  libtiff.so.5()</td>
+	</tr>
+	<tr class="row9">
+		<td class="col0 rightalign">  libXpm.so.4()</td><td class="col1 rightalign">  libglib-2.0.so.0()</td><td class="col2 rightalign">  libvpx.so.1()</td>
+	</tr>
+	<tr class="row10">
+		<td class="col0 rightalign">  libXrender.so.1()</td><td class="col1 rightalign">  libgmodule-2.0.so.0()</td><td class="col2 rightalign">  libz.so.1()</td>
+	</tr>
+	<tr class="row11">
+		<td class="col0 rightalign">  libXt.so.6()</td><td class="col1 rightalign">  libgobject-2.0.so.0()</td><td class="col2 rightalign">  m4</td>
+	</tr>
+	<tr class="row12">
+		<td class="col0 rightalign">  libatk-1.0.so.0()</td><td class="col1 rightalign">  libgtk-x11-2.0.so.0()</td><td class="col2 rightalign">  perl(File::Basename)</td>
+	</tr>
+	<tr class="row13">
+		<td class="col0 rightalign">  libc.so.6(GLIBC_2.14)</td><td class="col1 rightalign">  libgtkglext-x11-1.0.so.0()</td><td class="col2 rightalign">  perl(File::Copy)</td>
+	</tr>
+	<tr class="row14">
+		<td class="col0 rightalign">  libcairo.so.2()</td><td class="col1 rightalign">  libjpeg.so.62()</td><td class="col2 rightalign">  rtld(GNU_HASH)</td>
+	</tr>
+	<tr class="row15">
+		<td class="col0 rightalign">  libdbus-1.so.3()</td><td class="col1 rightalign">  libm.so.6()</td><td class="col2"> </td>
+	</tr>
+</table></div>
+<!-- EDIT1 TABLE [1606-2557] -->
+</div>
+</body>
+</html>

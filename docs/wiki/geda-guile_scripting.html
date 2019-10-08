@@ -9,29 +9,28 @@
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 </head>
 <body>
-<div class="dokuwiki export">
 
 <p>
 <em>Translations of this page are also available in the following languages:</em> <a href="geda-guile_scripting.ru.html" class="wikilink1" title="geda-guile_scripting.ru.html">Русский</a>.
 </p>
 
-<h2 class="sectionedit1"><a name="guile_scripting" id="guile_scripting">Guile scripting</a></h2>
+<h2 id="guilescripting">Guile scripting</h2>
 <div class="level2">
 
 <p>
-gEDA/gaf uses <a href="http://www.gnu.org/s/guile/" class="urlextern" title="http://www.gnu.org/s/guile/"  rel="nofollow">Guile Scheme</a> to provide Scheme scripting capabilities, and all of the features of Guile are available to use.  The <em>Guile Reference Manual</em> is available as an Info manual (<code>info guile</code> on most systems), or <a href="http://www.gnu.org/software/guile/docs/docs.html" class="urlextern" title="http://www.gnu.org/software/guile/docs/docs.html"  rel="nofollow">on the Guile website</a>.
+gEDA/gaf uses Guile Scheme to provide Scheme scripting capabilities, and all of the features of Guile are available to use.  The <em>Guile Reference Manual</em> is available as an Info manual (<code>info guile</code> on most systems), or on the Guile website.
 </p>
 
 <p>
-A collection of modules is provided for accessing and modifying gEDA objects and pages, called the gEDA Scheme <acronym title="Application Programming Interface">API</acronym>.  The <em>gEDA Scheme Reference Manual</em> is also available as an Info manual (<code>info geda-scheme</code>).
+A collection of modules is provided for accessing and modifying gEDA objects and pages, called the gEDA Scheme API.  The <em>gEDA Scheme Reference Manual</em> is also available as an Info manual (<code>info geda-scheme</code>).
 </p>
 
 </div>
-<!-- EDIT1 SECTION "Guile scripting" [118-733] -->
-<h3 class="sectionedit2"><a name="tutorials" id="tutorials">Tutorials</a></h3>
+
+<h3 id="tutorials">Tutorials</h3>
 <div class="level3">
 <ul>
-<li class="level1"><div class="li"> <a href="geda-gnetlist_scheme_tutorial.html" class="wikilink1" title="geda-gnetlist_scheme_tutorial.html">Scripting a gnetlist backend in scheme</a> (John Doty)</div>
+<li class="level1"><div class="li"> <a href="geda-gnetlistschemetutorial.html" class="wikilink2" title="geda-gnetlistschemetutorial.html">Scripting a gnetlist backend in scheme</a> (John Doty)</div>
 </li>
 </ul>
 
@@ -40,17 +39,19 @@ See also the <a href="geda-gschem_ug-extensions.html" class="wikilink1" title="g
 </p>
 
 </div>
-<!-- EDIT2 SECTION "Tutorials" [734-1091] -->
-<h3 class="sectionedit3"><a name="reference_documents" id="reference_documents">Reference documents</a></h3>
+
+<h3 id="referencedocuments">Reference documents</h3>
 <div class="level3">
 <ul>
-<li class="level1"><div class="li"> <a href="geda-gnetlist_scheme_primitives.html" class="wikilink1" title="geda-gnetlist_scheme_primitives.html">gnetlist Scheme primitives</a></div>
+<li class="level1"><div class="li"> <a href="geda-gnetlistschemeprimitives.html" class="wikilink2" title="geda-gnetlistschemeprimitives.html">gnetlist Scheme primitives</a></div>
+</li>
+<li class="level1"><div class="li"> <a href="geda-gschemrepl.html" class="wikilink2" title="geda-gschemrepl.html">Using REPL in gschem</a></div>
 </li>
 </ul>
 
 </div>
-<!-- EDIT3 SECTION "Reference documents" [1092-1157] -->
-<h3 class="sectionedit4"><a name="scripting_examples" id="scripting_examples">Scripting examples</a></h3>
+
+<h3 id="scriptingexamples">Scripting examples</h3>
 <div class="level3">
 
 <p>
@@ -64,9 +65,24 @@ You can download each script example and load it in <strong>gschem</strong>:
 </li>
 </ul>
 
+<p>
+You can install them as well if you don&#039;t want to load them every time:
+</p>
+<ul>
+<li class="level1"><div class="li"> copy the script you want into your <em><code>~/.gEDA</code></em> directory</div>
+</li>
+<li class="level1"><div class="li"> put the line <pre class="code lisp"><span class="br0">&#40;</span>load <span class="st0">&quot;filename.scm&quot;</span><span class="br0">&#41;</span></pre>
+
+<p>
+ into your <em><code>~/.gEDA/gschemrc</code></em> (replace <em>filename.scm</em> with the real name of the script)
+</p>
+</div>
+</li>
+</ul>
+
 </div>
 
-<h4><a name="removing_objects_with_specific_properties" id="removing_objects_with_specific_properties">Removing objects with specific properties</a></h4>
+<h4 id="removingobjectswithspecificproperties">Removing objects with specific properties</h4>
 <div class="level4">
 
 <p>
@@ -74,7 +90,7 @@ For instance, let&#039;s remove all objects which are circles or arcs
 with zero radius:
 </p>
 <dl class="file">
-<dt><a href="_export/code/geda:guile_scripting?codeblock=1" title="Download Snippet" class="mediafile mf_scm">remove-objects.scm</a></dt>
+<dt><a href="/./doku.php?do=export_code&amp;id=:geda:guile_scripting.txt&amp;codeblock=2" title="Download Snippet" class="mediafile mf_scm">remove-objects.scm</a></dt>
 <dd><pre class="code file lisp"><span class="br0">&#40;</span>use-modules <span class="br0">&#40;</span>geda page<span class="br0">&#41;</span><span class="br0">&#41;</span>
 &nbsp;
 <span class="co1">; Checks if the OBJECT is a circle or an arc with zero radius</span>
@@ -83,7 +99,7 @@ with zero radius:
     <span class="br0">&#40;</span><span class="kw1">and</span> <span class="br0">&#40;</span>circle? object<span class="br0">&#41;</span> <span class="br0">&#40;</span><span class="sy0">=</span> <span class="br0">&#40;</span>circle-radius object<span class="br0">&#41;</span> <span class="nu0">0</span><span class="br0">&#41;</span><span class="br0">&#41;</span>
     <span class="br0">&#40;</span><span class="kw1">and</span> <span class="br0">&#40;</span>arc?    object<span class="br0">&#41;</span> <span class="br0">&#40;</span><span class="sy0">=</span> <span class="br0">&#40;</span>arc-radius    object<span class="br0">&#41;</span> <span class="nu0">0</span><span class="br0">&#41;</span><span class="br0">&#41;</span><span class="br0">&#41;</span><span class="br0">&#41;</span>
 &nbsp;
-<span class="br0">&#40;</span><span class="kw1">apply</span> page-<span class="kw1">remove</span><span class="sy0">!</span> <span class="br0">&#40;</span>active-page<span class="br0">&#41;</span>
+<span class="br0">&#40;</span><span class="kw1">apply</span> page-remove<span class="sy0">!</span> <span class="br0">&#40;</span>active-page<span class="br0">&#41;</span>
        <span class="br0">&#40;</span>filter
          zero-radius-object?
          <span class="br0">&#40;</span>page-contents <span class="br0">&#40;</span>active-page<span class="br0">&#41;</span><span class="br0">&#41;</span><span class="br0">&#41;</span><span class="br0">&#41;</span></pre>
@@ -95,7 +111,7 @@ remove, then we have to detach and remove all its attributes, too.
 The function below does exactly this.
 </p>
 <dl class="file">
-<dt><a href="_export/code/geda:guile_scripting?codeblock=2" title="Download Snippet" class="mediafile mf_scm">remove-components-with-attribs.scm</a></dt>
+<dt><a href="/./doku.php?do=export_code&amp;id=:geda:guile_scripting.txt&amp;codeblock=3" title="Download Snippet" class="mediafile mf_scm">remove-components-with-attribs.scm</a></dt>
 <dd><pre class="code file lisp"><span class="br0">&#40;</span>use-modules <span class="br0">&#40;</span>geda page<span class="br0">&#41;</span><span class="br0">&#41;</span>
 <span class="br0">&#40;</span>use-modules <span class="br0">&#40;</span>geda object<span class="br0">&#41;</span><span class="br0">&#41;</span>
 <span class="br0">&#40;</span>use-modules <span class="br0">&#40;</span>geda attrib<span class="br0">&#41;</span><span class="br0">&#41;</span>
@@ -108,11 +124,11 @@ The function below does exactly this.
         <span class="br0">&#40;</span>for-each
           <span class="br0">&#40;</span><span class="kw1">lambda</span> <span class="br0">&#40;</span>attr<span class="br0">&#41;</span>
             <span class="br0">&#40;</span><span class="kw1">and</span>
-              <span class="br0">&#40;</span>string<span class="sy0">=</span>? <span class="br0">&#40;</span>attrib-<span class="kw1">name</span> attr<span class="br0">&#41;</span> <span class="kw1">name</span><span class="br0">&#41;</span>
-              <span class="br0">&#40;</span>string<span class="sy0">=</span>? <span class="br0">&#40;</span>attrib-<span class="kw1">value</span> attr<span class="br0">&#41;</span> <span class="kw1">value</span><span class="br0">&#41;</span>
+              <span class="br0">&#40;</span>string<span class="sy0">=</span>? <span class="br0">&#40;</span>attrib-name attr<span class="br0">&#41;</span> <span class="kw1">name</span><span class="br0">&#41;</span>
+              <span class="br0">&#40;</span>string<span class="sy0">=</span>? <span class="br0">&#40;</span>attrib-value attr<span class="br0">&#41;</span> <span class="kw1">value</span><span class="br0">&#41;</span>
               <span class="br0">&#40;</span><span class="kw1">let</span> <span class="br0">&#40;</span><span class="br0">&#40;</span>attached-attribs <span class="br0">&#40;</span>object-attribs obj<span class="br0">&#41;</span><span class="br0">&#41;</span><span class="br0">&#41;</span>
                 <span class="br0">&#40;</span><span class="kw1">apply</span> detach-attribs<span class="sy0">!</span> obj attached-attribs<span class="br0">&#41;</span>
-                <span class="br0">&#40;</span><span class="kw1">apply</span> page-<span class="kw1">remove</span><span class="sy0">!</span> page obj attached-attribs<span class="br0">&#41;</span><span class="br0">&#41;</span><span class="br0">&#41;</span><span class="br0">&#41;</span>
+                <span class="br0">&#40;</span><span class="kw1">apply</span> page-remove<span class="sy0">!</span> page obj attached-attribs<span class="br0">&#41;</span><span class="br0">&#41;</span><span class="br0">&#41;</span><span class="br0">&#41;</span>
           <span class="br0">&#40;</span>object-attribs obj<span class="br0">&#41;</span><span class="br0">&#41;</span><span class="br0">&#41;</span><span class="br0">&#41;</span>
     <span class="br0">&#40;</span>page-contents page<span class="br0">&#41;</span><span class="br0">&#41;</span><span class="br0">&#41;</span></pre>
 </dd></dl>
@@ -124,7 +140,7 @@ After loading the file, hit <kbd>:</kbd> and enter, for example,
 
 </div>
 
-<h4><a name="procedures_for_input-output" id="procedures_for_input-output">Procedures for input-output</a></h4>
+<h4 id="proceduresforinput-output">Procedures for input-output</h4>
 <div class="level4">
 
 <p>
@@ -132,13 +148,13 @@ The following script defines two procedures that can be used in
 <strong>gaf shell</strong> batch scripts:
 </p>
 <ul>
-<li class="level1"><div class="li"> <code>schematic-file→page</code></div>
+<li class="level1"><div class="li"> <code>schematic-file-&gt;page</code></div>
 </li>
-<li class="level1"><div class="li"> <code>page→schematic-file</code></div>
+<li class="level1"><div class="li"> <code>page-&gt;schematic-file</code></div>
 </li>
 </ul>
 <dl class="file">
-<dt><a href="_export/code/geda:guile_scripting?codeblock=4" title="Download Snippet" class="mediafile mf_scm">geda-io.scm</a></dt>
+<dt><a href="/./doku.php?do=export_code&amp;id=:geda:guile_scripting.txt&amp;codeblock=5" title="Download Snippet" class="mediafile mf_scm">geda-io.scm</a></dt>
 <dd><pre class="code file lisp"><span class="br0">&#40;</span>use-modules <span class="br0">&#40;</span>ice-<span class="nu0">9</span> lineio<span class="br0">&#41;</span><span class="br0">&#41;</span>
 <span class="br0">&#40;</span>use-modules <span class="br0">&#40;</span>geda page<span class="br0">&#41;</span><span class="br0">&#41;</span>
 &nbsp;
@@ -147,7 +163,7 @@ The following script defines two procedures that can be used in
 <span class="br0">&#40;</span>define <span class="br0">&#40;</span>file-<span class="sy0">&gt;</span>string file<span class="br0">&#41;</span>
   <span class="br0">&#40;</span><span class="kw1">let</span>* <span class="br0">&#40;</span><span class="br0">&#40;</span>port <span class="br0">&#40;</span>make-line-buffering-input-port <span class="br0">&#40;</span>open-file file <span class="st0">&quot;r&quot;</span><span class="br0">&#41;</span><span class="br0">&#41;</span><span class="br0">&#41;</span><span class="br0">&#41;</span>
     <span class="br0">&#40;</span><span class="kw1">do</span> <span class="br0">&#40;</span><span class="br0">&#40;</span>line <span class="st0">&quot;&quot;</span> <span class="br0">&#40;</span>read-string port<span class="br0">&#41;</span><span class="br0">&#41;</span>
-         <span class="br0">&#40;</span>s <span class="st0">&quot;&quot;</span> <span class="br0">&#40;</span>string-<span class="kw1">append</span> s line<span class="br0">&#41;</span><span class="br0">&#41;</span><span class="br0">&#41;</span>
+         <span class="br0">&#40;</span>s <span class="st0">&quot;&quot;</span> <span class="br0">&#40;</span>string-append s line<span class="br0">&#41;</span><span class="br0">&#41;</span><span class="br0">&#41;</span>
       <span class="br0">&#40;</span><span class="br0">&#40;</span>eof-object? line<span class="br0">&#41;</span> <span class="co1">; test</span>
        <span class="br0">&#40;</span>close-port port<span class="br0">&#41;</span>  <span class="co1">; expression(s) to evaluate in the end</span>
        s<span class="br0">&#41;</span>                 <span class="co1">; return value</span>
@@ -166,10 +182,10 @@ The following script defines two procedures that can be used in
 
 </div>
 
-<h4><a name="copy_move_and_rotate_objects" id="copy_move_and_rotate_objects">Copy, move, and rotate objects</a></h4>
+<h4 id="copymoveandrotateobjects">Copy, move, and rotate objects</h4>
 <div class="level4">
 <dl class="file">
-<dt><a href="_export/code/geda:guile_scripting?codeblock=5" title="Download Snippet" class="mediafile mf_scm">move-and-rotate.scm</a></dt>
+<dt><a href="/./doku.php?do=export_code&amp;id=:geda:guile_scripting.txt&amp;codeblock=6" title="Download Snippet" class="mediafile mf_scm">move-and-rotate.scm</a></dt>
 <dd><pre class="code file lisp"><span class="co1">; Scripting example by vzh per request of Kai-Martin Knaak :-)</span>
 <span class="co1">; Use at your own risk.</span>
 &nbsp;
@@ -218,7 +234,7 @@ The following script defines two procedures that can be used in
              <span class="br0">&#40;</span>bounds <span class="br0">&#40;</span><span class="kw1">apply</span> object-bounds translated-objects<span class="br0">&#41;</span><span class="br0">&#41;</span>
              <span class="br0">&#40;</span>rotation-center <span class="br0">&#40;</span>ceiling-coords <span class="br0">&#40;</span>min-coords <span class="br0">&#40;</span><span class="kw1">car</span> bounds<span class="br0">&#41;</span> <span class="br0">&#40;</span><span class="kw1">cdr</span> bounds<span class="br0">&#41;</span><span class="br0">&#41;</span> <span class="nu0">100</span><span class="br0">&#41;</span><span class="br0">&#41;</span>
              <span class="br0">&#40;</span>rotated-objects <span class="br0">&#40;</span><span class="kw1">apply</span> rotate-objects<span class="sy0">!</span> rotation-center angle translated-objects<span class="br0">&#41;</span><span class="br0">&#41;</span><span class="br0">&#41;</span>
-        <span class="br0">&#40;</span><span class="kw1">apply</span> page-<span class="kw1">append</span><span class="sy0">!</span> <span class="br0">&#40;</span>active-page<span class="br0">&#41;</span> rotated-objects<span class="br0">&#41;</span>
+        <span class="br0">&#40;</span><span class="kw1">apply</span> page-append<span class="sy0">!</span> <span class="br0">&#40;</span>active-page<span class="br0">&#41;</span> rotated-objects<span class="br0">&#41;</span>
         rotated-objects<span class="br0">&#41;</span>
       <span class="br0">&#41;</span><span class="br0">&#41;</span><span class="br0">&#41;</span>
 &nbsp;
@@ -250,7 +266,7 @@ The following script defines two procedures that can be used in
 
 </div>
 
-<h4><a name="group_attribute_editing" id="group_attribute_editing">Group attribute editing</a></h4>
+<h4 id="groupattributeediting">Group attribute editing</h4>
 <div class="level4">
 
 <p>
@@ -259,35 +275,35 @@ want to rename them at once, e.g., if they were copy from another
 place.
 </p>
 <dl class="file">
-<dt><a href="_export/code/geda:guile_scripting?codeblock=6" title="Download Snippet" class="mediafile mf_">set-selected-attribs-value</a></dt>
+<dt><a href="/./doku.php?do=export_code&amp;id=:geda:guile_scripting.txt&amp;codeblock=7" title="Download Snippet" class="mediafile mf_">set-selected-attribs-value</a></dt>
 <dd><pre class="code file lisp"><span class="br0">&#40;</span>use-modules <span class="br0">&#40;</span>gschem selection<span class="br0">&#41;</span><span class="br0">&#41;</span>
 &nbsp;
-<span class="br0">&#40;</span>define <span class="br0">&#40;</span>set-selected-attribs-<span class="kw1">value</span><span class="sy0">!</span> <span class="kw1">value</span><span class="br0">&#41;</span>
+<span class="br0">&#40;</span>define <span class="br0">&#40;</span>set-selected-attribs-value<span class="sy0">!</span> <span class="kw1">value</span><span class="br0">&#41;</span>
   <span class="br0">&#40;</span>for-each
     <span class="br0">&#40;</span><span class="kw1">lambda</span> <span class="br0">&#40;</span>attrib<span class="br0">&#41;</span>
-      <span class="br0">&#40;</span>set-attrib-<span class="kw1">value</span><span class="sy0">!</span> attrib <span class="kw1">value</span><span class="br0">&#41;</span><span class="br0">&#41;</span>
+      <span class="br0">&#40;</span>set-attrib-value<span class="sy0">!</span> attrib <span class="kw1">value</span><span class="br0">&#41;</span><span class="br0">&#41;</span>
     <span class="br0">&#40;</span>page-selection <span class="br0">&#40;</span>active-page<span class="br0">&#41;</span><span class="br0">&#41;</span><span class="br0">&#41;</span><span class="br0">&#41;</span></pre>
 </dd></dl>
 
 <p>
 Usage of the procedure in <strong>gschem</strong>:
 </p>
-<pre class="code lisp"><span class="br0">&#40;</span>set-selected-attribs-<span class="kw1">value</span><span class="sy0">!</span> <span class="st0">&quot;R100.?&quot;</span><span class="br0">&#41;</span></pre>
+<pre class="code lisp"><span class="br0">&#40;</span>set-selected-attribs-value<span class="sy0">!</span> <span class="st0">&quot;R100.?&quot;</span><span class="br0">&#41;</span></pre>
 
 <p>
 Now, after renumbering them using <kbd>T</kbd> <kbd>U</kbd>, you
 copy them all and want to rename those copied resistors appending a suffix:
 </p>
 <dl class="file">
-<dt><a href="_export/code/geda:guile_scripting?codeblock=8" title="Download Snippet" class="mediafile mf_scm">append-selected-attribs-suffix.scm</a></dt>
+<dt><a href="/./doku.php?do=export_code&amp;id=:geda:guile_scripting.txt&amp;codeblock=9" title="Download Snippet" class="mediafile mf_scm">append-selected-attribs-suffix.scm</a></dt>
 <dd><pre class="code file lisp"><span class="br0">&#40;</span>use-modules <span class="br0">&#40;</span>gschem selection<span class="br0">&#41;</span><span class="br0">&#41;</span>
 &nbsp;
 <span class="br0">&#40;</span>define <span class="br0">&#40;</span>append-selected-attribs-suffix<span class="sy0">!</span> suffix<span class="br0">&#41;</span>
   <span class="br0">&#40;</span>for-each
     <span class="br0">&#40;</span><span class="kw1">lambda</span> <span class="br0">&#40;</span>attrib<span class="br0">&#41;</span>
-      <span class="br0">&#40;</span>set-attrib-<span class="kw1">value</span><span class="sy0">!</span>
+      <span class="br0">&#40;</span>set-attrib-value<span class="sy0">!</span>
         attrib
-        <span class="br0">&#40;</span>string-<span class="kw1">append</span> <span class="br0">&#40;</span>attrib-<span class="kw1">value</span> attrib<span class="br0">&#41;</span> suffix<span class="br0">&#41;</span><span class="br0">&#41;</span><span class="br0">&#41;</span>
+        <span class="br0">&#40;</span>string-append <span class="br0">&#40;</span>attrib-value attrib<span class="br0">&#41;</span> suffix<span class="br0">&#41;</span><span class="br0">&#41;</span><span class="br0">&#41;</span>
     <span class="br0">&#40;</span>page-selection <span class="br0">&#40;</span>active-page<span class="br0">&#41;</span><span class="br0">&#41;</span><span class="br0">&#41;</span><span class="br0">&#41;</span></pre>
 </dd></dl>
 
@@ -300,16 +316,16 @@ Usage of the procedure in <strong>gschem</strong>:
 Now, let&#039;s rename some other attributes by adding a prefix:
 </p>
 <dl class="file">
-<dt><a href="_export/code/geda:guile_scripting?codeblock=10" title="Download Snippet" class="mediafile mf_scm">append-selected-attribs-prefix.scm</a></dt>
+<dt><a href="/./doku.php?do=export_code&amp;id=:geda:guile_scripting.txt&amp;codeblock=11" title="Download Snippet" class="mediafile mf_scm">append-selected-attribs-prefix.scm</a></dt>
 <dd><pre class="code file lisp"><span class="br0">&#40;</span>use-modules <span class="br0">&#40;</span>gschem selection<span class="br0">&#41;</span><span class="br0">&#41;</span>
 &nbsp;
 <span class="br0">&#40;</span>define <span class="br0">&#40;</span>append-selected-attribs-prefix<span class="sy0">!</span> prefix<span class="br0">&#41;</span>
   <span class="br0">&#40;</span>for-each
     <span class="br0">&#40;</span><span class="kw1">lambda</span> <span class="br0">&#40;</span>object<span class="br0">&#41;</span>
       <span class="br0">&#40;</span><span class="kw1">and</span> <span class="br0">&#40;</span>attribute? object<span class="br0">&#41;</span>
-           <span class="br0">&#40;</span>set-attrib-<span class="kw1">value</span><span class="sy0">!</span>
+           <span class="br0">&#40;</span>set-attrib-value<span class="sy0">!</span>
              object
-             <span class="br0">&#40;</span>string-<span class="kw1">append</span> prefix <span class="br0">&#40;</span>attrib-<span class="kw1">value</span> object<span class="br0">&#41;</span><span class="br0">&#41;</span><span class="br0">&#41;</span><span class="br0">&#41;</span><span class="br0">&#41;</span>
+             <span class="br0">&#40;</span>string-append prefix <span class="br0">&#40;</span>attrib-value object<span class="br0">&#41;</span><span class="br0">&#41;</span><span class="br0">&#41;</span><span class="br0">&#41;</span><span class="br0">&#41;</span>
     <span class="br0">&#40;</span>page-selection <span class="br0">&#40;</span>active-page<span class="br0">&#41;</span><span class="br0">&#41;</span><span class="br0">&#41;</span><span class="br0">&#41;</span></pre>
 </dd></dl>
 
@@ -322,18 +338,18 @@ Usage of the procedure in <strong>gschem</strong>:
 Let&#039;s replace first letters of selected attribs with prefix:
 </p>
 <dl class="file">
-<dt><a href="_export/code/geda:guile_scripting?codeblock=12" title="Download Snippet" class="mediafile mf_scm">append-selected-attribs-prefix.scm</a></dt>
+<dt><a href="/./doku.php?do=export_code&amp;id=:geda:guile_scripting.txt&amp;codeblock=13" title="Download Snippet" class="mediafile mf_scm">append-selected-attribs-prefix.scm</a></dt>
 <dd><pre class="code file lisp"><span class="br0">&#40;</span>use-modules <span class="br0">&#40;</span>gschem selection<span class="br0">&#41;</span><span class="br0">&#41;</span>
 &nbsp;
 <span class="br0">&#40;</span>define <span class="br0">&#40;</span>replace-selected-attribs-prefix<span class="sy0">!</span> prefix<span class="br0">&#41;</span>
   <span class="br0">&#40;</span>for-each
     <span class="br0">&#40;</span><span class="kw1">lambda</span> <span class="br0">&#40;</span>object<span class="br0">&#41;</span>
       <span class="br0">&#40;</span><span class="kw1">and</span> <span class="br0">&#40;</span>attribute? object<span class="br0">&#41;</span>
-           <span class="br0">&#40;</span>set-attrib-<span class="kw1">value</span><span class="sy0">!</span>
+           <span class="br0">&#40;</span>set-attrib-value<span class="sy0">!</span>
              object
-             <span class="br0">&#40;</span>string-<span class="kw1">append</span>
+             <span class="br0">&#40;</span>string-append
                prefix
-               <span class="br0">&#40;</span>string-copy <span class="br0">&#40;</span>attrib-<span class="kw1">value</span> object<span class="br0">&#41;</span> <span class="nu0">1</span><span class="br0">&#41;</span><span class="br0">&#41;</span><span class="br0">&#41;</span><span class="br0">&#41;</span><span class="br0">&#41;</span>
+               <span class="br0">&#40;</span>string-copy <span class="br0">&#40;</span>attrib-value object<span class="br0">&#41;</span> <span class="nu0">1</span><span class="br0">&#41;</span><span class="br0">&#41;</span><span class="br0">&#41;</span><span class="br0">&#41;</span><span class="br0">&#41;</span>
     <span class="br0">&#40;</span>page-selection <span class="br0">&#40;</span>active-page<span class="br0">&#41;</span><span class="br0">&#41;</span><span class="br0">&#41;</span><span class="br0">&#41;</span></pre>
 </dd></dl>
 
@@ -347,17 +363,17 @@ Let&#039;s rename selected <code>netname=</code> attributes increasing them by a
 fixed number:
 </p>
 <dl class="file">
-<dt><a href="_export/code/geda:guile_scripting?codeblock=14" title="Download Snippet" class="mediafile mf_scm">add-selected-attribs-number.scm</a></dt>
+<dt><a href="/./doku.php?do=export_code&amp;id=:geda:guile_scripting.txt&amp;codeblock=15" title="Download Snippet" class="mediafile mf_scm">add-selected-attribs-number.scm</a></dt>
 <dd><pre class="code file lisp"><span class="br0">&#40;</span>use-modules <span class="br0">&#40;</span>gschem selection<span class="br0">&#41;</span><span class="br0">&#41;</span>
 &nbsp;
 <span class="br0">&#40;</span>define <span class="br0">&#40;</span>add-selected-attribs-number<span class="sy0">!</span> number<span class="br0">&#41;</span>
   <span class="br0">&#40;</span>for-each
     <span class="br0">&#40;</span><span class="kw1">lambda</span> <span class="br0">&#40;</span>object<span class="br0">&#41;</span>
       <span class="br0">&#40;</span><span class="kw1">and</span> <span class="br0">&#40;</span>attribute? object<span class="br0">&#41;</span>
-           <span class="br0">&#40;</span>set-attrib-<span class="kw1">value</span><span class="sy0">!</span>
+           <span class="br0">&#40;</span>set-attrib-value<span class="sy0">!</span>
              object
              <span class="br0">&#40;</span>number-<span class="sy0">&gt;</span>string
-               <span class="br0">&#40;</span>+ <span class="br0">&#40;</span>string-<span class="sy0">&gt;</span>number <span class="br0">&#40;</span>attrib-<span class="kw1">value</span> object<span class="br0">&#41;</span><span class="br0">&#41;</span> number<span class="br0">&#41;</span><span class="br0">&#41;</span><span class="br0">&#41;</span><span class="br0">&#41;</span><span class="br0">&#41;</span>
+               <span class="br0">&#40;</span>+ <span class="br0">&#40;</span>string-<span class="sy0">&gt;</span>number <span class="br0">&#40;</span>attrib-value object<span class="br0">&#41;</span><span class="br0">&#41;</span> number<span class="br0">&#41;</span><span class="br0">&#41;</span><span class="br0">&#41;</span><span class="br0">&#41;</span><span class="br0">&#41;</span>
     <span class="br0">&#40;</span>page-selection <span class="br0">&#40;</span>active-page<span class="br0">&#41;</span><span class="br0">&#41;</span><span class="br0">&#41;</span><span class="br0">&#41;</span></pre>
 </dd></dl>
 
@@ -367,21 +383,21 @@ Usage of the procedure in <strong>gschem</strong>:
 <pre class="code lisp"><span class="br0">&#40;</span>add-selected-attribs-number<span class="sy0">!</span> <span class="nu0">100</span><span class="br0">&#41;</span></pre>
 
 <p>
-We could set any function instead of ”+” on the net number in this procedure.
+We could set any function instead of &quot;+&quot; on the net number in this procedure.
 For instance:
 </p>
 <dl class="file">
-<dt><a href="_export/code/geda:guile_scripting?codeblock=16" title="Download Snippet" class="mediafile mf_scm">use-another-func.scm</a></dt>
+<dt><a href="/./doku.php?do=export_code&amp;id=:geda:guile_scripting.txt&amp;codeblock=17" title="Download Snippet" class="mediafile mf_scm">use-another-func.scm</a></dt>
 <dd><pre class="code file lisp"><span class="br0">&#40;</span>use-modules <span class="br0">&#40;</span>gschem selection<span class="br0">&#41;</span><span class="br0">&#41;</span>
 &nbsp;
 <span class="br0">&#40;</span>define <span class="br0">&#40;</span>use-another-func<span class="sy0">!</span> func<span class="br0">&#41;</span>
   <span class="br0">&#40;</span>for-each
     <span class="br0">&#40;</span><span class="kw1">lambda</span> <span class="br0">&#40;</span>object<span class="br0">&#41;</span>
       <span class="br0">&#40;</span><span class="kw1">and</span> <span class="br0">&#40;</span>attribute? object<span class="br0">&#41;</span>
-           <span class="br0">&#40;</span>set-attrib-<span class="kw1">value</span><span class="sy0">!</span>
+           <span class="br0">&#40;</span>set-attrib-value<span class="sy0">!</span>
              object
              <span class="br0">&#40;</span>number-<span class="sy0">&gt;</span>string
-               <span class="br0">&#40;</span>func <span class="br0">&#40;</span>string-<span class="sy0">&gt;</span>number <span class="br0">&#40;</span>attrib-<span class="kw1">value</span> object<span class="br0">&#41;</span><span class="br0">&#41;</span><span class="br0">&#41;</span><span class="br0">&#41;</span><span class="br0">&#41;</span><span class="br0">&#41;</span><span class="br0">&#41;</span>
+               <span class="br0">&#40;</span>func <span class="br0">&#40;</span>string-<span class="sy0">&gt;</span>number <span class="br0">&#40;</span>attrib-value object<span class="br0">&#41;</span><span class="br0">&#41;</span><span class="br0">&#41;</span><span class="br0">&#41;</span><span class="br0">&#41;</span><span class="br0">&#41;</span><span class="br0">&#41;</span>
     <span class="br0">&#40;</span>page-selection <span class="br0">&#40;</span>active-page<span class="br0">&#41;</span><span class="br0">&#41;</span><span class="br0">&#41;</span><span class="br0">&#41;</span></pre>
 </dd></dl>
 
@@ -394,6 +410,93 @@ Usage of the procedure in <strong>gschem</strong>:
 <span class="br0">&#40;</span>use-another-func<span class="sy0">!</span> multiply-by-<span class="nu0">2</span><span class="br0">&#41;</span></pre>
 
 </div>
-<!-- EDIT4 SECTION "Scripting examples" [1158-] --></div>
+
+<h4 id="movingobjectsusingarrows">Moving objects using arrows</h4>
+<div class="level4">
+
+<p>
+Let&#039;s define actions to move selected objects using
+<kbd>Shift</kbd> + arrow keys.
+</p>
+<dl class="file">
+<dt><a href="/./doku.php?do=export_code&amp;id=:geda:guile_scripting.txt&amp;codeblock=19" title="Download Snippet" class="mediafile mf_scm">arrow-move.scm</a></dt>
+<dd><pre class="code file lisp"><span class="br0">&#40;</span>use-modules <span class="br0">&#40;</span>gschem selection<span class="br0">&#41;</span><span class="br0">&#41;</span>
+&nbsp;
+<span class="co1">; Default offset to move</span>
+<span class="br0">&#40;</span>define offset <span class="nu0">100</span><span class="br0">&#41;</span>
+&nbsp;
+<span class="co1">; Get moving vector</span>
+<span class="br0">&#40;</span>define <span class="br0">&#40;</span>move-selection direction<span class="br0">&#41;</span>
+  <span class="br0">&#40;</span><span class="kw1">apply</span> translate-objects<span class="sy0">!</span>
+    <span class="br0">&#40;</span><span class="kw1">case</span> direction
+      <span class="br0">&#40;</span><span class="br0">&#40;</span>left <span class="br0">&#41;</span> <span class="br0">&#40;</span><span class="kw1">cons</span> <span class="br0">&#40;</span>- offset<span class="br0">&#41;</span> <span class="nu0">0</span><span class="br0">&#41;</span><span class="br0">&#41;</span>
+      <span class="br0">&#40;</span><span class="br0">&#40;</span>right<span class="br0">&#41;</span> <span class="br0">&#40;</span><span class="kw1">cons</span> <span class="br0">&#40;</span>+ offset<span class="br0">&#41;</span> <span class="nu0">0</span><span class="br0">&#41;</span><span class="br0">&#41;</span>
+      <span class="br0">&#40;</span><span class="br0">&#40;</span>down <span class="br0">&#41;</span> <span class="br0">&#40;</span><span class="kw1">cons</span> <span class="nu0">0</span> <span class="br0">&#40;</span>- offset<span class="br0">&#41;</span><span class="br0">&#41;</span><span class="br0">&#41;</span>
+      <span class="br0">&#40;</span><span class="br0">&#40;</span>up   <span class="br0">&#41;</span> <span class="br0">&#40;</span><span class="kw1">cons</span> <span class="nu0">0</span> <span class="br0">&#40;</span>+ offset<span class="br0">&#41;</span><span class="br0">&#41;</span><span class="br0">&#41;</span>
+      <span class="br0">&#40;</span>else #f<span class="br0">&#41;</span><span class="br0">&#41;</span>
+    <span class="br0">&#40;</span>page-selection <span class="br0">&#40;</span>active-page<span class="br0">&#41;</span><span class="br0">&#41;</span><span class="br0">&#41;</span><span class="br0">&#41;</span>
+&nbsp;
+<span class="co1">; Define actions</span>
+<span class="br0">&#40;</span>define <span class="br0">&#40;</span><span class="sy0">&amp;</span>move-selection-left <span class="br0">&#41;</span> <span class="br0">&#40;</span>move-selection 'left <span class="br0">&#41;</span><span class="br0">&#41;</span>
+<span class="br0">&#40;</span>define <span class="br0">&#40;</span><span class="sy0">&amp;</span>move-selection-right<span class="br0">&#41;</span> <span class="br0">&#40;</span>move-selection 'right<span class="br0">&#41;</span><span class="br0">&#41;</span>
+<span class="br0">&#40;</span>define <span class="br0">&#40;</span><span class="sy0">&amp;</span>move-selection-down <span class="br0">&#41;</span> <span class="br0">&#40;</span>move-selection 'down <span class="br0">&#41;</span><span class="br0">&#41;</span>
+<span class="br0">&#40;</span>define <span class="br0">&#40;</span><span class="sy0">&amp;</span>move-selection-up   <span class="br0">&#41;</span> <span class="br0">&#40;</span>move-selection 'up   <span class="br0">&#41;</span><span class="br0">&#41;</span>
+&nbsp;
+<span class="co1">; Define shortcuts</span>
+<span class="br0">&#40;</span>global-set-key <span class="st0">&quot;&lt;Shift&gt;Left&quot;</span>  '<span class="sy0">&amp;</span>move-selection-left<span class="br0">&#41;</span>
+<span class="br0">&#40;</span>global-set-key <span class="st0">&quot;&lt;Shift&gt;Right&quot;</span> '<span class="sy0">&amp;</span>move-selection-right<span class="br0">&#41;</span>
+<span class="br0">&#40;</span>global-set-key <span class="st0">&quot;&lt;Shift&gt;Up&quot;</span>    '<span class="sy0">&amp;</span>move-selection-up<span class="br0">&#41;</span>
+<span class="br0">&#40;</span>global-set-key <span class="st0">&quot;&lt;Shift&gt;Down&quot;</span>  '<span class="sy0">&amp;</span>move-selection-down<span class="br0">&#41;</span></pre>
+</dd></dl>
+
+<p>
+The following script redefines current shortcuts so that if
+nothing is selected the canvas is moved with arrow keys (without
+<kbd>Shift</kbd> in this case), otherwise selected objects are
+moved.
+</p>
+<dl class="file">
+<dt><a href="/./doku.php?do=export_code&amp;id=:geda:guile_scripting.txt&amp;codeblock=20" title="Download Snippet" class="mediafile mf_scm">arrow-move2.scm</a></dt>
+<dd><pre class="code file lisp"><span class="br0">&#40;</span>use-modules <span class="br0">&#40;</span>gschem selection<span class="br0">&#41;</span><span class="br0">&#41;</span>
+&nbsp;
+<span class="co1">; Default offset to move</span>
+<span class="br0">&#40;</span>define offset <span class="nu0">100</span><span class="br0">&#41;</span>
+&nbsp;
+<span class="co1">; Get moving vector</span>
+<span class="br0">&#40;</span>define <span class="br0">&#40;</span>move-selection direction<span class="br0">&#41;</span>
+  <span class="br0">&#40;</span><span class="kw1">let</span> <span class="br0">&#40;</span><span class="br0">&#40;</span>selection <span class="br0">&#40;</span>page-selection <span class="br0">&#40;</span>active-page<span class="br0">&#41;</span><span class="br0">&#41;</span><span class="br0">&#41;</span><span class="br0">&#41;</span>
+    <span class="br0">&#40;</span><span class="kw1">if</span> <span class="br0">&#40;</span><span class="kw1">null</span>? selection<span class="br0">&#41;</span>
+      <span class="co1">; default behaviour</span>
+      <span class="br0">&#40;</span><span class="kw1">case</span> direction
+          <span class="br0">&#40;</span><span class="br0">&#40;</span>left <span class="br0">&#41;</span> <span class="br0">&#40;</span><span class="sy0">&amp;</span>view-pan-left<span class="br0">&#41;</span><span class="br0">&#41;</span>
+          <span class="br0">&#40;</span><span class="br0">&#40;</span>right<span class="br0">&#41;</span> <span class="br0">&#40;</span><span class="sy0">&amp;</span>view-pan-right<span class="br0">&#41;</span><span class="br0">&#41;</span>
+          <span class="br0">&#40;</span><span class="br0">&#40;</span>down <span class="br0">&#41;</span> <span class="br0">&#40;</span><span class="sy0">&amp;</span>view-pan-down<span class="br0">&#41;</span><span class="br0">&#41;</span>
+          <span class="br0">&#40;</span><span class="br0">&#40;</span>up   <span class="br0">&#41;</span> <span class="br0">&#40;</span><span class="sy0">&amp;</span>view-pan-up<span class="br0">&#41;</span><span class="br0">&#41;</span>
+          <span class="br0">&#40;</span>else #f<span class="br0">&#41;</span><span class="br0">&#41;</span>
+      <span class="co1">; modified behaviour</span>
+      <span class="br0">&#40;</span><span class="kw1">apply</span> translate-objects<span class="sy0">!</span>
+        <span class="br0">&#40;</span><span class="kw1">case</span> direction
+          <span class="br0">&#40;</span><span class="br0">&#40;</span>left <span class="br0">&#41;</span> <span class="br0">&#40;</span><span class="kw1">cons</span> <span class="br0">&#40;</span>- offset<span class="br0">&#41;</span> <span class="nu0">0</span><span class="br0">&#41;</span><span class="br0">&#41;</span>
+          <span class="br0">&#40;</span><span class="br0">&#40;</span>right<span class="br0">&#41;</span> <span class="br0">&#40;</span><span class="kw1">cons</span> <span class="br0">&#40;</span>+ offset<span class="br0">&#41;</span> <span class="nu0">0</span><span class="br0">&#41;</span><span class="br0">&#41;</span>
+          <span class="br0">&#40;</span><span class="br0">&#40;</span>down <span class="br0">&#41;</span> <span class="br0">&#40;</span><span class="kw1">cons</span> <span class="nu0">0</span> <span class="br0">&#40;</span>- offset<span class="br0">&#41;</span><span class="br0">&#41;</span><span class="br0">&#41;</span>
+          <span class="br0">&#40;</span><span class="br0">&#40;</span>up   <span class="br0">&#41;</span> <span class="br0">&#40;</span><span class="kw1">cons</span> <span class="nu0">0</span> <span class="br0">&#40;</span>+ offset<span class="br0">&#41;</span><span class="br0">&#41;</span><span class="br0">&#41;</span>
+          <span class="br0">&#40;</span>else #f<span class="br0">&#41;</span><span class="br0">&#41;</span>
+        <span class="br0">&#40;</span>page-selection <span class="br0">&#40;</span>active-page<span class="br0">&#41;</span><span class="br0">&#41;</span><span class="br0">&#41;</span><span class="br0">&#41;</span>
+    <span class="br0">&#41;</span><span class="br0">&#41;</span>
+&nbsp;
+<span class="co1">; Define actions</span>
+<span class="br0">&#40;</span>define <span class="br0">&#40;</span><span class="sy0">&amp;</span>move-selection-left <span class="br0">&#41;</span> <span class="br0">&#40;</span>move-selection 'left <span class="br0">&#41;</span><span class="br0">&#41;</span>
+<span class="br0">&#40;</span>define <span class="br0">&#40;</span><span class="sy0">&amp;</span>move-selection-right<span class="br0">&#41;</span> <span class="br0">&#40;</span>move-selection 'right<span class="br0">&#41;</span><span class="br0">&#41;</span>
+<span class="br0">&#40;</span>define <span class="br0">&#40;</span><span class="sy0">&amp;</span>move-selection-down <span class="br0">&#41;</span> <span class="br0">&#40;</span>move-selection 'down <span class="br0">&#41;</span><span class="br0">&#41;</span>
+<span class="br0">&#40;</span>define <span class="br0">&#40;</span><span class="sy0">&amp;</span>move-selection-up   <span class="br0">&#41;</span> <span class="br0">&#40;</span>move-selection 'up   <span class="br0">&#41;</span><span class="br0">&#41;</span>
+&nbsp;
+<span class="co1">; Define shortcuts</span>
+<span class="br0">&#40;</span>global-set-key <span class="st0">&quot;Left&quot;</span>  '<span class="sy0">&amp;</span>move-selection-left<span class="br0">&#41;</span>
+<span class="br0">&#40;</span>global-set-key <span class="st0">&quot;Right&quot;</span> '<span class="sy0">&amp;</span>move-selection-right<span class="br0">&#41;</span>
+<span class="br0">&#40;</span>global-set-key <span class="st0">&quot;Up&quot;</span>    '<span class="sy0">&amp;</span>move-selection-up<span class="br0">&#41;</span>
+<span class="br0">&#40;</span>global-set-key <span class="st0">&quot;Down&quot;</span>  '<span class="sy0">&amp;</span>move-selection-down<span class="br0">&#41;</span></pre>
+</dd></dl>
+
+</div>
 </body>
 </html>

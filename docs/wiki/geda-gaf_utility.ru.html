@@ -9,28 +9,27 @@
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 </head>
 <body>
-<div class="dokuwiki export">
 
 <p>
 <em>На других языках:</em> <a href="geda-gaf_utility.html" class="wikilink1" title="geda-gaf_utility.html">English</a>
 </p>
 
-<h1 class="sectionedit1"><a name="gaf_-_утилита_командной_строки_geda_gaf" id="gaf_-_утилита_командной_строки_geda_gaf">gaf - утилита командной строки gEDA/gaf</a></h1>
+<h1 id="gaf-утилитакоманднойстрокиgedagaf">gaf - утилита командной строки gEDA/gaf</h1>
 <div class="level1">
 
 <p>
 Программа <strong>gaf</strong> предоставляет в распоряжение пользователя несколько маленьких утилит
-командной строки для работы с файлами схем и символов. Её назначение —
+командной строки для работы с файлами схем и символов. Её назначение ---
 пакетная обработка данных проектов, созданных с помощью редактора схем
 <a href="geda-gschem_ug.ru.html" class="wikilink1" title="geda-gschem_ug.ru.html">gschem</a>. В настоящее время программа поддерживает три
 встроенных команды:
 </p>
 <ul>
-<li class="level1"><div class="li"> <a href="#gaf_export" title="geda:gaf_utility.ru &crarr;" class="wikilink1">gaf export</a> используется для конвертации файлов схем и символов в форматы <acronym title="Scalable Vector Graphics">SVG</acronym>, <acronym title="Portable Document Format">PDF</acronym>, <acronym title="Portable Network Graphics">PNG</acronym>, PS и EPS с целью распечатки или внедрения в другую документацию.</div>
+<li class="level1"><div class="li"> <a href="#gafexport" title=":geda:gaf_utility.ru.txt ↵" class="wikilink1">gaf export</a> используется для конвертации файлов схем и символов в форматы SVG, PDF, PNG, PS и EPS с целью распечатки или внедрения в другую документацию.</div>
 </li>
-<li class="level1"><div class="li"> <a href="#gaf_config" title="geda:gaf_utility.ru &crarr;" class="wikilink1">gaf config</a> предназначена для чтения текущих и записи новых параметров настройки в файлы настроек проектов, пользовательские и системные файлы настроек gEDA.</div>
+<li class="level1"><div class="li"> <a href="#gafconfig" title=":geda:gaf_utility.ru.txt ↵" class="wikilink1">gaf config</a> предназначена для чтения текущих и записи новых параметров настройки в файлы настроек проектов, пользовательские и системные файлы настроек gEDA.</div>
 </li>
-<li class="level1"><div class="li"> <a href="#gaf_shell" title="geda:gaf_utility.ru &crarr;" class="wikilink1">gaf shell</a> предоставляет интерфейс командной строки с «циклом чтения-вычисления-вывода» Scheme (REPL) для пакетной обработки данных принципиальных схем.</div>
+<li class="level1"><div class="li"> <a href="#gafshell" title=":geda:gaf_utility.ru.txt ↵" class="wikilink1">gaf shell</a> предоставляет интерфейс командной строки с «циклом чтения-вычисления-вывода» Scheme (REPL) для пакетной обработки данных принципиальных схем.</div>
 </li>
 </ul>
 
@@ -39,8 +38,8 @@
 </p>
 
 </div>
-<!-- EDIT1 SECTION "gaf - утилита командной строки gEDA/gaf" [62-1656] -->
-<h2 class="sectionedit2"><a name="gaf_export" id="gaf_export">gaf export</a></h2>
+
+<h2 id="gafexport">gaf export</h2>
 <div class="level2">
 
 <p>
@@ -49,8 +48,8 @@
 </p>
 
 </div>
-<!-- EDIT2 SECTION "gaf export" [1657-1821] -->
-<h2 class="sectionedit3"><a name="gaf_config" id="gaf_config">gaf config</a></h2>
+
+<h2 id="gafconfig">gaf config</h2>
 <div class="level2">
 
 <p>
@@ -63,8 +62,8 @@
 </p>
 
 </div>
-<!-- EDIT3 SECTION "gaf config" [1822-2131] -->
-<h3 class="sectionedit4"><a name="файлы_настроек" id="файлы_настроек">Файлы настроек</a></h3>
+
+<h3 id="файлынастроек">Файлы настроек</h3>
 <div class="level3">
 
 <p>
@@ -73,9 +72,9 @@ gEDA.
 Это следующие файлы:
 </p>
 <ul>
-<li class="level1"><div class="li"> <em><code>geda-system.conf</code></em> для системных настроек. Файл системных настроек последовательно ищется в трёх местах:</div>
+<li class="level1 node"><div class="li"> <em><code>geda-system.conf</code></em> для системных настроек. Файл системных настроек последовательно ищется в трёх местах:</div>
 <ul>
-<li class="level2"><div class="li"> в <em><code>${XDG_CONFIG_DIRS}/gEDA</code></em>, подробности об этой переменной окружения см. в <a href="http://standards.freedesktop.org/basedir-spec/latest/" class="urlextern" title="http://standards.freedesktop.org/basedir-spec/latest/"  rel="nofollow">XDG Base Directory Specification</a>;</div>
+<li class="level2"><div class="li"> в <em><code>${XDG_CONFIG_DIRS}/gEDA</code></em>, подробности об этой переменной окружения см. в XDG Base Directory Specification;</div>
 </li>
 <li class="level2"><div class="li"> если системных настроек там не найдено, то в традиционном местоположении rc-файлов gEDA, то есть в каталоге <em><code>${PREFIX}/share/gEDA</code></em>, где <code>${PREFIX}</code> является скомпилированным умолчанием, обычно <em><code>/usr</code></em> или <em><code>/usr/local</code></em> (но в дистрибутивах на основе Debian вместо этого используется каталог <em><code>/etc/gEDA</code></em>),</div>
 </li>
@@ -96,8 +95,8 @@ gEDA.
 
 <p>
 Формат файла настроек приводится в этом
-<a href="http://standards.freedesktop.org/desktop-entry-spec/1.0/" class="urlextern" title="http://standards.freedesktop.org/desktop-entry-spec/1.0/"  rel="nofollow">стандарте
-freedesktop.org</a>.
+стандарте
+freedesktop.org.
 </p>
 
 <p>
@@ -107,7 +106,7 @@ freedesktop.org</a>.
 
 <p>
 Значениями ключей в файлах настроек gEDA могут быть отдельные числа или списки.
-Обратите внимание, что в отличие от команды <a href="#gaf_export" title="geda:gaf_utility.ru &crarr;" class="wikilink1">gaf export</a>, для которой
+Обратите внимание, что в отличие от команды <a href="#gafexport" title=":geda:gaf_utility.ru.txt ↵" class="wikilink1">gaf export</a>, для которой
 можно использовать несколько разделителей списка, единственным разделителем между значениями
 списка в файлах настроек является точка с запятой &#039;;&#039;. Другое отличие заключается
 в том, что при использовании команды <strong>gaf config</strong> всегда необходимо указывать
@@ -123,8 +122,8 @@ freedesktop.org</a>.
 
 <p>
 Все размеры должны задаваться в пунктах Adobe (72 пункта = 1 дюйму).
-Суффиксы, такие как “pt”, “mm” и другие, которые могут использоваться с
-командой <a href="#gaf_export" title="geda:gaf_utility.ru &crarr;" class="wikilink1">gaf export</a>, в файлах настроек не работают.
+Суффиксы, такие как &quot;pt&quot;, &quot;mm&quot; и другие, которые могут использоваться с
+командой <a href="#gafexport" title=":geda:gaf_utility.ru.txt ↵" class="wikilink1">gaf export</a>, в файлах настроек не работают.
 </p>
 
 <p>
@@ -132,17 +131,19 @@ freedesktop.org</a>.
 </p>
 
 </div>
-<!-- EDIT4 SECTION "Файлы настроек" [2132-5708] -->
-<h3 class="sectionedit5"><a name="группа_export" id="группа_export">Группа export</a></h3>
+
+<h3 id="группаexport">Группа export</h3>
 <div class="level3">
 
 <p>
 <em><strong>Таблица 1.</strong></em> Параметры группы <strong>export</strong>
 </p>
-<div class="table sectionedit6"><table class="inline">
+<div class="table sectionedit1"><table class="inline">
+	<thead>
 	<tr class="row0">
 		<th class="col0 centeralign">  Ключ       </th><th class="col1 leftalign"> Формат                                                                </th><th class="col2 centeralign">  По умолчанию          </th>
 	</tr>
+	</thead>
 	<tr class="row1">
 		<td class="col0 leftalign"> align       </td><td class="col1 leftalign"> строка «auto» или список из двух целых вида <code>ГОРИЗ_ВЫРАВНИВАНИЕ;ВЕРТ_ВЫРАВНИВАНИЕ</code>  </td><td class="col2 centeralign">  auto  </td>
 	</tr>
@@ -168,41 +169,41 @@ freedesktop.org</a>.
 		<td class="col0 leftalign"> size        </td><td class="col1 leftalign"> строка «auto» или список из двух целых вида <code>ВЫСОТА;ШИРИНА</code>         </td><td class="col2 centeralign">  auto                  </td>
 	</tr>
 </table></div>
-<!-- EDIT6 TABLE [5808-7094] -->
+<!-- EDIT1 TABLE [5808-7094] -->
 </div>
 
-<h4><a name="align" id="align">align</a></h4>
+<h4 id="align">align</h4>
 <div class="level4">
 
 <p>
 Настройка выравнивания изображения на странице. <code>ГОРИЗ_ВЫРАВНИВАНИЕ</code>
-управляет горизонтальным выравниванием, а <code>ВЕРТ_ВЫРАВНИВАНИЕ</code> —
-вертикальным.  Оба значения должны быть в диапазоне 0.0 — 1.0. Значение
+управляет горизонтальным выравниванием, а <code>ВЕРТ_ВЫРАВНИВАНИЕ</code> ---
+вертикальным.  Оба значения должны быть в диапазоне 0.0 --- 1.0. Значение
 выравнивания <code>auto</code> эквивалентно значению <code>0.5:0.5</code>, т. е. изображение
 будет центрировано.
 </p>
 
 <p>
-Для команды <a href="#gaf_export" title="geda:gaf_utility.ru &crarr;" class="wikilink1">gaf export</a> при отсутствии кавычек можно использовать
+Для команды <a href="#gafexport" title=":geda:gaf_utility.ru.txt ↵" class="wikilink1">gaf export</a> при отсутствии кавычек можно использовать
 разделитель своей локали. В этом случае числа будут интерпретироваться вашей
 оболочкой. Для <strong>gaf config</strong> так делать нельзя, поскольку значение ключа
 <code>align</code> является строкой. При записи в файл настроек чисел с плавающей
 запятой в качестве разделителя используется точка, и точка также должна
-использоваться для чисел, содержащихся в строках. См. <a href="#примеры" title="geda:gaf_utility.ru &crarr;" class="wikilink1">примеры</a> ниже.
+использоваться для чисел, содержащихся в строках. См. <a href="#примеры" title=":geda:gaf_utility.ru.txt ↵" class="wikilink1">примеры</a> ниже.
 </p>
 
 </div>
 
-<h4><a name="dpi" id="dpi">dpi</a></h4>
+<h4 id="dpi">dpi</h4>
 <div class="level4">
 
 <p>
-Количество пикселов на дюйм для вывода в формате <acronym title="Portable Network Graphics">PNG</acronym>.
+Количество пикселов на дюйм для вывода в формате PNG.
 </p>
 
 </div>
 
-<h4><a name="font" id="font">font</a></h4>
+<h4 id="font">font</h4>
 <div class="level4">
 
 <p>
@@ -210,12 +211,12 @@ freedesktop.org</a>.
 </p>
 
 <p>
-Подробную информацию о выборе шрифтов см. ниже в разделе <a href="#шрифты" title="geda:gaf_utility.ru &crarr;" class="wikilink1">Шрифты</a>.
+Подробную информацию о выборе шрифтов см. ниже в разделе <a href="#шрифты" title=":geda:gaf_utility.ru.txt ↵" class="wikilink1">Шрифты</a>.
 </p>
 
 </div>
 
-<h4><a name="layout" id="layout">layout</a></h4>
+<h4 id="layout">layout</h4>
 <div class="level4">
 
 <p>
@@ -226,7 +227,7 @@ freedesktop.org</a>.
 
 </div>
 
-<h4><a name="margins" id="margins">margins</a></h4>
+<h4 id="margins">margins</h4>
 <div class="level4">
 
 <p>
@@ -248,7 +249,7 @@ freedesktop.org</a>.
 
 </div>
 
-<h4><a name="monochrome" id="monochrome">monochrome</a></h4>
+<h4 id="monochrome">monochrome</h4>
 <div class="level4">
 
 <p>
@@ -257,7 +258,7 @@ freedesktop.org</a>.
 
 </div>
 
-<h4><a name="paper" id="paper">paper</a></h4>
+<h4 id="paper">paper</h4>
 <div class="level4">
 
 <p>
@@ -266,7 +267,7 @@ freedesktop.org</a>.
 
 <p>
 Легальные размеры бумаги описаны в стандарте
-<a href="ftp://ftp.pwg.org/pub/pwg/candidates/cs-pwgmsn10-20020226-5101.1.pdf" class="urlextern" title="ftp://ftp.pwg.org/pub/pwg/candidates/cs-pwgmsn10-20020226-5101.1.pdf"  rel="nofollow"> PWG 5101.1-2002</a> (<code>iso_a4</code>, <code>iso_a3</code>,
+ PWG 5101.1-2002 (<code>iso_a4</code>, <code>iso_a3</code>,
 <code>na_letter</code>, <code>na_legal</code> и т. д.).
 Формат бумаги по умолчанию зависит от текущей локали. Например,
 это <code>A4</code>, когда используется <code>ru_RU.UTF-8</code>, в то время как
@@ -275,7 +276,7 @@ freedesktop.org</a>.
 
 </div>
 
-<h4><a name="size" id="size">size</a></h4>
+<h4 id="size">size</h4>
 <div class="level4">
 
 <p>
@@ -292,17 +293,19 @@ freedesktop.org</a>.
 </p>
 
 </div>
-<!-- EDIT5 SECTION "Группа export" [5709-11418] -->
-<h3 class="sectionedit7"><a name="группа_gnetlist" id="группа_gnetlist">Группа gnetlist</a></h3>
+
+<h3 id="группаgnetlist">Группа gnetlist</h3>
 <div class="level3">
 
 <p>
 <em><strong>Таблица 2.</strong></em> Параметры группы <strong>gnetlist</strong>
 </p>
-<div class="table sectionedit8"><table class="inline">
+<div class="table sectionedit2"><table class="inline">
+	<thead>
 	<tr class="row0">
 		<th class="col0 centeralign">  Ключ                </th><th class="col1 centeralign">  Формат                                                   </th><th class="col2 centeralign">  По умолчанию         </th>
 	</tr>
+	</thead>
 	<tr class="row1">
 		<td class="col0 leftalign"> default-bus-name     </td><td class="col1 leftalign"> строка                                                    </td><td class="col2 centeralign">  unnamed_bus          </td>
 	</tr>
@@ -316,10 +319,10 @@ freedesktop.org</a>.
 		<td class="col0 leftalign"> traverse-hierarchy   </td><td class="col1 leftalign"> логическое значение                                       </td><td class="col2 centeralign">  true                 </td>
 	</tr>
 </table></div>
-<!-- EDIT8 TABLE [11522-12147] -->
+<!-- EDIT2 TABLE [11522-12147] -->
 </div>
 
-<h4><a name="default-bus-name" id="default-bus-name">default-bus-name</a></h4>
+<h4 id="default-bus-name">default-bus-name</h4>
 <div class="level4">
 
 <p>
@@ -333,7 +336,7 @@ freedesktop.org</a>.
 
 </div>
 
-<h4><a name="default-net-name" id="default-net-name">default-net-name</a></h4>
+<h4 id="default-net-name">default-net-name</h4>
 <div class="level4">
 
 <p>
@@ -348,7 +351,7 @@ freedesktop.org</a>.
 
 </div>
 
-<h4><a name="net-naming-priority" id="net-naming-priority">net-naming-priority</a></h4>
+<h4 id="net-naming-priority">net-naming-priority</h4>
 <div class="level4">
 
 <p>
@@ -368,7 +371,7 @@ freedesktop.org</a>.
 
 </div>
 
-<h4><a name="traverse-hierarchy" id="traverse-hierarchy">traverse-hierarchy</a></h4>
+<h4 id="traverse-hierarchy">traverse-hierarchy</h4>
 <div class="level4">
 
 <p>
@@ -377,25 +380,27 @@ freedesktop.org</a>.
 </p>
 
 </div>
-<!-- EDIT7 SECTION "Группа gnetlist" [11419-14200] -->
-<h3 class="sectionedit9"><a name="группа_gschem" id="группа_gschem">Группа gschem</a></h3>
+
+<h3 id="группаgschem">Группа gschem</h3>
 <div class="level3">
 
 <p>
 <em><strong>Таблица 3.</strong></em> Параметры группы <strong>gschem</strong>
 </p>
-<div class="table sectionedit10"><table class="inline">
+<div class="table sectionedit3"><table class="inline">
+	<thead>
 	<tr class="row0">
 		<th class="col0 centeralign">  Ключ             </th><th class="col1 centeralign">  Формат  </th><th class="col2 rightalign">  По умолчанию </th>
 	</tr>
+	</thead>
 	<tr class="row1">
 		<td class="col0 leftalign"> default-filename  </td><td class="col1 leftalign"> строка   </td><td class="col2 centeralign">  untitled     </td>
 	</tr>
 </table></div>
-<!-- EDIT10 TABLE [14300-14424] -->
+<!-- EDIT3 TABLE [14300-14424] -->
 </div>
 
-<h4><a name="default-filename" id="default-filename">default-filename</a></h4>
+<h4 id="default-filename">default-filename</h4>
 <div class="level4">
 
 <p>
@@ -408,17 +413,19 @@ freedesktop.org</a>.
 </p>
 
 </div>
-<!-- EDIT9 SECTION "Группа gschem" [14201-14725] -->
-<h3 class="sectionedit11"><a name="группа_gschemlibrary" id="группа_gschemlibrary">Группа gschem.library</a></h3>
+
+<h3 id="группаgschemlibrary">Группа gschem.library</h3>
 <div class="level3">
 
 <p>
 <em><strong>Таблица 4.</strong></em> Параметры группы <strong>gschem.library</strong>
 </p>
-<div class="table sectionedit12"><table class="inline">
+<div class="table sectionedit4"><table class="inline">
+	<thead>
 	<tr class="row0">
 		<th class="col0 centeralign">  Ключ                   </th><th class="col1 centeralign">  Формат                                                   </th><th class="col2 centeralign">  По умолчанию         </th>
 	</tr>
+	</thead>
 	<tr class="row1">
 		<td class="col0 leftalign"> component-attributes    </td><td class="col1 leftalign"> список имён атрибутов, разделённых запятыми               </td><td class="col2 centeralign">  *                    </td>
 	</tr>
@@ -426,10 +433,10 @@ freedesktop.org</a>.
 		<td class="col0 leftalign"> sort                    </td><td class="col1 leftalign"> логическое значение                                       </td><td class="col2 centeralign">  false                </td>
 	</tr>
 </table></div>
-<!-- EDIT12 TABLE [14841-15253] -->
+<!-- EDIT4 TABLE [14841-15253] -->
 </div>
 
-<h4><a name="component-attributes" id="component-attributes">component-attributes</a></h4>
+<h4 id="component-attributes">component-attributes</h4>
 <div class="level4">
 
 <p>
@@ -438,14 +445,14 @@ freedesktop.org</a>.
 
 <p>
 Атрибуты символов в диалоговом окне сортируются в том же порядке, в каком
-они появляются в списке. Если первым элементом списка будет звёздочка “*”,
+они появляются в списке. Если первым элементом списка будет звёздочка &quot;*&quot;,
 все атрибуты будут отображаться в алфавитном порядке. При задании пустого
 списка показ атрибутов в диалоговом окне будет отключен.
 </p>
 
 </div>
 
-<h4><a name="sort" id="sort">sort</a></h4>
+<h4 id="sort">sort</h4>
 <div class="level4">
 
 <p>
@@ -459,17 +466,19 @@ freedesktop.org</a>.
 </p>
 
 </div>
-<!-- EDIT11 SECTION "Группа gschem.library" [14726-16361] -->
-<h3 class="sectionedit13"><a name="группа_gschemprinting" id="группа_gschemprinting">Группа gschem.printing</a></h3>
+
+<h3 id="группаgschemprinting">Группа gschem.printing</h3>
 <div class="level3">
 
 <p>
 <em><strong>Таблица 5.</strong></em> Параметры группы <strong>gschem.printing</strong>
 </p>
-<div class="table sectionedit14"><table class="inline">
+<div class="table sectionedit5"><table class="inline">
+	<thead>
 	<tr class="row0">
 		<th class="col0 centeralign">  Ключ       </th><th class="col1 centeralign">  Формат                                                         </th><th class="col2 centeralign">  По умолчанию           </th>
 	</tr>
+	</thead>
 	<tr class="row1">
 		<td class="col0 leftalign"> layout      </td><td class="col1 leftalign"> предопределённая строка: «portrait», «landscape» или «auto»     </td><td class="col2 centeralign">  auto                   </td>
 	</tr>
@@ -480,10 +489,10 @@ freedesktop.org</a>.
 		<td class="col0 leftalign"> paper       </td><td class="col1 leftalign"> предопределённая строка размера                                 </td><td class="col2 centeralign">  <em>зависит от локали</em>  </td>
 	</tr>
 </table></div>
-<!-- EDIT14 TABLE [16479-17024] -->
+<!-- EDIT5 TABLE [16479-17024] -->
 </div>
 
-<h4><a name="layout1" id="layout1">layout</a></h4>
+<h4 id="layout1">layout</h4>
 <div class="level4">
 
 <p>
@@ -494,11 +503,11 @@ freedesktop.org</a>.
 
 <p>
 Ориентация страницы в <strong>gschem</strong> рассчитана на вывод страниц на принтер, а не в
-<acronym title="Portable Document Format">PDF</acronym>, поэтому значение «auto» означает, что если
-вы выводите страницы в <acronym title="Portable Document Format">PDF</acronym>, вы получите перевёрнутую пейзажную ориентацию вместо
-обычной. Для получения пригодного для чтения <acronym title="Portable Document Format">PDF</acronym> со страницами в пейзажной ориентации
-используйте вместо этого команду <a href="#gaf_export" title="geda:gaf_utility.ru &crarr;" class="wikilink1">gaf export</a> и задайте значение «auto» для ключа <code>layout</code>
-в группе <a href="#группа_export" title="geda:gaf_utility.ru &crarr;" class="wikilink1">export</a>.
+PDF, поэтому значение «auto» означает, что если
+вы выводите страницы в PDF, вы получите перевёрнутую пейзажную ориентацию вместо
+обычной. Для получения пригодного для чтения PDF со страницами в пейзажной ориентации
+используйте вместо этого команду <a href="#gafexport" title=":geda:gaf_utility.ru.txt ↵" class="wikilink1">gaf export</a> и задайте значение «auto» для ключа <code>layout</code>
+в группе <a href="#группаexport" title=":geda:gaf_utility.ru.txt ↵" class="wikilink1">export</a>.
 </p>
 
 <p>
@@ -508,7 +517,7 @@ freedesktop.org</a>.
 
 </div>
 
-<h4><a name="paper1" id="paper1">paper</a></h4>
+<h4 id="paper1">paper</h4>
 <div class="level4">
 
 <p>
@@ -518,12 +527,12 @@ freedesktop.org</a>.
 <p>
 Значение по умолчанию ключа <code>paper</code> зависит от текущей
 локали. См. примечания о размере бумаги выше в описании ключа <code>paper</code> для
-группы <a href="#группа_export" title="geda:gaf_utility.ru &crarr;" class="wikilink1">export</a>.
+группы <a href="#группаexport" title=":geda:gaf_utility.ru.txt ↵" class="wikilink1">export</a>.
 </p>
 
 </div>
 
-<h4><a name="monochrome1" id="monochrome1">monochrome</a></h4>
+<h4 id="monochrome1">monochrome</h4>
 <div class="level4">
 
 <p>
@@ -532,13 +541,13 @@ freedesktop.org</a>.
 
 <p>
 Значение по умолчанию ключа <code>monochrome</code> в данной группе в отличие от
-значения этого ключа в группе <a href="#группа_export" title="geda:gaf_utility.ru &crarr;" class="wikilink1">export</a> задано равным
+значения этого ключа в группе <a href="#группаexport" title=":geda:gaf_utility.ru.txt ↵" class="wikilink1">export</a> задано равным
 <code>false</code> умышленно.
 </p>
 
 </div>
-<!-- EDIT13 SECTION "Группа gschem.printing" [16362-18999] -->
-<h3 class="sectionedit15"><a name="группы_gschemdialog-geometry" id="группы_gschemdialog-geometry">Группы gschem.dialog-geometry.*</a></h3>
+
+<h3 id="группыgschemdialog-geometry">Группы gschem.dialog-geometry.*</h3>
 <div class="level3">
 
 <p>
@@ -602,13 +611,15 @@ freedesktop.org</a>.
 <p>
 <em><strong>Таблица 5.</strong></em> Параметры группы <strong> gschem.dialog-geometry.* </strong>
 </p>
-<div class="table sectionedit16"><table class="inline">
+<div class="table sectionedit6"><table class="inline">
+	<thead>
 	<tr class="row0">
 		<th class="col0 centeralign" colspan="3">  Все диалоговые окна                                                                                      </th>
 	</tr>
 	<tr class="row1">
 		<th class="col0 centeralign">  Ключ                   </th><th class="col1 centeralign">  Формат                                                   </th><th class="col2 centeralign">  По умолчанию         </th>
 	</tr>
+	</thead>
 	<tr class="row2">
 		<td class="col0 leftalign"> x                       </td><td class="col1 leftalign"> целое                                                     </td><td class="col2 centeralign">  -                    </td>
 	</tr>
@@ -646,7 +657,7 @@ freedesktop.org</a>.
 		<td class="col0 leftalign"> show_inherited          </td><td class="col1 leftalign"> логическое значение                                       </td><td class="col2 centeralign">  true                 </td>
 	</tr>
 </table></div>
-<!-- EDIT16 TABLE [20137-21835] -->
+<!-- EDIT6 TABLE [20137-21835] -->
 <p>
 Примечание: все указанные значения автоматически сохраняются в файлах
 настроек пользователя. Их можно изменить вручную, но значения будут
@@ -658,7 +669,7 @@ freedesktop.org</a>.
 
 </div>
 
-<h4><a name="x" id="x">x</a></h4>
+<h4 id="x">x</h4>
 <div class="level4">
 
 <p>
@@ -667,7 +678,7 @@ freedesktop.org</a>.
 
 </div>
 
-<h4><a name="y" id="y">y</a></h4>
+<h4 id="y">y</h4>
 <div class="level4">
 
 <p>
@@ -676,7 +687,7 @@ freedesktop.org</a>.
 
 </div>
 
-<h4><a name="width" id="width">width</a></h4>
+<h4 id="width">width</h4>
 <div class="level4">
 
 <p>
@@ -685,7 +696,7 @@ freedesktop.org</a>.
 
 </div>
 
-<h4><a name="height" id="height">height</a></h4>
+<h4 id="height">height</h4>
 <div class="level4">
 
 <p>
@@ -694,7 +705,7 @@ freedesktop.org</a>.
 
 </div>
 
-<h4><a name="hpaned" id="hpaned">hpaned</a></h4>
+<h4 id="hpaned">hpaned</h4>
 <div class="level4">
 
 <p>
@@ -704,7 +715,7 @@ freedesktop.org</a>.
 
 </div>
 
-<h4><a name="vpaned" id="vpaned">vpaned</a></h4>
+<h4 id="vpaned">vpaned</h4>
 <div class="level4">
 
 <p>
@@ -714,7 +725,7 @@ freedesktop.org</a>.
 
 </div>
 
-<h4><a name="source-tab" id="source-tab">source-tab</a></h4>
+<h4 id="source-tab">source-tab</h4>
 <div class="level4">
 
 <p>
@@ -726,7 +737,7 @@ freedesktop.org</a>.
 
 </div>
 
-<h4><a name="show_inherited" id="show_inherited">show_inherited</a></h4>
+<h4 id="show_inherited">show_inherited</h4>
 <div class="level4">
 
 <p>
@@ -735,20 +746,20 @@ freedesktop.org</a>.
 </p>
 
 </div>
-<!-- EDIT15 SECTION "Группы gschem.dialog-geometry.*" [19000-23908] -->
-<h2 class="sectionedit17"><a name="gaf_shell" id="gaf_shell">gaf shell</a></h2>
+
+<h2 id="gafshell">gaf shell</h2>
 <div class="level2">
 
 <p>
-<strong>gaf shell</strong> предоставляет цикл чтения-вычисления-вывода Scheme («Read-Eval-Print Loop» — REPL) для
+<strong>gaf shell</strong> предоставляет цикл чтения-вычисления-вывода Scheme («Read-Eval-Print Loop» --- REPL) для
 автоматической обработки файлов схем и символов. Эта утилита разработана
-для поддержки работы с <acronym title="Application Programming Interface">API</acronym> языка Scheme в gEDA. Информацию об опциях утилиты см. в справочной странице <em>gaf(1)</em>, а
+для поддержки работы с API языка Scheme в gEDA. Информацию об опциях утилиты см. в справочной странице <em>gaf(1)</em>, а
 для информации о поддерживаемых Scheme-процедурах gEDA см. <strong>info geda-scheme</strong>.
 </p>
 
 </div>
-<!-- EDIT17 SECTION "gaf shell" [23909-24525] -->
-<h2 class="sectionedit18"><a name="шрифты" id="шрифты">Шрифты</a></h2>
+
+<h2 id="шрифты">Шрифты</h2>
 <div class="level2">
 
 <p>
@@ -773,8 +784,8 @@ freedesktop.org</a>.
 <p>
 Больше информации о том, как задать имя шрифта, который хотелось бы
 использовать, см. в
-<a href="http://freedesktop.org/software/fontconfig/fontconfig-user.html" class="urlextern" title="http://freedesktop.org/software/fontconfig/fontconfig-user.html"  rel="nofollow">документации
-пакета fontconfig</a>.
+документации
+пакета fontconfig.
 </p>
 
 <p>
@@ -788,16 +799,18 @@ freedesktop.org</a>.
 <p>
 В следующей таблице приводится список возможных значений настроек
 (полученный из документации по Pango), которые вы можете использовать в
-своих шаблонах имён шрифтов. См. также раздел <a href="#примеры" title="geda:gaf_utility.ru &crarr;" class="wikilink1">Примеры</a> ниже.
+своих шаблонах имён шрифтов. См. также раздел <a href="#примеры" title=":geda:gaf_utility.ru.txt ↵" class="wikilink1">Примеры</a> ниже.
 </p>
 
 <p>
 <em><strong>Table 6.</strong></em> Возможные параметры настройки шрифта
 </p>
-<div class="table sectionedit19"><table class="inline">
+<div class="table sectionedit7"><table class="inline">
+	<thead>
 	<tr class="row0">
 		<th class="col0"> Параметр </th><th class="col1"> Значение </th>
 	</tr>
+	</thead>
 	<tr class="row1">
 		<td class="col0 leftalign"> Style   </td><td class="col1"> Normal<br/>
 Oblique<br/>
@@ -832,15 +845,15 @@ ExtraExpanded<br/>
 UltraExpanded </td>
 	</tr>
 </table></div>
-<!-- EDIT19 TABLE [27428-27796] -->
+<!-- EDIT7 TABLE [27428-27796] -->
 </div>
-<!-- EDIT18 SECTION "Шрифты" [24526-27798] -->
-<h2 class="sectionedit20"><a name="примеры" id="примеры">Примеры</a></h2>
+
+<h2 id="примеры">Примеры</h2>
 <div class="level2">
 
 </div>
-<!-- EDIT20 SECTION "Примеры" [27799-27825] -->
-<h3 class="sectionedit21"><a name="настройка_экспорта" id="настройка_экспорта">Настройка экспорта</a></h3>
+
+<h3 id="настройкаэкспорта">Настройка экспорта</h3>
 <div class="level3">
 
 <p>
@@ -854,7 +867,7 @@ UltraExpanded </td>
 <pre class="code">gaf config --user export paper na_letter</pre>
 
 <p>
-Задать для локального проекта определённое значение размера бумаги, равное 1&times;2 дюйма:
+Задать для локального проекта определённое значение размера бумаги, равное 1x2 дюйма:
 </p>
 <pre class="code">gaf config --project export size &quot;72;144&quot;</pre>
 
@@ -870,7 +883,7 @@ UltraExpanded </td>
 <pre class="code">gaf config --project export align &quot;1.0;0.5&quot;</pre>
 
 <p>
-Следующая команда — неправильная, она не будет работать, даже если
+Следующая команда --- неправильная, она не будет работать, даже если
 в вашей локали в качестве разделителя в числах с плавающей запятой используется запятая, а не точка:
 </p>
 <pre class="code">gaf config --project export align &quot;1,0;0,0&quot;</pre>
@@ -885,7 +898,7 @@ UltraExpanded </td>
 </p>
 
 <p>
-Чтобы печатать все свои схемы в цвете (обратите внимание: “False” или “FALSE”
+Чтобы печатать все свои схемы в цвете (обратите внимание: &quot;False&quot; или &quot;FALSE&quot;
 работать не будут):
 </p>
 <pre class="code">gaf config --project export monochrome false</pre>
@@ -901,8 +914,8 @@ UltraExpanded </td>
 <pre class="code">gaf config --project export font &quot;Arial Bold&quot;</pre>
 
 </div>
-<!-- EDIT21 SECTION "Настройка экспорта" [27826-29996] -->
-<h3 class="sectionedit22"><a name="настройка_создания_списков_соединений" id="настройка_создания_списков_соединений">Настройка создания списков соединений</a></h3>
+
+<h3 id="настройкасозданиясписковсоединений">Настройка создания списков соединений</h3>
 <div class="level3">
 
 <p>
@@ -925,8 +938,8 @@ gaf config --user gnetlist default-bus-name bus</pre>
 <pre class="code">gaf config --project gnetlist net-naming-priority netname-attribute</pre>
 
 </div>
-<!-- EDIT22 SECTION "Настройка создания списков соединений" [29997-30959] -->
-<h3 class="sectionedit23"><a name="настройка_gschem" id="настройка_gschem">Настройка gschem</a></h3>
+
+<h3 id="настройкаgschem">Настройка gschem</h3>
 <div class="level3">
 
 <p>
@@ -935,8 +948,8 @@ gaf config --user gnetlist default-bus-name bus</pre>
 <pre class="code">gaf config --user gschem default-filename empty</pre>
 
 </div>
-<!-- EDIT23 SECTION "Настройка gschem" [30960-31142] -->
-<h3 class="sectionedit24"><a name="настройка_вида_библиотеки_gschem" id="настройка_вида_библиотеки_gschem">Настройка вида библиотеки gschem</a></h3>
+
+<h3 id="настройкавидабиблиотекиgschem">Настройка вида библиотеки gschem</h3>
 <div class="level3">
 
 <p>
@@ -974,8 +987,8 @@ gaf config --user gnetlist default-bus-name bus</pre>
 <pre class="code">gaf config --user gschem.library sort true</pre>
 
 </div>
-<!-- EDIT24 SECTION "Настройка вида библиотеки gschem" [31143-32839] -->
-<h3 class="sectionedit25"><a name="настройка_печати_из_gschem" id="настройка_печати_из_gschem">Настройка печати из gschem</a></h3>
+
+<h3 id="настройкапечатиизgschem">Настройка печати из gschem</h3>
 <div class="level3">
 
 <p>
@@ -995,8 +1008,8 @@ gaf config --user gnetlist default-bus-name bus</pre>
 <pre class="code">gaf config --user gschem.printing monochrome true</pre>
 
 </div>
-<!-- EDIT25 SECTION "Настройка печати из gschem" [32840-33423] -->
-<h3 class="sectionedit26"><a name="настройка_диалоговых_окон_gschem" id="настройка_диалоговых_окон_gschem">Настройка диалоговых окон gschem</a></h3>
+
+<h3 id="настройкадиалоговыхоконgschem">Настройка диалоговых окон gschem</h3>
 <div class="level3">
 
 <p>
@@ -1011,8 +1024,8 @@ gaf config --user gnetlist default-bus-name bus</pre>
 </p>
 
 </div>
-<!-- EDIT26 SECTION "Настройка диалоговых окон gschem" [33424-34043] -->
-<h3 class="sectionedit27"><a name="использование_оболочки_gaf_gaf_shell" id="использование_оболочки_gaf_gaf_shell">Использование оболочки gaf (gaf shell)</a></h3>
+
+<h3 id="использованиеоболочкиgafgafshell">Использование оболочки gaf (gaf shell)</h3>
 <div class="level3">
 
 <p>
@@ -1027,6 +1040,5 @@ gaf config --user gnetlist default-bus-name bus</pre>
 <pre class="code">gaf shell -c &quot;(display (sys-config-dirs))&quot;</pre>
 
 </div>
-<!-- EDIT27 SECTION "Использование оболочки gaf (gaf shell)" [34044-] --></div>
 </body>
 </html>

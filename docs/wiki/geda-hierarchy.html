@@ -9,29 +9,19 @@
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 </head>
 <body>
-<div class="dokuwiki export">
 
-<p>
-<em>(This page is still incomplete.)</em>
-</p>
-
-<h1 class="sectionedit1"><a name="hierarchical_schematics" id="hierarchical_schematics">Hierarchical schematics</a></h1>
+<h1 id="hierarchicalschematics">Hierarchical schematics</h1>
 <div class="level1">
 
 <p>
 Depending on what you want to achieve, there are several options how to use hierarchy.  If you are unsure, ask yourself if you want to include a subcircuit multiple times in your design, or want to represent a subsheet as a symbol in another sheet.  If you answer either with yes, go with full mangling.  If not, you probably don&#039;t need hierarchy at all and can just use multiple schematic files.
 </p>
-
-<p>
-<p><div class="noteclassic">
-The schematic hierarchy isn&#039;t limited to one level—subcircuits can in turn contain other subcircuits.
-
-</div></p>
-</p>
+<div class="noteclassic">The schematic hierarchy isn&#039;t limited to one level—subcircuits can in turn contain other subcircuits.
 
 </div>
-<!-- EDIT1 SECTION "Hierarchical schematics" [39-595] -->
-<h2 class="sectionedit2"><a name="multiple_schematic_files" id="multiple_schematic_files">Multiple schematic files</a></h2>
+</div>
+
+<h2 id="multipleschematicfiles">Multiple schematic files</h2>
 <div class="level2">
 
 <p>
@@ -44,8 +34,8 @@ If you are using the same <code>netname=</code> attribute on different pages, th
 </p>
 
 </div>
-<!-- EDIT2 SECTION "Multiple schematic files" [596-960] -->
-<h2 class="sectionedit3"><a name="hierarchy_as_a_convenience_method" id="hierarchy_as_a_convenience_method">Hierarchy as a convenience method</a></h2>
+
+<h2 id="hierarchyasaconveniencemethod">Hierarchy as a convenience method</h2>
 <div class="level2">
 
 <p>
@@ -64,55 +54,26 @@ You also need to tell gnetlist to disable component and net name mangling or you
 Now when invoking gnetlist, just specify the main schematic file:
 </p>
 <pre class="code">$ gnetlist -g geda main.sch</pre>
+<div class="noteclassic">This will only work if the <a href="geda-gaf_utility.html#gaf_config" class="wikilink1" title="geda-gaf_utility.html">configuration</a> setting <code><a href="geda-gaf_utility.html#gnetlist_group" class="wikilink1" title="geda-gaf_utility.html">gnetlist.traverse-hierarchy</a></code> is set to <code>true</code>.  This is the default but may have been overridden by your distribution or local administrator.
 
-<p>
-<p><div class="noteclassic">
-This will only work if the <a href="geda-gaf_utility.html#gaf_config" class="wikilink1" title="geda-gaf_utility.html">configuration</a> setting <code><a href="geda-gaf_utility.html#gnetlist_group" class="wikilink1" title="geda-gaf_utility.html">gnetlist.traverse-hierarchy</a></code> is set to <code>true</code>.  This is the default but may have been overridden by your distribution or local administrator.
+</div><div class="noteimportant"><code>gnetlist</code> will complain if the subsheet symbols don&#039;t contain a <code>refdes=</code> attribute, but with mangling disabled, it won&#039;t use it in any way.
 
-</div></p>
-</p>
-
-<p>
-<p><div class="noteimportant">
-<code>gnetlist</code> will complain if the subsheet symbols don&#039;t contain a <code>refdes=</code> attribute, but with mangling disabled, it won&#039;t use it in any way.
-
-</div></p>
-</p>
-
+</div>
 <p>
 In <code>gschem</code>, you can navigate the schematic hierarchy using the commands from the “Hierarchy” menu.  To view the underlying schematic for a subcircuit component, select it and use <strong>Hierarchy→Down Schematic</strong>.  Once finished editing, use <strong>Hierarchy→Up</strong> to return to the original schematic.  (This works only if you accessed the subcircuit&#039;s schematic in that way.)  Analogously, you can edit the subcircuit symbol itself using <strong>Hierarchy→Down Symbol</strong>.
 </p>
 
-</div>
-<!-- EDIT3 SECTION "Hierarchy as a convenience method" [961-2908] -->
-<h3 class="sectionedit4"><a name="input_output_pins" id="input_output_pins">Input/output pins</a></h3>
-<div class="level3">
-
 <p>
-As an alternative to using the same net name, you can add pins to a subsheet symbol to route nets to and from that schematic.  For each pin on the symbol, you need to add a corresponding footprint-less I/O symbol to the subsheet whose <code>refdes=</code> matches the <code>pinlabel=</code> of the pin.  (You can normally use the <code>in-1.sym</code> and <code>out-1.sym</code> symbols from the generic “Input/Output” symbol library for this.)
-</p>
-
-<p>
-<p><div class="noteimportant">
-If you get an error about a “Missing I/O symbol”, make sure you set a <code>refdes=</code> for the subsheet symbols.
-
-</div></p>
-</p>
-
-<p>
-<p><div class="notewarning">
-Make sure not to add more than one I/O symbol for each pin as this will silently produce an incorrect netlist.
-
-</div></p>
+As an alternative to using the same net name, you can add pins to a subsheet symbol to route nets to and from that schematic.  See the section <em>Input/output pins</em> below for details.
 </p>
 
 </div>
-<!-- EDIT4 SECTION "Input/output pins" [2909-3624] -->
-<h2 class="sectionedit5"><a name="hierarchy_as_a_grouping_instantiation_mechanism" id="hierarchy_as_a_grouping_instantiation_mechanism">Hierarchy as a grouping/instantiation mechanism</a></h2>
+
+<h2 id="hierarchyasagroupinginstantiationmechanism">Hierarchy as a grouping/instantiation mechanism</h2>
 <div class="level2">
 
 <p>
-If you want to include a subcircuit multiple times in your schematic, you need a way to tell the components of one instantiation from those of another one (given that your subcircuit contains any components).  This is where uref mangling comes in.  You enable it by specifying
+If you want to include a subcircuit multiple times in your schematic, you need a way to tell the components of one instantiation from those of another one (given that your subcircuit contains any components).  This is where refdef mangling comes in.  You enable it by specifying
 </p>
 <pre class="code">(hierarchy-uref-mangle &quot;enabled&quot;)</pre>
 
@@ -123,22 +84,54 @@ in <code>gnetlistrc</code>.  Now, <code>gnetlist</code> constructs the name of a
 (hierarchy-uref-separator &quot;:&quot;)</pre>
 
 <p>
-<p><div class="noteimportant">
-Named nets from one instantiation will connect to the same net of another one.  If you are using net names in the subcircuit, you will probably want to use separate net namespaces to avoid that.
-
-</div></p>
+Named nets from one instantiation will connect to the same net of another one.  This means you can&#039;t use net names to connect (non-power) pins across the hierarchy any more; you need I/O pins instead.  Also, you will probably want to use separate net namespaces so you don&#039;t short-circuit nets between instantiations when using net names.
 </p>
 
 </div>
-<!-- EDIT5 SECTION "Hierarchy as a grouping/instantiation mechanism" [3625-4597] -->
-<h2 class="sectionedit6"><a name="separating_net_netname_namespaces" id="separating_net_netname_namespaces">Separating net=/netname= namespaces</a></h2>
+
+<h3 id="inputoutputpins">Input/output pins</h3>
+<div class="level3">
+
+<p>
+In order to connect a net to a subcircuit, you need to add a pin to the subcircuit symbol and a corresponding footprint-less I/O component to the subcircuit whose <code>refdes=</code> matches the <code>pinlabel=</code> of the pin.  During netlist generation, these two nets will be connected.  (You can normally use the <code>in-1.sym</code> and <code>out-1.sym</code> symbols from the generic “Input/Output” symbol library for this.)
+</p>
+<div class="noteimportant">If you get an error about a “Missing I/O symbol”, make sure you set a <code>refdes=</code> for the subsheet symbols.
+
+</div><div class="notewarning">Make sure not to add more than one I/O symbol for each pin as this will silently produce an incorrect netlist.
+
+</div>
+</div>
+
+<h2 id="separatingnetnetnamenamespaces">Separating net=/netname= namespaces</h2>
 <div class="level2">
 
 <p>
-…
+The typical and cleanest way to use hierarchy is to enable both refdes and net=/netname= mangling.  This means that the subcircuit lives in a namespace of its own, and the only way to connect nets between the instantiating and the instantiated schematic is through pins of the subsheet symbol and I/O ports in its schematic.  If you want to include a subcircuit multiple times in your design, even though it&#039;s not strictly necessary, this is the recommended way to use hierarchy, as you would otherwise have to be very careful about avoiding naming nets in the subschematic which would cause them to be silently short-circuited between instantiations.
+</p>
+
+<p>
+You enable net=/netname= mangling it by specifying
+</p>
+<pre class="code">(hierarchy-netattrib-mangle &quot;enabled&quot;)
+(hierarchy-netname-mangle &quot;enabled&quot;)</pre>
+
+<p>
+in <code>gnetlistrc</code>.  As with refdes mangling, you can also configure the way mangled net names are constructed.
 </p>
 
 </div>
-<!-- EDIT6 SECTION "Separating net=/netname= namespaces" [4598-] --></div>
+
+<h3 id="netnamemanglingvsnetmangling">netname= mangling vs. net= mangling</h3>
+<div class="level3">
+
+<p>
+There are two slightly different options which influence net namespaces: <code>netname=</code> mangling means that net names set via the <code>netname=</code> attribute on nets are prefixed or suffixed with the subsheet instance&#039;s hierarchy tag.  <code>net=</code> attribute mangling means that net names which are set via the <code>net=</code> attribute on components (like, for example, <code>Vcc</code> and <code>GND</code> pins in some libraries) are prefixed or suffixed with the subsheet instance&#039;s hierarchy tag.
+</p>
+
+<p>
+Usually, when using net namespaces, you would enable both <code>netname=</code> and <code>net=</code> mangling.  Depending on how you use hierarchy in your design, there might be use cases where you might want to disable one of them, though: If you disable <code>netname=</code> mangling, you gain the ability to use global net names and connect nets across the hierarchy by setting the <code>netname=</code> attribute while still having implicit nets separate.  If you disable <code>net=</code> mangling, all implicit pins (usually power and ground pins) across all of your schematic pages will be connected, so you don&#039;t have to use explicit power and ground pins on your subsheet symbols.  Both approaches come at the cost of reduced readability, though: you can&#039;t tell any more how a subsheet is connected to the rest of the design by just looking at the schematic.
+</p>
+
+</div>
 </body>
 </html>

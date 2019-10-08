@@ -9,47 +9,46 @@
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 </head>
 <body>
-<div class="dokuwiki export">
 
-<h1 class="sectionedit1"><a name="version_control_migration" id="version_control_migration">Version Control Migration</a></h1>
+<h1 id="versioncontrolmigration">Version Control Migration</h1>
 <div class="level1">
 
 </div>
-<!-- EDIT1 SECTION "Version Control Migration" [1-41] -->
-<h2 class="sectionedit2"><a name="status_quo" id="status_quo">Status Quo</a></h2>
+
+<h2 id="statusquo">Status Quo</h2>
 <div class="level2">
 
 <p>
-Currently, gEDA uses <acronym title="Concurrent Versions System">CVS</acronym>.  <acronym title="Concurrent Versions System">CVS</acronym> is the “original” version control system used for collaborating on open source projects.
+Currently, gEDA uses CVS.  CVS is the &quot;original&quot; version control system used for collaborating on open source projects.
 </p>
 
 <p>
-Unfortunately, <acronym title="Concurrent Versions System">CVS</acronym> has a number of problems:
+Unfortunately, CVS has a number of problems:
 </p>
 <ol>
-<li class="level1"><div class="li"> <acronym title="Concurrent Versions System">CVS</acronym> does not support the concept of patch sets.  That is, it&#039;s very difficult to work out what changes went into <acronym title="Concurrent Versions System">CVS</acronym> together without using dodgy tools like <a href="http://www.cobite.com/cvsps/" class="urlextern" title="http://www.cobite.com/cvsps/"  rel="nofollow">cvsps</a>.</div>
+<li class="level1"><div class="li"> CVS does not support the concept of patch sets.  That is, it&#039;s very difficult to work out what changes went into CVS together without using dodgy tools like cvsps.</div>
 </li>
-<li class="level1"><div class="li"> Merging with <acronym title="Concurrent Versions System">CVS</acronym> is painful, especially when there is keyword expansion brokenness such as the <code>Log</code> keyword.</div>
+<li class="level1"><div class="li"> Merging with CVS is painful, especially when there is keyword expansion brokenness such as the <code>Log</code> keyword.</div>
 </li>
-<li class="level1"><div class="li"> <acronym title="Concurrent Versions System">CVS</acronym> doesn&#039;t support renames preserving history.</div>
+<li class="level1"><div class="li"> CVS doesn&#039;t support renames preserving history.</div>
 </li>
-<li class="level1"><div class="li"> The overhead involved in creating and managing a branch in <acronym title="Concurrent Versions System">CVS</acronym> is such that people tend to do one of the following:</div>
+<li class="level1 node"><div class="li"> The overhead involved in creating and managing a branch in CVS is such that people tend to do one of the following:</div>
 <ol>
 <li class="level2"><div class="li"> Don&#039;t bother</div>
 </li>
-<li class="level2"><div class="li"> Use another VCS locally, then export patches, then commit patches to <acronym title="Concurrent Versions System">CVS</acronym>.  This is a big hassle for everyone.</div>
+<li class="level2"><div class="li"> Use another VCS locally, then export patches, then commit patches to CVS.  This is a big hassle for everyone.</div>
 </li>
-<li class="level2"><div class="li"> Do II. <strong>and</strong> use a branch in <acronym title="Concurrent Versions System">CVS</acronym>, which is even more hassle, but means people can see the changes in advance.</div>
+<li class="level2"><div class="li"> Do II. <strong>and</strong> use a branch in CVS, which is even more hassle, but means people can see the changes in advance.</div>
 </li>
 </ol>
 </li>
-<li class="level1"><div class="li"> You can&#039;t do anything in <acronym title="Concurrent Versions System">CVS</acronym> (view logs, view “blame” for a line of code, create diffs to previous versions) without being online &amp; connecting to the repository.</div>
+<li class="level1"><div class="li"> You can&#039;t do anything in CVS (view logs, view &quot;blame&quot; for a line of code, create diffs to previous versions) without being online &amp; connecting to the repository.</div>
 </li>
 </ol>
 
 </div>
-<!-- EDIT2 SECTION "Status Quo" [42-1144] -->
-<h2 class="sectionedit3"><a name="what_we_need" id="what_we_need">What We Need</a></h2>
+
+<h2 id="whatweneed">What We Need</h2>
 <div class="level2">
 
 <p>
@@ -68,16 +67,16 @@ The following features would be deemed desirable in a version control system:
 </li>
 <li class="level1"><div class="li"> All users have their own copy of the history.</div>
 </li>
-<li class="level1"><div class="li"> Users can make local branches/commits without being logged onto a remote server (“distributed” repository model).</div>
+<li class="level1"><div class="li"> Users can make local branches/commits without being logged onto a remote server (&quot;distributed&quot; repository model).</div>
 </li>
 <li class="level1"><div class="li"> Merge &amp; rename tracking.</div>
 </li>
-<li class="level1"><div class="li"> Easy to transition to from <acronym title="Concurrent Versions System">CVS</acronym>.</div>
+<li class="level1"><div class="li"> Easy to transition to from CVS.</div>
 </li>
 </ol>
 
 <p>
-Using the <a href="http://en.wikipedia.org/wiki/Comparison_of_revision_control_software" class="urlextern" title="http://en.wikipedia.org/wiki/Comparison_of_revision_control_software"  rel="nofollow">comparison matrix at Wikipedia</a>, it looks like only <a href="http://www.selenic.com/mercurial/wiki/" class="urlextern" title="http://www.selenic.com/mercurial/wiki/"  rel="nofollow">Mercurial</a> and <a href="http://git.or.cz/" class="urlextern" title="http://git.or.cz/"  rel="nofollow">git</a> have the features we require.
+Using the comparison matrix at Wikipedia, it looks like only Mercurial and git have the features we require.
 </p>
 
 <p>
@@ -91,6 +90,5 @@ A number of factors militate in favour of using git:
 </ul>
 
 </div>
-<!-- EDIT3 SECTION "What We Need" [1145-] --></div>
 </body>
 </html>

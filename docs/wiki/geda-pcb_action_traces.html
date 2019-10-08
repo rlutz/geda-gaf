@@ -1,0 +1,125 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+  <link rel="stylesheet" media="screen" type="text/css" href="./style.css" />
+  <link rel="stylesheet" media="screen" type="text/css" href="./design.css" />
+  <link rel="stylesheet" media="print" type="text/css" href="./print.css" />
+
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+</head>
+<body>
+
+<h2 id="traceanaction">Trace an action</h2>
+<div class="level2">
+
+<p>
+Here is a short introduction where to start if you want to trace an action down into the source code:
+Lets draw a line in the (GTK) GUI.
+</p>
+
+<p>
+If we start pcb the default mode is the select mode, in order to draw a trace we need to switch to the LINE mode. We do that by pressing <kbd>F2</kbd>. Next we use the mouse to select a starting point and do a left click of the mouse button. Now we can start drawing a trace.
+</p>
+
+<p>
+So what happens in the source code? PCB uses a flexible way of implementing menu structures and it uses a flexible way to implement actions the program should do. All this flexibility made it a bit difficult for me to see where to start.
+</p>
+
+</div>
+
+<h3 id="f2key">F2 key</h3>
+<div class="level3">
+
+<p>
+First let&#039;s trace the LINE mode selecting by pressing <kbd>F2</kbd>.
+</p>
+
+<p>
+In the file <em><strong>gpcb-menu.res</strong></em> we look for our <kbd>F2</kbd> key and we find
+</p>
+<pre class="code">{&quot;Line&quot; checked=linemode,1 Mode(Line) a={&quot;F2&quot; &quot;&lt;Key&gt;F2&quot;}}</pre>
+
+<p>
+In the file <em><strong>action.c</strong></em> we find
+</p>
+<pre class="code">HID_Action action_action_list[] {&quot;Mode&quot;, 0, ActionMode, mode_help, mode_syntax}</pre>
+
+<p>
+The action_action_list defines that the <strong>Mode</strong> event is translated into the <em class="u">ActionMode</em> function. So the function called when we press <kbd>F2</kbd> is <code>ActionMode(Line)</code>.
+</p>
+
+<p>
+ActionMode is a generic function and therefore it will need to find what to do.
+</p>
+<pre class="code c">ActionMode <span class="br0">&#40;</span><span class="kw4">int</span> argc<span class="sy0">,</span> <span class="kw4">char</span> <span class="sy0">**</span>argv<span class="sy0">,</span> Coord x<span class="sy0">,</span> Coord y<span class="br0">&#41;</span></pre>
+
+<p>
+It will do that by calling <code>GetFunctionID (AGV[0])</code> in this example AGV[0] = Line. The function ID will tell it to do the function <code>SetMode (LINE_MODE);</code>
+</p>
+
+<p>
+That function will set the variable <strong>Settings.Mode</strong> to LINE_MODE
+</p>
+
+<p>
+<a href="media/devel_intro/set_mode.png" class="media" target="_blank" title="devel_intro:set_mode.png">devel_intro:set_mode.png</a>
+</p>
+
+</div>
+
+<h3 id="mouseclick">Mouse click</h3>
+<div class="level3">
+
+<p>
+Next we trace down what will happen if we left click the mouse button to start drawing a track.<br/>
+Please note this is a very simplified call graph.
+</p>
+
+<p>
+<a href="media/devel_intro/draw_line.png" class="media" target="_blank" title="devel_intro:draw_line.png">devel_intro:draw_line.png</a>
+</p>
+
+<p>
+In the file <em><strong>gpcb-menu.res</strong></em> Left mouse click Mouse = Left =&gt; points to Mode(Notify)
+</p>
+
+<p>
+[*1] Mode(Notify)
+</p>
+
+<p>
+<strong>Mode</strong> translates in the action_action_list into _ActionMode_
+</p>
+
+<p>
+[*2] Left mouse click translates into calling function ActionMode(Notify)
+</p>
+
+<p>
+[*3] The program will go back and forth between NotifyMode and NotifyLine until [*4].<br/>
+
+In the function NotifyLine all the dynamic processing is done, meaning that here the limitations and restrictions are check realtime. e.g. if the Auto force DRC check flag is checked, this function checks if we try to draw over existing copper.
+</p>
+
+<p>
+[*4]if two points are selected we can create a line
+</p>
+
+<p>
+[*5] We need to free memory-space and add our new Line into the linked list. This is done through the GLIB Library.
+Next our newly created LINE object is filled with the relevant data. 
+Basically we are done, the line is added to the data structure. However there is one more thing to do.
+</p>
+
+<p>
+[*6] Our new line is stored into the main PCBType data structure (actually in the DataType sub structure). Now there is one more administrative task to do, the newly created line must be add to the rtree data structure. Every item that is added to the data structure is also added to the rtree data structure. The R-TREE data structure makes it easy to search for free or occupied areas on a layer.
+</p>
+
+<p>
+This is in a very simplified description on what happens and the path the software takes to draw a line.
+</p>
+
+</div>
+</body>
+</html>

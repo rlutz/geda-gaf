@@ -1,0 +1,93 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+  <link rel="stylesheet" media="screen" type="text/css" href="./style.css" />
+  <link rel="stylesheet" media="screen" type="text/css" href="./design.css" />
+  <link rel="stylesheet" media="print" type="text/css" href="./print.css" />
+
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+</head>
+<body>
+
+<p>
+<strong>REGISTER_ACTIONS - REGISTER_FLAGS - REGISTER_ATTRIBUTES</strong>
+</p>
+
+<p>
+Every action file must register its actions in the HID.
+The action file will have an 
+</p>
+<pre class="code c"><span class="co2">#include &quot;hid.h&quot;</span></pre>
+
+<p>
+ which define the REGISTER_* macros.
+Then somewhere in the file you add:
+</p>
+<pre class="code">REGISTER_ACTIONS(exampledo_action_list)</pre>
+
+<p>
+This will be expanded by the preprocessor into:
+</p>
+<pre class="code c"><span class="kw4">void</span> register_exampledo_action_list<span class="br0">&#40;</span><span class="br0">&#41;</span>
+<span class="br0">&#123;</span> hid_register_actions<span class="br0">&#40;</span>exampledo_action_list<span class="sy0">,</span><span class="nu0">1</span><span class="br0">&#41;</span><span class="sy0">;</span> <span class="br0">&#125;</span></pre>
+
+<p>
+During the build process the files <em><strong>core_lists.h</strong></em> and <em><strong>gtk_lists.h</strong></em> are created. These files contain nothing more than a collection of REGISTER_* instructions it found in its source files.<br/>
+So <em><strong>core_lists.h</strong></em> and <em><strong>gtk_lists.h</strong></em> will contain:
+</p>
+<pre class="code">REGISTER_ACTION(exampledo_action_list)</pre>
+
+<p>
+In the file <em><strong>main.c</strong></em> around the <em class="u">main</em> functions we find the instruction:
+</p>
+<pre class="code c"><span class="co2">#include &quot;dolists.h&quot;</span></pre>
+
+<p>
+And soon after that we find
+</p>
+<pre class="code c"><span class="co2">#include &quot;core_lists.h&quot;</span></pre>
+
+<p>
+Because <em><strong>dolists.h</strong></em> redefines the REGISTER_* macros, the macros in <em><strong>core_lists.h</strong></em>
+</p>
+<pre class="code">REGISTER_ACTIONS(exampledo_action_list)</pre>
+
+<p>
+will be expanded by the preprocessor into:
+</p>
+<pre class="code c">external <span class="kw4">void</span> register_exampledo_action_list<span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+register_exampledo_action_list<span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span></pre>
+
+<p>
+And therefore it will call all functions to register the actions at the beginning of the main function.
+</p>
+
+<h3 id="options">Options</h3>
+<div class="level3">
+<div class="table sectionedit1"><table class="inline">
+	<tr class="row0">
+		<td class="col0">REGISTER_ACTIONS</td><td class="col1">These actions can be called though the user command window (start with &quot;:&quot; in the PCB program.</td>
+	</tr>
+	<tr class="row1">
+		<td class="col0">REGISTER_FLAGS</td><td class="col1">These flags initiate a functions when set or unset.<br/>
+E.g. in file <em><strong>flags.c</strong></em> we find <pre class="code c">HID_Flag flags_flag_list<span class="br0">&#91;</span><span class="br0">&#93;</span> <span class="sy0">=</span> <span class="br0">&#123;</span>
+  <span class="br0">&#123;</span><span class="st0">&quot;style&quot;</span><span class="sy0">,</span>                FlagCurrentStyle<span class="sy0">,</span> NULL<span class="br0">&#125;</span><span class="sy0">,</span>
+  <span class="br0">&#123;</span><span class="st0">&quot;grid&quot;</span><span class="sy0">,</span>                 FlagGrid<span class="sy0">,</span>         NULL<span class="br0">&#125;</span><span class="sy0">,</span></pre>
+
+<p>
+The &quot;grid&quot; flags is associated with the menu flag: <strong>View-&gt;enable visible grid</strong> and makes the connection to the <code>FlagGrid()</code> function.<br/>
+If you select <strong>View-&gt;enable visible grid</strong> the function <code>FlagGrid</code> will be called.
+</p>
+</td>
+	</tr>
+	<tr class="row2">
+		<td class="col0">REGISTER_ATTRIBUTES</td><td class="col1">In <em><strong>main.c</strong></em> there is a call to this macro: <code>REGISTER_ATTRIBUTES (main_attribute_list)</code><br/>
+The main_attribute_list defines the command-line options.<br/>
+Most of the HID also use this macro, to add their command line options as well.</td>
+	</tr>
+</table></div>
+<!-- EDIT1 TABLE [1377-2232] -->
+</div>
+</body>
+</html>

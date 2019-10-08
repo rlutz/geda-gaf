@@ -1,0 +1,25 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+  <link rel="stylesheet" media="screen" type="text/css" href="./style.css" />
+  <link rel="stylesheet" media="screen" type="text/css" href="./design.css" />
+  <link rel="stylesheet" media="print" type="text/css" href="./print.css" />
+
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+</head>
+<body>
+
+<p>
+This page will serve to document the pcb crosshair and collect ideas for its improvement.
+</p>
+
+<p>
+The crosshair is the pair of orthogonal lines used to indicate the coordinates of the next action. It serves a number of purposes related to this primary function, e.g. the position of the crosshair is restricted to grid points, snapping to objects (pins, pads, ends of lines, etc.), and objects can be attached to it for moving or copying.
+</p>
+
+<p>
+Presently, the code governing the crosshair is convoluted with many other functions in pcb. This blueprint seeks to coalesce the crosshair code into one location (crosshair.[c,h]), discuss how the crosshair should behave and interact with other elements of pcb, and ultimately revise the crosshair code to be more modular and flexible.
+</p>
+</body>
+</html>

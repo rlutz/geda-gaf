@@ -9,28 +9,24 @@
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 </head>
 <body>
-<div class="dokuwiki export">
+<a href=.>start</a>&nbsp;=>&nbsp;<a href=geda-gnetlist_ug.html>gnetlist_ug</a></br>
 <div class="table sectionedit1"><table class="inline">
 	<tr class="row0">
-		<td class="col0 leftalign"> « <a href="geda-gnetlist_ug-netlist_backends.html" class="wikilink1" title="geda-gnetlist_ug-netlist_backends.html">Netlist backends</a>  </td><td class="col1 centeralign">  <strong><a href="geda-gnetlist_ug.html" class="wikilink1" title="geda-gnetlist_ug.html">gEDA gnetlist User Guide</a></strong>     </td><td class="col2 rightalign">  <a href="geda-gnetlist_ug-hierarchy.html" class="wikilink1" title="geda-gnetlist_ug-hierarchy.html">Hierarchy</a> » </td>
+		<td class="col0 leftalign"> &lt;&lt; <a href="geda-gnetlist_ug-netlistbackends.html" class="wikilink2" title="geda-gnetlist_ug-netlistbackends.html">Netlist backends</a>  </td><td class="col1 centeralign">  <strong><a href="geda-gnetlist_ug.html" class="wikilink1" title="geda-gnetlist_ug.html">gEDA gnetlist User Guide</a></strong>     </td><td class="col2 rightalign">  <a href="geda-gnetlist_ug-hierarchy.html" class="wikilink1" title="geda-gnetlist_ug-hierarchy.html">Hierarchy</a> &gt;&gt; </td>
 	</tr>
 </table></div>
 <!-- EDIT1 TABLE [1-133] -->
-<h2 class="sectionedit2"><a name="basic_netlisting" id="basic_netlisting">Basic netlisting</a></h2>
+<h2 id="basicnetlisting">Basic netlisting</h2>
 <div class="level2">
 
 <p>
 For basic netlisting (such as for relatively simple PCB designs or simulations), there are some simple requirements for the schematics and symbols that you use.  These requirements are imposed by the gnetlist frontend, and apply no matter which netlist backend you use.  Some backends might have additional requirements not listed on this page.
 </p>
-
-<p>
-<p><div class="notetip">Many of these requirements are related to the correct use of attributes. For a full list of standard attributes and their meanings, see the <a href="geda-master_attributes_list.html" class="wikilink1" title="geda-master_attributes_list.html">Master Attributes List</a>.
-</div></p>
-</p>
-
+<div class="notetip">Many of these requirements are related to the correct use of attributes. For a full list of standard attributes and their meanings, see the <a href="geda-master_attributes_list.html" class="wikilink1" title="geda-master_attributes_list.html">Master Attributes List</a>.
 </div>
-<!-- EDIT2 SECTION "Basic netlisting" [135-724] -->
-<h3 class="sectionedit3"><a name="schematics" id="schematics">Schematics</a></h3>
+</div>
+
+<h3 id="schematics">Schematics</h3>
 <div class="level3">
 
 <p>
@@ -38,42 +34,34 @@ Schematics <strong>must</strong> contain only nets, buses, components and graphi
 </p>
 
 <p>
-Every component that you want to appear in a netlist <strong>must</strong> have a ”<code>refdes=</code>” attribute attached to it.  This should be an alphanumeric string beginning with a letter.  The “refdes” is used to identify the component in parts lists, on PCB layouts, and in simulator output.
+Every component that you want to appear in a netlist <strong>must</strong> have a &quot;<code>refdes=</code>&quot; attribute attached to it.  This should be an alphanumeric string beginning with a letter.  The &quot;refdes&quot; is used to identify the component in parts lists, on PCB layouts, and in simulator output.
 </p>
 
 <p>
-If two components in the same circuit have the same “refdes”, then gnetlist will merge them (i.e. it will treat them as being the same component).  This behaviour enables <a href="geda-gnetlist_ug-slotting.html" class="wikilink1" title="geda-gnetlist_ug-slotting.html">slotting</a>. It also allows you to split complicated components with very many pins across several pages, by using different symbols for different sections of the component.
+If two components in the same circuit have the same &quot;refdes&quot;, then gnetlist will merge them (i.e. it will treat them as being the same component).  This behaviour enables <a href="geda-gnetlist_ug-slotting.html" class="wikilink1" title="geda-gnetlist_ug-slotting.html">slotting</a>. It also allows you to split complicated components with very many pins across several pages, by using different symbols for different sections of the component.
 </p>
 
 <p>
-Nets can be named by attaching a ”<code>netname=</code>” attribute to a net segment.  All net segments attached to the segment with the attribute will then share the same name.  If two nets in the same circuit have the same “netname”, then gnetlist will treat them as being connected.  If two connected nets have different “netname” attributes, then gnetlist will merge all the nets with either of those names together.  If a net doesn&#039;t have a “netname”, gnetlist will automatically generate one.
+Nets can be named by attaching a &quot;<code>netname=</code>&quot; attribute to a net segment.  All net segments attached to the segment with the attribute will then share the same name.  If two nets in the same circuit have the same &quot;netname&quot;, then gnetlist will treat them as being connected.  If two connected nets have different &quot;netname&quot; attributes, then gnetlist will merge all the nets with either of those names together.  If a net doesn&#039;t have a &quot;netname&quot;, gnetlist will automatically generate one.
 </p>
-
-<p>
-<p><div class="noteimportant">gnetlist currently ignores buses and bus pins.  You can still use them in your schematic diagrams, but they will not be used for netlist generation.
-</div></p>
-</p>
-
+<div class="noteimportant">gnetlist currently ignores buses and bus pins.  You can still use them in your schematic diagrams, but they will not be used for netlist generation.
 </div>
-<!-- EDIT3 SECTION "Schematics" [725-2207] -->
-<h3 class="sectionedit4"><a name="symbols" id="symbols">Symbols</a></h3>
+</div>
+
+<h3 id="symbols">Symbols</h3>
 <div class="level3">
-
+<div class="notetip">Following the <a href="geda-gschem_symbol_creation.html" class="wikilink1" title="geda-gschem_symbol_creation.html">Symbol Creation Guide</a> will help you make symbols that work well with gnetlist.
+</div>
 <p>
-<p><div class="notetip">Following the <a href="geda-gschem_symbol_creation.html" class="wikilink1" title="geda-gschem_symbol_creation.html">Symbol Creation Guide</a> will help you make symbols that work well with gnetlist.
-</div></p>
+Symbols <strong>must</strong> contain only pins, attributes and <a href="geda-gschem_ug-graphics.html" class="wikilink1" title="geda-gschem_ug-graphics.html">graphical elements</a>.  Symbols should include an unattached &quot;<code>device=</code>&quot; attribute.
 </p>
 
 <p>
-Symbols <strong>must</strong> contain only pins, attributes and <a href="geda-gschem_ug-graphics.html" class="wikilink1" title="geda-gschem_ug-graphics.html">graphical elements</a>.  Symbols should include an unattached ”<code>device=</code>” attribute.
+All pins <strong>must</strong> have &quot;<code>pinnumber=</code>&quot; and &quot;<code>pinlabel=</code>&quot; attributes attached.  You should normally attach &quot;<code>pintype=</code>&quot; and &quot;<code>pinseq=</code>&quot; attributes as well.
 </p>
 
 <p>
-All pins <strong>must</strong> have ”<code>pinnumber=</code>” and ”<code>pinlabel=</code>” attributes attached.  You should normally attach ”<code>pintype=</code>” and ”<code>pinseq=</code>” attributes as well.
-</p>
-
-<p>
-Sometimes, you may want gnetlist to ignore a symbol entirely. For example, some people use symbols for non-electrical purposes such as title blocks, or for comment or note markers.  To do this, you may use the ”<code>graphical=1</code>” attribute.
+Sometimes, you may want gnetlist to ignore a symbol entirely. For example, some people use symbols for non-electrical purposes such as title blocks, or for comment or note markers.  To do this, you may use the &quot;<code>graphical=1</code>&quot; attribute.
 </p>
 
 <p>
@@ -81,8 +69,8 @@ There are additional requirements if you want to make use of gnetlist&#039;s <a 
 </p>
 
 </div>
-<!-- EDIT4 SECTION "Symbols" [2208-3047] -->
-<h3 class="sectionedit5"><a name="attribute_promotion" id="attribute_promotion">Attribute promotion</a></h3>
+
+<h3 id="attributepromotion">Attribute promotion</h3>
 <div class="level3">
 
 <p>
@@ -90,6 +78,5 @@ gnetlist supports <em>attribute promotion</em>.  When looking for a particular a
 </p>
 
 </div>
-<!-- EDIT5 SECTION "Attribute promotion" [3048-] --></div>
 </body>
 </html>

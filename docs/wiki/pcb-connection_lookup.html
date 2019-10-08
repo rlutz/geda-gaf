@@ -1,0 +1,425 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+  <link rel="stylesheet" media="screen" type="text/css" href="./style.css" />
+  <link rel="stylesheet" media="screen" type="text/css" href="./design.css" />
+  <link rel="stylesheet" media="print" type="text/css" href="./print.css" />
+
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+</head>
+<body>
+
+<h2 id="connectionlookup">Connection Lookup</h2>
+<div class="level2">
+
+<p>
+The connection lookup algorithm starts at an object and looks for any objects that touch the starting object or any object touching the starting object. This code is implemented in find.c and used throughout the code base for a variety of purposes.
+</p>
+
+<p>
+The connection lookup process starts at an object (pins/pads only?) and searches for intersecting objects. For each object it finds, it sets a specified flag. (todo: eventually this should build a list of objects instead). These flags are used in a convoluted way to identify things that have already been found, and if the algorithm should continue looking for more objects.
+</p>
+
+<p>
+One of the tricks that the algorithm uses to restore the state of the flags in some cases is to use ClearFlagOnAllObjects to wipe out a flag (an undoable operation), then do everything without adding operations to the Undo stack, run ClearFlagsOnAllObjects a second time (without undo), and then Undo the first one. I guess the point of this is to prevent the undo system from sucking up resources during these operations? This has led to a global variable &quot;User&quot; which has the effect of causing flag change operations to be added to the undo list. I think this is absolutely horrid. This variable needs to die. I think a better way of accomplishing this goal is by locking the undo system.
+</p>
+
+<p>
+In a number of places, the &quot;andRats&quot; parameter is used. This indicates that rat lines should be considered when looking for overlaps. This way, you can highlight an entire net, even if all the pieces aren&#039;t connected with copper. It&#039;s important to preserve this functionality.
+</p>
+
+<p>
+Objects are broken into two categories, &quot;layer objects&quot; (LO) and pins and vias (PV). The tests then get split into four categories, PV to PV, LO to PV, LO to LO, and PV to LO.
+</p>
+
+</div>
+
+<h2 id="detailedalgorithm">Detailed Algorithm</h2>
+<div class="level2">
+<ol>
+<li class="level1"><div class="li"> Initialize the lists</div>
+</li>
+<li class="level1"><div class="li"> Add seed object</div>
+</li>
+<li class="level1"><div class="li"> Initialize global variables</div>
+</li>
+<li class="level1 node"><div class="li"> Search lists for new connections</div>
+<ol>
+<li class="level2 node"><div class="li"> Check the PV list for new PV connections (LookupPVConnectionsToPVList)</div>
+<ol>
+<li class="level3"><div class="li"> rsearch the pin tree calling pv_pv_callback</div>
+</li>
+<li class="level3 node"><div class="li"> rsearch the via tree calling pv_pv_callback</div>
+<ol>
+<li class="level4"><div class="li"> check that the pvs are on intersecting layers</div>
+</li>
+<li class="level4"><div class="li"> check that it&#039;s not already in the list</div>
+</li>
+<li class="level4"><div class="li"> check that they touch</div>
+</li>
+<li class="level4"><div class="li"> check that neither is just a hole</div>
+</li>
+<li class="level4"><div class="li"> add the new pv to the list</div>
+</li>
+</ol>
+</li>
+</ol>
+</li>
+<li class="level2 node"><div class="li"> Check the PV list for new LO connections</div>
+<ol>
+<li class="level3"><div class="li"> rsearch the pad tree calling LOCtoPVpad_callback</div>
+</li>
+<li class="level3 node"><div class="li"> For each copper layer</div>
+<ol>
+<li class="level4"><div class="li"> rsearch the line tree calling LOCtoPVline_callback</div>
+</li>
+<li class="level4"><div class="li"> rsearch the arc tree calling LOCtoPVarc_callback</div>
+</li>
+<li class="level4"><div class="li"> rsearch the polygon tree calling LOCtoPVpoly_callback</div>
+</li>
+</ol>
+</li>
+</ol>
+</li>
+</ol>
+</li>
+</ol>
+<ol>
+<li class="level1 node"><div class="li"> InitConnectionLookup()</div>
+<ol>
+<li class="level2 node"><div class="li"> InitComponentLookup()</div>
+<ol>
+<li class="level3"><div class="li"> Compute the number of pads on each side of the pcb</div>
+</li>
+<li class="level3"><div class="li"> Allocate enough memory for the PadLists to hold pointers to all of them, and initialize the list structures.</div>
+</li>
+</ol>
+</li>
+<li class="level2 node"><div class="li"> InitLayoutLookup()</div>
+<ol>
+<li class="level3"><div class="li"> For each copper layer, allocate enough memory for each list (lines, arcs, polygons) to hold pointers to all of the objects on the layer, and initialize the list structures.</div>
+</li>
+<li class="level3"><div class="li"> Allocate enough memory for the pin and via combined list, and initialize it.</div>
+</li>
+<li class="level3"><div class="li"> Allocate enough memory for the rats list to hold all of the rats.</div>
+</li>
+</ol>
+</li>
+</ol>
+</li>
+<li class="level1 node"><div class="li"> ListStart(type, ptr1, ptr2, ptr3)</div>
+<ol>
+<li class="level2"><div class="li"> Add the seed object to the lists.</div>
+</li>
+</ol>
+</li>
+<li class="level1 node"><div class="li"> DoIt(flag, bloat, AndRats, AndDraw, is_drc)</div>
+<ol>
+<li class="level2"><div class="li"> Set the global drc flag and bloat value</div>
+</li>
+<li class="level2"><div class="li"> Update layer &quot;no_drc&quot; flags</div>
+</li>
+<li class="level2 node"><div class="li"> Lookup connection loop:</div>
+<ol>
+<li class="level3"><div class="li"> Note that if any of the four lookup functions returns true, it will likely short-circuit the rest of the tests.</div>
+</li>
+<li class="level3 node"><div class="li"> LookupPVConnectionsToPVList(flag)</div>
+<ol>
+<li class="level4"><div class="li"> Save our current position in the PV list</div>
+</li>
+<li class="level4 node"><div class="li"> If our current position is not the last item in the list:</div>
+<ol>
+<li class="level5"><div class="li"> Get the current list item</div>
+</li>
+<li class="level5"><div class="li"> Expand the bounding box by the global bloat for the search</div>
+</li>
+<li class="level5 node"><div class="li"> Set a jump point, and do an r_search on the via tree around the current PV (pv_pv_callback)</div>
+<ol>
+<li class="level6"><div class="li"> If the vias are buried and the layers don&#039;t intersect, return and continue the search.</div>
+</li>
+<li class="level6 node"><div class="li"> If the new PV hasn&#039;t been marked yet, and the new one overlaps with the current one,</div>
+<ol>
+<li class="level7"><div class="li"> If it&#039;s just a hole (no copper annulus), throw a warning and continue the search</div>
+</li>
+<li class="level7 node"><div class="li"> Otherwise, add the new PV to the list (add_object_to_list)</div>
+<ol>
+<li class="level8"><div class="li"> If this is a DRC and the selected flag wasn&#039;t set, long jump back to LookupPVConnectionsToPVList</div>
+</li>
+<li class="level8"><div class="li"> Otherwise, continue the search</div>
+</li>
+</ol>
+</li>
+</ol>
+</li>
+</ol>
+</li>
+<li class="level5"><div class="li"> If we returned via a long jump, return true (found something/want to stop lookup up objects)</div>
+</li>
+<li class="level5"><div class="li"> Otherwise check the pin tree (repeat via tree steps)</div>
+</li>
+<li class="level5"><div class="li"> If we returned via a long jump, return true (found something/want to stop lookup up objects)</div>
+</li>
+<li class="level5"><div class="li"> Otherwise, keep looking through the PV list until we get to the end.</div>
+</li>
+</ol>
+</li>
+<li class="level4"><div class="li"> Restore the list position (why? Probably so that LookupLOConnectionsToPVList can iterate over the same group of objects)</div>
+</li>
+<li class="level4"><div class="li"> Return false (no new objects/we want to keep looking up objects)</div>
+</li>
+</ol>
+</li>
+<li class="level3 node"><div class="li"> LookupLOConnectionsToPVList(flag, AndRats)</div>
+<ol>
+<li class="level4 node"><div class="li"> If our current position is not the last item in the list:</div>
+<ol>
+<li class="level5"><div class="li"> Get the current list item</div>
+</li>
+<li class="level5"><div class="li"> Expand the bounding box by the global bloat for the search</div>
+</li>
+<li class="level5 node"><div class="li"> Set a jump point, and do an r_search on the pad tree around the current PV (LOCtoPVpad_callback)</div>
+<ol>
+<li class="level6"><div class="li"> If the PV doesn&#039;t intersect the pad layer (top or bottom), return false (keep looking for objects)</div>
+</li>
+<li class="level6"><div class="li"> If we haven&#039;t already flagged the pad, the PV and pad intersect, and the PV isn&#039;t just a hole, add the pad to the list, and longjmp back to LookupLOConnectionToPVList</div>
+</li>
+<li class="level6"><div class="li"> Otherwise, return 0 (keep looking for objects)</div>
+</li>
+</ol>
+</li>
+<li class="level5 node"><div class="li"> For each layer:</div>
+<ol>
+<li class="level6"><div class="li"> if the no_drc flag is set, skip this layer</div>
+</li>
+<li class="level6 node"><div class="li"> Set a jump point, and do an r_search on the layer&#039;s line tree around the via (LOCtoPVline_callback)</div>
+<ol>
+<li class="level7"><div class="li"> Repeat the pad procedure here</div>
+</li>
+</ol>
+</li>
+<li class="level6"><div class="li"> If we returned via long jump, return true (abort search)</div>
+</li>
+<li class="level6 node"><div class="li"> Otherwise, set a jump point and do an r_search on the layer&#039;s arc tree around the via (LOCtoPVarc_callback)</div>
+<ol>
+<li class="level7"><div class="li"> Repeat the pad procedure here</div>
+</li>
+</ol>
+</li>
+<li class="level6"><div class="li"> If we returned via long jump, return true (abort search)</div>
+</li>
+<li class="level6 node"><div class="li"> Otherwise, set a jump point and do an r_search on the layer&#039;s polygon tree around the via (LOCtoPVpoly_callback)</div>
+<ol>
+<li class="level7"><div class="li"> If the PV doesn&#039;t intersect the polygon layer, return 0 (continue search)</div>
+</li>
+<li class="level7 node"><div class="li"> If we haven&#039;t yet flagged the polygon and the PV isn&#039;t just a hole...</div>
+<ol>
+<li class="level8"><div class="li"> If there&#039;s no thermal and the polygon is clearing, return 0 (continue search)</div>
+</li>
+<li class="level8 node"><div class="li"> Otherwise...</div>
+<ol>
+<li class="level9"><div class="li"> compute the width of the search box</div>
+</li>
+<li class="level9 node"><div class="li"> if the pv has the square flag set,</div>
+<ol>
+<li class="level10"><div class="li"> compute the corner points</div>
+</li>
+<li class="level10"><div class="li"> if the rectangle is in the polygon (IsRectangleInPolygon) add it to the list (... ends up in add_object_to_list)</div>
+</li>
+<li class="level10"><div class="li"> if we&#039;re doing the drc and the object didn&#039;t have the selected flag set, long jump back to to LookupLOConnectionToPVList</div>
+</li>
+<li class="level10"><div class="li"> otherwise return 0 (continue search)</div>
+</li>
+</ol>
+</li>
+<li class="level9 node"><div class="li"> otherwise, if the pv has the octagon flag set...</div>
+<ol>
+<li class="level10"><div class="li"> create a dummy octagon polygon</div>
+</li>
+<li class="level10"><div class="li"> if the dummy octagon and the polygon intersect (isects), add it to the list</div>
+</li>
+<li class="level10"><div class="li"> if we&#039;re doing the drc and the object didn&#039;t have the selected flag set, long jump back to to LookupLOConnectionToPVList</div>
+</li>
+</ol>
+</li>
+<li class="level9 node"><div class="li"> otherwise, pv is round, and if intersects the polygon (IsPointInPolygon)</div>
+<ol>
+<li class="level10"><div class="li"> add it to the list</div>
+</li>
+<li class="level10"><div class="li"> if we&#039;re doing the drc and the object didn&#039;t have the selected flag set, long jump back to LookupLOConnectionToPVList</div>
+</li>
+</ol>
+</li>
+</ol>
+</li>
+</ol>
+</li>
+<li class="level7"><div class="li"> return 0 (continue search)</div>
+</li>
+</ol>
+</li>
+<li class="level6"><div class="li"> Move on to the next layer</div>
+</li>
+</ol>
+</li>
+<li class="level5 node"><div class="li"> If we&#039;re following rats, set a jump point and do an r_search on the rat tree (LOCtoPVrat_callback)</div>
+<ol>
+<li class="level6"><div class="li"> If we haven&#039;t already found the rat, add it to the list, and long jump back to LookupLOConnectionToPVList</div>
+</li>
+</ol>
+</li>
+<li class="level5"><div class="li"> Increment the position in the list and check the next PV</div>
+</li>
+</ol>
+</li>
+<li class="level4"><div class="li"> Return false (continue search)</div>
+</li>
+</ol>
+</li>
+<li class="level3"><div class="li"> LookupLOConnectionsToLOList(flag, AndRats)</div>
+</li>
+</ol>
+</li>
+</ol>
+</li>
+</ol>
+
+</div>
+
+<h3 id="usesoftheconnectionlookupalgorithm">Uses of the Connection Lookup Algorithm</h3>
+<div class="level3">
+
+</div>
+
+<h4 id="drc">DRC</h4>
+<div class="level4">
+
+<p>
+The DRC uses the connection lookup code in combination with the &quot;Bloat&quot; and &quot;Shrink&quot; settings to detect places with insufficient spacing and overlap. 
+</p>
+
+</div>
+
+<h4 id="notifyline">NotifyLine</h4>
+<div class="level4">
+
+<p>
+action.c
+</p>
+
+</div>
+
+<h4 id="notifymode">NotifyMode</h4>
+<div class="level4">
+
+<p>
+action.c
+</p>
+
+</div>
+
+<h4 id="actionconnection">ActionConnection</h4>
+<div class="level4">
+
+<p>
+action.c
+</p>
+
+</div>
+
+<h4 id="actiondisplay">ActionDisplay</h4>
+<div class="level4">
+
+<p>
+action.c
+</p>
+
+</div>
+
+<h4 id="actionsaveto">ActionSaveTo</h4>
+<div class="level4">
+
+<p>
+action.c
+</p>
+
+</div>
+
+<h4 id="ipcdhid">IPCD HID</h4>
+<div class="level4">
+
+</div>
+
+<h4 id="gtkhid">GTK HID</h4>
+<div class="level4">
+
+<p>
+netlist window
+</p>
+
+</div>
+
+<h4 id="netlistc">netlist.c</h4>
+<div class="level4">
+
+</div>
+
+<h4 id="reportc">report.c</h4>
+<div class="level4">
+
+</div>
+
+<h4 id="placesthatcalldoit">Places that call DoIt</h4>
+<div class="level4">
+
+</div>
+
+<h5 id="notesfrom20180810">Notes from 20180810</h5>
+<div class="level5">
+
+<p>
+Saves list of unused pins and pads:
+ActionSaveTo:action.c:5752
+LookupUnusedPins:find.c:2464
+PrintAndSelectUnusedPinsAndPadsOfElement:find.c:1982
+DoIt:find.c:2000, 2044
+</p>
+
+<p>
+Saves list of element connections
+ActionSaveTo:action.c:5752
+LookupElementConnections:find.c:2255
+PrintElementConnections:find.c:2120
+DoIt:find.c:2136, 2161
+</p>
+
+<p>
+There are quite a few of these.
+(action.c: 905, 906, 1366, 2314, 2315, 2789, 2792) LookupConnection:find.c:2376
+(netlist.c: 171, 180) LookupConnection:find.c:2376
+(report.c: 598) LookupConnection:find.c:2376
+DoIt:find.c:2417
+</p>
+
+<p>
+(ipcd356.c: 493, 514, 538) LookupConnectionByPin:find.c:2431
+DoIt:find.c:2439
+</p>
+
+<p>
+(gsvit.c:433) RatFindHook:find.c:2450
+(lesstif/netlist.c:140) RatFindHook:find.c:2450
+(gtk/gui-netlist-window.c:543) RatFindHook:find.c:2450
+(rats.c:474) RatFindHook:find.c:2450
+(select.c:996) RatFindHook:find.c:2450
+DoIt:find.c:2456
+</p>
+
+<p>
+start_do_it_and_dump:find.c:2681
+DoIt:find.c:2689
+</p>
+
+</div>
+</body>
+</html>

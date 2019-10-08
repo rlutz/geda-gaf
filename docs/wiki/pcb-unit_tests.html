@@ -1,0 +1,45 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+  <link rel="stylesheet" media="screen" type="text/css" href="./style.css" />
+  <link rel="stylesheet" media="screen" type="text/css" href="./design.css" />
+  <link rel="stylesheet" media="print" type="text/css" href="./print.css" />
+
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+</head>
+<body>
+
+<h2 id="unittestingframework">Unit Testing Framework</h2>
+<div class="level2">
+
+<p>
+I just figured this out, so, here&#039;s how it works, and I&#039;ll formalize this page later.
+</p>
+
+<p>
+pcb uses the glib testing framework for unit tests: https:<em>developer.gnome.org/glib/stable/glib-Testing.html
+
+Look at main-test.c for examples. 
+
+In the actual code, you can wrap the unit test stuff in:
+
+&lt;code&gt;
+#ifdef PCB_UNIT_TEST
+#endif /* PCB_UNIT_TEST */
+&lt;/code&gt;
+
+so that it doesn&#039;t bog things down when not testing. Does it really bog things down when not testing??
+
+You need a &quot;&lt;x&gt;_register_tests&quot; function, and then how ever many functions you&#039;re going to use to execute your tests. Put prototypes in the header file. Include the header file in main-test.c, and add a call to the &quot;&lt;x&gt;_register_tests&quot; function in main.
+
+In the register function, make a call to g_test_add_func to add whatever testing functions you want to call. It uses a /x/y naming convention, where x is the test module, and y are the individual tests.
+
+You have to add the source file to the list of files to be compiled for testing in Makefile.am. Look for the TEST_SRCS variable, and add your files there, in addition to adding them wherever else you need so that pcb compiles them.
+
+Finally, you can rerun configure (to regen the makefiles), and execute &quot;make check&quot; from the build directory. This will build and execute the tests without necessarily building all of pcb. I&#039;m not sure if this runs the pcb level tests or not.
+</p>
+
+</div>
+</body>
+</html>

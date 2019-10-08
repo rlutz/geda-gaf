@@ -1,0 +1,101 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+  <link rel="stylesheet" media="screen" type="text/css" href="./style.css" />
+  <link rel="stylesheet" media="screen" type="text/css" href="./design.css" />
+  <link rel="stylesheet" media="print" type="text/css" href="./print.css" />
+
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+</head>
+<body>
+
+<h1 id="pcbplugins">pcb Plugins</h1>
+<div class="level1">
+
+<p>
+pcb has a plug-in mechanism that allows developers to add or modify its functionality. Plugins can add pcb actions, hook into the GUI HIDs, create new exporters, and more. For a tutorial on the basics of writing and installing a pluging, see the hello world example on the <a href="geda-pcb_developer_introduction_2.html" class="wikilink1" title="geda-pcb_developer_introduction_2.html"> pcb Developer Introduction</a> page. This page will discuss how plugins interact with the pcb system.
+</p>
+
+</div>
+
+<h2 id="pluginmechanics">Plugin Mechanics</h2>
+<div class="level2">
+
+<p>
+pcb plugins are essentially shared libraries that pcb will load at run-time. Because of this, they can be written in just about any language that can be compiled into a shared library. I haven&#039;t verified anything other than C and C++, but it ought to be possible. If you&#039;ve successfully written a plugin in another language, let me know!
+</p>
+
+<p>
+At runtime, pcb scans several directories for .so/.dll files (see src/common/hidinit.c:hid_load_dir). These include the exec prefix and the users personal preferences directory (~/.pcb). The exec_prefix is currently reserved for system plugins. Inside the personal pref directory should be a directory called &quot;plugins&quot;. User plugins should be located in this directory.
+</p>
+
+<p>
+If pcb finds a .so/.dll file, it opens it and looks for a couple of symbols: &quot;hid_&lt;file basename&gt;_init&quot; and &quot;pcb_plugin_init&quot;. If it finds one, it executes it as a function. These functions are responsible for registering the code they represent with pcb.
+</p>
+
+</div>
+
+<h3 id="registration">Registration</h3>
+<div class="level3">
+
+</div>
+
+<h3 id="hidstructures">HID Structures</h3>
+<div class="level3">
+
+</div>
+
+<h2 id="pluginresources">Plugin Resources</h2>
+<div class="level2">
+
+</div>
+
+<h3 id="handyplugintemplate">Handy Plugin Template</h3>
+<div class="level3">
+
+<p>
+<a href="media/geda/pcb_plugin_template.tar.gz" class="media" target="_blank" title="geda:pcb_plugin_template.tar.gz"></a>
+</p>
+
+</div>
+
+<h3 id="pluginrepositories">Plugin Repositories</h3>
+<div class="level3">
+
+<p>
+https://github.com/bert/pcb-plugins
+</p>
+
+<p>
+https://ljh4timm.home.xs4all.nl/gaf/dox_pcb-plugins/index.html
+</p>
+
+</div>
+
+<h3 id="listofplugins">List of Plugins</h3>
+<div class="level3">
+<ul>
+<li class="level1"><div class="li">  Polygon Stitcher, by DJ</div>
+</li>
+<li class="level1"><div class="li">  Ben Mode photos for the PNG hid, by DJ</div>
+</li>
+<li class="level1"><div class="li">  Find Rat, by DJ</div>
+</li>
+<li class="level1"><div class="li">  Board Flip, by DJ</div>
+</li>
+<li class="level1"><div class="li">  Renumber Block, by DJ</div>
+</li>
+<li class="level1"><div class="li">  Teardrops, by DJ</div>
+</li>
+<li class="level1"><div class="li"> https://github.com/bert/pcb-plugins git repo with many plugins</div>
+</li>
+<li class="level1"><div class="li">  sed rename, by bgamari</div>
+</li>
+<li class="level1"><div class="li"> <a href="media/pcb/plugin_debug_window.tar.gz" class="media" target="_blank" title="pcb:plugin_debug_window.tar.gz"> Debug Window</a>, by Chad Parker</div>
+</li>
+</ul>
+
+</div>
+</body>
+</html>

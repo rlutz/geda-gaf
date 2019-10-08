@@ -1,0 +1,123 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+  <link rel="stylesheet" media="screen" type="text/css" href="./style.css" />
+  <link rel="stylesheet" media="screen" type="text/css" href="./design.css" />
+  <link rel="stylesheet" media="print" type="text/css" href="./print.css" />
+
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+</head>
+<body>
+
+<p>
+<em>Translations of this page are also available in the following languages:</em> <a href="geda-gschem_repl.ru.html" class="wikilink1" title="geda-gschem_repl.ru.html">Русский</a>.
+</p>
+
+<h1 id="usingreplingschem">Using REPL in gschem</h1>
+<div class="level1">
+
+</div>
+
+<h2 id="embeddedgraphicalreplfunctionsingschem">Embedded graphical REPL functions in gschem</h2>
+<div class="level2">
+
+<p>
+The entry field for guile procedures is opened with hitting the
+key sequence <kbd>G</kbd><kbd>:</kbd> (g, colon). After doing this the user may enter
+commands in the appeared field and watch the results of their work
+in the gschem log window.
+</p>
+
+</div>
+
+<h2 id="replinthebackgroundterminal">REPL in the background terminal</h2>
+<div class="level2">
+
+<p>
+There is an additional menu entry for working with
+REPL in the background terminal, which is invoked with hitting
+key sequence <kbd>G</kbd><kbd>R</kbd>.
+</p>
+
+<p>
+Please note, that for the moment you can run it several times,
+which may confuse your terminal. Moreover, there is a risk of
+closing working instance of gschem by using some shortkeys.
+</p>
+
+<p>
+For more convenient work in the terminal you may want to turn on
+the functions of the <em>readline</em> library. For that, type in the
+terminal:
+</p>
+<pre class="code">(use-modules (ice-9 readline))
+(activate-readline)</pre>
+
+</div>
+
+<h2 id="externalgraphicalrepl">External graphical REPL</h2>
+<div class="level2">
+
+<p>
+For invoking external graphical REPL window you have to have a
+REPL functions library from the <em>guile-gnome</em>. In Debian, for
+instance, you have to install the package <em>guile-gnome2-gtk</em>
+to may use it. To open the window, type in the field of the
+embedded REPL in gschem as follows:
+</p>
+<pre class="code">(use-modules (gnome-2) (gnome gtk) (gnome gtk graphical-repl))
+(guile-gtk-repl)</pre>
+
+</div>
+
+<h2 id="replinanyterminal">REPL in any terminal</h2>
+<div class="level2">
+
+<p>
+In order to invoke REPL in a terminal you have to open a REPL
+socket in gschem. To do so, load the system REPL module and call
+the function of server spawning:
+</p>
+<pre class="code">(use-modules (system repl server))
+(spawn-server)</pre>
+
+<p>
+When called without arguments, the spawn-server function uses the
+default guile port 37146. You can define another port:
+</p>
+<pre class="code">(spawn-server 1234)</pre>
+
+<p>
+When you&#039;re opening a port, please note the security risks described
+here.
+</p>
+
+<p>
+Then you just need to connect to the port using any program which
+is able to do this, for example,
+ <strong>telnet</strong>,
+<strong>netcat</strong>, or some other. Example of using <strong>telnet</strong>:
+</p>
+<pre class="code">$ telnet localhost 37146</pre>
+
+<p>
+Example of using <strong>netcat</strong>:
+</p>
+<pre class="code">$ nc localhost 37146</pre>
+
+<p>
+In this case the  <em>readline</em> interface won&#039;t work.
+</p>
+
+<p>
+<strong>Emacs</strong> users may use a shiny <em>Geiser</em> environment for working
+with REPL in that program.
+For that to work, you have to install this package, run the REPL
+server in gschem and connect to it in <strong>Emacs</strong> using  <kbd>M</kbd>+<kbd>X</kbd>
+<strong><code>connect-to-guile</code></strong>.
+</p>
+
+</div>
+</body>
+</html>

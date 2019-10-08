@@ -1,0 +1,246 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+  <link rel="stylesheet" media="screen" type="text/css" href="./style.css" />
+  <link rel="stylesheet" media="screen" type="text/css" href="./design.css" />
+  <link rel="stylesheet" media="print" type="text/css" href="./print.css" />
+
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+</head>
+<body>
+
+<h1 id="gettingstartedwithxorn">Getting started with Xorn</h1>
+<div class="level1">
+
+<p>
+1. Make sure that, in addition to the usual gEDA build dependencies, a C++ compiler (preferably <code>g++</code>) and Python 2.7 (including the development headers) are installed on your system.
+</p>
+
+<p>
+2. Pull the latest gEDA sources, re-run <code>./autogen.sh</code>, and configure and build the package as usual.  If you prefer downloading a tarball, you can pick up the Xorn sources from here.  In either case, you don&#039;t need to install the package (but you can if you prefer to).
+</p>
+
+</div>
+
+<h2 id="xornasacommand-lineutility">Xorn as a command-line utility</h2>
+<div class="level2">
+
+<p>
+3a. Invoke the &quot;<code>xorn</code>&quot; executable with the option &quot;<code>--help</code>&quot; to see a list of subcommands:
+</p>
+<pre class="code">  xorn/src/command/xorn --help</pre>
+
+<p>
+(or &quot;<code>src/command/xorn --help</code>&quot; if you downloaded the Xorn tarball, or just &quot;<code>xorn --help</code>&quot; if you installed Xorn to your <code>PATH</code>)
+</p>
+
+<p>
+3b. Run the subcommand &quot;<code>xorn netlist</code>&quot; with the options &quot;<code>--help</code>&quot; and &quot;<code>--list-backends</code>&quot; to print a list of options and available backends.
+</p>
+<pre class="code">  xorn/src/command/xorn netlist --help
+  xorn/src/command/xorn netlist --list-backends</pre>
+
+<p>
+3c. Process a schematic with &quot;<code>xorn netlist</code>&quot; (using the &quot;<code>PCB</code>&quot; backend as an example):
+</p>
+<pre class="code">  xorn/src/command/xorn netlist \
+    --symbol-library-search=/usr/share/gEDA/sym \
+    -g PCB some-schematic.sch</pre>
+
+</div>
+
+<h2 id="interactingwithxorninacprogram">Interacting with Xorn in a C program</h2>
+<div class="level2">
+
+<p>
+4. Write a C program using libxornstorage and link it against the library:
+</p>
+<pre class="code">  $ cat &gt; example.c
+  #include &lt;stdio.h&gt;
+  #include &lt;stdlib.h&gt;
+  #include &lt;string.h&gt;
+  #include &lt;xornstorage.h&gt;
+  
+  int main()
+  {
+      xorn_revision_t rev;
+      xorn_object_t net_ob;
+      struct xornsch_net net_data;
+      xorn_object_t *objects;
+      size_t count;
+  
+      rev = xorn_new_revision(NULL);
+  
+      memset(&amp;net_data, 0, sizeof net_data);
+      net_data.pos.x = 0;
+      net_data.pos.y = 200;
+      net_data.size.x = 100;
+      net_data.size.y = 0;
+      net_data.color = 4;
+      net_ob = xornsch_add_net(rev, &amp;net_data);
+  
+      xorn_finalize_revision(rev);
+  
+      xorn_get_objects(rev, &amp;objects, &amp;count);
+      printf(&quot;%d object(s) found\n&quot;, count);
+      free(objects);
+  
+      xorn_free_revision(rev);
+      return 0;
+  }
+  ^D
+  $ gcc -I xorn/include -c example.c
+  $ ./libtool --mode=link gcc -o example \
+      example.o xorn/src/storage/libxornstorage.la
+  $ ./example
+  1 object(s)</pre>
+
+<p>
+If you are using a separate build directory, replace &quot;<code>-I xorn/include</code>&quot; with the path to the subdirectory &quot;<code>xorn/include</code>&quot; in the source directory.
+</p>
+
+<p>
+For more information, see the libxornstorage API documentation (overview).
+</p>
+
+</div>
+
+<h2 id="usingxornasalibrary">Using Xorn as a library</h2>
+<div class="level2">
+
+<p>
+5. Run the Python 2.7 interpreter with the subdirectory &quot;<code>xorn/built-packages</code>&quot; added to the environment variable &quot;<code>PYTHONPATH</code>&quot;.
+</p>
+<pre class="code">  $ PYTHONPATH=xorn/built-packages python2.7
+  Python 2.7.9 (default, Mar  1 2015, 18:22:53)
+  [GCC 4.9.2] on linux2
+  Type &quot;help&quot;, &quot;copyright&quot;, &quot;credits&quot; or &quot;license&quot; for more information.
+  &gt;&gt;&gt;</pre>
+
+<p>
+Import the module &quot;<code>xorn.storage</code>&quot; and experiment a bit with the API.  Here is how to perform the operations equivalent to the C program above:
+</p>
+<pre class="code">  &gt;&gt;&gt; import xorn.storage
+  &gt;&gt;&gt; rev = xorn.storage.Revision()
+  &gt;&gt;&gt; net_data = xorn.storage.Net(
+          x = 0, y = 200, width = 100, height = 0, color = 4)
+  &gt;&gt;&gt; net_ob = rev.add_object(net_data)
+  &gt;&gt;&gt; rev.finalize()
+  &gt;&gt;&gt; rev.get_objects()
+  [&lt;xorn.storage.Object object at ...&gt;]</pre>
+
+<p>
+Import the module &quot;<code>xorn.geda.read</code>&quot; and load a schematic or symbol file:
+</p>
+<pre class="code">  &gt;&gt;&gt; import xorn.geda.read
+  &gt;&gt;&gt; rev = xorn.geda.read.read(
+          &#039;/usr/share/gEDA/sym/analog/resistor-1.sym&#039;)
+  &gt;&gt;&gt; for ob in rev.toplevel_objects():
+  ...     data = ob.data()
+  ...     if isinstance(data, xorn.storage.Text):
+  ...         print data.text
+  ...
+  device=RESISTOR
+  refdes=R?
+  pins=2
+  class=DISCRETE</pre>
+
+<p>
+For more information, see the API documentation of xorn.storage and xorn.geda.
+</p>
+
+<p>
+6. Write and execute a Python program which uses the <code>xorn</code> package:
+</p>
+<pre class="code">  $ cat &gt; print-attributes.py
+  #!/usr/bin/env python2
+  import sys
+  import xorn.storage
+  import xorn.geda.read
+  
+  rev = xorn.geda.read.read(sys.argv[1])
+  for ob in rev.toplevel_objects():
+      data = ob.data()
+      if isinstance(data, xorn.storage.Text):
+          print data.text
+  ^D
+  $ chmod +x print-attributes.py
+  $ PYTHONPATH=xorn/built-packages ./print-attributes.py \
+      /usr/share/gEDA/sym/analog/resistor-1.sym
+  device=RESISTOR
+  refdes=R?
+  pins=2
+  class=DISCRETE</pre>
+
+</div>
+
+<h2 id="writingcustomnetlistbackends">Writing custom netlist backends</h2>
+<div class="level2">
+
+<p>
+7. Invoke &quot;<code>xorn netlist</code>&quot; on your schematic as above, but instead of specifying a netlist backend, use the option &quot;<code>-i</code>&quot;:
+</p>
+<pre class="code">  $ xorn/src/command/xorn netlist \
+      --symbol-library-search=/usr/share/gEDA/sym \
+      -i some-schematic.sch
+  Python 2.7.9 (default, Mar  1 2015, 18:22:53)
+  [GCC 4.9.2] on linux2
+  Type &quot;help&quot;, &quot;copyright&quot;, &quot;credits&quot; or &quot;license&quot; for more information.
+  (InteractiveConsole)
+  &gt;&gt;&gt;</pre>
+
+<p>
+This option causes &quot;<code>xorn netlist</code>&quot; to enter interactive mode.  You are now in an interactive Python interpreter session, just like above, but have the additional global variable &quot;<code>netlist</code>&quot; available which contains the netlist&#039;s contents.
+</p>
+<pre class="code">  &gt;&gt;&gt; netlist
+  &lt;xorn.geda.netlist.netlist.Netlist instance at ...&gt;
+  &gt;&gt;&gt; netlist.nets
+  [&lt;xorn.geda.netlist.net.Net instance at ...&gt;, ...]
+  &gt;&gt;&gt; [net.name for net in netlist.nets]
+  [..., &#039;GND&#039;, ...]
+  &gt;&gt;&gt; netlist.nets_by_name[&#039;GND&#039;]
+  &lt;xorn.geda.netlist.net.Net instance at ...&gt;
+  &gt;&gt;&gt; netlist.nets_by_name[&#039;GND&#039;].name
+  &#039;GND&#039;
+  &gt;&gt;&gt; netlist.nets_by_name[&#039;GND&#039;].connections
+  [&lt;xorn.geda.netlist.package.PackagePin instance at ...&gt;, ...]
+  &gt;&gt;&gt; netlist.nets_by_name[&#039;GND&#039;].connections[0].package
+  &lt;xorn.geda.netlist.package.Package instance at ...&gt;
+  &gt;&gt;&gt; netlist.nets_by_name[&#039;GND&#039;].connections[0].package.refdes
+  &#039;U100&#039;
+  &gt;&gt;&gt; netlist.nets_by_name[&#039;GND&#039;].connections[0].number
+  &#039;7&#039;
+  
+  &gt;&gt;&gt; netlist.packages
+  [&lt;xorn.geda.netlist.package.Package instance at ...&gt;]
+  &gt;&gt;&gt; netlist.packages_by_refdes
+  {..., &#039;U100&#039;: &lt;xorn.geda.netlist.package.Package instance at ...&gt;, ...}
+  &gt;&gt;&gt; netlist.packages_by_refdes[&#039;U100&#039;].get_attribute(&#039;device&#039;)
+  ...
+  &gt;&gt;&gt; netlist.packages_by_refdes[&#039;U100&#039;].pins
+  [&lt;xorn.geda.netlist.package.PackagePin instance at ...&gt;, ...]
+  &gt;&gt;&gt; netlist.packages_by_refdes[&#039;U100&#039;].pins_by_number
+  {..., &#039;7&#039;: &lt;xorn.geda.netlist.package.PackagePin instance at ...&gt;, ...}
+  &gt;&gt;&gt; netlist.packages_by_refdes[&#039;U100&#039;].pins_by_number[&#039;7&#039;].net
+  &lt;xorn.geda.netlist.net.Net instance at ...&gt;
+  &gt;&gt;&gt; netlist.packages_by_refdes[&#039;U100&#039;].pins_by_number[&#039;7&#039;].net.name
+  &#039;GND&#039;</pre>
+
+<p>
+8. Write a Python module whose name starts with &quot;<code>gnet_</code>&quot; and which contains a function &quot;<code>run(f, netlist)</code>&quot;.  Use this module as a netlist backend:
+</p>
+<pre class="code">  $ cat &gt; gnet_count.py
+  def run(f, netlist):
+      f.write(&quot;%d packages found\n&quot; % len(netlist.packages))
+      f.write(&quot;%d nets found\n&quot; % len(netlist.nets))
+  ^D
+  $ xorn/src/command/xorn netlist \
+      --symbol-library-search=/usr/share/gEDA/sym \
+      -L . -g count some-schematic.sch
+  1 packages found
+  4 nets found</pre>
+
+</div>
+</body>
+</html>

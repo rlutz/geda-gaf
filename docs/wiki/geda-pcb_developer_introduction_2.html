@@ -1,0 +1,306 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+  <link rel="stylesheet" media="screen" type="text/css" href="./style.css" />
+  <link rel="stylesheet" media="screen" type="text/css" href="./design.css" />
+  <link rel="stylesheet" media="print" type="text/css" href="./print.css" />
+
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+</head>
+<body>
+
+<h1 id="gettingstartedasapcbdeveloper">Getting Started as a pcb Developer</h1>
+<div class="level1">
+
+<p>
+This page is intended to be a less overwhelming version of the <a href="geda-pcb_developer_introduction.html" class="wikilink1" title="geda-pcb_developer_introduction.html">pcb_developer_introduction</a>.
+</p>
+
+</div>
+
+<h2 id="findinginformation">Finding Information</h2>
+<div class="level2">
+
+<p>
+The best resource for information on the guts of pcb is the current and past developers. Make sure that you subscribe to the geda-user mailing list. There are typically monthly code sprints  on the last Sunday of the month that are held on the #geda IRC channel on irc.oftc.net/6667. Sometimes the developers are there at other times as well. 
+</p>
+
+<p>
+There&#039;s also no shortage of documentation. Some of it is even current! Quite a bit of documentation exists in the source code, so that&#039;s a good place to look. There&#039;s also lots of stuff on this wiki, but it&#039;s not always easy to find. Search is your friend. Here are some additional resources:
+</p>
+<div class="table sectionedit1"><table class="inline">
+	<thead>
+	<tr class="row0">
+		<th class="col0 leftalign">Link  </th><th class="col1 leftalign">Remark  </th>
+	</tr>
+	</thead>
+	<tr class="row1">
+		<td class="col0">http://pcb.geda-project.org/manual.html</td><td class="col1 leftalign">As always read the manual first.  </td>
+	</tr>
+	<tr class="row2">
+		<td class="col0 leftalign">http://pcb.geda-project.org/faq.html  </td><td class="col1"> </td>
+	</tr>
+	<tr class="row3">
+		<td class="col0 leftalign">http://www.delorie.com/pcb/docs/gs/gs.html#Terminology  </td><td class="col1 leftalign">Knowing the terminology helps in understanding the code  </td>
+	</tr>
+	<tr class="row4">
+		<td class="col0 leftalign">http://wiki.geda-project.org/geda:pcb-quick_reference  </td><td class="col1"> </td>
+	</tr>
+	<tr class="row5">
+		<td class="col0 leftalign">http://wiki.geda-project.org/geda:pcb_footprints  </td><td class="col1"> </td>
+	</tr>
+	<tr class="row6">
+		<td class="col0 leftalign">http://wiki.geda-project.org/geda:pcb_tips  </td><td class="col1"> </td>
+	</tr>
+	<tr class="row7">
+		<td class="col0">http://wiki.geda-project.org/geda:documentation </td><td class="col1"> </td>
+	</tr>
+</table></div>
+<!-- EDIT1 TABLE [815-1314] -->
+</div>
+
+<h2 id="gettingtoknowthepcbsources">Getting to Know the pcb Sources</h2>
+<div class="level2">
+
+<p>
+In order to start hacking pcb, you should be familiar with how the sources are organized, and how to build system works.
+</p>
+
+<p>
+The pcb sources are managed in a git repository: http:<em>git.geda-project.org. To download the latest sources for the first time, you can use the command:
+&lt;code&gt;
+git clone git:</em>git.geda-project.org/pcb.git
+&lt;/code&gt;
+For subsequent updates, you can change do the source directory and run
+</p>
+<pre class="code">git checkout master
+git pull</pre>
+
+<p>
+There&#039;s lots of accessible documentation on how to use git https://git-scm.com/documentation. However, it&#039;s really easy to figure out how to do things using Google. You can also check here for some relevant examples: <a href="geda-scm.html" class="wikilink1" title="geda-scm.html">Source Control Management</a>.
+</p>
+
+<p>
+Note that you wont be able to contribute your changes directly to the server until you get an account set up with DJ. Ask him on the mailing list. Alternatively, you can submit your patches to the mailing list or LaunchPad, or you can create and publish your own <a href="pcb-plugins.html" class="wikilink1" title="pcb-plugins.html">plugins</a> for pcb on your blog, github, whatever. If you do the later, let us know so that we can link to it!
+</p>
+
+<p>
+Now that you have the source files, you&#039;ll want to know what&#039;s stored where. The source tree&#039;s file structure is described here:
+<a href="geda-pcb_source_tree_file_structure.html" class="wikilink1" title="geda-pcb_source_tree_file_structure.html">pcb_source_tree_file_structure</a>
+</p>
+
+<p>
+To build pcb, you can find instructions here:
+<a href="geda-building_pcb.html" class="wikilink1" title="geda-building_pcb.html">building_pcb</a>
+</p>
+
+</div>
+
+<h2 id="wheretostart">Where to Start</h2>
+<div class="level2">
+
+<p>
+The first thing you need to know about pcb is that it&#039;s been around a long time and in the hands of many different developers, each of whom had their own style. You&#039;ll see this quite clearly as you start looking around in the code. We&#039;re trying to move towards some standardized coding conventions, but, it&#039;s a big code base and no one really has the time to sit down and go through the entire thing to make it uniform. So, we do it as we go. Another consequence of pcb&#039;s history is that each developer had different ideas about how things should be implemented. So, in general, it&#039;s not safe to assume that two things that you think ought to be similar are implemented in the same way, because it was probably two different people that implemented it. This, too, is a work in progress.
+</p>
+
+<p>
+The second thing you need to know, is that pcb is designed to work with many different HIDs (Human Interface Devices). You can read more about them here: <a href="pcb-hids.html" class="wikilink1" title="pcb-hids.html">pcb HIDs</a>. The term might be a little misleading because, for example, the gtk interface and the png exporter are both considered HIDs. Anyway, the point is that pcb is split roughly into two parts: the database and the interface. These two things aren&#039;t completely independent of each other, but, the idea is that the interface (HID) can be one of many different ways to modify or render the database. Presently we have a number of HIDs, e.g. gtk, lesstif, batch, Gerber, png, etc. The first two are actually windowing systems that allow a human to interact with the database in the kind of friendly windowed environment that users are accustomed to. The others might be better known as exporters. This separation makes it relatively easy to implement new HIDs.
+</p>
+
+<p>
+The third thing you need to know, is that pcb is presently not organized around objects. pcb is organized around functions. So, instead of having a Line structure with a Move function that will change the coordinates of the line, there a structure of Move functions that is indexed by object type. This can be rather annoying for those of us that have spent our formative years learning object oriented programming, but, pcb predates that. It&#039;ll be a big project that we undertake someday, and we&#039;d love your help. For now, this is what we&#039;ve got.
+</p>
+
+<p>
+The first time you open up the pcb sources can be a bit intimidating, but don&#039;t worry, this page is here to help. The first two things you&#039;ll want to know about are the data structures and &quot;actions&quot;. For now, the data structures are basically all stored in &quot;global.h&quot;. You can look through these, and many of them look as you might expect. The documentation here on the wiki is a work in progress, but you can find some data structures documented here: <a href="geda-pcb_data_structures.html" class="wikilink1" title="geda-pcb_data_structures.html">pcb_data_structures</a>.
+</p>
+
+<p>
+Actions are how things get done in pcb. When you click the mouse somewhere, or hit a key on the keyboard, you set of a chain of actions. Following a chain of actions can feel a little bit like trying to untangle a plate of spaghetti, but trust me, it gets easier. Understanding how actions work is essential to understanding pcb. So, it&#039;s worth it to spend some time tracing a few actions through. This really is one of the best ways to learn how pcb works. There are a couple of examples here: <a href="geda-pcb_action_traces.html" class="wikilink1" title="geda-pcb_action_traces.html">pcb_action_traces</a>. Once you&#039;ve run through those, it&#039;s a good idea to pick another action, like placing text on the workspace, and trace that through. Then write it up and contribute it to the wiki :) It&#039;s a good idea to actually record the sequence of function calls in a text file or something. Otherwise it&#039;ll get too tangled in your memory and you wont be able to keep things straight. Plus, trust me, you&#039;ll revisit it later when you&#039;re trying to debug something.
+</p>
+
+</div>
+
+<h2 id="yourfirstaction">Your First Action</h2>
+<div class="level2">
+
+<p>
+Since actions are basically everything (exaggeration), the &quot;hello world!&quot; of pcb development is writing your first action. You can either do this directly in the source tree, or you can do it as a plugin. The primary difference is how you compile them. They&#039;re both useful, so, we&#039;ll hit them both. Adding an action boils down to three parts: an action function, an action list, and an action list registration.
+</p>
+
+</div>
+
+<h3 id="theactioncode">The Action Code</h3>
+<div class="level3">
+
+<p>
+Let&#039;s start with the plugin method, since that doesn&#039;t require us to muck with anything in the pcb source tree. I&#039;ve prepared a convenient plugin template for your coding pleasure: <a href="media/geda/pcb_plugin_template.tar.gz" class="media" target="_blank" title="geda:pcb_plugin_template.tar.gz"></a> It contains two files, a makefile and a C source file. Let&#039;s break down the meat of the source file:
+</p>
+<pre class="code c"><span class="co2">#include &lt;stdio.h&gt;</span>
+&nbsp;
+<span class="co2">#include &quot;globalconst.h&quot;</span>
+<span class="co2">#include &quot;global.h&quot; // types</span>
+&nbsp;
+<span class="co2">#include &quot;error.h&quot; // Message</span>
+<span class="co2">#include &quot;hid.h&quot;   // REGISTER_ACTIONS</span></pre>
+
+<p>
+These are the includes that you need. That&#039;s basically the minimum to do anything useful. All of the types are defined in the two globals, hid include is required to be able to register actions, and the error include is where the function that prints to the message log is.
+</p>
+
+<p>
+Next up, the action function. This is the entry point to the action. Your action doesn&#039;t have to be entirely contained in one function, but, when you call your action, this is the function that gets called. In this case, it&#039;s where all the action is (... yeah, I really did do that). In has a calling signature similar to that on a main function, but with the addition of a pair of coordinates. The argument vector will contain the arguments that were passed to the action (you can call actions like functions, more later). The coordinates are appended by the system (you don&#039;t explicitly add them to an action call) and could be different things depending on how the action was initiated. The Coord type is an alias for the &quot;long&quot; type (defined by configure through a chain of configure -&gt; config.h -&gt; globalconst.h -&gt; global.h) and its units are nano meters. 
+</p>
+<pre class="code c"><span class="kw4">static</span> <span class="kw4">int</span>
+myplugin_action <span class="br0">&#40;</span><span class="kw4">int</span> argc<span class="sy0">,</span> <span class="kw4">char</span> <span class="sy0">**</span>argv<span class="sy0">,</span> Coord x<span class="sy0">,</span> Coord y<span class="br0">&#41;</span>
+<span class="br0">&#123;</span>
+  <span class="kw4">int</span> i <span class="sy0">=</span> <span class="nu0">0</span><span class="sy0">;</span>
+  Message<span class="br0">&#40;</span><span class="st0">&quot;Hello from your new plugin!<span class="es1">\n</span>&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+  <span class="kw1">if</span> <span class="br0">&#40;</span><span class="br0">&#40;</span>argc <span class="sy0">==</span> <span class="nu0">2</span><span class="br0">&#41;</span> <span class="sy0">&amp;&amp;</span> <span class="br0">&#40;</span><a href="http://www.opengroup.org/onlinepubs/009695399/functions/strcmp.html"><span class="kw3">strcmp</span></a><span class="br0">&#40;</span>argv<span class="br0">&#91;</span><span class="nu0">0</span><span class="br0">&#93;</span><span class="sy0">,</span> <span class="st0">&quot;Echo&quot;</span><span class="br0">&#41;</span> <span class="sy0">==</span> <span class="nu0">0</span><span class="br0">&#41;</span><span class="br0">&#41;</span>
+  <span class="br0">&#123;</span>
+    Message<span class="br0">&#40;</span><span class="st0">&quot;Echoing: %s<span class="es1">\n</span>&quot;</span><span class="sy0">,</span> argv<span class="br0">&#91;</span><span class="nu0">1</span><span class="br0">&#93;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+  <span class="br0">&#125;</span>
+&nbsp;
+  <span class="kw1">return</span> <span class="nu0">0</span><span class="sy0">;</span>
+<span class="br0">&#125;</span></pre>
+
+<p>
+This action will print &quot;Hello from your new plugin!&quot; to the message log. If you provided two arguments to the function and the first one is &quot;Echo&quot;, then it will also echo the second argument to the message log.
+</p>
+
+<p>
+The Message function is useful. It will print things to the message log. You can use it with format strings just like you would use printf. So, now instead of littering your code with printfs while your debugging, you can litter it with Messages. The other thing is how to process the argument vector. Make sure you check the number of arguments to make sure you have enough of them before you start processing the contents of the vector. If you want to be clever and do it some other way, go ahead, but this is quick and easy. You can look for additional arguments by added some else ifs. It&#039;s usually a good idea to add an else clause at the end that tells what the arguments were so that when your debugging why your action isn&#039;t getting called, you can find out that it really is getting called, but you&#039;re just giving it the wrong argument. Odds are that your action isn&#039;t going to be called 1000s of times per second, so, decoding performance shouldn&#039;t be a big deal.
+</p>
+
+<p>
+Next up, the action list. There are lots of these scattered throughout the pcb sources. Some contain just a few, and some contain way more than they should. The action list is an array of HID_Action structures. The structure is defined in hid.h. The HID_Action structure contains the action&#039;s name, a field indicating that coords are required, the action function, a string description of the action, and a string description of the actions calling signature. In this case we&#039;re being lazy and only providing the essentials. When you&#039;re building an action in the pcb source tree, instead of as a plugin, the calling signature and description are automatically added to the manual.
+</p>
+<pre class="code c"><span class="kw4">static</span> HID_Action myplugin_action_list<span class="br0">&#91;</span><span class="br0">&#93;</span> <span class="sy0">=</span>
+<span class="br0">&#123;</span>
+  <span class="br0">&#123;</span><span class="st0">&quot;PluginAction&quot;</span><span class="sy0">,</span> NULL<span class="sy0">,</span> myplugin_action<span class="sy0">,</span> NULL<span class="sy0">,</span> NULL<span class="br0">&#125;</span>
+<span class="br0">&#125;</span><span class="sy0">;</span></pre>
+
+<p>
+Finally, we have to register our action list with pcb. There&#039;s a conveniently named macro that will do this for you: REGISTER_ACTIONS. Note that there&#039;s no semicolon at the end of the line. For now, don&#039;t worry too much about how this works. Later, after you&#039;ve written a core action, you can read this: <a href="geda-pcb_register_actions_explained.html" class="wikilink1" title="geda-pcb_register_actions_explained.html">pcb_register_actions_explained</a>.
+</p>
+<pre class="code c">REGISTER_ACTIONS <span class="br0">&#40;</span>myplugin_action_list<span class="br0">&#41;</span></pre>
+
+<p>
+Since we&#039;re doing this as a plugin, we do have to worry just a little bit about how it works. Normally pcb will find all of the REGISTER_ACTION invocations at compile time and make sure they get processed, but, since we&#039;re writing a plugin and not recompiling all of pcb, we have to help just a little bit. REGISTER_ACTIONS will define a function called &quot;register_whatever_the_name_of_the_argument_is&quot;. In this case, register_plugin_action_list. When pcb loads plugins, it calls pcb_plugin_init. So, we just have use that to register our actions.
+</p>
+<pre class="code c"><span class="kw4">void</span>
+pcb_plugin_init<span class="br0">&#40;</span><span class="br0">&#41;</span>
+<span class="br0">&#123;</span>
+  <a href="http://www.opengroup.org/onlinepubs/009695399/functions/printf.html"><span class="kw3">printf</span></a><span class="br0">&#40;</span><span class="st0">&quot;Loading plugin: myplugin<span class="es1">\n</span>&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+  register_myplugin_action_list<span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+<span class="br0">&#125;</span></pre>
+
+<p>
+That wasn&#039;t so bad was it? If you write another one, make sure that wherever there is a name &quot;myplugin&quot;, that you change it to something unique.
+</p>
+
+</div>
+
+<h3 id="buildingtheactionplugin">Building the Action Plugin</h3>
+<div class="level3">
+
+<p>
+Okay, now we have to compile and install our plugin. Fortunately, the makefile in the archive you downloaded earlier will do this for you too. You do have to do a little editing though. So, lets go through that too. pcb plugins are the same as shared libraries.
+</p>
+
+<p>
+In order to build a plugin, you do have to have the pcb sources, but you had those anyway because you wanted to be a pcb hacker. You&#039;ll need include files from pcb for data types and other things, so, the compiler needs to know where to find them. Set this appropriately.
+</p>
+<pre class="code makefile"># where is the source tree
+PCBSRC=${HOME}/src/pcb/pcb</pre>
+
+<p>
+pcb automatically looks for plugins in a couple of places, this is one of them. Yes, pcb contributes to the .spam in your home directory. Don&#039;t change this.
+</p>
+<pre class="code makefile"># where to put the compiled plugin
+PLUGINDIR = ${HOME}/.pcb/plugins</pre>
+
+<p>
+Update PLUGINNAME with the base name of your source file.
+</p>
+<pre class="code makefile">PLUGINNAME = myplugin</pre>
+
+<p>
+Depending on what you&#039;re doing, you may need to add additional compiler flags for includes and such. Hopefully you know how to do this. If you don&#039;t, there are lots of resources to help you.
+</p>
+<pre class="code"># compiler to use
+CC = gcc
+# base compile flags
+CFLAGS = -fPIC -O2 
+# includes for glib
+CFLAGS += `pkg-config --cflags glib-2.0`
+# includes for gtk
+#CFLAGS += `pkg-config --cflags gtk+-2.0`
+#includes for pcb
+CFLAGS += -I${PCBSRC} -I${PCBSRC}/src -DHAVE_CONFIG_H</pre>
+
+<p>
+Macs are different. Who&#039;s surprised? pcb builds on Macs. Who&#039;s surprised?!
+</p>
+<pre class="code makefile"># for linux or windows
+CFLAGS += -shared
+# for mac os
+#CFLAGS += -dynamiclib -Wl,-undefined,dynamic_lookup</pre>
+
+<p>
+Finally, some rules to build the shared library and install it.
+</p>
+<pre class="code makefile">${PLUGINNAME}.so: ${PLUGINNAME}.c
+	${CC} ${CFLAGS} $^ -o $@
+	file $@
+&nbsp;
+install: ${PLUGINNAME}.so
+	install -m 0755 -D $^ ${PLUGINDIR}</pre>
+
+<p>
+So, type &quot;make install&quot; and it should build and install the plugin somewhere where pcb will find it.
+</p>
+
+</div>
+
+<h3 id="runningyouraction">Running Your Action</h3>
+<div class="level3">
+
+<p>
+Now it&#039;s time to fire up pcb and give your new action a test run. Once pcb is open, open up the Message Log, Window -&gt; Message Log. Click back in the main window, and type &quot;:&quot; to bring up the command entry. This might come up in either a separate window or on the status bar depending on how your preferences are set. Type the calling signature of your new action &quot;PluginAction()&quot; and hit enter. You should see &quot;Hello from your new plugin!&quot; appear in the log. Next try &quot;PluginAction(Echo, Hello World)&quot;. This also tells you something about how pcb handles action arguments (hint: they&#039;re csv&#039;s).
+</p>
+
+<p>
+If instead of the message we expect, you see &quot;no action PluginAction()&quot; then obviously something is wrong. Try running pcb from the console. When pcb loads, you should see the message &quot;Loading plugin: myplugin&quot;. If you don&#039;t, then clearly pcb isn&#039;t loading your plugin. This is probably because it didn&#039;t actually build or install properly. Check the contents of ~/.pcb/plugins and make sure that myplugin.so is there and that it has execute privileges.
+</p>
+
+<p>
+If you do see the console message indicating that your plugin loaded, then you might have a namespace collision. It&#039;s possible for plugins to mask each others structures if they use the same names like &quot;myplugin_action&quot; or &quot;myplugin_action_list&quot;.
+</p>
+
+<p>
+Congratulations, you&#039;re a pcb hacker!
+</p>
+
+</div>
+
+<h3 id="makingyouractionpartofpcb">Making Your Action Part of pcb</h3>
+<div class="level3">
+
+<p>
+Okay, so, your shiny new action has reached a level of awesome that merits putting it directly into pcb. What now? Here&#039;s another example that does just that: <a href="geda-pcb_adding_a_core_action.html" class="wikilink1" title="geda-pcb_adding_a_core_action.html">pcb_adding_a_core_action</a>.
+</p>
+
+</div>
+
+<h2 id="nextsteps">Next Steps</h2>
+<div class="level2">
+
+<p>
+There are lots and lots of projects to help with. A good way to get started is to start looking at bug reports on LaunchPad: https:<em>launchpad.net/pcb . While you&#039;re there, you could have a look at the blueprints and milestones. We also have a running list of projects http://wiki.geda-project.org/pcb-projects that you could have a look at. If you need some other ideas, send some email to the list.  Happy hacking!
+</p>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,563 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+  <link rel="stylesheet" media="screen" type="text/css" href="./style.css" />
+  <link rel="stylesheet" media="screen" type="text/css" href="./design.css" />
+  <link rel="stylesheet" media="print" type="text/css" href="./print.css" />
+
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+</head>
+<body>
+
+<h1 id="fonts">Fonts</h1>
+<div class="level1">
+
+<p>
+A font system has been implemented in the git branch home/cparker/font_fun. This system was initially designed by Chad Parker. The initial set of fonts were converted for PCB by Erich Heinzle. With this system, the font of a design can be easily changed, and multiple fonts can be used in the same design. This system also reduces the need to store font data in saved design files, because a font name should be forever. If a font ever changes, it should be given a new name. So, saved designs can reference only the font name without having to worry about the font changing and a design being different when it is next opened.
+</p>
+
+<p>
+<a href="media/geda/pcbwithmultifonts.png" class="media" target="_blank" title="geda:pcbwithmultifonts.png">geda:pcbwithmultifonts.png</a>
+</p>
+
+</div>
+
+<h1 id="usage">Usage</h1>
+<div class="level1">
+
+</div>
+
+<h2 id="gettingthefeaturebranch">Getting the Feature Branch</h2>
+<div class="level2">
+
+<p>
+To test the font system, check out the feature branch from git. Switch to the feature branch with
+</p>
+<pre class="code">git checkout home/cparker/font_fun</pre>
+
+<p>
+reconfigure if necessary and build. Then, run pcb by executing the pcbtest.sh script in the src directory. This is important because it sets the font path so that pcb can load some of the included fonts.
+</p>
+
+</div>
+
+<h2 id="fontsettings">Font Settings</h2>
+<div class="level2">
+
+<p>
+All font settings can be viewed and edited from the Fonts tab in the preferences window.
+</p>
+
+<p>
+<a href="media/geda/fontprefswindow.png" class="media" target="_blank" title="geda:fontprefswindow.png">geda:fontprefswindow.png</a>
+</p>
+
+<p>
+There are three font related options that can be configured:
+</p>
+<ul>
+<li class="level1"><div class="li"> <strong>&quot;Save font data in files&quot;</strong><br/>
+When enabled, this will save the font of text objects in saved design files. If disabled, it will not, and the design will be backwards compatible with older versions of pcb.</div>
+</li>
+<li class="level1"><div class="li"> <strong>&quot;Save current system font as symbols in pcb files (old format).&quot;</strong><br/>
+This option is only available when &quot;Save font data in files&quot; is disabled. This option does exactly what it says. This is how you can save a font in a design file that is compatible with older versions of pcb.</div>
+</li>
+<li class="level1"><div class="li"> <strong>&quot;Embed used fonts in pcb files&quot;</strong><br/>
+This option is only available when &quot;Save font data in files&quot; is enabled. This option will store the font information of every font used in the design into the saved pcb file. This makes the pcb file portable to other systems that may not have the same fonts installed, or a different version of a font installed.</div>
+</li>
+</ul>
+
+<p>
+There are two fonts that can be configured:
+</p>
+<ul>
+<li class="level1"><div class="li"> <strong>System font</strong>:<br/>
+The system font is used for all new objects that are added to the design, and also for system generated text such as pin numbers and pin functions. System font information is not stored in saved designs.</div>
+</li>
+<li class="level1"><div class="li"> <strong>PCB font</strong>:<br/>
+The PCB font is stored in saved files as the default font for a design. It is used for any texts that cannot be assigned a font, presently reference designators. It&#039;s also the font that is assigned to any texts that don&#039;t have a specific font assigned when the design is loaded. The system font is set to this after loading.</div>
+</li>
+</ul>
+<div class="noteclassic">If a design is loaded and requests a font that is not on the system, it will issue a warning to the message log and the text will be displayed using the system font. If the system font is changed, it will also change. (This behavior should be reviewed.)
+</div>
+<p>
+The fonts can also be manipulated by executing <a href="geda-pcb_fonts.html#actions" class="wikilink1" title="geda-pcb_fonts.html">Actions</a>.
+</p>
+
+</div>
+
+<h2 id="fontlibraries">Font Libraries</h2>
+<div class="level2">
+
+<p>
+There are two font libraries:
+</p>
+<ul>
+<li class="level1"><div class="li"> <strong>System Font Library:</strong><br/>
+This library contains all of the fonts that pcb knows about that are stored on the local system. Fonts can be loaded and unloaded from this library using actions. This functionality is not yet available in the preferences menu, but it is planned to be eventually.</div>
+</li>
+<li class="level1"><div class="li"> <strong>Embedded Font Library:</strong><br/>
+This library contains the fonts that are stored in the pcb file of the current design. The only control a user has over this library is in the fonts that he or she chooses to use in the design. This library is populated whenever a pcb file is loaded. If you load a file, add an object with a different font, and choose to save the file with fonts embedded, the additional fonts will be saved in the file, but the embedded library will only be updated if you reload the pcb file. A possible future extension might be to allow the user to explicitly move fonts into the embedded library.</div>
+</li>
+</ul>
+
+</div>
+
+<h2 id="changingfonts">Changing Fonts</h2>
+<div class="level2">
+
+<p>
+Fonts can be easily changed using the Fonts tab in the preferences window:
+</p>
+<ul>
+<li class="level1"><div class="li"> Open the Preferences window and switch to the Fonts tab.</div>
+</li>
+<li class="level1"><div class="li"> Select the new font to be assigned to the text objects. </div>
+</li>
+<li class="level1"><div class="li"> In the main window, select the text objects to which the font should be assigned.</div>
+</li>
+<li class="level1"><div class="li"> Click the &quot;Change Selected&quot; button to assign the new font to the text objects.</div>
+</li>
+</ul>
+
+<p>
+Alternatively, all text in a design can have a font assigned by using the &quot;Change All&quot; button.
+</p>
+
+<p>
+Note that these methods will only change the font of discrete text objects. Reference designators of components cannot presently have fonts assigned to them individually. However, the font of *all* reference designators can be changed together by setting the PCB Font to the desired font.
+</p>
+
+</div>
+
+<h2 id="compatibilitywitholderversionsofpcb">Compatibility with Older Versions of PCB</h2>
+<div class="level2">
+
+<p>
+Previous versions of pcb would store the data of a single font in saved files as symbols. Alternatively, if the file did not contain symbols, perhaps because they were deleted, then pcb would load the default font instead. This feature branch will still play nicely with these scenarios. 
+</p>
+
+<p>
+If you load an existing design that has symbols stored in the design, the symbols will be converted into an embedded font (Font 0), all the text objects in the design will use that font, and that font will be set as the system font. If the design does <em>not</em> have symbols stored in it, then the text objects will be assigned the <em class="u">system font</em>. So, if you&#039;ve changed the system font then the text objects will not look exactly as they did when you saved them. However, If you load a design and don&#039;t like the font the text ends up in, it&#039;s easy to change the font.
+</p>
+
+</div>
+
+<h1 id="implementation">Implementation</h1>
+<div class="level1">
+
+<p>
+The font system is implemented using a few data structures and several actions.
+</p>
+
+</div>
+
+<h2 id="datastructures">Data Structures</h2>
+<div class="level2">
+
+</div>
+
+<h3 id="fonttype">Font Type</h3>
+<div class="level3">
+
+<p>
+The font data structure is called FontType and is defined in global.h as follows:
+</p>
+<pre class="code c"><span class="kw4">typedef</span> <span class="kw4">struct</span>
+<span class="br0">&#123;</span>
+    <span class="kw4">char</span> <span class="sy0">*</span> Name<span class="sy0">;</span>
+    <span class="kw4">char</span> <span class="sy0">*</span> SourceFile<span class="sy0">;</span>
+    Coord MaxHeight<span class="sy0">;</span> <span class="coMULTI">/*!&lt; Maximum cell width. */</span>
+    Coord MaxWidth<span class="sy0">;</span> <span class="coMULTI">/*!&lt; Maximum cell height. */</span>
+    BoxType DefaultSymbol<span class="sy0">;</span> <span class="coMULTI">/*!&lt; The default symbol is a filled box. */</span>
+    SymbolType Symbol<span class="br0">&#91;</span>MAX_FONTPOSITION <span class="sy0">+</span> <span class="nu0">1</span><span class="br0">&#93;</span><span class="sy0">;</span>
+    <span class="kw4">int</span> nSymbols<span class="sy0">;</span>
+<span class="br0">&#125;</span> FontType<span class="sy0">;</span></pre>
+
+<p>
+The MaxHeight and MaxWidth parameters are set by the SetFontInfo function that&#039;s been relocated into font.c. This structure has updated to include two new fields for the name of the font and the source file of the font. 
+</p>
+
+</div>
+
+<h3 id="fontlibraries1">Font Libraries</h3>
+<div class="level3">
+
+<p>
+The two font libraries (system and embedded) are both implemented as GLib GSLists. Each list element points to a FontType structure. The choice of a GSList was made because its a simple structure, and at the moment I don&#039;t anticipate there being a vast database of fonts to choose from, so searching through a list ought not to take all that long. GLib includes many functions for working with GSLists, and these are used for managing and accessing the list items. 
+</p>
+
+</div>
+
+<h4 id="findingfonts">Finding Fonts</h4>
+<div class="level4">
+
+<p>
+Searching through the library for a font is done by using the FindFontInLibrary function. This function iterates through the list once comparing the name of the font to the provided reference string. If a match is not found, the list is searched through again comparing the name of the source file. If it&#039;s still not found then a null is returned.
+</p>
+
+<p>
+A second function, FindFont, is available for searching. This function searches first through the embedded library, and if the font is not found, it will then search through the system library. This way, the embedded library always has precedence. So, if a customized version of a font is stored in the pcb file and there is a system font with the same name, the embedded font will be used. The assumption is that if the font was explicitly stored in the file, it was done so to ensure that it was used.
+</p>
+
+</div>
+
+<h3 id="fontfileformat">Font File Format</h3>
+<div class="level3">
+
+<p>
+The format for font files is basically the same as the format for symbols in complete pcb files, with one new keyword: Font. The argument of the Font keyword is the name of the font. Following the Font keyword a set of symbols using the existing pcb format are wrapped inside of normal parenthesis.
+</p>
+<pre class="code">Font(&quot;Default&quot;) (
+Symbol(&#039; &#039; 18)
+(
+)
+Symbol(&#039;!&#039; 12)
+(
+	SymbolLine(0 35 0 40 8)
+	SymbolLine(0 0 0 25 8)
+)
+...
+) # end font</pre>
+
+<p>
+The &quot;# end font&quot; is just for reference and is not required.
+</p>
+
+<p>
+A font file can have one or more fonts defined in succession.
+</p>
+
+</div>
+
+<h3 id="pcbfileformatchanges">PCB File Format Changes</h3>
+<div class="level3">
+
+</div>
+
+<h4 id="embeddedfontsyntax">Embedded Font Syntax</h4>
+<div class="level4">
+
+<p>
+A single addition to the file format has been implemented. That&#039;s the Font directive that was described above. That directive can have two meanings. Fonts can be embedded in regular pcb files using the same syntax as above. The only caveat is that the font must be defined early in the file, between the styles and the layout data.
+</p>
+
+<p>
+The Font directive can also be included without symbols. If it appears this way, then the argument is considered to be the PCB Default Font. This font is made the current font and is used for all reference designators and for any text objects that are not explicitly assigned a font.
+</p>
+
+</div>
+
+<h4 id="textsyntax">Text Syntax</h4>
+<div class="level4">
+
+<p>
+There is also an addition to the text syntax. It&#039;s labeled in <code>parse_y.y</code> as <code>text_20161008_format</code>. This is the same as <code>text_hi_format</code> with the addition of a second string field. The second string field is interpreted as the font. Here&#039;s the syntax definition:
+</p>
+<pre class="code">text_20161008_format
+			/* x, y, direction, scale, text, font, flags */
+		: T_TEXT &#039;[&#039; measure measure number number STRING STRING flags &#039;]&#039;
+			{
+                FontType * font = FindFont($8);
+                if(!font) Message(_(&quot;Warning: Could not find font %s for text \&quot;%s\&quot;\n&quot;), $8, $7);
+		CreateNewText(Layer, font, NU ($3), NU ($4), $5, $6, $7, $9);
+		free ($7);
+                free ($8);
+			}
+		;
+</pre>
+
+</div>
+
+<h2 id="actions">Actions</h2>
+<div class="level2">
+
+</div>
+
+<h3 id="changefont">Change Font</h3>
+<div class="level3">
+
+<p>
+The ChangeFont action can has two forms that can be invoked from the pcb command entry, a single argument version and a two argument version.<br/>
+
+Syntax:<br/>
+
+</p>
+<ul>
+<li class="level1"><div class="li"><code>ChangeFont(fontname)</code><br/>
+With one argument, the <code>ChangeFont</code> action changes the current system font to the font specified by <code>fontname</code>.<br/>
+</div>
+</li>
+<li class="level1"><div class="li"><code>ChangeFont([All|Selected|Object|System|PCB], fontname)</code><br/>
+With two arguments, the <code>ChangeFont</code> action changes the font of the specified item to the font specified by <code>fontname</code>.<br/>
+</div>
+</li>
+</ul>
+
+<p>
+The first argument to the second form has the following effects:
+</p>
+<ul>
+<li class="level1"><div class="li"> <code>All</code><br/>
+Change the font of *all* existing text objects to the specified font. </div>
+</li>
+<li class="level1"><div class="li"> <code>Selected</code><br/>
+Change the font of all *selected* text objects to the specified font.</div>
+</li>
+<li class="level1"><div class="li"> <code>Object</code><br/>
+Change the font of the object underneath the crosshair.</div>
+</li>
+<li class="level1"><div class="li"> <code>System</code><br/>
+Change the system font. This has the same function as the single argument invocation.</div>
+</li>
+<li class="level1"><div class="li"> <code>PCB</code><br/>
+Change the PCB font.</div>
+</li>
+</ul>
+<div class="noteclassic">The <code>All</code>, <code>Selected</code>, and <code>Object</code> action will not change the font of dynamically generated text such as pin names/numbers or text that cannot be assigned a specific font, such as reference designators.
+
+</div><div class="noteclassic">Changing the System or PCB font will update all of the dynamically generated text or reference designators, respectively.
+
+</div>
+</div>
+
+<h3 id="loadfont">Load Font</h3>
+<div class="level3">
+
+<p>
+The Load Font Action attempts to load a font from a font file.<br/>
+
+Syntax:
+</p>
+<ul>
+<li class="level1"><div class="li"> <code>LoadFont(&lt;filename&gt;)</code><br/>
+Load a font from the specified file.</div>
+</li>
+<li class="level1"><div class="li"> <code>LoadFont(All)</code><br/>
+Scan the font path(s) and attempt to load fonts from any file with the extension <code>.pcb_font</code>.</div>
+</li>
+</ul>
+
+<p>
+The Load Font Action is primarily an interface to the LoadFont function which takes as an argument being the name of the file containing the font(s) to load. 
+</p>
+
+<p>
+Fonts can only be deliberately loaded to the system font library, so prior to reading the specified file, the system library is checked for a font that came from a file with the same name. If it is present, then it does not reload the font. So, if you&#039;ve changed a font and want to update it without closing pcb, you must first use the Unload Font Action to unload the font. Then you can reload it. (Note that the Unload Font Action will not allow you to unload a font that is currently being used in the design.)
+</p>
+
+<p>
+A note on the LoadFont function: the ParseFont function is still used, however, the details of how fonts are parsed in parse_y.y have been modified to create fonts in the appropriate library. After ParseFont reads the file and loads the data, the new font is appended to the end of the GSList that is the library. LoadFont exploits this to get the font pointer and set the name of the source file in the data structure. LoadFont then explicitly sorts the library to put the entry in alphabetical order.
+</p>
+
+</div>
+
+<h3 id="unloadfont">Unload Font</h3>
+<div class="level3">
+
+<p>
+The Unload Font Action is used for removing a font from the system library.<br/>
+
+Syntax:<br/>
+
+</p>
+<ul>
+<li class="level1"><div class="li"> <code>UnloadFont(&lt;fontname&gt;)</code><br/>
+Unload the font with the specified name.</div>
+</li>
+<li class="level1"><div class="li"> <code>UnloadFont(&lt;filename&gt;)</code><br/>
+Unload the font loaded from the specified file name.</div>
+</li>
+</ul>
+
+<p>
+The Unload Font Action acts primarily as an interface to the UnloadFont function. This action first checks to see if the specified font is in the system library, and then checks to see if that font is used anywhere in the design.
+</p>
+<div class="noteclassic">The Unload Font Action will not allow a font that is used in the current design to be unloaded from the font library.
+</div>
+<p>
+The Unload Font Action will also not allow the Default font to be unloaded, and although it should be redundant, checks to ensure that there is always at least one font in the system library.
+</p>
+
+<p>
+A note about the UnloadFont function. All of the sanity checking is performed in the Action, not in the function, because there are things that the system should be able to do that the user shouldn&#039;t. For example, the UnloadFont function is capable of unloading fonts from either the system library or the embedded library. This is to facilitate the closing of designs and the of the program. UnloadFont can be called with the font name &quot;<code>all</code>&quot; which will enter a loop that will unload every font in the library.
+</p>
+
+</div>
+
+<h3 id="listfonts">List Fonts</h3>
+<div class="level3">
+
+<p>
+The List Fonts Action was primarily for use as an introspection tool to evaluate the font system during development, however it may also find use facilitating testing. This action takes no arguments and writes to the message log the names of all of the fonts in the system library and the embedded library, the currently system font, the PCB font, and all of the fonts presently in use. <br/>
+
+Syntax:<br/>
+
+</p>
+<ul>
+<li class="level1"><div class="li"> <code>ListFonts()</code><br/>
+List all fonts in use in the current design.</div>
+</li>
+</ul>
+
+<p>
+A noteworthy function that is used here is the FontsUsed() function. This function builds a GSList of all the fonts used in the design. The list must be freed by the calling function.
+</p>
+
+<p>
+Possible future upgrades/expansions for this or a similar function:
+</p>
+<ul>
+<li class="level1"><div class="li"> list information about which library a font is in</div>
+</li>
+<li class="level1"><div class="li"> take as an argument the name of a font and list the text objects that use that font</div>
+</li>
+</ul>
+
+</div>
+
+<h2 id="processes">Processes</h2>
+<div class="level2">
+
+</div>
+
+<h3 id="startupshutdown">Startup/Shutdown</h3>
+<div class="level3">
+
+<p>
+When PCB starts up the font system has several command line options that are processed like normal options. These options include:
+</p>
+<ul>
+<li class="level1"><div class="li"> <code>font-path</code><br/>
+The path(s) in which to search for font files</div>
+</li>
+<li class="level1"><div class="li"> <code>font-file</code><br/>
+The file name of the &quot;Default&quot; font. This is loaded first to ensure that there is always at least one font in the system.</div>
+</li>
+<li class="level1"><div class="li"> <code>save-font-data</code><br/>
+Save font information in pcb files. This is required in order for fonts to persist across saves. It will save the name of the font with the text object in the file. This option does not cause the fonts themselves to be included in the file (the <code>embed-font</code> option has that effect). Disabling this option will make the saved files backwards compatible with older versions of pcb.</div>
+</li>
+<li class="level1"><div class="li"> <code>save-symbols</code><br/>
+This option causes the symbols of the current system font to be stored in saved files. This is the way that pcb has previously preserved a potentially modified font across saves. </div>
+</li>
+<li class="level1"><div class="li"> <code>embed-fonts</code><br/>
+This option will embed the data for every font used in the design in the saved files. This ensures portability across systems that may have different fonts or different versions of the same font installed.</div>
+</li>
+</ul>
+
+<p>
+The font system is initialized in the <code>settings_post_process</code> function (<code>main.c</code>). Here, the <code>font-file</code> is searched for in the <code>font-path</code>(s) and loaded. Then the <code>font-path</code>(s) are searched by the <code>ScanFontPaths</code> function (<code>font.c</code>) for any files that have a <code>.pcb_font</code> extension, and these files are read looking for font information.
+</p>
+
+</div>
+
+<h3 id="fileload">File Load</h3>
+<div class="level3">
+
+<p>
+The loading of a pcb file has two parts: 1. the actual reading of data from the file and converting it into pcb data structures, and 2. applying policy to the loaded data. (1) is implemented using bison/flex in <code>parse_y.y</code> and <code>parse_l.l</code>. (2) is implemented in <code>file.c</code> in the <code>real_load_pcb</code> function.
+</p>
+
+</div>
+
+<h4 id="readingdatafromfilesintodatastructures">Reading Data From Files Into Data Structures</h4>
+<div class="level4">
+
+</div>
+
+<h5 id="fontdata">Font Data</h5>
+<div class="level5">
+
+<p>
+Font data is required to be located after style data and before object data in the pcb file (this is a requirement from before the font system that results from the definition of the file grammar). The variable <code>yyFont</code> acts as the global pointer to the current font. When font data (an embedded font or floating symbols) is found a new font instance is created in the appropriate library (depending on whether <code>yyPCB</code> is NULL, if not we&#039;re loading a pcb file, otherwise we&#039;re loading a font file), and subsequent symbols are added to that. If a new font is found, a new font instance is created and yyFont is updated to point at the new font. If only the font directive is found (no symbols), then the <code>DefaultFontName</code> field of the PCBType structure is updated with the name. (I&#039;ve been inconsistent in the docs about referring to this font name as both the <code>PCBDefaultFont</code> and the <code>DefaultPCBFont</code>)
+</p>
+
+</div>
+
+<h5 id="textdata">Text Data</h5>
+<div class="level5">
+
+<p>
+When text data is read from the file, it will either use the standard format, in which case the font pointer is initially set to NULL, or it will have a font specified, in which case the specified font is searched for in the font library (embedded library first). If the font is not found, then the font pointer is set to NULL. In post processing, any text object that has a NULL font pointer is set to the <code>DefaultPCBFont</code>. If the <code>DefaultPCBFont</code> is NULL, then the font pointers remain set to NULL. This could happen if this is a pcb file from an older version that has no font information. When the font pointer of a text object is NULL, it is displayed using the system font instead. So, it&#039;s possible to completely ignore the font system, change the system font, and in doing so change the font of every bit of text on the board (including refdes).
+</p>
+
+</div>
+
+<h5 id="elementdata">Element Data</h5>
+<div class="level5">
+
+<p>
+The format of element data in pcb files doesn&#039;t presently include font information, so individual font cannot be stored for individual ref des. New elements are created via the <code>CreateNewElement</code> function (<code>create.c</code>) which adds text to the element via the <code>AddTextToElement</code> function (<code>create.c</code>). This function searches for the <code>PCBDefaultFont</code>, and assigns that if it&#039;s found, or NULL otherwise.
+</p>
+
+</div>
+
+<h4 id="postloadingpolicy">Post Loading Policy</h4>
+<div class="level4">
+
+<p>
+The policy defines how to handle objects that need fonts but were not assigned one during load. This is the magic that will hopefully make pcb &quot;do the right thing&quot; when loading older versions of pcb files.
+</p>
+
+</div>
+
+<h5 id="systemfontanddefaultfontname">System Font and Default Font Name</h5>
+<div class="level5">
+
+<p>
+The first (font related) thing pcb tries to do after loading all the data from a pcb file is figure out if it needs to change the current system font. If a <code>DefaultFontName</code> was specified, the system font is changed to this font. If we&#039;re dealing with an older file, there will be no <code>DefaultFontName</code> specified, but there still might be font data in the file (as loose symbols), and if there is, then it should be used. Symbol data gets loaded as a font in the embedded library, so if there are any fonts in the embedded library, the first one is set to be the system font. (Is this behavior okay if there are embedded fonts but no default font?)
+</p>
+
+</div>
+
+<h5 id="textdata1">Text Data</h5>
+<div class="level5">
+
+<p>
+After loading all data, 
+</p>
+
+</div>
+
+<h3 id="filesave">File Save</h3>
+<div class="level3">
+
+</div>
+
+<h2 id="todolist">To Do List</h2>
+<div class="level2">
+
+<p>
+These are tasks and ideas related to the font subsystem that still need to be done, could be done, or are in progress:
+</p>
+<ul>
+<li class="level1"><div class="li"> Move work done in ChangeFontAction to separate function to isolate the work from the undo serial number increment</div>
+</li>
+<li class="level1"><div class="li"> Check what happens when loading a font file if a <code>DefaultFontName</code> is specified</div>
+</li>
+<li class="level1"><div class="li"> Add licensing info to font files</div>
+</li>
+<li class="level1"><div class="li"> Add fonts to install (and figure out where they should go)</div>
+</li>
+<li class="level1"><div class="li"> Write test scripts</div>
+</li>
+<li class="level1"><div class="li"> Add documentation to doc/ tree</div>
+</li>
+<li class="level1"><div class="li"> Add flow diagrams to code comments</div>
+</li>
+<li class="level1"><div class="li"> Font preview in settings window</div>
+</li>
+<li class="level1"><div class="li"> Character map for selecting non standard characters</div>
+</li>
+<li class="level1"><div class="li"> User control of fonts in embedded library</div>
+</li>
+<li class="level1"><div class="li"> Save font(s) to a file</div>
+</li>
+<li class="level1"><div class="li"> &quot;Font mode&quot; saving of fonts to font files.</div>
+</li>
+</ul>
+
+</div>
+</body>
+</html>

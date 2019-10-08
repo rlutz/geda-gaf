@@ -1,0 +1,350 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+  <link rel="stylesheet" media="screen" type="text/css" href="./style.css" />
+  <link rel="stylesheet" media="screen" type="text/css" href="./design.css" />
+  <link rel="stylesheet" media="print" type="text/css" href="./print.css" />
+
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+</head>
+<body>
+
+<h1 id="symbolguide">Symbol guide</h1>
+<div class="level1">
+
+</div>
+
+<h2 id="general">General</h2>
+<div class="level2">
+
+<p>
+A symbol is a small gEDA file (typically with the file extension “<code>.sym</code>”) that defines the graphical appearance, pins, and inherited attributes of a component.  It can be instantiated in a schematic as a component object.
+</p>
+
+</div>
+
+<h3 id="attributes">Attributes</h3>
+<div class="level3">
+
+<p>
+Attributes are text objects which follow the pattern “<code>name=value</code>”.  They can be attached to a net, pin, or component object, or they can not be attached to anything.  This allows five cases:
+</p>
+<ul>
+<li class="level1"><div class="li"> Attributes in a symbol which are attached to a pin define this pin&#039;s properties.  The four common pin attributes are <code>pinnumber=</code>, <code>pinseq=</code>, <code>pinlabel=</code>, and <code>pintype=</code>.  There is no direct way to change these pin attributes from the instantiating schematic, but there&#039;s the <a href="geda-gnetlist_ug-slotting.html" class="wikilink1" title="geda-gnetlist_ug-slotting.html">slotting mechanism</a> which allows changing pinnumbers depending on a <code>slot=</code> attribute in the component.</div>
+</li>
+</ul>
+<ul>
+<li class="level1"><div class="li"> Attributes in a symbol which aren&#039;t attached to anything make up the basic attributes of that symbol and are inherited by components instantiating the symbol.</div>
+</li>
+</ul>
+<ul>
+<li class="level1"><div class="li"> Attributes attached to a component augment the attributes inherited from the symbol.  For most attributes, attaching an attribute with the same name as an inherited attribute will override the inherited value, and attaching an attribute with the value “<code>unknown</code>” will remove the inherited value.  Some attributes like <code>net=</code> follow more complex rules.</div>
+</li>
+</ul>
+<ul>
+<li class="level1"><div class="li"> Attributes can be attached to a net.  The only attribute for which this is typically done is “<code>netname=</code>”; it makes that net segment part of the net with the specified name, connecting separate net segments with the same <code>netname=</code> attribute to form a single net.</div>
+</li>
+</ul>
+<ul>
+<li class="level1"><div class="li"> Attributes in a schematic which aren&#039;t attached to anything are called “floating”.  They aren&#039;t too useful, but there are some backends which allow specifying global parameters via floating attributes.</div>
+</li>
+</ul>
+
+<p>
+Attributes must not contain a space before or after the “=” sign, and the value must not be empty.  If you want to specify an empty value, use “<code>unknown</code>” instead; this is a special value that is treated as “no value” by the netlister.
+</p>
+
+</div>
+
+<h2 id="symboltypes">Symbol types</h2>
+<div class="level2">
+
+<p>
+There are different types of symbols which are treated differently by gEDA/gaf:
+</p>
+
+</div>
+
+<h3 id="regularsymbols">Regular symbols</h3>
+<div class="level3">
+
+<p>
+Regular symbols are the “bread and butter” symbol type.  They represent some basic unit—a component, some part of a component, or whatever is appropriate in the context—which can be connected to other such units via nets connected to their pins.
+</p>
+
+<p>
+Regular components must have a <code>refdes=</code> attribute.  If multiple components in a schematic have the same <code>refdes=</code> attribute, they are treated as part of the same package; i.e., there will be a single package in the resulting netlist which contains all the pins and attributes of all the components which share that <code>refdes=</code>.  It follows that a pinnumber must me unique, and there must not be attributes with conflicting values (except <code>slot=</code>), within all components which share a common <code>refdes=</code>.
+</p>
+
+<p>
+It&#039;s recommended that regular symbols contain a <code>refdes=</code> attribute with a placeholder value (e.g., “<code>U?</code>”, “<code>C?</code>”, or “<code>R?</code>”) which will be promoted on instantiation.  This way, the user just has to replace the “?” with a number and doesn&#039;t have to add a <code>refdes=</code> attribute themselves.  It is common to add other attributes pre-populated with common or placeholder values, as well.
+</p>
+
+<p>
+Recommended attributes:
+</p>
+<ul>
+<li class="level1"><div class="li"> <code>refdes=</code> (with a placeholder value; e.g., “U?”, “C?”, or “R?”)</div>
+</li>
+<li class="level1"><div class="li"> <code>value=</code></div>
+</li>
+<li class="level1"><div class="li"> <code>device=</code> (if used for simulation)</div>
+</li>
+<li class="level1"><div class="li"> <code>footprint=</code> (if used for layout)</div>
+</li>
+</ul>
+
+<p>
+Recommended pin attributes:
+</p>
+<ul>
+<li class="level1"><div class="li"> <code>pinnumber=</code> (required, must be unique; contrary to its name, this doesn&#039;t have to be a number)</div>
+</li>
+<li class="level1"><div class="li"> <code>pinlabel=</code> (if you want to have an additional label for the pin)</div>
+</li>
+<li class="level1"><div class="li"> <code>pinseq=</code> (if used for simulation, or if the symbol is slotted)</div>
+</li>
+<li class="level1"><div class="li"> <code>pintype=</code> (if used with DRC)</div>
+</li>
+</ul>
+
+</div>
+
+<h5 id="slotting">Slotting</h5>
+<div class="level5">
+
+<p>
+If you have a package which contains multiple instances of the same functionality (e.g., a 7400 IC with four NAND gates), it would be inconvenient if you had to create a separate symbol with the correct pinnumbers for each slot.  Instead, you can create a single symbol and use the <a href="geda-gnetlist_ug-slotting.html" class="wikilink1" title="geda-gnetlist_ug-slotting.html">slotting mechanism</a> to automatically change the pinnumbers depending on the value of the <code>slot=</code> attribute.
+</p>
+
+</div>
+
+<h5 id="symbolsformechanicalparts">Symbols for mechanical parts</h5>
+<div class="level5">
+
+<p>
+Symbols don&#039;t have to have pins.  If you want to treat some mechanical part (enclosure, screw, unplated or plated hole, copper antenna) as a component which will appear in the layout with its own footprint, you can do so.
+</p>
+
+<p>
+Plated holes or other parts with electrical connectivity should have a pin that is connected to the appropriate net (e.g. <code>GND</code>) in the schematic so the PCB editor knows about the connection and will warn if the part is connected to the wrong net.
+</p>
+
+</div>
+
+<h3 id="subschematicsymbols">Subschematic symbols</h3>
+<div class="level3">
+
+<p>
+A symbol with a <code>source=</code> attribute is considered a subschematic symbol.  As opposed to regular and graphical symbols, pins on subschematic symbols are named via <code>pinlabel=</code> attributes.  They still have to have valid <code>pinnumber=</code> attributes, though, which are used as a fallback if hierarchy traversal is disabled.
+</p>
+
+<p>
+If hierarchy traversal is enabled, gnetlist creates an instance of the schematic file (or multiple schematic files separated with “,”) listed in the <code>source=</code> attribute of each subschematic symbol, replacing the symbol with the contents of the subschematic and connecting the I/O ports in the subschematic with what is connected to the corresponding pins of the subschematic symbol.  If <code>refdes=</code> mangling is enabled, the <code>refdes=</code> of subschematic packages is prefixed/suffixed with the subschematic symbol&#039;s <code>refdes=</code> depending on the mangling settings.
+</p>
+
+<p>
+If hierarchy traversal is disabled, subschematic symbols are treated like regular symbols.
+</p>
+
+<p>
+Recommended attributes:
+</p>
+<ul>
+<li class="level1"><div class="li"> <code>refdes=</code></div>
+</li>
+<li class="level1"><div class="li"> <code>source=</code></div>
+</li>
+</ul>
+
+<p>
+Recommended pin attributes:
+</p>
+<ul>
+<li class="level1"><div class="li"> <code>pinnumber=</code> (required, must be unique; only used if hierarchy traversal is disabled)</div>
+</li>
+<li class="level1"><div class="li"> <code>pinlabel=</code> (required, must be unique; only used if hierarchy traversal is enabled)</div>
+</li>
+</ul>
+
+</div>
+
+<h3 id="powersymbols">Power symbols</h3>
+<div class="level3">
+
+<p>
+Power symbols indicate that what they are connected to is connected to some named net (usually a power rail; <code>GND</code>, <code>3.3V</code>, etc.).  Instead of a <code>refdes=</code> attribute, they have a <code>netname=</code> attribute indicating the name of the net.  Pins on power symbols mustn&#039;t have a <code>pinnumber=</code> attribute; they shouldn&#039;t have any attribute at all.
+</p>
+
+<p>
+Recommended attributes:
+</p>
+<ul>
+<li class="level1"><div class="li"> <code>netname=</code></div>
+</li>
+</ul>
+
+<p>
+Recommended pin attributes:
+</p>
+<ul>
+<li class="level1"><div class="li"> none</div>
+</li>
+</ul>
+
+</div>
+
+<h5 id="old-stylepowersymbols">Old-style power symbols</h5>
+<div class="level5">
+
+<p>
+gEDA/gaf up to version 1.9.2 didn&#039;t support proper power symbols.  Instead, symbols which has exactly one pin connected to a named net via a <code>net=</code> attribute were allowed not to have a <code>netname=</code> attribute; this marked them as a power symbol.
+</p>
+
+<p>
+For newer designs, power symbols with a <code>netname=</code> attribute are recommended.
+</p>
+
+</div>
+
+<h3 id="ioportsymbols">I/O port symbols</h3>
+<div class="level3">
+
+<p>
+Subschematics are hooked up to the schematic from which they are instantiated via port symbols.  Instead of a <code>refdes=</code> attribute, port symbols have a <code>portname=</code> attribute; for each pin on the subschematic symbol, there should be exactly one I/O port in the subschematic whose <code>portname=</code> attribute matches the <code>pinlabel=</code> attribute of the pin.  Port symbols mustn&#039;t have a <code>pinnumber=</code> attribute on their own pin.
+</p>
+
+<p>
+Recommended attributes:
+</p>
+<ul>
+<li class="level1"><div class="li"> <code>portname=</code></div>
+</li>
+</ul>
+
+<p>
+Recommended pin attributes:
+</p>
+<ul>
+<li class="level1"><div class="li"> none</div>
+</li>
+</ul>
+
+</div>
+
+<h5 id="old-styleioportsymbols">Old-style I/O port symbols</h5>
+<div class="level5">
+
+<p>
+gEDA/gaf up to version 1.9.2 didn&#039;t support proper port symbols.  Instead, symbols with exactly one pin whose <code>refdes=</code> matched the <code>pinlabel=</code> of the respective pin were used.
+</p>
+
+<p>
+For newer designs, port symbols with a <code>portname=</code> attribute are recommended.
+</p>
+
+</div>
+
+<h3 id="graphicalsymbols">Graphical symbols</h3>
+<div class="level3">
+
+<p>
+Graphical components convey additional information about a schematic that doesn&#039;t change the semantics of the netlist itself.  They must have a <code>graphical=1</code> attribute (any other value is invalid) and can&#039;t have a <code>refdes=</code> attribute.  gEDA/gaf doesn&#039;t assign a particular meaning to graphical components but passes them unchanged to netlist backends.  Users and backend authors are free to assign any meaning to them.  <strong>Contrary to a common misconception, graphical components are NOT ignored by the netlister.</strong>  They are collected in a separate list of graphical components which is passed to backends together with the netlist.
+</p>
+
+<p>
+The most common application of graphical symbols is <a href="#how_do_i_create_a_titleblock_symbol" title=":geda:symbols.txt ↵" class="wikilink1">titleblocks</a> and <a href="#how_do_i_create_an_nc_symbol" title=":geda:symbols.txt ↵" class="wikilink1">NC symbols</a>.
+</p>
+
+<p>
+Recommended attributes:
+</p>
+<ul>
+<li class="level1"><div class="li"> <code>graphical=1</code> (required; any other value is invalid)</div>
+</li>
+</ul>
+
+<p>
+Recommended pin attributes:
+</p>
+<ul>
+<li class="level1"><div class="li"> <code>pinnumber=</code> (required, must be unique)</div>
+</li>
+</ul>
+
+</div>
+
+<h2 id="faq">FAQ</h2>
+<div class="level2">
+
+</div>
+
+<h3 id="howdoicreateatitleblocksymbol">How do I create a titleblock symbol?</h3>
+<div class="level3">
+
+<p>
+A titleblock symbol has to have a “<code>graphical=1</code>” attribute so it isn&#039;t included in the regular netlist.  Apart from that, you can draw it however you like.
+</p>
+
+<p>
+If you plan to attach title, author, etc. as attributes, it makes sense to add pre-populated attributes to the symbol that will be promoted on instantiation.  You are free to choose whatever attribute names seem appropriate; the information entered here is available to but isn&#039;t currently used by netlist backends.
+</p>
+
+</div>
+
+<h3 id="howdoicreateasymbolforamechanicalpart">How do I create a symbol for a mechanical part?</h3>
+<div class="level3">
+
+<p>
+Regular components are the only components listed in the BOM, so if you want to create a symbol for something that should be listed in the BOM, it has to be a regular symbol.
+</p>
+
+<p>
+This means it is included in the netlist, so it has to have the proper attributes set, including a footprint.  Ideally, the footprint would match the physical geometry of the part and provide e.g. a silk outline, but you could also just use a dummy footprint.
+</p>
+
+<p>
+If the part has electrical connectivity (e.g. a plated hole), it should have a pin that is connected to the appropriate net (e.g. <code>GND</code>) in the schematic.  This makes sure the PCB editor knows about the connection and warns if the part is connected to the wrong net.
+</p>
+
+</div>
+
+<h3 id="howdoicreateanncsymbol">How do I create an NC symbol?</h3>
+<div class="level3">
+
+<p>
+An NC symbol is used in a schematic to indicate that some pin shouldn&#039;t be connected to anything.  Using NC symbols is optional and doesn&#039;t have any effect on netlisting; however, if a pin which is connected to an NC symbol is also connected to something else, a DRC error is displayed.
+</p>
+
+<p>
+NC symbols annotate the netlist with additional information but aren&#039;t “parts” by themselves, so they must be graphical symbols.  To create an NC symbol, use the following attributes:
+</p>
+<pre class="code">graphical=1
+device=DRC_Directive
+value=NoConnection</pre>
+
+<p>
+The symbol should have exactly one pin.  You can avoid having to create multiple NC symbols for multiple directions by making the pin zero units long.  (If you are using gEDA/gaf up to version 1.9.2, there is no way to do this in the GUI; you&#039;ll have to edit the symbol file manually.)
+</p>
+
+</div>
+
+<h3 id="howdoicreateadefaultjumpersymbol">How do I create a default jumper symbol?</h3>
+<div class="level3">
+
+<p>
+This depends on whether you want the default jumper to be listed in the BOM and visible in the layout or not.
+</p>
+
+<p>
+If you want it to be listed in the BOM and/or visible in the layout, treat it as a regular component.  This means you&#039;ll have to assign it a <code>refdes=</code> and a <code>footprint=</code> and place its footprint on the correct pins of the pin header in the layout.
+</p>
+
+<p>
+If you don&#039;t want it to be listed in the BOM nor visible in the layout, set <code>graphical=1</code> and don&#039;t use a <code>refdes=</code> or <code>footprint=</code> attribute.
+</p>
+
+</div>
+</body>
+</html>

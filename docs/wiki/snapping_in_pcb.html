@@ -1,0 +1,486 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+  <link rel="stylesheet" media="screen" type="text/css" href="./style.css" />
+  <link rel="stylesheet" media="screen" type="text/css" href="./design.css" />
+  <link rel="stylesheet" media="print" type="text/css" href="./print.css" />
+
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+</head>
+<body>
+
+<p>
+This page attempts to document the snapping system in pcb.
+</p>
+
+<p>
+The snapping system is what takes the location of the cursor (the arrow representing the position of the mouse on the screen) and translates it into the coordinates on the board where actions take place. For example, the snapping system currently restricts the position of the crosshair to the closest grid point to the cursor. If you move the cursor near a pin or a pad, the snapping system positions the crosshair at the center of that pin or pad.
+</p>
+
+<h2 id="currentsystem">Current System</h2>
+<div class="level2">
+
+</div>
+
+<h3 id="behavior">Behavior</h3>
+<div class="level3">
+
+<p>
+The snapping system in pcb is always active, and cannot be disabled. The snapping order... will be documented the next time I edit this page!
+</p>
+
+</div>
+
+<h3 id="implementation">Implementation</h3>
+<div class="level3">
+
+<p>
+In pcb 4.0.2, snapping is implemented in crosshair.c, towards the end of the file. It is entirely integrated with the crosshair.
+</p>
+
+<p>
+First, there is a structure that holds the information about where the crosshair is currently snapped.
+There is a series of functions that implement snapping.
+</p>
+
+</div>
+
+<h2 id="proposedsystem">Proposed System</h2>
+<div class="level2">
+
+<p>
+Implemented in the home/cparker/snapping_overhaul branch.
+</p>
+
+</div>
+
+<h3 id="overview">Overview</h3>
+<div class="level3">
+
+<p>
+Snapping is initiated by moving the mouse. The paths for each HID are different, but they ultimately end up calling crosshair.c:MoveCrosshairAbsolute. This function computes a new location for the crosshair, and updates the X, Y location in the global crosshair structure. The computing a new location part is where the snapping happens. MoveCrosshairAbsolute is triggered by mouse events, so, it can potentially be called very frequently. Consequently, this function should execute very quickly.
+</p>
+
+<p>
+MoveCrosshairAbsolute calculates the new crosshair position by checking for snaps, checking that the crosshair is inside of it&#039;s boundaries, and then enforcing DRC. Checking for snaps occurs by iterating through a list of functions, each of which looks for a particular type of object: lines, arcs, elements, pins, etc. The first function to find an object provides the coordinates that the crosshair snaps to. By changing the order of functions in the list, different types of objects can be given different priorities. Both the function that does the iterating and the snapping list can be changed dynamically so that different snapping policies can be implemented depending on the software context.
+</p>
+
+</div>
+
+<h3 id="details">Details</h3>
+<div class="level3">
+
+<p>
+The snapping code is located in two places: snap.[c,h] and crosshair.c. snap.[c,h] defines several general types that are used as infrastructure for the snapping. crosshair.c is where the snapping actually occurs and is where all of the snapping functions are implemented.
+</p>
+
+<p>
+There are three new types in snap.[c,h]:
+</p>
+<ul>
+<li class="level1"><div class="li"> SnapSpecType: This type is an index type for things that can be snapped to. </div>
+</li>
+<li class="level1"><div class="li"> SnapListType: A list of SnapSpecType objects</div>
+</li>
+<li class="level1"><div class="li"> SnapType: The result of a snapping test</div>
+</li>
+</ul>
+
+<p>
+Snapping occurs by iterating through SnapSpecType objects in a SnapListType. Each SnapSpecType object has a &quot;search&quot; function pointer that calls a function to look for the the object type associated with that particular SnapSpecType. These functions are presently defined in crosshair.c. So, for example, there is a SnapSpecType object associated with pins and pads called pin_pad_snap. It has a function associated with it called snap_to_pins_pads that calls SearchObjectByLocation to look for and pins or pads under the cursor, and decide if there is a valid snapping target. If there is, it passes that back to the calling function (as an object, not a pointer).
+</p>
+
+<p>
+The crosshair structure has two related fields:
+</p>
+<ul>
+<li class="level1"><div class="li"> (SnapType*) (*snap)(SnapListType*, Coord, Coord): a function pointer to a function that does the snapping</div>
+</li>
+<li class="level1"><div class="li"> (SnapListType*) snaps: a pointer to a list of things to try snapping to.</div>
+</li>
+</ul>
+
+<p>
+Presently, snapping occurs whenever the crosshair is repositioned using MoveCrosshairAbsolute (crosshair.c). This function calls Crosshair.snap(Crosshair.snaps, X, Y). If this returns non-null, we found something to snap to, and we reposition the crosshair to those coordinates.
+</p>
+
+<p>
+Both of the crosshair items are implemented as pointers so that they can be changed dynamically. You could, for example, change the snap list when you go into line drawing mode so that you don&#039;t snap to elements or other lines, or do so in a different order. Similarly, you could change the snapping function to one that snaps based on which item is closest as opposed to which has the highest priority.
+</p>
+
+</div>
+
+<h3 id="datastructures">Data Structures</h3>
+<div class="level3">
+
+<p>
+In a nod to the gobject/glib folks, I&#039;ve tried to adopt some similar naming conventions for functions.
+</p>
+
+</div>
+
+<h4 id="snaptype">SnapType</h4>
+<div class="level4">
+
+<p>
+A SnapType contains information about the result of a snapping test. This is basically a messenger type. It&#039;s mostly used to convey info from one place to another, and doesn&#039;t necessarily persist for very long. These are produced by snapping functions to indicate that a snappable object was or wasn&#039;t found. They contain a SnapSpecType pointer (that as I write this I realize is never used), an object type indicate, a pointer to a found object, a flag that it was valid for snapping, it&#039;s location, and the square of the distance to it.
+</p>
+
+</div>
+
+<h4 id="snapspectype">SnapSpecType</h4>
+<div class="level4">
+
+<p>
+This type contains information about snapping to something. They are identified by a name string, however, they are sorted in a <code>SnapListType</code> by priority. There is an enable flag that can be used to turn off the snap, and there is a radius of effect. Finally, there is a function pointer to a function that looks for the subject object type.
+</p>
+
+<p>
+Presently, there are <code>SnapSpecType</code>s defined for:
+</p>
+<ul>
+<li class="level1"><div class="li"> grid points </div>
+</li>
+<li class="level1"><div class="li"> pins and pads</div>
+</li>
+<li class="level1"><div class="li"> elements</div>
+</li>
+<li class="level1"><div class="li"> vias</div>
+</li>
+<li class="level1"><div class="li"> lines</div>
+</li>
+<li class="level1"><div class="li"> arcs, and</div>
+</li>
+<li class="level1"><div class="li"> polygons</div>
+</li>
+</ul>
+
+<p>
+These are all defined in crosshair.c, although eventually if we&#039;re ever successful at migrating to a more object oriented structure, these should be defined in their respective type files.
+</p>
+
+<p>
+<code>SnapSpecTypes</code> can be created using the <code>snap_spec_new</code> function which takes the name and priority of the spec, or by the <code>snap_spec_copy</code> function which takes a pointer to another <code>SnapSpecType</code>.
+</p>
+
+</div>
+
+<h4 id="snaplisttype">SnapListType</h4>
+<div class="level4">
+
+<p>
+<code>SnapListType</code> is a simple container for organizing <code>SnapSpecTypes</code>. It allocates an array of <code>SnapSpecTypes</code> and inserts, removes, or changes the order in that array based on the <code>priority</code> of the <code>SnapSpecType</code>. This priority was perhaps a silly way of organizing them since the actual number is irrelevant, however, it does make it fairly easy to change their order, or insert new ones at a given place in the list. 
+</p>
+
+<p>
+Lists can be created using <code>snap_list_new</code> and destroyed using <code>snap_list_delete</code>. You can add a SnapSpec to a SnapList using the <code>snap_list_add_snap</code> function. Snaps are referenced by name, so, to get a pointer to a particular snap you can use <code>snap_list_find_snap_by_name</code>. To remove a snap, use <code>snap_list_remove_snap_by_name</code>.
+</p>
+
+<p>
+There are two additional functions associated with SnapLists. <code>snap_list_list_snaps</code> will list all of the available snaps in the log window. 
+</p>
+
+<p>
+<code>snap_list_search_snaps</code> deserves a little more attention. This is the function that will iterate through the SnapSpecs in a SnapList trying to find an object on the board to snap to. Presently, this is the function called by the crosshair to search for a snappable object. This function implements a snap-to-the-highest-priority-object-under-the-cursor policy, but looping through the SnapList until a valid snap is returned. Another possible implementation of this function would be to look for object candidates of all types and then snap to the nearest one.
+</p>
+
+</div>
+
+<h4 id="crosshairintegration">Crosshair Integration</h4>
+<div class="level4">
+
+<p>
+All of the <code>SnapSpecs</code> are currently defined manually in crosshair.c, as are the snapping functions that search for those types of objects. 
+</p>
+
+<p>
+The <code>Crosshair</code> structure is a global structure, formerly defined in global.h but now moved to Crosshair.h, that contains crosshair data such as location, and attached objects. Two fields have been added to the Crosshair structure, <code>snap</code> and <code>snaps</code>. The first is a function pointer to a snap search function (such as <code>snap_list_search_snaps</code>) and the second is a SnapList to be searched. Implementing them in this way allows them to be changed out as needed. So, if you want to change snapping functions to one that searches for the closes object instead of the highest priority one, you can do that easily. If you want to change the SnapList, because perhaps you went into LineMode and don&#039;t want to snap to other lines, you can do that easily (of course you could always just search the list and disable those snaps too).
+</p>
+
+<p>
+These things are all tied together in <code>InitCrosshair</code> which creates the default snap list and adds all of the built in snaps to it, and then links <code>Crosshair.snap</code> to <code>snap_list_search_snaps</code>. The actual snapping is done in <code>MoveCrosshairAbsolute</code>
+</p>
+
+<p>
+One thing to note: there is a feature, I think it&#039;s called &#039;Auto Enforce DRC Clearance&#039; in the settings menu. It used to be implemented at the end of the <code>FitCrosshairIntoGrid</code> function that was previously responsible for the snapping. This has been moved into <code>MoveCrosshairAbsolute</code> until a better home can be found for it. I don&#039;t think this really belongs as part of the crosshair subsystem.
+</p>
+
+</div>
+
+<h3 id="addingsnaps">Adding Snaps</h3>
+<div class="level3">
+
+<p>
+TODO: TEST THIS!
+</p>
+
+<p>
+Under this configuration, it is fairly easy to add snaps or change the snapping behavior using plugins. Let&#039;s examine how that could work with an example. Let&#039;s change how the element snapping works. Presently, it snaps to the location of the element mark. Let&#039;s snap to the center of the bounding box instead.
+</p>
+
+<p>
+First, get the plugin template from <a href="geda-pcb_developer_introduction_2.html" class="wikilink1" title="geda-pcb_developer_introduction_2.html">pcb_developer_introduction_2</a>. In a real plugin, you would probably want to write some actions to enable and disable your features, but, for the sake of this example, we&#039;ll skip that. So, delete that stuff. Then, let&#039;s grab the existing code for snapping to elements out of crosshair.c, and copy it into the plugin file. There are two parts, the snapping function, and the <code>SnapSpecType</code> definition. Here they are (more or less). The snapping function should be fairly easy to read:
+</p>
+<pre class="code C"><span class="coMULTI">/* Snap to elements */</span>
+<span class="kw4">static</span> SnapType
+snap_to_elements<span class="br0">&#40;</span>Coord x<span class="sy0">,</span> Coord y<span class="sy0">,</span> Coord r<span class="br0">&#41;</span>
+<span class="br0">&#123;</span>
+  SnapType snap<span class="sy0">;</span>
+  <span class="kw4">void</span> <span class="sy0">*</span>p1<span class="sy0">,</span> <span class="sy0">*</span>p2<span class="sy0">,</span> <span class="sy0">*</span>p3<span class="sy0">;</span>
+  snap.<span class="me1">valid</span> <span class="sy0">=</span> <span class="kw2">false</span><span class="sy0">;</span>
+&nbsp;
+  snap.<span class="me1">obj_type</span> <span class="sy0">=</span> SearchObjectByLocation <span class="br0">&#40;</span>ELEMENT_TYPE<span class="sy0">,</span> <span class="sy0">&amp;</span>p1<span class="sy0">,</span> <span class="sy0">&amp;</span>p2<span class="sy0">,</span> <span class="sy0">&amp;</span>p3<span class="sy0">,</span>
+                                          x<span class="sy0">,</span> y<span class="sy0">,</span> r<span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+  <span class="kw1">if</span> <span class="br0">&#40;</span>snap.<span class="me1">obj_type</span> <span class="sy0">&amp;</span> ELEMENT_TYPE<span class="br0">&#41;</span>
+  <span class="br0">&#123;</span>
+    <span class="coMULTI">/* if we found an element, check to see if we should snap to it */</span>
+    ElementType <span class="sy0">*</span>el <span class="sy0">=</span> <span class="br0">&#40;</span>ElementType <span class="sy0">*</span><span class="br0">&#41;</span> p1<span class="sy0">;</span>
+    snap.<span class="me1">loc</span>.<span class="me1">X</span> <span class="sy0">=</span> el<span class="sy0">-&gt;</span>MarkX<span class="sy0">;</span> snap.<span class="me1">loc</span>.<span class="me1">Y</span> <span class="sy0">=</span> el<span class="sy0">-&gt;</span>MarkY<span class="sy0">;</span>
+    snap.<span class="me1">distsq</span> <span class="sy0">=</span> square<span class="br0">&#40;</span>snap.<span class="me1">loc</span>.<span class="me1">X</span> <span class="sy0">-</span> x<span class="br0">&#41;</span> <span class="sy0">+</span> square<span class="br0">&#40;</span>snap.<span class="me1">loc</span>.<span class="me1">Y</span> <span class="sy0">-</span> y<span class="br0">&#41;</span><span class="sy0">;</span>
+    snap.<span class="me1">valid</span> <span class="sy0">=</span> <span class="kw2">true</span><span class="sy0">;</span>
+  <span class="br0">&#125;</span>
+  <span class="kw1">return</span> snap<span class="sy0">;</span>
+<span class="br0">&#125;</span></pre>
+
+<p>
+Break it down! (In my head that sounded like M.C. Hammer...) First, search the specified location for an element. If one was found (obj_type is a bit vector in which only one bit should be set for the corresponding type, and ELEMENT_TYPE is a mask with that bit), grab the coordinates of the mark, update the data in the snap, mark the snap as valid, and return the snap.
+</p>
+
+<p>
+The snap coordinates are where there crosshair will snap if this snap is selected. It&#039;s clear what we need to change to achieve our new objective. Instead of populating the snap location with the location of the element mark, we need to populate it with the center of the bounding box. Simple enough. The second part is the new <code>SnapSpecType</code> definition. This is a littler harder to read, but fortunately it template definition was nicely commented for you (your welcome), so all you have to do is update a few things. You need to change the name to something unique, the function pointer to the updated function (which you should rename), and the priority. You&#039;ll also probably want to enable it (although that can be done in the GTK HID if you&#039;d rather), and you can change the default radius if you want.
+</p>
+<pre class="code C"><span class="kw4">static</span> SnapSpecType element_snap <span class="sy0">=</span> <span class="br0">&#123;</span>
+  <span class="st0">&quot;Snap to elements&quot;</span><span class="sy0">,</span>       <span class="co1">// Name</span>
+  <span class="sy0">&amp;</span>snap_to_elements<span class="sy0">,</span>        <span class="co1">// Function pointer</span>
+  <span class="kw2">false</span><span class="sy0">,</span>                    <span class="co1">// enabled</span>
+  <span class="nu0">10</span><span class="sy0">,</span>                       <span class="co1">// priority</span>
+  <span class="nu0">1000000</span><span class="sy0">,</span>                  <span class="co1">// radius (nm)</span>
+  <span class="nu0">0</span>                         <span class="co1">// object type</span>
+<span class="br0">&#125;</span><span class="sy0">;</span></pre>
+
+<p>
+Finally, all that&#039;s left to do is register our new snap in the snap list. For that we&#039;ll want to copy a line out of InitCrosshair:
+</p>
+<pre class="code C">snap_list_add_snap<span class="br0">&#40;</span>Crosshair.<span class="me1">snaps</span><span class="sy0">,</span> <span class="sy0">&amp;</span>element_snap<span class="br0">&#41;</span><span class="sy0">;</span></pre>
+
+<p>
+Change that to point to your new snap definition. Your resulting code should look something like this:
+</p>
+<dl class="code">
+<dt><a href="/./doku.php?do=export_code&amp;id=:snapping_in_pcb.txt&amp;codeblock=3" title="Download Snippet" class="mediafile mf_c">snap_plugin.c</a></dt>
+<dd><pre class="code C"><span class="co1">//</span>
+<span class="co1">//  snap_plugin.c</span>
+<span class="co1">//  </span>
+<span class="co1">//  Created by Parker, Charles W. on 2018-06-03.</span>
+<span class="co1">//</span>
+&nbsp;
+<span class="co2">#include &lt;stdio.h&gt;</span>
+&nbsp;
+<span class="co2">#include &quot;globalconst.h&quot;</span>
+<span class="co2">#include &quot;global.h&quot; // types</span>
+&nbsp;
+<span class="co2">#include &quot;crosshair.h&quot;</span>
+<span class="co2">#include &quot;snap.h&quot;</span>
+&nbsp;
+<span class="coMULTI">/* Snap to elements */</span>
+<span class="kw4">static</span> SnapType
+snap_to_element_centers<span class="br0">&#40;</span>Coord x<span class="sy0">,</span> Coord y<span class="sy0">,</span> Coord r<span class="br0">&#41;</span>
+<span class="br0">&#123;</span>
+  SnapType snap<span class="sy0">;</span>
+  <span class="kw4">void</span> <span class="sy0">*</span>p1<span class="sy0">,</span> <span class="sy0">*</span>p2<span class="sy0">,</span> <span class="sy0">*</span>p3<span class="sy0">;</span>
+  snap.<span class="me1">valid</span> <span class="sy0">=</span> <span class="kw2">false</span><span class="sy0">;</span>
+&nbsp;
+  <span class="coMULTI">/* if we're not drawing rats, check for elements first */</span>
+  <span class="kw1">if</span> <span class="br0">&#40;</span>PCB<span class="sy0">-&gt;</span>RatDraw<span class="br0">&#41;</span> <span class="kw1">return</span> snap<span class="sy0">;</span>
+&nbsp;
+  snap.<span class="me1">obj_type</span> <span class="sy0">=</span> SearchObjectByLocation <span class="br0">&#40;</span>ELEMENT_TYPE<span class="sy0">,</span> <span class="sy0">&amp;</span>p1<span class="sy0">,</span> <span class="sy0">&amp;</span>p2<span class="sy0">,</span> <span class="sy0">&amp;</span>p3<span class="sy0">,</span>
+                                          x<span class="sy0">,</span> y<span class="sy0">,</span> r<span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+  <span class="kw1">if</span> <span class="br0">&#40;</span>snap.<span class="me1">obj_type</span> <span class="sy0">&amp;</span> ELEMENT_TYPE<span class="br0">&#41;</span>
+  <span class="br0">&#123;</span>
+    <span class="coMULTI">/* if we found an element, check to see if we should snap to it */</span>
+    ElementType <span class="sy0">*</span>el <span class="sy0">=</span> <span class="br0">&#40;</span>ElementType <span class="sy0">*</span><span class="br0">&#41;</span> p1<span class="sy0">;</span>
+    snap.<span class="me1">loc</span>.<span class="me1">X</span> <span class="sy0">=</span> <span class="br0">&#40;</span>el<span class="sy0">-&gt;</span>BoundingBox.<span class="me1">X1</span> <span class="sy0">-</span> el<span class="sy0">-&gt;</span>BoundingBox.<span class="me1">X2</span><span class="br0">&#41;</span> <span class="sy0">/</span> <span class="nu0">2</span><span class="sy0">;</span> 
+    snap.<span class="me1">loc</span>.<span class="me1">Y</span> <span class="sy0">=</span> <span class="br0">&#40;</span>el<span class="sy0">-&gt;</span>BoundingBox.<span class="me1">Y1</span> <span class="sy0">-</span> el<span class="sy0">-&gt;</span>BoundingBox.<span class="me1">Y2</span><span class="br0">&#41;</span> <span class="sy0">/</span> <span class="nu0">2</span><span class="sy0">;</span>
+    snap.<span class="me1">distsq</span> <span class="sy0">=</span> square<span class="br0">&#40;</span>snap.<span class="me1">loc</span>.<span class="me1">X</span> <span class="sy0">-</span> x<span class="br0">&#41;</span> <span class="sy0">+</span> square<span class="br0">&#40;</span>snap.<span class="me1">loc</span>.<span class="me1">Y</span> <span class="sy0">-</span> y<span class="br0">&#41;</span><span class="sy0">;</span>
+    snap.<span class="me1">valid</span> <span class="sy0">=</span> <span class="kw2">true</span><span class="sy0">;</span>
+  <span class="br0">&#125;</span>
+  <span class="kw1">return</span> snap<span class="sy0">;</span>
+<span class="br0">&#125;</span>
+&nbsp;
+<span class="kw4">static</span> SnapSpecType element_center_snap <span class="sy0">=</span> <span class="br0">&#123;</span>
+  <span class="st0">&quot;Snap to element centers&quot;</span><span class="sy0">,</span><span class="co1">// Name</span>
+  <span class="sy0">&amp;</span>snap_to_element_centers<span class="sy0">,</span> <span class="co1">// Function pointer</span>
+  <span class="kw2">true</span><span class="sy0">,</span>                     <span class="co1">// enabled</span>
+  <span class="nu0">15</span><span class="sy0">,</span>                       <span class="co1">// priority</span>
+  <span class="nu0">1000000</span><span class="sy0">,</span>                  <span class="co1">// radius (nm)</span>
+  <span class="nu0">0</span>                         <span class="co1">// object type</span>
+<span class="br0">&#125;</span><span class="sy0">;</span>
+&nbsp;
+&nbsp;
+<span class="kw4">void</span>
+pcb_plugin_init<span class="br0">&#40;</span><span class="br0">&#41;</span>
+<span class="br0">&#123;</span>
+  <a href="http://www.opengroup.org/onlinepubs/009695399/functions/printf.html"><span class="kw3">printf</span></a><span class="br0">&#40;</span><span class="st0">&quot;Loading plugin: snap to element centers<span class="es1">\n</span>&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+  snap_list_add_snap<span class="br0">&#40;</span>Crosshair.<span class="me1">snaps</span><span class="sy0">,</span> <span class="sy0">&amp;</span>element_center_snap<span class="br0">&#41;</span><span class="sy0">;</span>
+<span class="br0">&#125;</span></pre>
+</dd></dl>
+
+<p>
+Compile that, and put the result in your plugins folder. Run pcb from the command line so that you can see the message to verify that your plugin loaded. Then open up the preferences dialog and go to the snapping page. You should see your new snap in there! Now disable all the other snaps and open up a layout with some elements in it. When you mouse over an element, the crosshair should snap to the center of the element! (note that some bounding boxes could be drawn strangely).
+</p>
+
+<p>
+Congrats! You&#039;ve extended pcb with a new snap. You could do something similar to replace the snapping function.
+</p>
+
+</div>
+
+<h2 id="discussion">Discussion</h2>
+<div class="level2">
+
+<p>
+This section is for ideas and discussion regarding things related to the snapping implementation.
+</p>
+
+</div>
+
+<h5 id="whodoesthesnapping">Who Does the Snapping</h5>
+<div class="level5">
+
+<p>
+Regarding the crosshair integration, there is a question in my mind about algorithm. Should the crosshair be responsible for the snapping? Presently the procedure is...
+</p>
+<ul>
+<li class="level1"><div class="li"> the mouse is moved </div>
+</li>
+<li class="level1"><div class="li"> a function is called to move the crosshair to the mouse location</div>
+</li>
+<li class="level1"><div class="li"> the crosshair checks underneath it for something to snap to</div>
+</li>
+<li class="level1"><div class="li"> if it finds something, it adjust the coordinates to the location of the object</div>
+</li>
+<li class="level1"><div class="li"> it moves the crosshair to the new location.</div>
+</li>
+</ul>
+
+<p>
+Perhaps is should be that the HID calls the snapping, and the crosshair just goes where it&#039;s told:
+</p>
+<ul>
+<li class="level1"><div class="li"> the mouse is moved</div>
+</li>
+<li class="level1"><div class="li"> the a snap is searched for underneath the mouse location</div>
+</li>
+<li class="level1"><div class="li"> if a snappable object is found, the coordinates are updated</div>
+</li>
+<li class="level1"><div class="li"> the crosshair is told to move to the new location</div>
+</li>
+</ul>
+
+</div>
+
+<h5 id="needtoknow">Need to Know</h5>
+<div class="level5">
+
+<p>
+One thing I&#039;m on the fence about is if the snapping functions should get a pointer to the SnapSpecType they were called from. Presently, the functions answer the question: &quot;is there something of this type under the cursor that can be snapped to?&quot;. To answer that question, the SnapSpecType data isn&#039;t required, and so presently it&#039;s not provided. However, if this were to become more sophisticated in the future, it might become necessary.
+</p>
+
+</div>
+
+<h5 id="snappingmodifiers">Snapping Modifiers</h5>
+<div class="level5">
+
+<p>
+A very nice feature would be if the user could press a mod key to change the snapping behavior. Perhaps the cursor only snaps to grid points normally, and then starts snapping to everything else when &quot;alt&quot; is held.
+</p>
+
+<p>
+There are several places where this kind of behavior could be implemented. The basic idea behind them all is that you would have a second <code>SnapList</code> that was applied to the other condition.
+</p>
+<pre class="code">1. In the search_snaps function. It could check in with the gui to see if the modifier is active, and then select a &#039;&#039;SnapList&#039;&#039; to search.
+2. The crosshair could do the same thing before it calls the search_snaps, and pass the appropriate list to the search function.
+3. The gui could control it, watch the modifier key and change the active SnapList when the state of the key changes.
+4. A plugin can actually be implemented to do this. Since plugins can access the gtk structures, a plugin could install a listener function to listen for modifier key strokes, and update the crosshair snap list accordingly.</pre>
+
+<p>
+Option 4 is the most modular, and I did write this infrastructure so that plugins could be used to modify the behavior. I think I&#039;m going to try that method first. 
+</p>
+
+<p>
+How does it work?
+The plugin is loaded and creates it&#039;s alternate <code>SnapList</code>. It can populate it from the structures that already exist in crosshair.c, I think, by declaring them as externs.
+</p>
+
+<p>
+I&#039;m currently experimenting with this in the home/cparker/mod_snapping_plugin branch. I have this code built as a plugin, but I also included it in the source tree just in case people had trouble with the plugin.
+</p>
+
+</div>
+
+<h5 id="snappingandlayers">Snapping and Layers</h5>
+<div class="level5">
+
+<p>
+It&#039;s frequently the case that you only want to snap to objects on certain layers. What&#039;s the best way to implement this?
+</p>
+
+<p>
+Presently, SearchObjectByLocation doesn&#039;t have a layer parameter. It simply iterates over them all with every search. So, we would have to expose some of the lower level searching functions in order to restrict layers, or add layers as a parameter to SearchObjectByLocation. That function is called in a lot of places, so, it would be a lot of calls to have to update.
+</p>
+
+<p>
+How do I keep track of which layers I&#039;m searching? Do I pass pointers? Layer numbers?
+</p>
+
+</div>
+
+<h2 id="todolist">TODO List</h2>
+<div class="level2">
+<ul>
+<li class="level1"><div class="li"> rebase the code off of the object_list instead of using dedicated list types.</div>
+</li>
+<li class="level1"><div class="li"> snap based on screen distance instead of linear distance</div>
+</li>
+<li class="level1"><div class="li"> don&#039;t snap to off-screen objects</div>
+</li>
+<li class="level1"><div class="li"> snap-to-the-closest-object function</div>
+</li>
+<li class="level1"><div class="li"> snapping preferences saving</div>
+</li>
+<li class="level1"><div class="li"> sub-snaps? (lines, line endpoints, midpoints... )</div>
+</li>
+<li class="level1"><div class="li"> lesstif config page</div>
+</li>
+<li class="level1"><div class="li"> tests</div>
+</li>
+</ul>
+
+</div>
+
+<h2 id="currentworkinprogress">Current Work In Progress</h2>
+<div class="level2">
+
+<p>
+Based on email exchanges and testing by Richard.
+</p>
+
+<p>
+The snapping code needs to know about layers. We want to be able to search for things to snap to only on certain layers, and then in a particular order.
+</p>
+
+</div>
+
+<h2 id="relatedpages">Related Pages</h2>
+<div class="level2">
+<ul>
+<li class="level1"><div class="li"> <a href="pcbcrosshair.html" class="wikilink2" title="pcbcrosshair.html">PCB Crosshair</a></div>
+</li>
+</ul>
+
+</div>
+</body>
+</html>

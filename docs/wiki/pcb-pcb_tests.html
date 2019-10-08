@@ -1,0 +1,106 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+  <link rel="stylesheet" media="screen" type="text/css" href="./style.css" />
+  <link rel="stylesheet" media="screen" type="text/css" href="./design.css" />
+  <link rel="stylesheet" media="print" type="text/css" href="./print.css" />
+
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+</head>
+<body>
+
+<p>
+pcb has two testing frameworks:
+</p>
+<ul>
+<li class="level1"><div class="li"> <a href="pcb-unit_tests.html" class="wikilink1" title="pcb-unit_tests.html"> Unit Tests</a> <br/>
+The first uses the  glib testing framework to execute function and object low-level tests of the code directly. These tests are generally contained by the files defining the code to be tested.</div>
+</li>
+<li class="level1"><div class="li"> Application tests <br/>
+The second uses the meager scriptability of pcb to test functions at a higher level. These tests are contained in the tests/ directory of the source tree, and are run using the run_tests.sh script.</div>
+</li>
+</ul>
+
+<h3 id="todolist">To Do List</h3>
+<div class="level3">
+
+</div>
+
+<h4 id="geometrytests">Geometry Tests</h4>
+<div class="level4">
+
+<p>
+All of the geometry functions need tests. 
+I&#039;ve been trying to compile a list of functions that need tests. Many of these are indirectly tested through the <a href="pcb-drc.html" class="wikilink1" title="pcb-drc.html"> DRC tests</a>, but that isn&#039;t really as thorough as it ought to be.
+</p>
+<ul>
+<li class="level1 node"><div class="li"> search.c</div>
+<ul>
+<li class="level2"><div class="li"> IsPointOnLine</div>
+</li>
+<li class="level2"><div class="li"> IsPointOnPin</div>
+</li>
+<li class="level2"><div class="li"> IsPointOnArc</div>
+</li>
+<li class="level2"><div class="li"> IsPointOnLineEnd</div>
+</li>
+<li class="level2"><div class="li"> IsLineInRectangle</div>
+</li>
+<li class="level2"><div class="li"> IsLineInQuadrangle</div>
+</li>
+<li class="level2"><div class="li"> IsArcInRectangle</div>
+</li>
+<li class="level2"><div class="li"> IsPointInPad</div>
+</li>
+<li class="level2"><div class="li"> IsPointInBox</div>
+</li>
+</ul>
+</li>
+<li class="level1 node"><div class="li"> find.c</div>
+<ul>
+<li class="level2"><div class="li"> LineLineIntersect</div>
+</li>
+<li class="level2"><div class="li"> LineArcIntersect</div>
+</li>
+<li class="level2"><div class="li"> PinLineIntersect</div>
+</li>
+<li class="level2"><div class="li"> LinePadIntersect</div>
+</li>
+<li class="level2"><div class="li"> ArcPadIntersect</div>
+</li>
+<li class="level2"><div class="li"> ArcArcIntersect</div>
+</li>
+<li class="level2"><div class="li"> IsRatPointOnLineEnd</div>
+</li>
+<li class="level2"><div class="li"> IsArcInPolygon</div>
+</li>
+<li class="level2"><div class="li"> IsLineInPolygon</div>
+</li>
+<li class="level2"><div class="li"> IsPadInPolygon</div>
+</li>
+<li class="level2"><div class="li"> IsPolygonInPolygon</div>
+</li>
+<li class="level2"><div class="li"> IS_PV_ON_RAT</div>
+</li>
+<li class="level2"><div class="li"> IS_PV_ON_ARC</div>
+</li>
+<li class="level2"><div class="li"> IS_PV_ON_PAD</div>
+</li>
+</ul>
+</li>
+<li class="level1 node"><div class="li"> polygon.c</div>
+<ul>
+<li class="level2"><div class="li"> IsPointInPolygon</div>
+</li>
+<li class="level2"><div class="li"> IsPointInPolygonIgnoreHoles</div>
+</li>
+<li class="level2"><div class="li"> IsRectangleInPolygon</div>
+</li>
+</ul>
+</li>
+</ul>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,286 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+  <link rel="stylesheet" media="screen" type="text/css" href="./style.css" />
+  <link rel="stylesheet" media="screen" type="text/css" href="./design.css" />
+  <link rel="stylesheet" media="print" type="text/css" href="./print.css" />
+
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+</head>
+<body>
+
+<p>
+This page will serve to document the design rule checker. This is presently documented &quot;as-is&quot;.
+</p>
+
+<p>
+For work tasks, see the LaunchPad blueprint.
+</p>
+
+<p>
+The DRC code makes extensive use of the <a href="pcb-connection_lookup.html" class="wikilink1" title="pcb-connection_lookup.html"> &quot;connection lookup&quot;</a> code.
+</p>
+
+<h2 id="drcviolations">DRC Violations</h2>
+<div class="level2">
+<ul>
+<li class="level1"><div class="li"> Line/arc/silk width is too thin</div>
+</li>
+<li class="level1"><div class="li"> Pin/via annular ring too small</div>
+</li>
+<li class="level1"><div class="li"> Pin/via drill size too small</div>
+</li>
+<li class="level1"><div class="li"> Pad too thin</div>
+</li>
+<li class="level1"><div class="li"> Silk lines in elements</div>
+</li>
+<li class="level1"><div class="li"> No paste</div>
+</li>
+<li class="level1"><div class="li"> Insufficient copper overlap</div>
+</li>
+<li class="level1"><div class="li"> Insufficient copper spacing</div>
+</li>
+<li class="level1"><div class="li"> Hole too close to line/pad/pin/via</div>
+</li>
+<li class="level1"><div class="li"> Hole touches arc</div>
+</li>
+<li class="level1"><div class="li"> Insufficient clearance inside polygon</div>
+</li>
+<li class="level1"><div class="li"> Joined line not connected to polygon</div>
+</li>
+</ul>
+
+</div>
+
+<h2 id="process">Process</h2>
+<div class="level2">
+
+<p>
+Presently, the violations are identified in find.c, and then appended to a list in the gtk hid. In the lesstif and batch hids, you get a pop-up window or a text prompt that describes the error.
+</p>
+
+<p>
+Executing the DRC() action will wipe out the selected, found, and DRC flags on most objects, although, apparently not elements.
+</p>
+<ol>
+<li class="level1"><div class="li"> Execute the DRC() action.</div>
+</li>
+<li class="level1"><div class="li"> Generate the &quot;DRC doesn&#039;t catch everything&quot; warning.</div>
+</li>
+<li class="level1"><div class="li"> Save layer state and turn on all layers.</div>
+</li>
+<li class="level1"><div class="li"> Clear the FOUNDFLAG, DRCFLAG, and SELECTEDFLAG on all objects. DRC uses these flags to find errors. After clearing all the flags, the undo serial number is incremented. When we&#039;re done, we&#039;ll clear all the flags again, and execute an &quot;undo&quot; to restore the state.</div>
+</li>
+<li class="level1"><div class="li"> InitConnectionLookup -- This resets all of the lists that are used for building the connectivity map.</div>
+</li>
+<li class="level1 node"><div class="li"> Use DRCFind to check for &quot;insufficient overlap&quot; and &quot;insufficient clearance&quot; in copper objects.</div>
+<ol>
+<li class="level2"><div class="li"> For every element pin, pad, and via, execute DRCFind. DRCFind builds a connection list starting from the given pin/pad/via four times using the <a href="pcb-connection_lookup.html" class="wikilink1" title="pcb-connection_lookup.html"> &quot;connection lookup&quot;</a> code.</div>
+</li>
+<li class="level2 node"><div class="li"> Check for insufficient overlap:</div>
+<ol>
+<li class="level3"><div class="li"> Apply a global bloat of value &quot;Shrink&quot;, and build a connection list, with global drc set to false. This will set the DRCFLAG and SELECTEDFLAG on every object that is touching the given pin/pad/via.</div>
+</li>
+<li class="level3"><div class="li"> Apply a global bloat of value 0, and build a connection list with global &quot;drc&quot; set to true.</div>
+</li>
+<li class="level3"><div class="li"> With &quot;drc&quot; set to true, the add_object_to_list function will exit with a return status when it finds something that doesn&#039;t have the SELECTEDFLAG set. &quot;Thing&quot; is set to the new object.</div>
+</li>
+<li class="level3"><div class="li"> This status propagates back up, and the connection lookup is terminated early.</div>
+</li>
+<li class="level3"><div class="li"> A drc_violation is created that includes the &quot;Thing&quot; object.</div>
+</li>
+</ol>
+</li>
+<li class="level2 node"><div class="li"> Check for insufficient clearance:</div>
+<ol>
+<li class="level3"><div class="li"> Do the same routine as above, except starting with a global bloat of 0, and using a bloat of &quot;Bloat&quot; for the second run through.</div>
+</li>
+</ol>
+</li>
+</ol>
+</li>
+<li class="level1 node"><div class="li"> Check for minimum copper line widths:</div>
+<ol>
+<li class="level2"><div class="li"> Iterate over all copper lines with COPPERLINE_LOOP</div>
+</li>
+<li class="level2"><div class="li"> Test the thickness value of the line</div>
+</li>
+<li class="level2"><div class="li"> Generate a drc_violation if the thickness is too thin.</div>
+</li>
+<li class="level2"><div class="li"> Iterate over all copper arcs with COPPERARC_LOOP</div>
+</li>
+<li class="level2"><div class="li"> ditto</div>
+</li>
+</ol>
+</li>
+<li class="level1"><div class="li"> Check pin annular rings</div>
+</li>
+<li class="level1"><div class="li"> Check drill sizes</div>
+</li>
+<li class="level1"><div class="li"> Check pad widths</div>
+</li>
+<li class="level1"><div class="li"> Check via annular rings</div>
+</li>
+<li class="level1"><div class="li"> Check via drill sizes</div>
+</li>
+<li class="level1"><div class="li"> Check silk line widths</div>
+</li>
+<li class="level1"><div class="li"> Check element silk line widths</div>
+</li>
+<li class="level1"><div class="li"> Restore the layer stack visibility</div>
+</li>
+<li class="level1"><div class="li"> return the number of violations found</div>
+</li>
+</ol>
+
+</div>
+
+<h2 id="todolist">To Do List</h2>
+<div class="level2">
+
+</div>
+
+<h3 id="newdrcviolations">New DRC Violations</h3>
+<div class="level3">
+
+<p>
+Some useful DRC violations to add:
+</p>
+<ul>
+<li class="level1"><div class="li"> Check for text on copper layers (which is not tested by the DRC)</div>
+</li>
+<li class="level1"><div class="li"> Check for object proximity to the edge of the board</div>
+</li>
+<li class="level1"><div class="li"> Violations for holes being too close together</div>
+</li>
+<li class="level1"><div class="li"> Floating copper</div>
+</li>
+<li class="level1"><div class="li"> Pin/pad exit violations</div>
+</li>
+<li class="level1"><div class="li"> Silk screen over pins/pads</div>
+</li>
+<li class="level1"><div class="li"> Overlapping elements</div>
+</li>
+</ul>
+
+</div>
+
+<h3 id="drctests">DRC tests</h3>
+<div class="level3">
+
+<p>
+This is to describe ways of testing the DRC code, not things the DRC should check for.
+</p>
+<ul>
+<li class="level1"><div class="li"> Go through the DRC code for different kinds of violations to check that all possible code paths are being tested</div>
+</li>
+<li class="level1"><div class="li"> Review the DRC tests and check that the results are correct! (Done: 201901xx)</div>
+</li>
+<li class="level1"><div class="li"> Generate graphical output for the DRC report</div>
+</li>
+<li class="level1"><div class="li"> Generate LaTeX output for the DRC report (wishlist!)</div>
+</li>
+<li class="level1"><div class="li"> Figure out what else uses the &quot;ConnectionLookup&quot; code and write tests so that we don&#039;t break anything else as we&#039;re reworking the DRC</div>
+</li>
+</ul>
+
+</div>
+
+<h4 id="additionaltestcases">Additional test cases</h4>
+<div class="level4">
+
+<p>
+As I work through the code, I&#039;m going to jot some things down here regarding tests that ought to be done. Much of this stuff tests the more general geometry code too, so, maybe two birds with one stone.
+</p>
+<ul>
+<li class="level1"><div class="li"> Square pads <br/>
+In lots of cases, square pads are handled differently than ones with round ends, so, square pads should definitely be tested.</div>
+</li>
+<li class="level1"><div class="li"> Objects in the same layer group (physical layer) but on different (logical) layers</div>
+</li>
+<li class="level1"><div class="li"> End points of lines/arcs <br/>
+The end point condition is frequently tested for, and a separate test is called for these cases.</div>
+</li>
+</ul>
+
+</div>
+
+<h3 id="drcbackendwork">DRC backend work</h3>
+<div class="level3">
+<ul>
+<li class="level1 node"><div class="li"> Separate the DRC code from the &quot;ConnectionLookup&quot; code.<br/>
+This is mostly complete, however, there are a few reasons why this is not going to completely happen for a while. </div>
+<ul>
+<li class="level2"><div class="li"> The global &quot;drc&quot; variable is going to be difficult to get rid of, since we do want the code to do certain things during a DRC check that we otherwise might not. </div>
+</li>
+<li class="level2"><div class="li"> The global bloat parameter is also going to be tough to get rid of completely. I think what should happen, is that the DRC should generate a list of connected objects, then bloat/shrink all of them as appropriate, and then run the lookup code again. The lookup code shouldn&#039;t need to know anything about bloating things. However, because of the way the lists are generated (separate lists for every type for every layer!) it will be some work to actually do this.</div>
+</li>
+</ul>
+</li>
+<li class="level1"><div class="li"> Get rid of the &quot;drc&quot;, &quot;User&quot;, and &quot;AndDraw&quot; parameters. (Still trying to figure out what the implications of this would be)</div>
+</li>
+<li class="level1"><div class="li"> Factor all of the different DRC tests into separate functions so that they can be executed individually.</div>
+</li>
+<li class="level1"><div class="li"> Parameterize the DRC functions, and use those parameters to generate the pane in the preferences widnow.</div>
+</li>
+<li class="level1"><div class="li"> Have DRC functions operate on &quot;DataType&quot; objects so that you can selectively apply the DRC to, say, the objects in the buffer</div>
+</li>
+<li class="level1"><div class="li"> Work through more of Peter C&#039;s work to see how much of it we should incorporate (home/cparker/peterc_drc, he has quite a bit of good stuff here, but I&#039;d like to include it intelligently instead of just picking the commits.)</div>
+</li>
+<li class="level1"><div class="li"> Write functions to compute the distance between objects.</div>
+</li>
+<li class="level1"><div class="li"> Put the testing into a background thread so that the GUI is still responsive while the test is executing</div>
+</li>
+</ul>
+
+</div>
+
+<h3 id="onlinedrc">Online DRC</h3>
+<div class="level3">
+
+<p>
+The online part of the DRC is that part that is active during normal design activities. It does things like preventing you from drawing traces too close together.
+</p>
+
+<p>
+Right now this functionality exists only for lines and is present in the line.c source file.
+</p>
+
+</div>
+
+<h3 id="multi-clearance">Multi-clearance</h3>
+<div class="level3">
+
+<p>
+One of the primary hurdles with implementing multi-clearance DRC, or, different DRC requirements for different traces or nets, is the way in which our DRC is implemented. Presently we use an algorithm that bloats or shrinks the objects we&#039;re testing, and looks for changes in connectivity. In a multi-clearance DRC environment, the amount that you would need to bloat your object now depends on the objects around it, which may not have been discovered yet.
+</p>
+
+</div>
+
+<h3 id="drcinterface">DRC interface</h3>
+<div class="level3">
+<ul>
+<li class="level1"><div class="li"> Create a DRC panel in the preferences window that allows for adjusting settings (possibly with image descriptions of the violations) and running specific tests individually. This will require that parameterization in the back-end work to be finished first.</div>
+</li>
+</ul>
+
+</div>
+
+<h3 id="drcbugs">DRC bugs</h3>
+<div class="level3">
+<ul>
+<li class="level1"><div class="li"> Highlight both offending objects instead of just one (done: 4.2.0)</div>
+</li>
+<li class="level1"><div class="li"> Find more than one &quot;insufficient overlap&quot; or &quot;insufficient gap&quot; per pin/pad/via <br/>
+The insufficient overlap case cannot propagate, due to the nature of how it works, however, the insufficient gap one can, and it does now as of the 4.2.0 release.</div>
+</li>
+<li class="level1"><div class="li"> Check for duplicate DRC errors before appending a new one (can happen if more than one pin is connected to an object) (done: 4.2.0)</div>
+</li>
+<li class="level1"><div class="li"> On MacOS the images in the DRC window of the GTK HID are garbled</div>
+</li>
+</ul>
+
+</div>
+</body>
+</html>

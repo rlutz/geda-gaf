@@ -1,0 +1,157 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+  <link rel="stylesheet" media="screen" type="text/css" href="./style.css" />
+  <link rel="stylesheet" media="screen" type="text/css" href="./design.css" />
+  <link rel="stylesheet" media="print" type="text/css" href="./print.css" />
+
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+</head>
+<body>
+
+<p>
+As an exercise let&#039;s do something easy, like adding an action to PCB.
+</p>
+
+<p>
+Before you start coding take a look at: <a href="geda-pcb_developer_introduction.html#buildsystem" class="wikilink1" title="geda-pcb_developer_introduction.html">Build system</a>
+It is essential that you have a working build system.
+</p>
+
+<p>
+When working on the source code of PCB then please make use of lots and lots of comments (preferably doxygen style). In trying to understand the code I was very grateful for every piece of comment the developer had written.
+</p>
+
+<p>
+First make a file called <em><strong>example.c</strong></em> and add:
+</p>
+<pre class="code c"><span class="coMULTI">/*!
+ * =====================================================================================
+ *
+ *                                      COPYRIGHT
+ *  Example action implementation for PCB.
+ *  Copyright (C) 2015 Robert Zeegers
+ *
+ *  This program is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU General Public License
+ *  as published by the Free Software Foundation; either version 2
+ *  of the License, or (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ *
+ *  \File:   example.c
+ *  \Brief:  Example on how to implement a action in the PCB program.
+ *  \par Description
+ *   Example action implementation for PCB, interactive printed circuit board design
+ *  \copyright (C) 2015 Robert Zeegers
+ *
+ *  \Version:  1.0
+ *  Created:  24/07/15
+ *
+ *  \Todo:     nothing
+ *  \Bug:      not that I know of
+ *
+ * =====================================================================================
+ */</span>
+&nbsp;
+<span class="coMULTI">/* First thing todo is include global.h  */</span>
+<span class="coMULTI">/* This will automatically also include const.h and macro.h */</span>
+<span class="co2">#include &quot;global.h&quot;</span>
+&nbsp;
+<span class="coMULTI">/* Second we include hid.h because we want to register our action to the HID */</span>
+<span class="co2">#include &quot;hid.h&quot;</span>
+&nbsp;
+<span class="coMULTI">/* We are going to add an action and therefore we want it to show-up in the PCB manual, */</span>
+<span class="coMULTI">/* so we add some documentation comments */</span>
+<span class="coMULTI">/* For the documentation style see the &quot;extract-docs&quot; perl script in the doc directory */</span>
+&nbsp;
+<span class="coMULTI">/* %start-doc actions DoSilly
+   This function doesn't do anything useful.
+&nbsp;
+   @example
+   DoSilly()
+   @end example
+&nbsp;
+   %end-doc */</span>
+&nbsp;
+<span class="coMULTI">/* All action entry functions must have the same syntax as defined in */</span>
+<span class="coMULTI">/* typedef struct HID_Action (hid.h)  */</span>
+<span class="kw4">static</span> <span class="kw4">int</span>
+ExampleDo <span class="br0">&#40;</span><span class="kw4">int</span> argc<span class="sy0">,</span> <span class="kw4">char</span> <span class="sy0">**</span>argv<span class="sy0">,</span> <span class="kw4">int</span> x<span class="sy0">,</span> <span class="kw4">int</span> y<span class="br0">&#41;</span>
+<span class="br0">&#123;</span>
+    <span class="coMULTI">/* It should do something, so let's do something silly */</span>
+    <span class="coMULTI">/* Let's write a Dutch songtext to the Message Log window */</span>
+    <span class="coMULTI">/* The struct HID is defined in hid.h */</span>
+    <span class="coMULTI">/* and the variable gui is made available there by &quot;extern HID *gui;&quot; */</span>
+    <span class="coMULTI">/* First we check if we have a gui. */</span>
+    <span class="kw1">if</span><span class="br0">&#40;</span> <span class="nu0">1</span> <span class="sy0">==</span> gui<span class="sy0">-&gt;</span>gui <span class="br0">&#41;</span>
+    <span class="br0">&#123;</span>
+        <span class="coMULTI">/*  if we have one let's write the songtext */</span>
+        gui<span class="sy0">-&gt;</span><a href="http://www.opengroup.org/onlinepubs/009695399/functions/log.html"><span class="kw3">log</span></a> <span class="br0">&#40;</span>_<span class="br0">&#40;</span><span class="st0">&quot;Iedereen is van de wereld en de wereld is van iedereen!<span class="es1">\n</span>&quot;</span><span class="br0">&#41;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+    <span class="br0">&#125;</span>
+<span class="br0">&#125;</span>
+&nbsp;
+<span class="coMULTI">/* Now we have to make an action list. */</span>
+<span class="coMULTI">/* Here we make the connection between our command &quot;DoSilly()&quot; and */</span>
+<span class="coMULTI">/* the actual function which should be executed ExampleDo().*/</span>
+<span class="kw4">static</span> HID_Action exampledo_action_list<span class="br0">&#91;</span><span class="br0">&#93;</span> <span class="sy0">=</span> <span class="br0">&#123;</span>
+  <span class="br0">&#123;</span><span class="st0">&quot;DoSilly&quot;</span><span class="sy0">,</span> <span class="st0">&quot;Example action&quot;</span><span class="sy0">,</span> ExampleDo<span class="sy0">,</span> <span class="st0">&quot;Always provide some help&quot;</span><span class="sy0">,</span> <span class="st0">&quot;DoSilly()&quot;</span><span class="br0">&#125;</span>
+<span class="br0">&#125;</span><span class="sy0">;</span>
+&nbsp;
+<span class="coMULTI">/* Next a macro to register the action in the HID */</span>
+<span class="coMULTI">/* Note the missing ; at the end, that's correct ;-) */</span>
+REGISTER_ACTIONS <span class="br0">&#40;</span>exampledo_action_list<span class="br0">&#41;</span></pre>
+
+<p>
+For an explanation on the <code>REGISTER_ACTION</code> macro see paragraph <a href="geda-pcb_developer_introduction.html#register" class="wikilink1" title="geda-pcb_developer_introduction.html">REGISTER</a>.
+</p>
+
+<p>
+Next we need to add our file to the build system.<br/>
+
+We do that in the file <em><strong>MakeFile.am</strong></em>.<br/>
+Open <em><strong>MakeFile.am</strong></em> and look for the variable <em class="u">PCB_SRCS</em> and add the file <em><strong>example.c</strong></em> there like the others.
+</p>
+
+<p>
+Clean your build directory by doing:
+</p>
+<pre class="code">make distclean</pre>
+
+<p>
+Then do:
+</p>
+<pre class="code">./autogen.sh</pre>
+
+<p>
+Now our file is in <em><strong>MakeFile.in</strong></em>
+</p>
+
+<p>
+Next do:
+</p>
+<pre class="code">./configure
+make</pre>
+
+<p>
+Run:
+</p>
+<pre class="code">src/pcb</pre>
+
+<p>
+In the PCB program type &quot;:DoSilly()&quot; and watch the message log window.
+</p>
+
+<p>
+And do check out the pcb manual in doc/pcb.pdf search for &quot;DoSilly&quot;
+</p>
+</body>
+</html>

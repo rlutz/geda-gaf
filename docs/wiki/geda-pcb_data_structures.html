@@ -1,0 +1,213 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+  <link rel="stylesheet" media="screen" type="text/css" href="./style.css" />
+  <link rel="stylesheet" media="screen" type="text/css" href="./design.css" />
+  <link rel="stylesheet" media="print" type="text/css" href="./print.css" />
+
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+</head>
+<body>
+
+<h2 id="pcbtype">PCBType</h2>
+<div class="level2">
+
+<p>
+PCBType is the main data structure
+</p>
+
+<p>
+PCBType contain all the general information used in the program and it contains a pointer to the DataType
+</p>
+
+<p>
+<a href="media/devel_intro/structpcbtype_graph.png" class="media" target="_blank" title="devel_intro:structpcbtype_graph.png">devel_intro:structpcbtype_graph.png</a>
+</p>
+
+</div>
+
+<h2 id="datatype">DataType</h2>
+<div class="level2">
+
+<p>
+The DataType contains the actual data that defines our printed circuit board.
+</p>
+
+<p>
+DataType is what&#039;s stored in the Buffers when you do cut/paste.
+</p>
+<div class="table sectionedit1"><table class="inline">
+	<thead>
+	<tr class="row0">
+		<th class="col0">Data Fields </th><th class="col1" colspan="2"> </th>
+	</tr>
+	</thead>
+	<tr class="row1">
+		<td class="col0">Cardinal</td><td class="col1">ViaN</td><td class="col2"> </td>
+	</tr>
+	<tr class="row2">
+		<td class="col0">Cardinal</td><td class="col1">ElementN</td><td class="col2"> </td>
+	</tr>
+	<tr class="row3">
+		<td class="col0">Cardinal</td><td class="col1">RatN</td><td class="col2"> </td>
+	</tr>
+	<tr class="row4">
+		<td class="col0">int</td><td class="col1">LayerN</td><td class="col2"> </td>
+	</tr>
+	<tr class="row5">
+		<td class="col0">GList *</td><td class="col1">Via</td><td class="col2">Layer independent via&#039;s</td>
+	</tr>
+	<tr class="row6">
+		<td class="col0">GList *</td><td class="col1">Element</td><td class="col2">Layer independent elements</td>
+	</tr>
+	<tr class="row7">
+		<td class="col0">GList *</td><td class="col1">Rat</td><td class="col2">Layer independent rat-lines</td>
+	</tr>
+	<tr class="row8">
+		<td class="col0">rtree_t *</td><td class="col1">via_tree</td><td class="col2"> </td>
+	</tr>
+	<tr class="row9">
+		<td class="col0">rtree_t *</td><td class="col1">element_tree</td><td class="col2"> </td>
+	</tr>
+	<tr class="row10">
+		<td class="col0">rtree_t *</td><td class="col1">pin_tree</td><td class="col2"> </td>
+	</tr>
+	<tr class="row11">
+		<td class="col0">rtree_t *</td><td class="col1">pad_tree</td><td class="col2"> </td>
+	</tr>
+	<tr class="row12">
+		<td class="col0">rtree_t *</td><td class="col1">name_tree [3]</td><td class="col2"> </td>
+	</tr>
+	<tr class="row13">
+		<td class="col0">rtree_t *</td><td class="col1">rat_tree</td><td class="col2"> </td>
+	</tr>
+	<tr class="row14">
+		<td class="col0">struct PCBType *</td><td class="col1">pcb</td><td class="col2">A pointer back to the main data structure</td>
+	</tr>
+	<tr class="row15">
+		<td class="col0">LayerType</td><td class="col1">Layer [MAX_LAYER+2]</td><td class="col2">All layer dependent items</td>
+	</tr>
+	<tr class="row16">
+		<td class="col0">int</td><td class="col1">polyClip</td><td class="col2"> </td>
+	</tr>
+</table></div>
+<!-- EDIT1 TABLE [373-875] -->
+<p>
+The actual data is stored in the <a href="geda-pcb_developer_introduction.html#glist" class="wikilink1" title="geda-pcb_developer_introduction.html">GList</a> data elements. The rest is there for administrative purposes, to keep track of it all.
+Here I like to specially mention the rtree_t* data members. Although they have an administrative character the <a href="geda-pcb_developer_introduction.html#r-tree" class="wikilink1" title="geda-pcb_developer_introduction.html">R-TREE</a> data structure is heavily used in the PCB program.
+</p>
+
+</div>
+
+<h2 id="glist">GList</h2>
+<div class="level2">
+<pre class="code c"><span class="kw4">struct</span> GList <span class="br0">&#123;</span>
+  gpointer data<span class="sy0">;</span>
+  GList <span class="sy0">*</span>next<span class="sy0">;</span>
+  GList <span class="sy0">*</span>prev<span class="sy0">;</span>
+<span class="br0">&#125;</span><span class="sy0">;</span> </pre>
+
+<p>
+The GList struct is used for each element in a doubly-linked list. 
+</p>
+
+<p>
+Members:
+</p>
+<div class="table sectionedit2"><table class="inline">
+	<tr class="row0">
+		<td class="col0">gpointer data</td><td class="col1">holds the element&#039;s data , which can be a pointer to any kind of data.</td>
+	</tr>
+	<tr class="row1">
+		<td class="col0">GList *next</td><td class="col1">contains the link to the next element in the list</td>
+	</tr>
+	<tr class="row2">
+		<td class="col0">GList *prev;</td><td class="col1">contains the link to the previous element in the list</td>
+	</tr>
+</table></div>
+<!-- EDIT2 TABLE [1429-1648] -->
+<p>
+gpointer =&gt;
+</p>
+<pre class="code c"><span class="kw4">typedef</span> <span class="kw4">void</span><span class="sy0">*</span> gpointer<span class="sy0">;</span></pre>
+
+<p>
+An untyped pointer. <code>gpointer</code> looks better and is easier to use than <code>void*</code>.
+</p>
+
+</div>
+
+<h2 id="r-tree">R-TREE</h2>
+<div class="level2">
+
+<p>
+From Wikipedia:
+The key idea of the r-tree data structure is to group nearby objects and represent them with their minimum bounding rectangle in the next higher level of the tree; the &quot;R&quot; in R-tree is for rectangle. Since all objects lie within this bounding rectangle, a query that does not intersect the bounding rectangle also cannot intersect any of the contained objects. At the leaf level, each rectangle describes a single object; at higher levels the aggregation of an increasing number of objects. This can also be seen as an increasingly coarse approximation of the data set.
+</p>
+
+<p>
+A general r-tree will look like this:
+</p>
+
+<p>
+<a href="media/devel_intro/rtree.png" class="media" target="_blank" title="devel_intro:rtree.png">devel_intro:rtree.png</a>
+</p>
+
+<p>
+The bottom row of records are called leafs. 
+</p>
+
+<p>
+The rtree data structure PCB uses is:
+</p>
+
+<p>
+<a href="media/devel_intro/structrtree.png" class="media" target="_blank" title="devel_intro:structrtree.png">devel_intro:structrtree.png</a>
+</p>
+
+<p>
+The r-tree data structure hold a copy of the where&#039;s what data. Meaning that it holds a list of every item on our canvas arranged in successively smaller boxes.
+<a href="media/devel_intro/rtreepicture.png" class="media" target="_blank" title="devel_intro:rtreepicture.png">devel_intro:rtreepicture.png</a>
+</p>
+
+</div>
+
+<h2 id="object_list">object_list</h2>
+<div class="level2">
+
+<p>
+This is presently available in the home/cparker/drc_test branch. Hopefully merged in soon.
+</p>
+
+<p>
+This is a type for keeping lists of things. It uses void pointers, so, you can keep lists of just about anything you want: pointers, complex data structures, whatever. A list can only hold one type of object. I implemented this, because I found myself implementing similar things over and over again for different types.
+</p>
+
+<p>
+This explanation needs to be expanded on later, but, briefly, this list just keeps a big block of memory and copies data around inside it. If you hand it a data structure, it makes its own copy of that data structure. A future version might provide an option to take control of an existing structure, but, not right now.
+</p>
+
+<p>
+Since a list only handles a single type of object, it can calculate where in the block of memory a given index should be. When you ask for an element, it will calculate the location of that element, and give you a pointer to it. Since it knows how many elements are in the list, when you insert at element, it can figure out how much data needs to be moved to make space for the new element.
+</p>
+
+<p>
+Some objects are more complex than just a block of data. For example, an object might contain a pointer to a string. The object technically owns that string, but if you just make a copy of the object, the pointer will point to the same string. If the original object is deleted, now the list&#039;s copy will point to a string that no longer exists. To deal with this, complex objects require the definition of two functions, a clear function and a copy function.
+</p>
+
+<p>
+The clear function should take care of &quot;zeroing out&quot; an object. If the object owns other bits of memory, the clear function should free them. It should essentially make the object blank.
+</p>
+
+<p>
+The copy function should be used to copy an object&#039;s data, including data that the object owns that is stored elsewhere.
+</p>
+
+<p>
+I&#039;ll eventually put some examples here, but for now, have a look at the unit tests at the end of src/object_list.c.
+</p>
+
+</div>
+</body>
+</html>
