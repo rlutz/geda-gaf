@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: geda\n"
 "Report-Msgid-Bugs-To: https://bugs.launchpad.net/geda\n"
-"POT-Creation-Date: 2015-09-13 16:27+0300\n"
+"POT-Creation-Date: 2019-10-08 20:20+0200\n"
 "PO-Revision-Date: 2014-08-31 20:31+0100\n"
 "Last-Translator: Bert Timmerman <bert.timmerman@xs4all.nl>\n"
 "Language-Team: gEDA developers <geda-dev@seul.org>\n"
@@ -174,7 +174,7 @@ msgstr ""
 "In s_object_remove_attrib_in_object, is gefaald om attrib %s in de component "
 "te vinden.  Afsluiten . . .\n"
 
-#: gattrib/src/s_object.c:332
+#: gattrib/src/s_object.c:330
 #, c-format
 msgid ""
 "In s_object_attrib_add_attrib_in_object, trying to add attrib to non-complex "
@@ -276,7 +276,7 @@ msgstr ""
 msgid "- Starting internal component TABLE creation\n"
 msgstr "- Start het aanmaken van de interne componenten TABEL.\n"
 
-#: gattrib/src/s_table.c:344
+#: gattrib/src/s_table.c:343
 #, c-format
 msgid ""
 "In s_table_add_toplevel_comp_items_to_comp_table, we didn't find either row "
@@ -285,12 +285,12 @@ msgstr ""
 "In s_table_add_toplevel_comp_items_to_comp_table, is geen regel of kolom "
 "gevonden in de lijsten!\n"
 
-#: gattrib/src/s_table.c:493
+#: gattrib/src/s_table.c:492
 #, c-format
 msgid "- Starting internal pin TABLE creation\n"
 msgstr "- Start het aanmaken van de interne pennen TABEL.\n"
 
-#: gattrib/src/s_table.c:553
+#: gattrib/src/s_table.c:552
 #, c-format
 msgid ""
 "In s_table_add_toplevel_pin_items_to_pin_table, we didn't find either row or "

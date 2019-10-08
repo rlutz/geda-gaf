@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: geda\n"
 "Report-Msgid-Bugs-To: https://bugs.launchpad.net/geda\n"
-"POT-Creation-Date: 2015-09-13 16:27+0300\n"
+"POT-Creation-Date: 2019-10-08 20:20+0200\n"
 "PO-Revision-Date: 2012-03-21 00:09+0000\n"
 "Last-Translator: ghas <Unknown>\n"
 "Language-Team: Galician <gl@li.org>\n"
@@ -126,7 +126,7 @@ msgid ""
 "the component.  Exiting . . .\n"
 msgstr ""
 
-#: gattrib/src/s_object.c:332
+#: gattrib/src/s_object.c:330
 #, c-format
 msgid ""
 "In s_object_attrib_add_attrib_in_object, trying to add attrib to non-complex "
@@ -215,19 +215,19 @@ msgstr ""
 msgid "- Starting internal component TABLE creation\n"
 msgstr ""
 
-#: gattrib/src/s_table.c:344
+#: gattrib/src/s_table.c:343
 #, c-format
 msgid ""
 "In s_table_add_toplevel_comp_items_to_comp_table, we didn't find either row "
 "or col in the lists!\n"
 msgstr ""
 
-#: gattrib/src/s_table.c:493
+#: gattrib/src/s_table.c:492
 #, c-format
 msgid "- Starting internal pin TABLE creation\n"
 msgstr ""
 
-#: gattrib/src/s_table.c:553
+#: gattrib/src/s_table.c:552
 #, c-format
 msgid ""
 "In s_table_add_toplevel_pin_items_to_pin_table, we didn't find either row or "

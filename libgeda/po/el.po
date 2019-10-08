@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: geda\n"
 "Report-Msgid-Bugs-To: https://bugs.launchpad.net/geda\n"
-"POT-Creation-Date: 2015-09-26 23:29+0300\n"
+"POT-Creation-Date: 2019-10-08 20:20+0200\n"
 "PO-Revision-Date: 2012-09-01 18:46+0000\n"
 "Last-Translator: Panos Bouklis <panos@echidna-band.com>\n"
 "Language-Team: Greek <el@li.org>\n"
@@ -42,21 +42,21 @@ msgstr "Σχεδιάγραμμα Κυκλώματος gEDA"
 msgid "gEDA Schematic Symbol"
 msgstr "Σύμβολο Σχεδίου gEDA"
 
-#: libgeda/src/a_basic.c:178
+#: libgeda/src/a_basic.c:174
 #, c-format
 msgid "o_save_objects: object %p has unknown type '%c'\n"
 msgstr "o_save_objects: το αντικείμενο %p έχει άγνωστο τύπο '%c'\n"
 
-#: libgeda/src/a_basic.c:234 libgeda/src/f_basic.c:372
+#: libgeda/src/a_basic.c:230 libgeda/src/f_basic.c:377
 #, c-format
 msgid "File %s is read-only"
 msgstr "Το αρχείο %s είναι μόνο για ανάγνωση"
 
-#: libgeda/src/a_basic.c:292
+#: libgeda/src/a_basic.c:287
 msgid "Schematic data was not valid UTF-8"
 msgstr ""
 
-#: libgeda/src/a_basic.c:424
+#: libgeda/src/a_basic.c:419
 #, c-format
 msgid ""
 "Read unexpected attach symbol start marker in [%s] :\n"
@@ -64,7 +64,7 @@ msgid ""
 "%s<<\n"
 msgstr ""
 
-#: libgeda/src/a_basic.c:441
+#: libgeda/src/a_basic.c:436
 #, c-format
 msgid ""
 "Read unexpected embedded symbol start marker in [%s] :\n"
@@ -72,7 +72,7 @@ msgid ""
 "%s<<\n"
 msgstr ""
 
-#: libgeda/src/a_basic.c:472
+#: libgeda/src/a_basic.c:467
 #, c-format
 msgid ""
 "Read unexpected embedded symbol end marker in [%s] :\n"
@@ -80,7 +80,7 @@ msgid ""
 "%s<<\n"
 msgstr ""
 
-#: libgeda/src/a_basic.c:507
+#: libgeda/src/a_basic.c:502
 #, c-format
 msgid ""
 "Read an old format sym/sch file!\n"
@@ -91,7 +91,7 @@ msgstr ""
 "Παρακαλούμε εκτελέστε το g[sym|sch]update σε:\n"
 "[%s]\n"
 
-#: libgeda/src/a_basic.c:513
+#: libgeda/src/a_basic.c:508
 #, c-format
 msgid ""
 "Read garbage in [%s] :\n"
@@ -112,7 +112,12 @@ msgstr ""
 msgid "Cannot find file %s: %s"
 msgstr "Αδυναμία εύρεσης του αρχείου %s: %s"
 
-#: libgeda/src/f_basic.c:258
+#: libgeda/src/f_basic.c:230
+#, fuzzy, c-format
+msgid "Failed to chdir to [%s]: %s"
+msgstr "Αδυναμία ανοίγματος καταλόγου [%s]: %s\n"
+
+#: libgeda/src/f_basic.c:264
 #, c-format
 msgid ""
 "\n"
@@ -125,13 +130,13 @@ msgstr ""
 "  %s.\n"
 "\n"
 
-#: libgeda/src/f_basic.c:260
+#: libgeda/src/f_basic.c:266
 msgid "I could not guess if it is newer, so you have to do it manually.\n"
 msgstr ""
 "Δεν μπόρεσα να καταλάβω αν είναι νεότερο, οπότε πρέπει να το κάνετε με το "
 "χέρι.\n"
 
-#: libgeda/src/f_basic.c:262
+#: libgeda/src/f_basic.c:268
 msgid ""
 "The backup copy is newer than the schematic, so it seems you should load it "
 "instead of the original file.\n"
@@ -139,7 +144,7 @@ msgstr ""
 "Το αντίγραφο ασφαλείας είναι νεότερο από το σχεδιάγραμμα, άρα μάλλον πρέπει "
 "να φορτώσετε αυτό αντί για το αρχικό αρχείο.\n"
 
-#: libgeda/src/f_basic.c:264
+#: libgeda/src/f_basic.c:270
 msgid ""
 "Gschem usually makes backup copies automatically, and this situation happens "
 "when it crashed or it was forced to exit abruptly.\n"
@@ -147,7 +152,7 @@ msgstr ""
 "Το gschem συνήθως δημιουργεί αντίγραφα ασφαλείας αυτόματα, και αυτή η "
 "περίπτωση συμβαίνει όταν κατέρρευσε ή έγινε βίαιη έξοδος.\n"
 
-#: libgeda/src/f_basic.c:267
+#: libgeda/src/f_basic.c:273
 msgid ""
 "\n"
 "Run gschem and correct the situation.\n"
@@ -157,42 +162,47 @@ msgstr ""
 "Εκτελέστε το gschem και διορθώστε την κατάσταση.\n"
 "\n"
 
-#: libgeda/src/f_basic.c:362
+#: libgeda/src/f_basic.c:320
+#, fuzzy, c-format
+msgid "Failed to restore working directory to [%s]: %s\n"
+msgstr "Αδυναμία ανοίγματος καταλόγου [%s]: %s\n"
+
+#: libgeda/src/f_basic.c:367
 #, c-format
 msgid "Can't get the real filename of %s: %s"
 msgstr "Αδυναμία λήψης του πραγματικού ονόματος αρχείου του %s: %s"
 
-#: libgeda/src/f_basic.c:393
+#: libgeda/src/f_basic.c:398
 #, c-format
 msgid "Could NOT set previous backup file [%s] read-write\n"
 msgstr ""
 
-#: libgeda/src/f_basic.c:399
+#: libgeda/src/f_basic.c:404
 #, c-format
 msgid "Can't save backup file: %s."
 msgstr "Αδυναμία αποθήκευσης αντιγράφου ασφαλείας: %s."
 
-#: libgeda/src/f_basic.c:409
+#: libgeda/src/f_basic.c:414
 #, c-format
 msgid "Could NOT set backup file [%s] readonly\n"
 msgstr ""
 
-#: libgeda/src/f_basic.c:458
+#: libgeda/src/f_basic.c:472
 #, fuzzy, c-format
 msgid "Failed to restore permissions on '%s': %s\n"
 msgstr "Αδυναμία ανοίγματος καταλόγου [%s]: %s\n"
 
-#: libgeda/src/f_basic.c:463
+#: libgeda/src/f_basic.c:477
 #, fuzzy, c-format
 msgid "Failed to restore ownership on '%s': %s\n"
 msgstr "Αδυναμία ανοίγματος καταλόγου [%s]: %s\n"
 
-#: libgeda/src/f_basic.c:473
+#: libgeda/src/f_basic.c:487
 #, c-format
 msgid "Could NOT save file: %s"
 msgstr "ΔΕΝ ήταν δυνατή η αποθήκευση του αρχείου: %s"
 
-#: libgeda/src/f_basic.c:720
+#: libgeda/src/f_basic.c:734
 #, c-format
 msgid "%s: %s"
 msgstr "%s: %s"
@@ -218,83 +228,83 @@ msgstr "Το αρχείο ρυθμίσεων έχει ήδη φορτωθεί"
 msgid "Failed to load config from '%s': %s\n"
 msgstr "Αδυναμία φορτώματος εικόνας από [%s]: %s\n"
 
-#: libgeda/src/g_rc.c:206
+#: libgeda/src/g_rc.c:209
 #, fuzzy, c-format
 msgid "Loaded RC file [%s]\n"
 msgstr "Η εντολή της βιβλιοθήκης απέτυχε [%s]\n"
 
-#: libgeda/src/g_rc.c:210
+#: libgeda/src/g_rc.c:213
 #, fuzzy, c-format
 msgid "Failed to load RC file [%s]: "
 msgstr "Αποτυχία φορτώματος του συμβόλου από το αρχείο [%s]: %s\n"
 
-#: libgeda/src/g_rc.c:327
+#: libgeda/src/g_rc.c:330
 msgid "ERROR: An unknown error occurred while parsing configuration files."
 msgstr ""
 
-#: libgeda/src/g_rc.c:339 libgeda/src/g_rc.c:340
+#: libgeda/src/g_rc.c:342 libgeda/src/g_rc.c:343
 #, c-format
 msgid "ERROR: %s\n"
 msgstr "ΣΦΑΛΜΑ: %s\n"
 
-#: libgeda/src/g_rc.c:346
+#: libgeda/src/g_rc.c:349
 #, c-format
 msgid "ERROR: The %s log may contain more information.\n"
 msgstr "ΣΦΑΛΜΑ: Η καταγραφή %s μπορεί να περιέχει περισσότερες πληροφορίες.\n"
 
-#: libgeda/src/g_rc.c:467
+#: libgeda/src/g_rc.c:470
 #, fuzzy, c-format
 msgid "Invalid path [%s] passed to component-library\n"
 msgstr "Το στοιχείο [%s] δε βρέθηκε στη βιβλιοθήκη στοιχείων\n"
 
-#: libgeda/src/g_rc.c:606
+#: libgeda/src/g_rc.c:609
 #, c-format
 msgid "Invalid path [%s] passed to source-library\n"
 msgstr ""
 
-#: libgeda/src/g_rc.c:653 libgeda/src/g_rc.c:662
+#: libgeda/src/g_rc.c:656 libgeda/src/g_rc.c:665
 #, c-format
 msgid "Invalid path [%s] passed to source-library-search\n"
 msgstr ""
 
-#: libgeda/src/g_rc.c:862
+#: libgeda/src/g_rc.c:865
 #, c-format
 msgid "Invalid path [%s] passed to bitmap-directory\n"
 msgstr ""
 
-#: libgeda/src/g_rc.c:995
+#: libgeda/src/g_rc.c:998
 msgid ""
 "WARNING: using a string for 'always-promote-attributes' is deprecated. Use a "
 "list of strings instead\n"
 msgstr ""
 
-#: libgeda/src/g_rc.c:1017
+#: libgeda/src/g_rc.c:1020
 msgid "always-promote-attribute: list element is not a string"
 msgstr ""
 
-#: libgeda/src/o_arc_basic.c:252 libgeda/src/o_arc_basic.c:265
+#: libgeda/src/o_arc_basic.c:254 libgeda/src/o_arc_basic.c:267
 msgid "Failed to parse arc object"
 msgstr ""
 
-#: libgeda/src/o_arc_basic.c:272
+#: libgeda/src/o_arc_basic.c:274
 #, c-format
 msgid "Found a zero radius arc [ %c %d, %d, %d, %d, %d, %d ]\n"
 msgstr ""
 
-#: libgeda/src/o_arc_basic.c:278 libgeda/src/o_box_basic.c:320
-#: libgeda/src/o_bus_basic.c:146 libgeda/src/o_circle_basic.c:282
-#: libgeda/src/o_line_basic.c:257 libgeda/src/o_net_basic.c:132
-#: libgeda/src/o_path_basic.c:206 libgeda/src/o_pin_basic.c:154
-#: libgeda/src/o_text_basic.c:386
+#: libgeda/src/o_arc_basic.c:280 libgeda/src/o_box_basic.c:320
+#: libgeda/src/o_bus_basic.c:154 libgeda/src/o_circle_basic.c:258
+#: libgeda/src/o_line_basic.c:255 libgeda/src/o_net_basic.c:142
+#: libgeda/src/o_path_basic.c:206 libgeda/src/o_pin_basic.c:163
+#: libgeda/src/o_text_basic.c:391
 #, c-format
 msgid "Found an invalid color [ %s ]\n"
 msgstr "Βρέθηκε ένα μη έγκυρο χρώμα [ %s ]\n"
 
-#: libgeda/src/o_arc_basic.c:279 libgeda/src/o_box_basic.c:321
-#: libgeda/src/o_bus_basic.c:147 libgeda/src/o_circle_basic.c:283
-#: libgeda/src/o_line_basic.c:258 libgeda/src/o_net_basic.c:133
-#: libgeda/src/o_path_basic.c:207 libgeda/src/o_pin_basic.c:155
-#: libgeda/src/o_text_basic.c:387
+#: libgeda/src/o_arc_basic.c:281 libgeda/src/o_box_basic.c:321
+#: libgeda/src/o_bus_basic.c:155 libgeda/src/o_circle_basic.c:259
+#: libgeda/src/o_line_basic.c:256 libgeda/src/o_net_basic.c:143
+#: libgeda/src/o_path_basic.c:207 libgeda/src/o_pin_basic.c:164
+#: libgeda/src/o_text_basic.c:392
 msgid "Setting color to default color\n"
 msgstr "Ρύθμιση χρώματος στο προκαθορισμένο\n"
 
@@ -330,42 +340,42 @@ msgstr ""
 msgid "Found a zero width/height box [ %c %d %d %d %d %d ]\n"
 msgstr ""
 
-#: libgeda/src/o_bus_basic.c:128 libgeda/src/o_bus_basic.c:135
+#: libgeda/src/o_bus_basic.c:136 libgeda/src/o_bus_basic.c:143
 msgid "Failed to parse bus object"
 msgstr ""
 
-#: libgeda/src/o_bus_basic.c:141
+#: libgeda/src/o_bus_basic.c:149
 #, c-format
 msgid "Found a zero length bus [ %c %d %d %d %d %d ]\n"
 msgstr ""
 
-#: libgeda/src/o_bus_basic.c:152
+#: libgeda/src/o_bus_basic.c:160
 #, c-format
 msgid "Found an invalid bus ripper direction [ %s ]\n"
 msgstr ""
 
-#: libgeda/src/o_bus_basic.c:153
+#: libgeda/src/o_bus_basic.c:161
 msgid "Resetting direction to neutral (no direction)\n"
 msgstr "Επαναφορά κατεύθυνσης στη φυσική (χωρίς κατεύθυνση)\n"
 
-#: libgeda/src/o_circle_basic.c:186
+#: libgeda/src/o_circle_basic.c:162
 msgid "Null radius circles are not allowed\n"
 msgstr ""
 
-#: libgeda/src/o_circle_basic.c:239 libgeda/src/o_circle_basic.c:268
+#: libgeda/src/o_circle_basic.c:215 libgeda/src/o_circle_basic.c:244
 msgid "Failed to parse circle object"
 msgstr ""
 
-#: libgeda/src/o_circle_basic.c:275
+#: libgeda/src/o_circle_basic.c:251
 #, c-format
 msgid "Found a zero or negative radius circle [ %c %d %d %d %d ]\n"
 msgstr ""
 
-#: libgeda/src/o_circle_basic.c:277
+#: libgeda/src/o_circle_basic.c:253
 msgid "Setting radius to 0\n"
 msgstr ""
 
-#: libgeda/src/o_complex_basic.c:502
+#: libgeda/src/o_complex_basic.c:509
 #, c-format
 msgid ""
 "Component not found:\n"
@@ -374,53 +384,53 @@ msgstr ""
 "Το στοιχείο δε βρέθηκε:\n"
 " %s"
 
-#: libgeda/src/o_complex_basic.c:705
+#: libgeda/src/o_complex_basic.c:712
 msgid "Failed to parse complex object"
 msgstr ""
 
-#: libgeda/src/o_complex_basic.c:718
+#: libgeda/src/o_complex_basic.c:725
 #, c-format
 msgid "Found a component with an invalid rotation [ %c %d %d %d %d %d %s ]\n"
 msgstr "Βρέθηκε στοιχείο με μη έγκυρη περιστροφή [ %c %d %d %d %d %d %s ]\n"
 
-#: libgeda/src/o_complex_basic.c:719 libgeda/src/o_picture.c:104
-#: libgeda/src/o_text_basic.c:358
+#: libgeda/src/o_complex_basic.c:726 libgeda/src/o_picture.c:104
+#: libgeda/src/o_text_basic.c:363
 msgid "Setting angle to 0\n"
 msgstr "Ρύθμιση γωνίας σε 0\n"
 
-#: libgeda/src/o_complex_basic.c:731
+#: libgeda/src/o_complex_basic.c:738
 #, c-format
 msgid ""
 "Found a component with an invalid mirror flag [ %c %d %d %d %d %d %s ]\n"
 msgstr ""
 "Βρέθηκε στοιχείο με μη έγκυρη σημαία καθρεπτισμού [ %c %d %d %d %d %d %s ]\n"
 
-#: libgeda/src/o_complex_basic.c:732
+#: libgeda/src/o_complex_basic.c:739
 msgid "Setting mirror to 0\n"
 msgstr "Ρύθμιση καθρεπτισμού σε 0\n"
 
-#: libgeda/src/o_complex_basic.c:1052
+#: libgeda/src/o_complex_basic.c:1063
 #, c-format
 msgid ""
 "WARNING: Symbol version parse error on refdes %s:\n"
 "\tCould not parse symbol file symversion=%s\n"
 msgstr ""
 
-#: libgeda/src/o_complex_basic.c:1056
+#: libgeda/src/o_complex_basic.c:1067
 #, c-format
 msgid ""
 "WARNING: Symbol version parse error on refdes %s:\n"
 "\tCould not parse symbol file symversion=\n"
 msgstr ""
 
-#: libgeda/src/o_complex_basic.c:1072
+#: libgeda/src/o_complex_basic.c:1083
 #, c-format
 msgid ""
 "WARNING: Symbol version parse error on refdes %s:\n"
 "\tCould not parse attached symversion=%s\n"
 msgstr ""
 
-#: libgeda/src/o_complex_basic.c:1097
+#: libgeda/src/o_complex_basic.c:1108
 #, c-format
 msgid ""
 "WARNING: Symbol version oddity on refdes %s:\n"
@@ -428,36 +438,36 @@ msgid ""
 "symbol file\n"
 msgstr ""
 
-#: libgeda/src/o_complex_basic.c:1111
+#: libgeda/src/o_complex_basic.c:1122
 #, c-format
 msgid ""
 "WARNING: Symbol version mismatch on refdes %s (%s):\n"
 "\tSymbol in library is newer than instantiated symbol\n"
 msgstr ""
 
-#: libgeda/src/o_complex_basic.c:1139
+#: libgeda/src/o_complex_basic.c:1150
 #, c-format
 msgid "\tMAJOR VERSION CHANGE (file %.3f, instantiated %.3f, %s)!\n"
 msgstr ""
 
-#: libgeda/src/o_complex_basic.c:1157
+#: libgeda/src/o_complex_basic.c:1168
 #, c-format
 msgid "\tMinor version change (file %.3f, instantiated %.3f)\n"
 msgstr ""
 
-#: libgeda/src/o_complex_basic.c:1168
+#: libgeda/src/o_complex_basic.c:1179
 #, c-format
 msgid ""
 "WARNING: Symbol version oddity on refdes %s:\n"
 "\tInstantiated symbol is newer than symbol in library\n"
 msgstr ""
 
-#: libgeda/src/o_embed.c:54
+#: libgeda/src/o_embed.c:55
 #, c-format
 msgid "Component [%s] has been embedded\n"
 msgstr "Το στοιχείο [%s] ενσωματώθηκε\n"
 
-#: libgeda/src/o_embed.c:98
+#: libgeda/src/o_embed.c:97
 #, c-format
 msgid ""
 "Could not find component [%s], while trying to unembed. Component is still "
@@ -466,25 +476,25 @@ msgstr ""
 "Δεν ήταν δυνατή η εύρεση του στοιχείου [%s], κατά τη διάρκεια "
 "αποενσωμάτωσης. Το στοιχείο είναι ακόμα ενσωματωμένο\n"
 
-#: libgeda/src/o_embed.c:106
+#: libgeda/src/o_embed.c:105
 #, c-format
 msgid "Component [%s] has been successfully unembedded\n"
 msgstr "Το στοιχείο [%s] αποενσωματώθηκε επιτυχώς\n"
 
-#: libgeda/src/o_line_basic.c:222 libgeda/src/o_line_basic.c:240
+#: libgeda/src/o_line_basic.c:220 libgeda/src/o_line_basic.c:238
 msgid "Failed to parse line object"
 msgstr ""
 
-#: libgeda/src/o_line_basic.c:252
+#: libgeda/src/o_line_basic.c:250
 #, c-format
 msgid "Found a zero length line [ %c %d %d %d %d %d ]\n"
 msgstr ""
 
-#: libgeda/src/o_net_basic.c:122
+#: libgeda/src/o_net_basic.c:132
 msgid "Failed to parse net object"
 msgstr ""
 
-#: libgeda/src/o_net_basic.c:127
+#: libgeda/src/o_net_basic.c:137
 #, c-format
 msgid "Found a zero length net [ %c %d %d %d %d %d ]\n"
 msgstr ""
@@ -546,121 +556,121 @@ msgstr "Η αποκωδικοποίηση Base64 απέτυχε."
 msgid "Falling back to file loading. Picture unembedded.\n"
 msgstr "Επιστροφή στο φόρτωμα αρχείου. Η εικόνα αποενσωματώθηκε.\n"
 
-#: libgeda/src/o_picture.c:207
+#: libgeda/src/o_picture.c:206
 msgid "ERROR: o_picture_save: unable to encode the picture.\n"
 msgstr "ΣΦΑΛΜΑ: o_picture_save: αδυναμία κωδικοποίησης εικόνας.\n"
 
-#: libgeda/src/o_picture.c:307
+#: libgeda/src/o_picture.c:306
 #, c-format
 msgid "Failed to load buffer image [%s]: %s\n"
 msgstr ""
 
-#: libgeda/src/o_picture.c:320
+#: libgeda/src/o_picture.c:319
 #, c-format
 msgid "Failed to load image from [%s]: %s\n"
 msgstr "Αδυναμία φορτώματος εικόνας από [%s]: %s\n"
 
-#: libgeda/src/o_picture.c:402
+#: libgeda/src/o_picture.c:409
 #, c-format
 msgid "Picture %p has invalid angle %i\n"
 msgstr "Η εικόνα %p έχει μη έγκυρη γωνία %i\n"
 
-#: libgeda/src/o_picture.c:748
+#: libgeda/src/o_picture.c:765
 #, c-format
 msgid "Picture [%s] has no image data.\n"
 msgstr ""
 
-#: libgeda/src/o_picture.c:749
+#: libgeda/src/o_picture.c:766
 msgid "Falling back to file loading. Picture is still unembedded.\n"
 msgstr ""
 
-#: libgeda/src/o_picture.c:757
+#: libgeda/src/o_picture.c:774
 #, c-format
 msgid "Picture [%s] has been embedded\n"
 msgstr ""
 
-#: libgeda/src/o_picture.c:781
+#: libgeda/src/o_picture.c:798
 #, c-format
 msgid "Failed to load image from file [%s]: %s\n"
 msgstr ""
 
-#: libgeda/src/o_picture.c:783
+#: libgeda/src/o_picture.c:800
 msgid "Picture is still embedded.\n"
 msgstr ""
 
-#: libgeda/src/o_picture.c:791
+#: libgeda/src/o_picture.c:808
 #, c-format
 msgid "Picture [%s] has been unembedded\n"
 msgstr ""
 
-#: libgeda/src/o_picture.c:1028
+#: libgeda/src/o_picture.c:1043
 #, c-format
 msgid "Failed to load fallback image %s: %s.\n"
 msgstr ""
 
-#: libgeda/src/o_pin_basic.c:131 libgeda/src/o_pin_basic.c:139
+#: libgeda/src/o_pin_basic.c:140 libgeda/src/o_pin_basic.c:148
 msgid "Failed to parse pin object"
 msgstr ""
 
-#: libgeda/src/o_pin_basic.c:145
+#: libgeda/src/o_pin_basic.c:154
 msgid ""
 "Found a pin which did not have the whichend field set.\n"
 "Verify and correct manually.\n"
 msgstr ""
 
-#: libgeda/src/o_pin_basic.c:148
+#: libgeda/src/o_pin_basic.c:157
 #, c-format
 msgid "Found an invalid whichend on a pin (reseting to zero): %d\n"
 msgstr ""
 
-#: libgeda/src/o_text_basic.c:317 libgeda/src/o_text_basic.c:327
-#: libgeda/src/o_text_basic.c:337
+#: libgeda/src/o_text_basic.c:322 libgeda/src/o_text_basic.c:332
+#: libgeda/src/o_text_basic.c:342
 msgid "Failed to parse text object"
 msgstr ""
 
-#: libgeda/src/o_text_basic.c:344
+#: libgeda/src/o_text_basic.c:349
 #, c-format
 msgid "Found a zero size text string [ %c %d %d %d %d %d %d %d %d ]\n"
 msgstr ""
 
-#: libgeda/src/o_text_basic.c:356
+#: libgeda/src/o_text_basic.c:361
 #, c-format
 msgid "Found an unsupported text angle [ %c %d %d %d %d %d %d %d %d ]\n"
 msgstr ""
 "Βρέθηκε μία μη υποστηριζόμενη γωνία κειμένου [ %c %d %d %d %d %d %d %d %d ]\n"
 
-#: libgeda/src/o_text_basic.c:378
+#: libgeda/src/o_text_basic.c:383
 #, c-format
 msgid "Found an unsupported text alignment [ %c %d %d %d %d %d %d %d %d ]\n"
 msgstr ""
 "Βρέθηκε μία μη υποστηριζόμενη στοίχιση κειμένου [ %c %d %d %d %d %d %d %d "
 "%d ]\n"
 
-#: libgeda/src/o_text_basic.c:380
+#: libgeda/src/o_text_basic.c:385
 msgid "Setting alignment to LOWER_LEFT\n"
 msgstr "Ρύθμιση στοίχισης σε LOWER_LEFT\n"
 
-#: libgeda/src/o_text_basic.c:401
+#: libgeda/src/o_text_basic.c:406
 #, c-format
 msgid "Unexpected end-of-file after %d lines"
 msgstr ""
 
-#: libgeda/src/s_clib.c:460
+#: libgeda/src/s_clib.c:465
 #, c-format
 msgid "Library command failed [%s]: %s\n"
 msgstr "Η εντολή της βιβλιοθήκης απέτυχε [%s]: %s\n"
 
-#: libgeda/src/s_clib.c:465
+#: libgeda/src/s_clib.c:470
 #, c-format
 msgid "Library command failed [%s]: Uncaught signal %i.\n"
 msgstr ""
 
-#: libgeda/src/s_clib.c:469
+#: libgeda/src/s_clib.c:474
 #, c-format
 msgid "Library command failed [%s]\n"
 msgstr "Η εντολή της βιβλιοθήκης απέτυχε [%s]\n"
 
-#: libgeda/src/s_clib.c:470
+#: libgeda/src/s_clib.c:475
 #, c-format
 msgid ""
 "Error output was:\n"
@@ -669,31 +679,31 @@ msgstr ""
 "Η έξοδος σφάλματος ήταν:\n"
 "%s\n"
 
-#: libgeda/src/s_clib.c:556
+#: libgeda/src/s_clib.c:561
 #, c-format
 msgid "Library name [%s] already in use.  Using [%s].\n"
 msgstr "Η ονομασία βιβλιοθήκης [%s] χρησιμοποιείται ήδη.  Χρήση [%s].\n"
 
-#: libgeda/src/s_clib.c:593
+#: libgeda/src/s_clib.c:600
 #, c-format
 msgid "Failed to open directory [%s]: %s\n"
 msgstr "Αδυναμία ανοίγματος καταλόγου [%s]: %s\n"
 
-#: libgeda/src/s_clib.c:729
+#: libgeda/src/s_clib.c:740
 #, c-format
 msgid "Failed to scan library [%s]: Scheme function returned non-list\n"
 msgstr ""
 
-#: libgeda/src/s_clib.c:737
+#: libgeda/src/s_clib.c:748
 #, c-format
 msgid "Non-string symbol name while scanning library [%s]\n"
 msgstr ""
 
-#: libgeda/src/s_clib.c:896 libgeda/src/s_clib.c:943
+#: libgeda/src/s_clib.c:906 libgeda/src/s_clib.c:953
 msgid "Cannot add library: name not specified\n"
 msgstr "Αδυναμία προσθήκης βιβλιοθήκης: το όνομα δεν έχει οριστεί\n"
 
-#: libgeda/src/s_clib.c:903
+#: libgeda/src/s_clib.c:913
 #, c-format
 msgid ""
 "Cannot add library [%s]: both 'list' and 'get' commands must be specified.\n"
@@ -701,44 +711,44 @@ msgstr ""
 "Δεν είναι δυνατή η προσθήκη της βιβλιοθήκης [%s]: πρέπει να καθοριστούν οι "
 "εντολές 'list' και 'get'.\n"
 
-#: libgeda/src/s_clib.c:951
+#: libgeda/src/s_clib.c:961
 #, c-format
 msgid "Cannot add Scheme-library [%s]: callbacks must be closures\n"
 msgstr ""
 
-#: libgeda/src/s_clib.c:1078
+#: libgeda/src/s_clib.c:1096
 #, c-format
 msgid "Failed to load symbol from file [%s]: %s\n"
 msgstr "Αποτυχία φορτώματος του συμβόλου από το αρχείο [%s]: %s\n"
 
-#: libgeda/src/s_clib.c:1138
+#: libgeda/src/s_clib.c:1156
 #, c-format
 msgid "Failed to load symbol data [%s] from source [%s]\n"
 msgstr "Αποτυχία φορτώματος των δεδομένων συμβόλου [%s] από την πηγή [%s]\n"
 
-#: libgeda/src/s_clib.c:1380
+#: libgeda/src/s_clib.c:1398
 #, c-format
 msgid "Component [%s] was not found in the component library\n"
 msgstr "Το στοιχείο [%s] δε βρέθηκε στη βιβλιοθήκη στοιχείων\n"
 
-#: libgeda/src/s_clib.c:1386
+#: libgeda/src/s_clib.c:1404
 #, c-format
 msgid "More than one component found with name [%s]\n"
 msgstr "Βρέθηκαν περισσότερα από ένα στοιχεία με το όνομα [%s]\n"
 
-#: libgeda/src/s_color.c:231
+#: libgeda/src/s_color.c:233
 msgid "Color map entry must be a two-element list"
 msgstr ""
 
-#: libgeda/src/s_color.c:239
+#: libgeda/src/s_color.c:241
 msgid "Index in color map entry must be an integer"
 msgstr ""
 
-#: libgeda/src/s_color.c:265
+#: libgeda/src/s_color.c:267
 msgid "Value in color map entry must be #f or a string"
 msgstr ""
 
-#: libgeda/src/s_hierarchy.c:75 libgeda/src/s_hierarchy.c:232
+#: libgeda/src/s_hierarchy.c:75 libgeda/src/s_hierarchy.c:168
 msgid "Schematic not found in source library."
 msgstr ""
 
@@ -746,31 +756,32 @@ msgstr ""
 msgid "Hierarchy contains a circular dependency."
 msgstr ""
 
-#: libgeda/src/s_hierarchy.c:194
-msgid "There are no schematics above the current one!\n"
-msgstr "Δεν υπάρχουν σχεδιαγράμματα πάνω από το τρέχον!\n"
-
-#: libgeda/src/s_hierarchy.c:332
+#: libgeda/src/s_hierarchy.c:268
 #, fuzzy, c-format
 msgid "Failed to descend hierarchy into '%s': %s\n"
 msgstr "Αδυναμία ανοίγματος καταλόγου [%s]: %s\n"
 
-#: libgeda/src/s_page.c:205
+#: libgeda/src/s_page.c:217
 #, c-format
 msgid "s_page_delete: Can't get the real filename of %s."
 msgstr "s_page_delete: Αδυναμία λήψης του πραγματικού ονόματος αρχείου του %s."
 
-#: libgeda/src/s_page.c:216
+#: libgeda/src/s_page.c:228
 #, c-format
 msgid "s_page_delete: Unable to delete backup file %s."
 msgstr "s_page_delete: Αδυναμία διαγραφής αντιγράφου ασφαλείας %s."
 
-#: libgeda/src/s_page.c:491
+#: libgeda/src/s_page.c:403
+#, fuzzy, c-format
+msgid "Failed to change working directory to [%s]: %s\n"
+msgstr "Αδυναμία ανοίγματος καταλόγου [%s]: %s\n"
+
+#: libgeda/src/s_page.c:506
 #, c-format
 msgid "Saved [%s]\n"
 msgstr "Αποθηκεύτηκε [%s]\n"
 
-#: libgeda/src/s_page.c:497
+#: libgeda/src/s_page.c:512
 #, c-format
 msgid "Could NOT save [%s]\n"
 msgstr "ΔΕΝ αποθηκεύτηκε [%s]\n"
@@ -827,23 +838,23 @@ msgstr "Το αντικείμενο ~A είναι γνώρισμα του λάθ
 msgid "Invalid complex angle ~A. Must be 0, 90, 180, or 270 degrees"
 msgstr ""
 
-#: libgeda/src/scheme_complex.c:265 libgeda/src/scheme_page.c:249
+#: libgeda/src/scheme_complex.c:265 libgeda/src/scheme_page.c:252
 msgid "Object ~A is already attached to something"
 msgstr "Το αντικείμενο ~A είναι ήδη συνδεδεμένο με κάτι"
 
-#: libgeda/src/scheme_complex.c:325
+#: libgeda/src/scheme_complex.c:327
 msgid "Object ~A is attached to a different complex"
 msgstr ""
 
-#: libgeda/src/scheme_complex.c:332
+#: libgeda/src/scheme_complex.c:334
 msgid "Object ~A is attached to a page"
 msgstr "Το αντικείμενο ~A είναι συνδεδεμένο με μια σελίδα"
 
-#: libgeda/src/scheme_complex.c:339 libgeda/src/scheme_page.c:301
+#: libgeda/src/scheme_complex.c:341 libgeda/src/scheme_page.c:304
 msgid "Object ~A is attached as an attribute"
 msgstr "Το αντικείμενο ~A είναι συνδεδεμένο ως γνώρισμα"
 
-#: libgeda/src/scheme_complex.c:346 libgeda/src/scheme_page.c:308
+#: libgeda/src/scheme_complex.c:348 libgeda/src/scheme_page.c:311
 msgid "Object ~A has attributes"
 msgstr "Το αντικείμενο ~A έχει γνωρίσματα"
 
@@ -903,60 +914,60 @@ msgstr ""
 msgid "Missing angle parameter for fill style ~A."
 msgstr ""
 
-#: libgeda/src/scheme_object.c:918
+#: libgeda/src/scheme_object.c:919
 msgid "Invalid pin type ~A, must be 'net or 'bus"
 msgstr ""
 
-#: libgeda/src/scheme_object.c:961
+#: libgeda/src/scheme_object.c:962
 msgid "Object ~A has invalid pin type."
 msgstr "Το αντικείμενο ~A έχει μη έγκυρο τύπο ακροδεκτών."
 
-#: libgeda/src/scheme_object.c:1356
+#: libgeda/src/scheme_object.c:1355
 msgid "Invalid text alignment ~A."
 msgstr "Μη έγκυρη στοίχιση κειμένου ~A."
 
-#: libgeda/src/scheme_object.c:1372
+#: libgeda/src/scheme_object.c:1371
 msgid "Invalid text angle ~A. Must be 0, 90, 180, or 270 degrees"
 msgstr "Μη έγκυρη γωνία κειμένου ~A. Πρέπει να είναι 0, 90, 180, ή 270 μοίρες"
 
-#: libgeda/src/scheme_object.c:1391
+#: libgeda/src/scheme_object.c:1390
 msgid "Invalid text name/value visibility ~A."
 msgstr "Μη έγκυρο όνομα/τιμή ορατότητας ~A."
 
-#: libgeda/src/scheme_object.c:1466
+#: libgeda/src/scheme_object.c:1465
 msgid "Text object ~A has invalid text alignment ~A"
 msgstr "Το αντικείμενο κειμένου ~A έχει μη έγκυρη στοίχιση κειμένου ~A"
 
-#: libgeda/src/scheme_object.c:1475
+#: libgeda/src/scheme_object.c:1474
 msgid "Text object ~A has invalid visibility ~A"
 msgstr "Το αντικείμενο κειμένου ~A έχει μη έγκυρη ορατότητα ~A"
 
-#: libgeda/src/scheme_object.c:1485
+#: libgeda/src/scheme_object.c:1484
 msgid "Text object ~A has invalid text attribute visibility ~A"
 msgstr ""
 "Το αντικείμενο κειμένου ~A έχει μη έγκυρο γνώρισμα ορατότητας κειμένου ~A"
 
-#: libgeda/src/scheme_object.c:1526
+#: libgeda/src/scheme_object.c:1525
 msgid "Object ~A is not included in a page."
 msgstr "Το αντικείμενο ~A δεν περιλαμβάνεται σε κάποια σελίδα."
 
-#: libgeda/src/scheme_object.c:1679
+#: libgeda/src/scheme_object.c:1678
 msgid "Path object ~A has invalid element type ~A at index ~A"
 msgstr ""
 
-#: libgeda/src/scheme_object.c:1793
+#: libgeda/src/scheme_object.c:1792
 msgid "Invalid path element type ~A."
 msgstr ""
 
-#: libgeda/src/scheme_object.c:1966
+#: libgeda/src/scheme_object.c:1964
 msgid "Invalid picture angle ~A. Must be 0, 90, 180, or 270 degrees"
 msgstr "Μη έγκυρη γωνία εικόνας ~A. Πρέπει να είναι 0, 90, 180, ή 270 μοίρες"
 
-#: libgeda/src/scheme_page.c:294
+#: libgeda/src/scheme_page.c:297
 msgid "Object ~A is attached to a complex or different page"
 msgstr ""
 
-#: libgeda/src/scheme_page.c:442
+#: libgeda/src/scheme_page.c:444
 msgid "Parse error: ~s"
 msgstr ""
 
@@ -972,6 +983,9 @@ msgstr ""
 #, scheme-format
 msgid "Object ~A is not part of a page"
 msgstr "Το αντικείμενο ~A δεν είναι μέρος καμίας σελίδας"
+
+#~ msgid "There are no schematics above the current one!\n"
+#~ msgstr "Δεν υπάρχουν σχεδιαγράμματα πάνω από το τρέχον!\n"
 
 #~ msgid "Invalid space specified, setting to 100\n"
 #~ msgstr "Καθορίστηκε μη έγκυρο διάστημα, ορισμός σε 100\n"
