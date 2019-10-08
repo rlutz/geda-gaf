@@ -58,6 +58,11 @@ The major components of the gEDA suite are:
   API, exporting schematics into various formats, and
   configuring all the programs of the suite.
 
+`xorn'
+  A commmand-line utility working with the new Python API which
+  converts gEDA files between formats and extracts embedded symbols
+  and pixmaps from a schematic.
+
 Installation
 ============
 
