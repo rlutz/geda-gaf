@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: geda\n"
 "Report-Msgid-Bugs-To: https://bugs.launchpad.net/geda\n"
 "POT-Creation-Date: 2019-10-08 20:20+0200\n"
-"PO-Revision-Date: 2019-09-23 13:35+0200\n"
+"PO-Revision-Date: 2019-10-08 17:15+0200\n"
 "Last-Translator: Roland Lutz\n"
 "Language-Team: gEDA developers <geda-dev@seul.org>\n"
 "Language: de\n"
@@ -166,7 +166,7 @@ msgstr ""
 "\n"
 "%s%s%s%s\n"
 "Diese Optionen wurden in gEDA/gaf 1.9.1 als Ersatz für die entsprechenden "
-"gnetlistrc-Optionen eingeführt, aber in gEDA/gaf 1.9.3 wieder entfernt. Die "
+"gnetlistrc-Optionen eingeführt, aber in gEDA/gaf 1.10.0 wieder entfernt. Die "
 "aktuelle Version von gnetlist benutzt stattdessen gnetlistrc-Optionen:\n"
 "\n"
 "%s%s%s%s\n"
@@ -411,7 +411,7 @@ msgstr "Wert"
 
 #: gschem/src/gschem_compselect_dockable.c:1306
 msgid "Reference symbol (default)"
-msgstr ""
+msgstr "Symbol referenzieren (Voreinstellung)"
 
 #: gschem/src/gschem_compselect_dockable.c:1309
 msgid "Embed symbol in schematic"
@@ -1796,22 +1796,22 @@ msgstr "Ausgabehintergrund"
 #: gschem/src/x_colorcb.c:116
 msgctxt "color"
 msgid "User-defined #1"
-msgstr ""
+msgstr "Benutzerdefiniert 1"
 
 #: gschem/src/x_colorcb.c:117
 msgctxt "color"
 msgid "User-defined #2"
-msgstr ""
+msgstr "Benutzerdefiniert 2"
 
 #: gschem/src/x_colorcb.c:118
 msgctxt "color"
 msgid "User-defined #3"
-msgstr ""
+msgstr "Benutzerdefiniert 3"
 
 #: gschem/src/x_colorcb.c:119
 msgctxt "color"
 msgid "User-defined #4"
-msgstr ""
+msgstr "Benutzerdefiniert 4"
 
 #: gschem/src/x_colorcb.c:130
 msgctxt "color"
@@ -2050,12 +2050,9 @@ msgid "Cannot find any schematics above the current one!\n"
 msgstr "Konnte keinen übergeordneten Schaltplan finden!\n"
 
 #: gschem/src/x_highlevel.c:116
-#, fuzzy, c-format
+#, c-format
 msgid "The file \"%s\" has changed on disk."
-msgstr ""
-"<b>Die Datei „%s“ wurde seit dem letzten Zugriff verändert.</b>\n"
-"\n"
-"%s"
+msgstr "Die Datei „%s“ wurde seit dem letzten Zugriff verändert."
 
 #: gschem/src/x_highlevel.c:118 gschem/src/x_window.c:522
 msgid "Do you want to drop your changes and reload the file?"
@@ -2066,12 +2063,9 @@ msgid "Do you want to reload it?"
 msgstr "Möchten Sie die Datei neu laden?"
 
 #: gschem/src/x_highlevel.c:121
-#, fuzzy, c-format
+#, c-format
 msgid "The file \"%s\" has been created on disk."
-msgstr ""
-"<b>Die Datei „%s“ wurde angelegt.</b>\n"
-"\n"
-"%s"
+msgstr "Die Datei „%s“ wurde zwischenzeitlich angelegt."
 
 #: gschem/src/x_highlevel.c:123 gschem/src/x_window.c:528
 msgid "Do you want to drop your changes and load the file?"
@@ -2108,11 +2102,11 @@ msgstr ""
 #: gschem/src/x_highlevel.c:339
 #, c-format
 msgid "\"%s\" changed since visited or saved."
-msgstr ""
+msgstr "„%s“ wurde seit dem letzten Zugriff verändert."
 
 #: gschem/src/x_highlevel.c:343
 msgid "Save anyway?"
-msgstr ""
+msgstr "Trotzdem speichern?"
 
 #: gschem/src/x_highlevel.c:429
 msgid "Failed to Save All"
