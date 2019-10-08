@@ -203,7 +203,7 @@ warn_if_using_invalid_config ()
     _("The following options are present in your configuration:\n\n%s%s%s%s\n"
       "These options were introduced in gEDA/gaf 1.9.1 as a replacement for "
       "the corresponding gnetlistrc options but were removed again in "
-      "gEDA/gaf 1.9.3. The current version of gnetlist uses gnetlistrc "
+      "gEDA/gaf 1.10.0. The current version of gnetlist uses gnetlistrc "
       "options instead:\n\n%s%s%s%s\n"
       "Please make sure to update your configuration as the options currently "
       "set won't have the desired effect."),
