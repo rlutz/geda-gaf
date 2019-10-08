@@ -7,8 +7,12 @@ Copyright (C) 1998-2019 gEDA Developers
 This file documents important user-visible changes in gEDA/gaf.  For
 more information, please consult the `ChangeLog' file.
 
+
 Notable changes in gEDA/gaf 1.9.3 (upcoming)
 ============================================
+
+General changes
+---------------
 
 * Added the library "xornstorage" and the Python package "gaf" as a
   (currently quite minimal) way to access gEDA/gaf functionality from
@@ -22,6 +26,10 @@ Notable changes in gEDA/gaf 1.9.3 (upcoming)
 * Added experimental XML file format (currently only supported by
   gnetlist and the `xorn' command line utility).
 
+* Objects colors are limited to 21 (up to and including FREESTYLE4).
+  More recent colors added for GUI purposes can be set in colormaps
+  but aren't automatically added to the file format specification.
+
 * The symbol directories "gnetman", "verilog", and "vhdl" are now
   installed to the new location PREFIX/share/gEDA/extra-sym/.  This
   allows adding the default library with "component-library-search".
@@ -32,6 +40,25 @@ Notable changes in gEDA/gaf 1.9.3 (upcoming)
 
 * All tests now use the parallel test harness, speeding up `make
   check' runs considerably when used with multiple jobs (-jN).
+
+* Fixed bugs:
+  - lp-698501   gschem file preview function renders files twice
+  - lp-698524   gnetlist ignores duplicate inout-symbols
+  - lp-698768   No ordering requirement for attribute attach/detach
+  - lp-701637   gschem "Scheme Interaction" window
+  - lp-1266316  gschem exits on color value < 0
+  - lp-1367462  undo messes with the view even though undo panzoom is disabled
+  - lp-1492834  These docked dialogs should remember their size
+  - lp-1496899  gschem: dock window wishlist
+  - lp-1497659  gnetlist -v -g spice-sdb generates bad verbose netlist
+  - lp-1514209  gschem: multiattrib Value textview improvements
+  - lp-1532794  Build fails on missing colors.h
+  - lp-1576918  Memory and file handle leak in libgeda
+  - lp-1590757  partlist3 yields wrong netlist in some cases
+  - lp-1625474  xorn does not build on FreeBSD
+  - lp-1661961  "format not a string literal and no format arguments" warning
+  ...and a lot more which never made it to the bugtracker.
+
 
 gschem changes
 --------------
@@ -106,8 +133,11 @@ gschem changes
   - The file chooser dialog on "Open" and "Save As" is now always
     opened in the current directory.
 
-  - A notification is shown when a file has been modified on disk,
-    offering the user to reload the file.
+  - When opening a file which is already open but has since been
+    changed on disk, the user is asked whether to reload the file.
+
+  - When the currently edited file has been modified on disk, a
+    notification is shown offering the user to reload the file.
 
   - If the user enters a filename with an unusual extension while
     saving, a confirmation dialog is shown.
@@ -151,14 +181,8 @@ gschem changes
   only operate on components, changing the color of attached
   attributes as they used to do with any selected text.
 
-* The current viewport used to be restored on undo/redo regardless of
-  the "undo-panzoom" setting (which prevents pan and zoom operations
-  from being recorded in the undo history).  This turned out to
-  confuse users, so if the setting is enabled, undo/redo now doesn't
-  change the viewport at all.
-
-* The "Light Color Scheme" (V L) selected from the menu now has a true
-  white background.  For compatibility, selecting the "lightbg"
+* The "Light Color Scheme" (V L) selected from the menu now has a
+  truly white background.  For compatibility, selecting the "lightbg"
   colormap in gschemrc loads the old, light-gray color scheme; the new
   color scheme can be selected as "whitebg".
 
@@ -191,6 +215,10 @@ gschem changes
 * Added support for back-annotation from pcb-rnd.
 
 * Double-clicking a subschematic component enters the subschematic.
+
+* Right-clicking in path mode works as expected.
+
+* Pins are allowed to have zero length.
 
 * "File / Revert" only asks for confirmation if the file has been
   modified.
@@ -225,12 +253,41 @@ gschem changes
 
   - "Tools / Select Locked Objects" (T L)
 
-* Adding an attribute, changing the slot of a component, replacing the
-  contents of a picture, and selecting "Pan" from the menu used not to
-  work properly with undo/redo.  This has been fixed.
+* Fixed various issues related to undo/redo:
 
-* "Edit / Undo" and "Edit / Redo" now show the name of the action that
-  will be undone/redone.
+  - The menu items "Edit / Undo" and "Edit / Redo" now show the name
+    of the action that will be undone/redone.
+
+  - The current viewport used to be restored on undo/redo regardless
+    of the "undo-panzoom" setting (which prevents pan and zoom
+    operations from being recorded in the undo history).  This turned
+    out to confuse users, so if the setting is enabled, undo/redo now
+    doesn't change the viewport at all.
+
+  - The default mode ("undo-panzoom" disabled) now works correctly.
+
+  - After undoing the first action which changed a page, the page will
+    be considered "unchanged" again.
+
+  - Adding an attribute, changing the slot of a component, replacing
+    the contents of a picture, and selecting "Pan" from the menu used
+    not to be correctly un-doable.  This has been fixed.
+
+  - Selecting a picture to be added doesn't cause the page to be
+    treated as changed any more.
+
+  - "Object / Update Symbol" can't be undone with the current undo/
+    redo system, so it isn't listed as something that can be undone
+    any more.
+
+  - Several actions (attach/detach attribute, text actions, embed/
+    unembed, lock/unlock component, show/hide specific text) changed
+    the undo history even in the case that they didn't have any
+    effect.  This has been fixed.
+
+  - Several actions (attach/detach, embed/unembed) didn't update the
+    "changed" flag correctly; this has been fixed.
+
 
 gnetlist changes
 ----------------
@@ -250,6 +307,10 @@ gnetlist changes
 
   - In case there should be any problems with the refactored codebase,
     the "old" gnetlist is still available as "gnetlist-legacy".
+
+* If gnetlist is invoked with the `pcbfwd' backend or the new option
+  `--report-gui', errors and warnings are displayed in a GUI dialog
+  instead of printing them to stderr.
 
 * There are new semantics for power and I/O port symbols:
 
@@ -273,6 +334,14 @@ gnetlist changes
   "unnamed-netname", and "unnamed-busname" are once again configured
   via gnetlistrc, making them consistent with the refdes=, net=, and
   netname= mangling options.
+
+* Duplicate I/O ports in subschematics and duplicate I/O pins in
+  subschematic symbols are now treated correctly.
+
+* Added a netlist backend for pcb-rnd's tEDAx format.
+
+* Added backends which dump the netlist in various generic formats
+  (dumpindent, dumpjson, dumplihata, dumptext, dumpxml).
 
 
 Notable changes in gEDA/gaf 1.9.2.1p
