@@ -1600,7 +1600,7 @@ multiattrib_callback_value_key_pressed (GtkWidget *widget,
       retval = FALSE;
     } else {
       /* change focus and stop propagation */
-      g_signal_emit_by_name (multiattrib,
+      g_signal_emit_by_name (GSCHEM_DOCKABLE (multiattrib)->widget,
                              "move_focus",
                              (event->state & GDK_SHIFT_MASK) ?
                              GTK_DIR_TAB_BACKWARD : GTK_DIR_TAB_FORWARD);
