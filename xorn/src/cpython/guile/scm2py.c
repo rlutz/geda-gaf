@@ -21,7 +21,7 @@ PyObject *scm2py(SCM value)
 {
 	if (value == NULL)
 		return NULL;
-	if (scm_is_eq (value, SCM_UNSPECIFIED)) {
+	if (scm_is_eq(value, SCM_UNSPECIFIED)) {
 		Py_INCREF(Py_None);
 		return Py_None;
 	}
@@ -34,7 +34,7 @@ PyObject *scm2py(SCM value)
 		Py_INCREF(result);
 		return result;
 	}
-	if (scm_is_eq (value, SCM_EOL))
+	if (scm_is_null(value))
 		return PyTuple_New(0);
 	if (scm_is_string(value)) {
 		size_t len = 0;

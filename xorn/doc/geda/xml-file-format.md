@@ -438,9 +438,6 @@ Does not have any attributes.
 18|<tt>freestyle2</tt>
 19|<tt>freestyle3</tt>
 20|<tt>freestyle4</tt>
-21|<tt>junction</tt>
-22|<tt>mesh-grid-major</tt>
-23|<tt>mesh-grid-minor</tt>
 
 --------------------------------------------------------------------------------
 

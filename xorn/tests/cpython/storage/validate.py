@@ -179,8 +179,8 @@ def check_arc():
     data = xorn.storage.Arc()
     data.color = -1;                    test(data, 1)
     data.color = 0;                     test(data, 0)
-    data.color = 23;                    test(data, 0)
-    data.color = 24;                    test(data, 1)
+    data.color = 20;                    test(data, 0)
+    data.color = 21;                    test(data, 1)
 
     check_line_attr(xorn.storage.Arc)
 
@@ -212,8 +212,8 @@ def check_box():
     data = xorn.storage.Box()
     data.color = -1;                    test(data, 1)
     data.color = 0;                     test(data, 0)
-    data.color = 23;                    test(data, 0)
-    data.color = 24;                    test(data, 1)
+    data.color = 20;                    test(data, 0)
+    data.color = 21;                    test(data, 1)
 
     check_line_attr(xorn.storage.Box)
     check_fill_attr(xorn.storage.Box)
@@ -240,8 +240,8 @@ def check_circle():
     data = xorn.storage.Circle()
     data.color = -1;                    test(data, 1)
     data.color = 0;                     test(data, 0)
-    data.color = 23;                    test(data, 0)
-    data.color = 24;                    test(data, 1)
+    data.color = 20;                    test(data, 0)
+    data.color = 21;                    test(data, 1)
 
     check_line_attr(xorn.storage.Circle)
     check_fill_attr(xorn.storage.Circle)
@@ -294,8 +294,8 @@ def check_line():
     data = xorn.storage.Line()
     data.color = -1;                    test(data, 1)
     data.color = 0;                     test(data, 0)
-    data.color = 23;                    test(data, 0)
-    data.color = 24;                    test(data, 1)
+    data.color = 20;                    test(data, 0)
+    data.color = 21;                    test(data, 1)
 
     check_line_attr(xorn.storage.Line)
 
@@ -327,8 +327,8 @@ def check_net():
     data = xorn.storage.Net()
     data.color = -1;                    test(data, 1)
     data.color = 0;                     test(data, 0)
-    data.color = 23;                    test(data, 0)
-    data.color = 24;                    test(data, 1)
+    data.color = 20;                    test(data, 0)
+    data.color = 21;                    test(data, 1)
 
     data = xorn.storage.Net()
     data.is_inverted = False;           test(data, 0)
@@ -341,8 +341,8 @@ def check_path():
     data = xorn.storage.Path()
     data.color = -1;                    test(data, 1)
     data.color = 0;                     test(data, 0)
-    data.color = 23;                    test(data, 0)
-    data.color = 24;                    test(data, 1)
+    data.color = 20;                    test(data, 0)
+    data.color = 21;                    test(data, 1)
 
     check_line_attr(xorn.storage.Path)
     check_fill_attr(xorn.storage.Path)
@@ -395,8 +395,8 @@ def check_text():
     data = xorn.storage.Text()
     data.color = -1;                    test(data, 1)
     data.color = 0;                     test(data, 0)
-    data.color = 23;                    test(data, 0)
-    data.color = 24;                    test(data, 1)
+    data.color = 20;                    test(data, 0)
+    data.color = 21;                    test(data, 1)
 
     data = xorn.storage.Text()
     data.text_size = -1;                test(data, 1)

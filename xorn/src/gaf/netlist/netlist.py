@@ -94,7 +94,8 @@ class Netlist:
                        refdes_mangle_func = NotImplemented,
                        netname_mangle_func = NotImplemented,
                        default_net_name = 'unnamed_net',
-                       default_bus_name = 'unnamed_bus'):
+                       default_bus_name = 'unnamed_bus',
+                       show_error_coordinates = False):
         ## Aggregated list of all components in the netlist.
         self.components = []
         ## List of sheets for the schematics named on the command line.
@@ -130,6 +131,9 @@ class Netlist:
         self.flat_package_namespace = flat_package_namespace
         ## Function which was used for mangling package/component refdes's.
         self.refdes_mangle_func = refdes_mangle_func
+
+        ## Whether to print coordinate hints for errors.
+        self.show_error_coordinates = show_error_coordinates
 
         def load_schematic(filename):
             if filename in self.schematics_by_filename:

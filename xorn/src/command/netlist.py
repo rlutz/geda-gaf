@@ -17,7 +17,7 @@
 # along with this program; if not, write to the Free Software Foundation,
 # Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
-import getopt, gettext, os, sys
+import cStringIO, getopt, gettext, os, sys
 from gettext import gettext as _
 
 import xorn.command
@@ -29,6 +29,10 @@ import gaf.netlist.netlist
 import gaf.netlist.slib
 
 APPEND, PREPEND = xrange(2)
+
+report_gui_enabled = False
+report_gui_buf = None
+report_gui_stderr = None
 
 def parse_bool(value):
     if value in ['disabled', 'no', 'n', 'off', 'false', '0']:
@@ -201,6 +205,13 @@ Ignoring errors:
 """))
     sys.stdout.write("\n")
     sys.stdout.write(_("""\
+Reporting errors:
+  --report-gui
+  --show-error-coordinates
+  --dont-show-error-coordinates             [default]
+"""))
+    sys.stdout.write("\n")
+    sys.stdout.write(_("""\
 Miscellaneous options:
       --list-backends     print a list of available netlist backends
   -h, --help              help; this message
@@ -237,7 +248,74 @@ def version():
     sys.exit(0)
 
 
+def enable_report_gui():
+    global report_gui_enabled
+    global report_gui_buf
+    global report_gui_stderr
+
+    if report_gui_enabled:
+        return
+
+    sys.stderr.write(_("Redirecting warnings and errors to GUI dialog...\n"))
+    sys.stderr.flush()
+
+    report_gui_enabled = True
+    report_gui_stderr = sys.stderr
+    report_gui_buf = cStringIO.StringIO()
+    sys.stderr = report_gui_buf
+
+def daemonize(fun):
+    try:
+        pid = os.fork()
+        if pid > 0:
+            # parent process: continue on
+            return
+    except OSError as e:
+        sys.stderr.write("fork: %s\n" % e.strerror)
+        # can't fork: just call fun() un-daemonized and continue on
+        fun()
+        return
+
+    ### Don't return from here on! ###
+
+    try:
+        os.chdir('/')
+        os.setsid()
+        try:
+            pid = os.fork()
+            if pid > 0:
+                # exit from intermediate process
+                os._exit(0)
+        except OSError, e:
+            sys.stderr.write("fork: %s\n" % e.strerror)
+            # can't fork second time: call fun() in intermediate process
+
+        fun()
+    finally:
+        os._exit(0)
+
 def main():
+    try:
+        inner_main()
+        sys.exit(0)
+    except SystemExit as e:
+        if report_gui_enabled:
+            sys.stderr = report_gui_stderr
+            log = report_gui_buf.getvalue()
+            report_gui_buf.close()
+            import gaf.netlist.reportgui
+            daemonize(
+                lambda: gaf.netlist.reportgui.report_messages(e.code, log))
+        raise
+    except KeyboardInterrupt:
+        raise
+    except:
+        if report_gui_enabled:
+            import gaf.netlist.reportgui
+            daemonize(lambda: gaf.netlist.reportgui.report_crash())
+        raise
+
+def inner_main():
     # TODO: this is totally hacky, re-do this correctly
     dirname = os.path.dirname(__file__)
     if dirname.endswith('/command'):
@@ -312,6 +390,7 @@ def main():
     netname_separator = '/'
 
     ignore_errors = False
+    show_error_coordinates = False
 
     list_backends = False
 
@@ -342,6 +421,8 @@ def main():
              'hierarchy-netname-order=',
 
              'ignore-errors', 'dont-ignore-errors',
+             'report-gui',
+             'show-error-coordinates', 'dont-show-error-coordinates',
 
              'list-backends', 'help', 'version'])
     except getopt.GetoptError as e:
@@ -425,6 +506,14 @@ def main():
         elif option == '--dont-ignore-errors':
             ignore_errors = False
 
+        elif option == '--report-gui':
+            enable_report_gui()
+
+        elif option == '--show-error-coordinates':
+            show_error_coordinates = True
+        elif option == '--dont-show-error-coordinates':
+            show_error_coordinates = False
+
         elif option == '--list-backends':
             list_backends = True
         elif option == '-h' or option == '--help':
@@ -466,7 +555,8 @@ def main():
             mangle(basename, sheet, refdes_separator, refdes_order,
                                     netname_separator, netname_order),
         default_net_name = default_net_name,
-        default_bus_name = default_bus_name)
+        default_bus_name = default_bus_name,
+        show_error_coordinates = show_error_coordinates)
 
     if netlist.failed and not ignore_errors:
         # there were errors during netlist creation
