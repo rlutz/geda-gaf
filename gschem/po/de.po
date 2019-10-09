@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: geda\n"
 "Report-Msgid-Bugs-To: https://bugs.launchpad.net/geda\n"
 "POT-Creation-Date: 2019-10-08 20:20+0200\n"
-"PO-Revision-Date: 2019-10-08 17:15+0200\n"
+"PO-Revision-Date: 2019-10-09 20:27+0200\n"
 "Last-Translator: Roland Lutz\n"
 "Language-Team: gEDA developers <geda-dev@seul.org>\n"
 "Language: de\n"
@@ -149,7 +149,7 @@ msgid "Found invalid gschem window smob ~S"
 msgstr ""
 
 #: gschem/src/gschem.c:203
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The following options are present in your configuration:\n"
 "\n"
