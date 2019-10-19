@@ -346,7 +346,7 @@ process_command (gchar *buf)
     if (count != 1)
       fprintf (stderr, "Command usage: help\n");
     else
-      fprintf (stderr, help_string);
+      fprintf (stderr, "%s", help_string);
   }
 
   else
