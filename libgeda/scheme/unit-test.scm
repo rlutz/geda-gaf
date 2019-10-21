@@ -44,6 +44,7 @@
   #:use-module (ice-9 pretty-print)
   #:export (assert-true
             assert-equal
+            assert-same-strings
             %assert-thrown
             tests-passed?
             report-tests
@@ -71,6 +72,15 @@
       (throw 'test-failed-exception
              (simple-format #f "  assert-equal: expected: ~S got: ~S"
                             expected result))))
+
+(define (assert-same-strings expected result)
+  (let ((sorted-expected (sort-list expected string<?))
+        (sorted-result (sort-list result string<?)))
+    (if (equal? sorted-expected sorted-result)
+        #t
+        (throw 'test-failed-exception
+               (simple-format #f "  assert-same-strings: expected: ~S got: ~S"
+                              sorted-expected sorted-result)))))
 
 (define (%assert-thrown key thunk)
   (catch key
