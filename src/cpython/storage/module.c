@@ -443,7 +443,7 @@ static PyMethodDef methods[] = {
 		    "a selection containing the objects contained in one "
 		    "given selection, but not the other") },
 	{ "selection_is_empty", (PyCFunction)selection_is_empty, METH_KEYWORDS,
-	  PyDoc_STR("selection_is_empty(rev, sel) -> Selection -- "
+	  PyDoc_STR("selection_is_empty(rev, sel) -> bool -- "
 		    "whether a selection is empty in a given revision") },
 	{ "object_is_selected", (PyCFunction)object_is_selected, METH_KEYWORDS,
 	  PyDoc_STR("object_is_selected(rev, sel, ob) -> bool -- "
