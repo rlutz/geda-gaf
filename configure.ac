@@ -44,6 +44,11 @@ AC_PROG_CC
 AC_PROG_CPP
 m4_ifdef([AM_PROG_AR], [AM_PROG_AR]) dnl Workaround for Automake 1.11
 
+AC_PROG_CC_STDC
+if test "X$ac_cv_prog_cc_stdc" = "Xno"; then
+  AC_MSG_ERROR([C compiler cannot compile ISO Standard C])
+fi
+
 AC_LIBTOOL_WIN32_DLL
 AC_DISABLE_STATIC
 AC_PROG_LIBTOOL
