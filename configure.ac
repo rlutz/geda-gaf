@@ -78,7 +78,7 @@ PKG_PROG_PKG_CONFIG
 
 AX_CHECK_GUILE([2.0.0])
 
-PKG_CHECK_MODULES(GLIB, [glib-2.0 >= 2.20.0], ,
+PKG_CHECK_MODULES(GLIB, [glib-2.0 >= 2.41.1], ,
   AC_MSG_ERROR([GLib 2.20.0 or later is required.]))
 
 PKG_CHECK_MODULES(GIO, [gio-2.0 >= 2.20.0], ,
