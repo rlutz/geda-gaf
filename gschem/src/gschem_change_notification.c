@@ -188,7 +188,7 @@ update_visibility (GschemChangeNotification *chnot)
 
 
 static void
-fam_event (const gchar *path, enum FAMCodes code, gpointer user_data)
+fam_event (const gchar *path, unsigned int code, gpointer user_data)
 {
   GschemChangeNotification *chnot = GSCHEM_CHANGE_NOTIFICATION (user_data);
 

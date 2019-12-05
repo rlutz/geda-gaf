@@ -31,9 +31,9 @@ struct request {
   gboolean end_exist;  /* whether a FAMEndExist event has been received */
 
   gpointer user_data;
-  void (*exists_event) (const gchar *path, enum FAMCodes code,
+  void (*exists_event) (const gchar *path, unsigned int code,
                         gpointer user_data);
-  void (*regular_event) (const gchar *path, enum FAMCodes code,
+  void (*regular_event) (const gchar *path, unsigned int code,
                          gpointer user_data);
 };
 
@@ -88,9 +88,9 @@ x_fam_free ()
 
 gpointer
 x_fam_monitor (const gchar *path,
-               void (*exists_event) (const gchar *path, enum FAMCodes code,
+               void (*exists_event) (const gchar *path, unsigned int code,
                                      gpointer user_data),
-               void (*regular_event) (const gchar *path, enum FAMCodes code,
+               void (*regular_event) (const gchar *path, unsigned int code,
                                       gpointer user_data),
                gpointer user_data)
 {

@@ -399,10 +399,9 @@ gboolean x_event_get_pointer_position (GschemToplevel *w_current, gboolean snapp
 void x_compselect_deselect (GschemToplevel *w_current);
 void x_compselect_select_previous_symbol (GschemToplevel *w_current);
 /* x_fam.c */
-enum FAMCodes;
 void x_fam_init (void);
 void x_fam_free (void);
-gpointer x_fam_monitor (const gchar *path, void (*exists_event) (const gchar *path, enum FAMCodes code, gpointer user_data), void (*regular_event) (const gchar *path, enum FAMCodes code, gpointer user_data), gpointer user_data);
+gpointer x_fam_monitor (const gchar *path, void (*exists_event) (const gchar *path, unsigned int code, gpointer user_data), void (*regular_event) (const gchar *path, unsigned int code, gpointer user_data), gpointer user_data);
 void x_fam_unmonitor (gpointer handle);
 /* x_fileselect.c */
 PAGE *x_fileselect_create (GschemToplevel *w_current, const gchar *dirname, const gchar *basename);
