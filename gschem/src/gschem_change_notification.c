@@ -67,7 +67,10 @@
 
 #include <sys/types.h>
 #include <sys/stat.h>
+
+#ifdef HAVE_LIBFAM
 #include <fam.h>
+#endif
 
 #include "gschem.h"
 #include "../include/gschem_change_notification.h"
