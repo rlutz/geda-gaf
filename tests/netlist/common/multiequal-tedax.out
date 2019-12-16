@@ -1,0 +1,22 @@
+tEDAx v1
+begin netlist v1 netlist
+value A1 abotol=1e-11
+device A1 options
+value R1 20
+device R1 RESISTOR
+pinname R1 2 2
+pinidx R1 2 2
+pinname R1 1 1
+pinidx R1 1 1
+footprint V1 none
+value V1 DC\ 1V
+device V1 VOLTAGE_SOURCE
+pinname V1 1 +
+pinidx V1 1 1
+pinname V1 2 -
+pinidx V1 2 2
+conn unnamed_net1 R1 2
+conn unnamed_net1 V1 1
+conn GND R1 1
+conn GND V1 2
+end netlist

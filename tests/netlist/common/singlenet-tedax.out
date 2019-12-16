@@ -1,0 +1,33 @@
+tEDAx v1
+begin netlist v1 netlist
+footprint U100 DIP14
+device U100 7400
+pinname U100 6 Y
+pinidx U100 6 3
+pinname U100 5 B
+pinidx U100 5 2
+pinname U100 4 A
+pinidx U100 4 1
+pinname U100 3 Y
+pinidx U100 3 3
+pinname U100 2 B
+pinidx U100 2 2
+pinname U100 1 A
+pinidx U100 1 1
+pinname U100 8 Y
+pinidx U100 8 3
+pinname U100 10 B
+pinidx U100 10 2
+pinname U100 9 A
+pinidx U100 9 1
+conn SING_N U100 6
+conn SING_N U100 5
+conn SING_N U100 4
+conn SING_N U100 8
+conn SING_N U100 10
+conn SING_N U100 9
+conn Vcc U100 14
+conn GND U100 7
+conn SING_N_2 U100 3
+conn SING_N_2 U100 1
+end netlist

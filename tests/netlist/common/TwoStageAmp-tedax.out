@@ -1,0 +1,167 @@
+tEDAx v1
+begin netlist v1 netlist
+device Q1 NPN_TRANSISTOR
+pinidx Q1 3 1
+pinidx Q1 1 3
+pinidx Q1 2 2
+value R5 10
+device R5 RESISTOR
+pinname R5 2 2
+pinidx R5 2 2
+pinname R5 1 1
+pinidx R5 1 1
+value R1 28K
+device R1 RESISTOR
+pinname R1 2 2
+pinidx R1 2 2
+pinname R1 1 1
+pinidx R1 1 1
+value R2 2K
+device R2 RESISTOR
+pinname R2 2 2
+pinidx R2 2 2
+pinname R2 1 1
+pinidx R2 1 1
+value RE1 100
+device RE1 RESISTOR
+pinname RE1 2 2
+pinidx RE1 2 2
+pinname RE1 1 1
+pinidx RE1 1 1
+value RC2 1K
+device RC2 RESISTOR
+pinname RC2 2 2
+pinidx RC2 2 2
+pinname RC2 1 1
+pinidx RC2 1 1
+value RL 100K
+device RL RESISTOR
+pinname RL 2 2
+pinidx RL 2 2
+pinname RL 1 1
+pinidx RL 1 1
+value Cout 2.2uF
+device Cout CAPACITOR
+pinname Cout 1 1
+pinidx Cout 1 1
+pinname Cout 2 2
+pinidx Cout 2 2
+value CE1 1pF
+device CE1 CAPACITOR
+pinname CE1 1 1
+pinidx CE1 1 1
+pinname CE1 2 2
+pinidx CE1 2 2
+footprint Vinput none
+value Vinput DC\ 1.6V\ AC\ 10MV\ SIN(0\ 1MV\ 1KHZ)
+device Vinput vsin
+pinname Vinput 1 +
+pinidx Vinput 1 1
+pinname Vinput 2 -
+pinidx Vinput 2 2
+footprint VCC none
+value VCC DC\ 15V
+device VCC VOLTAGE_SOURCE
+pinname VCC 1 +
+pinidx VCC 1 1
+pinname VCC 2 -
+pinidx VCC 2 2
+device A1 model
+device A2 include
+value A3 .options\ TEMP=25
+device A3 directive
+value C1 2.2uF
+device C1 CAPACITOR
+pinname C1 1 1
+pinidx C1 1 1
+pinname C1 2 2
+pinidx C1 2 2
+device Q2 NPN_TRANSISTOR
+pinidx Q2 3 1
+pinidx Q2 1 3
+pinidx Q2 2 2
+value RC1 3.3K
+device RC1 RESISTOR
+pinname RC1 2 2
+pinidx RC1 2 2
+pinname RC1 1 1
+pinidx RC1 1 1
+value RE2 100
+device RE2 RESISTOR
+pinname RE2 2 2
+pinidx RE2 2 2
+pinname RE2 1 1
+pinidx RE2 1 1
+value CE2 1pF
+device CE2 CAPACITOR
+pinname CE2 1 1
+pinidx CE2 1 1
+pinname CE2 2 2
+pinidx CE2 2 2
+value R8 1
+device R8 RESISTOR
+pinname R8 2 2
+pinidx R8 2 2
+pinname R8 1 1
+pinidx R8 1 1
+value R3 28K
+device R3 RESISTOR
+pinname R3 2 2
+pinidx R3 2 2
+pinname R3 1 1
+pinidx R3 1 1
+value R4 2.8K
+device R4 RESISTOR
+pinname R4 2 2
+pinidx R4 2 2
+pinname R4 1 1
+pinidx R4 1 1
+value C2 2.2uF
+device C2 CAPACITOR
+pinname C2 1 1
+pinidx C2 1 1
+pinname C2 2 2
+pinidx C2 2 2
+conn Vcoll1 Q1 3
+conn Vcoll1 RC1 1
+conn Vcoll1 R8 1
+conn Vem1 Q1 1
+conn Vem1 RE1 2
+conn Vem1 CE1 2
+conn Vbase1 Q1 2
+conn Vbase1 R1 1
+conn Vbase1 R2 2
+conn Vbase1 C1 2
+conn unnamed_net1 R5 2
+conn unnamed_net1 C1 1
+conn Vin R5 1
+conn Vin Vinput 1
+conn Vcc R1 2
+conn Vcc RC2 2
+conn Vcc VCC 1
+conn Vcc RC1 2
+conn Vcc R3 2
+conn GND R2 1
+conn GND RE1 1
+conn GND RL 1
+conn GND CE1 1
+conn GND Vinput 2
+conn GND VCC 2
+conn GND RE2 1
+conn GND CE2 1
+conn GND R4 1
+conn VColl2 RC2 1
+conn VColl2 Cout 1
+conn VColl2 Q2 3
+conn Vout RL 2
+conn Vout Cout 2
+conn Vem2 Q2 1
+conn Vem2 RE2 2
+conn Vem2 CE2 2
+conn Vbase2 Q2 2
+conn Vbase2 R3 1
+conn Vbase2 R4 2
+conn Vbase2 C2 2
+conn unnamed_net2 R8 2
+conn unnamed_net2 C2 1
+end netlist
