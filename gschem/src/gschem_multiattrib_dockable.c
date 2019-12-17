@@ -2298,7 +2298,7 @@ multiattrib_create_widget (GschemDockable *dockable)
   column = GTK_TREE_VIEW_COLUMN (
                                  g_object_new (GTK_TYPE_TREE_VIEW_COLUMN,
                                                /* GtkTreeViewColumn */
-                                               "title", _("Vis?"),
+                                               "title", _("Vis"),
                                                NULL));
   gtk_tree_view_column_pack_start (column, renderer, TRUE);
   gtk_tree_view_column_set_cell_data_func (column, renderer,
