@@ -353,19 +353,6 @@ void i_update_toolbar(GschemToplevel *w_current)
 }
 
 
-/*! \brief Update sensitivity of the Edit/Paste menu item
- *
- *  \par Function Description
- *  Asynchronous callback to update sensitivity of the Edit/Paste
- *  menu item.
- */
-static void clipboard_usable_cb (int usable, void *userdata)
-{
-  GschemToplevel *w_current = userdata;
-  gschem_action_set_sensitive (action_clipboard_paste, usable, w_current);
-}
-
-
 /*! \brief Update sensitivity of relevant menu items
  *
  *  \par Function Description
@@ -378,8 +365,6 @@ void i_update_menus(GschemToplevel *w_current)
   TOPLEVEL *toplevel = gschem_toplevel_get_toplevel (w_current);
   g_return_if_fail (w_current != NULL);
   g_return_if_fail (toplevel->page_current != NULL);
-
-  x_clipboard_query_usable (w_current, clipboard_usable_cb, w_current);
 
   gboolean sel_object = FALSE;          /* any object */
   gboolean sel_editable = FALSE;        /* object that can be edited via E E */

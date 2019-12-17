@@ -343,7 +343,7 @@ void x_basic_warp_cursor(GtkWidget *widget, gint x, gint y);
 /* x_clipboard.c */
 void x_clipboard_init (GschemToplevel *w_current);
 void x_clipboard_finish (GschemToplevel *w_current);
-void x_clipboard_query_usable (GschemToplevel *w_current, void (*callback) (int, void *), void *userdata);
+void x_clipboard_update_menus (GschemToplevel *w_current);
 gboolean x_clipboard_set (GschemToplevel *w_current, const GList *object_list);
 GList *x_clipboard_get (GschemToplevel *w_current);
 /* x_color.c */
