@@ -249,8 +249,14 @@ x_hierarchy_up (GschemToplevel *w_current)
     return FALSE;
   }
 
-  if (!x_highlevel_close_page (w_current, page))
-    return FALSE;
+  if (!page->is_untitled) {
+    gchar *lowercase_filename = g_ascii_strdown (page->page_filename, -1);
+    gboolean is_symbol = g_str_has_suffix (lowercase_filename, ".sym");
+    g_free (lowercase_filename);
+
+    if (is_symbol && !x_highlevel_close_page (w_current, page))
+      return FALSE;
+  }
 
   x_window_set_current_page (w_current, parent);
   return TRUE;
