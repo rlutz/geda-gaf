@@ -1427,6 +1427,74 @@ multiattrib_callback_button_pressed (GtkWidget *widget,
   return ret;
 }
 
+
+/*! \todo Finish function documentation
+ *  \brief
+ *  \par Function Description
+ *
+ */
+static gboolean
+multiattrib_callback_query_tooltip (GtkWidget *widget,
+                                    gint x, gint y, gboolean keyboard_mode,
+                                    GtkTooltip *tooltip, gpointer user_data)
+{
+  GschemMultiattribDockable *multiattrib =
+    GSCHEM_MULTIATTRIB_DOCKABLE (user_data);
+
+  GtkTreeView *tree_view = GTK_TREE_VIEW (widget);
+  GtkTreePath *path = NULL;
+  GtkTreeViewColumn *column = NULL;
+
+  if (keyboard_mode)
+    gtk_tree_view_get_cursor (tree_view, &path, &column);
+  else {
+    gtk_tree_view_convert_widget_to_bin_window_coords (tree_view, x, y,
+                                                       &x, &y);
+    if (y < 0 ? !gtk_tree_view_get_path_at_pos (tree_view, x, 0,
+                                                NULL, &column, NULL, NULL)
+              : !gtk_tree_view_get_path_at_pos (tree_view, x, y,
+                                                &path, &column, NULL, NULL))
+      return FALSE;
+  }
+
+  if (path == NULL) {
+    /* show tooltip for column header */
+
+    if (column == multiattrib->column_visible)
+      gtk_tooltip_set_markup (tooltip, _("Is the attribute visible?"));
+    else if (column == multiattrib->column_show_name)
+      gtk_tooltip_set_markup (tooltip, _("Show attribute name?"));
+    else if (column == multiattrib->column_show_value)
+      gtk_tooltip_set_markup (tooltip, _("Show attribute value?"));
+    else
+      return FALSE;
+
+  } else {
+    /* show tooltip for cell */
+
+    GtkTreeModel *model;
+    GtkTreeIter iter;
+    gchar *value;
+
+    if (column != multiattrib->column_value)
+      return FALSE;
+
+    model = gtk_tree_view_get_model (tree_view);
+    gtk_tree_model_get_iter (model, &iter, path);
+    gtk_tree_model_get (model, &iter, COLUMN_VALUE, &value, -1);
+
+    gtk_tooltip_set_markup (tooltip, value);
+    gtk_tree_view_set_tooltip_row (tree_view, tooltip, path);
+
+    g_free (value);
+    gtk_tree_path_free (path);
+
+  }
+
+  return TRUE;
+}
+
+
 /*! \todo Finish function documentation
  *  \brief
  *  \par Function Description
@@ -2208,6 +2276,11 @@ multiattrib_create_widget (GschemDockable *dockable)
                     "popup-menu",
                     G_CALLBACK (multiattrib_callback_popup_menu),
                     multiattrib);
+  g_signal_connect (treeview,
+                    "query-tooltip",
+                    G_CALLBACK (multiattrib_callback_query_tooltip),
+                    multiattrib);
+  gtk_widget_set_has_tooltip (GTK_WIDGET (treeview), TRUE);
   selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (treeview));
   gtk_tree_selection_set_mode (selection,
                                GTK_SELECTION_SINGLE);
