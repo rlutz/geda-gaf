@@ -495,9 +495,8 @@ x_multiattrib_edit_attribute (GschemToplevel *w_current, OBJECT *object)
   /* invoke the editor */
   path = gtk_tree_model_get_path (multiattrib->store, &iter);
   gtk_widget_grab_focus (GTK_WIDGET (multiattrib->treeview));
-  gtk_tree_view_set_cursor (
-    multiattrib->treeview, path,
-    gtk_tree_view_get_column (multiattrib->treeview, 1), TRUE);
+  gtk_tree_view_set_cursor (multiattrib->treeview, path,
+                            multiattrib->column_value, TRUE);
   gtk_tree_path_free (path);
 }
 
@@ -1361,7 +1360,7 @@ multiattrib_edit_cell_at_pos (GschemMultiattribDockable *multiattrib,
   gtk_tree_path_free (path);
 
   /* don't promote attributes when trying to edit columns other than "value" */
-  if (column != gtk_tree_view_get_column (multiattrib->treeview, 1))
+  if (column != multiattrib->column_value)
     return;
 
   /* see if there's already a matching attached attribute */
@@ -2226,6 +2225,7 @@ multiattrib_create_widget (GschemDockable *dockable)
                     "edited",
                     G_CALLBACK (multiattrib_callback_edited_name),
                     multiattrib);
+  multiattrib->column_name =
   column = GTK_TREE_VIEW_COLUMN (
                                  g_object_new (GTK_TYPE_TREE_VIEW_COLUMN,
                                                /* GtkTreeViewColumn */
@@ -2250,6 +2250,7 @@ multiattrib_create_widget (GschemDockable *dockable)
                     "edited",
                     G_CALLBACK (multiattrib_callback_edited_value),
                     multiattrib);
+  multiattrib->column_value =
   column = GTK_TREE_VIEW_COLUMN (
                                  g_object_new (GTK_TYPE_TREE_VIEW_COLUMN,
                                                /* GtkTreeViewColumn */
@@ -2270,6 +2271,7 @@ multiattrib_create_widget (GschemDockable *dockable)
                     "toggled",
                     G_CALLBACK (multiattrib_callback_toggled_visible),
                     multiattrib);
+  multiattrib->column_visible =
   column = GTK_TREE_VIEW_COLUMN (
                                  g_object_new (GTK_TYPE_TREE_VIEW_COLUMN,
                                                /* GtkTreeViewColumn */
@@ -2288,6 +2290,7 @@ multiattrib_create_widget (GschemDockable *dockable)
                     "toggled",
                     G_CALLBACK (multiattrib_callback_toggled_show_name),
                     multiattrib);
+  multiattrib->column_show_name =
   column = GTK_TREE_VIEW_COLUMN (
                                  g_object_new (GTK_TYPE_TREE_VIEW_COLUMN,
                                                /* GtkTreeViewColumn */
@@ -2306,6 +2309,7 @@ multiattrib_create_widget (GschemDockable *dockable)
                     "toggled",
                     G_CALLBACK (multiattrib_callback_toggled_show_value),
                     multiattrib);
+  multiattrib->column_show_value =
   column = GTK_TREE_VIEW_COLUMN (
                                  g_object_new (GTK_TYPE_TREE_VIEW_COLUMN,
                                                /* GtkTreeViewColumn */

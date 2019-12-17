@@ -57,6 +57,9 @@ struct _GschemMultiattribDockable {
   GtkTreeView    *treeview;
   GtkTreeModel   *store;
 
+  GtkTreeViewColumn *column_name, *column_value, *column_visible,
+                    *column_show_name, *column_show_value;
+
   GtkWidget      *show_inherited;
   GtkCombo       *combo_name;
   GtkTextView    *textview_value;
