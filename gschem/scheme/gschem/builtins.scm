@@ -20,6 +20,7 @@
 (define-module (gschem builtins)
   #:use-module (gschem core gettext)
   #:use-module (gschem action)
+  #:use-module (gschem select-connected)
   #:use-module (gschem gschemdoc))
 
 (or (defined? 'define-syntax)
@@ -31,6 +32,13 @@
      (begin
        (define-action (name . args) . forms)
        (export name)))))
+
+(define-action-public
+    (&tools-select-connected
+     #:name       (_ "Select Connected Objects")
+     #:label      (_ "Select Connected Objects")
+     #:menu-label (_ "Select Connected Objects"))
+  (selcncts))
 
 (define-action-public
     (&help-manual

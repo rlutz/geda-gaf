@@ -1083,6 +1083,7 @@
 (global-set-key "T <Shift>H" &edit-show-text)
 (global-set-key "T L" &edit-select-locked)
 (global-set-key "T U" &edit-autonumber)
+(global-set-key "T C" &tools-select-connected)
 
 (global-set-key "U" &edit-undo)
 (global-set-key "<Shift>U" &edit-redo)
@@ -1299,6 +1300,7 @@
            ,&edit-find-patch
            ,&edit-hide-text
            ,&edit-show-text
+           ,&tools-select-connected
            ,&edit-select-locked)
           (,&options-show-log-window
            ,&options-show-coordinates)
