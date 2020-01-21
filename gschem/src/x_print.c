@@ -391,6 +391,7 @@ x_print (GschemToplevel *w_current)
 
   /* Create the print operation and set it up */
   print = g_object_new (GTK_TYPE_PRINT_OPERATION,
+                        "embed-page-setup", TRUE,
                         "n-pages", num_pages,
                         "use-full-page", FALSE,
                         "unit", GTK_UNIT_POINTS,
