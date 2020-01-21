@@ -230,7 +230,7 @@ draw_page__print_operation (GtkPrintOperation *print,
   gboolean is_color;
 
   /* Find the page data */
-  g_return_if_fail (page_nr != 1);
+  g_return_if_fail (page_nr == 0);
   page = w_current->toplevel->page_current;
   g_return_if_fail (page != NULL);
 
