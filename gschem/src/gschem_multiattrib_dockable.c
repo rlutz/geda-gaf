@@ -1237,7 +1237,7 @@ multiattrib_callback_key_pressed (GtkWidget *widget,
   GschemMultiattribDockable *multiattrib =
     GSCHEM_MULTIATTRIB_DOCKABLE (user_data);
 
-  if (event->state == 0 &&
+  if ((event->state & gtk_accelerator_get_default_mod_mask ()) == 0 &&
       (event->keyval == GDK_Delete || event->keyval == GDK_KP_Delete)) {
     GtkTreeModel *model;
     GtkTreeIter iter;

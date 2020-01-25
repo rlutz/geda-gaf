@@ -386,7 +386,8 @@ gschem_show_hide_text_widget_set_text_string (GschemShowHideTextWidget *widget, 
 static gboolean
 key_press_event (GtkWidget *widget, GdkEventKey *event, gpointer user_data)
 {
-  if (event->keyval == GDK_KEY_Escape && event->state == 0) {
+  if (event->keyval == GDK_KEY_Escape &&
+      (event->state & gtk_accelerator_get_default_mod_mask ()) == 0) {
     gtk_info_bar_response (GTK_INFO_BAR (user_data), GTK_RESPONSE_CANCEL);
     return TRUE;
   }

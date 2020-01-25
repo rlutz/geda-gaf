@@ -1460,7 +1460,8 @@ callback_after_window_key_press_event (GtkWidget *widget,
 {
   if ((event->keyval == GDK_KEY_Return ||
        event->keyval == GDK_KEY_ISO_Enter ||
-       event->keyval == GDK_KEY_KP_Enter) && event->state == 0) {
+       event->keyval == GDK_KEY_KP_Enter) &&
+      (event->state & gtk_accelerator_get_default_mod_mask ()) == 0) {
     if (gschem_dockable_get_state (dockable) == GSCHEM_DOCKABLE_STATE_DIALOG)
       gschem_dockable_hide (dockable);
     else {
@@ -1470,7 +1471,8 @@ callback_after_window_key_press_event (GtkWidget *widget,
     return TRUE;
   }
 
-  if (event->keyval == GDK_KEY_Escape && event->state == 0) {
+  if (event->keyval == GDK_KEY_Escape &&
+      (event->state & gtk_accelerator_get_default_mod_mask ()) == 0) {
     if (gschem_dockable_get_state (dockable) == GSCHEM_DOCKABLE_STATE_DIALOG)
       gschem_dockable_hide (dockable);
     else {
@@ -1723,12 +1725,14 @@ callback_notebook_key_press_event (GtkWidget *notebook,
 
   if ((event->keyval == GDK_KEY_Return ||
        event->keyval == GDK_KEY_ISO_Enter ||
-       event->keyval == GDK_KEY_KP_Enter) && event->state == 0) {
+       event->keyval == GDK_KEY_KP_Enter) &&
+      (event->state & gtk_accelerator_get_default_mod_mask ()) == 0) {
     gtk_widget_grab_focus (w_current->drawing_area);
     return TRUE;
   }
 
-  if (event->keyval == GDK_KEY_Escape && event->state == 0) {
+  if (event->keyval == GDK_KEY_Escape &&
+      (event->state & gtk_accelerator_get_default_mod_mask ()) == 0) {
     gtk_widget_grab_focus (w_current->drawing_area);
     if (GSCHEM_DOCKABLE_GET_CLASS (dockable)->cancel != NULL)
       GSCHEM_DOCKABLE_GET_CLASS (dockable)->cancel (dockable);
