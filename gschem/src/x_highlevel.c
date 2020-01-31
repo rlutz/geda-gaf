@@ -23,9 +23,8 @@
  *
  * As opposed to the low-level page functions, the high-level page
  * functions do interact with the user.  They switch to a newly
- * created / opened page, ask for confirmation for potentially
- * destructive actions (switching pages if necessary), and warn about
- * major symbol changes.
+ * created / opened page and ask for confirmation for potentially
+ * destructive actions (switching pages if necessary).
  */
 #include <config.h>
 
@@ -225,10 +224,9 @@ open_or_create_page (GschemToplevel *w_current, const gchar *filename,
 
 /*! \brief Open a new page from a file, or find an existing page.
  *
- * Creates a new page, loads the file in it, and shows the "Major
- * symbol changes" dialog if major symversion mismatches were found.
- * If there is already a matching page in \a w_current, returns a
- * pointer to the existing page instead.
+ * Creates a new page and loads the file in it.  If there is already a
+ * matching page in \a w_current, returns a pointer to the existing
+ * page instead.
  *
  * The page becomes the new current page of \a w_current.  If there
  * was exactly one untitled, unchanged page before this operation, the
@@ -257,10 +255,6 @@ x_highlevel_open_page (GschemToplevel *w_current, const gchar *filename)
   if (page != NULL)
     x_window_set_current_page (w_current, page);
 
-  /* if there were any symbols which had major changes, put up an
-     error dialog box */
-  major_changed_dialog (w_current);
-
   return page;
 }
 
@@ -268,9 +262,7 @@ x_highlevel_open_page (GschemToplevel *w_current, const gchar *filename)
 /*! \brief Open multiple pages from files.
  *
  * For each file specified in \a filenames that is not already opened,
- * creates a new page and loads the file in it.  If major symversion
- * mismatches were found in any of the files, the "Major symbol
- * changes" dialog is shown.
+ * creates a new page and loads the file in it.
  *
  * The first page that could be opened or already existed becomes the
  * new current page of \a w_current.  If there was exactly one
@@ -312,10 +304,6 @@ x_highlevel_open_pages (GschemToplevel *w_current, GSList *filenames,
 
   if (first_page != NULL)
     x_window_set_current_page (w_current, first_page);
-
-  /* if there were any symbols which had major changes, put up an
-     error dialog box */
-  major_changed_dialog (w_current);
 
   return success;
 }

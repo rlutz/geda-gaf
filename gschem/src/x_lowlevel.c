@@ -22,10 +22,9 @@
  * \brief Low-level page-related functions.
  *
  * These functions don't usually interact with the user.  In
- * particular, they don't switch pages, don't ask for confirmation
- * before carrying out potentially destructive actions, and don't warn
- * about major symbol changes.  However, they *do* warn if an error
- * occurred during an operation.
+ * particular, they don't switch pages and don't ask for confirmation
+ * before carrying out potentially destructive actions.  However, they
+ * *do* warn if an error occurred during an operation.
  *
  * For user-interface actions, the functions in x_highlevel.c should
  * be used instead.
@@ -349,10 +348,6 @@ x_lowlevel_revert_page (GschemToplevel *w_current, PAGE *page)
 
   page = x_lowlevel_open_page (w_current, filename);
   g_free (filename);
-
-  /* clear symversion= mismatch warnings */
-  g_list_free_full (w_current->toplevel->major_changed_refdes, g_free);
-  w_current->toplevel->major_changed_refdes = NULL;
 
   if (page == NULL) {
     /* don't leave without a current page set */
