@@ -1014,9 +1014,7 @@ OBJECT *o_complex_find_pin_by_attribute (OBJECT *object, char *name, char *wante
  *  \par Function Description
  *  This function compares the symversion of a symbol with it's 
  *  earlier saved symversion in a schematic.
- *  Major symversion changes are added to the toplevel object 
- *  (toplevel->major_changed_refdes), minor changes are reported
- *  to the messaging system.
+ *  All symversion changes are reported to the messaging system.
  *  
  *  \param toplevel  The TOPLEVEL object
  *  \param object    The complex OBJECT
@@ -1146,18 +1144,9 @@ o_complex_check_symversion(TOPLEVEL* toplevel, OBJECT* object)
     
     if (inside_major > outside_major)
     {
-      char* refdes_copy;
       s_log_message(_("\tMAJOR VERSION CHANGE (file %.3f, "
                       "instantiated %.3f, %s)!\n"),
                     inside_value, outside_value, refdes);
-
-      /* add the refdes to the major_changed_refdes GList */
-      /* make sure refdes_copy is freed somewhere */
-      refdes_copy = g_strconcat (refdes, " (",
-                                 object->complex_basename,
-                                 ")", NULL);
-      toplevel->major_changed_refdes =
-        g_list_append(toplevel->major_changed_refdes, refdes_copy);
 
       /* don't bother checking minor changes if there are major ones*/
       goto done; 

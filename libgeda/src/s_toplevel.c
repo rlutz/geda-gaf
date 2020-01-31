@@ -60,8 +60,6 @@ TOPLEVEL *s_toplevel_new (void)
 
   toplevel->show_hidden_text = 0;
 
-  toplevel->major_changed_refdes = NULL;
-
   toplevel->image_color = FALSE;
 
   toplevel->net_consolidate = FALSE;
