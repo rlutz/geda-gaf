@@ -47,6 +47,7 @@ gschem_SOURCES = \
 	gschem_log_dockable.c \
 	gschem_macro_widget.c \
 	gschem_main_window.c \
+	gschem_messages_dockable.c \
 	gschem_multiattrib_dockable.c \
 	gschem_object_properties_dockable.c \
 	gschem_options.c \

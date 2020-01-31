@@ -1061,6 +1061,7 @@
 ;(global-set-key "P R" &page-revert)
 ;(global-set-key "P C" &page-close)
 ;(global-set-key "P <Shift>P" &page-print)
+(global-set-key "F5" &page-update-messages)
 
 (global-set-key "Q" &hierarchy-up)
 (global-set-key "<Alt>Q" &file-quit)
@@ -1286,7 +1287,8 @@
            ,&docking-area-right)))
 
 (define pages-menu
-        `((,&hierarchy-down-schematic
+        `((,&page-update-messages)
+          (,&hierarchy-down-schematic
            ,&hierarchy-down-symbol
            ,&hierarchy-up)
           (,&page-prev

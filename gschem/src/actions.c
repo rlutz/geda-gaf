@@ -1945,6 +1945,18 @@ DEFINE_ACTION (docking_area_right,
 
 /*! \section pages-menu Pages Menu Callback Functions */
 
+DEFINE_ACTION (page_update_messages,
+               "page-update-messages",
+               "gtk-refresh",
+               _("Update Messages"),
+               _("Update Messages"),
+               _("_Update Messages"),
+               NULL,
+               ACTUATE)
+{
+  x_messages_update (w_current);
+}
+
 DEFINE_ACTION (hierarchy_down_schematic,
                "hierarchy-down-schematic",
                "gtk-go-down",

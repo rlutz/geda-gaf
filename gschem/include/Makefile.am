@@ -23,6 +23,7 @@ noinst_HEADERS = \
 	gschem_log_dockable.h \
 	gschem_macro_widget.h \
 	gschem_main_window.h \
+	gschem_messages_dockable.h \
 	gschem_multiattrib_dockable.h \
 	gschem_object_properties_dockable.h \
 	gschem_options.h \

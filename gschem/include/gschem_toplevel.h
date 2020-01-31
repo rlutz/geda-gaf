@@ -85,6 +85,7 @@ struct st_gschem_toplevel {
   GschemDockable *multiattrib_dockable;
   GschemDockable *options_dockable;     /* snap size dialog */
   GschemDockable *log_dockable;
+  GschemDockable *messages_dockable;
   GschemDockable *find_text_dockable;
   GschemDockable *patch_dockable;
   GschemDockable *pagesel_dockable;

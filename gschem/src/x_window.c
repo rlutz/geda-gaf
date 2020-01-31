@@ -37,6 +37,7 @@
 #include "gschem_multiattrib_dockable.h"
 #include "gschem_options_dockable.h"
 #include "gschem_log_dockable.h"
+#include "gschem_messages_dockable.h"
 #include "gschem_find_text_dockable.h"
 #include "gschem_patch_dockable.h"
 #include "gschem_pagesel_dockable.h"
@@ -934,6 +935,16 @@ void x_window_create_main(GschemToplevel *w_current)
     "gschem-toplevel", w_current,
     NULL);
 
+  w_current->messages_dockable = g_object_new (
+    GSCHEM_TYPE_MESSAGES_DOCKABLE,
+    "title", _("Messages"),
+    "settings-name", "messages",
+    "initial-state", GSCHEM_DOCKABLE_STATE_DOCKED_BOTTOM,
+    "initial-width", 800,
+    "initial-height", 320,
+    "gschem-toplevel", w_current,
+    NULL);
+
   w_current->find_text_dockable = g_object_new (
     GSCHEM_TYPE_FIND_TEXT_DOCKABLE,
     "title", _("Search results"),
@@ -1069,6 +1080,7 @@ void x_window_close(GschemToplevel *w_current)
   g_clear_object (&w_current->multiattrib_dockable);
   g_clear_object (&w_current->options_dockable);
   g_clear_object (&w_current->log_dockable);
+  g_clear_object (&w_current->messages_dockable);
   g_clear_object (&w_current->find_text_dockable);
   g_clear_object (&w_current->patch_dockable);
   g_clear_object (&w_current->pagesel_dockable);
@@ -1202,6 +1214,7 @@ x_window_set_current_page (GschemToplevel *w_current, PAGE *page)
 
   x_pagesel_update (w_current);
   x_multiattrib_update (w_current);
+  x_messages_page_changed (w_current);
 }
 
 /*! \brief Raise the main window to the front.

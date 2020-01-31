@@ -33,6 +33,7 @@ gschem/src/gschem_integer_combo_box.c
 gschem/src/gschem_log_dockable.c
 gschem/src/gschem_macro_widget.c
 gschem/src/gschem_main_window.c
+gschem/src/gschem_messages_dockable.c
 gschem/src/gschem_multiattrib_dockable.c
 gschem/src/gschem_object_properties_dockable.c
 gschem/src/gschem_options.c
