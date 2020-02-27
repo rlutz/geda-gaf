@@ -543,6 +543,8 @@ popup (GschemMessagesDockable *messages_dockable,
 
     gtk_menu_popup (GTK_MENU (messages_dockable->menu), NULL, NULL,
                     menu_position_func, pos, 0, gtk_get_current_event_time ());
+    gtk_menu_shell_select_first (GTK_MENU_SHELL (messages_dockable->menu),
+                                 FALSE);
   }
 }
 
