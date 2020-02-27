@@ -489,10 +489,20 @@ create_menu (GschemMessagesDockable *messages_dockable)
 
 
 static void
+menu_position_func (GtkMenu *menu, gint *x, gint *y, gboolean *push_in,
+                    gpointer user_data)
+{
+  gint *pos = user_data;
+
+  *x = pos[0];
+  *y = pos[1];
+}
+
+
+static void
 popup (GschemMessagesDockable *messages_dockable,
        GtkTreeModel *model, GtkTreeIter *iter,
-       GtkMenuPositionFunc func, gpointer data,
-       guint button, guint32 activate_time)
+       GdkEventButton *event)
 {
   gint type, severity;
   OBJECT *obj;
@@ -514,8 +524,26 @@ popup (GschemMessagesDockable *messages_dockable,
   gtk_widget_set_sensitive (messages_dockable->confirm_item,
                             type == type_symversion);
 
-  gtk_menu_popup (GTK_MENU (messages_dockable->menu), NULL, NULL,
-                  func, data, button, activate_time);
+  if (event != NULL)
+    gtk_menu_popup (GTK_MENU (messages_dockable->menu), NULL, NULL,
+                    NULL, NULL, event->button, event->time);
+  else {
+    GtkTreeView *tree_view = GTK_TREE_VIEW (messages_dockable->tree_view);
+    GtkTreePath *path = gtk_tree_model_get_path (model, iter);
+    GdkRectangle rect;
+    gint pos[2];
+
+    gtk_tree_view_get_cell_area (tree_view, path, NULL, &rect);
+    gtk_tree_path_free (path);
+
+    (void) gdk_window_get_origin (gtk_tree_view_get_bin_window (tree_view),
+                                  &pos[0], &pos[1]);
+    pos[0] += rect.x;
+    pos[1] += rect.y + rect.height;
+
+    gtk_menu_popup (GTK_MENU (messages_dockable->menu), NULL, NULL,
+                    menu_position_func, pos, 0, gtk_get_current_event_time ());
+  }
 }
 
 
@@ -550,20 +578,8 @@ tree_view_button_press_event (GtkWidget *widget, GdkEventButton *event,
   gtk_tree_selection_select_path (selection, path);
   gtk_tree_path_free (path);
 
-  popup (messages_dockable, model, &iter,
-         NULL, NULL, event->button, event->time);
+  popup (messages_dockable, model, &iter, event);
   return TRUE;
-}
-
-
-static void
-menu_position_func (GtkMenu *menu, gint *x, gint *y, gboolean *push_in,
-                    gpointer user_data)
-{
-  gint *pos = user_data;
-
-  *x = pos[0];
-  *y = pos[1];
 }
 
 
@@ -573,28 +589,15 @@ tree_view_popup_menu (GtkWidget *widget, gpointer user_data)
   GschemMessagesDockable *messages_dockable =
     GSCHEM_MESSAGES_DOCKABLE (user_data);
 
-  GtkTreeView *tree_view = GTK_TREE_VIEW (messages_dockable->tree_view);
-  GtkTreeSelection *selection = gtk_tree_view_get_selection (tree_view);
+  GtkTreeSelection *selection = gtk_tree_view_get_selection (
+    GTK_TREE_VIEW (messages_dockable->tree_view));
   GtkTreeModel *model;
   GtkTreeIter iter;
-  GtkTreePath *path;
-  GdkRectangle rect;
-  gint pos[2];
 
   if (!gtk_tree_selection_get_selected (selection, &model, &iter))
     return FALSE;
 
-  path = gtk_tree_model_get_path (model, &iter);
-  gtk_tree_view_get_cell_area (tree_view, path, NULL, &rect);
-  gtk_tree_path_free (path);
-
-  (void) gdk_window_get_origin (gtk_tree_view_get_bin_window (tree_view),
-                                &pos[0], &pos[1]);
-  pos[0] += rect.x;
-  pos[1] += rect.y + rect.height;
-
-  popup (messages_dockable, model, &iter,
-         menu_position_func, pos, 0, gtk_get_current_event_time ());
+  popup (messages_dockable, model, &iter, NULL);
   return TRUE;
 }
 
