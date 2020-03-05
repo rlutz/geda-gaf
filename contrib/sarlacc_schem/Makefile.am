@@ -3,8 +3,10 @@
 noinst_PROGRAMS = sarlacc_schem
 
 sarlacc_schem_SOURCES = sarlacc_schem.c
-sarlacc_schem_CFLAGS = $(GLIB_CFLAGS) $(GUILE_CFLAGS) $(GDK_PIXBUF_CFLAGS)
-sarlacc_schem_LDFLAGS = $(GLIB_LIBS) $(GUILE_LIBS) $(GDK_PIXBUF_LIBS)
+sarlacc_schem_CFLAGS = $(GLIB_CFLAGS) $(GIO_CFLAGS) $(GUILE_CFLAGS) \
+	$(GDK_PIXBUF_CFLAGS)
+sarlacc_schem_LDFLAGS = $(GLIB_LIBS) $(GIO_LIBS) $(GUILE_LIBS) \
+	$(GDK_PIXBUF_LIBS)
 sarlacc_schem_LDADD = $(top_builddir)/libgeda/src/libgeda.la
 
 AM_CFLAGS = $(GCC_CFLAGS) $(MINGW_CFLAGS)
