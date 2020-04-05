@@ -25,7 +25,10 @@ dist_man_MANS = gschem.1
 	sed -e"s:[@]DATE@:$$d:" -e"s:[@]VERSION@:$$v:" -e"s:[@]YEAR@:$$y:" < $< > $@
 
 # Rules for converting man->html
-html_man_files = gschem.html
+html_man_files =
+if ENABLE_GROFF_HTML
+html_man_files += gschem.html
+endif
 SUFFIXES = .1.in .1 .html
 
 docsmandir=$(docdir)/man
