@@ -29,7 +29,9 @@ LT_INIT([])
 AC_PROG_CXX
 
 AM_PATH_PYTHON([2.7])
-PKG_CHECK_MODULES([PYTHON], [python2 >= 2.7])
+PKG_CHECK_MODULES([PYTHON], [python-2.7 >= 2.7],, [
+  PKG_CHECK_MODULES([PYTHON], [python2 >= 2.7])
+])
 PKG_CHECK_MODULES([GUILE], [guile-2.0 >= 2.0.10])
 
 AM_GNU_GETTEXT([external])
