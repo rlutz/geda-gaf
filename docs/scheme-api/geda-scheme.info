@@ -1,0 +1,2742 @@
+This is geda-scheme.info, produced by makeinfo version 6.5 from
+geda-scheme.texi.
+
+This manual is for gEDA/gaf, version 1.10.0.
+
+   Copyright © 2011-2013 Peter TB Brett
+
+   The text of and illustrations in this document are licensed under a
+Creative Commons Attribution–Share Alike 3.0 Unported license
+("CC-BY-SA"). An explanation of CC-BY-SA is available at
+<http://creativecommons.org/licenses/by-sa/3.0/>.  The original authors
+of this document designate the gEDA Project as the "Attribution Party"
+for purposes of CC-BY-SA. In accordance with CC-BY-SA, if you distribute
+this document or an adaptation of it, you must provide the URL for the
+original version.
+INFO-DIR-SECTION The Algorithmic Language Scheme
+START-INFO-DIR-ENTRY
+* gEDA Scheme: (geda-scheme).  gEDA extensibility with Guile Scheme.
+END-INFO-DIR-ENTRY
+
+
+File: geda-scheme.info,  Node: Top,  Next: Introduction,  Up: (dir)
+
+gEDA Scheme Reference Manual
+****************************
+
+This manual is for gEDA/gaf, version 1.10.0.
+
+   Copyright © 2011-2013 Peter TB Brett
+
+   The text of and illustrations in this document are licensed under a
+Creative Commons Attribution–Share Alike 3.0 Unported license
+("CC-BY-SA"). An explanation of CC-BY-SA is available at
+<http://creativecommons.org/licenses/by-sa/3.0/>.  The original authors
+of this document designate the gEDA Project as the "Attribution Party"
+for purposes of CC-BY-SA. In accordance with CC-BY-SA, if you distribute
+this document or an adaptation of it, you must provide the URL for the
+original version.
+
+* Menu:
+
+* Introduction::
+
+* Schematic Document Model::
+* Core API Reference::
+* gschem API Reference::
+
+* Concept Index::
+* Function Index::
+* Variable Index::
+
+
+File: geda-scheme.info,  Node: Introduction,  Next: Schematic Document Model,  Prev: Top,  Up: Top
+
+Introduction
+************
+
+About gEDA
+==========
+
+“gEDA”, or _GPL Electronic Design Automation_, is a suite of free
+software tools for designing electronics.  The gEDA project has produced
+and continues working on a full GPL’d suite and toolkit of Electronic
+Design Automation (EDA) tools.  These tools are used for electrical
+circuit design, schematic capture, simulation, prototyping, and
+production.  Currently, the gEDA project offers a mature suite of free
+software applications for electronics design, including schematic
+capture, attribute management, bill of materials (BOM) generation,
+netlisting into over 20 netlist formats, analog and digital simulation,
+and printed circuit board (PCB) layout.
+
+   The gEDA project was started because of the lack of free EDA tools
+for POSIX systems with the primary purpose of advancing the state of
+free hardware or open source hardware.  The suite is mainly being
+developed on the GNU/Linux platform with some development effort going
+into making sure the tools run on other platforms as well.
+
+About the gEDA Scheme API
+=========================
+
+The “gEDA Scheme API”, documented in this manual, is a set of Scheme
+functions which can be used to enhance gEDA applications by adding new
+functionality or modify existing behaviour.
+
+   gEDA has always used a Scheme interpreter for interpreting
+configuration files, managing keybindings in gschem, and implementing
+netlist exporter backends in gnetlist.  However, for a long time the
+utility of embedding a Scheme interpreter was diminished by the lack of
+a low-level API for inspecting and modifying schematic documents.  The
+Scheme types and functions documented here were added to gEDA to address
+that need.
+
+   gEDA uses the _Guile_ Scheme implementation (otherwise known as the
+_GNU Ubiquitous Intelligent Language for Extensions_) as its embedded
+Scheme.  For more information about Guile, please visit
+<http://www.gnu.org/s/guile/>.
+
+Getting Additional Help
+=======================
+
+If you think you have found a bug, please file a bug report in
+Launchpad: <http://bugs.launchpad.net/geda>.  Please add the tag
+‘scheme-api’.  It will help us to fix your bug quickly if you can
+describe in detail how to reproduce the bug.
+
+   If you have a question about using gEDA, or about extending gEDA
+using Scheme, you may wish to send a message to one of the gEDA mailing
+lists.  You may also find additional information in the gEDA wiki.
+
+   Both the mailing lists and wiki can be accessed from the main gEDA
+website: <http://www.geda-project.org/>.
+
+We Need Feedback!
+=================
+
+If you find a typographical error in this manual, or if you have thought
+of a way to make this manual better, we would love to hear from you!
+Please submit a report in Launchpad: <http://bugs.launchpad.net/geda>,
+with the tag ‘scheme-api’.
+
+
+File: geda-scheme.info,  Node: Schematic Document Model,  Next: Core API Reference,  Prev: Introduction,  Up: Top
+
+1 The Schematic Document Model
+******************************
+
+When using gEDA to design an electronic circuit, users use the schematic
+editor, gschem, to choose and place _schematic symbols_ on a _schematic
+page_, and connect the _pins_ of the symbols together by drawing _nets_.
+The user may add various _attributes_ to symbols, nets or pins to modify
+how the circuit diagrams should be interpreted.  The resulting
+schematics are then processed with the gnetlist tool to generate a
+_netlist_.
+
+   This chapter describes the different data types used by the Scheme
+API to represent gEDA documents (both schematics and symbols), and how
+they relate to each other.
+
+* Menu:
+
+* Pages::
+* Objects::
+* Component objects::
+* Attributes::
+* Coordinate system::
+
+
+File: geda-scheme.info,  Node: Pages,  Next: Objects,  Up: Schematic Document Model
+
+1.1 Pages
+=========
+
+Schematics and symbols are presented as different types of document to
+the user, with different file extensions, icons and mime-types.
+However, when they are loaded into a gEDA application such as gschem for
+editing, they are internally represented in exactly the same way, by the
+‘page’ type.  The ‘page’ is the top-level gEDA document data type.
+
+   Internally, the main difference between a ‘page’ for a schematic and
+a ‘page’ for a symbol is the types of schematic element they are
+permitted to contain (*note Objects::).  For example, a symbol is not
+permitted to contain nets, buses, or instances of other symbols, and a
+schematic is not permitted to contain pins.
+
+   *Note*: Although the restrictions on what types of primitive element
+schematics and symbols may contain are not enforced by the API, designs
+which violate these restrictions may cause the netlister not to work as
+expected.
+
+   Each ‘page’ is associated with a filename, although the filename is
+not required by the API either to be valid or to be associated with a
+accessible file in the filesystem.
+
+   Pages are not garbage-collected; once you create a ‘page’, you are
+responsible for making sure that it is disposed of when it is no longer
+required.
+
+
+File: geda-scheme.info,  Node: Objects,  Next: Component objects,  Prev: Pages,  Up: Schematic Document Model
+
+1.2 Objects
+===========
+
+Each ‘page’ contains some number of “schematic elements”, represented by
+the ‘object’ type.  There are several sub-types of ‘object’, including:
+
+   • graphical lines, circles, arcs, rectangles and paths;
+
+   • nets and net pins;
+
+   • buses and bus pins;
+
+   • pictures;
+
+   • text;
+
+   • and symbol instances, known as ’components’.
+
+   Each ‘object’ can be part of at most a single ‘page’ – they cannot be
+shared between pages.  ‘object’s are automatically garbage collected.
+
+   Most of different ‘object’ sub-types are quite straightforward to
+understand.  The main exceptions are components, and the text
+‘object’-based attribute mechanism, which are described in the following
+sections.
+
+
+File: geda-scheme.info,  Node: Component objects,  Next: Attributes,  Prev: Objects,  Up: Schematic Document Model
+
+1.3 Component objects
+=====================
+
+When a symbol is instantiated in a schematic (e.g.  by the user
+selecting it from the gschem component library and placing it on the
+page), a compound ‘object’ known as a “component” is created.
+
+   Like a ‘page’, a component contains some number of ‘object’ elements.
+When a component is created from a symbol, the contents of the symbol’s
+‘page’ are copied into the component.
+
+   In order to allow the component to appear in the correct place on the
+schematic page, at the correct orientation, etc., a transformation is
+applied to every ‘object’ in the component.
+
+   Normally, when the schematic ‘page’ is closed, the parameters of the
+transformation are stored in the schematic file along with the basename
+of the original symbol, but the ‘object’ contents of the component are
+discarded.  When the schematic is subsequently re-opened, the original
+symbol is retrieved from the component library, and used to recreate the
+component.
+
+   However, a component may optionally be _embedded_.  In this case, its
+contents _are_ stored in the schematic file.
+
+   *Note*: A component cannot contain another component – only other
+types of ‘object’.
+
+
+File: geda-scheme.info,  Node: Attributes,  Next: Coordinate system,  Prev: Component objects,  Up: Schematic Document Model
+
+1.4 Attributes
+==============
+
+A gEDA user is able to annotate schematic elements with additional data,
+such as footprints for components or net names for nets.  This is
+carried out using “attributes”.
+
+   An attribute is text ‘object’ which contains a text string in the
+form ‘NAME=VALUE’.  Currently, the restrictions on attribute format that
+are enforced by the API are:
+
+   • Attribute NAMEs:
+
+       1. must contain at least one character;
+       2. must not contain a ‘=’ character (Unicode ‘U+003D’);
+       3. must not end with a space (‘ ’, Unicode ‘U+0020’).
+
+   • Attribute VALUEs:
+
+       1. must contain at least one character;
+       2. must not begin with a space (‘ ’, Unicode ‘U+0020’).
+
+   *Note*: Due to assumptions made by some gEDA tools, it is _strongly
+recommended_ that you use attribute NAMEs which contain only lower-case
+Latin characters, decimal digits, full stops ‘.’ (‘U+002E’), and hyphens
+‘-’ (‘U+002D’).
+
+   There are two types of attribute:
+
+   _Attached attributes_ are attribute text ‘object’s that are linked to
+another ‘object’.  To attach an attribute to another schematic element,
+both ‘object’s must be part of the same component or part of the same
+‘object’.  For example, a ‘netname=NAME’ attribute attached to a net
+‘object’ can be used to give that net a specific name in netlist output,
+such as ‘VCC’ or ‘GND’.
+
+   _Floating attributes_ are attribute text ‘object’s that are not
+linked to another ‘object’.  These attributes affect the schematic or
+symbol that they’re part of as a whole.  For example, a floating
+‘documentation=URL’ attribute in a symbol tells gschem’s *Help →
+Component Documentation* command how to find the component’s data sheet.
+
+
+File: geda-scheme.info,  Node: Coordinate system,  Prev: Attributes,  Up: Schematic Document Model
+
+1.5 Coordinate system
+=====================
+
+gEDA documents use a “coordinate system” (internally referred to as
+‘world’ coordinates) with coordinates increasing upwards and to the
+right (i.e.  a conventional right-handed Cartesian coordinate system).
+
+   Although all coordinates may be positive or negative, gschem only
+displays objects with positive coordinates (i.e.  in the upper right
+quadrant of the coordinate system).  It is therefore recommended to use
+only positive coordinates.
+
+   In the Scheme API, the coordinate of a point is expressed in the
+format:
+
+     (x . y)
+
+   and a set of “bounds” (i.e.  a rectangular area in the document
+plane) is expressed in the format:
+
+     ((left . top) . (right . bottom))
+
+   where ‘left’ is the smaller x coordinate, ‘right’ is the larger x
+coordinate, and ‘bottom’ and ‘top’ are respectively the smaller and
+larger y coordinates.
+
+
+File: geda-scheme.info,  Node: Core API Reference,  Next: gschem API Reference,  Prev: Schematic Document Model,  Up: Top
+
+2 Core API Reference
+********************
+
+The Scheme modules and functions described in this chapter are primitive
+operations for working with schematics and symbols, and are available to
+be used in all gEDA applications.
+
+* Menu:
+
+* Core page functions::
+* Core object functions::
+* Core attribute functions::
+* Configuration functions::
+* Logging functions::
+* System information::
+
+
+File: geda-scheme.info,  Node: Core page functions,  Next: Core object functions,  Up: Core API Reference
+
+2.1 Core page functions
+=======================
+
+To use the functions described in this section, you will need to load
+the ‘(geda page)’ module.
+
+   *Note Pages::.
+
+ -- Function: page? obj
+     Returns ‘#t’ if and only if OBJ is a ‘page’.
+
+ -- Function: active-pages
+     Returns a list of all open ‘page’s.
+
+2.1.1 Page creation, disposal and filenames
+-------------------------------------------
+
+Every ‘page’ is associated with a _filename_.  The filename does not
+necessarily have to be a file which exists and/or is accessible in the
+filesystem.
+
+ -- Function: make-page filename
+     Creates and returns a new, empty ‘page’, with the given string
+     FILENAME.
+
+ -- Function: close-page! page
+     Destroys PAGE.  The returned value is undefined.
+
+     *Warning*: This function closes and destroys PAGE immediately,
+     regardless of whether the page has been modified since loading or
+     saving, and without asking the user.
+
+ -- Function: page-filename page
+     Returns the filename associated with PAGE as a string, or ‘#f’ if
+     PAGE is untitled.
+
+ -- Function: set-page-filename! page filename
+     Sets the filename of PAGE to FILENAME.  Returns PAGE.
+
+2.1.2 Page serialisation
+------------------------
+
+Pages can be converted to and from strings in the gEDA schematic file
+format.
+
+ -- Function: string->page filename string
+     Parses STRING, which should be in the gEDA file format, to create a
+     new ‘page’.  The initial filename for the new ‘page’ is FILENAME.
+
+     If the string is not in gEDA format, raises an ‘string-format’
+     error.
+
+ -- Function: page->string page
+     Returns a string representation of PAGE in the gEDA file format.
+
+2.1.3 Page contents
+-------------------
+
+A schematic or symbol ‘page’ is composed of a set of ‘object’s which
+determine both its graphical appearance and its electrical meaning.
+
+ -- Function: page-contents page
+     Returns a list of the ‘object’s which make up PAGE.  The list can
+     be freely modified without changing the contents of PAGE.
+
+ -- Function: page-append! page objects...
+     Appends zero or more OBJECTS to the contents of PAGE in the order
+     given.  Returns PAGE.
+
+     If any of the OBJECTS is already part of a ‘page’ other than PAGE,
+     or is part of a component ‘object’, raises an ‘object-state’ error.
+     Any of the OBJECTS that are already in the PAGE are ignored.
+
+ -- Function: page-remove! page objects...
+     Removes zero or more OBJECTS from the contents of PAGE.  Returns
+     PAGE.
+
+     Any OBJECTS that are not part of a ‘page’ or component ‘object’ are
+     ignored.
+
+     An ‘object-state’ error will be thrown if any of the OBJECTS
+     satisfies any of the following conditions:
+
+        • part of a ‘page’ other than PAGE;
+        • part of component ‘object’;
+        • has attached attributes (*note Attributes::);
+        • is attached as an attribute.
+
+ -- Function: object-page object
+     Returns the ‘page’ which contains OBJECT (either directly or
+     indirectly), or ‘#f’ if OBJECT is not part of a ‘page’.
+
+     *Note*: If the OBJECT argument to ‘object-page’ is part of a
+     component ‘object’ which is itself part of a ‘page’, that ‘page’
+     will be returned.
+
+2.1.4 Page dirty flags
+----------------------
+
+A ‘page’ has a _dirty flag_ that is used to indicate to applications
+that the ‘page’ has been modified since it was last loaded or saved.
+
+ -- Function: page-dirty? page
+     Returns ‘#t’ if the PAGE’s page has been marked as dirty;
+     otherwise, returns ‘#f’.
+
+ -- Function: set-page-dirty! page [state]
+     Sets the dirty flag for PAGE.  If STATE is ‘#f’, clears the dirty
+     flag; otherwise, or if STATE is omitted, marks the page as dirty.
+     Returns PAGE.
+
+
+File: geda-scheme.info,  Node: Core object functions,  Next: Core attribute functions,  Prev: Core page functions,  Up: Core API Reference
+
+2.2 Core object functions
+=========================
+
+To use the functions described in this section, you will need to load
+the ‘(geda object)’ module.
+
+* Menu:
+
+* General object functions::
+* Lines::
+* Nets and buses::
+* Pins::
+* Boxes::
+* Circles::
+* Arcs::
+* Paths::
+* Pictures::
+* Text::
+* Components::
+
+
+File: geda-scheme.info,  Node: General object functions,  Next: Lines,  Up: Core object functions
+
+2.2.1 General object functions
+------------------------------
+
+ -- Function: object? obj
+     Returns ‘#t’ if and only if OBJ is an ‘object’.
+
+ -- Function: copy-object object
+     Returns a deep copy of OBJECT.  The new ‘object’ returned has no
+     attached attributes, and is not part of a ‘page’ or part of a
+     component ‘object’.
+
+ -- Function: object-component object
+     Returns the component ‘object’ that contains OBJECT, or ‘#f’ if
+     OBJECT is not part of a component.
+
+ -- Function: object-connections object
+     Returns a list of other ‘object’s that are _directly_ connected to
+     OBJECT.  If ‘object’ is not included in a ‘page’, raises an
+     ‘object-state’ error.  The connections reported are independent of
+     inclusion in components.
+
+     For example, consider a page containing a net and a component, and
+     the component contains a single pin.  If the connectable end of the
+     pin intersects the net, then ‘(object-connections <net>)’ will
+     return a list containing the pin ‘object’, and _not_ the component.
+
+* Menu:
+
+* Object sub-types::
+* Object transformations::
+* Object bounds::
+* Object color::
+* Object fill and stroke::
+
+
+File: geda-scheme.info,  Node: Object sub-types,  Next: Object transformations,  Up: General object functions
+
+2.2.1.1 Object sub-types
+........................
+
+Schematic element ‘object’s come in several subtypes.
+
+ -- Function: object-type object
+     Returns the sub-type of OBJECT as a symbol.  The subtype will be
+     one of the following symbols:
+
+        • ‘arc’
+        • ‘box’
+        • ‘bus’
+        • ‘circle’
+        • ‘complex’ (indicates a component ‘object’)
+        • ‘line’
+        • ‘net’
+        • ‘path’
+        • ‘picture’
+        • ‘pin’
+        • ‘text’
+
+ -- Function: object-type? object type
+     Returns ‘#t’ if and only if OBJECT is an ‘object’ and that its
+     subtype is TYPE, which should be a symbol.
+
+
+File: geda-scheme.info,  Node: Object transformations,  Next: Object bounds,  Prev: Object sub-types,  Up: General object functions
+
+2.2.1.2 Object transformations
+..............................
+
+Objects can be translated, rotated, or mirrored about a point.
+
+ -- Function: translate-objects! vector [objects...]
+     Translate OBJECTS by VECTOR, a world coordinate distance in the
+     form ‘(x . y)’.  Returns a list of the modified OBJECTS.
+
+ -- Function: rotate-objects! center angle [objects...]
+     Translate OBJECTS anti-clockwise by ANGLE about CENTER, a world
+     coordinate position in the form ‘(x . y)’.  ANGLE must be an
+     integer multiple of 90 degrees.  Returns a list of the modified
+     OBJECTS.
+
+ -- Function: mirror-objects! x-offset [objects...]
+     Mirror OBJECTS in the line ‘x = X-OFFSET’.  Returns a list of the
+     modified OBJECTS.
+
+
+File: geda-scheme.info,  Node: Object bounds,  Next: Object color,  Prev: Object transformations,  Up: General object functions
+
+2.2.1.3 Object bounds
+.....................
+
+The bounds of an object is the smallest bounding rectangle of the
+object, expressed in document coordinates (*note Coordinate system::).
+
+ -- Function: object-bounds objects...
+     Returns the world coordinate bounding box containing all of the
+     OBJECTS passed as arguments, or ‘#f’ if none of the OBJECTS have
+     bounds (for example, this can occur if no OBJECTS are specified, or
+     if they are all empty component ‘object’s).
+
+     *Note*: ‘object-bounds’ always returns the actual bounds of the
+     OBJECTS, not the visible bounds.  This means that the bounds of
+     invisible text is always included.
+
+ -- Function: fold-bounds bounds...
+     Calculates the union of several sets of BOUNDS (as returned by
+     ‘object-bounds’).  If any of the BOUNDS are ‘#f’, they are skipped;
+     if all of the BOUNDS are ‘#f’, ‘#f’ is returned.
+
+
+File: geda-scheme.info,  Node: Object color,  Next: Object fill and stroke,  Prev: Object bounds,  Up: General object functions
+
+2.2.1.4 Object color
+....................
+
+Object colors in gEDA documents are specified as indices into a color
+map.  This allows users to specify the color map that suits them when
+viewing schematics and symbols.
+
+ -- Function: object-color object
+     Returns the integer color map index of the color used to draw
+     OBJECT.
+
+ -- Function: set-object-color! object color
+     Sets the integer color map index for OBJECT to COLOR.  Returns
+     OBJECT.
+
+
+File: geda-scheme.info,  Node: Object fill and stroke,  Prev: Object color,  Up: General object functions
+
+2.2.1.5 Object fill and stroke
+..............................
+
+Graphical object subtypes – lines, boxes, circles, arcs and paths – are
+drawn with a stroke pattern that can be configured in detail.
+
+ -- Function: object-stroke object
+     Returns the stroke settings of the OBJECT, which must be a line,
+     box, circle, arc or path ‘object’.  The return value is a list of
+     parameters:
+
+       1. stroke width, as an integer number of world units
+       2. cap style, one of the symbols ‘none’, ‘square’ or ‘round’.
+       3. dash style, one of the symbols ‘solid’, ‘dotted’, ‘dashed’,
+          ‘center’ or ‘phantom’.
+       4. up to two dash parameters, depending on the dash style:
+             • for solid lines, no parameters;
+             • for dotted lines, dot spacing;
+             • for other styles, dot/dash spacing and dash length.
+
+ -- Function: set-object-stroke! object width cap dash [dash-space
+          [dash-length]]
+     Set the stroke settings of the OBJECT, which must be a line, box,
+     circle, arc or path ‘object’.  The arguments are the same as the
+     contents of the list returned by ‘object-stroke’.  Returns OBJECT.
+
+ -- Function: object-stroke-width object
+     Returns the integer stroke width of OBJECT, which must be a line,
+     box, circle, arc or path ‘object’.
+
+ -- Function: object-stroke-cap object
+     Returns the stroke cap style of OBJECT, which must be a line, box,
+     circle, arc or path ‘object’.  The returned value is one of the
+     symbols ‘none’, ‘square’ or ‘round’.
+
+ -- Function: object-stroke-dash object
+     Returns the dash style of OBJECT, which must be a line, box,
+     circle, arc or path ‘object’.  The return value is a list of
+     between one and three parameters:
+
+       1. dash style, one of the symbols ‘solid’, ‘dotted’, ‘dashed’,
+          ‘center’ or ‘phantom’.
+       2. for styles other than ‘solid’, dot/dash spacing;
+       3. for ‘dashed’, ‘center’ and ‘phantom’, dash length.
+
+   Some types of ‘object’ – boxes, circles and paths – can have their
+interiors filled with a variety of patterns.
+
+ -- Function: object-fill object
+     Returns the fill settings of OBJECT, which must be a box, circle or
+     path ‘object’.  The return value is a list of one to six
+     parameters:
+
+       1. fill style, one of the symbols ‘hollow’, ‘solid’, ‘mesh’ or
+          ‘hatch’;
+       2. up to five fill parameters, depending on fill style:
+            1. none for ‘hollow’ or ‘solid’ fills;
+            2. line width, line spacing and line angle (in degrees) for
+               ‘hatch’ fills;
+            3. line width, first spacing and angle, and second spacing
+               and angle for ‘mesh’ fills.
+
+ -- Function: set-object-fill! object fill-type . fill-args
+     Sets the fill settings of OBJECT, which must be a box, circle or
+     path ‘object’.  The arguments are the same as the contents of the
+     list returned by ‘object-fill’.  Returns OBJECT.
+
+
+File: geda-scheme.info,  Node: Lines,  Next: Nets and buses,  Prev: General object functions,  Up: Core object functions
+
+2.2.2 Lines
+-----------
+
+Line ‘object’s are straight graphical line segments with no electrical
+meaning.  A line’s geometrical parameters are a start point and end
+point, and it supports different colors and stroke styles.
+
+   Many of the functions for manipulating lines are also used to
+manipulate line-like objects such as nets, buses or pins.
+
+ -- Function: line? object
+     Returns ‘#t’ if and only if OBJECT is a line ‘object’.
+
+ -- Function: make-line start end [color]
+     Creates and returns a new line ‘object’.  START is the position of
+     the start of the new line in the form ‘(x . y)’ and END is the
+     position of end of the line.  If COLOR is specified, it should be
+     the integer color map index of the color with which to draw the
+     line.  If COLOR is not specified, the default line color is used.
+
+ -- Function: set-line! line start end [color]
+     Sets the parameters of LINE (which may be a line, net, bus or pin
+     ‘object’).  The arguments are the same as to ‘make-line’.  Returns
+     LINE.
+
+ -- Function: line-info line
+     Returns the parameters of LINE (which may be a line, net, bus or
+     pin ‘object’).  The return value is a list in the form:
+
+          ((start-x . start-y) (end-x . end-y) color)
+
+     *Note*: For pin ‘object’s, first coordinate is the connectable
+     point on the pin.
+
+ -- Function: line-start line
+     Returns the position ‘(x . y)’ of the start of LINE (which may be a
+     line, net, bus or pin ‘object’).  For pin ‘objects’, this is the
+     position of the connectable point on the pin.
+
+ -- Function: line-end line
+     Returns the position ‘(x . y)’ of the end of LINE (which may be a
+     line, net, bus or pin ‘object’).
+
+
+File: geda-scheme.info,  Node: Nets and buses,  Next: Pins,  Prev: Lines,  Up: Core object functions
+
+2.2.3 Nets and buses
+--------------------
+
+Net and bus ‘object’s are straight line segments which represent
+electrical connectivity.  Nets represent single wires, and buses
+multi-wire connections of arbitrary composition.
+
+   All of the functions that work on line ‘object’s also work with nets
+and buses (*note Lines::).  Note that ‘line?’ will return ‘#f’ if called
+with a net or bus argument.
+
+ -- Function: net? object
+     Returns ‘#t’ if and only if OBJECT is a net.
+
+ -- Function: make-net start end [color]
+     Creates and returns a new net ‘object’.  START is the position of
+     the start of the new net in the form ‘(x . y)’ and END is the
+     position of end of the net.  If COLOR is specified, it should be
+     the integer color map index of the color with which to draw the
+     net.  If COLOR is not specified, the default net color is used.
+
+ -- Function: bus? object
+     Returns ‘#t’ if and only if OBJECT is a bus.
+
+ -- Function: make-bus start end [color]
+     Creates and returns a new bus ‘object’.  Arguments are as for
+     ‘make-net’.
+
+
+File: geda-scheme.info,  Node: Pins,  Next: Boxes,  Prev: Nets and buses,  Up: Core object functions
+
+2.2.4 Pins
+----------
+
+Pin ‘objects’ are straight line segments which represent connectable
+points in symbols or subcircuits, such as the pins of a semiconductor
+package.  Only one end of a pin can be connected to nets, buses or other
+pins; the rest of a pin is purely graphical.
+
+   Pins come in two varieties: “net pins” and “bus pins”, which are used
+for connections to nets and buses respectively (*note Nets and buses::).
+
+   All of the functions that work on line ‘object’s also work with pins
+(*note Lines::).  Note that ‘line?’ will return ‘#f’ if called with a
+pin argument.
+
+ -- Function: pin? object
+     Returns ‘#t’ if and only if OBJECT is a pin ‘object’.
+
+ -- Function: net-pin? object
+     Returns ‘#t’ if and only if OBJECT is a net pin.
+
+ -- Function: make-net-pin start end [color]
+     Creates and returns a new net pin ‘object’.  START is the position
+     of the start of the new pin (the connectable end) in the form ‘(x .
+     y)’ and END is the position of end of the pin.  If COLOR is
+     specified, it should be the integer color map index of the color
+     with which to draw the pin.  If COLOR is not specified, the default
+     pin color is used.
+
+ -- Function: bus-pin? object
+     Returns ‘#t’ if and only if OBJECT is a bus pin.
+
+ -- Function: make-bus-pin start end [color]
+     Creates and returns a new bus pin ‘object’.  Arguments are as for
+     ‘make-net-pin’.
+
+
+File: geda-scheme.info,  Node: Boxes,  Next: Circles,  Prev: Pins,  Up: Core object functions
+
+2.2.5 Boxes
+-----------
+
+Boxes are rectangles specified by the coordinates of their top left and
+bottom right corners.  They are purely graphical, and have no electrical
+meaning.  They can be drawn in different colors, and with various stroke
+and fill settings.
+
+   *Note Object color::.  *Note Object fill and stroke::.
+
+ -- Function: box? object
+     Returns ‘#t’ if and only if OBJECT is a box ‘object’.
+
+ -- Function: make-box top-left bottom-right [color]
+     Creates and returns a new box ‘object’.  TOP-LEFT is the position
+     of the top left of the new box in the form ‘(x . y)’, and
+     BOTTOM-RIGHT is the position of the bottom right of the box.  If
+     COLOR is specified, it should be the integer color map index of the
+     color with which to draw the box.  If COLOR is not specified, the
+     default box color is used.
+
+ -- Function: set-box! box top-left bottom-right [color]
+     Sets the parameters of BOX.  The arguments are the same as to
+     ‘make-box’.  Returns BOX.
+
+ -- Function: box-info box
+     Returns the parameters of BOX.  The return value is a list in the
+     form:
+
+          ((top-left-x . top-left-y) (bottom-right-x . bottom-right-y) color)
+
+ -- Function: box-top-left box
+     Returns the position of the top left corner of BOX in the form ‘(x
+     . y)’.
+
+ -- Function: box-bottom-right box
+     Returns the position of the bottom right corner of BOX in the form
+     ‘(x . y)’.
+
+
+File: geda-scheme.info,  Node: Circles,  Next: Arcs,  Prev: Boxes,  Up: Core object functions
+
+2.2.6 Circles
+-------------
+
+Circle ‘objects’ are specified by center position and radius, and are
+purely graphical with no electrical meaning.  They can be drawn in
+different colors, and with various stroke and fill settings.
+
+   *Note Object color::.  *Note Object fill and stroke::.
+
+ -- Function: circle? object
+     Returns ‘#t’ if and only if OBJECT is a circle ‘object’.
+
+ -- Function: make-circle center radius [color]
+     Creates and returns a new circle ‘object’.  CENTER is the position
+     of the center of the new circle in the form ‘(x . y)’, and RADIUS
+     is the integer radius of the circle.  If COLOR is specified, it
+     should be the integer color map index of the color with which to
+     draw the circle.  If COLOR is not specified, the default circle
+     color is used.
+
+ -- Function: set-circle! circle center radius [color]
+     Sets the parameters of CIRCLE.  The arguments are the same as to
+     ‘make-circle’.  Returns CIRCLE.
+
+ -- Function: circle-info circle
+     Returns the parameters of CIRCLE as a list of the form:
+
+          ((center-x . center-y) radius color)
+
+ -- Function: circle-center circle
+     Returns the position of the center of CIRCLE as in the form ‘(x .
+     y)’.
+
+ -- Function: circle-radius circle
+     Returns the radius of CIRCLE as an integer.
+
+
+File: geda-scheme.info,  Node: Arcs,  Next: Paths,  Prev: Circles,  Up: Core object functions
+
+2.2.7 Arcs
+----------
+
+Arc ‘objects’ are specified by center position, radius, and start and
+end angles.  They are purely graphical with no electrical meaning.  They
+can be drawn in different colors, and with various stroke settings.
+
+ -- Function: arc? object
+     Returns ‘#t’ if and only if OBJECT is an arc ‘object’.
+
+ -- Function: make-arc center radius start-angle end-angle [color]
+     Creates and returns a new arc ‘object’.  CENTER is the position of
+     the center of the new arc in the form ‘(x . y)’, and RADIUS is the
+     integer radius of the arc.  START-ANGLE and END-ANGLE are the
+     angles at which to start and end the arc, in degrees.  If COLOR is
+     specified, it should be the integer color map index of the color
+     with which to draw the arc.  If COLOR is not specified, the default
+     arc color is used.
+
+ -- Function: set-arc! arc center radius start-angle end-angle [color]
+     Sets the parameters of ARC.  The arguments are the same as to
+     ‘make-arc’.  Returns ARC.
+
+ -- Function: arc-info arc
+     Returns the parameters of ARC as a list of the form:
+
+          ((center-x . center-y) radius start-angle end-angle color)
+
+ -- Function: arc-center arc
+     Returns the position of the center of ARC in the form ‘(x . y)’.
+
+ -- Function: arc-radius arc
+     Returns the radius of ARC as an integer.
+
+ -- Function: arc-start-angle arc
+     Returns the start angle of ARC as an integer number of degrees.
+
+ -- Function: arc-end-angle arc
+     Returns the end angle of ARC as an integer number of degrees.
+
+
+File: geda-scheme.info,  Node: Paths,  Next: Pictures,  Prev: Arcs,  Up: Core object functions
+
+2.2.8 Paths
+-----------
+
+Paths are arbitrary shapes comprised of straight lines and Bézier
+curves.  Each path contains a sequence of _path elements_, each of which
+requires zero or more absolute position parameters.  The element types
+supported by gEDA are:
+
+   • ‘moveto’ elements represent a step (without drawing) to another
+     point in the schematic, and begin a new subpath.  ‘moveto’ elements
+     need a single position parameter, which is the position of the
+     endpoint of the move.
+   • ‘lineto’ elements draw a straight line from the current point to
+     the point specified by a single position parameter.
+   • ‘curveto’ elements draw a Bézier curve from the current point.  The
+     curve requires three position parameters: the position of the first
+     control point; the position of the second control point; and the
+     endpoint of the curve.
+   • ‘closepath’ elements close the current subpath by drawing a
+     straight line from the current point to the subpath’s initial
+     point.  They take no parameters.
+
+ -- Function: path? object
+     Returns ‘#t’ if and only if OBJECT is a path ‘object’.
+
+ -- Function: make-path [color]
+     Creates and returns a new path ‘object’.  If COLOR is specified, it
+     should be the integer color map index of the color with which to
+     draw the path.  If COLOR is not specified, the default path color
+     is used.
+
+ -- Function: path-length path
+     Returns the number of path elements in PATH.
+
+ -- Function: path-ref path K
+     Returns the Kth element in PATH.  The return value is a list.  The
+     first item in the list is a symbol indicating the type of element,
+     and any additional items are the position parameters of the
+     element.  For example, a call to ‘path-ref’ might return:
+
+          (curveto (800 . 525) (700 . 700) (500 . 700))
+
+     If K is not a valid offset into PATH, raises an ‘out-of-range’
+     error.
+
+ -- Function: path-remove! path K
+     Removes the Kth element in PATH, returning PATH.  If K is not a
+     valid offset, raises an ‘out-of-range’ error.
+
+ -- Function: path-insert! path K type [positions...]
+     Inserts a new element into PATH at index K.  TYPE is a symbol
+     indicating the type of element to insert, using the parameters
+     POSITIONS.  If K is less than zero or greater than the number of
+     elements PATH already contains, the new element is appended to the
+     path.  For example, to append a straight line section to the
+     current path:
+
+          (path-insert! path -1 'lineto '(500 . 100))
+
+
+File: geda-scheme.info,  Node: Pictures,  Next: Text,  Prev: Paths,  Up: Core object functions
+
+2.2.9 Pictures
+--------------
+
+A picture object displays an image in the schematic, and is a purely
+graphical element.  Pictures may be in any format supported by the
+user’s GdkPixbuf installation (but note that images that can’t be loaded
+for some reason are preserved).  The TOP-LEFT, BOTTOM-RIGHT, ANGLE and
+MIRROR properties of a picture object indicate the transformation that
+was applied to the original image.  The transformation is applied as
+follows:
+
+  1. If MIRROR is true, the picture is reflected about its vertical
+     centerline.
+  2. The picture is rotated by ANGLE anticlockwise about its center
+     (ANGLE may only be an integer multiple of 90 degrees).
+  3. The picture is scaled and translated to fit within the rectangle
+     defined by the points TOP-LEFT and BOTTOM-RIGHT.
+
+ -- Function: picture? object
+     Returns ‘#t’ if and only if OBJECT is a picture ‘object’.
+
+ -- Function: make-picture/vector vector filename top-left bottom-right
+          angle mirror
+     Creates and returns a new picture object for FILENAME, by reading
+     image data from VECTOR (which should be in a standard image file
+     format).  If VECTOR could not be loaded, an error is raised.
+     TOP-LEFT, BOTTOM-RIGHT, ANGLE and MIRROR specify the picture
+     transformation.
+
+     The points TOP-LEFT and BOTTOM-RIGHT should be specified in the
+     form ‘(x . y)’.
+
+ -- Function: set-picture! picture top-left bottom-right angle mirror
+     Sets the picture transformation for PICTURE.
+
+ -- Function: picture-info picture
+     Returns the parameters of PICTURE as a list in the form:
+
+          (filename (top-left-x . top-left-y) (bottom-right-x . bottom-right-y) angle mirror)
+
+ -- Function: picture-filename picture
+     Returns the filename associated with PICTURE as a string.
+
+ -- Function: picture-top-left picture
+     Returns the position of the top left corner of ‘picture’ in the
+     form ‘(x . y)’.
+
+ -- Function: picture-bottom-right picture
+     Returns the position of the bottom right corner of ‘picture’ in the
+     form ‘(x . y)’.
+
+ -- Function: picture-angle picture
+     Returns the angle to rotate ‘picture’ by, as an integer number of
+     degrees.
+
+ -- Function: picture-mirror? picture
+     Returns true if ‘picture’ is mirrored.
+
+
+File: geda-scheme.info,  Node: Text,  Next: Components,  Prev: Pictures,  Up: Core object functions
+
+2.2.10 Text
+-----------
+
+Text fulfils two roles, as straightforward labels and notes on
+schematics and symbols, and as attached or floating attributes (*note
+Attributes::).  A text ‘object’ can be aligned in different ways
+relative to its anchor position, and can be displayed in different font
+sizes.
+
+   Any text can be set to be visible or invisible on printed output (and
+gschem provides ways to preview invisible text).  When a text ‘object’
+is an attribute (i.e.  its string is in a ‘NAME=VALUE’ format) then the
+visibility settings are more fine-grained: the text can be set to
+display just the attribute name, just the attribute value, or both.
+
+   *Note Attributes::.
+
+ -- Function: text? object
+     Returns ‘#t’ if and only if OBJECT is a text ‘object’.
+
+ -- Function: make-text anchor align angle string size visible show
+          [color]
+     Creates and returns a new text ‘object’.  ANCHOR is the position of
+     the anchor of the new text in the form ‘(x . y)’, and ALIGN is a
+     symbol determining how the text should be aligned relative to the
+     anchor.  ALIGN must be one of the following symbols:
+
+        • ‘lower-left’
+        • ‘middle-left’
+        • ‘upper-left’
+        • ‘lower-center’
+        • ‘middle-center’
+        • ‘upper-center’
+        • ‘lower-right’
+        • ‘middle-right’
+        • ‘upper-right’
+
+     For example, if ALIGN is ‘upper-center’, the anchor will be located
+     at the top center of the rendered text block.
+
+     ANGLE should be an integer multiple of 90 degrees, determining the
+     angle which the text should be displayed at.  STRING is the string
+     contents for the ‘text’ object, and must not contain any null
+     characters (‘#\0’ in Scheme, Unicode ‘U+0000’).  SIZE is the font
+     size to use.  If VISIBLE is ‘#f’, the text will be invisible;
+     otherwise, it will be visible.
+
+     When the STRING is in an attribute format (*note Attributes::), the
+     SHOW argument determines which parts of the STRING will be
+     displayed.  It must be one of the following symbols:
+
+        • ‘name’
+        • ‘value’
+        • ‘both’
+
+     If COLOR is specified, it should be the integer color map index of
+     the color with which to draw the text.  If COLOR is not specified,
+     the default text color is used.
+
+ -- Function: set-text! text anchor align angle string size visible show
+          [color]
+     Sets the parameters of TEXT.  The arguments are the same as to
+     ‘make-text’.  Returns TEXT.
+
+ -- Function: text-info text
+     Returns the parameters of TEXT as a list in the form:
+
+          ((anchor-x . anchor-y) align angle string size visible show color)
+
+     See ‘make-text’ for a description of all of these parameters.
+
+ -- Function: text-anchor text
+     Returns the position of the anchor of TEXT in the form ‘(x . y)’.
+
+ -- Function: text-align text
+     Returns the alignment of TEXT as one of the following symbols:
+
+        • ‘lower-left’
+        • ‘middle-left’
+        • ‘upper-left’
+        • ‘lower-center’
+        • ‘middle-center’
+        • ‘upper-center’
+        • ‘lower-right’
+        • ‘middle-right’
+        • ‘upper-right’
+
+ -- Function: text-angle text
+     Returns the angle that TEXT is displayed at as an integer multiple
+     of 90 degrees.
+
+ -- Function: text-string text
+     Returns the string content of TEXT.
+
+ -- Function: set-text-string! text str
+     Set the string content of TEXT to STR.  STR must not contain any
+     null characters (‘#\0’ in Scheme, Unicode ‘U+0000’).
+
+ -- Function: text-size text
+     Return the font size of TEXT as an integer.
+
+ -- Function: text-visible? text
+     Returns ‘#t’ if and only if TEXT is set to be visible.
+
+ -- Function: set-text-visibility! text visible?
+     If VISIBLE? is ‘#f’, sets TEXT to be invisible; otherwise, sets it
+     to be visible.
+
+ -- Function: text-attribute-mode text
+     Returns a symbol indicating which parts of TEXT will be displayed
+     when TEXT is a valid attribute.  The returned value will be one of
+     the following symbols:
+
+        • ‘name’
+        • ‘value’
+        • ‘both’
+
+
+File: geda-scheme.info,  Node: Components,  Prev: Text,  Up: Core object functions
+
+2.2.11 Components
+-----------------
+
+Component ‘object’s represent instances of symbols.  They contain other
+‘object’s copied from the original symbol when it is instantiated into a
+schematic.
+
+   A component’s BASENAME is a string used to identify which symbol it
+originated from.  When instantiating a symbol on initial placement in a
+schematic, or when recreating a component while loading a schematic, the
+BASENAME is used to find the underlying symbol file in the component
+library.
+
+   *Note Component objects::.
+
+   *Note*: In the gEDA C source code, these are normally called
+“complex” objects.  However, as Guile Scheme supports complex numbers,
+and the procedures related to working with complex numbers use the word
+‘complex’ to describe them, this API uses ‘component’ to avoid
+ambiguity.
+
+   The POSITION, ANGLE and MIRROR flag of a component indicates the
+transformation that was applied to the contents of the original symbol.
+The transformation is applied in the following order:
+
+  1. If MIRROR is true, the symbol is reflected in the line x = 0.
+  2. The symbol is rotated anti-clockwise by ANGLE degrees about the
+     point (0,0) (ANGLE may only be an integer multiple of 90 degrees).
+  3. Finally, the symbol is translated by POSITION.
+
+   The component’s contents (as returned by ‘component-contents’) have
+the transformation already applied to them.  Updating the translation
+information using e.g.  ‘set-component!’ will not alter them – that must
+be done separately (e.g.  by reloading the symbol).
+
+ -- Function: component? object
+     Returns ‘#t’ if and only if OBJECT is a component ‘object’.
+
+ -- Function: make-component basename position angle mirror locked
+     Creates and returns a new, empty component ‘object’ with the given
+     BASENAME.  POSITION, ANGLE and MIRROR specify the symbol
+     transformation.  If LOCKED is true, the component will be protected
+     against accidental selection by the user (this is used in gschem
+     e.g.  for titleblocks).
+
+     No attempt is made to load a symbol matching BASENAME from
+     component libraries, and the returned component is flagged as
+     embedded.
+
+ -- Function: make-component/library basename position angle mirror
+          locked
+     Searches the component libraries for a symbol matching BASENAME,
+     and if found, instantiates the symbol and returns the resulting
+     component (which is not flagged as embedded).  Arguments are as for
+     ‘make-component’.
+
+     If no match for BASENAME is found, ‘#f’ is returned.
+
+ -- Function: set-component! component position angle mirror locked
+     Sets the parameters of COMPONENT.  Arguments are the same as to
+     ‘make-component’.  Returns COMPONENT.
+
+     *Note*: Remember that modifying the transformation parameters of a
+     component does not update the component’s contents.
+
+ -- Function: set-component-with-transform! component position angle
+          mirror locked
+     Sets the parameters of COMPONENT.  Arguments are the same as to
+     ‘make-component’.  Returns COMPONENT.
+
+     *Note*: All transformations are applied immediately.
+
+ -- Function: component-info component
+     Returns the parameters of COMPONENT as a list of the form:
+
+          (basename (x . y) angle mirror locked)
+
+ -- Function: component-basename component
+     Returns the basename of COMPONENT.
+
+ -- Function: component-position component
+     Returns the position to which the original symbol was translated
+     when creating COMPONENT.
+
+ -- Function: component-angle component
+     Returns the angle by which the original symbol was rotated when
+     creating COMPONENT, as an integer number of degrees.
+
+ -- Function: component-mirror? component
+     Returns true if the original symbol was mirrored when creating
+     COMPONENT.
+
+ -- Function: component-locked? component
+     Returns true if COMPONENT is non-selectable.
+
+ -- Function: component-contents component
+     Returns the contents of COMPONENTS as a list of objects.
+
+ -- Function: component-append! component objects...
+     Appends OBJECTS (which must not be component ‘object’s) to the
+     contents of COMPONENT.  Any OBJECTS which are already included in
+     COMPONENT are ignored.  If any OBJECTS are already part of a ‘page’
+     or of another component ‘object’, an ‘object-state’ error is
+     raised.  Returns COMPONENT.
+
+ -- Function: component-remove! component objects...
+     Removes OBJECTS from the contents of COMPONENT.  Any OBJECTS which
+     are not part of a component or of a page are ignored.  Returns
+     COMPONENT.
+
+     An ‘object-state’ error will be raised if any OBJECTS satisfy any
+     of the following conditions:
+
+        • are part of a ‘page’;
+        • are part of a component ‘object’ other than COMPONENT;
+        • have attached attributes
+        • are attached as an attribute.
+
+
+File: geda-scheme.info,  Node: Core attribute functions,  Next: Configuration functions,  Prev: Core object functions,  Up: Core API Reference
+
+2.3 Core attribute functions
+============================
+
+To use the functions described in this section, you will need to load
+the ‘(geda attrib)’ module.
+
+   Attributes are text ‘object’s with a particular format of string.
+They can be floating, or they can be attached to another ‘object’.
+
+ -- Function: attribute? object
+     Returns true if and only if OBJECT is an attribute (i.e.  a text
+     ‘object’ and in attribute format).
+
+2.3.1 Attribute names and values
+--------------------------------
+
+ -- Function: parse-attrib text
+     Splits the string from TEXT (a text ‘object’) into name and value,
+     if it is in attribute format.  If it is not in attribute format,
+     raises an ‘attribute-format’ error.  The return value is in the
+     form ‘(NAME . VALUE)’.
+
+ -- Function: attrib-name attrib
+     Returns the name part of ATTRIB, as a string.
+
+ -- Function: attrib-value attrib
+     Returns the value part of ATTRIB, as a string.
+
+ -- Function: set-attrib-value! attrib value
+     Sets the value part of ATTRIB to VALUE.
+
+2.3.2 Attribute attachment
+--------------------------
+
+ -- Function: attrib-attachment attrib
+     If ATTRIB is attached to another ‘object’, returns that object.
+     Otherwise, returns ‘#f’.
+
+ -- Function: object-attribs object
+     Returns a list of all attributes attached to OBJECT.
+
+ -- Function: attach-attribs! object [attribs...]
+     Attach ATTRIBS to OBJECT.  All the ATTRIBS must be text ‘object’s.
+     The following conditions must be satisfied, or an ‘object-state’
+     error will be raised:
+
+        • Neither OBJECT nor any of the ATTRIBS may be already attached
+          as an attribute;
+        • Both OBJECT and all ATTRIBS must be part of the same ‘page’
+          and/or component ‘object’;
+
+     Any ATTRIBS that are already attached to OBJECT are ignored.
+     Returns OBJECT.
+
+     *Note*: For historical reasons, ‘attach-attribs!’ does not require
+     that all ATTRIBS satisfy ‘attribute?’.  Nevertheless, avoid
+     attaching non-attribute text objects as attributes.
+
+ -- Function: detach-attribs! object [attribs...]
+     Detach ATTRIBS from OBJECT.  Any ATTRIBS that are not attached as
+     attributes are ignored.  If any ATTRIBS are attached to ‘object’s
+     other than OBJECT, an ‘object-state’ error is raised.
+
+2.3.3 Inherited and promoted attributes
+---------------------------------------
+
+“Inherited attributes” are unattached attributes inside a component
+‘object’.
+
+ -- Function: inherited-attribs object
+     Returns the inherited attributes of OBJECT, if OBJECT is a
+     component.  If OBJECT is not a component, returns the empty list.
+
+ -- Function: attrib-inherited? attrib
+     Returns ‘#t’ if ATTRIB is an inherited attribute.
+
+   “promotable attributes” are inherited attributes that are both
+visible and have names that are in the list of promotable attributes set
+with the ‘always-promote-attributes’ rc file parameter.
+
+ -- Function: promotable-attribs component
+     Returns a list of promotable attributes of COMPONENT.
+
+ -- Function: promote-attribs! component
+     Promote all promotable attributes from COMPONENT into the ‘page’
+     that contains COMPONENT.  If COMPONENT is not in a page, an
+     ‘object-state’ error is raised.
+
+     All promotable attributes are copied, and made invisible.  The
+     copies are added to the ‘page’, and attached as attributes of
+     COMPONENT.
+
+     The promoted attributes are returned.  If COMPONENT is not in fact
+     a component ‘object’, does nothing and returns the empty list.
+
+
+File: geda-scheme.info,  Node: Configuration functions,  Next: Logging functions,  Prev: Core attribute functions,  Up: Core API Reference
+
+2.4 Configuration functions
+===========================
+
+To use the functions described in this section, you will need to load
+the ‘(geda config)’ module.
+
+   This section describes some functions for accessing, monitoring and
+modifying the configuration of gEDA libraries and applications.
+
+* Menu:
+
+* Configuration contexts::
+* Configuration parameters::
+* Configuration events::
+* Configuration errors::
+
+
+File: geda-scheme.info,  Node: Configuration contexts,  Next: Configuration parameters,  Up: Configuration functions
+
+2.4.1 Configuration contexts
+----------------------------
+
+A configuration parameter is always evaluated within a “configuration
+context”.  Each context is associated with a configuration file
+(although the file does not necessarily need to exist).
+
+   Each configuration context may have a “parent context”.  If, when
+looking up a parameter, it has no value set in the selected context, the
+parent context is checked, and so on.
+
+   Three special contexts are always automatically defined: the “default
+context”, the “system context” and the “user context”.  The user context
+is the default parent context for all other configuration contexts,
+including newly-created ones.
+
+2.4.1.1 Obtaining a context
+...........................
+
+ -- Function: path-config-context path
+     Normally, you shouldn’t create a configuration context directly;
+     you should obtain the configuration context associated with a PATH.
+
+     ‘path-config-context’ looks for a configuration file named
+     ‘geda.conf’.  If PATH is not a directory, it is truncated, and then
+     a file named ‘geda.conf’ is looked for in that directory.  If none
+     is found, the parent directory is checked, and so on until a
+     configuration file is found or the filesystem root is reached.  If
+     no configuration file was found, the returned context will be
+     associated with a ‘geda.conf’ in the same directory as PATH.
+
+     *Warning*: Do not assume that the configuration file associated
+     with the context returned by ‘path-config-context’ is located in
+     the directory specified by PATH.
+
+ -- Function: default_config_context
+     The default context is not associated with any physical path or
+     on-disk configuration file, and has no parent context.  It contains
+     the default configuration used when no configuration file can be
+     loaded.
+
+     *Note*: Normally, the default context should be populated with
+     built-in default configuration settings on start-up, before loading
+     any further configuration files.  This approach is strongly
+     recommended, because it means that configuration parameters can
+     then be safely read without having to use ‘config-has-group?’ and
+     ‘config-has-key?’ to check if they are set (*note Configuration
+     groups and keys: Configuration parameters.).
+
+     Since 1.10.
+
+ -- Function: system-config-context
+     The system context is used for system-wide configuration.  Its
+     parent context is the default context.  It is located:
+
+       1. By searching ‘XDG_CONFIG_DIRS’ for a ‘gEDA/geda-system.conf’
+          file.
+       2. By checking the system configuration directory specified at
+          compile-time for a ‘gEDA/geda-system.conf’ file.
+
+     Since 1.10.
+
+ -- Function: user-config-context
+     The user context is used for user-specific configuration, and is
+     loaded from ‘gEDA/geda-user.conf’ in ‘XDG_CONFIG_HOME’.  Its parent
+     context is the system context.
+
+     Since 1.10.
+
+2.4.1.2 Loading and saving configuration files
+..............................................
+
+Other than the default context, all configuration contexts are
+associated with an on-disk configuration file.
+
+ -- Function: config-filename cfg
+     Return the filename of the configuration file associated with the
+     context CFG.  For some contexts (including the default context),
+     this will return ‘#f’.
+
+     Since 1.10.
+
+ -- Function: config-load! cfg
+     Attempt to load configuration parameters for the context CFG from
+     its associated file.
+
+ -- Function: config-loaded? cfg
+     Determine whether the context CFG has been successfully loaded from
+     file.
+
+     Since 1.10.
+
+ -- Function: config-save! cfg
+     Attempt to save configuration parameters for the context CFG to its
+     associated file.
+
+     Since 1.10.
+
+ -- Function: config-changed? cfg
+     Determine whether the context CFG has been altered since it was
+     last synchronised with the on-disk version by loading or saving it.
+
+     Since 1.10.
+
+2.4.1.3 Context parents
+.......................
+
+A configuration context may have a “parent context”, from which it
+inherits configuration values.  Configuration inheritance loops are not
+permitted.
+
+   *Note Configuration inheritance: Configuration parameters.
+
+ -- Function: context-parent cfg
+     Return the parent context of the context CFG, if it has one.
+
+     Since 1.10.
+
+ -- Function: set-config-parent! cfg parent
+     Sets PARENT as the parent context of CFG.  If PARENT is ‘#f’, sets
+     CFG as having no parent context.
+
+     *Note*: Normally, application code should avoid using this
+     function; keeping to the default configuration inheritance
+     structure is recommended in order to ensure consistent behaviour of
+     all libgeda applications.
+
+     Since 1.10.
+
+2.4.1.4 Context trust
+.....................
+
+Some configuration parameters are dangerous; in particular, parameters
+that may lead to arbitrary code execution need to be handled carefully.
+Such settings might include:
+
+   • Preferred PDF reader
+   • Preferred web browser
+   • Search path for Scheme plugins
+
+   Configuration contexts can be flagged as being “trusted”.  This
+allows code that needs to access such dangerous parameters to determine
+whether the value has been obtained from a safe source.
+
+   By default, the default context, system context and user context are
+trusted, and all other contexts untrusted.
+
+ -- Function: config-trusted? cfg
+     Test whether CFG is a trusted configuration context.
+
+     Since 1.10.
+
+ -- Function: set-config-trusted! cfg trusted?
+     Set whether the configuration context CFG should be trusted as a
+     source for dangerous configuration parameters.
+
+     *Warning*: You should not set a configuration context as trusted
+     unless you are certain that it originated from a safe source (e.g.
+     by interacting with the user to verify it).
+
+     Since 1.10.
+
+ -- Function: config-trusted-context cfg
+     If CFG is trusted, returns CFG; otherwise, returns the first parent
+     context of CFG that is a trusted context.  If no trusted context
+     can be found, returns ‘#f’.
+
+     Since 1.10.
+
+
+File: geda-scheme.info,  Node: Configuration parameters,  Next: Configuration events,  Prev: Configuration contexts,  Up: Configuration functions
+
+2.4.2 Configuration parameters
+------------------------------
+
+A gEDA “configuration parameter” consists of three components:
+
+“Group”
+     A string which identifies the general category in which the
+     parameter lies (e.g.  which application and/or plugin).
+“Name”
+     A string which specifically identifies the parameter within the
+     group.
+“Value”
+     The value of the parameter.  This is stored as a string, but can be
+     converted to a number of possible scalar and list types.
+
+   Groups, names and values are all case-sensitive.
+
+2.4.2.1 Configuration groups and keys
+.....................................
+
+ -- Function: config-groups cfg
+     Returns a list of all groups available in CFG and its parent
+     contexts.
+
+     Since 1.10.
+
+ -- Function: config-has-group? cfg group
+     Determines whether CFG or its parent contexts contain the specified
+     GROUP
+
+     Since 1.10.
+
+ -- Function: config-keys cfg group
+     Returns a list of all keys available in the specified GROUP in CFG
+     and its parent contexts.
+
+     Since 1.10.
+
+ -- Function: config-has-key? cfg group key
+     Determines whether CFG or its parent contexts contains KEY in the
+     specified GROUP.
+
+     Since 1.10.
+
+2.4.2.2 Configuration inheritance
+.................................
+
+If a configuration context does not directly specify a value for a
+configuration parameter, it inherits the value from its parent context.
+
+   *Note Context parents: Configuration contexts.
+
+ -- Function: config-inherited? cfg group key
+     Returns ‘#f’ if value of the configuration parameter with the given
+     GROUP and KEY is specified in the context CFG, and ‘#t’ if it is
+     inherited from a parent context of CFG.
+
+     Since 1.10.
+
+ -- Function: config-source cfg group key
+     Returns the configuration context (either CFG or one of its parent
+     contexts) in which the configuration parameter with the given GROUP
+     and KEY has its value defined.
+
+     Since 1.10.
+
+2.4.2.3 Configuration values
+............................
+
+Each value is stored as a UTF-8 string in the configuration file.
+However, this string can be parsed a several different types.  All of
+the following types are supported:
+
+   • Strings
+   • Booleans
+   • Exact integers
+   • Inexact real numbers
+
+   In addition, lists of all the above are supported.
+
+ -- Function: config-string cfg group key
+     Retrieve configuration value as a string.
+
+     Since 1.10.
+
+ -- Function: config-boolean cfg group key
+     Retrieve configuration value as a boolean.
+
+     Since 1.10.
+
+ -- Function: config-int cfg group key
+     Retrieve configuration value as an exact integer.
+
+     Since 1.10.
+
+ -- Function: config-real cfg group key
+     Retrieve configuration value as an inexact real number.
+
+     Since 1.10.
+
+ -- Function: config-string-list cfg group key
+     Retrieve configuration value as a list of strings.
+
+     Since 1.10.
+
+ -- Function: config-boolean-list cfg group key
+     Retrieve configuration value as a list of booleans.
+
+     Since 1.10.
+ -- Function: config-int-list cfg group key
+     Retrieve configuration value as a list of exact integers.
+
+     Since 1.10.
+
+ -- Function: config-real-list cfg group key
+     Retrieve configuration value as a list of inexact real numbers.
+
+     Since 1.10.
+
+ -- Function: config-set! cfg group key value
+     Set the configuration parameter identified by the given GROUP and
+     KEY in the configuration context CFG.  The type of value to set is
+     inferred from VALUE.
+
+     Since 1.10.
+
+
+File: geda-scheme.info,  Node: Configuration events,  Next: Configuration errors,  Prev: Configuration parameters,  Up: Configuration functions
+
+2.4.3 Configuration events
+--------------------------
+
+When the value of a configuration parameter is altered, either directly
+or by loading a configuration file, a “configuration event” is
+generated.  Handlers can be registered to be notified when a
+configuration event occurs.  A configuration event is associated with
+the group and key that had its value modified.
+
+   If a configuration event is emitted by a configuration context, it
+propagates to all configuration contexts which inherit that group and
+key from it.
+
+   A configuration event handler must be a closure that accepts three
+arguments:
+
+     handler cfg group key
+
+   CFG is always the configuration context that received the event, and
+the GROUP and KEY identify the configuration parameter that changed.
+
+ -- Function: add-config-event! cfg handler
+     Registers HANDLER to be called when configuration changes in the
+     context CFG.
+
+     Since 1.10.
+
+ -- Function: remove-config-event! cfg handler
+     Stops HANDLER from being called when configuration changes in the
+     context CFG.
+
+     Since 1.10.
+
+
+File: geda-scheme.info,  Node: Configuration errors,  Prev: Configuration events,  Up: Configuration functions
+
+2.4.4 Configuration errors
+--------------------------
+
+All errors in functions in the ‘(geda config)’ are reported using one of
+two keys:
+
+  1. File errors (e.g.  “Access denied” or “File not found” are
+     indicated with the ‘system-error’ key.
+  2. All other errors are indicated using the ‘config-error’ key.
+
+   When a ‘config-error’ is signalled, ‘data’ part of the error
+arguments is a list containing one of the following symbols:
+
+‘unknown-encoding’
+     The text being parsed was in an unknown encoding.
+‘parse’
+     The configuration data wass ill-formed.
+‘key-not-found’
+     A requested configuration key was not found.
+‘group-not-found’
+     A requested configuration group was not found.
+‘invalid-value’
+     A configuration value could not be parsed into the requested
+     format.
+
+
+File: geda-scheme.info,  Node: Logging functions,  Next: System information,  Prev: Configuration functions,  Up: Core API Reference
+
+2.5 Logging functions
+=====================
+
+To use the functions described in this section, you will need to load
+the ‘(geda log)’ module.
+
+ -- Function: log! level message [format-args...]
+     Emit a log message with the specified LEVEL.  The MESSAGE is
+     interpreted as a format string, with FORMAT-ARGS as its parameters.
+
+     The LEVEL should be one of the symbols ‘error’, ‘critical’,
+     ‘warning’, ‘message’, ‘info’ or ‘debug’.
+
+     Generally, if the LEVEL is not ‘debug’, then the message should be
+     localised.
+
+
+File: geda-scheme.info,  Node: System information,  Prev: Logging functions,  Up: Core API Reference
+
+2.6 System information
+======================
+
+To use the functions described in this section, you will need to load
+the ‘(geda os)’ module.
+
+   This section describes some functions and variables that are useful
+for Scheme code that needs to behave differently depending on which
+operating system gEDA is running on.
+
+ -- Variable: separator-char
+     The directory separator character that should be used on the host
+     platform.
+
+     The ‘separator-char’ function is deprecated and must not be used in
+     the newly written code.  It will be removed after version 1.10.
+     There is no replacement for it.
+
+ -- Variable: separator
+     A string containing ‘separator-char’.
+
+     The ‘separator’ function is deprecated and must not be used in the
+     newly written code.  It will be removed after version 1.10.  Use
+     the guile function ‘file-name-separator-string’ instead.
+
+ -- Variable: path-separator-char
+     The character used for separating the elements in ‘PATH’-like
+     environment variables on the host platform.
+
+ -- Variable: path-separator
+     A string containing ‘path-separator-char’.
+
+ -- Function: platform
+     Returns a list of symbols describing the host platform.  The
+     returned symbols may include:
+
+        • ‘carbon’
+        • ‘cygwin’
+        • ‘linux’
+        • ‘win32’
+        • ‘win32-native’
+
+ -- Function: platform? type
+     Returns ‘#t’ if the platform description list returned by
+     ‘platform’ contains the symbol TYPE, and ‘#f’ otherwise.
+
+ -- Function: sys-data-dirs
+     Returns an ordered list of directories in which to access
+     system-wide gEDA data.
+
+ -- Function: sys-config-dirs
+     Returns an ordered list of directories in which to access
+     system-wide gEDA configuration information.
+
+ -- Function: user-data-dir
+     Returns the directory in which to store user-specific gEDA data.
+
+ -- Function: user-config-dir
+     Returns the directory in which to store user-specific gEDA
+     configuration information.
+
+ -- Function: expand-env-variables str
+     Recursively expands STR until no more environment variables can be
+     expanded, and return the expanded string.  Environment variables
+     are in the form ‘${VAR}’.
+
+          (expand-env-variables "${HOME}/path/to/dir")
+
+
+File: geda-scheme.info,  Node: gschem API Reference,  Next: Concept Index,  Prev: Core API Reference,  Up: Top
+
+3 gschem API Reference
+**********************
+
+The Scheme modules and functions described in this chapter are available
+in the gschem schematic editor application.  They are more focused on
+enabling and responding to user editing operations.
+
+* Menu:
+
+* Windows and views::
+* Key mapping::
+* Selections::
+* Hooks::
+* Actions::
+* Miscellanous gschem functions::
+
+
+File: geda-scheme.info,  Node: Windows and views,  Next: Key mapping,  Up: gschem API Reference
+
+3.1 Windows and views
+=====================
+
+To use the functions described in this section, you will need to load
+the ‘(gschem window)’ module.
+
+ -- Function: active-page
+     Returns the ‘page’ currently being displayed for editing.
+
+ -- Function: set-active-page! page
+     Sets the current ‘page’ to PAGE.
+
+ -- Function: pointer-position
+     Returns the current mouse pointer position in world coordinates in
+     the form ‘(x . y)’.  If the pointer is outside the display area,
+     returns ‘#f’.
+
+ -- Function: snap-point point
+     Snaps the given POINT to the current snap grid, i.e.  returns the
+     closest grid location to POINT.  Expects a point in the form ‘(x .
+     y)’, and returns a point in the same format.
+
+
+File: geda-scheme.info,  Node: Key mapping,  Next: Selections,  Prev: Windows and views,  Up: gschem API Reference
+
+3.2 Key mapping
+===============
+
+To use the functions described in this section, you will need to load
+the ‘(gschem keymap)’ module.
+
+3.2.1 Key combinations
+----------------------
+
+gschem treats key combinations as first-class objects.  A key
+combination consists of a non-modifier key press with some number of
+modifiers applied.  For example, the key combination ‘Ctrl+Shift+A’
+(which calls *Edit→Deselect* by default) is typed by holding the <Ctrl>
+and <Shift> keys down, and then pressing <A>.
+
+ -- Function: key? obj
+     Returns ‘#t’ if and only if OBJ is a key combination.
+
+ -- Function: string->key str
+     Parses STR to create a new key combination.  The expected format
+     looks like ‘<Control>a’ or ‘<Shift><Alt>F1’.  Key names are parsed
+     using ‘gdk_keyval_from_name()’, and modifiers may appear in any
+     order.  If STR has invalid syntax or does not represent a valid key
+     combination, raises a ‘key-format’ error.
+
+ -- Function: key->string key
+     Converts KEY to a string, using a format suitable for passing to
+     ‘string->key’.
+
+ -- Function: key->display-string key
+     Converts KEY to a string, using a format suitable for display.
+     This should be used when the key combination needs to be displayed
+     to the user e.g.  in the gschem menus or status area.  The returned
+     string is translated according to the user’s current locale.
+
+          (key->display-string (string->key ``<Control>bracketright''))
+          => ``Ctrl+]''
+
+3.2.2 Key sequences
+-------------------
+
+Most gschem functionality is bound not to single key combinations but to
+sequences of them.  For example, *File→New* is bound to ‘F N’ by default
+(i.e.  press <F> followed by <N>).  Key sequences are simply vectors of
+key bindings.  For example:
+
+     (string->keys ``F N'')
+     => #(#<gschem-key "F"> #<gschem-key "N">)
+
+   In this case, <F> is a “prefix key”, because pressing it does not
+cause an action to be carried out directly, but just changes the effect
+of pressing subsequent keys.
+
+ -- Function: keys? obj
+     Returns ‘#t’ if and only if OBJ is a valid key sequence.
+
+ -- Function: string->keys str
+     Parses STR into a key sequence.  The expected format is a sequence
+     of key combination specifications (as could be passed to
+     ‘string->key’) separated by spaces.
+
+ -- Function: keys->string keys
+     Converts the key sequence KEYS to a string, using a format suitable
+     for passing to ‘string->keys’.
+
+ -- Function: keys->display-string keys
+     Converts the key sequence KEYS to a string, using a format suitable
+     for display.
+
+3.2.3 Keymaps
+-------------
+
+A “keymap” maps key combinations to values (usually actions) or to other
+keymaps.  *Note Actions::.
+
+ -- Function: keymap? obj
+     Returns ‘#t’ if and only if OBJ is a keymap.
+
+ -- Function: make-keymap
+     Creates and returns a new, empty keymap.
+
+ -- Function: keymap-bind-key! keymap key [bindable]
+     Binds KEY to BINDABLE in KEYMAP.  If BINDABLE is ‘#f’ or not
+     specified, removes the binding for KEY.  BINDABLE should be a thunk
+     or a keymap.
+
+ -- Function: keymap-lookup-key keymap key
+     Looks up the binding for KEY in KEYMAP.  If KEY is not bound,
+     returns ‘#f’.
+
+ -- Function: keymap-lookup-binding keymap bindable
+     Carries out a reverse lookup in KEYMAP to find the key bound to
+     BINDABLE.  If BINDABLE is not bound in KEYMAP, returns ‘#f’.
+
+ -- Function: keymap-for-each proc keymap
+     Applies PROC to each binding in KEYMAP.  PROC should take two
+     arguments: the bound key, and its binding.
+
+   Actions are bound to key sequences by binding the first key
+combination to a keymap, then in the resulting keymap binding the second
+key combination, etc.  This results in a directed graph of keymaps.
+
+   For example, to bind the key sequence ‘F N’, a keymap is created
+containing a binding for <N> to the desired action, and then in the main
+keymap the prefix key <F> is bound to the new keymap.
+
+   Three helper functions are provided for working with key sequence
+bindings.
+
+ -- Function: bind-keys! keymap keys [bindable]
+     Bind KEYS to BINDABLE.  Keys may be a key sequence vector, a single
+     key combination, or a string representing a key sequence or key
+     combination.  If BINDABLE is ‘#f’ or not specified, removes the
+     binding for KEYS.  BINDABLE should be a thunk or a keymap.
+
+     If KEYS contains invalid prefix keys (e.g.  because one of the
+     prefix keys is already bound to something other than a keymap),
+     raises an error.  Missing prefix keymaps are created as required.
+
+ -- Function: lookup-keys keymap keys
+     Looks up the binding for KEYS in KEYMAP.  KEYS is interpreted the
+     same as for ‘bind-keys!’.  If KEYS is not bound, returns ‘#f’.
+
+ -- Function: lookup-binding keymap bindable
+     Recursively searches KEYMAP for the key sequence bound to BINDABLE,
+     which should be a thunk or a keymap.  If BINDABLE is not bound,
+     returns ‘#f’.
+
+
+File: geda-scheme.info,  Node: Selections,  Next: Hooks,  Prev: Key mapping,  Up: gschem API Reference
+
+3.3 Selections
+==============
+
+To use the functions described in this section, you will need to load
+the ‘(gschem selection)’ module.
+
+   Each ‘page’ in gschem has a “selection” associated with it, which is
+some subset of the ‘page’s contents.  Most actions in gschem operate on
+the currently selected objects.
+
+ -- Function: page-selection page
+     Returns the current selection for PAGE, as a list of ‘object’s.
+
+ -- Function: object-selected? object
+     Returns ‘#t’ if OBJECT is in its containing page’s selection.
+     Otherwise, returns ‘#f’.  If OBJECT is not in a ‘page’, raises an
+     ‘object-state’ error.
+
+     *Note*: OBJECT must be _directly_ included in a ‘page’, not via
+     inclusion in a component ‘object’.
+
+ -- Function: select-object! object
+     Adds OBJECT to the selection of its containing ‘page’.  If OBJECT
+     is not directly included in a ‘page’, raises an ‘object-state’
+     error.  If OBJECT is already selected, does nothing.  Returns
+     OBJECT.
+
+     *Note*: This function does not call ‘select-objects-hook’.
+
+ -- Function: deselect-object! object
+     Removes OBJECT from the selection of its containing ‘page’.  If
+     OBJECT is not directly included in a ‘page’, raises an
+     ‘object-state’ error.  If OBJECT is not selected, does nothing.
+     Returns OBJECT.
+
+     *Note*: This function does not call ‘deselect-objects-hook’.
+
+
+File: geda-scheme.info,  Node: Hooks,  Next: Actions,  Prev: Selections,  Up: gschem API Reference
+
+3.4 Hooks
+=========
+
+To use the hooks described in this section, you will need to load the
+‘(gschem hook)’ module.
+
+   gschem defines a number of hooks that allow functions to be
+automatically run whenever a number of built-in actions are invoked by
+the user.
+
+   Most Scheme functions do not call these hooks.  If it makes sense for
+your code to invoke a standard hook, you should normally do so
+explicitly.
+
+   *Warning*: Functions added to these standard hooks should not
+normally modify their arguments.
+
+   For more information on hooks in Guile, *note Hooks: (guile)Hooks.
+
+ -- Variable: add-objects-hook
+     Called after objects are added to the page, at their initial
+     creation.  The argument is a list of the objects being added.
+
+ -- Variable: copy-objects-hook
+     Called after objects are copied, either via *Edit → Copy Mode* or
+     similar, or to buffers, or to the clipboard.  Argument is a list of
+     the objects that were copied.
+
+ -- Variable: remove-objects-hook
+     Called after objects are removed from the page.  Argument is a list
+     of the objects being removed.
+
+ -- Variable: move-objects-hook
+     Called after objects are moved.  Argument is a list of the objects
+     that were moved.
+
+ -- Variable: mirror-objects-hook
+     Called after objects are mirrored.  Argument is a list of the
+     objects that were mirrored.
+
+ -- Variable: rotate-objects-hook
+     Called after objects are rotated.  Argument is a list of the
+     objects that were rotated.
+
+ -- Variable: paste-objects-hook
+     Called after objects are pasted to the page, either via *Edit →
+     Copy Mode* or similar, or via buffers, or via the clipboard.
+     Argument is a list of the objects that were pasted.
+
+ -- Variable: attach-attribs-hook
+     Called after attributes are attached to something.  The argument is
+     a list of the attributes that were attached.
+
+ -- Variable: detach-attribs-hook
+     Called after attributes are detached from something.  The argument
+     is a list of the attributes that were detached.
+
+ -- Variable: select-objects-hook
+     Called after objects are added to the selection.  The argument is a
+     list of objects that were selected.
+
+ -- Variable: deselect-objects-hook
+     Called after objects are removed from the selection.  The argument
+     is a list of objects that were deselected.
+
+ -- Variable: new-page-hook
+     Called when a new page is created.  The argument is the new page.
+
+ -- Variable: action-property-hook
+     Called when an action property is set.  The arguments are the
+     action, the property key and the property value.  *Note Actions::.
+
+     Since 1.10.
+
+ -- Variable: bind-keys-hook
+     Called when a key binding is set or modified.  The arguments are
+     the keymap, the key sequence and the binding’s target.
+
+     *Note*: ‘bind-keys-hook’ may be run multiple times for a single key
+     binding event if the target keymap is bound within a superior
+     keymap.
+
+     Since 1.10.
+
+
+File: geda-scheme.info,  Node: Actions,  Next: Miscellanous gschem functions,  Prev: Hooks,  Up: gschem API Reference
+
+3.5 Actions
+===========
+
+To use the functions described in this section, you will need to load
+the ‘(gschem action)’ module.
+
+3.5.1 Action objects
+--------------------
+
+Usually, it is sufficient to use normal Scheme functions when extending
+gschem.  However, when integrating an extension function with the gschem
+GUI (e.g.  via keybindings), it is often useful to couple a Scheme
+function with metadata such as the label and icon to show in menus, etc.
+
+   You can do this by creating a gschem action.  Actions can be called
+just like a normal Scheme function, but get executed via the gschem
+action dispatcher ‘eval-action!’ rather than being invoked directly.
+Normally, actions have names begining with an ‘&’ symbol.
+
+ -- Macro: define-action (name [keyword value ...]) body
+     Create a new action, bound to the given NAME in the current module.
+     The BODY is a sequence of Scheme expressions which are evaluated in
+     order when the action is invoked.  The following meta-information
+     can be specified for the action by providing pairs of KEYWORDs and
+     VALUEs:
+
+        • ‘#:icon’ sets the name of the icon to be used for the action.
+          This can be either a GTK stock identifier, in which case the
+          GTK stock icon is used, or an icon name in the current icon
+          theme.
+        • ‘#:name’ sets the generic name of the action.  This is
+          displayed as a tooltip for toolbar buttons, and in the hotkey
+          list.  It should be understandable without any context and not
+          contain a mnemonic or ellipsis.
+        • ‘#:label’ sets the generic label of the action.  This is
+          displayed in the context menu.  It should be suitable to be
+          used as a menu label but be understandable without any context
+          and not contain a mnemonic.
+        • ‘#:menu-label’ sets the label for the action when shown in the
+          main menu.  This should be identical to the generic label
+          except for the mnemonic (a character preceded by an underscore
+          for easier keyboard access) and omissions based on the menu
+          name.
+        • ‘#:tooltip’ sets a string explaining the action.  This is
+          displayed as an additional information when the user hovers
+          the mouse cursor over the action.  For tool buttons, it is
+          displayed in addition to the action name.  GTK tends to
+          display tooltips quite aggressively, so use with care.
+
+     Example:
+          (define-action (&report-bug
+                          #:icon       "web-browser"
+                          #:name       "Report Bug"
+                          #:label      "Report Bug..."
+                          #:menu-label "Report _Bug...")
+            (show-uri "http://bugs.launchpad.net/geda/+reportbug"))
+
+     Since 1.10.
+
+ -- Function: make-action thunk [keyword value ...]
+     Create and return a new action wrapping THUNK.  KEYWORD-VALUE pairs
+     specify the meta-information for the action as with
+     ‘define-action’.
+
+     Since 1.10.
+
+ -- Function: action? obj
+     Returns ‘#t’ iff OBJ is a gschem action, and ‘#f’ otherwise.
+
+     Since 1.10.
+
+3.5.2 Evaluating actions
+------------------------
+
+All of gschem’s built-in actions are callable just like normal Scheme
+functions.  However, it’s sometimes useful to explicitly evaluate an
+action in the same way that the gschem GUI (menus, toolbars or
+keybindings) would do so.
+
+ -- Function: eval-action! action
+     Invoke ACTION, returning ‘#t’ on success and raising an error on
+     failure.  There are a number of possible types for ACTION that
+     ‘eval-action!’ will accept:
+
+        • A thunk.
+        • A gschem action.
+        • A symbol naming an action or a thunk in the current module.
+
+     The special symbol ‘repeat-last-command’ is interpreted as a
+     request to repeat the last action evaluated via ‘eval-action!’.
+
+     *Note*: If you have an action object ‘&action’, then the following
+     to calls are equivalent and interchangeable:
+
+          (eval-action! &action)
+          (&action)
+
+     Since 1.10.
+
+3.5.3 Action positions
+----------------------
+
+Often in gschem actions it may be useful not to use the actual current
+mouse pointer position but to use the mouse pointer position that was
+current when the action was invoked.
+
+ -- Function: eval-action-at-point! action [point]
+     Evaluate ACTION at a particular point on the schematic plane.  If
+     POINT is omitted, the action is evaluated at the current mouse
+     pointer position.
+
+     Since 1.10.
+
+ -- Function: action-position
+     Return the current action pointer position, as set when the action
+     was invoked (via ‘eval-action-at-point!’).  This only makes sense
+     to call from inside an action.
+
+     Since 1.10.
+
+   *Note*: The pointer position can only be considered reliable when the
+user was actually clicking on or pointing at the schematic view area to
+invoke the action, rather than on a menu or toolbar button.  At the
+moment this means that an action position is only set when a command is
+invoked by hotkey.
+
+
+File: geda-scheme.info,  Node: Miscellanous gschem functions,  Prev: Actions,  Up: gschem API Reference
+
+3.6 Miscellaneous gschem functions
+==================================
+
+3.6.1 gschem Attribute Helpers
+------------------------------
+
+To use the functions described in this section, you will need to load
+the ‘(gschem attrib)’ module.
+
+ -- Function: add-attrib! target name value visible show
+     Create a new attribute, either attached to a TARGET ‘object’ in the
+     current ‘page’, or floating in the current ‘page’ if TARGET is
+     ‘#f’.  The NAME and VALUE for the attribute must be strings, and if
+     visible is ‘#f’, the attribute will be invisible.  The SHOW
+     argument controls which parts of the attribute will be visible, and
+     must be one of the following symbols:
+
+        • ‘name’
+        • ‘value’
+        • ‘both’
+
+     This function exists to provide a way for actions defined in Scheme
+     to use the same attribute placement heuristics as gschem’s built-in
+     *Add Attribute* action.
+
+     *Note Text::, *note Attributes:: and *note Windows and views::.
+
+3.6.2 Miscellaneous utility functions
+-------------------------------------
+
+To use the functions described in this section, you will need to load
+the ‘(gschem util)’ module.
+
+ -- Function: show-uri uri
+     Open URI in the registered default application associated for that
+     type of file or protocol.  URI should be fully-qualified URI; which
+     URIs can be handled by ‘show-uri’ will depend on the system
+     configuration.
+
+ -- Function: show-file filename
+     Displays a file in the registered default application for files of
+     that type.  FILENAME should be the absolute path and filename of a
+     local file.
+
+
+File: geda-scheme.info,  Node: Concept Index,  Next: Function Index,  Prev: gschem API Reference,  Up: Top
+
+Concept Index
+*************
+
+ [index ]
+* Menu:
+
+* Action evaluation:                     Actions.             (line  77)
+* Action objects:                        Actions.             (line  12)
+* Action positions:                      Actions.             (line 105)
+* Action properties:                     Actions.             (line  12)
+* Actions:                               Actions.             (line   6)
+* Attached attribute:                    Attributes.          (line  32)
+* Attribute:                             Attributes.          (line   6)
+* Attribute format:                      Attributes.          (line   6)
+* Component:                             Component objects.   (line   6)
+* Component library:                     Component objects.   (line   6)
+* Configuration:                         Configuration functions.
+                                                              (line   6)
+* Configuration context:                 Configuration contexts.
+                                                              (line   6)
+* Configuration errors:                  Configuration errors.
+                                                              (line   6)
+* Configuration events:                  Configuration events.
+                                                              (line   6)
+* Configuration group:                   Configuration parameters.
+                                                              (line   6)
+* Configuration key:                     Configuration parameters.
+                                                              (line   6)
+* Configuration notifications:           Configuration events.
+                                                              (line   6)
+* Configuration parameter:               Configuration parameters.
+                                                              (line   6)
+* Configuration trust:                   Configuration contexts.
+                                                              (line 135)
+* Configuration value:                   Configuration parameters.
+                                                              (line   6)
+* Context parent:                        Configuration contexts.
+                                                              (line 110)
+* Context trust:                         Configuration contexts.
+                                                              (line 135)
+* Default configuration contex:          Configuration contexts.
+                                                              (line  22)
+* Embedded component:                    Component objects.   (line   6)
+* Evaluating actions:                    Actions.             (line  77)
+* Floating attribute:                    Attributes.          (line  39)
+* Getting configuration parameters:      Configuration parameters.
+                                                              (line  72)
+* Loading configuration:                 Configuration contexts.
+                                                              (line  75)
+* Objects:                               Objects.             (line   6)
+* Pages:                                 Pages.               (line   6)
+* Parent configuration context:          Configuration contexts.
+                                                              (line 110)
+* Reporting bugs:                        Introduction.        (line  49)
+* Saving configuration:                  Configuration contexts.
+                                                              (line  75)
+* Schematic elements:                    Objects.             (line   6)
+* Schematics:                            Pages.               (line   6)
+* Setting configuration parameters:      Configuration parameters.
+                                                              (line  72)
+* Symbols:                               Pages.               (line   6)
+* System configuration context:          Configuration contexts.
+                                                              (line  22)
+* Trusted configuration context:         Configuration contexts.
+                                                              (line 135)
+* User configuration context:            Configuration contexts.
+                                                              (line  22)
+
+
+File: geda-scheme.info,  Node: Function Index,  Next: Variable Index,  Prev: Concept Index,  Up: Top
+
+Function Index
+**************
+
+ [index ]
+* Menu:
+
+* action-position:                       Actions.             (line 116)
+* action?:                               Actions.             (line  69)
+* active-page:                           Windows and views.   (line   9)
+* active-pages:                          Core page functions. (line  14)
+* add-attrib!:                           Miscellanous gschem functions.
+                                                              (line  12)
+* add-config-event!:                     Configuration events.
+                                                              (line  24)
+* arc-center:                            Arcs.                (line  31)
+* arc-end-angle:                         Arcs.                (line  40)
+* arc-info:                              Arcs.                (line  26)
+* arc-radius:                            Arcs.                (line  34)
+* arc-start-angle:                       Arcs.                (line  37)
+* arc?:                                  Arcs.                (line  10)
+* attach-attribs!:                       Core attribute functions.
+                                                              (line  44)
+* attrib-attachment:                     Core attribute functions.
+                                                              (line  37)
+* attrib-inherited?:                     Core attribute functions.
+                                                              (line  76)
+* attrib-name:                           Core attribute functions.
+                                                              (line  25)
+* attrib-value:                          Core attribute functions.
+                                                              (line  28)
+* attribute?:                            Core attribute functions.
+                                                              (line  12)
+* bind-keys!:                            Key mapping.         (line 112)
+* box-bottom-right:                      Boxes.               (line  38)
+* box-info:                              Boxes.               (line  28)
+* box-top-left:                          Boxes.               (line  34)
+* box?:                                  Boxes.               (line  13)
+* bus-pin?:                              Pins.                (line  32)
+* bus?:                                  Nets and buses.      (line  24)
+* circle-center:                         Circles.             (line  32)
+* circle-info:                           Circles.             (line  27)
+* circle-radius:                         Circles.             (line  36)
+* circle?:                               Circles.             (line  12)
+* close-page!:                           Core page functions. (line  28)
+* component-angle:                       Components.          (line  87)
+* component-append!:                     Components.          (line 101)
+* component-basename:                    Components.          (line  80)
+* component-contents:                    Components.          (line  98)
+* component-info:                        Components.          (line  75)
+* component-locked?:                     Components.          (line  95)
+* component-mirror?:                     Components.          (line  91)
+* component-position:                    Components.          (line  83)
+* component-remove!:                     Components.          (line 108)
+* component?:                            Components.          (line  38)
+* config-boolean:                        Configuration parameters.
+                                                              (line  88)
+* config-boolean-list:                   Configuration parameters.
+                                                              (line 108)
+* config-changed?:                       Configuration contexts.
+                                                              (line 101)
+* config-filename:                       Configuration contexts.
+                                                              (line  78)
+* config-groups:                         Configuration parameters.
+                                                              (line  23)
+* config-has-group?:                     Configuration parameters.
+                                                              (line  29)
+* config-has-key?:                       Configuration parameters.
+                                                              (line  41)
+* config-inherited?:                     Configuration parameters.
+                                                              (line  55)
+* config-int:                            Configuration parameters.
+                                                              (line  93)
+* config-int-list:                       Configuration parameters.
+                                                              (line 112)
+* config-keys:                           Configuration parameters.
+                                                              (line  35)
+* config-load!:                          Configuration contexts.
+                                                              (line  85)
+* config-loaded?:                        Configuration contexts.
+                                                              (line  89)
+* config-real:                           Configuration parameters.
+                                                              (line  98)
+* config-real-list:                      Configuration parameters.
+                                                              (line 117)
+* config-save!:                          Configuration contexts.
+                                                              (line  95)
+* config-set!:                           Configuration parameters.
+                                                              (line 122)
+* config-source:                         Configuration parameters.
+                                                              (line  62)
+* config-string:                         Configuration parameters.
+                                                              (line  83)
+* config-string-list:                    Configuration parameters.
+                                                              (line 103)
+* config-trusted-context:                Configuration contexts.
+                                                              (line 165)
+* config-trusted?:                       Configuration contexts.
+                                                              (line 150)
+* context-parent:                        Configuration contexts.
+                                                              (line 116)
+* copy-object:                           General object functions.
+                                                              (line   9)
+* default_config_context:                Configuration contexts.
+                                                              (line  38)
+* define-action:                         Actions.             (line  22)
+* deselect-object!:                      Selections.          (line  32)
+* detach-attribs!:                       Core attribute functions.
+                                                              (line  61)
+* eval-action!:                          Actions.             (line  82)
+* eval-action-at-point!:                 Actions.             (line 109)
+* expand-env-variables:                  System information.  (line  64)
+* fold-bounds:                           Object bounds.       (line  19)
+* inherited-attribs:                     Core attribute functions.
+                                                              (line  72)
+* key->display-string:                   Key mapping.         (line  32)
+* key->string:                           Key mapping.         (line  28)
+* key?:                                  Key mapping.         (line  18)
+* keymap-bind-key!:                      Key mapping.         (line  84)
+* keymap-for-each:                       Key mapping.         (line  97)
+* keymap-lookup-binding:                 Key mapping.         (line  93)
+* keymap-lookup-key:                     Key mapping.         (line  89)
+* keymap?:                               Key mapping.         (line  78)
+* keys->display-string:                  Key mapping.         (line  68)
+* keys->string:                          Key mapping.         (line  64)
+* keys?:                                 Key mapping.         (line  56)
+* line-end:                              Lines.               (line  42)
+* line-info:                             Lines.               (line  28)
+* line-start:                            Lines.               (line  37)
+* line?:                                 Lines.               (line  13)
+* log!:                                  Logging functions.   (line   9)
+* lookup-binding:                        Key mapping.         (line 126)
+* lookup-keys:                           Key mapping.         (line 122)
+* make-action:                           Actions.             (line  62)
+* make-arc:                              Arcs.                (line  13)
+* make-box:                              Boxes.               (line  16)
+* make-bus:                              Nets and buses.      (line  27)
+* make-bus-pin:                          Pins.                (line  35)
+* make-circle:                           Circles.             (line  15)
+* make-component:                        Components.          (line  41)
+* make-component/library:                Components.          (line  52)
+* make-keymap:                           Key mapping.         (line  81)
+* make-line:                             Lines.               (line  16)
+* make-net:                              Nets and buses.      (line  17)
+* make-net-pin:                          Pins.                (line  24)
+* make-page:                             Core page functions. (line  24)
+* make-path:                             Paths.               (line  28)
+* make-picture/vector:                   Pictures.            (line  24)
+* make-text:                             Text.                (line  23)
+* mirror-objects!:                       Object transformations.
+                                                              (line  18)
+* net-pin?:                              Pins.                (line  21)
+* net?:                                  Nets and buses.      (line  14)
+* object-attribs:                        Core attribute functions.
+                                                              (line  41)
+* object-bounds:                         Object bounds.       (line   9)
+* object-color:                          Object color.        (line  10)
+* object-component:                      General object functions.
+                                                              (line  14)
+* object-connections:                    General object functions.
+                                                              (line  18)
+* object-fill:                           Object fill and stroke.
+                                                              (line  51)
+* object-page:                           Core page functions. (line  91)
+* object-selected?:                      Selections.          (line  16)
+* object-stroke:                         Object fill and stroke.
+                                                              (line   9)
+* object-stroke-cap:                     Object fill and stroke.
+                                                              (line  33)
+* object-stroke-dash:                    Object fill and stroke.
+                                                              (line  38)
+* object-stroke-width:                   Object fill and stroke.
+                                                              (line  29)
+* object-type:                           Object sub-types.    (line   8)
+* object-type?:                          Object sub-types.    (line  24)
+* object?:                               General object functions.
+                                                              (line   6)
+* page->string:                          Core page functions. (line  55)
+* page-append!:                          Core page functions. (line  68)
+* page-contents:                         Core page functions. (line  64)
+* page-dirty?:                           Core page functions. (line 105)
+* page-filename:                         Core page functions. (line  35)
+* page-remove!:                          Core page functions. (line  76)
+* page-selection:                        Selections.          (line  13)
+* page?:                                 Core page functions. (line  11)
+* parse-attrib:                          Core attribute functions.
+                                                              (line  19)
+* path-config-context:                   Configuration contexts.
+                                                              (line  22)
+* path-insert!:                          Paths.               (line  52)
+* path-length:                           Paths.               (line  34)
+* path-ref:                              Paths.               (line  37)
+* path-remove!:                          Paths.               (line  48)
+* path?:                                 Paths.               (line  25)
+* picture-angle:                         Pictures.            (line  54)
+* picture-bottom-right:                  Pictures.            (line  50)
+* picture-filename:                      Pictures.            (line  43)
+* picture-info:                          Pictures.            (line  38)
+* picture-mirror?:                       Pictures.            (line  58)
+* picture-top-left:                      Pictures.            (line  46)
+* picture?:                              Pictures.            (line  21)
+* pin?:                                  Pins.                (line  18)
+* platform:                              System information.  (line  35)
+* platform?:                             System information.  (line  45)
+* pointer-position:                      Windows and views.   (line  15)
+* promotable-attribs:                    Core attribute functions.
+                                                              (line  83)
+* promote-attribs!:                      Core attribute functions.
+                                                              (line  86)
+* remove-config-event!:                  Configuration events.
+                                                              (line  30)
+* rotate-objects!:                       Object transformations.
+                                                              (line  12)
+* select-object!:                        Selections.          (line  24)
+* set-active-page!:                      Windows and views.   (line  12)
+* set-arc!:                              Arcs.                (line  22)
+* set-attrib-value!:                     Core attribute functions.
+                                                              (line  31)
+* set-box!:                              Boxes.               (line  24)
+* set-circle!:                           Circles.             (line  23)
+* set-component!:                        Components.          (line  61)
+* set-component-with-transform!:         Components.          (line  68)
+* set-config-parent!:                    Configuration contexts.
+                                                              (line 121)
+* set-config-trusted!:                   Configuration contexts.
+                                                              (line 155)
+* set-line!:                             Lines.               (line  23)
+* set-object-color!:                     Object color.        (line  14)
+* set-object-fill!:                      Object fill and stroke.
+                                                              (line  65)
+* set-object-stroke!:                    Object fill and stroke.
+                                                              (line  23)
+* set-page-dirty!:                       Core page functions. (line 109)
+* set-page-filename!:                    Core page functions. (line  39)
+* set-picture!:                          Pictures.            (line  35)
+* set-text!:                             Text.                (line  62)
+* set-text-string!:                      Text.                (line  97)
+* set-text-visibility!:                  Text.                (line 107)
+* show-file:                             Miscellanous gschem functions.
+                                                              (line  42)
+* show-uri:                              Miscellanous gschem functions.
+                                                              (line  36)
+* snap-point:                            Windows and views.   (line  20)
+* string->key:                           Key mapping.         (line  21)
+* string->keys:                          Key mapping.         (line  59)
+* string->page:                          Core page functions. (line  48)
+* sys-config-dirs:                       System information.  (line  53)
+* sys-data-dirs:                         System information.  (line  49)
+* system-config-context:                 Configuration contexts.
+                                                              (line  54)
+* text-align:                            Text.                (line  77)
+* text-anchor:                           Text.                (line  74)
+* text-angle:                            Text.                (line  90)
+* text-attribute-mode:                   Text.                (line 111)
+* text-info:                             Text.                (line  67)
+* text-size:                             Text.                (line 101)
+* text-string:                           Text.                (line  94)
+* text-visible?:                         Text.                (line 104)
+* text?:                                 Text.                (line  20)
+* translate-objects!:                    Object transformations.
+                                                              (line   8)
+* user-config-context:                   Configuration contexts.
+                                                              (line  65)
+* user-config-dir:                       System information.  (line  60)
+* user-data-dir:                         System information.  (line  57)
+
+
+File: geda-scheme.info,  Node: Variable Index,  Prev: Function Index,  Up: Top
+
+Variable Index
+**************
+
+ [index ]
+* Menu:
+
+* action-property-hook:                  Hooks.                (line 71)
+* add-objects-hook:                      Hooks.                (line 22)
+* attach-attribs-hook:                   Hooks.                (line 52)
+* bind-keys-hook:                        Hooks.                (line 77)
+* copy-objects-hook:                     Hooks.                (line 26)
+* deselect-objects-hook:                 Hooks.                (line 64)
+* detach-attribs-hook:                   Hooks.                (line 56)
+* mirror-objects-hook:                   Hooks.                (line 39)
+* move-objects-hook:                     Hooks.                (line 35)
+* new-page-hook:                         Hooks.                (line 68)
+* paste-objects-hook:                    Hooks.                (line 47)
+* path-separator:                        System information.   (line 32)
+* path-separator-char:                   System information.   (line 28)
+* remove-objects-hook:                   Hooks.                (line 31)
+* rotate-objects-hook:                   Hooks.                (line 43)
+* select-objects-hook:                   Hooks.                (line 60)
+* separator:                             System information.   (line 21)
+* separator-char:                        System information.   (line 13)
+
+
+
+Tag Table:
+Node: Top827
+Node: Introduction1705
+Node: Schematic Document Model4652
+Node: Pages5525
+Node: Objects6886
+Node: Component objects7773
+Node: Attributes9123
+Node: Coordinate system11058
+Node: Core API Reference12073
+Node: Core page functions12584
+Node: Core object functions16552
+Node: General object functions17005
+Node: Object sub-types18332
+Node: Object transformations19152
+Node: Object bounds20033
+Node: Object color21087
+Node: Object fill and stroke21676
+Node: Lines24898
+Node: Nets and buses26783
+Node: Pins27992
+Node: Boxes29554
+Node: Circles31106
+Node: Arcs32538
+Node: Paths34209
+Node: Pictures36900
+Node: Text39302
+Node: Components43706
+Node: Core attribute functions48722
+Node: Configuration functions52503
+Node: Configuration contexts53057
+Node: Configuration parameters59394
+Node: Configuration events63092
+Node: Configuration errors64324
+Node: Logging functions65285
+Node: System information65985
+Node: gschem API Reference68418
+Node: Windows and views68894
+Node: Key mapping69746
+Node: Selections74911
+Node: Hooks76471
+Node: Actions79557
+Node: Miscellanous gschem functions84832
+Node: Concept Index86607
+Node: Function Index91060
+Node: Variable Index109644
+
+End Tag Table
+
+
+Local Variables:
+coding: utf-8
+End:
