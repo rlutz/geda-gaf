@@ -1,4 +1,4 @@
-/* Copyright (C) 2013-2019 Roland Lutz
+/* Copyright (C) 2013-2020 Roland Lutz
 
    AUTOMATICALLY GENERATED FROM data_arc.m4 -- DO NOT EDIT
 
