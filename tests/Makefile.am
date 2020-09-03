@@ -15,7 +15,7 @@
 # Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 AM_CPPFLAGS = -I$(top_srcdir)/include
-AM_CFLAGS = -Wall -W -Werror -Wno-empty-body
+AM_CFLAGS = -Wall -W -Werror -Wno-empty-body -Wno-parentheses
 LDADD = $(top_builddir)/src/storage/libxornstorage.la
 
 TEST_EXTENSIONS = .py
