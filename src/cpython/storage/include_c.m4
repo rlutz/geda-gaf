@@ -605,14 +605,14 @@ snap -----------------------------------
 
 static PyMemberDef Class(`members')[] = {
 undivert(`members')
-	{ NULL }  /* Sentinel */
+	{ NULL, 0, 0, 0, NULL }  /* Sentinel */
 };
 snip -----------------------------------
 undivert(`getset_bodies')
 
 static PyGetSetDef Class(`getset')[] = {
 undivert(`getset')
-	{ NULL }  /* Sentinel */
+	{ NULL, NULL, NULL, NULL, NULL }  /* Sentinel */
 };
 snap -----------------------------------
 

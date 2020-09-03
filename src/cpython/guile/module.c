@@ -152,7 +152,7 @@ static PyMethodDef methods[] = {
 	  PyDoc_STR("eval_string(string)\n\n"
 		    "Parse string as Scheme, and evaluate the expressions it "
 		    "contains, in\norder, returning the last expression.") },
-	{ NULL }  /* sentinel */
+	{ NULL, NULL, 0, NULL }  /* sentinel */
 };
 
 PyMODINIT_FUNC initguile(void)

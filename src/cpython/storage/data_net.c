@@ -132,7 +132,7 @@ static PyMemberDef Net_members[] = {
 	  PyDoc_STR("") },
 	{ "is_inverted", T_BOOL, offsetof(Net, data.is_inverted), 0,
 	  PyDoc_STR("") },
-	{ NULL }  /* Sentinel */
+	{ NULL, 0, 0, 0, NULL }  /* Sentinel */
 };
 
 PyTypeObject NetType = {

@@ -145,11 +145,11 @@ static PyMemberDef Component_members[] = {
 	  PyDoc_STR("") },
 	{ "symbol", T_OBJECT_EX, offsetof(Component, data.symbol.ptr), 0,
 	  PyDoc_STR("") },
-	{ NULL }  /* Sentinel */
+	{ NULL, 0, 0, 0, NULL }  /* Sentinel */
 };
 
 static PyGetSetDef Component_getset[] = {
-	{ NULL }  /* Sentinel */
+	{ NULL, NULL, NULL, NULL, NULL }  /* Sentinel */
 };
 
 PyTypeObject ComponentType = {

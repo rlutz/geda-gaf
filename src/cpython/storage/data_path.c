@@ -178,7 +178,7 @@ static void Path_dealloc(Path *self)
 static PyMemberDef Path_members[] = {
 	{ "color", T_INT, offsetof(Path, data.color), 0,
 	  PyDoc_STR("") },
-	{ NULL }  /* Sentinel */
+	{ NULL, 0, 0, 0, NULL }  /* Sentinel */
 };
 
 static PyObject *Path_getpathdata(Path *self, void *closure)
@@ -275,7 +275,7 @@ static PyGetSetDef Path_getset[] = {
 	  PyDoc_STR(""), NULL },
 	{ "fill", (getter)Path_getfill, (setter)Path_setfill,
 	  PyDoc_STR(""), NULL },
-	{ NULL }  /* Sentinel */
+	{ NULL, NULL, NULL, NULL, NULL }  /* Sentinel */
 };
 
 PyTypeObject PathType = {

@@ -142,11 +142,11 @@ static PyMemberDef Picture_members[] = {
 	  PyDoc_STR("") },
 	{ "pixmap", T_OBJECT_EX, offsetof(Picture, data.pixmap.ptr), 0,
 	  PyDoc_STR("") },
-	{ NULL }  /* Sentinel */
+	{ NULL, 0, 0, 0, NULL }  /* Sentinel */
 };
 
 static PyGetSetDef Picture_getset[] = {
-	{ NULL }  /* Sentinel */
+	{ NULL, NULL, NULL, NULL, NULL }  /* Sentinel */
 };
 
 PyTypeObject PictureType = {

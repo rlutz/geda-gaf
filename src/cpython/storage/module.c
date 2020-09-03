@@ -450,7 +450,7 @@ static PyMethodDef methods[] = {
 		    "whether an object exists in a revision and is selected "
 		    "in a selection") },
 
-	{ NULL }  /* Sentinel */
+	{ NULL, NULL, 0, NULL }  /* Sentinel */
 };
 
 static int add_type(PyObject *module, const char *name, PyTypeObject *value)

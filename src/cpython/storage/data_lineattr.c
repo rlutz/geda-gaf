@@ -95,7 +95,7 @@ static PyMemberDef LineAttr_members[] = {
 	  PyDoc_STR("") },
 	{ "dash_space", T_DOUBLE, offsetof(LineAttr, data.dash_space), 0,
 	  PyDoc_STR("") },
-	{ NULL }  /* Sentinel */
+	{ NULL, 0, 0, 0, NULL }  /* Sentinel */
 };
 
 PyTypeObject LineAttrType = {

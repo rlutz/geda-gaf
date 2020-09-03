@@ -101,7 +101,7 @@ static PyMemberDef FillAttr_members[] = {
 	  PyDoc_STR("") },
 	{ "pitch1", T_DOUBLE, offsetof(FillAttr, data.pitch1), 0,
 	  PyDoc_STR("") },
-	{ NULL }  /* Sentinel */
+	{ NULL, 0, 0, 0, NULL }  /* Sentinel */
 };
 
 PyTypeObject FillAttrType = {
