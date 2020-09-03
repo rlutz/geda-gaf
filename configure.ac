@@ -26,6 +26,8 @@ AM_INIT_AUTOMAKE([-Wall -Werror silent-rules subdir-objects])
 m4_ifdef([AM_PROG_AR], [AM_PROG_AR])
 LT_INIT([])
 
+AX_PROG_CC_WARNING([cast_function_type], [cast-function-type])
+
 AC_PROG_CXX
 
 AM_PATH_PYTHON([2.7])

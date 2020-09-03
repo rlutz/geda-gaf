@@ -15,7 +15,8 @@
 # Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 AM_CPPFLAGS = $(PYTHON_CFLAGS) -I$(top_srcdir)/include
-AM_CFLAGS = -Wall -W -Wno-unused-parameter -fno-strict-aliasing
+AM_CFLAGS = -Wall -W -Wno-unused-parameter -fno-strict-aliasing \
+	    $(Wno_cast_function_type_IF_SUPPORTED)
 
 AM_V_M4 = $(am__v_M4_@AM_V@)
 am__v_M4_ = $(am__v_M4_@AM_DEFAULT_V@)

@@ -15,7 +15,8 @@
 # Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 AM_CPPFLAGS = $(PYTHON_CFLAGS) $(GUILE_CFLAGS)
-AM_CFLAGS = -Wall -W -Wno-unused-parameter -fno-strict-aliasing
+AM_CFLAGS = -Wall -W -Wno-unused-parameter -fno-strict-aliasing \
+	    $(Wno_cast_function_type_IF_SUPPORTED)
 
 pkgpyexec_LTLIBRARIES = guilemodule.la
 guilemodule_la_SOURCES = \
