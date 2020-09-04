@@ -1,4 +1,4 @@
-/* Copyright (C) 2013-2019 Roland Lutz
+/* Copyright (C) 2013-2020 Roland Lutz
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -152,7 +152,7 @@ static PyMethodDef methods[] = {
 	  PyDoc_STR("eval_string(string)\n\n"
 		    "Parse string as Scheme, and evaluate the expressions it "
 		    "contains, in\norder, returning the last expression.") },
-	{ NULL }  /* sentinel */
+	{ NULL, NULL, 0, NULL }  /* sentinel */
 };
 
 PyMODINIT_FUNC initguile(void)

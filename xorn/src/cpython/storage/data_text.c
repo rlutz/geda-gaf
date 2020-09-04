@@ -1,4 +1,4 @@
-/* Copyright (C) 2013-2019 Roland Lutz
+/* Copyright (C) 2013-2020 Roland Lutz
 
    AUTOMATICALLY GENERATED FROM data_text.m4 -- DO NOT EDIT
 
@@ -173,7 +173,7 @@ static PyMemberDef Text_members[] = {
 	  PyDoc_STR("") },
 	{ "alignment", T_INT, offsetof(Text, data.alignment), 0,
 	  PyDoc_STR("") },
-	{ NULL }  /* Sentinel */
+	{ NULL, 0, 0, 0, NULL }  /* Sentinel */
 };
 
 static PyObject *Text_gettext(Text *self, void *closure)
@@ -208,7 +208,7 @@ static int Text_settext(Text *self, PyObject *value, void *closure)
 static PyGetSetDef Text_getset[] = {
 	{ "text", (getter)Text_gettext, (setter)Text_settext,
 	  PyDoc_STR(""), NULL },
-	{ NULL }  /* Sentinel */
+	{ NULL, NULL, NULL, NULL, NULL }  /* Sentinel */
 };
 
 PyTypeObject TextType = {

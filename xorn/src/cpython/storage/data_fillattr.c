@@ -1,4 +1,4 @@
-/* Copyright (C) 2013-2019 Roland Lutz
+/* Copyright (C) 2013-2020 Roland Lutz
 
    AUTOMATICALLY GENERATED FROM data_fillattr.m4 -- DO NOT EDIT
 
@@ -101,7 +101,7 @@ static PyMemberDef FillAttr_members[] = {
 	  PyDoc_STR("") },
 	{ "pitch1", T_DOUBLE, offsetof(FillAttr, data.pitch1), 0,
 	  PyDoc_STR("") },
-	{ NULL }  /* Sentinel */
+	{ NULL, 0, 0, 0, NULL }  /* Sentinel */
 };
 
 PyTypeObject FillAttrType = {

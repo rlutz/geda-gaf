@@ -1,4 +1,4 @@
-/* Copyright (C) 2013-2019 Roland Lutz
+/* Copyright (C) 2013-2020 Roland Lutz
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -628,7 +628,7 @@ static PyMethodDef Revision_methods[] = {
 		    "delete some objects from the revision\n\n"
 		    "Only callable on a transient revision.\n") },
 
-	{ NULL }  /* Sentinel */
+	{ NULL, NULL, 0, NULL }  /* Sentinel */
 };
 
 static PyObject *Revision_gettransient(Revision *self, void *closure)
@@ -669,7 +669,7 @@ static PyGetSetDef Revision_getset[] = {
 	{ "transient", (getter)Revision_gettransient,
 		       (setter)Revision_settransient,
 	  PyDoc_STR("Whether the revision can be changed."), NULL },
-	{ NULL }  /* Sentinel */
+	{ NULL, NULL, NULL, NULL, NULL }  /* Sentinel */
 };
 
 PyTypeObject RevisionType = {

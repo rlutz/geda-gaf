@@ -1,0 +1,114 @@
+tEDAx v1
+begin netlist v1 netlist
+device U1 DIODE-BRIDGE
+pinname U1 1 1
+pinidx U1 1 1
+pinname U1 2 2
+pinidx U1 2 2
+pinname U1 3 3
+pinidx U1 3 3
+pinname U1 4 4
+pinidx U1 4 4
+device F1 FUSE
+pinname F1 1 1
+pinidx F1 1 1
+pinname F1 2 2
+pinidx F1 2 2
+device T1 transformer
+pinname T1 2 2
+pinidx T1 2 2
+pinname T1 1 1
+pinidx T1 1 1
+pinname T1 4 4
+pinidx T1 4 4
+pinname T1 3 3
+pinidx T1 3 3
+device CONN1 MAINS_CONNECTOR
+pinname CONN1 1 1
+pinidx CONN1 1 1
+pinname CONN1 2 2
+pinidx CONN1 2 2
+pinname CONN1 3 3
+pinidx CONN1 3 3
+device S1 SPST
+pinname S1 2 2
+pinidx S1 2 2
+pinname S1 1 1
+pinidx S1 1 1
+value C1 2200uF
+device C1 POLARIZED_CAPACITOR
+pinname C1 1 +
+pinidx C1 1 1
+pinname C1 2 -
+pinidx C1 2 2
+value R2 220
+device R2 RESISTOR
+pinname R2 2 2
+pinidx R2 2 2
+pinname R2 1 1
+pinidx R2 1 1
+value C2 0.1uF
+device C2 POLARIZED_CAPACITOR
+pinname C2 1 +
+pinidx C2 1 1
+pinname C2 2 -
+pinidx C2 2 2
+value R1 5k
+device R1 VARIABLE_RESISTOR
+pinname R1 3 3
+pinidx R1 3 3
+pinname R1 2 2
+pinidx R1 2 2
+pinname R1 1 1
+pinidx R1 1 1
+value C3 22uF
+device C3 POLARIZED_CAPACITOR
+pinname C3 1 +
+pinidx C3 1 1
+pinname C3 2 -
+pinidx C3 2 2
+value C4 1uf
+device C4 POLARIZED_CAPACITOR
+pinname C4 1 +
+pinidx C4 1 1
+pinname C4 2 -
+pinidx C4 2 2
+device U2 LM317
+pinname U2 2 Vout
+pinidx U2 2 2
+pinname U2 3 Vin
+pinidx U2 3 3
+pinname U2 1 Adjust
+pinidx U2 1 1
+conn eight U1 1
+conn eight C1 1
+conn eight C2 1
+conn eight U2 3
+conn nine U1 2
+conn nine C1 2
+conn nine C2 2
+conn nine R1 3
+conn nine R1 1
+conn nine C3 2
+conn nine C4 2
+conn seven U1 3
+conn seven T1 4
+conn six U1 4
+conn six T1 3
+conn two F1 1
+conn two S1 2
+conn three F1 2
+conn three T1 1
+conn five T1 2
+conn five CONN1 2
+conn one CONN1 1
+conn one S1 1
+conn GND CONN1 3
+conn eleven R2 2
+conn eleven C4 1
+conn eleven U2 2
+conn ten R2 1
+conn ten R1 2
+conn ten C3 1
+conn ten U2 1
+end netlist

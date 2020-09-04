@@ -1,0 +1,105 @@
+tEDAx v1
+begin netlist v1 netlist
+device X1 LVD
+pinname X1 4 Y0
+pinidx X1 4 4
+pinname X1 5 Y1
+pinidx X1 5 5
+pinname X1 1 D
+pinidx X1 1 1
+pinname X1 3 VH
+pinidx X1 3 3
+pinname X1 2 DGND
+pinidx X1 2 2
+pinname X1 6 Vdd1
+pinidx X1 6 6
+pinname X1 7 Vss
+pinidx X1 7 7
+device M1 PMOS_TRANSISTOR
+pinname M1 S S
+pinidx M1 S 3
+pinname M1 B B
+pinidx M1 B 4
+pinname M1 D D
+pinidx M1 D 1
+pinname M1 G G
+pinidx M1 G 2
+value Rb 5.6k
+device Rb RESISTOR
+pinname Rb 2 2
+pinidx Rb 2 2
+pinname Rb 1 1
+pinidx Rb 1 1
+value Rt 1k
+device Rt RESISTOR
+pinname Rt 2 2
+pinidx Rt 2 2
+pinname Rt 1 1
+pinidx Rt 1 1
+footprint V1 none
+value V1 pulse\ 3.3\ 0\ 1u\ 10p\ 10p\ 1.25u\ 2.5u
+device V1 vpulse
+pinname V1 1 +
+pinidx V1 1 1
+pinname V1 2 -
+pinidx V1 2 2
+footprint Vdd none
+value Vdd DC\ 3.3V
+device Vdd VOLTAGE_SOURCE
+pinname Vdd 1 +
+pinidx Vdd 1 1
+pinname Vdd 2 -
+pinidx Vdd 2 2
+value Rlm 500k
+device Rlm RESISTOR
+pinname Rlm 2 2
+pinidx Rlm 2 2
+pinname Rlm 1 1
+pinidx Rlm 1 1
+value Rlp 1meg
+device Rlp RESISTOR
+pinname Rlp 2 2
+pinidx Rlp 2 2
+pinname Rlp 1 1
+pinidx Rlp 1 1
+value Cp 20p
+device Cp CAPACITOR
+pinname Cp 1 1
+pinidx Cp 1 1
+pinname Cp 2 2
+pinidx Cp 2 2
+value Cm 20p
+device Cm CAPACITOR
+pinname Cm 1 1
+pinidx Cm 1 1
+pinname Cm 2 2
+pinidx Cm 2 2
+device A1 model
+conn m X1 4
+conn m Rt 2
+conn m Rlm 1
+conn m Cm 1
+conn p X1 5
+conn p Rt 1
+conn p Rlp 1
+conn p Cp 1
+conn i X1 1
+conn i V1 1
+conn LVH X1 3
+conn LVH M1 D
+conn LVH M1 G
+conn LVH Rb 2
+conn GND X1 2
+conn GND X1 7
+conn GND Rb 1
+conn GND V1 2
+conn GND Vdd 2
+conn GND Rlm 2
+conn GND Cp 2
+conn GND Cm 2
+conn Vdd1 X1 6
+conn Vdd1 M1 S
+conn Vdd1 M1 B
+conn Vdd1 Vdd 1
+conn Vdd1 Rlp 2
+end netlist

@@ -1,5 +1,5 @@
 m4_divert(`-1')
-# Copyright (C) 2013-2019 Roland Lutz
+# Copyright (C) 2013-2020 Roland Lutz
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -495,7 +495,7 @@ end_divert
 
 m4_define(`cg_output', `
 begin_divert(`stdout')
-/* Copyright (C) 2013-2019 Roland Lutz
+/* Copyright (C) 2013-2020 Roland Lutz
 
    AUTOMATICALLY GENERATED FROM m4_regexp(
 	m4___file__, `.*/\([^/]*\)', ``\1'') -- DO NOT EDIT
@@ -605,14 +605,14 @@ snap -----------------------------------
 
 static PyMemberDef Class(`members')[] = {
 undivert(`members')
-	{ NULL }  /* Sentinel */
+	{ NULL, 0, 0, 0, NULL }  /* Sentinel */
 };
 snip -----------------------------------
 undivert(`getset_bodies')
 
 static PyGetSetDef Class(`getset')[] = {
 undivert(`getset')
-	{ NULL }  /* Sentinel */
+	{ NULL, NULL, NULL, NULL, NULL }  /* Sentinel */
 };
 snap -----------------------------------
 

@@ -1,4 +1,4 @@
-/* Copyright (C) 2013-2019 Roland Lutz
+/* Copyright (C) 2013-2020 Roland Lutz
 
    AUTOMATICALLY GENERATED FROM data_circle.m4 -- DO NOT EDIT
 
@@ -158,7 +158,7 @@ static PyMemberDef Circle_members[] = {
 	  PyDoc_STR("") },
 	{ "color", T_INT, offsetof(Circle, data.color), 0,
 	  PyDoc_STR("") },
-	{ NULL }  /* Sentinel */
+	{ NULL, 0, 0, 0, NULL }  /* Sentinel */
 };
 
 static PyObject *Circle_getline(Circle *self, void *closure)
@@ -224,7 +224,7 @@ static PyGetSetDef Circle_getset[] = {
 	  PyDoc_STR(""), NULL },
 	{ "fill", (getter)Circle_getfill, (setter)Circle_setfill,
 	  PyDoc_STR(""), NULL },
-	{ NULL }  /* Sentinel */
+	{ NULL, NULL, NULL, NULL, NULL }  /* Sentinel */
 };
 
 PyTypeObject CircleType = {
