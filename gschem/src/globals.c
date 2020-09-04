@@ -28,6 +28,9 @@
 /* window list */
 GList *global_window_list = NULL;
 
+/* Manager for recently used files */
+GtkRecentManager *recent_manager = NULL;
+
 char *rc_filename     = NULL;
 char *output_filename = NULL;
 
