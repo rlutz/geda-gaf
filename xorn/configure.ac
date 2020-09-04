@@ -37,6 +37,7 @@ AM_GNU_GETTEXT_VERSION([0.18.2])
 
 # use location passed by main configure script
 AC_MSG_CHECKING([where to look for gEDA shared data])
+AC_ARG_VAR([GEDADATADIR], [path to gEDA shared data])
 gedadatadir="$GEDADATADIR"
 AC_MSG_RESULT([$gedadatadir])
 AS_IF([test "x$gedadatadir" = "x"],
@@ -49,6 +50,7 @@ AC_SUBST([gedadatadir])
 
 # use location passed by main configure script
 AC_MSG_CHECKING([where to look for gEDA rc files])
+AC_ARG_VAR([GEDARCDIR], [path to gEDA rc files])
 gedasysconfdir="$GEDARCDIR"
 AC_MSG_RESULT([$gedasysconfdir])
 AC_SUBST([gedasysconfdir])
