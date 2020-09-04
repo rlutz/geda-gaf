@@ -25,9 +25,9 @@
  * variable declarations for the individual actions defined in
  * actions.c.  The resulting file looks like this:
  *
- *     GschemAction *action_file_new;
- *     GschemAction *action_file_new_window;
- *     GschemAction *action_file_open;
+ *     extern GschemAction *action_file_new;
+ *     extern GschemAction *action_file_new_window;
+ *     extern GschemAction *action_file_open;
  *     ...
  *
  * Source files which reference individual actions by name (e.g. in
@@ -39,6 +39,6 @@
  */
 
 #define DEFINE_ACTION(c_id, id, icon, name, label, menu_label, tooltip, type) \
-  KEEP_LINE GschemAction *action_ ## c_id;
+  KEEP_LINE extern GschemAction *action_ ## c_id;
 #include "actions.c"
 #undef DEFINE_ACTION

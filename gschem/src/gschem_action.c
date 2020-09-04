@@ -65,6 +65,7 @@
 #include "gschem.h"
 
 #define DEFINE_ACTION(c_id, id, icon, name, label, menu_label, tooltip, type) \
+  GschemAction *action_ ## c_id; \
   static void action_callback_ ## c_id (GschemAction *action, \
                                         GschemToplevel *w_current)
 #include "actions.c"
