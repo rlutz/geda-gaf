@@ -34,6 +34,23 @@
 #include "../include/prototype.h"  /* function prototypes */
 #include "../include/globals.h"
 
+TOPLEVEL *pr_current;
+
+SHEET_DATA *sheet_head;
+
+GtkWidget *window;
+GtkWidget *notebook;
+
+GtkSheet **sheets;
+
+GtkWidget **scrolled_windows;
+GtkWidget *entry;
+GtkWidget *location;
+GtkWidget *left_button;
+GtkWidget *center_button;
+GtkWidget *right_button;
+GtkWidget *label;
+
 /* command line arguments */
 int verbose_mode=FALSE; //!< Reflects the value of the command line flag
 int quiet_mode=FALSE;   //!< Reflects the value of the command line flag
