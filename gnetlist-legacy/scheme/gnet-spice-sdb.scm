@@ -1608,7 +1608,6 @@
       ;; Otherwise it's a regular schematic.  Write out command line followed by comments in file header.
           (begin
             (debug-spew "found normal type schematic")
-            (debug-spew "checking for a title-box")
             (let ((title (find-device packages "spice-title"))) ;; If the schematic contains a spice-title device
               (when (string? title)
                  (set! title (get-value title)) ;; and the value attribute is a string
