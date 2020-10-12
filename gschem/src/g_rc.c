@@ -832,14 +832,8 @@ SCM g_rc_bus_ripper_type(SCM mode)
  */
 SCM g_rc_bus_ripper_rotation(SCM mode)
 {
-  static const vstbl_entry mode_table[] = {
-    {SYMMETRIC,     "symmetric" },
-    {NON_SYMMETRIC, "non-symmetric"  }
-  };
-
-  RETURN_G_RC_MODE("bus-ripper-rotation",
-		   default_bus_ripper_rotation,
-		   2);
+  /* obsolete option, keep for compatibility reasons */
+  return SCM_BOOL_F;
 }
 
 /*! \todo Finish function documentation!!!

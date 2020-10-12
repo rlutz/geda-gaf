@@ -15,7 +15,10 @@ dist_man_MANS = gsymcheck.1
 	sed -e"s:[@]DATE@:$$d:" -e"s:[@]VERSION@:$$v:" -e"s:[@]YEAR@:$$y:" < $< > $@
 
 # Rules for converting man->html
-html_man_files = gsymcheck.html
+html_man_files =
+if ENABLE_GROFF_HTML
+html_man_files += gsymcheck.html
+endif
 SUFFIXES = .1.in .1 .html
 
 docsmandir=$(docdir)/man

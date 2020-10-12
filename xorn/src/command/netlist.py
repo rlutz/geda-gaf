@@ -1,7 +1,7 @@
 # gaf.netlist - gEDA Netlist Extraction and Generation
 # Copyright (C) 1998-2010 Ales Hvezda
 # Copyright (C) 1998-2010 gEDA Contributors (see ChangeLog for details)
-# Copyright (C) 2013-2019 Roland Lutz
+# Copyright (C) 2013-2020 Roland Lutz
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -232,7 +232,7 @@ Miscellaneous options:
 def version():
     sys.stdout.write("%s - gEDA netlister\n" % xorn.config.PACKAGE_STRING)
     sys.stdout.write(_("Copyright (C) 1998-2012 gEDA developers\n"))
-    sys.stdout.write(_("Copyright (C) 2019 Roland Lutz\n"))
+    sys.stdout.write(_("Copyright (C) 2020 Roland Lutz\n"))
     sys.stdout.write("\n")
     sys.stdout.write(_(
 "This program is free software; you can redistribute it and/or\n"

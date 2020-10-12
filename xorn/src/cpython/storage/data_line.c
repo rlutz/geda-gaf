@@ -1,4 +1,4 @@
-/* Copyright (C) 2013-2019 Roland Lutz
+/* Copyright (C) 2013-2020 Roland Lutz
 
    AUTOMATICALLY GENERATED FROM data_line.m4 -- DO NOT EDIT
 
@@ -136,7 +136,7 @@ static PyMemberDef Line_members[] = {
 	  PyDoc_STR("") },
 	{ "color", T_INT, offsetof(Line, data.color), 0,
 	  PyDoc_STR("") },
-	{ NULL }  /* Sentinel */
+	{ NULL, 0, 0, 0, NULL }  /* Sentinel */
 };
 
 static PyObject *Line_getline(Line *self, void *closure)
@@ -171,7 +171,7 @@ static int Line_setline(Line *self, PyObject *value, void *closure)
 static PyGetSetDef Line_getset[] = {
 	{ "line", (getter)Line_getline, (setter)Line_setline,
 	  PyDoc_STR(""), NULL },
-	{ NULL }  /* Sentinel */
+	{ NULL, NULL, NULL, NULL, NULL }  /* Sentinel */
 };
 
 PyTypeObject LineType = {

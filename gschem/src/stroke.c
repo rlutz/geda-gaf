@@ -64,11 +64,11 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 /* structure for holding point data */
 typedef struct s_point *p_point;
 
-static struct s_point {
+struct s_point {
   int x;
   int y;
   p_point next;
-} point;
+};
 
 /* point list head and tail */
 static p_point point_list_head;
@@ -238,7 +238,7 @@ void stroke_record (int x, int y)
   float ix, iy;
 
   if (point_count < STROKE_MAX_POINTS) {
-    new_point_p = (p_point) malloc (sizeof(point));
+    new_point_p = (p_point) malloc (sizeof(struct s_point));
 
     if (point_list_tail == NULL) {
 
@@ -283,7 +283,7 @@ void stroke_record (int x, int y)
           if (((int) iy) > max_y) max_y = (int) iy;
           point_count++;
 
-          new_point_p = (p_point) malloc (sizeof(point));
+          new_point_p = (p_point) malloc (sizeof(struct s_point));
         }
       } else {  /* same thing, but for dely larger than delx case... */
         ix = point_list_tail->x;
@@ -311,7 +311,7 @@ void stroke_record (int x, int y)
           if (((int) iy) > max_y) max_y = (int) iy;
           point_count++;
 
-          new_point_p = (p_point) malloc (sizeof(point));
+          new_point_p = (p_point) malloc (sizeof(struct s_point));
         }
       }
 

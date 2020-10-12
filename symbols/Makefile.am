@@ -99,7 +99,7 @@ install-data-local:
 	    echo " ( cd $(srcdir)/$$lib && $(INSTALL_DATA)" $$list "'$$d' )"; \
 	    (cd $(srcdir)/$$lib && $(INSTALL_DATA) $$list "$$d") || exit $$?; \
 	    echo " ( cd '$(DESTDIR)$(datasymdir)/$$lib' && rm -f" $$list ")"; \
-	    (cd "$(DESTDIR)$(datasymdir)/$$lib" && rm -f $$list); \
+	    (cd "$(DESTDIR)$(datasymdir)/$$lib" && rm -f $$list || true); \
 	  fi; \
 	  rmdir "$(DESTDIR)$(datasymdir)/$$lib" || true; \
 	done

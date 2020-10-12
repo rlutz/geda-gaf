@@ -1,4 +1,4 @@
-/* Copyright (C) 2013-2019 Roland Lutz
+/* Copyright (C) 2013-2020 Roland Lutz
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -443,14 +443,14 @@ static PyMethodDef methods[] = {
 		    "a selection containing the objects contained in one "
 		    "given selection, but not the other") },
 	{ "selection_is_empty", (PyCFunction)selection_is_empty, METH_KEYWORDS,
-	  PyDoc_STR("selection_is_empty(rev, sel) -> Selection -- "
+	  PyDoc_STR("selection_is_empty(rev, sel) -> bool -- "
 		    "whether a selection is empty in a given revision") },
 	{ "object_is_selected", (PyCFunction)object_is_selected, METH_KEYWORDS,
 	  PyDoc_STR("object_is_selected(rev, sel, ob) -> bool -- "
 		    "whether an object exists in a revision and is selected "
 		    "in a selection") },
 
-	{ NULL }  /* Sentinel */
+	{ NULL, NULL, 0, NULL }  /* Sentinel */
 };
 
 static int add_type(PyObject *module, const char *name, PyTypeObject *value)

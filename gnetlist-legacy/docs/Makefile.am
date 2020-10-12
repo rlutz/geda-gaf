@@ -24,7 +24,10 @@ noinst_MANS = mk_verilog_syms.1
 	sed -e"s:[@]DATE@:$$d:" -e"s:[@]VERSION@:$$v:" -e"s:[@]YEAR@:$$y:" < $< > $@
 
 # Rules for converting man->html
-html_man_files = $(dist_man_MANS:%.1=%.html)
+html_man_files =
+if ENABLE_GROFF_HTML
+html_man_files += $(dist_man_MANS:%.1=%.html)
+endif
 SUFFIXES = .1.in .1 .html
 
 docsmandir=$(docdir)/man

@@ -316,7 +316,6 @@ GschemToplevel *gschem_toplevel_new ()
   w_current->handleboxes = 0;
   w_current->bus_ripper_size = 0;
   w_current->bus_ripper_type = 0;
-  w_current->bus_ripper_rotation = 0;
   w_current->grid_mode = GRID_MODE_NONE;
   w_current->dots_grid_fixed_threshold = 10;
   w_current->dots_grid_dot_size = 1;

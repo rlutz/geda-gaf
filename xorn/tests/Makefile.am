@@ -1,4 +1,4 @@
-# Copyright (C) 2013-2019 Roland Lutz
+# Copyright (C) 2013-2020 Roland Lutz
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -15,7 +15,7 @@
 # Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 AM_CPPFLAGS = -I$(top_srcdir)/include
-AM_CFLAGS = -Wall -W -Werror -Wno-empty-body
+AM_CFLAGS = -Wall -W -Werror -Wno-empty-body -Wno-parentheses
 LDADD = $(top_builddir)/src/storage/libxornstorage.la
 
 TEST_EXTENSIONS = .py

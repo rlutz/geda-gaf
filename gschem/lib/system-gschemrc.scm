@@ -456,22 +456,17 @@
 ;                    plain "net"
 ; bus-ripper-symname  : If above is set to component, specify the symbol name.
 ;                       The symbol must exist in a component library
-; bus-ripper-rotation  : Either "symmetric" or "non-symmetric".  This deals
-;                        with how the bus ripper symbol is rotated when it
-;                        is auto added to a schematic.
 ;
 
 ; The default bus ripper
 (bus-ripper-size 200)
 (bus-ripper-type "component")
 (bus-ripper-symname "busripper-1.sym")
-(bus-ripper-rotation "non-symmetric")
 
 ; A symmetric alternative
 ;(bus-ripper-size 200)
 ;(bus-ripper-type "component")
 ;(bus-ripper-symname "busripper-2.sym")
-;(bus-ripper-rotation "symmetric")
 
 ; A simple net
 ;(bus-ripper-size 200)

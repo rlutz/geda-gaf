@@ -1267,6 +1267,8 @@ gschem_page_view_WORLDtoSCREEN (GschemPageView *view, int x, int y, int *px, int
 {
   GschemPageGeometry *geometry = gschem_page_view_get_page_geometry (view);
 
+  *px = *py = 0;
+
   g_return_if_fail (geometry != NULL);
 
   *px = gschem_page_geometry_pix_x (geometry, x);

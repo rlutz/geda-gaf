@@ -1,4 +1,4 @@
-/* Copyright (C) 2013-2019 Roland Lutz
+/* Copyright (C) 2013-2020 Roland Lutz
 
    AUTOMATICALLY GENERATED FROM data_box.m4 -- DO NOT EDIT
 
@@ -161,7 +161,7 @@ static PyMemberDef Box_members[] = {
 	  PyDoc_STR("") },
 	{ "color", T_INT, offsetof(Box, data.color), 0,
 	  PyDoc_STR("") },
-	{ NULL }  /* Sentinel */
+	{ NULL, 0, 0, 0, NULL }  /* Sentinel */
 };
 
 static PyObject *Box_getline(Box *self, void *closure)
@@ -227,7 +227,7 @@ static PyGetSetDef Box_getset[] = {
 	  PyDoc_STR(""), NULL },
 	{ "fill", (getter)Box_getfill, (setter)Box_setfill,
 	  PyDoc_STR(""), NULL },
-	{ NULL }  /* Sentinel */
+	{ NULL, NULL, NULL, NULL, NULL }  /* Sentinel */
 };
 
 PyTypeObject BoxType = {

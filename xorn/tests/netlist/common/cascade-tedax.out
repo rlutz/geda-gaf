@@ -1,0 +1,57 @@
+tEDAx v1
+begin netlist v1 netlist
+device DEFAULTS cascade-defaults-top
+footprint SOURCE none
+device SOURCE cascade-source
+pinname SOURCE 1 OUT
+pinidx SOURCE 1 1
+footprint AMP1 none
+device AMP1 cascade-amp
+pinname AMP1 1 IN
+pinidx AMP1 1 1
+pinname AMP1 2 OUT
+pinidx AMP1 2 2
+footprint DEF1 none
+device DEF1 cascade-defaults
+pinname DEF1 1 IN
+pinidx DEF1 1 1
+pinname DEF1 2 OUT
+pinidx DEF1 2 2
+footprint FL1 none
+device FL1 cascade-filter
+pinname FL1 1 I
+pinidx FL1 1 1
+pinname FL1 2 O
+pinidx FL1 2 2
+footprint MX1 none
+device MX1 cascade-mixer
+pinname MX1 1 IN
+pinidx MX1 1 1
+pinname MX1 2 OUT
+pinidx MX1 2 2
+footprint T1 none
+device T1 cascade-transformer
+pinname T1 1 1
+pinidx T1 1 1
+pinname T1 2 2
+pinidx T1 2 2
+footprint AMP2 none
+device AMP2 cascade-amp
+pinname AMP2 1 IN
+pinidx AMP2 1 1
+pinname AMP2 2 OUT
+pinidx AMP2 2 2
+conn GND DEFAULTS 1
+conn unnamed_net1 SOURCE 1
+conn unnamed_net1 AMP1 1
+conn unnamed_net2 AMP1 2
+conn unnamed_net2 DEF1 1
+conn unnamed_net3 DEF1 2
+conn unnamed_net3 FL1 1
+conn unnamed_net4 FL1 2
+conn unnamed_net4 MX1 1
+conn unnamed_net5 MX1 2
+conn unnamed_net5 T1 1
+conn unnamed_net6 T1 2
+conn unnamed_net6 AMP2 1
+end netlist

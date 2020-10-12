@@ -60,7 +60,10 @@ am__v_SNARF_1 =
 
 # Rules for converting man->html
 dist_man_MANS = gaf.1
-html_man_files = gaf.html
+html_man_files =
+if ENABLE_GROFF_HTML
+html_man_files += gaf.html
+endif
 
 docsmandir=$(docdir)/man
 docsman_DATA=$(html_man_files)
