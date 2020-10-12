@@ -98,6 +98,8 @@
 ;;               to be used for netlisting NGspice device models. CC
 ;;  6.12.2011 -- Updated the Problematci name=? symbols to name=unknown and removed the
 ;;               FIXME check for them. This should be a step closer to place holder consistancy. CC
+;;  10.11.2020 -- Added support for a spice-title device to prove a netlist
+;;                title. Epilitimus
 ;;
 ;;**********************************************************************************
 ;;
@@ -1349,6 +1351,7 @@
           ( (string=? device "none"))                 ;; do nothing for graphical symbols.
           ( (string=? device "spice-subcircuit-LL"))  ;; do nothing for subcircuit declaration.
           ( (string=? device "spice-IO"))             ;; do nothing for SPICE IO pins.
+          ( (string=? device "spice-title"))          ;; do nothing for spice title blocks
           ( (string=? device "SPICE-ccvs")
               (spice:write-ccvs package))
           ( (string=? device "SPICE-cccs")
@@ -1605,6 +1608,16 @@
       ;; Otherwise it's a regular schematic.  Write out command line followed by comments in file header.
           (begin
             (debug-spew "found normal type schematic")
+            (debug-spew "checking for a title-box")
+            (let ((title (find-device packages "spice-title"))) ;; If the schematic contains a spice-title device
+              (when (string? title)
+                 (set! title (get-value title)) ;; and the value attribute is a string
+                 (when (string? title)
+                  (display title) ;;use that as the title of the spice netlist
+                  (newline)
+                 )
+              )
+            )
             (display (string-append "* " (gnetlist:get-command-line) "\n"))
             (spice-sdb:write-top-header)
           )
