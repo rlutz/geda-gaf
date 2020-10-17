@@ -64,7 +64,7 @@ PyObject *scm2py(SCM value)
 		return result;
 	}
 	if (scm_to_bool(scm_procedure_p(value))) {
-		SCM ptr = scm_assq_ref(gsubr_alist, value);
+		SCM ptr = scm_assq_ref(gsubr_alist, scm_procedure_name(value));
 		if (!scm_is_false(ptr)) {
 			PyObject *result = scm_to_pointer(ptr);
 			Py_INCREF(result);
