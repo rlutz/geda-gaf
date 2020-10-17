@@ -34,7 +34,7 @@ AM_PATH_PYTHON([2.7])
 PKG_CHECK_MODULES([PYTHON], [python-2.7 >= 2.7],, [
   PKG_CHECK_MODULES([PYTHON], [python2 >= 2.7])
 ])
-PKG_CHECK_MODULES([GUILE], [guile-2.0 >= 2.0.10])
+PKG_CHECK_MODULES([GUILE], [guile-2.2 >= 2.2.4])
 
 AM_GNU_GETTEXT([external])
 AM_GNU_GETTEXT_VERSION([0.18.2])
