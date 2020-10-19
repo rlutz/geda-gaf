@@ -435,7 +435,10 @@ eda_renderer_update_contexts (EdaRenderer *renderer, cairo_t *new_cr,
 
   /* Now recreate anything necessary */
   if ((renderer->priv->pc == NULL) && (renderer->priv->cr != NULL)) {
+    cairo_save (renderer->priv->cr);
+    cairo_identity_matrix (renderer->priv->cr);
     renderer->priv->pc = pango_cairo_create_context (renderer->priv->cr);
+    cairo_restore (renderer->priv->cr);
     renderer->priv->pc_from_cr = 1;
   }
 
@@ -933,7 +936,10 @@ eda_renderer_prepare_text (EdaRenderer *renderer, OBJECT *object)
     cairo_translate (renderer->priv->cr, dx, dy);
   }
 
+  cairo_save (renderer->priv->cr);
+  cairo_identity_matrix (renderer->priv->cr);
   pango_cairo_update_layout (renderer->priv->cr, renderer->priv->pl);
+  cairo_restore (renderer->priv->cr);
   return TRUE;
 }
 
