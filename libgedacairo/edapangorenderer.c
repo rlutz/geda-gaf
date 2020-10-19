@@ -120,9 +120,7 @@ eda_pango_renderer_class_init (EdaPangoRendererClass *klass)
 static void
 eda_pango_renderer_init (EdaPangoRenderer *renderer)
 {
-  renderer->priv = G_TYPE_INSTANCE_GET_PRIVATE (renderer,
-                                                EDA_TYPE_PANGO_RENDERER,
-                                                EdaPangoRendererPrivate);
+  renderer->priv = eda_pango_renderer_get_instance_private (renderer);
 }
 
 static GObject *

@@ -139,9 +139,7 @@ eda_config_class_init (EdaConfigClass *klass)
 static void
 eda_config_init (EdaConfig *config)
 {
-  config->priv = G_TYPE_INSTANCE_GET_PRIVATE (config,
-                                              EDA_TYPE_CONFIG,
-                                              EdaConfigPrivate);
+  config->priv = eda_config_get_instance_private (config);
 
   config->priv->parent = NULL;
   config->priv->keyfile = g_key_file_new ();
