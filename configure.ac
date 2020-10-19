@@ -91,9 +91,11 @@ PKG_CHECK_MODULES(GIO, [gio-2.0 >= 2.20.0], ,
 
 PKG_CHECK_MODULES(GTK, [gtk+-2.0 >= 2.18.0], ,
   AC_MSG_ERROR([GTK+ 2.18.0 or later is required.]))
+GTK_CFLAGS=`echo "$GTK_CFLAGS" | sed "s/-I\\(@<:@^ @:>@*gtk\\)/-isystem\\1/g"`
 
 PKG_CHECK_MODULES(GDK, [gdk-2.0 >= 2.18.0], ,
   AC_MSG_ERROR([GDK 2.18.0 or later is required.]))
+GDK_CFLAGS=`echo "$GDK_CFLAGS" | sed "s/-I\\(@<:@^ @:>@*gtk\\)/-isystem\\1/g"`
 
 PKG_CHECK_MODULES(GDK_PIXBUF, [gdk-pixbuf-2.0 >= 2.18.0], ,
   AC_MSG_ERROR([GDK_PIXBUF 2.18.0 or later is required.]))
