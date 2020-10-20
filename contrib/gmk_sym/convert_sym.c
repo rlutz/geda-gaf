@@ -1516,6 +1516,7 @@ do_instance(FILE *fp)
   extension = 9999;
   x = 0;
   y = 0;
+  mirror = 0;
 
   /* Instance doesn't necessarily have to have the LIB:NAME convention, so */
   /* read this in as a full string and parse later */
