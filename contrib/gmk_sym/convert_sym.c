@@ -1615,6 +1615,7 @@ set_orientation(int *angle, int *mirror, int orientation)
   case 6:  /* 0 rotation, 1 mirror */
     *angle = 180;
     *mirror = 1;
+    break;
   case 7:  /* 270 rotation, 1 mirror */
     *angle = 90;
     *mirror = 1;
