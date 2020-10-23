@@ -95,9 +95,11 @@ def load(backend_name):
         raise ImportError
 
     # Load backend code.
-    sys.path.insert(0, os.path.dirname(pathname))
+    saved_path = sys.path
+    sys.path = load_path + sys.path
     try:
         return imp.load_module(BACKEND_PREFIX + backend_name,
                                f, pathname, description)
     finally:
+        sys.path = saved_path
         f.close()
