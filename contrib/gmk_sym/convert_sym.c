@@ -1516,6 +1516,8 @@ do_instance(FILE *fp)
   extension = 9999;
   x = 0;
   y = 0;
+  orientation = 0;
+  angle = 0;
   mirror = 0;
 
   /* Instance doesn't necessarily have to have the LIB:NAME convention, so */
