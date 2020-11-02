@@ -882,7 +882,7 @@ def main():
         options, args = getopt.getopt(
             xorn.command.args, 'c:g:hil:L:m:o:O:p:qvV', [
                 'quiet', 'verbose', 'interactive', 'report-gui',
-                'list-backends', 'help', 'version'])
+                'list-backends', 'sab-context=', 'help', 'version'])
     except getopt.GetoptError as e:
         xorn.command.invalid_arguments(e.msg)
 
@@ -901,6 +901,7 @@ def main():
 
     report_gui = False
     list_backends_ = False
+    sab_context = []
 
     for option, value in options:
         if option == '-q' or option == '--quiet':
@@ -935,6 +936,12 @@ def main():
             report_gui = True
         elif option == '--list-backends':
             list_backends_ = True
+        elif option == '--sab-context':
+            value=value.lower().split(',');
+            if 'none' in value:
+                sab_context = None
+            elif sab_context is not None:
+                sab_context.extend(value)
 
         elif option == '-h' or option == '--help':
             sys.stdout.write('''\
@@ -955,6 +962,7 @@ Generate a netlist from one or more gEDA schematic files.
   -i                    enter interactive Python interpreter after loading
       --report-gui      report warnings and errors in GUI dialog
       --list-backends   print a list of available netlist backends
+      --sab-context CTX force the SAB context to CTX
   -h, --help            help; this message
   -V, --version         show version information
   --                    treat all remaining arguments as filenames
@@ -1186,6 +1194,11 @@ GNU General Public License for more details.
 
     if interactive_mode:
         cmd += ['-i']
+
+    if sab_context is not None:
+        cmd += ['--sab-context', ','.join(sab_context)]
+    else:
+        cmd += ['--sab-context','none']
 
     if output_filename != '-':
         cmd += ['-o', output_filename]

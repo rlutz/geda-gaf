@@ -760,6 +760,7 @@
 (attribute-name "dist-license")
 (attribute-name "use-license")
 (attribute-name "file")
+(attribute-name "sab-param")
 
 ;
 ; End of path related keywords

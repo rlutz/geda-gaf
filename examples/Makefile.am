@@ -1,5 +1,5 @@
 
-SUBDIRS = gTAG lightning_detector RF_Amp TwoStageAmp
+SUBDIRS = gTAG lightning_detector RF_Amp TwoStageAmp SAB
 
 exampledir = $(docdir)/examples/
 

@@ -1,0 +1,86 @@
+Simulation/As-Built (SAB) processing
+========================================
+
+Overview
+===========
+In the SAB model a schematic represents the circuit for multiple purposes, called contexts. The predefined contexts are:
+
+ sim   -   Simulation
+ ab    -   As-built
+ 
+There is a third reserved label of 'none' (see gnetlist below for more detail). The user is able to define and implement their own contexts as well. User defined context labels may not contain the ':' character. An example of a possible user defined context would be 'doc' for keeping theory-of-operation documentation automatically updated with current reference designators.
+
+Various components may have a role in only a subset of all the contexts for which a schematic is used. For example, physical connectors are critical for an as-built context but will often have no role in a simulation of the circuit and thus must be removed prior to simulation. Similarly ng-spice w/ xspice support (configured with the --with-xspice option) can perform pure analog, pure digital, and mixed mode simulations. In mixed mode simulation bridge devices are inserted into the circuit at points where a signal needs to be transferred from the digital to analog domain or the reverse. These bridge devices have no physical counterpart and so must be removed when working in the as-built context, e.g. when generating a partslist. The SAB system was conceived to handle these modifications, removing the burden from the designer.
+
+There are currently two mechanisms by which contexts can be specified, as command line switches to gnetlist (see gnetlist below) or by gnetlist backends (see backends below).
+
+Some important points to keep in mind:
+- The SAB system is in *addition* to the existing system. It need not be used. 
+- Attributes must be added to the schematic to make use of the SAB system (see sab-param below).
+- The SAB system can be disabled on the command line even when it would otherwise take effect.
+- Backends can be simply modified (usually requiring the addition of only a single line) to work with the SAB system.
+- The SAB system can be used with legacy backends with the use if a command line switch.
+- The default is to behave in the legacy fashion.
+
+gnetlist
+===========
+A new command line switch --sab-context has been added to gnetlist. Multiple contexts can be specified using both multiple instances of --sab-context and comma separated lists. A special label of 'none' is mutually exclusive with all other contexts. The 'none' context will disable the SAB processing regardless of any other factors which would otherwise cause it to be invoked. Context labels are case insensitive. The order in which contexts are supplied on the command line is the order in which they will be processed. Contexts specified on the command line override any specified by the backend.
+
+Examples:
+usually gnetlist will be invoked without any context specified in which case the context, if any, will be obtained from the backend
+gnetlist <backend-specification> ...
+
+when desiring SAB processing with a legacy backend the context can be supplied on the command line
+gnetlist --sab-context=sim -p spice-sdb ...
+gnetlist --sab-context=ab -p partslist1 ...
+
+this will force the SAB system to perform 'sim' context processing regardless of what the backend prefers.
+gnetlist --sab-context=sim ...
+
+The following are all equivalent
+gnetlist --sab-context=ab --sab-context=user1 --sab-context=user2 ...
+gnetlist --sab-context=ab,user1 --sab-context=user2 ...
+gnetlist --sab-context=Ab,usEr1,user2 ...
+
+The following will all block SAB processing
+gnetlist --sab-context=none ...
+gnetlist --sab-context=sim,none ...
+gnetlist --sab-context=sim,none,user1 ...
+
+backends
+==========
+Backends can specify a context by defining the SAB_CONTEXT symbol as a string containing the context to be employed. While it is anticipated that only a single context will be specified by this mechanism there is nothing to prevent multiple contexts from being specified. As with those specified on the gnetlist command line multiple contexts will be processed in the order in which they appear. Specifying 'none' by this mechanism is discouraged and will probably not have the desired effect.
+
+sab-param
+============
+In order for the SAB system to locate the components it needs to work with they must be tagged with the 'sab-param' attribute. Any component which does not have an 'sab-param' attribute attached will be left untouched. Components may have multiple instances of sab-param attached, one for each context for which processing is desired.
+
+The value of the 'sab-param' attribute has the following format:
+
+<context>:<action>[:<action parameters>]
+
+See Overview above for the meanings of the currently defined contexts.
+
+The currently defined actions are:
+
+discard  - Discard the component. Any connections to it will dropped. Any <action parameters> will be ignored.
+bypass - Bypass and then discard the component. The <action parameters> field is required to be a list of pins to be shorted together. (see sab-param=<context>:bypass:<shorting list>)
+exec - Pass the component to an external script for processing (see sab-param=<context>:exec:<script>[:<parameters> below)
+
+sab-param=<context>:bypass:<shorting list>
+==============================================
+
+sab-param=<context>:exec:<script>[:<parameters>
+===================================================
+
+Notes
+=======
+While replacing a component with a subcircuit is common in a simulation context, the particulars of how this is done was considered too simulator and design specific to warrant inclusion as a predefined action. Accordingly one or more external scripts are provided to do this as well as demonstrate how such scripts may be written.
+
+TODO
+========
+Possibly allow processing of the entire netlist via a top level attribute. I didn't implement this because frankly once I have the above the SAB system will meet my current needs.
+
+When the component employs slotting the bypass action should should be independent of which slot the component is in, i.e. politely handle changing pin numbers when the slot is changed. Maybe reference slot 1 pin numbers and adjust accordingly?
+
+???????

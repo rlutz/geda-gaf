@@ -309,6 +309,7 @@ AC_CONFIG_FILES([Makefile
                  examples/TwoStageAmp/Makefile
                  examples/gTAG/Makefile
                  examples/lightning_detector/Makefile
+                 examples/SAB/Makefile
 
                  contrib/Makefile
                  contrib/smash_megafile/Makefile

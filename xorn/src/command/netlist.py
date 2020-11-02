@@ -27,6 +27,8 @@ import gaf.clib
 import gaf.netlist.backend
 import gaf.netlist.netlist
 import gaf.netlist.slib
+import types
+import sab
 
 APPEND, PREPEND = xrange(2)
 
@@ -213,6 +215,7 @@ Reporting errors:
     sys.stdout.write(_("""\
 Miscellaneous options:
       --list-backends     print a list of available netlist backends
+      --sab-context CTX   force the sab context to CTX
   -h, --help              help; this message
   -V, --version           show version information
   --                      treat all remaining arguments as filenames
@@ -398,6 +401,8 @@ def inner_main():
 
     list_backends = False
 
+    sab_context = []
+
     try:
         options, args = getopt.getopt(xorn.command.args, 'c:g:hil:L:m:o:O:vV',
             ['verbose',
@@ -428,7 +433,7 @@ def inner_main():
              'report-gui',
              'show-error-coordinates', 'dont-show-error-coordinates',
 
-             'list-backends', 'help', 'version'])
+             'list-backends', 'sab-context=', 'help', 'version'])
     except getopt.GetoptError as e:
         xorn.command.invalid_arguments(e.msg)
 
@@ -520,6 +525,12 @@ def inner_main():
 
         elif option == '--list-backends':
             list_backends = True
+        elif option == '--sab-context':
+            value=value.lower().split(',');
+            if 'none' in value:
+                sab_context = None
+            else:
+                sab_context.extend(value)
         elif option == '-h' or option == '--help':
             usage()
         elif option == '-V' or option == '--version':
@@ -584,6 +595,11 @@ def inner_main():
                 % (xorn.command.program_short_name, backend_name))
             sys.exit(1)
 
+        if (sab_context == [] and
+            'SAB_CONTEXT' in dir(m) and
+            isinstance(m.SAB_CONTEXT, types.ListType)):
+                sab_context = m.SAB_CONTEXT
+
     if netlist.failed and not ignore_errors:
         # there were netlist errors during backend loading (shouldn't happen)
         sys.exit(3)
@@ -608,6 +624,9 @@ def inner_main():
         # there were netlist errors during interactive session
         sys.stderr.write(_("Exiting due to previous errors.\n"))
         sys.exit(3)
+
+    if sab_context:
+        sab.process(netlist,sab_context)
 
     class NetlistFailedError(Exception):
         pass
