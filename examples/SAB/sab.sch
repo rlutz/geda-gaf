@@ -30,62 +30,114 @@ value=sab_example
 T 40700 46600 5 10 1 0 0 0 1
 sab-param=ab:discard
 }
-T 40100 45300 9 12 1 0 0 0 2
+T 40100 45300 9 12 1 0 0 0 3
 This device has pins but no connections.
 It will be removed in the 'sim' context.
-C 40700 44400 1 0 0 pwrjack-1.sym
-{
-T 40800 44900 5 10 0 0 0 0 1
-device=PWRJACK
-T 40700 44900 5 10 1 1 0 0 1
-refdes=CONN1
-T 40700 44200 5 10 1 0 0 0 1
-sab-param=sim:discard
-}
-T 40100 42900 9 12 1 0 0 0 2
+'doc' context present only for testing purposes.
+T 45700 49800 9 12 1 0 0 0 2
 This circuit fragment will have the middle gate
-bypassed in the 'sim'context.
-C 41300 41300 1 0 0 7400-1.sym
+bypassed in the 'sim' context.
+C 46300 48400 1 0 0 7400-1.sym
 {
-T 41800 42200 5 10 0 0 0 0 1
+T 46800 49300 5 10 0 0 0 0 1
 device=7400
-T 41600 42200 5 10 1 1 0 0 1
+T 46600 49300 5 10 1 1 0 0 1
 refdes=U1
-T 41800 43550 5 10 0 0 0 0 1
+T 46800 50650 5 10 0 0 0 0 1
 footprint=DIP14
-T 41300 41300 5 10 0 0 0 0 1
+T 46300 48400 5 10 0 0 0 0 1
 slot=1
 }
-C 43500 41100 1 0 0 7400-1.sym
+C 48500 48200 1 0 0 7400-1.sym
 {
-T 44000 42000 5 10 0 0 0 0 1
+T 49000 49100 5 10 0 0 0 0 1
 device=7400
-T 43800 42000 5 10 1 1 0 0 1
+T 48800 49100 5 10 1 1 0 0 1
 refdes=U1
-T 44000 43350 5 10 0 0 0 0 1
+T 49000 50450 5 10 0 0 0 0 1
 footprint=DIP14
-T 44000 42200 5 10 0 0 0 0 1
-slot=2
-T 42800 42300 5 10 1 0 0 0 1
-sab-param=sim:bypass:4,5,6
-}
-C 45400 41100 1 0 0 7400-1.sym
-{
-T 45900 42000 5 10 0 0 0 0 1
-device=7400
-T 45700 42000 5 10 1 1 0 0 1
-refdes=U1
-T 45900 43350 5 10 0 0 0 0 1
-footprint=DIP14
-T 45900 42200 5 10 0 0 0 0 1
+T 49000 49300 5 10 0 0 0 0 1
 slot=3
+T 47800 49400 5 10 1 0 0 0 1
+sab-param=sim:bypass:8,9,10
 }
-N 45400 41800 45400 41400 4
-N 44800 41600 45400 41600 4
-N 42600 41800 43500 41800 4
-N 46700 41600 46700 40500 4
-N 40700 40500 46700 40500 4
-N 40700 40500 40700 42000 4
-N 40700 42000 41300 42000 4
-N 43500 41400 43200 41400 4
-N 43200 41400 43200 40500 4
+C 50400 48200 1 0 0 7400-1.sym
+{
+T 50900 49100 5 10 0 0 0 0 1
+device=7400
+T 50700 49100 5 10 1 1 0 0 1
+refdes=U1
+T 50900 50450 5 10 0 0 0 0 1
+footprint=DIP14
+T 50900 49300 5 10 0 0 0 0 1
+slot=4
+}
+N 50400 48900 50400 48500 4
+N 49800 48700 50400 48700 4
+N 47600 48900 48500 48900 4
+N 51700 48700 51700 47600 4
+N 45700 47600 51700 47600 4
+N 45700 47600 45700 49100 4
+N 45700 49100 46300 49100 4
+N 48500 48500 48200 48500 4
+N 48200 48500 48200 47600 4
+T 43500 41500 9 16 1 0 0 0 1
+These are wrong and will produce warnings.
+C 43700 40800 1 0 0 resistor-1.sym
+{
+T 44000 41200 5 10 0 0 0 0 1
+device=RESISTOR
+T 43900 41100 5 10 1 1 0 0 1
+refdes=R2
+T 43600 40500 5 10 1 0 0 0 1
+sab-param=ab
+}
+C 45200 40800 1 0 0 resistor-1.sym
+{
+T 45500 41200 5 10 0 0 0 0 1
+device=RESISTOR
+T 45400 41100 5 10 1 1 0 0 1
+refdes=R3
+T 45100 40500 5 10 1 0 0 0 1
+sab-param=ab:foo
+}
+C 46900 40800 1 0 0 resistor-1.sym
+{
+T 47200 41200 5 10 0 0 0 0 1
+device=RESISTOR
+T 47100 41100 5 10 1 1 0 0 1
+refdes=R4
+T 46800 40500 5 10 1 0 0 0 1
+sab-param=ab:discard
+T 46800 40300 5 10 1 0 0 0 1
+sab-param=ab:bypass:1,2
+}
+C 40800 41000 1 0 0 7400-1.sym
+{
+T 41300 41900 5 10 0 0 0 0 1
+device=7400
+T 41100 41900 5 10 1 1 0 0 1
+refdes=U1
+T 41300 43250 5 10 0 0 0 0 1
+footprint=DIP14
+T 41300 42100 5 10 0 0 0 0 1
+slot=2
+T 40600 40800 5 10 1 0 0 0 1
+sab-param=sim:discard
+}
+C 41000 44200 1 0 0 pwrjack-1.sym
+{
+T 41100 44700 5 10 0 0 0 0 1
+device=PWRJACK
+T 41000 44700 5 10 1 1 0 0 1
+refdes=CONN1
+T 41000 43900 5 10 1 0 0 0 1
+sab-param=sim:discard
+T 41000 43600 5 10 1 0 0 0 1
+sab-param=doc:discard
+}
+T 40100 42400 9 12 1 0 0 0 4
+This device has unconnected pins
+and hidden pins, i.e. net attributes.
+It also tests slotting. It will be discarded
+in the 'sim' context.

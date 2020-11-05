@@ -1195,9 +1195,9 @@ GNU General Public License for more details.
     if interactive_mode:
         cmd += ['-i']
 
-    if sab_context is not None:
+    if sab_context:
         cmd += ['--sab-context', ','.join(sab_context)]
-    else:
+    elif sab_context is None:
         cmd += ['--sab-context','none']
 
     if output_filename != '-':

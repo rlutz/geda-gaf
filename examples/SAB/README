@@ -17,10 +17,11 @@ There are currently two mechanisms by which contexts can be specified, as comman
 Some important points to keep in mind:
 - The SAB system is in *addition* to the existing system. It need not be used. 
 - Attributes must be added to the schematic to make use of the SAB system (see sab-param below).
-- The SAB system can be disabled on the command line even when it would otherwise take effect.
+- The SAB system can be disabled on the command line even when it would otherwise take effect. (use --sab-context=none)
 - Backends can be simply modified (usually requiring the addition of only a single line) to work with the SAB system.
-- The SAB system can be used with legacy backends with the use if a command line switch.
+- The SAB system can be used with legacy backends with the use if a command line switch. (use --sab-context=<context list>)
 - The default is to behave in the legacy fashion.
+- While the order in which contexts are processed is fixed by the order in which they are provided, components may be processed in any order for a given context.
 
 gnetlist
 ===========
@@ -65,13 +66,36 @@ The currently defined actions are:
 
 discard  - Discard the component. Any connections to it will dropped. Any <action parameters> will be ignored.
 bypass - Bypass and then discard the component. The <action parameters> field is required to be a list of pins to be shorted together. (see sab-param=<context>:bypass:<shorting list>)
-exec - Pass the component to an external script for processing (see sab-param=<context>:exec:<script>[:<parameters> below)
+exec - Pass the component to an external script for processing (see sab-param=<context>:exec:<script>[:<parameters>] below)
 
 sab-param=<context>:bypass:<shorting list>
 ==============================================
+Bypassing a component consists of shorting across various pins and then discarding the component. Any pins not listed in the <shorting list> will be silently dropped.
 
-sab-param=<context>:exec:<script>[:<parameters>
+The <shorting list> consists of comma delimited lists of pins which are to be connected together separated by ';' (semicolon). For example:
+
+This will short pins 1 and 2 of the component and then discard it dropping any other connections including those provided by the 'net' attribute.
+sab-param=<context>:bypass:1,2
+
+This will bypass the component by shorting pins 1 & 2, and separately pins 3 & 4
+sab-param=<context>:bypass:1,2;3,4
+
+Several pins can be shorted together at once
+sab-param=<context>:bypass:1,2,5
+
+The identifier of the net resulting from pins being shorted will be that of the first pin listed. Thus a <shorting list> of 1,2 will probably not result in the same id as 2,1 (unless pins 1 and 2 are already connected to the same net.) An alternate net identifier can be supplied using the 'as' keyword. For example:
+
+sab-param=<context>:bypass:1,2 as <new net name>;3,4 as <some other net name>
+
+Note that no checking is performed for naming conflicts. It is left to the backend to resolve any such conflicts. The provided net name must not contain any ':',';', or ','
+
+sab-param=<context>:exec:<script>[:<parameters>]
 ===================================================
+External scripts can be loaded and executed. The designated <script> must contain a 'process_sab(component,parameters)' function. The function will receive the actual component object. The parameters will be passed as an unaltered string, i.e. the remainder of the line after the third ':'. If no parameters are given the value 'None" will be passed in their place. The function is free to manipulate the component as it sees fit. Note that some changes may have been made to the component and/or associated netlist by prior processing. The script is responsible for ensuring that the netlist is left in a usable form when its processing is complete. For example:
+
+sab-param=<context>:exec:<my script>:<some arbitrary parameter string>
+
+The <script> field is used as the filename of the script to be loaded which is searched for in the usual places.
 
 Notes
 =======
@@ -81,6 +105,8 @@ TODO
 ========
 Possibly allow processing of the entire netlist via a top level attribute. I didn't implement this because frankly once I have the above the SAB system will meet my current needs.
 
-When the component employs slotting the bypass action should should be independent of which slot the component is in, i.e. politely handle changing pin numbers when the slot is changed. Maybe reference slot 1 pin numbers and adjust accordingly?
+When the component employs slotting the bypass action should be independent of which slot the component is in, i.e. politely handle changing pin numbers when the slot is changed. Maybe reference slot 1 pin numbers and adjust accordingly? Probably would require modification of the 'slot' attribute handle code in gschem.
+
+Provide a processing order mechanism via sab-param. Maybe an alternate form: sab-param=<context>:<order #>:<action>[:<action parameters>]
 
 ???????
