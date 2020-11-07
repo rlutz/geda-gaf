@@ -27,4 +27,5 @@ sabpyexecdir = $(pyexecdir)/sab
 
 nobase_sabpyexec_PYTHON = \
 	__init__.py \
-        sab.py
+        sab.py \
+        sab_utils.py

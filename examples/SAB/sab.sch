@@ -1,5 +1,4 @@
 v 20191008 2
-C 40000 40000 0 0 0 title-B.sym
 T 44200 50600 9 18 1 0 0 0 1
 Below are various use/test cases for the SAB system.
 T 40100 49700 9 12 1 0 0 0 2
@@ -59,7 +58,7 @@ footprint=DIP14
 T 49000 49300 5 10 0 0 0 0 1
 slot=3
 T 47800 49400 5 10 1 0 0 0 1
-sab-param=sim:bypass:8,9,10
+sab-param=sim:bypass:8,9,10 as ring
 }
 C 50400 48200 1 0 0 7400-1.sym
 {
@@ -83,34 +82,34 @@ N 48500 48500 48200 48500 4
 N 48200 48500 48200 47600 4
 T 43500 41500 9 16 1 0 0 0 1
 These are wrong and will produce warnings.
-C 43700 40800 1 0 0 resistor-1.sym
+C 43900 40900 1 0 0 resistor-1.sym
 {
-T 44000 41200 5 10 0 0 0 0 1
+T 44200 41300 5 10 0 0 0 0 1
 device=RESISTOR
-T 43900 41100 5 10 1 1 0 0 1
-refdes=R2
-T 43600 40500 5 10 1 0 0 0 1
-sab-param=ab
-}
-C 45200 40800 1 0 0 resistor-1.sym
-{
-T 45500 41200 5 10 0 0 0 0 1
-device=RESISTOR
-T 45400 41100 5 10 1 1 0 0 1
-refdes=R3
-T 45100 40500 5 10 1 0 0 0 1
-sab-param=ab:foo
-}
-C 46900 40800 1 0 0 resistor-1.sym
-{
-T 47200 41200 5 10 0 0 0 0 1
-device=RESISTOR
-T 47100 41100 5 10 1 1 0 0 1
+T 44100 41200 5 10 1 1 0 0 1
 refdes=R4
-T 46800 40500 5 10 1 0 0 0 1
-sab-param=ab:discard
-T 46800 40300 5 10 1 0 0 0 1
-sab-param=ab:bypass:1,2
+T 43800 40600 5 10 1 0 0 0 1
+sab-param=err
+}
+C 45500 40900 1 0 0 resistor-1.sym
+{
+T 45800 41300 5 10 0 0 0 0 1
+device=RESISTOR
+T 45700 41200 5 10 1 1 0 0 1
+refdes=R10
+T 45400 40600 5 10 1 0 0 0 1
+sab-param=err:foo
+}
+C 47300 40900 1 0 0 resistor-1.sym
+{
+T 47600 41300 5 10 0 0 0 0 1
+device=RESISTOR
+T 47500 41200 5 10 1 1 0 0 1
+refdes=R14
+T 47200 40600 5 10 1 0 0 0 1
+sab-param=err:discard
+T 47200 40400 5 10 1 0 0 0 1
+sab-param=err:bypass:1,2
 }
 C 40800 41000 1 0 0 7400-1.sym
 {
@@ -141,3 +140,110 @@ This device has unconnected pins
 and hidden pins, i.e. net attributes.
 It also tests slotting. It will be discarded
 in the 'sim' context.
+C 46800 45800 1 0 0 resistor-1.sym
+{
+T 47100 46200 5 10 0 0 0 0 1
+device=RESISTOR
+T 47000 46100 5 10 1 1 0 0 1
+refdes=R2
+}
+C 46800 45400 1 0 0 resistor-1.sym
+{
+T 47100 45800 5 10 0 0 0 0 1
+device=RESISTOR
+T 47000 45100 5 10 1 1 0 0 1
+refdes=R3
+}
+C 49100 45800 1 0 0 resistor-1.sym
+{
+T 49400 46200 5 10 0 0 0 0 1
+device=RESISTOR
+T 49300 46100 5 10 1 1 0 0 1
+refdes=R6
+}
+C 49100 45000 1 0 0 resistor-1.sym
+{
+T 49400 45400 5 10 0 0 0 0 1
+device=RESISTOR
+T 49300 45300 5 10 1 1 0 0 1
+refdes=R9
+}
+C 49100 44200 1 0 0 resistor-1.sym
+{
+T 49400 44600 5 10 0 0 0 0 1
+device=RESISTOR
+T 49300 44500 5 10 1 1 0 0 1
+refdes=R11
+}
+N 49100 44700 49100 44300 4
+C 47700 42900 1 0 0 header16-1.sym
+{
+T 47750 41850 5 10 0 1 0 0 1
+device=HEADER16
+T 48300 46200 5 10 1 1 0 0 1
+refdes=J1
+T 45500 42600 5 10 1 0 0 0 1
+sab-param=ab:bypass:1,2;3,4 as blocked;5,6;9,8 as forked1;13,14 as forked2
+T 47500 42300 5 10 1 0 0 0 1
+sab-param=sim:discard
+}
+C 49100 43400 1 0 0 resistor-1.sym
+{
+T 49400 43800 5 10 0 0 0 0 1
+device=RESISTOR
+T 49300 43700 5 10 1 1 0 0 1
+refdes=R13
+}
+C 46800 43800 1 0 0 resistor-1.sym
+{
+T 47100 44200 5 10 0 0 0 0 1
+device=RESISTOR
+T 47000 44100 5 10 1 1 0 0 1
+refdes=R5
+}
+N 47700 43500 47700 43900 4
+T 47100 46500 9 12 1 0 0 0 2
+Various bypass combinations
+looking for trouble makers
+C 46500 46000 1 270 0 gnd-1.sym
+C 46500 45400 1 270 1 gnd-1.sym
+C 46500 43800 1 270 1 gnd-1.sym
+C 50300 43400 1 90 0 gnd-1.sym
+C 50300 44200 1 90 0 gnd-1.sym
+C 50300 45000 1 90 0 gnd-1.sym
+C 50300 45800 1 90 0 gnd-1.sym
+C 46800 43000 1 0 0 resistor-1.sym
+{
+T 47100 43400 5 10 0 0 0 0 1
+device=RESISTOR
+T 47000 43300 5 10 1 1 0 0 1
+refdes=R7
+}
+C 46500 43000 1 270 1 gnd-1.sym
+C 43900 39900 1 0 0 resistor-1.sym
+{
+T 44200 40300 5 10 0 0 0 0 1
+device=RESISTOR
+T 44100 40200 5 10 1 1 0 0 1
+refdes=R8
+T 43800 39600 5 10 1 0 0 0 1
+sab-param=err:bypass:1,w
+}
+C 46600 39900 1 0 0 resistor-1.sym
+{
+T 46900 40300 5 10 0 0 0 0 1
+device=RESISTOR
+T 46800 40200 5 10 1 1 0 0 1
+refdes=R15
+T 46500 39600 5 10 1 0 0 0 1
+sab-param=err:bypass:1
+}
+C 43800 38800 1 0 0 resistor-1.sym
+{
+T 44100 39200 5 10 0 0 0 0 1
+device=RESISTOR
+T 44000 39100 5 10 1 1 0 0 1
+refdes=R12
+T 43800 38500 5 10 1 0 0 0 1
+sab-param=err:bypass:1,10
+}
