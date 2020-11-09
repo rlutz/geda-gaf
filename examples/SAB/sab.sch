@@ -29,9 +29,13 @@ value=sab_example
 T 40700 46600 5 10 1 0 0 0 1
 sab-param=ab:discard
 }
-T 40100 45300 9 12 1 0 0 0 3
+T 40100 44600 9 12 1 0 0 0 7
 This device has pins but no connections.
 It will be removed in the 'sim' context.
+It will be the second component processed
+in the 'sim' context because I have intentionally
+skip 2 to show that not all order indices
+need to be included, i.e. there can be gaps.
 'doc' context present only for testing purposes.
 T 46600 49800 9 12 1 0 0 0 2
 This circuit fragment will have the middle gate
@@ -56,9 +60,9 @@ refdes=U1
 T 49000 50450 5 10 0 0 0 0 1
 footprint=DIP14
 T 49000 49300 5 10 0 0 0 0 1
-slot=3
+slot=2
 T 47800 49400 5 10 1 0 0 0 1
-sab-param=sim:bypass:8,9,10 as ring
+sab-param=sim:bypass:4,5,6 as ring
 }
 C 50400 48200 1 0 0 7400-1.sym
 {
@@ -111,35 +115,36 @@ sab-param=err:discard
 T 56100 43000 5 10 1 0 0 0 1
 sab-param=err:bypass:1,2
 }
-C 40800 41000 1 0 0 7400-1.sym
+C 40800 40500 1 0 0 7400-1.sym
 {
-T 41300 41900 5 10 0 0 0 0 1
+T 41300 41400 5 10 0 0 0 0 1
 device=7400
-T 41100 41900 5 10 1 1 0 0 1
+T 41100 41400 5 10 1 1 0 0 1
 refdes=U1
-T 41300 43250 5 10 0 0 0 0 1
+T 41300 42750 5 10 0 0 0 0 1
 footprint=DIP14
-T 41300 42100 5 10 0 0 0 0 1
-slot=2
-T 40600 40800 5 10 1 0 0 0 1
-sab-param=sim:discard
+T 41300 41600 5 10 0 0 0 0 1
+slot=3
+T 40600 40300 5 10 1 0 0 0 1
+sab-param=sim:#1:discard
 }
-C 41000 44200 1 0 0 pwrjack-1.sym
+C 41000 43700 1 0 0 pwrjack-1.sym
 {
-T 41100 44700 5 10 0 0 0 0 1
+T 41100 44200 5 10 0 0 0 0 1
 device=PWRJACK
-T 41000 44700 5 10 1 1 0 0 1
+T 41000 44200 5 10 1 1 0 0 1
 refdes=CONN1
-T 41000 43900 5 10 1 0 0 0 1
-sab-param=sim:discard
-T 41000 43600 5 10 1 0 0 0 1
+T 41000 43400 5 10 1 0 0 0 1
+sab-param=sim:#3:discard
+T 41000 43100 5 10 1 0 0 0 1
 sab-param=doc:discard
 }
-T 40100 42400 9 12 1 0 0 0 4
+T 40100 41700 9 12 1 0 0 0 5
 This device has unconnected pins
 and hidden pins, i.e. net attributes.
 It also tests slotting. It will be discarded
-in the 'sim' context.
+in the 'sim' context. It will be the first
+component processed.
 C 46800 45800 1 0 0 resistor-1.sym
 {
 T 47100 46200 5 10 0 0 0 0 1
@@ -276,3 +281,21 @@ Here are two gates from the same package.
 The second one has a call to an external
 script in the 'sim' context. See modify_refdes.py
 for a description of the parameters.
+C 55800 41500 1 0 0 resistor-1.sym
+{
+T 56100 41900 5 10 0 0 0 0 1
+device=RESISTOR
+T 56000 41800 5 10 1 1 0 0 1
+refdes=R16
+T 55700 41400 5 10 1 0 0 0 1
+sab-param=err:#2:discard
+}
+C 55800 40900 1 0 0 resistor-1.sym
+{
+T 56100 41300 5 10 0 0 0 0 1
+device=RESISTOR
+T 56000 41200 5 10 1 1 0 0 1
+refdes=R17
+T 55700 40800 5 10 1 0 0 0 1
+sab-param=err:#2:discard
+}

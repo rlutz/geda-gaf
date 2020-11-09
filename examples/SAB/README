@@ -8,7 +8,7 @@ In the SAB model a schematic represents the circuit for multiple purposes, calle
  sim   -   Simulation
  ab    -   As-built
  
-There is a third reserved label of 'none' (see gnetlist below for more detail). The user is able to define and implement their own contexts as well. User defined context labels may not contain the ':' character. An example of a possible user defined context would be 'doc' for keeping theory-of-operation documentation automatically updated with current reference designators.
+There is a third reserved label of 'none' (see gnetlist below for more detail). The user is able to define and implement their own contexts as well. User defined context labels may not contain the ':' character. An example of a possible user defined context might be 'doc' for keeping theory-of-operation documentation automatically updated with current reference designators.
 
 Various components may have a role in only a subset of all the contexts for which a schematic is used. For example, physical connectors are critical for an as-built context but will often have no role in a simulation of the circuit and thus must be removed prior to simulation. Similarly ng-spice w/ xspice support (configured with the --with-xspice option) can perform pure analog, pure digital, and mixed mode simulations. In mixed mode simulation bridge devices are inserted into the circuit at points where a signal needs to be transferred from the digital to analog domain or the reverse. These bridge devices have no physical counterpart and so must be removed when working in the as-built context, e.g. when generating a partslist. The SAB system was conceived to handle these modifications, removing the burden from the designer.
 
@@ -21,7 +21,6 @@ Some important points to keep in mind:
 - Backends can be simply modified (usually requiring the addition of only a single line) to work with the SAB system.
 - The SAB system can be used with legacy backends with the use if a command line switch. (use --sab-context=<context list>)
 - The default is to behave in the legacy fashion.
-- While the order in which contexts are processed is fixed by the order in which they are provided, components may be processed in any order for a given context.
 
 gnetlist
 ===========
@@ -43,7 +42,7 @@ gnetlist --sab-context=ab --sab-context=user1 --sab-context=user2 ...
 gnetlist --sab-context=ab,user1 --sab-context=user2 ...
 gnetlist --sab-context=Ab,usEr1,user2 ...
 
-The following will all block SAB processing
+The following will all block SAB processing (note: the sim context will *not* be processed)
 gnetlist --sab-context=none ...
 gnetlist --sab-context=sim,none ...
 gnetlist --sab-context=sim,none,user1 ...
@@ -52,23 +51,26 @@ backends
 ==========
 Backends can specify a context by defining the SAB_CONTEXT symbol as a string containing the context to be employed. While it is anticipated that only a single context will be specified by this mechanism there is nothing to prevent multiple contexts from being specified. As with those specified on the gnetlist command line multiple contexts will be processed in the order in which they appear. Specifying 'none' by this mechanism is discouraged and will probably not have the desired effect.
 
+A new backend 'null' has been added. As the name implies this backend does nothing and produces no output. It was added because the SAB system allows processing to occur prior to the backend being executed and it is possibly situations may exist where a user only needs to do the SAB processing and does not wish to produce any backend output.
+
 sab-param
 ============
-In order for the SAB system to locate the components it needs to work with they must be tagged with the 'sab-param' attribute. Any component which does not have an 'sab-param' attribute attached will be left untouched. Components may have multiple instances of sab-param attached, one for each context for which processing is desired.
+In order for the SAB system to locate the components it needs to work with they must be tagged with the 'sab-param' attribute. Any component which does not have an 'sab-param' attribute attached will not be directly processed, but may have some modifications made as a result of processing other components, usually via the 'exec' action. Components may have multiple instances of sab-param attached, one for each context for which processing is desired.
 
 The value of the 'sab-param' attribute has the following format:
 
-<context>:<action>[:<action parameters>]
+<context>[:#<order>]:<action>[:<action parameters>]
 
 See Overview above for the meanings of the currently defined contexts.
 
-The currently defined actions are:
+When the optional <order> field is used the value of <order> is converted to an integer and used to sequence the components for the given context. All the ordered components are processed in the order specified by the <order> field, then all remaining un-ordered components are processed in an undetermined order. If two components have the same order number a warning is issued and the new component will be added to the list after the existing component, i.e. components with the same order number are processed in the order they are encountered.
 
+The currently defined actions are:
 discard  - Discard the component. Any connections to it will dropped. Any <action parameters> will be ignored.
 bypass - Bypass and then discard the component. The <action parameters> field is required to be a list of pins to be shorted together. (see sab-param=<context>:bypass:<shorting list>)
 exec - Pass the component to an external script for processing (see sab-param=<context>:exec:<script>[:<parameters>] below)
 
-sab-param=<context>:bypass:<shorting list>
+sab-param=<context>[:#<order>]:bypass:<shorting list>
 ==============================================
 Bypassing a component consists of shorting across various pins and then discarding the component. Any pins not listed in the <shorting list> will be silently dropped.
 
@@ -89,24 +91,24 @@ sab-param=<context>:bypass:1,2 as <new net name>;3,4 as <some other net name>
 
 Note that no checking is performed for naming conflicts. It is left to the backend to resolve any such conflicts. The provided net name must not contain any ':',';', or ','
 
-sab-param=<context>:exec:<script>[:<parameters>]
+sab-param=<context>[:#<order>]:exec:<script>[:<parameters>]
 ===================================================
-External scripts can be loaded and executed. The designated <script> must contain a 'process_sab(nets,component,parameters)' function. The function will receive the actual netlist and component objects. The parameters will be passed as an unaltered string, i.e. the remainder of the line after the third ':'. If no parameters are given the value 'None" will be passed in their place. The function is free to manipulate the netlist and component as it sees fit. Note that some changes may have been made to the component and/or associated netlist by prior processing. The script is responsible for ensuring that the netlist is left in a usable form when its processing is complete. For example:
+External scripts can be loaded and executed. The designated <script> must contain a 'process_sab(nets,component,parameters)' function. The function will receive the actual netlist and component objects. The parameters will be passed as an unaltered string (note ':' is allowed in the parameter field). If no parameters are given the value 'None' will be passed in their place. The function is free to manipulate the netlist and component as it sees fit. Note that some changes may have been made to the component and/or associated netlist by prior processing. The script is responsible for ensuring that the netlist is left in a usable form when its processing is complete. For example:
 
 sab-param=<context>:exec:<my script>:<some arbitrary parameter string>
 
-The <script> field is used as the filename of the script to be loaded which is searched for in the usual places.
+The <script> field is used as the filename of the script to be loaded which is searched for in the current directory and the other usual places.
+
+See modify_refdes.py in the SAB example directory for an example of how such a script is written.
 
 Notes
 =======
-While replacing a component with a subcircuit is common in a simulation context, the particulars of how this is done was considered too simulator and design specific to warrant inclusion as a predefined action. Accordingly one or more external scripts are provided to do this as well as demonstrate how such scripts may be written.
+While replacing a component with a subcircuit is common in a simulation context, the particulars of how this is done was considered too simulator and design specific to warrant inclusion as a predefined action.
 
 TODO
 ========
-Possibly allow processing of the entire netlist via a top level attribute. I didn't implement this because frankly once I have the above the SAB system will meet my current needs.
+Possibly allow processing of the entire netlist via a top level attribute. I didn't implement this because frankly once I have the above the SAB system will meet my current needs. It also isn't technically needed as only an external script makes any since at this level and an external script can already access the entire net. So while it might be a bit misleading a user could execute a script from an sab-param on a component which would then make changes to any part of the netlist.
 
 When the component employs slotting the bypass action should be independent of which slot the component is in, i.e. politely handle changing pin numbers when the slot is changed. Maybe reference slot 1 pin numbers and adjust accordingly? Probably would require modification of the 'slot' attribute handle code in gschem.
-
-Provide a processing order mechanism via sab-param. Maybe an alternate form: sab-param=<context>:<order #>:<action>[:<action parameters>]
 
 ???????
