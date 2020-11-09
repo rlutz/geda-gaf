@@ -51,6 +51,7 @@ backend_PYTHON = \
 	gnet_makedepend.py \
 	gnet_mathematica.py \
 	gnet_maxascii.py \
+        gnet_null.py \
 	gnet_osmond.py \
 	gnet_pads.py \
 	gnet_partslist1.py \

@@ -1,4 +1,6 @@
 import sys
+import imp
+import types
 
 verbose = False
 
@@ -7,6 +9,36 @@ def verboseMsg(msg, indent):
         return
 
     print ''.zfill(4*indent).replace('0',' ')+msg
+
+#Load an external script and call its sab_process function passing
+#the netlist, component, and parameter string
+def exec_extern(nets, component, param):
+    script,c,param=param.partition(':')
+
+    try:
+        f,path,desc=imp.find_module(script,['.']+sys.path)
+        script=imp.load_module(script,f,path,desc)
+    except ImportError:
+        sys.stderr.write("WARNING: Unable to load script %s"%(script))
+        script=None
+    finally:
+        if f is not None:
+            f.close()
+
+    if(script is not None and
+       'sab_process' in dir(script) and
+       isinstance(script.sab_process,types.FunctionType) and
+       script.sab_process.__code__.co_argcount == 3):
+        script.sab_process(nets,component,param)
+
+    elif script is None:
+        return
+    elif 'sab_process' not in dir(script):
+        sys.stderr.write("WARNING: Script %s missing 'sab_process' function."%(script.__name__))
+    elif not isinstance(script.sab_process,types.FunctionType):
+        sys.stderr.write("WARNING: %s.sab_process is not a function."%(script.__name__))
+    else:
+        sys.stderr.write('WARNING: %s.sab_process must take three parameters.'%(script.__name__))
 
 #Bypass a component. Cross connect the nets connected to the pins
 #in each group from the shorting list 'shorts'. The id of the resulting

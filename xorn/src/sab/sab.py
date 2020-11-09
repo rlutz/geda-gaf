@@ -68,7 +68,7 @@ def process(nets, context, be_verbose=True):
             for component in ctx[context]:
                 sab_utils.verboseMsg('Processing component %s...' % (component),2)
                 if ctx[context][component][0] == 'exec': #the external script is responsible for the whole shebang
-                    pass
+                    sab_utils.exec_extern(nets, ctx[context][component][2], ctx[context][component][1])
                 else:
                     if ctx[context][component][0] == 'bypass': #first bypass then discard whatever is left
                         sab_utils.bypass(nets, ctx[context][component][2], ctx[context][component][1])

@@ -91,7 +91,7 @@ Note that no checking is performed for naming conflicts. It is left to the backe
 
 sab-param=<context>:exec:<script>[:<parameters>]
 ===================================================
-External scripts can be loaded and executed. The designated <script> must contain a 'process_sab(component,parameters)' function. The function will receive the actual component object. The parameters will be passed as an unaltered string, i.e. the remainder of the line after the third ':'. If no parameters are given the value 'None" will be passed in their place. The function is free to manipulate the component as it sees fit. Note that some changes may have been made to the component and/or associated netlist by prior processing. The script is responsible for ensuring that the netlist is left in a usable form when its processing is complete. For example:
+External scripts can be loaded and executed. The designated <script> must contain a 'process_sab(nets,component,parameters)' function. The function will receive the actual netlist and component objects. The parameters will be passed as an unaltered string, i.e. the remainder of the line after the third ':'. If no parameters are given the value 'None" will be passed in their place. The function is free to manipulate the netlist and component as it sees fit. Note that some changes may have been made to the component and/or associated netlist by prior processing. The script is responsible for ensuring that the netlist is left in a usable form when its processing is complete. For example:
 
 sab-param=<context>:exec:<my script>:<some arbitrary parameter string>
 

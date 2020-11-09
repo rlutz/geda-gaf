@@ -33,7 +33,7 @@ T 40100 45300 9 12 1 0 0 0 3
 This device has pins but no connections.
 It will be removed in the 'sim' context.
 'doc' context present only for testing purposes.
-T 45700 49800 9 12 1 0 0 0 2
+T 46600 49800 9 12 1 0 0 0 2
 This circuit fragment will have the middle gate
 bypassed in the 'sim' context.
 C 46300 48400 1 0 0 7400-1.sym
@@ -80,35 +80,35 @@ N 45700 47600 45700 49100 4
 N 45700 49100 46300 49100 4
 N 48500 48500 48200 48500 4
 N 48200 48500 48200 47600 4
-T 43500 41500 9 16 1 0 0 0 1
+T 52400 44100 9 16 1 0 0 0 1
 These are wrong and will produce warnings.
-C 43900 40900 1 0 0 resistor-1.sym
+C 52800 43500 1 0 0 resistor-1.sym
 {
-T 44200 41300 5 10 0 0 0 0 1
+T 53100 43900 5 10 0 0 0 0 1
 device=RESISTOR
-T 44100 41200 5 10 1 1 0 0 1
-refdes=R4
-T 43800 40600 5 10 1 0 0 0 1
+T 53000 43800 5 10 1 1 0 0 1
+refdes=R10
+T 52700 43200 5 10 1 0 0 0 1
 sab-param=err
 }
-C 45500 40900 1 0 0 resistor-1.sym
+C 54400 43500 1 0 0 resistor-1.sym
 {
-T 45800 41300 5 10 0 0 0 0 1
+T 54700 43900 5 10 0 0 0 0 1
 device=RESISTOR
-T 45700 41200 5 10 1 1 0 0 1
-refdes=R10
-T 45400 40600 5 10 1 0 0 0 1
+T 54600 43800 5 10 1 1 0 0 1
+refdes=R12
+T 54300 43200 5 10 1 0 0 0 1
 sab-param=err:foo
 }
-C 47300 40900 1 0 0 resistor-1.sym
+C 56200 43500 1 0 0 resistor-1.sym
 {
-T 47600 41300 5 10 0 0 0 0 1
+T 56500 43900 5 10 0 0 0 0 1
 device=RESISTOR
-T 47500 41200 5 10 1 1 0 0 1
+T 56400 43800 5 10 1 1 0 0 1
 refdes=R14
-T 47200 40600 5 10 1 0 0 0 1
+T 56100 43200 5 10 1 0 0 0 1
 sab-param=err:discard
-T 47200 40400 5 10 1 0 0 0 1
+T 56100 43000 5 10 1 0 0 0 1
 sab-param=err:bypass:1,2
 }
 C 40800 41000 1 0 0 7400-1.sym
@@ -159,21 +159,21 @@ C 49100 45800 1 0 0 resistor-1.sym
 T 49400 46200 5 10 0 0 0 0 1
 device=RESISTOR
 T 49300 46100 5 10 1 1 0 0 1
-refdes=R6
+refdes=R5
 }
 C 49100 45000 1 0 0 resistor-1.sym
 {
 T 49400 45400 5 10 0 0 0 0 1
 device=RESISTOR
 T 49300 45300 5 10 1 1 0 0 1
-refdes=R9
+refdes=R7
 }
 C 49100 44200 1 0 0 resistor-1.sym
 {
 T 49400 44600 5 10 0 0 0 0 1
 device=RESISTOR
 T 49300 44500 5 10 1 1 0 0 1
-refdes=R11
+refdes=R8
 }
 N 49100 44700 49100 44300 4
 C 47700 42900 1 0 0 header16-1.sym
@@ -192,14 +192,14 @@ C 49100 43400 1 0 0 resistor-1.sym
 T 49400 43800 5 10 0 0 0 0 1
 device=RESISTOR
 T 49300 43700 5 10 1 1 0 0 1
-refdes=R13
+refdes=R9
 }
 C 46800 43800 1 0 0 resistor-1.sym
 {
 T 47100 44200 5 10 0 0 0 0 1
 device=RESISTOR
 T 47000 44100 5 10 1 1 0 0 1
-refdes=R5
+refdes=R4
 }
 N 47700 43500 47700 43900 4
 T 47100 46500 9 12 1 0 0 0 2
@@ -217,33 +217,62 @@ C 46800 43000 1 0 0 resistor-1.sym
 T 47100 43400 5 10 0 0 0 0 1
 device=RESISTOR
 T 47000 43300 5 10 1 1 0 0 1
-refdes=R7
+refdes=R6
 }
 C 46500 43000 1 270 1 gnd-1.sym
-C 43900 39900 1 0 0 resistor-1.sym
+C 52800 42500 1 0 0 resistor-1.sym
 {
-T 44200 40300 5 10 0 0 0 0 1
+T 53100 42900 5 10 0 0 0 0 1
 device=RESISTOR
-T 44100 40200 5 10 1 1 0 0 1
-refdes=R8
-T 43800 39600 5 10 1 0 0 0 1
+T 53000 42800 5 10 1 1 0 0 1
+refdes=R11
+T 52700 42200 5 10 1 0 0 0 1
 sab-param=err:bypass:1,w
 }
-C 46600 39900 1 0 0 resistor-1.sym
+C 55500 42500 1 0 0 resistor-1.sym
 {
-T 46900 40300 5 10 0 0 0 0 1
+T 55800 42900 5 10 0 0 0 0 1
 device=RESISTOR
-T 46800 40200 5 10 1 1 0 0 1
+T 55700 42800 5 10 1 1 0 0 1
 refdes=R15
-T 46500 39600 5 10 1 0 0 0 1
+T 55400 42200 5 10 1 0 0 0 1
 sab-param=err:bypass:1
 }
-C 43800 38800 1 0 0 resistor-1.sym
+C 52700 41400 1 0 0 resistor-1.sym
 {
-T 44100 39200 5 10 0 0 0 0 1
+T 53000 41800 5 10 0 0 0 0 1
 device=RESISTOR
-T 44000 39100 5 10 1 1 0 0 1
-refdes=R12
-T 43800 38500 5 10 1 0 0 0 1
+T 52900 41700 5 10 1 1 0 0 1
+refdes=R13
+T 52700 41100 5 10 1 0 0 0 1
 sab-param=err:bypass:1,10
 }
+C 53000 48000 1 0 0 7402-1.sym
+{
+T 53600 48900 5 10 0 0 0 0 1
+device=7402
+T 53300 48900 5 10 1 1 0 0 1
+refdes=U2
+T 53600 50300 5 10 0 0 0 0 1
+footprint=DIP14
+T 53000 48000 5 10 0 0 0 0 1
+slot=1
+}
+C 55100 48000 1 0 0 7402-1.sym
+{
+T 55700 48900 5 10 0 0 0 0 1
+device=7402
+T 55400 48900 5 10 1 1 0 0 1
+refdes=U2
+T 55700 50300 5 10 0 0 0 0 1
+footprint=DIP14
+T 54400 47800 5 10 1 0 0 0 1
+sab-param=sim:exec:modify_refdes:A,PCB,True
+T 55100 48000 5 10 0 0 0 0 1
+slot=2
+}
+T 53000 49300 9 12 1 0 0 0 4
+Here are two gates from the same package.
+The second one has a call to an external
+script in the 'sim' context. See modify_refdes.py
+for a description of the parameters.
