@@ -68,6 +68,7 @@ libgeda_la_SOURCES = \
 	o_pin_basic.c \
 	o_selection.c \
 	o_text_basic.c \
+        sab.c \
 	s_attrib.c \
 	s_basic.c \
 	s_clib.c \

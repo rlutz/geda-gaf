@@ -16,7 +16,8 @@ libgedainclude_HEADERS = \
 	libgeda/prototype.h \
 	libgeda/libgedaguile.h \
 	libgeda/struct.h \
-	libgeda/s_toplevel.h
+        libgeda/s_toplevel.h \
+        libgeda/sab.h
 
 
 noinst_HEADERS = \
