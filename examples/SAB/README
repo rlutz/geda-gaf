@@ -107,8 +107,8 @@ While replacing a component with a subcircuit is common in a simulation context,
 
 TODO
 ========
-Possibly allow processing of the entire netlist via a top level attribute. I didn't implement this because frankly once I have the above the SAB system will meet my current needs. It also isn't technically needed as only an external script makes any since at this level and an external script can already access the entire net. So while it might be a bit misleading a user could execute a script from an sab-param on a component which would then make changes to any part of the netlist.
+Possibly allow processing of the entire netlist via a top level attribute. I didn't implement this because frankly once I have the above the SAB system will meet my current needs. It also isn't technically needed as only an external script makes any sense at this level and an external script can already access the entire net. So while it might be a bit misleading a user could execute a script from an sab-param on a component which would then make changes to any part of the netlist.
 
-When the component employs slotting the bypass action should be independent of which slot the component is in, i.e. politely handle changing pin numbers when the slot is changed. Maybe reference slot 1 pin numbers and adjust accordingly? Probably would require modification of the 'slot' attribute handle code in gschem.
+SAB in printout of schematic.
 
 ???????
