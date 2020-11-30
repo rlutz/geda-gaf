@@ -19,6 +19,9 @@
 
 # Copyright (C) 2001-2010 MIYAMOTO Takanori
 
+# specify and contextof as-built for SAB processing
+SAB_CONTEXT = ["ab"]
+
 def run(f, netlist):
     f.write('.START\n')
     f.write('..refdes\tdevice\tvalue\tfootprint\tquantity\n')
