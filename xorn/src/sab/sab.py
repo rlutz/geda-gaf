@@ -57,16 +57,16 @@ def parse_param(param, refdes):
     return (None, None, None, None)
 
 # The top level SAB processing is done here.
-# Turns out we can't use the verbose_made flag from xorn-netlist
+# Turns out we can't use the verbose_mode flag from xorn-netlist
 # because gnetlist defaults to sending the -v flag. Maybe someday...
-def process(nets, context, be_verbose=True):
+def process(nets, context, be_verbose=False):
     sab_utils.verbose=be_verbose
 
     sab_utils.verboseMsg('\nStarting SAB processing',0)
 
     ctx=OrderedDict()
     for c in context:
-        if c:  # skip any contexts which are the empty string
+        if c and isinstance(c,types.StringType):  # skip any contexts which are the empty string or not strings
             ctx[c]=[]
 
     if ctx:
