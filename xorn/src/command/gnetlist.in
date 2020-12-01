@@ -937,7 +937,7 @@ def main():
         elif option == '--list-backends':
             list_backends_ = True
         elif option == '--sab-context':
-            value=value.lower().split(',');
+            value = value.lower().split(',');
             if 'none' in value:
                 sab_context = None
             elif sab_context is not None:

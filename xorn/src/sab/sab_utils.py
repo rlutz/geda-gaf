@@ -8,19 +8,19 @@ def verboseMsg(msg, indent):
     if not verbose:
         return
 
-    print ''.zfill(4*indent).replace('0',' ')+msg
+    print ''.zfill(4*indent).replace('0',' ') + msg
 
 #Load an external script and call its sab_process function passing
 #the netlist, component, and parameter string
 def exec_extern(nets, component, param):
-    script,c,param=param.partition(':')
+    script,c,param = param.partition(':')
 
     try:
-        f,path,desc=imp.find_module(script,['.']+sys.path)
-        script=imp.load_module(script,f,path,desc)
+        f,path,desc = imp.find_module(script,['.'] + sys.path)
+        script = imp.load_module(script,f,path,desc)
     except ImportError:
-        sys.stderr.write("WARNING: Unable to load script %s"%(script))
-        script=None
+        sys.stderr.write("WARNING: Unable to load script %s" % (script))
+        script = None
     finally:
         if f is not None:
             f.close()
@@ -34,11 +34,11 @@ def exec_extern(nets, component, param):
     elif script is None:
         return
     elif 'sab_process' not in dir(script):
-        sys.stderr.write("WARNING: Script %s missing 'sab_process' function."%(script.__name__))
+        sys.stderr.write("WARNING: Script %s missing 'sab_process' function." % (script.__name__))
     elif not isinstance(script.sab_process,types.FunctionType):
-        sys.stderr.write("WARNING: %s.sab_process is not a function."%(script.__name__))
+        sys.stderr.write("WARNING: %s.sab_process is not a function." % (script.__name__))
     else:
-        sys.stderr.write('WARNING: %s.sab_process must take three parameters.'%(script.__name__))
+        sys.stderr.write('WARNING: %s.sab_process must take three parameters.' % (script.__name__))
 
 #Bypass a component. Cross connect the nets connected to the pins
 #in each group from the shorting list 'shorts'. The id of the resulting
@@ -46,32 +46,34 @@ def exec_extern(nets, component, param):
 #is used. Only the nets are handled here.
 def bypass(nets, component, shorts):
     verboseMsg("Starting bypass.",3)
-    short_list=shorts.split(';')
+    short_list = shorts.split(';')
     for short in short_list:
-        parts=short.partition('as')
+        parts = short.partition('as')
         if not parts[0].strip().replace(',','').isdigit():
             sys.stderr.write('''WARNING: Only digits and commas allowed in shorting list. Ignoring.
-         %s: %s\n'''%(component.blueprint.refdes,parts[0]))
+         %s: %s\n''' % (component.blueprint.refdes,parts[0]))
             continue
 
         verboseMsg('Bypassing %s' % (parts[0]),4)
         pins=parts[0].strip().split(',')
         if len(pins)<2:
-            sys.stderr.write('''WARNING: Two or more pins needed in shorting list for component %s (current list: %s)\n'''%(component.blueprint.refdes,parts[0]))
+            sys.stderr.write('''WARNING: Two or more pins needed in shorting list for component %s (current list: %s)\n'''
+                % (component.blueprint.refdes,parts[0]))
 
-        dest_net=component.cpins_by_number[pins[0]].local_net.net
+        dest_net = component.cpins_by_number[pins[0]].local_net.net
 
         if not parts[2] == '':
-            dest_net.name=parts[2]
-            dest_net.unnamed_counter=None
+            dest_net.name = parts[2]
+            dest_net.unnamed_counter = None
 
-        src_nets=[]
+        src_nets = []
         for pin in pins[1:]:
             if pin not in component.cpins_by_number:
-                sys.stderr.write('WARNING: Component %s does not have a pin %s. Ignoring.\n'%(component.blueprint.refdes,pin))
+                sys.stderr.write('WARNING: Component %s does not have a pin %s. Ignoring.\n'
+                    % (component.blueprint.refdes,pin))
                 continue
 
-            new_net=component.cpins_by_number[pin].local_net.net
+            new_net = component.cpins_by_number[pin].local_net.net
             if(dest_net is not new_net and
                new_net not in src_nets and
                not new_net.is_unconnected_pin):
@@ -113,7 +115,7 @@ def discard(nets, comp):
                 if not pin.local_net.net.local_nets and not pin.local_net.net.component_pins:
                     netist.remove(pin.local_net.net)
                 if len(pin.local_net.net.component_pins) == 1:
-                    pin.local_net.net.is_unconnected_pin=True
+                    pin.local_net.net.is_unconnected_pin = True
 
     #remove it from the blueprint level first
     comp.sheet.blueprint.components.remove(comp.blueprint)
@@ -124,7 +126,7 @@ def discard(nets, comp):
     comp.sheet.components_by_blueprint.pop(comp.blueprint)
 
     #and from the package
-    package=nets.packages_by_refdes[comp.refdes]
+    package = nets.packages_by_refdes[comp.refdes]
     package.components.remove(comp)
     #which may leave an empty package
     if not package.components:
@@ -135,4 +137,3 @@ def discard(nets, comp):
     #and finally from the component list itself
     nets.components.remove(comp)
     verboseMsg('Discard complete',3)
-

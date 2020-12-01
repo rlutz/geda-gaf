@@ -9,7 +9,7 @@ VALID_ACTIONS=('discard','bypass','exec')
 #return None if not found
 def find_refdes(refdes,ctx):
     for i in range(len(ctx)):
-        if ctx[i][0]==refdes:
+        if ctx[i][0] == refdes:
             return i
 
     return None
@@ -19,10 +19,11 @@ def find_refdes(refdes,ctx):
 #the context list ctx in ordered postition
 def add_refdes(ctx,comp):
     for i in range(len(ctx)):
-        if comp[1]<1000000000 and ctx[i][1]==comp[1]:
-            sys.stderr.write("WARNING: Both %s and %s specify the same order for the same context.\n"%(ctx[i][0],comp[0]))
+        if comp[1] < 1000000000 and ctx[i][1] == comp[1]:
+            sys.stderr.write("WARNING: Both %s and %s specify the same order for the same context.\n"
+                % (ctx[i][0],comp[0]))
             continue
-        if ctx[i][1]>comp[1]:
+        if ctx[i][1] > comp[1]:
             ctx.insert(i,comp)
             return
     ctx.append(comp)
@@ -33,51 +34,53 @@ def parse_param(param, refdes):
     if not param or not isinstance(param,types.StringType):
         return (None,None,None,None)
 
-    parts=param.split(':')
-    if len(parts)<2:
-        sys.stderr.write('WARNING: Malformed sab-param for component %s: %s\n         Did you forget the action?\n' % (refdes,param))
+    parts = param.split(':')
+    if len(parts) < 2:
+        sys.stderr.write('''WARNING: Malformed sab-param for component %s: %s
+         Did you forget the action?\n''' % (refdes,param))
         return (None, None, None, None)
 
-    parts[0]=parts[0].lower()
+    parts[0] = parts[0].lower()
     if parts[1][0] == '#':
         parts[1]=int(parts[1][1:])
     else:
         parts.insert(1,1000000000) #hopefully no one ever uses a schematic with a billion ordered SAB components
-    parts[2]=parts[2].lower()
-    if len(parts)<4:
+    parts[2] = parts[2].lower()
+    if len(parts) < 4:
         parts.append(None)
     else:
-        action_parameters=':'.join(parts[3:])
-        parts[3]=action_parameters
+        action_parameters = ':'.join(parts[3:])
+        parts[3] = action_parameters
 
     if parts[2] in VALID_ACTIONS:
         return tuple(parts[:4])
 
-    sys.stderr.write('WARNING: The %s action is not valid in sab-param for component %s in context %s\n' % (parts[2],refdes,parts[0]))
+    sys.stderr.write('WARNING: The %s action is not valid in sab-param for component %s in context %s\n'
+        % (parts[2],refdes,parts[0]))
     return (None, None, None, None)
 
 # The top level SAB processing is done here.
 # Turns out we can't use the verbose_mode flag from xorn-netlist
 # because gnetlist defaults to sending the -v flag. Maybe someday...
-def process(nets, context, be_verbose=False):
-    sab_utils.verbose=be_verbose
+def process(nets, context, be_verbose = False):
+    sab_utils.verbose = be_verbose
 
     sab_utils.verboseMsg('\nStarting SAB processing',0)
 
-    ctx=OrderedDict()
+    ctx = OrderedDict()
     for c in context:
         if c and isinstance(c,types.StringType):  # skip any contexts which are the empty string or not strings
-            ctx[c]=[]
+            ctx[c] = []
 
     if ctx:
         for c in nets.components:
             for attr in c.blueprint.get_attributes('sab-param'):
                 (context, order, action, parms)=parse_param(attr,c.refdes)
                 if context in ctx:
-                    refdes=c.refdes
-                    slot=c.blueprint.get_attribute('slot',None)
+                    refdes = c.refdes
+                    slot = c.blueprint.get_attribute('slot',None)
                     if slot is not None:
-                        refdes= refdes + ':' + slot
+                        refdes = refdes + ':' + slot
                     if find_refdes(refdes,ctx[context]) is None:
                         add_refdes(ctx[context],(refdes,order,action,parms,c))
                     else:
