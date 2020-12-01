@@ -937,7 +937,7 @@ def main():
         elif option == '--list-backends':
             list_backends_ = True
         elif option == '--sab-context':
-            value = value.lower().split(',');
+            value = value.lower().split(',')
             if 'none' in value:
                 sab_context = None
             elif sab_context is not None:
@@ -1198,7 +1198,7 @@ GNU General Public License for more details.
     if sab_context:
         cmd += ['--sab-context', ','.join(sab_context)]
     elif sab_context is None:
-        cmd += ['--sab-context','none']
+        cmd += ['--sab-context', 'none']
 
     if output_filename != '-':
         cmd += ['-o', output_filename]

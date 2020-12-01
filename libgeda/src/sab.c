@@ -17,15 +17,15 @@ ParseBypassArgs (char *args)
   char *seg = args;
   /* strtok is not reentrant and the reentrant version is POSIX specfic
    * which means we have to do this in two passes. The string held in
-   args will be valid as long as I am in this function or above it on
-   the stack. */
+   * args will be valid as long as I am in this function or above it on
+   * the stack. */
   while ((seg = strtok (seg, ";")) != NULL) {
     arg_list = g_slist_append (arg_list, seg);
     seg = NULL;
   }
 
   /* Now replace each entry in arg_list with a list of pins */
-  for (GSList * cur = arg_list; cur != NULL; cur = cur->next) {
+  for (GSList *cur = arg_list; cur != NULL; cur = cur->next) {
     char *pin_list = (char *) cur->data;
     pin_set *set;
     char *name = NULL;
@@ -37,7 +37,8 @@ ParseBypassArgs (char *args)
         name++;
       while (as != pin_list && isspace (*(as - 1)))
         as--;
-      if (as == pin_list || *name == '\0') {  /* arg is malformed so discard and move on */
+      if (as == pin_list || *name == '\0') {
+        /* arg is malformed so discard and move on */
         cur->data = NULL;
         continue;
       }
@@ -100,13 +101,13 @@ ConstructBypassArg (GSList *arg_list)
     g_free (g_steal_pointer (&(cur_seg->data)));
     cur_seg = cur_seg->next;
   }
-/* The source list will be freed by the caller */
+  /* The source list will be freed by the caller */
 
   return buf1;
 }
 
-/* Retrieves all the sab-param attributes of the provided OBJECT and parses them,
- * ignoring any which are malformed. */
+/* Retrieves all the sab-param attributes of the provided OBJECT and
+ * parses them, ignoring any which are malformed. */
 sab_action_set *
 SabGetSet (OBJECT *object)
 {
@@ -150,7 +151,8 @@ SabGetSet (OBJECT *object)
 
         if (*attr_val == '#') {
           new_action->order = atoi (attr_val + 1);
-          if ((attr_val = strtok (NULL, ":")) == NULL) {  /* malformed: missing action */
+          if ((attr_val = strtok (NULL, ":")) == NULL) {
+            /* malformed: missing action */
             g_free (new_action->context);
             g_free (new_action);
             continue;

@@ -526,7 +526,7 @@ def inner_main():
         elif option == '--list-backends':
             list_backends = True
         elif option == '--sab-context':
-            value = value.lower().split(',');
+            value = value.lower().split(',')
             if 'none' in value:
                 sab_context = None
             else:
@@ -595,11 +595,12 @@ def inner_main():
                 % (xorn.command.program_short_name, backend_name))
             sys.exit(1)
 
-        #Note that both None and and empty list test as false so can't use not
-        if (sab_context == [] and
-            'SAB_CONTEXT' in dir(m) and
-            isinstance(m.SAB_CONTEXT, types.ListType)):
-                sab_context = m.SAB_CONTEXT
+        # Note that both None and and empty list test as false
+        # so can't use not
+        if (sab_context == []
+                and 'SAB_CONTEXT' in dir(m)
+                and isinstance(m.SAB_CONTEXT, types.ListType)):
+            sab_context = m.SAB_CONTEXT
 
     if netlist.failed and not ignore_errors:
         # there were netlist errors during backend loading (shouldn't happen)
@@ -627,7 +628,7 @@ def inner_main():
         sys.exit(3)
 
     if sab_context:
-        sab.process(netlist,sab_context)
+        sab.process(netlist, sab_context)
 
     class NetlistFailedError(Exception):
         pass

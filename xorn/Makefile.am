@@ -23,7 +23,7 @@ SUBDIRS = \
 	src/gaf \
 	src/command \
 	src/backend \
-        src/sab \
+	src/sab \
 	. \
 	tests \
 	tests/netlist

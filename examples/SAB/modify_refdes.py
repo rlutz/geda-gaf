@@ -26,33 +26,33 @@ import types
 from sab.sab_utils import verboseMsg
 import sys
 
-def sab_process(nets,comp,param):
-    verboseMsg("Starting refdes modification",3)
+def sab_process(nets, comp, param):
+    verboseMsg("Starting refdes modification", 3)
 #    print sys.path
-    if param and isinstance(param,types.StringType):
-        prefix,levels,all=param.split(',')
-        levels=list(levels.upper())
+    if param and isinstance(param, types.StringType):
+        prefix, levels, all = param.split(',')
+        levels = list(levels.upper())
         if all.lower() == 'true':
-            all=True
+            all = True
         else:
-            all=False
+            all = False
     else:
-        prefix,levels,all=['','C',False]
+        prefix, levels, all = ['', 'C', False]
 
 
-    p=nets.packages_by_refdes[comp.refdes]
+    p = nets.packages_by_refdes[comp.refdes]
     if 'P' in levels:
-        p.refdes=prefix+p.refdes
+        p.refdes = prefix + p.refdes
     if 'C' in levels:
-        comp.refdes=prefix+comp.refdes
+        comp.refdes = prefix + comp.refdes
     if 'B' in levels:
-        comp.blueprint.refdes=prefix+comp.blueprint.refdes
+        comp.blueprint.refdes = prefix + comp.blueprint.refdes
 
     if all and ('C' in levels or 'B' in levels):
         for c in p.components:
             if not c == comp:
                 if 'C' in levels:
-                    c.refdes=prefix+c.refdes
+                    c.refdes = prefix + c.refdes
                 if 'B' in levels:
-                    c.blueprint.refdes=prefix+c.blueprint.refdes
-    verboseMsg("refdes modification complete.",3)
+                    c.blueprint.refdes = prefix + c.blueprint.refdes
+    verboseMsg("refdes modification complete.", 3)
