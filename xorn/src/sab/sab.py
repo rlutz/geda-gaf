@@ -90,7 +90,7 @@ def process(nets, context, be_verbose = False):
         for context in ctx:
             sab_utils.verboseMsg('Processing %s context...' % (context),1)
             if not ctx[context]:
-                if verbose:
+                if sab_utils.verbose:
                     sys.stderr.write("INFORMATION: Nothing to be done for context %s\n" % (context))
                 continue
 
