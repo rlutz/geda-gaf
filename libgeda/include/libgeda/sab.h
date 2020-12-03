@@ -1,12 +1,12 @@
 #ifndef SAB_H
 #define SAB_H
 
+/* required by struct.h */
 #include <gdk-pixbuf/gdk-pixbuf.h>
-#include <libguile.h>
 
 #include "struct.h"
-#include "prototype.h"
-#include <gmodule.h>
+
+/* gmodule.h included via struct.h */
 
 
 typedef enum {

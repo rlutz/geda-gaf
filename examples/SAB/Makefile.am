@@ -1,9 +1,12 @@
 exampledir = $(docdir)/examples/SAB/
 
-nobase_example_DATA = \
+example_DATA = \
 	sab.sch \
 	README \
-	modify_refdes.py
+        modify_refdes.py \
+        err_noprocess.py \
+        err_nofunc.py \
+        err_numargs.py
 
 EXTRA_DIST = $(nobase_example_DATA)
 

@@ -4,7 +4,11 @@
 #include <string.h>
 #include <ctype.h>
 
+/* Required by prototype_priv.h */
+#include <libguile.h>
 #include <prototype_priv.h>
+
+#include "prototype.h"
 
 #define PARAM_BUFFER_LENGTH 256
 
@@ -31,7 +35,8 @@ ParseBypassArgs (char *args)
     char *name = NULL;
     char *as;
 
-    if ((as = strstr (pin_list, "as")) != NULL) {
+    as = strstr (pin_list, "as");
+    if (as != NULL) {
       name = as + 2;
       while (*name != '\0' && isspace (*name))
         name++;
@@ -124,6 +129,7 @@ SabGetSet (OBJECT *object)
   new_set->base = object;
   new_set->actions = NULL;
 
+  /* Leaving this one for the same reason we do it for strtok */
   while ((attr =
           o_attrib_find_attrib_by_name (object->attribs, "sab-param",
                                         attr_index++)) != NULL) {
@@ -143,15 +149,19 @@ SabGetSet (OBJECT *object)
     strcpy (attr_buf, attr_val);
     g_free (attr_val);
 
-    if ((attr_val = strtok (attr_buf, ":")) != NULL) {
+    attr_val = strtok (attr_buf, ":");
+    if (attr_val != NULL) {
       new_action->context = g_strdup (attr_val);
 
-      if ((attr_val = strtok (NULL, ":")) != NULL) {
+      attr_val = strtok (NULL, ":");
+      if (attr_val != NULL) {
         int i;
 
         if (*attr_val == '#') {
           new_action->order = atoi (attr_val + 1);
-          if ((attr_val = strtok (NULL, ":")) == NULL) {
+
+          attr_val = strtok (NULL, ":");
+          if (attr_val == NULL) {
             /* malformed: missing action */
             g_free (new_action->context);
             g_free (new_action);
@@ -225,7 +235,7 @@ SabUpdateBypassPin (sab_action_set *set, char *cur_pin, char *new_pin)
 }
 
 void
-SabReleaseSet (sab_action_set *set, TOPLEVEL *topLevel)
+SabReleaseSet (sab_action_set *set, TOPLEVEL *toplevel)
 {
 
   if (set != NULL) {
@@ -275,7 +285,7 @@ SabReleaseSet (sab_action_set *set, TOPLEVEL *topLevel)
         g_free (order);
         g_free (param);
 
-        o_text_set_string (topLevel, act->src, text);
+        o_text_set_string (toplevel, act->src, text);
         g_free (text);
 
         g_free (g_steal_pointer (&(action->data)));

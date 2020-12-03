@@ -27,8 +27,7 @@ import gaf.clib
 import gaf.netlist.backend
 import gaf.netlist.netlist
 import gaf.netlist.slib
-import types
-import sab
+import gaf.sab
 
 APPEND, PREPEND = xrange(2)
 
@@ -526,11 +525,10 @@ def inner_main():
         elif option == '--list-backends':
             list_backends = True
         elif option == '--sab-context':
-            value = value.lower().split(',')
-            if 'none' in value:
+            if 'none' in value.lower().split(','):
                 sab_context = None
             else:
-                sab_context.extend(value)
+                sab_context.extend(value.split(','))
         elif option == '-h' or option == '--help':
             usage()
         elif option == '-V' or option == '--version':
@@ -597,10 +595,12 @@ def inner_main():
 
         # Note that both None and and empty list test as false
         # so can't use not
-        if (sab_context == []
-                and 'SAB_CONTEXT' in dir(m)
-                and isinstance(m.SAB_CONTEXT, types.ListType)):
-            sab_context = m.SAB_CONTEXT
+        try:
+            if (sab_context == []
+                and isinstance(m.SAB_CONTEXT, list)):
+                    sab_context = m.SAB_CONTEXT
+        except AttributeError:
+            pass
 
     if netlist.failed and not ignore_errors:
         # there were netlist errors during backend loading (shouldn't happen)
@@ -628,7 +628,7 @@ def inner_main():
         sys.exit(3)
 
     if sab_context:
-        sab.process(netlist, sab_context)
+        gaf.sab.process(netlist, sab_context)
 
     class NetlistFailedError(Exception):
         pass

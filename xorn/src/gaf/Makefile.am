@@ -33,6 +33,8 @@ nobase_gafpyexec_PYTHON = \
 	plainwrite.py \
 	read.py \
 	ref.py \
+        sab.py \
+        sab_utils.py \
 	write.py \
 	xmlformat.py \
 	xmlread.py \

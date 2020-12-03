@@ -70,7 +70,6 @@ AC_CONFIG_FILES([
 	src/gaf/Makefile
 	src/command/Makefile
 	src/backend/Makefile
-	src/sab/Makefile
 	tests/Makefile
 	tests/netlist/Makefile
 ])

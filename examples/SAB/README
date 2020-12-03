@@ -50,12 +50,12 @@ gnetlist
 ========
 A new command line switch --sab-context has been added to gnetlist.
 Multiple contexts can be specified using both multiple instances of
---sab-context and comma separated lists.  A special label of 'none' is
-mutually exclusive with all other contexts.  The 'none' context will disable
-the SAB processing regardless of any other factors which would otherwise
-cause it to be invoked.  Context labels are case insensitive.  The order in
-which contexts are supplied on the command line is the order in which they
-will be processed.  Contexts specified on the command line override any
+--sab-context and comma separated lists.  A special label of 'none' (case
+insensitive) is mutually exclusive with all other contexts.  The 'none' context
+will disable the SAB processing regardless of any other factors which would
+otherwise cause it to be invoked.  Context labels are case sensitive.  The
+order in which contexts are supplied on the command line is the order in which
+they will be processed.  Contexts specified on the command line override any
 specified by the backend.
 
 Examples:
@@ -75,13 +75,13 @@ gnetlist --sab-context=sim ...
 The following are all equivalent
 gnetlist --sab-context=ab --sab-context=user1 --sab-context=user2 ...
 gnetlist --sab-context=ab,user1 --sab-context=user2 ...
-gnetlist --sab-context=Ab,usEr1,user2 ...
+gnetlist --sab-context=ab,user1,user2 ...
 
 The following will all block SAB processing (note: the sim context will
 *not* be processed)
 gnetlist --sab-context=none ...
-gnetlist --sab-context=sim,none ...
-gnetlist --sab-context=sim,none,user1 ...
+gnetlist --sab-context=sim,None ...
+gnetlist --sab-context=sim,NONE,user1 ...
 
 backends
 ========

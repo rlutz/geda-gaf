@@ -23,15 +23,14 @@ Parameters:
 '''
 
 import types
-from sab.sab_utils import verboseMsg
+from gaf.sab_utils import verboseMsg
 import sys
 
 def sab_process(nets, comp, param):
     verboseMsg("Starting refdes modification", 3)
-#    print sys.path
-    if param and isinstance(param, types.StringType):
+    if param and isinstance(param, str):
         prefix, levels, all = param.split(',')
-        levels = list(levels.upper())
+        levels = levels.upper()
         if all.lower() == 'true':
             all = True
         else:

@@ -84,35 +84,35 @@ N 45700 47600 45700 49100 4
 N 45700 49100 46300 49100 4
 N 48500 48500 48200 48500 4
 N 48200 48500 48200 47600 4
-T 52400 44100 9 16 1 0 0 0 1
+T 52500 46800 9 16 1 0 0 0 1
 These are wrong and will produce warnings.
-C 52800 43500 1 0 0 resistor-1.sym
+C 52900 46200 1 0 0 resistor-1.sym
 {
-T 53100 43900 5 10 0 0 0 0 1
+T 53200 46600 5 10 0 0 0 0 1
 device=RESISTOR
-T 53000 43800 5 10 1 1 0 0 1
+T 53100 46500 5 10 1 1 0 0 1
 refdes=R10
-T 52700 43200 5 10 1 0 0 0 1
+T 52800 45900 5 10 1 0 0 0 1
 sab-param=err
 }
-C 54400 43500 1 0 0 resistor-1.sym
+C 54500 46200 1 0 0 resistor-1.sym
 {
-T 54700 43900 5 10 0 0 0 0 1
+T 54800 46600 5 10 0 0 0 0 1
 device=RESISTOR
-T 54600 43800 5 10 1 1 0 0 1
+T 54700 46500 5 10 1 1 0 0 1
 refdes=R12
-T 54300 43200 5 10 1 0 0 0 1
+T 54400 45900 5 10 1 0 0 0 1
 sab-param=err:foo
 }
-C 56200 43500 1 0 0 resistor-1.sym
+C 56300 46200 1 0 0 resistor-1.sym
 {
-T 56500 43900 5 10 0 0 0 0 1
+T 56600 46600 5 10 0 0 0 0 1
 device=RESISTOR
-T 56400 43800 5 10 1 1 0 0 1
-refdes=R14
-T 56100 43200 5 10 1 0 0 0 1
+T 56500 46500 5 10 1 1 0 0 1
+refdes=R15
+T 56200 45900 5 10 1 0 0 0 1
 sab-param=err:discard
-T 56100 43000 5 10 1 0 0 0 1
+T 56200 45700 5 10 1 0 0 0 1
 sab-param=err:bypass:1,2
 }
 C 40800 40500 1 0 0 7400-1.sym
@@ -225,31 +225,31 @@ T 47000 43300 5 10 1 1 0 0 1
 refdes=R6
 }
 C 46500 43000 1 270 1 gnd-1.sym
-C 52800 42500 1 0 0 resistor-1.sym
+C 52900 45200 1 0 0 resistor-1.sym
 {
-T 53100 42900 5 10 0 0 0 0 1
+T 53200 45600 5 10 0 0 0 0 1
 device=RESISTOR
-T 53000 42800 5 10 1 1 0 0 1
+T 53100 45500 5 10 1 1 0 0 1
 refdes=R11
-T 52700 42200 5 10 1 0 0 0 1
+T 52800 44900 5 10 1 0 0 0 1
 sab-param=err:bypass:1,w
 }
-C 55500 42500 1 0 0 resistor-1.sym
+C 55600 45200 1 0 0 resistor-1.sym
 {
-T 55800 42900 5 10 0 0 0 0 1
+T 55900 45600 5 10 0 0 0 0 1
 device=RESISTOR
-T 55700 42800 5 10 1 1 0 0 1
-refdes=R15
-T 55400 42200 5 10 1 0 0 0 1
+T 55800 45500 5 10 1 1 0 0 1
+refdes=R16
+T 55500 44900 5 10 1 0 0 0 1
 sab-param=err:bypass:1
 }
-C 52700 41400 1 0 0 resistor-1.sym
+C 52800 44100 1 0 0 resistor-1.sym
 {
-T 53000 41800 5 10 0 0 0 0 1
+T 53100 44500 5 10 0 0 0 0 1
 device=RESISTOR
-T 52900 41700 5 10 1 1 0 0 1
+T 53000 44400 5 10 1 1 0 0 1
 refdes=R13
-T 52700 41100 5 10 1 0 0 0 1
+T 52800 43800 5 10 1 0 0 0 1
 sab-param=err:bypass:1,10
 }
 C 53000 48000 1 0 0 7402-1.sym
@@ -281,21 +281,57 @@ Here are two gates from the same package.
 The second one has a call to an external
 script in the 'sim' context. See modify_refdes.py
 for a description of the parameters.
-C 55800 41500 1 0 0 resistor-1.sym
+C 55900 44200 1 0 0 resistor-1.sym
 {
-T 56100 41900 5 10 0 0 0 0 1
+T 56200 44600 5 10 0 0 0 0 1
 device=RESISTOR
-T 56000 41800 5 10 1 1 0 0 1
-refdes=R16
-T 55700 41400 5 10 1 0 0 0 1
+T 56100 44500 5 10 1 1 0 0 1
+refdes=R18
+T 55800 44100 5 10 1 0 0 0 1
 sab-param=err:#2:discard
 }
-C 55800 40900 1 0 0 resistor-1.sym
+C 55900 43600 1 0 0 resistor-1.sym
 {
-T 56100 41300 5 10 0 0 0 0 1
+T 56200 44000 5 10 0 0 0 0 1
 device=RESISTOR
-T 56000 41200 5 10 1 1 0 0 1
-refdes=R17
-T 55700 40800 5 10 1 0 0 0 1
+T 56100 43900 5 10 1 1 0 0 1
+refdes=R19
+T 55800 43500 5 10 1 0 0 0 1
 sab-param=err:#2:discard
+}
+C 52800 42800 1 0 0 resistor-1.sym
+{
+T 53100 43200 5 10 0 0 0 0 1
+device=RESISTOR
+T 53000 43100 5 10 1 1 0 0 1
+refdes=R14
+T 52800 42600 5 10 1 0 0 0 1
+sab-param=err:exec:err_noprocess
+}
+C 52800 41900 1 0 0 resistor-1.sym
+{
+T 53100 42300 5 10 0 0 0 0 1
+device=RESISTOR
+T 53000 42200 5 10 1 1 0 0 1
+refdes=R17
+T 52800 41700 5 10 1 0 0 0 1
+sab-param=err:exec:err_nofunc
+}
+C 56100 42800 1 0 0 resistor-1.sym
+{
+T 56400 43200 5 10 0 0 0 0 1
+device=RESISTOR
+T 56300 43100 5 10 1 1 0 0 1
+refdes=R20
+T 56000 42600 5 10 1 0 0 0 1
+sab-param=err:exec:err_numargs
+}
+C 56100 41900 1 0 0 resistor-1.sym
+{
+T 56400 42300 5 10 0 0 0 0 1
+device=RESISTOR
+T 56300 42200 5 10 1 1 0 0 1
+refdes=R21
+T 56000 41700 5 10 1 0 0 0 1
+sab-param=err:exec:err_noscript
 }
