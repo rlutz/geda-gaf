@@ -270,10 +270,10 @@ def postproc_instances(netlist, flat_namespace):
         if component.blueprint.refdes is None:
             continue
 
-        if flat_namespace or component.sheet.instantiating_component is None:
+        if flat_namespace:
             namespace = None
         else:
-            namespace = component.sheet
+            namespace = component.sheet.instantiating_component
 
         try:
             package = pkg_dict[namespace, component.blueprint.refdes]
@@ -316,11 +316,10 @@ def postproc_instances(netlist, flat_namespace):
         for cpin in net.component_pins:
             if cpin.component.blueprint.refdes is None:
                 continue
-            if flat_namespace \
-                   or cpin.component.sheet.instantiating_component is None:
+            if flat_namespace:
                 namespace = None
             else:
-                namespace = cpin.component.sheet
+                namespace = cpin.component.sheet.instantiating_component
             ppin = pkg_dict[namespace, cpin.component.blueprint.refdes] \
                      .pins_by_number[cpin.blueprint.number]
             if ppin not in net.connections:

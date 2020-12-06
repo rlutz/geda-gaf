@@ -117,8 +117,8 @@ def source_library_search(path):
 
 ## Construct component and net names for hierarchical schematics.
 
-def mangle(basename, sheet, separator0, order0, separator1, order1):
-    if sheet is None:
+def mangle(basename, component, separator0, order0, separator1, order1):
+    if component is None:
         return basename
     if basename is None:
         return None
@@ -126,7 +126,6 @@ def mangle(basename, sheet, separator0, order0, separator1, order1):
     # prefix which is attached to all component and net names
     # found in this schematic
     hierarchy_tag = []
-    component = sheet.instantiating_component
     while component is not None:
         hierarchy_tag.insert(0, component.blueprint.refdes)
         component = component.sheet.instantiating_component
@@ -548,12 +547,12 @@ def inner_main():
         flat_package_namespace = flat_package_namespace,
         flat_netname_namespace = flat_netname_namespace,
         flat_netattrib_namespace = flat_netattrib_namespace,
-        refdes_mangle_func = lambda basename, sheet:
-            mangle(basename, sheet, refdes_separator, refdes_order,
-                                    refdes_separator, refdes_order),
-        netname_mangle_func = lambda basename, sheet:
-            mangle(basename, sheet, refdes_separator, refdes_order,
-                                    netname_separator, netname_order),
+        refdes_mangle_func = lambda basename, namespace:
+            mangle(basename, namespace, refdes_separator, refdes_order,
+                                        refdes_separator, refdes_order),
+        netname_mangle_func = lambda basename, namespace:
+            mangle(basename, namespace, refdes_separator, refdes_order,
+                                        netname_separator, netname_order),
         default_net_name = default_net_name,
         default_bus_name = default_bus_name,
         show_error_coordinates = show_error_coordinates)

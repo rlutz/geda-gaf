@@ -1,0 +1,22 @@
+START header
+
+gEDA's netlist format
+Created specifically for testing of gnetlist
+
+END header
+
+START components
+
+A/B2 device=unknown
+A/C device=unknown
+A/B1 device=unknown
+
+END components
+
+START nets
+
+A/RIGHT : A/C 4, A/B2 2, A/C 2, A/B1 2 
+A/LEFT : A/C 3, A/B2 1, A/C 1, A/B1 1 
+
+END nets
+
