@@ -345,6 +345,28 @@ def rc_source_library(path):
 
     return True
 
+# \returns \c True on success, \c False otherwise
+
+def rc_source_library_search(path):
+    check_argument_type('source-library-search', 1, path, basestring)
+
+    # take care of any shell variables
+    path = expand_env_variables(path)
+
+    # invalid path?
+    if not os.path.isdir(path):
+        sys.stderr.write(
+            _("Invalid path [%s] passed to source-library-search\n") % path)
+        return False
+
+    if os.path.isabs(path):
+        source_library.extend(['--source-library-search', path])
+    else:
+        source_library.extend(['--source-library-search',
+                               os.path.join(os.getcwd(), path)])
+
+    return True
+
 # \returns \c True
 
 def rc_reset_source_library():
@@ -753,6 +775,7 @@ for name, value in {
         'component-library-funcs': rc_component_library_funcs,
         'reset-component-library': rc_reset_component_library,
         'source-library': rc_source_library,
+        'source-library-search': rc_source_library_search,
         'reset-source-library': rc_reset_source_library,
 
         'bitmap-directory': rc_bitmap_directory,
