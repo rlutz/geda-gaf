@@ -115,11 +115,10 @@ def postproc_instances(netlist, flat_namespace, prefer_netname_attribute,
                 if not isinstance(net_name, basestring):
                     raise ValueError
 
-                if flat_namespace[from_netattrib] \
-                       or sheet.instantiating_component is None:
+                if flat_namespace[from_netattrib]:
                     net_name = None, net_name
                 else:
-                    net_name = sheet, net_name
+                    net_name = sheet.instantiating_component, net_name
 
                 try:
                     net = net_dict[net_name]
@@ -226,11 +225,11 @@ def postproc_instances(netlist, flat_namespace, prefer_netname_attribute,
 
                     net_name = '%s%d' % (unnamed_string, unnamed_counter)
 
-                if flat_namespace[False] \
-                       or component.sheet.instantiating_component is None:
+                if flat_namespace[False]:
                     net_name = None, net_name
                 else:
-                    net_name = component.sheet, net_name
+                    net_name = component.sheet.instantiating_component, \
+                               net_name
 
             net.namespace, net.unmangled_name = net_name
             net.unnamed_counter = unnamed_counter

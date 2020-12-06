@@ -93,11 +93,10 @@ def repackage(netlist, refdes_func):
                 component.warning(_("component dropped during re-packaging"))
             continue
 
-        if netlist.flat_package_namespace \
-                or component.sheet.instantiating_component is None:
+        if netlist.flat_package_namespace:
             namespace = None
         else:
-            namespace = component.sheet
+            namespace = component.sheet.instantiating_component
 
         try:
             package = pkg_dict[namespace, new_refdes]
