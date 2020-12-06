@@ -111,8 +111,8 @@ def source_library_search(path):
             fullpath = os.path.join(path, entry)
             if not os.path.isdir(fullpath):
                 continue
-            if fullpath not in slib:
-                slib.append(fullpath)
+            if fullpath not in gaf.netlist.slib.slib:
+                gaf.netlist.slib.slib.append(fullpath)
 
 
 ## Construct component and net names for hierarchical schematics.
