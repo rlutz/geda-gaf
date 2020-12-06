@@ -1,3 +1,21 @@
+December 2020
+=============
+
+- Added missing configuration function `source-library-search'
+
+- Fixed merging package and net names across multiple subsheets
+  instantiated by one component
+
+
+October 2020
+============
+
+- Migrated to Guile 2.2
+
+- Backend helper modules are now located independently from the
+  location of the backend source file itself
+
+
 October 2019
 ============
 
