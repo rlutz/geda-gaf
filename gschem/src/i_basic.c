@@ -441,17 +441,11 @@ void i_update_menus(GschemToplevel *w_current)
         g_free (filename);
       }
 
-      if (o_attrib_search_attached_attribs_by_name (obj, "slot", 0) ||
-          o_attrib_search_inherited_attribs_by_name (obj, "slot", 0))
-        sel_slotted = TRUE;
-
-      if (o_attrib_search_attached_attribs_by_name (obj, "source", 0) ||
-          o_attrib_search_inherited_attribs_by_name (obj, "source", 0))
-        sel_subsheet = TRUE;
-
-      if (o_attrib_search_attached_attribs_by_name (obj, "documentation", 0) ||
-          o_attrib_search_inherited_attribs_by_name (obj, "documentation", 0))
-        sel_documented = TRUE;
+      /* Using the o_attrib_search... functions leaks memory without a bunch
+         of ugly code. */
+      sel_slotted = o_attrib_has_attrib_by_name (obj, "slot");
+      sel_subsheet = o_attrib_has_attrib_by_name (obj,"source");
+      sel_documented = o_attrib_has_attrib_by_name (obj, "documentation");
     }
 
     if (obj->type == OBJ_TEXT) {

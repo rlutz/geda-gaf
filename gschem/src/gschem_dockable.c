@@ -745,6 +745,8 @@ restore_state (GschemDockable *dockable)
     gschem_dockable_set_state (dockable, GSCHEM_DOCKABLE_STATE_DOCKED_BOTTOM);
   else if (strcmp (state, "docked-right") == 0)
     gschem_dockable_set_state (dockable, GSCHEM_DOCKABLE_STATE_DOCKED_RIGHT);
+
+  g_free(state);
 }
 
 
@@ -769,6 +771,7 @@ restore_page_order (GschemToplevel *w_current,
     if (dockable != NULL && dockable->widget != NULL)
       gtk_notebook_reorder_child (notebook, dockable->widget, page_num);
   }
+  g_strfreev(list);
 }
 
 
@@ -782,6 +785,8 @@ restore_current_page (GschemToplevel *w_current,
   gchar *current_page = eda_config_get_string (
     cfg, get_notebook_group_name (w_current, notebook),
     "current-page", NULL);
+  g_free(cfg);
+
   if (current_page == NULL || *current_page == '\0')
     return;
 
@@ -815,6 +820,8 @@ restore_detached_dockables (GschemToplevel *w_current)
     if (state != NULL ? strcmp (state, "detached") == 0 :
           dockable->initial_state == GSCHEM_DOCKABLE_STATE_WINDOW)
       gschem_dockable_detach (dockable, FALSE);
+
+    g_free(state);
   }
 
   /* open up log window on startup */

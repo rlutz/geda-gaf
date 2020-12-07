@@ -683,3 +683,31 @@ int o_attrib_is_inherited (OBJECT *attrib)
   return (attrib->attached_to == NULL &&
           attrib->parent != NULL);
 }
+
+/*! \brief Check if an object has an attribute
+ *  \par Function Description
+ *  This functions returns TRUE if the given OBJECT has an attribute
+ *  with the given name. Both attached and inherited attributes are
+ *  checked.
+ *
+ *  \param [in] object       OBJECT to check
+ *  \param [in] name         the attribute name to check for
+ *  \return TRUE if the given OBJECT has an attribute with the given name
+ */
+/* It would probably be more efficient to look for them directly rather
+ * than relying on the search functions. */
+int o_attrib_has_attrib_by_name(OBJECT *object, gchar *name)
+{
+  gchar* buf = o_attrib_search_attached_attribs_by_name(object,name,0);
+  int result = buf != NULL;
+
+  g_free(buf);
+  if(result)
+    return result;
+
+  buf = o_attrib_search_inherited_attribs_by_name(object, name, 0);
+  result = buf != NULL;
+
+  g_free(buf);
+  return result;
+}

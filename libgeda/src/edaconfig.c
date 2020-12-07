@@ -530,6 +530,7 @@ eda_config_get_context_for_file (GFile *path)
   /* Find the project root, and the corresponding configuration
    * filename. */
   root = find_project_root (path);
+  g_object_unref(path);
   file = g_file_get_child (root, LOCAL_CONFIG_NAME);
 
   /* If there's already a context available for this file, return

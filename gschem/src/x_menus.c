@@ -121,6 +121,8 @@ x_menus_create_main_menu (GschemToplevel *w_current)
       } while (*i++ != '\0');
       g_object_set_data (G_OBJECT (menu), "settings-name", settings_name);
 
+      g_free(settings_name);
+
       GtkWidget *root_menu = gtk_menu_item_new_with_mnemonic (title);
       gtk_widget_show (root_menu);
       gtk_menu_item_set_submenu (GTK_MENU_ITEM (root_menu), menu);
