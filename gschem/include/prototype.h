@@ -281,7 +281,7 @@ void o_pin_draw_rubber(GschemToplevel *w_current, EdaRenderer *renderer);
 void o_pin_invalidate_rubber(GschemToplevel *w_current);
 /* o_place.c */
 void o_place_start(GschemToplevel *w_current, int x, int y);
-void o_place_end(GschemToplevel *w_current, int x, int y, int continue_placing, const char *hook_name, const gchar *undo_desc);
+void o_place_end(GschemToplevel *w_current, int x, int y, int continue_placing, int select_placed, const char *hook_name, const gchar *undo_desc);
 void o_place_motion(GschemToplevel *w_current, int x, int y);
 void o_place_invalidate_rubber(GschemToplevel *w_current, int drawing);
 void o_place_draw_rubber(GschemToplevel *w_current, EdaRenderer *renderer);

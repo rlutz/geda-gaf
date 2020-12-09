@@ -65,6 +65,7 @@ void o_place_start (GschemToplevel *w_current, int w_x, int w_y)
 void o_place_end (GschemToplevel *w_current,
                   int w_x, int w_y,
                   int continue_placing,
+                  int select_placed,
                   const char* hook_name,
                   const gchar *undo_desc)
 {
@@ -128,10 +129,26 @@ void o_place_end (GschemToplevel *w_current,
   connected_objects = NULL;
 
   o_invalidate_glist (w_current, temp_dest_list); /* only redraw new objects */
-  g_list_free (temp_dest_list);
 
   gschem_toplevel_page_content_changed (w_current, page);
   o_undo_savestate_old (w_current, UNDO_ALL, undo_desc);
+
+  if (select_placed) {
+    SELECTION *selection = page->selection_list;
+    o_select_unselect_all (w_current);
+
+    for (const GList *l = temp_dest_list; l != NULL; l = l->next) {
+      OBJECT *obj = (OBJECT *) l->data;
+      o_selection_add (page->toplevel, selection, obj);
+      o_attrib_add_selected (w_current, selection, obj);
+    }
+
+    if (temp_dest_list != NULL)
+      g_run_hook_object_list (w_current, "%select-objects-hook",
+                              temp_dest_list);
+  }
+  g_list_free (temp_dest_list);
+
   i_update_menus (w_current);
 
   if (!continue_placing) {

@@ -140,11 +140,12 @@ x_event_button_pressed(GschemPageView *page_view, GdkEventButton *event, GschemT
       /* End action */
       if (page->place_list != NULL) {
         switch(w_current->event_state) {
-          case (COMPMODE)   : o_place_end(w_current, w_x, w_y, w_current->continue_component_place,
+          case (COMPMODE)   : o_place_end(w_current, w_x, w_y,
+                                w_current->continue_component_place, FALSE,
                                 "%add-objects-hook", _("Add Component")); break;
-          case (TEXTMODE)   : o_place_end(w_current, w_x, w_y, FALSE,
+          case (TEXTMODE)   : o_place_end(w_current, w_x, w_y, FALSE, FALSE,
                                 "%add-objects-hook", _("Add Text")); break;
-          case (PASTEMODE)  : o_place_end(w_current, w_x, w_y, FALSE,
+          case (PASTEMODE)  : o_place_end(w_current, w_x, w_y, FALSE, TRUE,
                                 "%paste-objects-hook", _("Paste")); break;
           default: break;
         }
