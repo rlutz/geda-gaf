@@ -34,5 +34,6 @@
   (for-each (lambda (o)
               (and (attribute? o)
                    (string=? (attrib-name o) "netname")
+                   (object-type? (attrib-attachment o) 'net)
                    (place-netname-attribute o)))
             objects))
