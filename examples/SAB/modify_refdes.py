@@ -26,7 +26,8 @@ import types
 from gaf.sab_utils import verboseMsg
 import sys
 
-def sab_process(nets, comp, param):
+# context (ctx) is unused in this case
+def sab_process(nets, ctx, comp, param):
     verboseMsg("Starting refdes modification", 3)
     if param and isinstance(param, str):
         prefix, levels, all = param.split(',')

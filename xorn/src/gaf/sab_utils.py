@@ -13,7 +13,7 @@ def verboseMsg(msg, indent):
 
 # Load an external script and call its sab_process function passing
 # the netlist, component, and parameter string
-def exec_extern(nets, component, param):
+def exec_extern(nets, context, component, param):
     script, c, param = param.partition(':')
 
     try:
@@ -30,15 +30,15 @@ def exec_extern(nets, component, param):
     try:
         if (script is not None
             and isinstance(script.sab_process, types.FunctionType)
-            and script.sab_process.__code__.co_argcount == 3):
-                script.sab_process(nets, component, param)
+            and script.sab_process.__code__.co_argcount == 4):
+                script.sab_process(nets, context, component, param)
         elif script is None:
             return
         elif not isinstance(script.sab_process, types.FunctionType):
             sys.stderr.write(_("WARNING: %s.sab_process is not a function.\n")
                                % (script.__name__))
         else:
-            sys.stderr.write(_('WARNING: %s.sab_process must take three parameters.\n')
+            sys.stderr.write(_('WARNING: %s.sab_process must take four parameters.\n')
                                % (script.__name__))
     except AttributeError:
         sys.stderr.write(_("WARNING: Script %s missing 'sab_process' function.\n")

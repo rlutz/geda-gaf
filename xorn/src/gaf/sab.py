@@ -118,7 +118,7 @@ def process(nets, context, be_verbose = True):
                                        % (component.refdes), 2)
                 # the external script is responsible for the whole shebang
                 if component.action == 'exec':
-                    gaf.sab_utils.exec_extern(nets, component.comp, component.parms)
+                    gaf.sab_utils.exec_extern(nets, context, component.comp, component.parms)
                 else:
                     # first bypass then discard whatever is left
                     if component.action == 'bypass':
