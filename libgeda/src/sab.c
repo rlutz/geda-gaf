@@ -1,8 +1,10 @@
+#include <config.h>
 #include <libgeda/sab.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
+#include "libgeda_priv.h"
 
 /* Required by prototype_priv.h */
 #include <libguile.h>
@@ -139,11 +141,11 @@ SabGetSet (OBJECT *object)
     new_action = g_new (sab_action, 1);
     new_action->src = attr;
     if (!o_attrib_get_name_value (attr, NULL, &attr_val)) {
-      printf ("ERROR: Unable to retrieve value of sab-param in SAB.\n");
+      printf (_("ERROR: Unable to retrieve value of sab-param in SAB.\n"));
       exit (-1);
     }
     if (strlen (attr_val) > PARAM_BUFFER_LENGTH) {
-      printf ("ERROR: Length of sab-param exceeds buffer length.\n");
+      printf (_("ERROR: Length of sab-param exceeds buffer length.\n"));
       exit (-1);
     }
     strcpy (attr_buf, attr_val);
@@ -273,7 +275,7 @@ SabReleaseSet (sab_action_set *set, TOPLEVEL *toplevel)
           break;
 
         default:
-          printf ("ERROR: In SabReleaseAction unknown action found,\n");
+          printf (_("ERROR: In SabReleaseAction unknown action found,\n"));
           exit (-1);
         }
 
