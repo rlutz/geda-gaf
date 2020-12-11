@@ -125,13 +125,10 @@ query_usable_targets_cb (GtkClipboard *clip, GdkAtom *targets, gint ntargets,
   int i;
   int is_usable = FALSE;
 
-  for (i = 0; i < ntargets; i++) {
+  for (i = 0; i < ntargets && !is_usable; i++) {
     gchar *buf=gdk_atom_name (targets[i]);
-    if (strcmp (buf, MIME_TYPE_SCHEMATIC) == 0) {
+    if (strcmp (buf, MIME_TYPE_SCHEMATIC) == 0)
       is_usable = TRUE;
-      g_free(buf);
-      break;
-    }
     g_free(buf);
   }
 
