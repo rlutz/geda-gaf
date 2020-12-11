@@ -785,13 +785,12 @@ restore_current_page (GschemToplevel *w_current,
   gchar *current_page = eda_config_get_string (
     cfg, get_notebook_group_name (w_current, notebook),
     "current-page", NULL);
-  g_free(cfg);
 
-  if (current_page == NULL || *current_page == '\0')
-    return;
+  GschemDockable *dockable = NULL;
+  if (current_page != NULL && *current_page != '\0')
+    dockable = get_dockable_by_settings_name (w_current, current_page);
 
-  GschemDockable *dockable =
-    get_dockable_by_settings_name (w_current, current_page);
+  g_free (current_page);
   if (dockable == NULL || dockable->widget == NULL)
     return;
 
