@@ -353,6 +353,34 @@ void i_update_toolbar(GschemToplevel *w_current)
 }
 
 
+/*! \brief Check if an object has an attribute
+ *  \par Function Description
+ *  This functions returns TRUE if the given OBJECT has an attribute
+ *  with the given name. Both attached and inherited attributes are
+ *  checked.
+ *
+ *  \param [in] object       OBJECT to check
+ *  \param [in] name         the attribute name to check for
+ *  \return TRUE if the given OBJECT has an attribute with the given name
+ */
+/* It would probably be more efficient to look for them directly rather
+ * than relying on the search functions. */
+static int object_has_attribute (OBJECT *object, gchar *name)
+{
+  gchar* buf = o_attrib_search_attached_attribs_by_name(object,name,0);
+  int result = buf != NULL;
+
+  g_free(buf);
+  if(result)
+    return result;
+
+  buf = o_attrib_search_inherited_attribs_by_name(object, name, 0);
+  result = buf != NULL;
+
+  g_free(buf);
+  return result;
+}
+
 /*! \brief Update sensitivity of relevant menu items
  *
  *  \par Function Description
@@ -441,11 +469,9 @@ void i_update_menus(GschemToplevel *w_current)
         g_free (filename);
       }
 
-      /* Using the o_attrib_search... functions leaks memory without a bunch
-         of ugly code. */
-      sel_slotted = o_attrib_has_attrib_by_name (obj, "slot");
-      sel_subsheet = o_attrib_has_attrib_by_name (obj,"source");
-      sel_documented = o_attrib_has_attrib_by_name (obj, "documentation");
+      sel_slotted = object_has_attribute (obj, "slot");
+      sel_subsheet = object_has_attribute (obj,"source");
+      sel_documented = object_has_attribute (obj, "documentation");
     }
 
     if (obj->type == OBJ_TEXT) {

@@ -82,7 +82,6 @@ char *o_attrib_search_inherited_attribs_by_name (OBJECT *object, char *name, int
 char *o_attrib_search_object_attribs_by_name (OBJECT *object, char *name, int counter);
 GList *o_attrib_return_attribs(OBJECT *object);
 int o_attrib_is_inherited(OBJECT *attrib);
-int o_attrib_has_attrib_by_name(OBJECT *object, gchar *name);
 
 /* o_basic.c */
 int inside_region(int xmin, int ymin, int xmax, int ymax, int x, int y);
