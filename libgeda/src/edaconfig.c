@@ -521,16 +521,17 @@ eda_config_get_context_for_file (GFile *path)
     g_once_init_leave (&initialized, 1);
   }
 
-  if (path == NULL) {
+  if (path != NULL) {
+    g_return_val_if_fail (G_IS_FILE (path), NULL);
+
+    /* Find the project root, and the corresponding configuration
+     * filename. */
+    root = find_project_root (path);
+  } else {
     path = g_file_new_for_path (".");
+    root = find_project_root (path);
+    g_object_unref (path);
   }
-
-  g_return_val_if_fail (G_IS_FILE (path), NULL);
-
-  /* Find the project root, and the corresponding configuration
-   * filename. */
-  root = find_project_root (path);
-  g_object_unref(path);
   file = g_file_get_child (root, LOCAL_CONFIG_NAME);
 
   /* If there's already a context available for this file, return
