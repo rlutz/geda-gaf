@@ -344,6 +344,7 @@ x_window_save_geometry (GschemToplevel *w_current)
                           "gschem.window-geometry", "height", height);
     }
   }
+  g_free (window_state);
 
   /* save torn-off menus */
   if (w_current->menubar != NULL)
@@ -450,6 +451,7 @@ x_window_restore_geometry (GschemToplevel *w_current)
     gtk_window_fullscreen (GTK_WINDOW (w_current->main_window));
   else if (window_state != NULL && strcmp (window_state, "maximized") == 0)
     gtk_window_maximize (GTK_WINDOW (w_current->main_window));
+  g_free (window_state);
 
   /* defer restoring torn-off menus until main window is shown */
   g_signal_connect_swapped (
