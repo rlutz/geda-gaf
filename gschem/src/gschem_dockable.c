@@ -746,7 +746,7 @@ restore_state (GschemDockable *dockable)
   else if (strcmp (state, "docked-right") == 0)
     gschem_dockable_set_state (dockable, GSCHEM_DOCKABLE_STATE_DOCKED_RIGHT);
 
-  g_free(state);
+  g_free (state);
 }
 
 
@@ -771,7 +771,8 @@ restore_page_order (GschemToplevel *w_current,
     if (dockable != NULL && dockable->widget != NULL)
       gtk_notebook_reorder_child (notebook, dockable->widget, page_num);
   }
-  g_strfreev(list);
+
+  g_strfreev (list);
 }
 
 
@@ -820,7 +821,7 @@ restore_detached_dockables (GschemToplevel *w_current)
           dockable->initial_state == GSCHEM_DOCKABLE_STATE_WINDOW)
       gschem_dockable_detach (dockable, FALSE);
 
-    g_free(state);
+    g_free (state);
   }
 
   /* open up log window on startup */

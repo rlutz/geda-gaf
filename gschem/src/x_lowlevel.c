@@ -198,9 +198,9 @@ x_lowlevel_open_page (GschemToplevel *w_current, const gchar *filename)
     return NULL;
   }
 
-  furi=g_filename_to_uri (page->page_filename, NULL, NULL);
+  furi = g_filename_to_uri (page->page_filename, NULL, NULL);
   gtk_recent_manager_add_item (recent_manager, furi);
-  g_free(furi);
+  g_free (furi);
 
   o_undo_savestate (w_current, toplevel->page_current, UNDO_ALL, NULL);
 

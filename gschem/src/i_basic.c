@@ -367,17 +367,17 @@ void i_update_toolbar(GschemToplevel *w_current)
  * than relying on the search functions. */
 static int object_has_attribute (OBJECT *object, gchar *name)
 {
-  gchar* buf = o_attrib_search_attached_attribs_by_name(object,name,0);
+  gchar *buf = o_attrib_search_attached_attribs_by_name (object, name, 0);
   int result = buf != NULL;
 
-  g_free(buf);
-  if(result)
+  g_free (buf);
+  if (result)
     return result;
 
-  buf = o_attrib_search_inherited_attribs_by_name(object, name, 0);
+  buf = o_attrib_search_inherited_attribs_by_name (object, name, 0);
   result = buf != NULL;
 
-  g_free(buf);
+  g_free (buf);
   return result;
 }
 
