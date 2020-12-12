@@ -6,6 +6,9 @@ December 2020
 - Fixed merging package and net names across multiple subsheets
   instantiated by one component
 
+- Duplicate symbol names within one library are only considered an
+  error if the symbol is actually used
+
 
 October 2020
 ============
