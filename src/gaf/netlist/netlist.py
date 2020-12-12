@@ -147,8 +147,12 @@ class Netlist:
             try:
                 rev = gaf.read.read(filename, load_symbols = True)
             except Exception as e:
-                sys.stderr.write(_("ERROR: Failed to load '%s': %s\n")
-                                 % (filename, e))
+                if str(e):
+                    sys.stderr.write(_("ERROR: Failed to load '%s': %s\n")
+                                         % (filename, e))
+                else:
+                    sys.stderr.write(_("ERROR: Failed to load '%s'\n")
+                                         % filename)
                 sys.exit(2)
 
             rev.finalize()
