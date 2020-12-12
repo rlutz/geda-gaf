@@ -15,8 +15,8 @@
 # along with this program; if not, write to the Free Software Foundation,
 # Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
-AC_PREREQ([2.61])
-LT_PREREQ([2.4.2])
+AC_PREREQ([2.69])
+LT_PREREQ([2.4.6])
 
 AC_INIT([Xorn], [0.0], [bug-xorn@hedmen.org], [], [http://hedmen.org/xorn/])
 AC_CONFIG_SRCDIR([src/cpython/storage/module.c])
@@ -37,7 +37,7 @@ PKG_CHECK_MODULES([PYTHON], [python-2.7 >= 2.7],, [
 PKG_CHECK_MODULES([GUILE], [guile-2.2 >= 2.2.4])
 
 AM_GNU_GETTEXT([external])
-AM_GNU_GETTEXT_VERSION([0.18.2])
+AM_GNU_GETTEXT_VERSION([0.19.8])
 
 # use location passed by main configure script
 AC_MSG_CHECKING([where to look for gEDA shared data])

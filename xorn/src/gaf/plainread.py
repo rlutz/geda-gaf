@@ -379,7 +379,11 @@ def read_file(f, name, log, load_symbol, load_pixmap,
 # \warning This function is not implemented.  See Xorn bug #148.
 
 def pin_update_whichend(rev, force_boundingbox, log):
-    log.error(_("file is lacking pin orientation information"))
+    for ob in rev.get_objects():
+        data = rev.get_object_data(ob)
+        if isinstance(data, xorn.storage.Net) and data.is_pin:
+            log.error(_("file is lacking pin orientation information"))
+            break
 
 
 ## Construct a line attribute object.

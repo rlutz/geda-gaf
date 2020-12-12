@@ -30,7 +30,7 @@ import gaf.netlist.slib
 
 APPEND, PREPEND = xrange(2)
 
-report_gui_enabled = False
+report_gui = None
 report_gui_buf = None
 report_gui_stderr = None
 
@@ -248,17 +248,25 @@ def version():
 
 
 def enable_report_gui():
-    global report_gui_enabled
+    global report_gui
     global report_gui_buf
     global report_gui_stderr
 
-    if report_gui_enabled:
+    if report_gui is not None:
+        return
+
+    try:
+        import gaf.netlist.reportgui
+    except:
+        sys.stderr.write(
+            _("%s: Can't set up GUI dialog; is pygtk installed?\n")
+                % xorn.command.program_short_name)
         return
 
     sys.stderr.write(_("Redirecting warnings and errors to GUI dialog...\n"))
     sys.stderr.flush()
 
-    report_gui_enabled = True
+    report_gui = gaf.netlist.reportgui
     report_gui_stderr = sys.stderr
     report_gui_buf = cStringIO.StringIO()
     sys.stderr = report_gui_buf
@@ -298,20 +306,17 @@ def main():
         inner_main()
         sys.exit(0)
     except SystemExit as e:
-        if report_gui_enabled:
+        if report_gui is not None:
             sys.stderr = report_gui_stderr
             log = report_gui_buf.getvalue()
             report_gui_buf.close()
-            import gaf.netlist.reportgui
-            daemonize(
-                lambda: gaf.netlist.reportgui.report_messages(e.code, log))
+            daemonize(lambda: report_gui.report_messages(e.code, log))
         raise
     except KeyboardInterrupt:
         raise
     except:
-        if report_gui_enabled:
-            import gaf.netlist.reportgui
-            daemonize(lambda: gaf.netlist.reportgui.report_crash())
+        if report_gui is not None:
+            daemonize(lambda: report_gui.report_crash())
         raise
 
 def inner_main():

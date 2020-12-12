@@ -9,7 +9,7 @@ original gEDA file format.  For example,
 
 becomes
 
-    <box x="0" y="0" width="170" height="110" color="lock" width="0"/>
+    <box x="0" y="0" width="170" height="110" color="lock" linewidth="0"/>
 
 However, there are some moderate changes to the format with the
 intention to make the files more exactly represent what Xorn sees,
