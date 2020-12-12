@@ -1,6 +1,6 @@
 # German translation for gschem
 # Copyright (C) 2002, 2005-2010 Werner Hoch <werner.ho@gmx.de>
-# Copyright (C) 2019 Roland Lutz
+# Copyright (C) 2019-2020 Roland Lutz
 # This file is distributed under the same license as the gEDA/gaf package.
 #
 msgid ""
@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: geda\n"
 "Report-Msgid-Bugs-To: https://bugs.launchpad.net/geda\n"
 "POT-Creation-Date: 2020-12-16 18:12+0100\n"
-"PO-Revision-Date: 2019-10-09 20:27+0200\n"
+"PO-Revision-Date: 2020-12-12 16:47+0100\n"
 "Last-Translator: Roland Lutz\n"
 "Language-Team: gEDA developers <geda-dev@seul.org>\n"
 "Language: de\n"
@@ -568,19 +568,16 @@ msgid "Toggle Show Attribute Value"
 msgstr "Attributwerts-Sichtbarkeit umschalten"
 
 #: gschem/src/gschem_multiattrib_dockable.c:1465
-#, fuzzy
 msgid "Is the attribute visible?"
-msgstr "Das numslots Attribut fehlt\n"
+msgstr "Ist das Attribut sichtbar?"
 
 #: gschem/src/gschem_multiattrib_dockable.c:1467
-#, fuzzy
 msgid "Show attribute name?"
-msgstr "Nur Attributnamen anzeigen"
+msgstr "Attributnamen anzeigen?"
 
 #: gschem/src/gschem_multiattrib_dockable.c:1469
-#, fuzzy
 msgid "Show attribute value?"
-msgstr "Nur Attributwert anzeigen"
+msgstr "Attributwert anzeigen?"
 
 #: gschem/src/gschem_multiattrib_dockable.c:1782 gschem/src/x_attribedit.c:431
 #: gschem/src/actions.c:1196 gschem/src/actions.c:1229
@@ -613,17 +610,16 @@ msgid "Copy to all"
 msgstr "In alle kopieren"
 
 #: gschem/src/gschem_multiattrib_dockable.c:2302
-#, fuzzy
 msgid "Vis"
-msgstr "Sichtbar?"
+msgstr "Si"
 
 #: gschem/src/gschem_multiattrib_dockable.c:2321
 msgid "N"
-msgstr "Name"
+msgstr "N"
 
 #: gschem/src/gschem_multiattrib_dockable.c:2340
 msgid "V"
-msgstr "Wert"
+msgstr "W"
 
 #: gschem/src/gschem_multiattrib_dockable.c:2424
 msgid "Show inherited attributes"
