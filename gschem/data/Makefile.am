@@ -90,6 +90,9 @@ DOMAIN=geda-gschem
 @DESKTOP_I18N_LANGS_RULE@
 @DESKTOP_I18N_DESKTOP_RULE@
 
+metainfodir = $(datadir)/metainfo
+dist_metainfo_DATA = geda-gschem.metainfo.xml
+
 # --------------------------------------------------------------------
 # Special rules for installing icon files
 install_icons_exec = \

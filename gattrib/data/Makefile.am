@@ -25,6 +25,9 @@ DOMAIN=geda-gattrib
 @DESKTOP_I18N_LANGS_RULE@
 @DESKTOP_I18N_DESKTOP_RULE@
 
+metainfodir = $(datadir)/metainfo
+dist_metainfo_DATA = geda-gattrib.metainfo.xml
+
 install_icon_exec = \
 	$(ICON_THEME_INSTALLER) \
 	-t $(theme) \
