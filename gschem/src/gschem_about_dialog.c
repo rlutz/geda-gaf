@@ -1,7 +1,7 @@
 /* gEDA - GPL Electronic Design Automation
  * gschem - gEDA Schematic Capture
  * Copyright (C) 1998-2010 Ales Hvezda
- * Copyright (C) 1998-2019 gEDA Contributors (see ChangeLog for details)
+ * Copyright (C) 1998-2020 gEDA Contributors (see ChangeLog for details)
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -76,7 +76,7 @@ void about_dialog (GschemToplevel *w_current)
       /* TRANSLATORS: "ChangeLog" is a literal filename; please don't translate it. */
       _("Copyright © 1998-2012 Ales Hvezda"
         " <ahvezda@geda.seul.org>\n"
-        "Copyright © 1998-2019 gEDA Contributors"
+        "Copyright © 1998-2020 gEDA Contributors"
         " (see ChangeLog for details)"),
       "website",        "http://geda-project.org/",
       NULL);

@@ -256,7 +256,7 @@ msgstr "gEDA: Ηλεκτρονικός Αυτοματισμός Σχεδίαση
 #, fuzzy
 msgid ""
 "Copyright © 1998-2012 Ales Hvezda <ahvezda@geda.seul.org>\n"
-"Copyright © 1998-2019 gEDA Contributors (see ChangeLog for details)"
+"Copyright © 1998-2020 gEDA Contributors (see ChangeLog for details)"
 msgstr ""
 "Πνευματικά δικαιώματα © 1998-2012 Ales Hvezda <ahvezda@geda.seul.org>\n"
 "Πνευματικά δικαιώματα © 1998-2019 προγραμματιστές του gEDA (δείτε το "
@@ -1535,7 +1535,7 @@ msgstr ""
 #, fuzzy, c-format
 msgid ""
 "gEDA %s (g%.7s)\n"
-"Copyright (C) 1998-2019 gEDA developers\n"
+"Copyright (C) 1998-2020 gEDA developers\n"
 "This is free software, and you are welcome to redistribute it under\n"
 "certain conditions. For details, see the file `COPYING', which is\n"
 "included in the gEDA distribution.\n"

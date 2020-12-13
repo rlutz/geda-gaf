@@ -1,6 +1,6 @@
 /* gEDA - GPL Electronic Design Automation
  * libgedacairo - Rendering gEDA schematics with Cairo
- * Copyright (C) 2010-2019 gEDA Contributors (see ChangeLog for details)
+ * Copyright (C) 2010-2020 gEDA Contributors (see ChangeLog for details)
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public

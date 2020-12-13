@@ -1,5 +1,5 @@
 # Italian translation for the gEDA gsymcheck package.
-# Copyright (C) 2014-2019 gEDA Developers
+# Copyright (C) 2014-2020 gEDA Developers
 # This file is distributed under the same license as the gEDA gsymcheck package.
 # Marco Ciampa <ciampix@libero.it>, 2014.
 #
