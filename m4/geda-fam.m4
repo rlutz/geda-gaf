@@ -22,7 +22,7 @@ dnl Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 # available.
 AC_DEFUN([AX_OPTION_FAM],
 [
-  AC_PREREQ([2.60])dnl
+  AC_PREREQ([2.69])dnl
   AC_MSG_CHECKING([whether to use libfam])
 
   # Check what the user wants

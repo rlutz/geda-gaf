@@ -20,7 +20,7 @@ dnl Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 
 AC_DEFUN([AX_DESKTOP_I18N],
 [
-  AC_PREREQ([2.60])dnl
+  AC_PREREQ([2.69])dnl
   AC_REQUIRE([AM_NLS])dnl
   AC_REQUIRE([AM_PO_SUBDIRS])dnl
   dnl Complain if desktop-i18n is missing

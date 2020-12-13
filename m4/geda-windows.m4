@@ -35,7 +35,7 @@ dnl Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
   
 AC_DEFUN([AX_WINDOWS_FLAGS],
 [
-  AC_PREREQ([2.60])dnl
+  AC_PREREQ([2.69])dnl
   AC_REQUIRE([AX_HOST])dnl
 
   if test "$PLATFORM_WIN32" = "yes"; then

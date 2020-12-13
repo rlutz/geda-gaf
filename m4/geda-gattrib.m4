@@ -21,7 +21,7 @@ dnl Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 # Check if gattrib should be disabled
 AC_DEFUN([AX_OPTION_GATTRIB],
 [
-  AC_PREREQ([2.60])dnl
+  AC_PREREQ([2.69])dnl
 
   AC_MSG_CHECKING([whether to enable gattrib])
   AC_ARG_ENABLE([gattrib],

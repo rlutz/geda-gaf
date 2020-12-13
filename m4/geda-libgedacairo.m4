@@ -21,7 +21,7 @@ dnl Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 # Work out the gettext domain that libgeda should use
 AC_DEFUN([AX_LIBGEDACAIRO],
 [
-  AC_PREREQ([2.60])dnl
+  AC_PREREQ([2.69])dnl
 
   # First argument is the shared library version to use.
   AC_MSG_CHECKING([libgedacairo shared library version])

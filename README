@@ -72,63 +72,87 @@ information in the `INSTALL' file.
 Dependencies
 ------------
 
+Note: `xxx >= y is used as a shorthand for `xxx, version y or later'.
+
 In order to compile gEDA from the distributed source archives, you
-*must* have the following tools and libraries installed:
+*must* have the following tools installed:
 
- - A C/C++ compiler and standard library (GCC/glibc are recommended).
+ - A C/C++ compiler and standard library (GCC >= 8.3.0 and glibc >=
+   2.28 are recommended, but clang >= 7.0.1 should work, as well).
 
- - The `pkg-config' tool for managing shared libraries.
-   <http://pkgconfig.freedesktop.org/>
+ - The `make' tool (GNU Make >= 4.2.1 is recommended).
+   <https://www.gnu.org/software/make/>
 
- - Guile 2.2 ("GNU's Ubiquitous Intelligent Language for Extensions"),
-   version 2.2.4 or later.  <http://www.gnu.org/software/guile/>
+ - The `pkg-config' tool for managing shared libraries >= 0.29.
+   <https://www.freedesktop.org/wiki/Software/pkg-config/>
 
- - GTK+ (the Gimp Toolkit), version 2.18.0 or later.
-   <http://www.gtk.org/>
-
- - GNU `gettext', version 0.18 or newer.
-   <http://www.gnu.org/software/gettext/>
+ - GNU `gettext' >= 0.19.8 <https://www.gnu.org/software/gettext/>
 
  - The `lex' tool for generating lexical scanners.  The `flex'
-   implementation recommended.  <http://flex.sourceforge.net/>
+   implementation >= 2.6.4 is recommended.
+   <https://github.com/westes/flex/releases>
 
- - The `awk' tool for data processing.  GNU Awk (`gawk') is
-   recommended.  <http://www.gnu.org/software/gawk/>
+ - The `awk' tool for data processing.  GNU Awk (`gawk') >= 4.2.1 or
+   mawk >= 1.3.3 are recommended.  <https://www.gnu.org/software/gawk/>
 
- - The CPython interpreter, version 2.7, including the development
-   headers.  <https://www.python.org/downloads/>
+You *must* also have the following libraries installed, including
+their development files:
+
+ - Guile 2.2 ("GNU's Ubiquitous Intelligent Language for Extensions")
+   >= 2.2.4 <https://www.gnu.org/software/guile/>
+
+ - GLib 2.0 >= 2.58.3 <https://www.gtk.org/>
+
+ - GTK+ 2.0 (the Gimp Toolkit) >= 2.24.32 <https://www.gtk.org/>
+
+ - GDK Pixbuf 2.0 >= 2.38.1 <https://www.gtk.org/>
+
+ - Pango >= 1.42.3 <https://pango.gnome.org/>
+
+ - Cairo >= 1.16.0 <https://cairographics.org/>
+
+ - CPython 2.7 >= 2.7.16 <https://www.python.org/downloads/>
+
+ - libexpat1 >= 2.2.6 <https://libexpat.github.io/>
+
+ - libpng >= 1.6.36 <http://libpng.org/pub/png/libpng.html>
 
 The following tools and libraries are *highly recommended*:
 
- - GNU `troff' (`groff'). <http://www.gnu.org/software/groff/>
-
- - The freedesktop.org MIME info database.
-   <http://freedesktop.org/Software/shared-mime-info>
-
- - The freedesktop.org utilities for manipulating .desktop files.
-   <http://www.freedesktop.org/software/desktop-file-utils>
-
  - The FAM or Gamin daemon and corresponding `libfam' or `libgamin'
-   client library (Gamin is recommended).  If this is available,
-   gschem will detect if files have been changed on disk by another
-   application.  <https://people.gnome.org/~veillard/gamin/>
+   client library (Gamin >= 0.1.10 is recommended).  If this is
+   available, gschem will detect if files have been changed on disk by
+   another application.  <https://people.gnome.org/~veillard/gamin/>
+
+ - pygtk >= 2.24.0, the Python 2.7 bindings for GTK+.  Without this
+   package, netlisting errors are reported to the terminal where users
+   probably won't see them. <http://www.pygtk.org/>
+
+ - GNU `troff' (`groff') >= 1.22.4
+   <https://www.gnu.org/software/groff/>
+
+ - The freedesktop.org MIME info database >= 1.10
+   <https://freedesktop.org/wiki/Software/shared-mime-info/>
+
+ - The freedesktop.org utilities for manipulating .desktop files >= 0.23
+   <https://www.freedesktop.org/software/desktop-file-utils/>
 
 The following tools and libraries are optional:
 
- - The `doxygen' API documentation tool.  This is required for
+ - The `doxygen' API documentation tool >= 1.8.13.  This is required for
    building the gEDA developer API documentation, not for the regular
    user documentation.  <http://www.stack.nl/~dimitri/doxygen/>
 
- - `Inkscape' or `ImageMagic' for svg to png or pdf conversion
-   This is required for building the gEDA developer API documentation,
-   not for the regular user documentation.
-   <http://inkscape.org/>
-   <http://www.imagemagick.org/script/index.php>
+ - `Inkscape' >= 0.92.4 or `ImageMagick' >= 6.9.10 for svg to png or
+   pdf conversion.  This is required for building the gEDA developer
+   API documentation, not for the regular user documentation.
+   <https://inkscape.org/>
+   <https://www.imagemagick.org/script/index.php>
 
- - `Graphviz' for drawing directed graphs.
+ - `Graphviz' >= 2.40.1 for drawing directed graphs.
    This is required for building the gEDA developer API documentation,
    not for the regular user documentation.
-   <http://www.graphviz.org/>
+   <https://www.graphviz.org/>
 
 Troubleshooting dependencies
 ----------------------------
@@ -178,19 +202,16 @@ gEDA uses the `git' version control system.  If you wish to try out
 the very latest version of gEDA, you will need to install some extra
 tools *in addition to* the ones listed above:
 
-  - The `git' version control tool, version 1.6 or newer.
-    <http://git-scm.com/>
+  - The `git' version control tool. <https://git-scm.com/>
 
-  - GNU Automake, version 1.11.0 or newer.
-    <http://www.gnu.org/software/automake/>
+  - GNU Automake >= 1.16.1 <https://www.gnu.org/software/automake/>
 
-  - GNU Autoconf, version 2.60 or newer.
-    <http://www.gnu.org/software/autoconf/>
+  - GNU Autoconf >= 2.69 <https://www.gnu.org/software/autoconf/>
 
-  - GNU Libtool.  <http://www.gnu.org/software/libtool/>
+  - GNU Libtool >= 2.4.6 <https://www.gnu.org/software/libtool/>
 
-  - GNU Texinfo documentation system.
-    <http://www.gnu.org/software/texinfo/>
+  - GNU Texinfo documentation system >= 6.5.0
+    <https://www.gnu.org/software/texinfo/>
 
     Note that on some distributions the TeX support for Texinfo is
     packaged separately.
@@ -256,7 +277,7 @@ There are several ways to get help with installing and using gEDA:
 
  - If you have discovered a bug, have a feature request, or have
    written a patch to gEDA, please create an item on the gEDA Bugs
-   page on Launchpad. <http://bugs.launchpad.net/geda>
+   page on Launchpad. <https://bugs.launchpad.net/geda>
 
 License
 =======
