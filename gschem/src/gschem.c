@@ -73,7 +73,7 @@ void gschem_atexit(gschem_atexit_func func, gpointer data)
  *  This function cleans up all memory objects allocated during the
  *  gSchem runtime.
  */
-void gschem_quit(void)
+static void gschem_quit(void)
 {
   GList *list;
   gschem_atexit_struct *p;
@@ -109,9 +109,6 @@ void gschem_quit(void)
   /* enable this to get more memory usage from glib */
   /* You also have to enable something in glib I think */
   /* g_mem_profile();*/
-
-
-  gtk_main_quit();
 }
 
 /*! \brief Show warning dialog if certain configuration options are set.
@@ -450,6 +447,8 @@ void main_prog(void *closure, int argc, char *argv[])
 
   /* enter main loop */
   gtk_main();
+
+  gschem_quit ();
 }
 
 /*! \brief Main executable entrance point.

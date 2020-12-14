@@ -1114,7 +1114,7 @@ void x_window_close(GschemToplevel *w_current)
 
   /* just closed last window, so quit */
   if (last_window) {
-    gschem_quit();
+    gtk_main_quit();
   }
 }
 
