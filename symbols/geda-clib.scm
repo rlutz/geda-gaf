@@ -20,8 +20,8 @@
     ("analog" "Basic devices")
     ("connector" "Connectors (generic)")
     ("diode" "Diodes (generic)")
+    ("net-power" "Power symbols")
     ("io" "Input/output (generic)")
-    ("power" "Power rails")
     ("radio" "Radio elements (generic)")
     ("switch" "Switches (generic)")
     ("titleblock" "Titleblocks (generic)")
@@ -64,6 +64,7 @@
     ("supervisor" "Microprocessor supervisors (misc)")
     ("opto" "Optocouplers (misc)")
     ("relay" "Relays (misc)")
+    ("power" "Legacy power rails")
     ("misc" "Misc. unsorted symbols")
 
   ; Other
