@@ -12,11 +12,11 @@
 <a href=.>start</a>&nbsp;=>&nbsp;<a href=geda-gschem_ug.html>gschem_ug</a></br>
 <div class="table sectionedit1"><table class="inline">
 	<tr class="row0">
-		<td class="col0 leftalign"> &lt;&lt; <a href="geda-gschem_ug-stroke.html" class="wikilink1" title="geda-gschem_ug-stroke.html">Mouse gesture support</a>  </td><td class="col1 centeralign">  <strong><a href="geda-gschem_ug.html" class="wikilink1" title="geda-gschem_ug.html">gEDA gschem User Guide</a></strong>  </td><td class="col2 rightalign">  <a href="geda-gschem_ug.html" class="wikilink1" title="geda-gschem_ug.html">Contents</a> &gt;&gt; </td>
+		<td class="col0 leftalign"> « <a href="geda-gschem_ug-stroke.html" class="wikilink1" title="geda-gschem_ug-stroke.html">Mouse gesture support</a>  </td><td class="col1 centeralign">  <strong><a href="geda-gschem_ug.html" class="wikilink1" title="geda-gschem_ug.html">gEDA gschem User Guide</a></strong>  </td><td class="col2 rightalign">  <a href="geda-gschem_ug.html" class="wikilink1" title="geda-gschem_ug.html">Contents</a> » </td>
 	</tr>
 </table></div>
 <!-- EDIT1 TABLE [1-125] -->
-<h2 id="extendinggschem">Extending gschem</h2>
+<h2 class="sectionedit2" id="extending_gschem">Extending gschem</h2>
 <div class="level2">
 
 <p>
@@ -24,20 +24,20 @@ Since the gschem <a href="geda-gschem_ug-config.html" class="wikilink1" title="g
 </p>
 
 <p>
-gschem (and other gEDA/gaf tools such as <a href="geda-gnetlist_ug.html" class="wikilink1" title="geda-gnetlist_ug.html">gnetlist</a>) use Guile Scheme to provide Scheme scripting capabilities, and all of the features of Guile are available to use.  The <em>Guile Reference Manual</em> is available as an Info manual (<code>info guile</code> on most systems), or on the Guile website.
+gschem (and other gEDA/gaf tools such as <a href="geda-gnetlist_ug.html" class="wikilink1" title="geda-gnetlist_ug.html">gnetlist</a>) use <a href="http://www.gnu.org/s/guile/" class="urlextern" title="http://www.gnu.org/s/guile/" rel="nofollow">Guile Scheme</a> to provide Scheme scripting capabilities, and all of the features of Guile are available to use.  The <em>Guile Reference Manual</em> is available as an Info manual (<code>info guile</code> on most systems), or <a href="http://www.gnu.org/software/guile/docs/docs.html" class="urlextern" title="http://www.gnu.org/software/guile/docs/docs.html" rel="nofollow">on the Guile website</a>.
 </p>
 
 <p>
-A collection of modules is provided for accessing and modifying gEDA objects and pages, called the gEDA Scheme API.  The <em>gEDA Scheme Reference Manual</em> is also available as an Info manual (<code>info geda-scheme</code>).
+A collection of modules is provided for accessing and modifying gEDA objects and pages, called the gEDA Scheme <abbr title="Application Programming Interface">API</abbr>.  The <em>gEDA Scheme Reference Manual</em> is also available as an Info manual (<code>info geda-scheme</code>).
 </p>
 
 </div>
-
-<h3 id="addinganaction">Adding an action</h3>
+<!-- EDIT2 SECTION "Extending gschem" [127-998] -->
+<h3 class="sectionedit3" id="adding_an_action">Adding an action</h3>
 <div class="level3">
 
 <p>
-Actions are thunks, i.e. Scheme procedures that take no arguments.  For gschem to be able to find them, they must be defined in the top-level module, so you must do one of the following:
+Actions are thunks, i.e. Scheme procedures that take no arguments.  For gschem to be able to find them, they must be defined in the top-level <a href="http://www.gnu.org/software/guile/manual/html_node/Modules.html" class="urlextern" title="http://www.gnu.org/software/guile/manual/html_node/Modules.html" rel="nofollow">module</a>, so you must do one of the following:
 </p>
 <ul>
 <li class="level1"><div class="li"> define the procedure directly in one of your configuration files;</div>
@@ -53,8 +53,8 @@ You can then bind the procedure to a keystroke as normal with <code>global-set-k
 </p>
 
 </div>
-
-<h3 id="hookingintobuilt-inactions">Hooking into built-in actions</h3>
+<!-- EDIT3 SECTION "Adding an action" [999-1655] -->
+<h3 class="sectionedit4" id="hooking_into_built-in_actions">Hooking into built-in actions</h3>
 <div class="level3">
 
 <p>
@@ -62,15 +62,15 @@ gschem allows you to register functions, called <em>hooks</em>, to be executed w
 </p>
 
 </div>
-
-<h3 id="proceduresforextensionwriters">Procedures for extension writers</h3>
+<!-- EDIT4 SECTION "Hooking into built-in actions" [1656-1958] -->
+<h3 class="sectionedit5" id="procedures_for_extension_writers">Procedures for extension writers</h3>
 <div class="level3">
 
 <p>
-In addition to the gEDA Scheme API functions, gschem provides some utility procedures for extension writers.
+In addition to the gEDA Scheme <abbr title="Application Programming Interface">API</abbr> functions, gschem provides some utility procedures for extension writers.
 </p>
-<div class="noteimportant">The functions described in this section are not guaranteed to remain stable from one release of gEDA/gaf to another.  For longer-term stability, use only the gEDA Scheme API.
-</div><div class="table sectionedit2"><table class="inline">
+<div class="noteimportant">The functions described in this section are not guaranteed to remain stable from one release of gEDA/gaf to another.  For longer-term stability, use only the gEDA Scheme <abbr title="Application Programming Interface">API</abbr>.
+</div><div class="table sectionedit6"><table class="inline">
 	<thead>
 	<tr class="row0">
 		<th class="col0 leftalign"> Function                        </th><th class="col1 leftalign"> Description  </th>
@@ -95,13 +95,13 @@ In addition to the gEDA Scheme API functions, gschem provides some utility proce
 		<td class="col0 leftalign"> <code>gschem-msg MSG</code>  </td><td class="col1 leftalign"> Display a message dialog to the user with the text <code>MSG</code>.  </td>
 	</tr>
 	<tr class="row7">
-		<td class="col0 leftalign"> <code>gschem-confirm MSG</code>  </td><td class="col1 leftalign"> Display a confirmation dialog to the user, with &quot;Yes&quot; and &quot;No&quot; buttons and the text <code>MSG</code>.  Return <code>#t</code> if the user selects &quot;Yes&quot;, and <code>#f</code> otherwise.  </td>
+		<td class="col0 leftalign"> <code>gschem-confirm MSG</code>  </td><td class="col1 leftalign"> Display a confirmation dialog to the user, with “Yes” and “No” buttons and the text <code>MSG</code>.  Return <code>#t</code> if the user selects “Yes”, and <code>#f</code> otherwise.  </td>
 	</tr>
 	<tr class="row8">
-		<td class="col0 leftalign"> <code>gschem-filesel MSG TEMPL FLAGS</code>  </td><td class="col1"> Display a file selector dialog, with <code>MSG</code> in the title and the default filename <code>TEMPL</code>.  The <code>FLAGS</code> control the file selector behavior, and should be a list of strings.  The following strings can be provided in the <code>FLAGS</code>: <code>&quot;may_exist&quot;</code> if the file selected is permitted to already exist; <code>&quot;must_exist&quot;</code> if the file selected must already exist; <code>&quot;must_not_exist&quot;</code> if the file selected must <em>not</em> already exist; <code>&quot;save&quot;</code> to show a &quot;Save file...&quot; dialog; <code>&quot;open&quot;</code> to show an &quot;Open file...&quot; dialog. </td>
+		<td class="col0 leftalign"> <code>gschem-filesel MSG TEMPL FLAGS</code>  </td><td class="col1"> Display a file selector dialog, with <code>MSG</code> in the title and the default filename <code>TEMPL</code>.  The <code>FLAGS</code> control the file selector behavior, and should be a list of strings.  The following strings can be provided in the <code>FLAGS</code>: <code>“may_exist”</code> if the file selected is permitted to already exist; <code>“must_exist”</code> if the file selected must already exist; <code>“must_not_exist”</code> if the file selected must <em>not</em> already exist; <code>“save”</code> to show a “Save file…” dialog; <code>“open”</code> to show an “Open file…” dialog. </td>
 	</tr>
 </table></div>
-<!-- EDIT2 TABLE [2312-3885] -->
+<!-- EDIT6 TABLE [2312-3885] -->
 </div>
-</body>
+<!-- EDIT5 SECTION "Procedures for extension writers" [1959-] --></body>
 </html>

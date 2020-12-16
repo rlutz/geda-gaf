@@ -94,6 +94,17 @@ _symbol_cache = {}
 load_pixmaps = False
 
 
+## Raised on symbol lookup if the symbol isn't found in the library.
+
+class NotFoundError(Exception):
+    pass
+
+## Raised on symbol lookup if there are multiple matching symbols.
+
+class DuplicateError(Exception):
+    pass
+
+
 ## Source object representing a directory of symbol files.
 #
 # This class allows a directory which contains one or more symbol
@@ -257,15 +268,25 @@ def _update_symbol_list(source):
             "Python function returned non-list" % source.name
 
     found = set()
+    duplicate = set()
     for symbol in symbols:
         if not isinstance(symbol, str) and \
            not isinstance(symbol, unicode):
             raise TypeError, "Non-string symbol name " \
                 "while scanning library [%s]" % source.name
         if symbol in found:
-            raise ValueError, "Duplicate symbol name " \
-                "while scanning library [%s]: %s" % (symbol, source.name)
+            duplicate.add(symbol)
         found.add(symbol)
+
+    if duplicate:
+        if source.name:
+            sys.stderr.write(_("Library \"%s\" contains symbols with "
+                               "conflicting names:\n") % source.name)
+        else:
+            sys.stderr.write(_("Library contains symbols with "
+                               "conflicting names:\n"))
+        for symbol in sorted(duplicate):
+            sys.stderr.write(_("\t%s\n") % symbol)
 
     symbols.sort()
     source.symbols[:] = symbols
@@ -403,6 +424,8 @@ def invalidate_symbol_data(source, symbol):
 # glob pattern; otherwise, only exact matches are returned.
 #
 # \returns a list of pairs <tt>(source, symbol)</tt>
+#
+# \throws DuplicateError if one library contains multiple matching symbols
 
 def search(pattern, glob = False):
     # Check to see if the query is already in the cache
@@ -417,6 +440,9 @@ def search(pattern, glob = False):
             for symbol in fnmatch.filter(source.symbols, pattern):
                 result.append((source, symbol))
         elif pattern in source.symbols:
+            if source.symbols.count(pattern) > 1:
+                raise DuplicateError, \
+                    "More than one component found with name [%s]" % pattern
             result.append((source, pattern))
 
     _search_cache[pattern, glob] = result
@@ -427,13 +453,14 @@ def search(pattern, glob = False):
 # Returns the source of the first symbol found with the given \a name.
 # If more than one matching symbol is found, emits a warning to stderr.
 #
-# \throws ValueError if the component was not found
+# \throws NotFoundError if the symbol was not found
+# \throws DuplicateError if one library contains multiple matching symbols
 
 def lookup_symbol_source(name):
     symlist = search(name)
 
     if not symlist:
-        raise ValueError, "Component [%s] was not found in the " \
+        raise NotFoundError, "Component [%s] was not found in the " \
             "component library" % name
 
     if len(symlist) > 1:
@@ -451,7 +478,11 @@ def lookup_symbol_source(name):
 # load system, as it will always want to load symbols given only their
 # name.
 #
-# \throws ValueError if the component was not found
+# \throws NotFoundError  if the component was not found
+# \throws DuplicateError if one library contains multiple matching symbols
+# \throws ValueError     if the source object's \c get function doesn't
+#                        return a xorn.storage.Revision or
+#                        xorn.proxy.RevisionProxy instance
 
 def lookup_symbol(name):
     return get_symbol(lookup_symbol_source(name), name)

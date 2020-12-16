@@ -11,10 +11,10 @@
 <body>
 
 <p>
-<a href="start.html" class="wikilink1" title="start.html">gEDA</a> &gt;&gt; <a href="geda-developer.html" class="wikilink1" title="geda-developer.html">Development</a> &gt;&gt; <a href="geda-gparts_tc.html" class="wikilink1" title="geda-gparts_tc.html">Parts Manager</a> &gt;&gt; <a href="geda-gparts_ii.html" class="wikilink1" title="geda-gparts_ii.html">Installation Instructions</a>
+<a href="start.html" class="wikilink1" title="start.html">gEDA</a> » <a href="geda-developer.html" class="wikilink1" title="geda-developer.html">Development</a> » <a href="geda-gparts_tc.html" class="wikilink1" title="geda-gparts_tc.html">Parts Manager</a> » <a href="geda-gparts_ii.html" class="wikilink1" title="geda-gparts_ii.html">Installation Instructions</a>
 </p>
 
-<h1 id="partmanagerinstallation">Part Manager Installation</h1>
+<h1 class="sectionedit1" id="part_manager_installation">Part Manager Installation</h1>
 <div class="level1">
 
 <p>
@@ -22,14 +22,14 @@ The parts manager is in development. All required functionality is not implement
 </p>
 
 </div>
-
-<h2 id="requirements">Requirements</h2>
+<!-- EDIT1 SECTION "Part Manager Installation" [116-242] -->
+<h2 class="sectionedit2" id="requirements">Requirements</h2>
 <div class="level2">
 
 <p>
 Building and using the part manager requires the following packages:
 </p>
-<div class="table sectionedit1"><table class="inline">
+<div class="table sectionedit3"><table class="inline">
 	<thead>
 	<tr class="row0">
 		<th class="col0 leftalign"> PackageName   </th><th class="col1 leftalign"> Description                                             </th><th class="col2 leftalign"> Use      </th>
@@ -45,7 +45,7 @@ Building and using the part manager requires the following packages:
 		<td class="col0 leftalign"> gcc           </td><td class="col1 leftalign"> The GNU C compiler                                      </td><td class="col2"> Required </td>
 	</tr>
 	<tr class="row4">
-		<td class="col0 leftalign"> geda          </td><td class="col1 leftalign"> GPL EDA -- Electronics design software (metapackage)    </td><td class="col2"> Required </td>
+		<td class="col0 leftalign"> geda          </td><td class="col1 leftalign"> <abbr title="GNU General Public License">GPL</abbr> EDA – Electronics design software (metapackage)    </td><td class="col2"> Required </td>
 	</tr>
 	<tr class="row5">
 		<td class="col0 leftalign"> git-core      </td><td class="col1 leftalign"> fast, scalable, distributed revision control system     </td><td class="col2"> Required </td>
@@ -69,22 +69,22 @@ Building and using the part manager requires the following packages:
 		<td class="col0 leftalign"> xsltproc      </td><td class="col1 leftalign"> XSLT command line processor                             </td><td class="col2"> Required </td>
 	</tr>
 </table></div>
-<!-- EDIT1 TABLE [339-1382] -->
+<!-- EDIT3 TABLE [339-1382] -->
 <p>
 Additionally, GParts requires a database for the back-end.  Currently, GParts
 can use either MySQL, PostgreSQL, or SQLite.
 </p>
 
 </div>
-
-<h3 id="mysql">MySQL</h3>
+<!-- EDIT2 SECTION "Requirements" [243-1507] -->
+<h3 class="sectionedit4" id="mysql">MySQL</h3>
 <div class="level3">
 
 <p>
 In order to use MySQL, the packages listed below must be installed.  The
 mysql-server package may not be required if configured to use a remote server.
 </p>
-<div class="table sectionedit2"><table class="inline">
+<div class="table sectionedit5"><table class="inline">
 	<thead>
 	<tr class="row0">
 		<th class="col0 leftalign"> PackageName        </th><th class="col1 leftalign"> Description                      </th><th class="col2 leftalign"> Use      </th>
@@ -100,17 +100,17 @@ mysql-server package may not be required if configured to use a remote server.
 		<td class="col0 leftalign"> mysql-server       </td><td class="col1 leftalign"> MySQL database server            </td><td class="col2"> Required </td>
 	</tr>
 </table></div>
-<!-- EDIT2 TABLE [1677-1952] -->
+<!-- EDIT5 TABLE [1677-1952] -->
 </div>
-
-<h3 id="postgresql">PostgreSQL</h3>
+<!-- EDIT4 SECTION "MySQL" [1508-1953] -->
+<h3 class="sectionedit6" id="postgresql">PostgreSQL</h3>
 <div class="level3">
 
 <p>
 In order to use PostgreSQL, the following packages must be installed:
 (TODO: PostgreSQL not supported yet.)
 </p>
-<div class="table sectionedit3"><table class="inline">
+<div class="table sectionedit7"><table class="inline">
 	<thead>
 	<tr class="row0">
 		<th class="col0"> PackageName </th><th class="col1 leftalign"> Description                         </th><th class="col2 leftalign"> Use      </th>
@@ -123,16 +123,16 @@ In order to use PostgreSQL, the following packages must be installed:
 		<td class="col0 leftalign"> postgresql  </td><td class="col1 leftalign"> Object-relational SQL database      </td><td class="col2"> Required </td>
 	</tr>
 </table></div>
-<!-- EDIT3 TABLE [2085-2279] -->
+<!-- EDIT7 TABLE [2085-2279] -->
 </div>
-
-<h3 id="sqlite">SQLite</h3>
+<!-- EDIT6 SECTION "PostgreSQL" [1954-2280] -->
+<h3 class="sectionedit8" id="sqlite">SQLite</h3>
 <div class="level3">
 
 <p>
 In order to use SQLite, the following packages must be installed:
 </p>
-<div class="table sectionedit4"><table class="inline">
+<div class="table sectionedit9"><table class="inline">
 	<thead>
 	<tr class="row0">
 		<th class="col0 leftalign"> PackageName   </th><th class="col1 leftalign"> Description                           </th><th class="col2 leftalign"> Use      </th>
@@ -154,15 +154,15 @@ In order to use SQLite, the following packages must be installed:
 		<td class="col0 leftalign"> sqlite3-doc      </td><td class="col1 leftalign"> SQLite 3 documentation                </td><td class="col2"> Optional </td>
 	</tr>
 </table></div>
-<!-- EDIT4 TABLE [2366-2794] -->
+<!-- EDIT9 TABLE [2366-2794] -->
 <p>
 Of course, installing all packages before building allows the application to
 use either database for the back-end.
 </p>
 
 </div>
-
-<h2 id="buildinggpartsfromsource">Building GParts from Source</h2>
+<!-- EDIT8 SECTION "SQLite" [2281-2911] -->
+<h2 class="sectionedit10" id="building_gparts_from_source">Building GParts from Source</h2>
 <div class="level2">
 
 <p>
@@ -198,12 +198,12 @@ Finally, test the executable.
 
 <p>
 To ensure dynamically loaded modules for database support work, select
-Database-&gt;Connect... from the part manager menu. The combo box Database
+Database→Connect… from the part manager menu. The combo box Database
 Type should so options for the various databases supported.
 </p>
 
 <p>
-<a href="media/geda/gparts-ss-connect-types.png" class="media" target="_blank" title="geda:gparts-ss-connect-types.png"></a>
+<a href="media/geda/gparts-ss-connect-types.png" class="media" target="_blank" title="geda:gparts-ss-connect-types.png"><img src="media/geda/gparts-ss-connect-types.png" class="media" title="" alt="" /></a>
 </p>
 
 <p>
@@ -229,13 +229,13 @@ geda-gschem: /usr/share/gEDA/scheme/gschem.scm</pre>
 $ export GEDADATADIR</pre>
 
 </div>
-
-<h2 id="databasecreation">Database Creation</h2>
+<!-- EDIT10 SECTION "Building GParts from Source" [2912-4720] -->
+<h2 class="sectionedit11" id="database_creation">Database Creation</h2>
 <div class="level2">
 
 </div>
-
-<h3 id="mysql1">MySQL</h3>
+<!-- EDIT11 SECTION "Database Creation" [4721-4752] -->
+<h3 class="sectionedit12" id="mysql1">MySQL</h3>
 <div class="level3">
 
 <p>
@@ -295,8 +295,8 @@ the MySQL prompt.
 <pre class="code">mysql&gt; source tmp/parts-bourns.sql</pre>
 
 </div>
-
-<h3 id="postgresql1">PostgreSQL</h3>
+<!-- EDIT12 SECTION "MySQL" [4753-6746] -->
+<h3 class="sectionedit13" id="postgresql1">PostgreSQL</h3>
 <div class="level3">
 
 <p>
@@ -304,8 +304,8 @@ TODO: Finish implementation
 </p>
 
 </div>
-
-<h3 id="sqlite1">SQLite</h3>
+<!-- EDIT13 SECTION "PostgreSQL" [6747-6797] -->
+<h3 class="sectionedit14" id="sqlite1">SQLite</h3>
 <div class="level3">
 
 <p>
@@ -365,5 +365,5 @@ For other sample parts, the data is not generated with a script.
 <pre class="code">$ xsltproc convert.xml ../../tmp/rhom-discretes.xml | sqlite3 sample.db</pre>
 
 </div>
-</body>
+<!-- EDIT14 SECTION "SQLite" [6798-] --></body>
 </html>

@@ -14,16 +14,16 @@
 <em>Translations of this page are also available in the following languages:</em> <a href="geda-scm.ru.html" class="wikilink1" title="geda-scm.ru.html">Русский</a>.
 </p>
 
-<h1 id="gedausesgit">gEDA uses git</h1>
+<h1 class="sectionedit1" id="geda_uses_git">gEDA uses git</h1>
 <div class="level1">
 
 <p>
 gEDA uses <strong>git</strong> for source code management.  git is a distributed version control system, where every user has his or her own full copy of the revision history.
 </p>
 <ul>
-<li class="level1"><div class="li"> official git website</div>
+<li class="level1"><div class="li"> <a href="http://git.or.cz/" class="urlextern" title="http://git.or.cz/" rel="nofollow">official git website</a></div>
 </li>
-<li class="level1"><div class="li"> git documentation online</div>
+<li class="level1"><div class="li"> <a href="http://www.kernel.org/pub/software/scm/git/docs/" class="urlextern" title="http://www.kernel.org/pub/software/scm/git/docs/" rel="nofollow">git documentation online</a></div>
 </li>
 </ul>
 
@@ -31,21 +31,21 @@ gEDA uses <strong>git</strong> for source code management.  git is a distributed
 Some nice tutorials:
 </p>
 <ul>
-<li class="level1"><div class="li"> comprehensive set of tutorials at atlassian.com</div>
+<li class="level1"><div class="li"> <a href="https://www.atlassian.com/git/tutorials/" class="urlextern" title="https://www.atlassian.com/git/tutorials/" rel="nofollow">comprehensive set of tutorials</a> at atlassian.com</div>
 </li>
-<li class="level1"><div class="li"> GitSvnCrashCourse -- git courses for SVN users</div>
+<li class="level1"><div class="li"> <a href="https://git.wiki.kernel.org/index.php/GitSvnCrashCourse" class="urlextern" title="https://git.wiki.kernel.org/index.php/GitSvnCrashCourse" rel="nofollow">GitSvnCrashCourse</a> – git courses for SVN users</div>
 </li>
-<li class="level1"><div class="li">  Git - The Simple Guide -- very concise and condensed cheat sheet style tutorial</div>
+<li class="level1"><div class="li"> <a href="http://git.huit.harvard.edu/guide/" class="urlextern" title="http://git.huit.harvard.edu/guide/" rel="nofollow"> Git - The Simple Guide</a> – very concise and condensed cheat sheet style tutorial</div>
 </li>
 </ul>
 
 </div>
-
-<h2 id="read-onlyaccessthegedarepositories">Read-only access the geda repositories</h2>
+<!-- EDIT1 SECTION "gEDA uses git" [106-780] -->
+<h2 class="sectionedit2" id="read-only_access_the_geda_repositories">Read-only access the geda repositories</h2>
 <div class="level2">
 
 <p>
-To clone the geda-gaf.git repository (or any repository hosted at git.geda-project.org) using anonymous git access:
+To clone the geda-gaf.git repository (or any repository hosted at <a href="http://git.geda-project.org" class="urlextern" title="http://git.geda-project.org" rel="nofollow">git.geda-project.org</a>) using anonymous git access:
 </p>
 <pre class="code">git clone git://git.geda-project.org/geda-gaf.git</pre>
 
@@ -55,25 +55,25 @@ or
 <pre class="code">git clone git://git.geda-project.org/pcb.git</pre>
 
 <p>
-For different repositories hosted at git.geda-project.org, just substitute the last part of the above URL.
+For different repositories hosted at git.geda-project.org, just substitute the last part of the above <abbr title="Uniform Resource Locator">URL</abbr>.
 </p>
 
 <p>
-There is a cgit interface to the repositories of the various projects. Just point a www browser to http://git.geda-project.org/ .
+There is a <a href="http://hjemli.net/git/cgit/about/" class="urlextern" title="http://hjemli.net/git/cgit/about/" rel="nofollow">cgit</a> interface to the repositories of the various projects. Just point a www browser to <a href="http://git.geda-project.org/" class="urlextern" title="http://git.geda-project.org/" rel="nofollow">http://git.geda-project.org/</a> .
 </p>
 
 </div>
-
-<h2 id="featurebranches">Feature branches</h2>
+<!-- EDIT2 SECTION "Read-only access the geda repositories" [781-1366] -->
+<h2 class="sectionedit3" id="feature_branches">Feature branches</h2>
 <div class="level2">
 
 <p>
-Branches are a major feature of git. The geda project uses feature branches to test non-trivial changes. Once they are assessed as useful, the changes a branch represents gets merged into the main head. You can try and test a feature branch even if you don&#039;t have write access to the git repository of geda-project, yet.
+<a href="http://git-scm.com/book/en/v2/Git-Branching-Branches-in-a-Nutshell" class="urlextern" title="http://git-scm.com/book/en/v2/Git-Branching-Branches-in-a-Nutshell" rel="nofollow">Branches</a> are a major feature of git. The geda project uses feature branches to test non-trivial changes. Once they are assessed as useful, the changes a branch represents gets merged into the main head. You can try and test a feature branch even if you don&#039;t have write access to the git repository of geda-project, yet.
 </p>
 
 </div>
-
-<h3 id="listallbranchesofaproject">List all branches of a project</h3>
+<!-- EDIT3 SECTION "Feature branches" [1367-1788] -->
+<h3 class="sectionedit4" id="list_all_branches_of_a_project">List all branches of a project</h3>
 <div class="level3">
 
 <p>
@@ -82,8 +82,8 @@ To list all branches of a project available on the geda-project server cd to you
 <pre class="code">$ git branch -r</pre>
 
 </div>
-
-<h3 id="trackafeaturebranch">Track a feature branch</h3>
+<!-- EDIT4 SECTION "List all branches of a project" [1789-1993] -->
+<h3 class="sectionedit5" id="track_a_feature_branch">Track a feature branch</h3>
 <div class="level3">
 
 <p>
@@ -96,8 +96,8 @@ Go ahead and build the application from the branch as described by the <a href="
 </p>
 
 </div>
-
-<h3 id="communicateyourexperience">Communicate your experience</h3>
+<!-- EDIT5 SECTION "Track a feature branch" [1994-2598] -->
+<h3 class="sectionedit6" id="communicate_your_experience">Communicate your experience</h3>
 <div class="level3">
 
 <p>
@@ -109,8 +109,8 @@ For additional visibility you may report your experience on the mailing list <a 
 </p>
 
 </div>
-
-<h2 id="formatapatchtosendtothedevelopers">Format a patch to send to the developers</h2>
+<!-- EDIT6 SECTION "Communicate your experience" [2599-3240] -->
+<h2 class="sectionedit7" id="format_a_patch_to_send_to_the_developers">Format a patch to send to the developers</h2>
 <div class="level2">
 
 <p>
@@ -131,12 +131,12 @@ This will output a filename which contains the patch.  Be sure to look at the do
 </p>
 
 </div>
-
-<h2 id="accesstherepositorywithwritepermission">Access the repository with write permission</h2>
+<!-- EDIT7 SECTION "Format a patch to send to the developers" [3241-4009] -->
+<h2 class="sectionedit8" id="access_the_repository_with_write_permission">Access the repository with write permission</h2>
 <div class="level2">
 
 <p>
-For developer git access, you should write DJ Delorie or Traumflug an email with your SSH public key and your preferred user name. They&#039;ll install this key on the server, then. Having done so, the git URL to push to is (note the <em>:65</em>):
+For developer git access, you should write DJ Delorie or Traumflug an email with your SSH public key and your preferred user name. They&#039;ll install this key on the server, then. Having done so, the git <abbr title="Uniform Resource Locator">URL</abbr> to push to is (note the <em>:65</em>):
 </p>
 <pre class="code">ssh://git@git.geda-project.org:65/&lt;repository&gt;.git</pre>
 
@@ -160,8 +160,8 @@ Having this done, your local clone works just as before, just a <code>git push o
 </p>
 
 </div>
-
-<h3 id="useauniquesshkeyforgeda">Use a unique SSH key for gEDA</h3>
+<!-- EDIT8 SECTION "Access the repository with write permission" [4010-4889] -->
+<h3 class="sectionedit9" id="use_a_unique_ssh_key_for_geda">Use a unique SSH key for gEDA</h3>
 <div class="level3">
 
 <p>
@@ -176,13 +176,13 @@ Note, the file you refer to here is the private key. By contrast, the file you s
 </p>
 
 </div>
-
-<h2 id="commitchanges">Commit changes</h2>
+<!-- EDIT9 SECTION "Use a unique SSH key for gEDA" [4890-5380] -->
+<h2 class="sectionedit10" id="commit_changes">Commit changes</h2>
 <div class="level2">
 
 </div>
-
-<h3 id="setupuserinformation">Set up user information</h3>
+<!-- EDIT10 SECTION "Commit changes" [5381-5408] -->
+<h3 class="sectionedit11" id="set_up_user_information">Set up user information</h3>
 <div class="level3">
 
 <p>
@@ -192,13 +192,13 @@ You should make sure that your username &amp; e-mail address are set in your git
 $ git config --global user.email you@yourdomain.example.com</pre>
 
 </div>
-
-<h3 id="commitpatchesfromothercontributors">Commit patches from other contributors</h3>
+<!-- EDIT11 SECTION "Set up user information" [5409-5661] -->
+<h3 class="sectionedit12" id="commit_patches_from_other_contributors">Commit patches from other contributors</h3>
 <div class="level3">
 
 <p>
 If you apply a patch from someone else (e.g. from a launchpad patch record) there are a few things to consider.
-Git stores two different names and e-mail addresses for a given commit: the &quot;author&quot; of the patch, and the &quot;committer&quot; of the patch, so these details must be set correctly when making the commit.
+Git stores two different names and e-mail addresses for a given commit: the “author” of the patch, and the “committer” of the patch, so these details must be set correctly when making the commit.
 </p>
 
 <p>
@@ -266,8 +266,8 @@ As an alternative, you can set the GIT_AUTHOR_NAME and GIT_AUTHOR_EMAIL environm
 </p>
 
 </div>
-
-<h3 id="writegoodcommitmessages">Write good commit messages</h3>
+<!-- EDIT12 SECTION "Commit patches from other contributors" [5662-7588] -->
+<h3 class="sectionedit13" id="write_good_commit_messages">Write good commit messages</h3>
 <div class="level3">
 
 <p>
@@ -293,8 +293,8 @@ Read only access to the underlying GList is provided by an accessor,
 currenly implemented as a macro.</pre>
 
 </div>
-
-<h2 id="keepthelocalcopycurrent">Keep the local copy current</h2>
+<!-- EDIT13 SECTION "Write good commit messages" [7589-8568] -->
+<h2 class="sectionedit14" id="keep_the_local_copy_current">Keep the local copy current</h2>
 <div class="level2">
 
 <p>
@@ -303,14 +303,14 @@ For those who are are not merging changes back into the central git repository y
 <pre class="code">$ git pull</pre>
 
 <p>
-However, for those of you who are going to be pushing your changes back into the central git repository, using git pull will clutter up the history with merge messages (&quot;Merge branch &#039;master&#039;&quot;).  To avoid this you should run:
+However, for those of you who are going to be pushing your changes back into the central git repository, using git pull will clutter up the history with merge messages (“Merge branch &#039;master&#039;”).  To avoid this you should run:
 </p>
 <pre class="code">$ git fetch
 $ git rebase origin</pre>
 
 </div>
-
-<h2 id="commitchangestothelocalgitrepository">Commit changes to the local git repository</h2>
+<!-- EDIT14 SECTION "Keep the local copy current" [8569-8979] -->
+<h2 class="sectionedit15" id="commit_changes_to_the_local_git_repository">Commit changes to the local git repository</h2>
 <div class="level2">
 <pre class="code">$ git commit -a</pre>
 
@@ -324,8 +324,8 @@ If you want to commit files in the current directory or want to explicitly commi
 <pre class="code">$ git commit filename1 filename2</pre>
 
 </div>
-
-<h2 id="undoanyuncommittedlocalchanges">Undo any uncommitted local changes</h2>
+<!-- EDIT15 SECTION "Commit changes to the local git repository" [8980-9525] -->
+<h2 class="sectionedit16" id="undo_any_uncommitted_local_changes">Undo any uncommitted local changes</h2>
 <div class="level2">
 <pre class="code">$ git checkout -f</pre>
 
@@ -344,8 +344,8 @@ If you want to discard all edits from the current directory and downward recursi
 <pre class="code">$ git checkout .</pre>
 
 </div>
-
-<h2 id="fixalessthanperfectlastcommit">Fix a less than perfect last commit</h2>
+<!-- EDIT16 SECTION "Undo any uncommitted local changes" [9526-9896] -->
+<h2 class="sectionedit17" id="fix_a_less_than_perfect_last_commit">Fix a less than perfect last commit</h2>
 <div class="level2">
 <pre class="code">$ Edit whatever files
 $ git commit --amend filename1..filenameN</pre>
@@ -355,8 +355,8 @@ This will pickup any changes you made and recommit them again with the previous 
 </p>
 
 </div>
-
-<h2 id="createapersonalizedbranch">Create a personalized branch</h2>
+<!-- EDIT17 SECTION "Fix a less than perfect last commit" [9897-10111] -->
+<h2 class="sectionedit18" id="create_a_personalized_branch">Create a personalized branch</h2>
 <div class="level2">
 
 <p>
@@ -396,8 +396,8 @@ Skip the option <code>--global</code> if you want this to be active only in this
  </pre>
 
 </div>
-
-<h2 id="deleteapersonalizedbranch">Delete a personalized branch</h2>
+<!-- EDIT18 SECTION "Create a personalized branch" [10112-11438] -->
+<h2 class="sectionedit19" id="delete_a_personalized_branch">Delete a personalized branch</h2>
 <div class="level2">
 
 <p>
@@ -412,12 +412,12 @@ To delete the branch on the local repository, too:
  </pre>
 
 </div>
-
-<h2 id="fetchadevelopmentbranchfromotherpeople">Fetch a development branch from other people</h2>
+<!-- EDIT19 SECTION "Delete a personalized branch" [11439-11827] -->
+<h2 class="sectionedit20" id="fetch_a_development_branch_from_other_people">Fetch a development branch from other people</h2>
 <div class="level2">
 
 <p>
-Beside the http://git.geda-project.org/ repository we have a mirror of that repository at http://repo.or.cz/w/geda-gaf.git. Some of the developers have forks of that repository with new feature branches.
+Beside the <a href="http://git.geda-project.org/" class="urlextern" title="http://git.geda-project.org/" rel="nofollow">http://git.geda-project.org/</a> repository we have a mirror of that repository at <a href="http://repo.or.cz/w/geda-gaf.git" class="urlextern" title="http://repo.or.cz/w/geda-gaf.git" rel="nofollow">http://repo.or.cz/w/geda-gaf.git</a>. Some of the developers have forks of that repository with new feature branches.
 </p>
 
 <p>
@@ -461,7 +461,7 @@ an eye on development in various feature branches on various forks:
   $ gitk --all</pre>
 
 <p>
-Now gitk can become quite filled up, but <strong>File</strong>-&gt;<strong>List references</strong> (<kbd>F2</kbd>) will open
+Now gitk can become quite filled up, but <strong>File</strong>→<strong>List references</strong> (<kbd>F2</kbd>) will open
 a dialog for easier navigation.
 </p>
 
@@ -471,8 +471,8 @@ Updating favourite remotes will then boil down to:
 <pre class="code">  $ git fetch --all</pre>
 
 </div>
-
-<h2 id="recoverfromareallymesseduplocalrepository">Recover from a really messed up local repository</h2>
+<!-- EDIT20 SECTION "Fetch a development branch from other people" [11828-13493] -->
+<h2 class="sectionedit21" id="recover_from_a_really_messed_up_local_repository">Recover from a really messed up local repository</h2>
 <div class="level2">
 
 <p>
@@ -490,9 +490,9 @@ Second, the command that will really save your bacon is git-reflog.  Using it wo
  $ git reset --hard HEAD@{1}</pre>
 
 <p>
-The last command (git reset --hard ...) will rollback all your changes to the &quot;checkout: moving to master&quot;.  Remember: don&#039;t panic! Most things are fixable when using git.
+The last command (git reset --hard ...) will rollback all your changes to the “checkout: moving to master”.  Remember: don&#039;t panic! Most things are fixable when using git.
 </p>
 
 </div>
-</body>
+<!-- EDIT21 SECTION "Recover from a really messed up local repository" [13494-] --></body>
 </html>

@@ -1,6 +1,6 @@
 /* gEDA - GPL Electronic Design Automation
  * gschem - gEDA Schematic Capture
- * Copyright (C) 1998-2019 gEDA Contributors (see ChangeLog for details)
+ * Copyright (C) 1998-2020 gEDA Contributors (see ChangeLog for details)
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -125,11 +125,11 @@ query_usable_targets_cb (GtkClipboard *clip, GdkAtom *targets, gint ntargets,
   int i;
   int is_usable = FALSE;
 
-  for (i = 0; i < ntargets; i++) {
-    if (strcmp (gdk_atom_name (targets[i]), MIME_TYPE_SCHEMATIC) == 0) {
+  for (i = 0; i < ntargets && !is_usable; i++) {
+    gchar *buf = gdk_atom_name (targets[i]);
+    if (strcmp (buf, MIME_TYPE_SCHEMATIC) == 0)
       is_usable = TRUE;
-      break;
-    }
+    g_free (buf);
   }
 
   cbinfo->callback (is_usable, cbinfo->userdata);

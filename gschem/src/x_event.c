@@ -1,7 +1,7 @@
 /* gEDA - GPL Electronic Design Automation
  * gschem - gEDA Schematic Capture
  * Copyright (C) 1998-2010 Ales Hvezda
- * Copyright (C) 1998-2019 gEDA Contributors (see ChangeLog for details)
+ * Copyright (C) 1998-2020 gEDA Contributors (see ChangeLog for details)
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -140,11 +140,12 @@ x_event_button_pressed(GschemPageView *page_view, GdkEventButton *event, GschemT
       /* End action */
       if (page->place_list != NULL) {
         switch(w_current->event_state) {
-          case (COMPMODE)   : o_place_end(w_current, w_x, w_y, w_current->continue_component_place,
+          case (COMPMODE)   : o_place_end(w_current, w_x, w_y,
+                                w_current->continue_component_place, FALSE,
                                 "%add-objects-hook", _("Add Component")); break;
-          case (TEXTMODE)   : o_place_end(w_current, w_x, w_y, FALSE,
+          case (TEXTMODE)   : o_place_end(w_current, w_x, w_y, FALSE, FALSE,
                                 "%add-objects-hook", _("Add Text")); break;
-          case (PASTEMODE)  : o_place_end(w_current, w_x, w_y, FALSE,
+          case (PASTEMODE)  : o_place_end(w_current, w_x, w_y, FALSE, TRUE,
                                 "%paste-objects-hook", _("Paste")); break;
           default: break;
         }

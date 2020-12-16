@@ -15,6 +15,7 @@
    Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.  */
 
 #include "module.h"
+#include <inttypes.h>
 
 struct call_callable_data {
 	PyObject *callable;
@@ -63,8 +64,8 @@ static SCM call_callable(SCM scm_args)
 {
 	SCM stack = scm_make_stack(SCM_BOOL_T, SCM_EOL);
 	SCM frame = scm_stack_ref(stack, scm_from_int(0));
-	SCM proc = scm_frame_procedure(frame);
-	PyObject *callable = scm_to_pointer(scm_assq_ref(gsubr_alist, proc));
+	SCM name = scm_frame_procedure_name(frame);
+	PyObject *callable = scm_to_pointer(scm_assq_ref(gsubr_alist, name));
 
 	scm_dynwind_begin(0);
 
@@ -144,11 +145,14 @@ SCM py2scm(PyObject *value)
 	if (PyObject_TypeCheck(value, &ProcedureType))
 		return ((Procedure *)value)->proc;
 	if (PyCallable_Check(value)) {
-		SCM gsubr = scm_c_make_gsubr(
-			"<Python function>", 0, 0, 1, &call_callable);
+		char name[40];
+		snprintf(name, sizeof name,
+			 "__py_callable_%" PRIxPTR "__", (uintptr_t)value);
+		SCM gsubr = scm_c_make_gsubr(name, 0, 0, 1, &call_callable);
 		Py_INCREF(value);
 		SCM ptr = scm_from_pointer(value, (void (*)(void *))Py_DecRef);
-		gsubr_alist = scm_acons(gsubr, ptr, gsubr_alist);
+		gsubr_alist = scm_acons(scm_procedure_name(gsubr), ptr,
+					gsubr_alist);
 		return gsubr;
 	}
 

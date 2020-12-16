@@ -20,7 +20,7 @@ dnl Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 
 AC_DEFUN([AX_HOST],
 [
-  AC_PREREQ([2.60])dnl
+  AC_PREREQ([2.69])dnl
   AC_REQUIRE([AC_CANONICAL_HOST])dnl
 
   # Need to distinguish between native Windows (via MinGW) and Unix

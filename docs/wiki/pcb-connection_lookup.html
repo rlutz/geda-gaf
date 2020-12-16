@@ -10,7 +10,7 @@
 </head>
 <body>
 
-<h2 id="connectionlookup">Connection Lookup</h2>
+<h2 class="sectionedit1" id="connection_lookup">Connection Lookup</h2>
 <div class="level2">
 
 <p>
@@ -22,20 +22,20 @@ The connection lookup process starts at an object (pins/pads only?) and searches
 </p>
 
 <p>
-One of the tricks that the algorithm uses to restore the state of the flags in some cases is to use ClearFlagOnAllObjects to wipe out a flag (an undoable operation), then do everything without adding operations to the Undo stack, run ClearFlagsOnAllObjects a second time (without undo), and then Undo the first one. I guess the point of this is to prevent the undo system from sucking up resources during these operations? This has led to a global variable &quot;User&quot; which has the effect of causing flag change operations to be added to the undo list. I think this is absolutely horrid. This variable needs to die. I think a better way of accomplishing this goal is by locking the undo system.
+One of the tricks that the algorithm uses to restore the state of the flags in some cases is to use ClearFlagOnAllObjects to wipe out a flag (an undoable operation), then do everything without adding operations to the Undo stack, run ClearFlagsOnAllObjects a second time (without undo), and then Undo the first one. I guess the point of this is to prevent the undo system from sucking up resources during these operations? This has led to a global variable “User” which has the effect of causing flag change operations to be added to the undo list. I think this is absolutely horrid. This variable needs to die. I think a better way of accomplishing this goal is by locking the undo system.
 </p>
 
 <p>
-In a number of places, the &quot;andRats&quot; parameter is used. This indicates that rat lines should be considered when looking for overlaps. This way, you can highlight an entire net, even if all the pieces aren&#039;t connected with copper. It&#039;s important to preserve this functionality.
+In a number of places, the “andRats” parameter is used. This indicates that rat lines should be considered when looking for overlaps. This way, you can highlight an entire net, even if all the pieces aren&#039;t connected with copper. It&#039;s important to preserve this functionality.
 </p>
 
 <p>
-Objects are broken into two categories, &quot;layer objects&quot; (LO) and pins and vias (PV). The tests then get split into four categories, PV to PV, LO to PV, LO to LO, and PV to LO.
+Objects are broken into two categories, “layer objects” (LO) and pins and vias (PV). The tests then get split into four categories, PV to PV, LO to PV, LO to LO, and PV to LO.
 </p>
 
 </div>
-
-<h2 id="detailedalgorithm">Detailed Algorithm</h2>
+<!-- EDIT1 SECTION "Connection Lookup" [1-1803] -->
+<h2 class="sectionedit2" id="detailed_algorithm">Detailed Algorithm</h2>
 <div class="level2">
 <ol>
 <li class="level1"><div class="li"> Initialize the lists</div>
@@ -118,7 +118,7 @@ Objects are broken into two categories, &quot;layer objects&quot; (LO) and pins 
 <ol>
 <li class="level2"><div class="li"> Set the global drc flag and bloat value</div>
 </li>
-<li class="level2"><div class="li"> Update layer &quot;no_drc&quot; flags</div>
+<li class="level2"><div class="li"> Update layer “no_drc” flags</div>
 </li>
 <li class="level2 node"><div class="li"> Lookup connection loop:</div>
 <ol>
@@ -212,11 +212,11 @@ Objects are broken into two categories, &quot;layer objects&quot; (LO) and pins 
 <ol>
 <li class="level7"><div class="li"> If the PV doesn&#039;t intersect the polygon layer, return 0 (continue search)</div>
 </li>
-<li class="level7 node"><div class="li"> If we haven&#039;t yet flagged the polygon and the PV isn&#039;t just a hole...</div>
+<li class="level7 node"><div class="li"> If we haven&#039;t yet flagged the polygon and the PV isn&#039;t just a hole…</div>
 <ol>
 <li class="level8"><div class="li"> If there&#039;s no thermal and the polygon is clearing, return 0 (continue search)</div>
 </li>
-<li class="level8 node"><div class="li"> Otherwise...</div>
+<li class="level8 node"><div class="li"> Otherwise…</div>
 <ol>
 <li class="level9"><div class="li"> compute the width of the search box</div>
 </li>
@@ -224,7 +224,7 @@ Objects are broken into two categories, &quot;layer objects&quot; (LO) and pins 
 <ol>
 <li class="level10"><div class="li"> compute the corner points</div>
 </li>
-<li class="level10"><div class="li"> if the rectangle is in the polygon (IsRectangleInPolygon) add it to the list (... ends up in add_object_to_list)</div>
+<li class="level10"><div class="li"> if the rectangle is in the polygon (IsRectangleInPolygon) add it to the list (… ends up in add_object_to_list)</div>
 </li>
 <li class="level10"><div class="li"> if we&#039;re doing the drc and the object didn&#039;t have the selected flag set, long jump back to to LookupLOConnectionToPVList</div>
 </li>
@@ -232,7 +232,7 @@ Objects are broken into two categories, &quot;layer objects&quot; (LO) and pins 
 </li>
 </ol>
 </li>
-<li class="level9 node"><div class="li"> otherwise, if the pv has the octagon flag set...</div>
+<li class="level9 node"><div class="li"> otherwise, if the pv has the octagon flag set…</div>
 <ol>
 <li class="level10"><div class="li"> create a dummy octagon polygon</div>
 </li>
@@ -285,8 +285,8 @@ Objects are broken into two categories, &quot;layer objects&quot; (LO) and pins 
 </ol>
 
 </div>
-
-<h3 id="usesoftheconnectionlookupalgorithm">Uses of the Connection Lookup Algorithm</h3>
+<!-- EDIT2 SECTION "Detailed Algorithm" [1804-8382] -->
+<h3 class="sectionedit3" id="uses_of_the_connection_lookup_algorithm">Uses of the Connection Lookup Algorithm</h3>
 <div class="level3">
 
 </div>
@@ -295,7 +295,7 @@ Objects are broken into two categories, &quot;layer objects&quot; (LO) and pins 
 <div class="level4">
 
 <p>
-The DRC uses the connection lookup code in combination with the &quot;Bloat&quot; and &quot;Shrink&quot; settings to detect places with insufficient spacing and overlap. 
+The DRC uses the connection lookup code in combination with the “Bloat” and “Shrink” settings to detect places with insufficient spacing and overlap. 
 </p>
 
 </div>
@@ -345,12 +345,12 @@ action.c
 
 </div>
 
-<h4 id="ipcdhid">IPCD HID</h4>
+<h4 id="ipcd_hid">IPCD HID</h4>
 <div class="level4">
 
 </div>
 
-<h4 id="gtkhid">GTK HID</h4>
+<h4 id="gtk_hid">GTK HID</h4>
 <div class="level4">
 
 <p>
@@ -369,12 +369,12 @@ netlist window
 
 </div>
 
-<h4 id="placesthatcalldoit">Places that call DoIt</h4>
+<h4 id="places_that_call_doit">Places that call DoIt</h4>
 <div class="level4">
 
 </div>
 
-<h5 id="notesfrom20180810">Notes from 20180810</h5>
+<h5 id="notes_from_20180810">Notes from 20180810</h5>
 <div class="level5">
 
 <p>
@@ -421,5 +421,5 @@ DoIt:find.c:2689
 </p>
 
 </div>
-</body>
+<!-- EDIT3 SECTION "Uses of the Connection Lookup Algorithm" [8383-] --></body>
 </html>

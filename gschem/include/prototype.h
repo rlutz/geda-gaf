@@ -102,7 +102,6 @@ void g_init_window ();
 /* gschem.c */
 typedef void (*gschem_atexit_func)(gpointer data);
 void gschem_atexit(gschem_atexit_func func, gpointer data);
-void gschem_quit(void);
 void main_prog(void *closure, int argc, char *argv[]);
 int main(int argc, char *argv[]);
 /* i_basic.c */
@@ -281,7 +280,7 @@ void o_pin_draw_rubber(GschemToplevel *w_current, EdaRenderer *renderer);
 void o_pin_invalidate_rubber(GschemToplevel *w_current);
 /* o_place.c */
 void o_place_start(GschemToplevel *w_current, int x, int y);
-void o_place_end(GschemToplevel *w_current, int x, int y, int continue_placing, const char *hook_name, const gchar *undo_desc);
+void o_place_end(GschemToplevel *w_current, int x, int y, int continue_placing, int select_placed, const char *hook_name, const gchar *undo_desc);
 void o_place_motion(GschemToplevel *w_current, int x, int y);
 void o_place_invalidate_rubber(GschemToplevel *w_current, int drawing);
 void o_place_draw_rubber(GschemToplevel *w_current, EdaRenderer *renderer);

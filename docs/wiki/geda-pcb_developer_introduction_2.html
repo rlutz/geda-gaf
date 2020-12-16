@@ -10,7 +10,7 @@
 </head>
 <body>
 
-<h1 id="gettingstartedasapcbdeveloper">Getting Started as a pcb Developer</h1>
+<h1 class="sectionedit1" id="getting_started_as_a_pcb_developer">Getting Started as a pcb Developer</h1>
 <div class="level1">
 
 <p>
@@ -18,49 +18,49 @@ This page is intended to be a less overwhelming version of the <a href="geda-pcb
 </p>
 
 </div>
-
-<h2 id="findinginformation">Finding Information</h2>
+<!-- EDIT1 SECTION "Getting Started as a pcb Developer" [1-144] -->
+<h2 class="sectionedit2" id="finding_information">Finding Information</h2>
 <div class="level2">
 
 <p>
-The best resource for information on the guts of pcb is the current and past developers. Make sure that you subscribe to the geda-user mailing list. There are typically monthly code sprints  on the last Sunday of the month that are held on the #geda IRC channel on irc.oftc.net/6667. Sometimes the developers are there at other times as well. 
+The best resource for information on the guts of pcb is the current and past developers. Make sure that you subscribe to the geda-user mailing list. There are typically monthly code sprints  on the last Sunday of the month that are held on the #geda <abbr title="Internet Relay Chat">IRC</abbr> channel on irc.oftc.net/6667. Sometimes the developers are there at other times as well. 
 </p>
 
 <p>
 There&#039;s also no shortage of documentation. Some of it is even current! Quite a bit of documentation exists in the source code, so that&#039;s a good place to look. There&#039;s also lots of stuff on this wiki, but it&#039;s not always easy to find. Search is your friend. Here are some additional resources:
 </p>
-<div class="table sectionedit1"><table class="inline">
+<div class="table sectionedit3"><table class="inline">
 	<thead>
 	<tr class="row0">
 		<th class="col0 leftalign">Link  </th><th class="col1 leftalign">Remark  </th>
 	</tr>
 	</thead>
 	<tr class="row1">
-		<td class="col0">http://pcb.geda-project.org/manual.html</td><td class="col1 leftalign">As always read the manual first.  </td>
+		<td class="col0"><a href="http://pcb.geda-project.org/manual.html" class="urlextern" title="http://pcb.geda-project.org/manual.html" rel="nofollow">http://pcb.geda-project.org/manual.html</a></td><td class="col1 leftalign">As always read the manual first.  </td>
 	</tr>
 	<tr class="row2">
-		<td class="col0 leftalign">http://pcb.geda-project.org/faq.html  </td><td class="col1"> </td>
+		<td class="col0 leftalign"><a href="http://pcb.geda-project.org/faq.html" class="urlextern" title="http://pcb.geda-project.org/faq.html" rel="nofollow">http://pcb.geda-project.org/faq.html</a>  </td><td class="col1"> </td>
 	</tr>
 	<tr class="row3">
-		<td class="col0 leftalign">http://www.delorie.com/pcb/docs/gs/gs.html#Terminology  </td><td class="col1 leftalign">Knowing the terminology helps in understanding the code  </td>
+		<td class="col0 leftalign"><a href="http://www.delorie.com/pcb/docs/gs/gs.html#Terminology" class="urlextern" title="http://www.delorie.com/pcb/docs/gs/gs.html#Terminology" rel="nofollow">http://www.delorie.com/pcb/docs/gs/gs.html#Terminology</a>  </td><td class="col1 leftalign">Knowing the terminology helps in understanding the code  </td>
 	</tr>
 	<tr class="row4">
-		<td class="col0 leftalign">http://wiki.geda-project.org/geda:pcb-quick_reference  </td><td class="col1"> </td>
+		<td class="col0 leftalign"><a href="http://wiki.geda-project.org/geda:pcb-quick_reference" class="urlextern" title="http://wiki.geda-project.org/geda:pcb-quick_reference" rel="nofollow">http://wiki.geda-project.org/geda:pcb-quick_reference</a>  </td><td class="col1"> </td>
 	</tr>
 	<tr class="row5">
-		<td class="col0 leftalign">http://wiki.geda-project.org/geda:pcb_footprints  </td><td class="col1"> </td>
+		<td class="col0 leftalign"><a href="http://wiki.geda-project.org/geda:pcb_footprints" class="urlextern" title="http://wiki.geda-project.org/geda:pcb_footprints" rel="nofollow">http://wiki.geda-project.org/geda:pcb_footprints</a>  </td><td class="col1"> </td>
 	</tr>
 	<tr class="row6">
-		<td class="col0 leftalign">http://wiki.geda-project.org/geda:pcb_tips  </td><td class="col1"> </td>
+		<td class="col0 leftalign"><a href="http://wiki.geda-project.org/geda:pcb_tips" class="urlextern" title="http://wiki.geda-project.org/geda:pcb_tips" rel="nofollow">http://wiki.geda-project.org/geda:pcb_tips</a>  </td><td class="col1"> </td>
 	</tr>
 	<tr class="row7">
-		<td class="col0">http://wiki.geda-project.org/geda:documentation </td><td class="col1"> </td>
+		<td class="col0"><a href="http://wiki.geda-project.org/geda:documentation" class="urlextern" title="http://wiki.geda-project.org/geda:documentation" rel="nofollow">http://wiki.geda-project.org/geda:documentation</a> </td><td class="col1"> </td>
 	</tr>
 </table></div>
-<!-- EDIT1 TABLE [815-1314] -->
+<!-- EDIT3 TABLE [815-1314] -->
 </div>
-
-<h2 id="gettingtoknowthepcbsources">Getting to Know the pcb Sources</h2>
+<!-- EDIT2 SECTION "Finding Information" [145-1315] -->
+<h2 class="sectionedit4" id="getting_to_know_the_pcb_sources">Getting to Know the pcb Sources</h2>
 <div class="level2">
 
 <p>
@@ -68,17 +68,18 @@ In order to start hacking pcb, you should be familiar with how the sources are o
 </p>
 
 <p>
-The pcb sources are managed in a git repository: http:<em>git.geda-project.org. To download the latest sources for the first time, you can use the command:
-&lt;code&gt;
-git clone git:</em>git.geda-project.org/pcb.git
-&lt;/code&gt;
+The pcb sources are managed in a git repository: <a href="http://git.geda-project.org" class="urlextern" title="http://git.geda-project.org" rel="nofollow">http://git.geda-project.org</a>. To download the latest sources for the first time, you can use the command:
+</p>
+<pre class="code">git clone git://git.geda-project.org/pcb.git</pre>
+
+<p>
 For subsequent updates, you can change do the source directory and run
 </p>
 <pre class="code">git checkout master
 git pull</pre>
 
 <p>
-There&#039;s lots of accessible documentation on how to use git https://git-scm.com/documentation. However, it&#039;s really easy to figure out how to do things using Google. You can also check here for some relevant examples: <a href="geda-scm.html" class="wikilink1" title="geda-scm.html">Source Control Management</a>.
+There&#039;s lots of accessible documentation on how to use git <a href="https://git-scm.com/documentation" class="urlextern" title="https://git-scm.com/documentation" rel="nofollow">https://git-scm.com/documentation</a>. However, it&#039;s really easy to figure out how to do things using Google. You can also check here for some relevant examples: <a href="geda-scm.html" class="wikilink1" title="geda-scm.html">Source Control Management</a>.
 </p>
 
 <p>
@@ -96,8 +97,8 @@ To build pcb, you can find instructions here:
 </p>
 
 </div>
-
-<h2 id="wheretostart">Where to Start</h2>
+<!-- EDIT4 SECTION "Getting to Know the pcb Sources" [1316-2682] -->
+<h2 class="sectionedit5" id="where_to_start">Where to Start</h2>
 <div class="level2">
 
 <p>
@@ -113,7 +114,7 @@ The third thing you need to know, is that pcb is presently not organized around 
 </p>
 
 <p>
-The first time you open up the pcb sources can be a bit intimidating, but don&#039;t worry, this page is here to help. The first two things you&#039;ll want to know about are the data structures and &quot;actions&quot;. For now, the data structures are basically all stored in &quot;global.h&quot;. You can look through these, and many of them look as you might expect. The documentation here on the wiki is a work in progress, but you can find some data structures documented here: <a href="geda-pcb_data_structures.html" class="wikilink1" title="geda-pcb_data_structures.html">pcb_data_structures</a>.
+The first time you open up the pcb sources can be a bit intimidating, but don&#039;t worry, this page is here to help. The first two things you&#039;ll want to know about are the data structures and “actions”. For now, the data structures are basically all stored in “global.h”. You can look through these, and many of them look as you might expect. The documentation here on the wiki is a work in progress, but you can find some data structures documented here: <a href="geda-pcb_data_structures.html" class="wikilink1" title="geda-pcb_data_structures.html">pcb_data_structures</a>.
 </p>
 
 <p>
@@ -121,17 +122,17 @@ Actions are how things get done in pcb. When you click the mouse somewhere, or h
 </p>
 
 </div>
-
-<h2 id="yourfirstaction">Your First Action</h2>
+<!-- EDIT5 SECTION "Where to Start" [2683-6424] -->
+<h2 class="sectionedit6" id="your_first_action">Your First Action</h2>
 <div class="level2">
 
 <p>
-Since actions are basically everything (exaggeration), the &quot;hello world!&quot; of pcb development is writing your first action. You can either do this directly in the source tree, or you can do it as a plugin. The primary difference is how you compile them. They&#039;re both useful, so, we&#039;ll hit them both. Adding an action boils down to three parts: an action function, an action list, and an action list registration.
+Since actions are basically everything (exaggeration), the “hello world!” of pcb development is writing your first action. You can either do this directly in the source tree, or you can do it as a plugin. The primary difference is how you compile them. They&#039;re both useful, so, we&#039;ll hit them both. Adding an action boils down to three parts: an action function, an action list, and an action list registration.
 </p>
 
 </div>
-
-<h3 id="theactioncode">The Action Code</h3>
+<!-- EDIT6 SECTION "Your First Action" [6425-6867] -->
+<h3 class="sectionedit7" id="the_action_code">The Action Code</h3>
 <div class="level3">
 
 <p>
@@ -150,7 +151,7 @@ These are the includes that you need. That&#039;s basically the minimum to do an
 </p>
 
 <p>
-Next up, the action function. This is the entry point to the action. Your action doesn&#039;t have to be entirely contained in one function, but, when you call your action, this is the function that gets called. In this case, it&#039;s where all the action is (... yeah, I really did do that). In has a calling signature similar to that on a main function, but with the addition of a pair of coordinates. The argument vector will contain the arguments that were passed to the action (you can call actions like functions, more later). The coordinates are appended by the system (you don&#039;t explicitly add them to an action call) and could be different things depending on how the action was initiated. The Coord type is an alias for the &quot;long&quot; type (defined by configure through a chain of configure -&gt; config.h -&gt; globalconst.h -&gt; global.h) and its units are nano meters. 
+Next up, the action function. This is the entry point to the action. Your action doesn&#039;t have to be entirely contained in one function, but, when you call your action, this is the function that gets called. In this case, it&#039;s where all the action is (… yeah, I really did do that). In has a calling signature similar to that on a main function, but with the addition of a pair of coordinates. The argument vector will contain the arguments that were passed to the action (you can call actions like functions, more later). The coordinates are appended by the system (you don&#039;t explicitly add them to an action call) and could be different things depending on how the action was initiated. The Coord type is an alias for the “long” type (defined by configure through a chain of configure → config.h → globalconst.h → global.h) and its units are nano meters. 
 </p>
 <pre class="code c"><span class="kw4">static</span> <span class="kw4">int</span>
 myplugin_action <span class="br0">&#40;</span><span class="kw4">int</span> argc<span class="sy0">,</span> <span class="kw4">char</span> <span class="sy0">**</span>argv<span class="sy0">,</span> Coord x<span class="sy0">,</span> Coord y<span class="br0">&#41;</span>
@@ -166,7 +167,7 @@ myplugin_action <span class="br0">&#40;</span><span class="kw4">int</span> argc<
 <span class="br0">&#125;</span></pre>
 
 <p>
-This action will print &quot;Hello from your new plugin!&quot; to the message log. If you provided two arguments to the function and the first one is &quot;Echo&quot;, then it will also echo the second argument to the message log.
+This action will print “Hello from your new plugin!” to the message log. If you provided two arguments to the function and the first one is “Echo”, then it will also echo the second argument to the message log.
 </p>
 
 <p>
@@ -187,7 +188,7 @@ Finally, we have to register our action list with pcb. There&#039;s a convenient
 <pre class="code c">REGISTER_ACTIONS <span class="br0">&#40;</span>myplugin_action_list<span class="br0">&#41;</span></pre>
 
 <p>
-Since we&#039;re doing this as a plugin, we do have to worry just a little bit about how it works. Normally pcb will find all of the REGISTER_ACTION invocations at compile time and make sure they get processed, but, since we&#039;re writing a plugin and not recompiling all of pcb, we have to help just a little bit. REGISTER_ACTIONS will define a function called &quot;register_whatever_the_name_of_the_argument_is&quot;. In this case, register_plugin_action_list. When pcb loads plugins, it calls pcb_plugin_init. So, we just have use that to register our actions.
+Since we&#039;re doing this as a plugin, we do have to worry just a little bit about how it works. Normally pcb will find all of the REGISTER_ACTION invocations at compile time and make sure they get processed, but, since we&#039;re writing a plugin and not recompiling all of pcb, we have to help just a little bit. REGISTER_ACTIONS will define a function called “register_whatever_the_name_of_the_argument_is”. In this case, register_plugin_action_list. When pcb loads plugins, it calls pcb_plugin_init. So, we just have use that to register our actions.
 </p>
 <pre class="code c"><span class="kw4">void</span>
 pcb_plugin_init<span class="br0">&#40;</span><span class="br0">&#41;</span>
@@ -197,12 +198,12 @@ pcb_plugin_init<span class="br0">&#40;</span><span class="br0">&#41;</span>
 <span class="br0">&#125;</span></pre>
 
 <p>
-That wasn&#039;t so bad was it? If you write another one, make sure that wherever there is a name &quot;myplugin&quot;, that you change it to something unique.
+That wasn&#039;t so bad was it? If you write another one, make sure that wherever there is a name “myplugin”, that you change it to something unique.
 </p>
 
 </div>
-
-<h3 id="buildingtheactionplugin">Building the Action Plugin</h3>
+<!-- EDIT7 SECTION "The Action Code" [6868-11974] -->
+<h3 class="sectionedit8" id="building_the_action_plugin">Building the Action Plugin</h3>
 <div class="level3">
 
 <p>
@@ -259,24 +260,24 @@ install: ${PLUGINNAME}.so
 	install -m 0755 -D $^ ${PLUGINDIR}</pre>
 
 <p>
-So, type &quot;make install&quot; and it should build and install the plugin somewhere where pcb will find it.
+So, type “make install” and it should build and install the plugin somewhere where pcb will find it.
 </p>
 
 </div>
-
-<h3 id="runningyouraction">Running Your Action</h3>
+<!-- EDIT8 SECTION "Building the Action Plugin" [11975-13979] -->
+<h3 class="sectionedit9" id="running_your_action">Running Your Action</h3>
 <div class="level3">
 
 <p>
-Now it&#039;s time to fire up pcb and give your new action a test run. Once pcb is open, open up the Message Log, Window -&gt; Message Log. Click back in the main window, and type &quot;:&quot; to bring up the command entry. This might come up in either a separate window or on the status bar depending on how your preferences are set. Type the calling signature of your new action &quot;PluginAction()&quot; and hit enter. You should see &quot;Hello from your new plugin!&quot; appear in the log. Next try &quot;PluginAction(Echo, Hello World)&quot;. This also tells you something about how pcb handles action arguments (hint: they&#039;re csv&#039;s).
+Now it&#039;s time to fire up pcb and give your new action a test run. Once pcb is open, open up the Message Log, Window → Message Log. Click back in the main window, and type “:” to bring up the command entry. This might come up in either a separate window or on the status bar depending on how your preferences are set. Type the calling signature of your new action “PluginAction()” and hit enter. You should see “Hello from your new plugin!” appear in the log. Next try “PluginAction(Echo, Hello World)”. This also tells you something about how pcb handles action arguments (hint: they&#039;re csv&#039;s).
 </p>
 
 <p>
-If instead of the message we expect, you see &quot;no action PluginAction()&quot; then obviously something is wrong. Try running pcb from the console. When pcb loads, you should see the message &quot;Loading plugin: myplugin&quot;. If you don&#039;t, then clearly pcb isn&#039;t loading your plugin. This is probably because it didn&#039;t actually build or install properly. Check the contents of ~/.pcb/plugins and make sure that myplugin.so is there and that it has execute privileges.
+If instead of the message we expect, you see “no action PluginAction()” then obviously something is wrong. Try running pcb from the console. When pcb loads, you should see the message “Loading plugin: myplugin”. If you don&#039;t, then clearly pcb isn&#039;t loading your plugin. This is probably because it didn&#039;t actually build or install properly. Check the contents of ~/.pcb/plugins and make sure that myplugin.so is there and that it has execute privileges.
 </p>
 
 <p>
-If you do see the console message indicating that your plugin loaded, then you might have a namespace collision. It&#039;s possible for plugins to mask each others structures if they use the same names like &quot;myplugin_action&quot; or &quot;myplugin_action_list&quot;.
+If you do see the console message indicating that your plugin loaded, then you might have a namespace collision. It&#039;s possible for plugins to mask each others structures if they use the same names like “myplugin_action” or “myplugin_action_list”.
 </p>
 
 <p>
@@ -284,8 +285,8 @@ Congratulations, you&#039;re a pcb hacker!
 </p>
 
 </div>
-
-<h3 id="makingyouractionpartofpcb">Making Your Action Part of pcb</h3>
+<!-- EDIT9 SECTION "Running Your Action" [13980-15346] -->
+<h3 class="sectionedit10" id="making_your_action_part_of_pcb">Making Your Action Part of pcb</h3>
 <div class="level3">
 
 <p>
@@ -293,14 +294,14 @@ Okay, so, your shiny new action has reached a level of awesome that merits putti
 </p>
 
 </div>
-
-<h2 id="nextsteps">Next Steps</h2>
+<!-- EDIT10 SECTION "Making Your Action Part of pcb" [15347-15575] -->
+<h2 class="sectionedit11" id="next_steps">Next Steps</h2>
 <div class="level2">
 
 <p>
-There are lots and lots of projects to help with. A good way to get started is to start looking at bug reports on LaunchPad: https:<em>launchpad.net/pcb . While you&#039;re there, you could have a look at the blueprints and milestones. We also have a running list of projects http://wiki.geda-project.org/pcb-projects that you could have a look at. If you need some other ideas, send some email to the list.  Happy hacking!
+There are lots and lots of projects to help with. A good way to get started is to start looking at bug reports on LaunchPad: <a href="https://launchpad.net/pcb" class="urlextern" title="https://launchpad.net/pcb" rel="nofollow">https://launchpad.net/pcb</a> . While you&#039;re there, you could have a look at the blueprints and milestones. We also have a running list of projects <a href="http://wiki.geda-project.org/pcb-projects" class="urlextern" title="http://wiki.geda-project.org/pcb-projects" rel="nofollow">http://wiki.geda-project.org/pcb-projects</a> that you could have a look at. If you need some other ideas, send some email to the list.  Happy hacking!
 </p>
 
 </div>
-</body>
+<!-- EDIT11 SECTION "Next Steps" [15576-] --></body>
 </html>

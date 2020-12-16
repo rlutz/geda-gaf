@@ -137,6 +137,7 @@ cmd_config_impl (void *data, int argc, char **argv)
       project_store_path = ".";
     GFile *project_store = g_file_new_for_commandline_arg (project_store_path);
     cfg = eda_config_get_context_for_file (project_store);
+    g_object_unref (project_store);
   }
 
   /* If no further arguments were specified, output the configuration

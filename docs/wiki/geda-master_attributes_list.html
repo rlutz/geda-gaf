@@ -14,7 +14,7 @@
 <em>Translations of this page are also available in the following languages:</em> <a href="geda-master_attributes_list.ru.html" class="wikilink1" title="geda-master_attributes_list.ru.html">Русский</a>.
 </p>
 
-<h1 id="gedagafmasterattributedocument">gEDA/gaf Master Attribute Document</h1>
+<h1 class="sectionedit1" id="geda_gaf_master_attribute_document">gEDA/gaf Master Attribute Document</h1>
 <div class="level1">
 
 <p>
@@ -22,7 +22,7 @@ by: Ales Hvezda, ahvezda@geda.seul.org
 </p>
 
 <p>
-This document is released under GFDL
+This document is released under <a href="http://www.gnu.org/copyleft/fdl.html" class="urlextern" title="http://www.gnu.org/copyleft/fdl.html" rel="nofollow">GFDL</a>
 </p>
 
 <p>
@@ -30,20 +30,20 @@ July 10th, 2007
 </p>
 
 </div>
-
-<h2 id="overview">Overview</h2>
+<!-- EDIT1 SECTION "gEDA/gaf Master Attribute Document" [125-309] -->
+<h2 class="sectionedit2" id="overview">Overview</h2>
 <div class="level2">
 
 <p>
-This document describes all the attributes used in in gEDA/gaf (GPL&#039;d Electronic Design Automation / Gschem And Friends). This document is broken down into several section: this overview, symbol only attributes, schematic only attributes, attributes which can appear in both symbols and schematics, and
+This document describes all the attributes used in in gEDA/gaf (<abbr title="GNU General Public License">GPL</abbr>&#039;d Electronic Design Automation / Gschem And Friends). This document is broken down into several section: this overview, symbol only attributes, schematic only attributes, attributes which can appear in both symbols and schematics, and
 attributes which are obsolete or deprecated.<br/>
 
 In this document, attribute names are in <strong>bold</strong> and examples are in the <code>typewriter</code> font.
 </p>
 
 </div>
-
-<h2 id="whatareattributes">What are Attributes?</h2>
+<!-- EDIT2 SECTION "Overview" [310-776] -->
+<h2 class="sectionedit3" id="what_are_attributes">What are Attributes?</h2>
 <div class="level2">
 
 <p>
@@ -54,13 +54,13 @@ floating. Free standing attributes just exist in the symbol file as text items w
 </p>
 
 </div>
-
-<h2 id="symbolonlyattributes">Symbol only Attributes</h2>
+<!-- EDIT3 SECTION "What are Attributes?" [777-1546] -->
+<h2 class="sectionedit4" id="symbol_only_attributes">Symbol only Attributes</h2>
 <div class="level2">
 
 </div>
-
-<h3 id="device">device</h3>
+<!-- EDIT4 SECTION "Symbol only Attributes" [1547-1582] -->
+<h3 class="sectionedit5" id="device">device</h3>
 <div class="level3">
 
 <p>
@@ -76,8 +76,8 @@ floating attribute. If the object is a graphic then <strong>device</strong>= sho
 </p>
 
 </div>
-
-<h3 id="graphical">graphical</h3>
+<!-- EDIT5 SECTION "device" [1583-2214] -->
+<h3 class="sectionedit6" id="graphical">graphical</h3>
 <div class="level3">
 
 <p>
@@ -91,8 +91,8 @@ floating attribute. Don&#039;t forget to set <a href="#device" title=":geda:mast
 </p>
 
 </div>
-
-<h3 id="description">description</h3>
+<!-- EDIT6 SECTION "graphical" [2215-2634] -->
+<h3 class="sectionedit7" id="description">description</h3>
 <div class="level3">
 
 <p>
@@ -103,8 +103,8 @@ The <strong>description</strong> attribute provides a simple one line descriptio
 </p>
 
 </div>
-
-<h3 id="author">author</h3>
+<!-- EDIT7 SECTION "description" [2635-2831] -->
+<h3 class="sectionedit8" id="author">author</h3>
 <div class="level3">
 
 <p>
@@ -115,8 +115,8 @@ The <strong>author</strong> attribute identifies the name of the author of this 
 </p>
 
 </div>
-
-<h3 id="comment">comment</h3>
+<!-- EDIT8 SECTION "author" [2832-3434] -->
+<h3 class="sectionedit9" id="comment">comment</h3>
 <div class="level3">
 
 <p>
@@ -127,8 +127,8 @@ The <strong>comment</strong> attribute can contain anything. This attribute can 
 </p>
 
 </div>
-
-<h3 id="pinseq">pinseq</h3>
+<!-- EDIT9 SECTION "comment" [3435-3714] -->
+<h3 class="sectionedit10" id="pinseq">pinseq</h3>
 <div class="level3">
 
 <p>
@@ -147,8 +147,8 @@ This attribute replaces the obsolete <strong>pin#</strong>=# attribute.
 </p>
 
 </div>
-
-<h3 id="pinnumber">pinnumber</h3>
+<!-- EDIT10 SECTION "pinseq" [3715-4422] -->
+<h3 class="sectionedit11" id="pinnumber">pinnumber</h3>
 <div class="level3">
 
 <p>
@@ -167,21 +167,21 @@ This attribute replaces the obsolete <strong>pin#</strong>=# attribute.
 </p>
 
 </div>
-
-<h3 id="pintype">pintype</h3>
+<!-- EDIT11 SECTION "pinnumber" [4423-4865] -->
+<h3 class="sectionedit12" id="pintype">pintype</h3>
 <div class="level3">
 
 <p>
 Each pin must have a <strong>pintype</strong>=value attribute attached to it and should be made hidden. Table 1 shows valid values for this attribute.<br/>
 
-This attribute is not used extensively in the symbol library, but it will be used for DRC and netlisting. Use &quot;Passive&quot; if no other type matches.<br/>
+This attribute is not used extensively in the symbol library, but it will be used for DRC and netlisting. Use “Passive” if no other type matches.<br/>
 
 <em>Examples:</em><br/>
 <code>pintype=clk</code><br/>
 <code>pintype=in</code><br/>
 <code>pintype=pas</code>
 </p>
-<div class="table sectionedit1"><table class="inline">
+<div class="table sectionedit13"><table class="inline">
 	<tr class="row0">
 		<td class="col0">in</td><td class="col1">Input</td>
 	</tr>
@@ -216,10 +216,10 @@ This attribute is not used extensively in the symbol library, but it will be use
 		<td class="col0 centeralign" colspan="2">  <strong>Table 1:</strong> pintype values  </td>
 	</tr>
 </table></div>
-<!-- EDIT1 TABLE [5240-5447] -->
+<!-- EDIT13 TABLE [5240-5447] -->
 </div>
-
-<h3 id="pinlabel">pinlabel</h3>
+<!-- EDIT12 SECTION "pintype" [4866-5448] -->
+<h3 class="sectionedit14" id="pinlabel">pinlabel</h3>
 <div class="level3">
 
 <p>
@@ -234,8 +234,8 @@ This attribute must be attached to the pin and be left visible. Please make this
 </p>
 
 </div>
-
-<h3 id="numslots">numslots</h3>
+<!-- EDIT14 SECTION "pinlabel" [5449-5798] -->
+<h3 class="sectionedit15" id="numslots">numslots</h3>
 <div class="level3">
 
 <p>
@@ -246,14 +246,14 @@ If a component has multiple slots in a physical package (such as a 7400 (NAND) w
 </p>
 
 </div>
-
-<h3 id="slotdef">slotdef</h3>
+<!-- EDIT15 SECTION "numslots" [5799-6268] -->
+<h3 class="sectionedit16" id="slotdef">slotdef</h3>
 <div class="level3">
 
 <p>
-If a component has multiple slots in a physical package then you must attach a <strong>slotdef</strong>=slotnumber:#,#,#... for every device inside the physical package.<br/>
+If a component has multiple slots in a physical package then you must attach a <strong>slotdef</strong>=slotnumber:#,#,#… for every device inside the physical package.<br/>
 
-The slotnumber corresponds to the slot number. The colon after the slot number is required. For example, if a device has 4 slots then there would be <strong>slotdef</strong>=1:..., <strong>slotdef</strong>=2:..., <strong>slotdef</strong>=3:..., and <strong>slotdef</strong>=4:... attributes somewhere in the symbol and be made invisible. This is a free standing or
+The slotnumber corresponds to the slot number. The colon after the slot number is required. For example, if a device has 4 slots then there would be <strong>slotdef</strong>=1:…, <strong>slotdef</strong>=2:…, <strong>slotdef</strong>=3:…, and <strong>slotdef</strong>=4:… attributes somewhere in the symbol and be made invisible. This is a free standing or
 floating attribute.<br/>
 
 The #&#039;s have a one-to-one correspondence to the <strong>pinseq</strong> attributes and specify which <strong>pinnumber</strong>=# is used during display (gschem) or netlisting (gnetlist).<br/>
@@ -273,8 +273,8 @@ This attribute replaces the obsolete <strong>slot#</strong>=# attribute.
 </p>
 
 </div>
-
-<h3 id="footprint">footprint</h3>
+<!-- EDIT16 SECTION "slotdef" [6269-7269] -->
+<h3 class="sectionedit17" id="footprint">footprint</h3>
 <div class="level3">
 
 <p>
@@ -282,14 +282,14 @@ This attribute replaces the obsolete <strong>slot#</strong>=# attribute.
 
 Attach this attribute just like the <a href="#device" title=":geda:master_attributes_list.txt ↵" class="wikilink1">device</a>= attribute. This is a free standing or floating attribute.<br/>
 
-package_name is the pcb footprint or package type like DIP14 or DIP40. Although this attribute in principle is pcb package dependent, gEDA/gaf conventions exist to make this attribute as portable as possible, allowing for easy collaboration and sharing between users. See the <a href="geda-pcbfootprintnamingconventions.html" class="wikilink2" title="geda-pcbfootprintnamingconventions.html">Footprint naming conventions</a>.<br/>
+package_name is the pcb footprint or package type like DIP14 or DIP40. Although this attribute in principle is pcb package dependent, gEDA/gaf conventions exist to make this attribute as portable as possible, allowing for easy collaboration and sharing between users. See the <a href="geda-pcb_footprint_naming_conventions.html" class="wikilink1" title="geda-pcb_footprint_naming_conventions.html">Footprint naming conventions</a>.<br/>
 
 If the symbol does not have a footprint, then the value of <strong>footprint</strong>= should be set to none. If the footprint must be overridden in a schematic, then the value of <strong>footprint</strong>= should be set to none. If the footprint is not known, then the value of <strong>footprint</strong>= should be set to unknown.
 </p>
 
 </div>
-
-<h3 id="documentation">documentation</h3>
+<!-- EDIT17 SECTION "footprint" [7270-8203] -->
+<h3 class="sectionedit18" id="documentation">documentation</h3>
 <div class="level3">
 
 <p>
@@ -297,23 +297,23 @@ If the symbol does not have a footprint, then the value of <strong>footprint</st
 
 Attach this attribute just like the <a href="#device" title=":geda:master_attributes_list.txt ↵" class="wikilink1">device</a>= attribute. This is a freestanding or floating attribute.<br/>
 
-documentation_locator is either the base filename of the documentation, or it is the complete Internet URL (Uniform Resource Locator). If it is the filename, an attempt will be made to search for it in the local gEDA share directory named <strong>documentation</strong>.<br/>
+documentation_locator is either the base filename of the documentation, or it is the complete Internet <abbr title="Uniform Resource Locator">URL</abbr> (Uniform Resource Locator). If it is the filename, an attempt will be made to search for it in the local gEDA share directory named <strong>documentation</strong>.<br/>
 
 <em>Filename example:</em><br/>
 <code>documentation=sn74ls00.pdf</code><br/>
 
-<em>URL example:</em><br/>
+<em><abbr title="Uniform Resource Locator">URL</abbr> example:</em><br/>
 <code>documentation=http://www-s.ti.com/sc/ds/sn74ls00.pdf</code>
 </p>
 
 </div>
-
-<h2 id="schematiconlyattributes">Schematic only Attributes</h2>
+<!-- EDIT18 SECTION "documentation" [8204-8978] -->
+<h2 class="sectionedit19" id="schematic_only_attributes">Schematic only Attributes</h2>
 <div class="level2">
 
 </div>
-
-<h3 id="netname">netname</h3>
+<!-- EDIT19 SECTION "Schematic only Attributes" [8979-9016] -->
+<h3 class="sectionedit20" id="netname">netname</h3>
 <div class="level3">
 
 <p>
@@ -325,8 +325,8 @@ This attribute should be attached to a net object to give it a name. Multiple ne
 </p>
 
 </div>
-
-<h3 id="source">source</h3>
+<!-- EDIT20 SECTION "netname" [9017-9386] -->
+<h3 class="sectionedit21" id="source">source</h3>
 <div class="level3">
 
 <p>
@@ -340,13 +340,13 @@ This attribute should only be attached to instantiated components in schematics.
 </p>
 
 </div>
-
-<h2 id="symbolandschematicattributes">Symbol and Schematic Attributes</h2>
+<!-- EDIT21 SECTION "source" [9387-10024] -->
+<h2 class="sectionedit22" id="symbol_and_schematic_attributes">Symbol and Schematic Attributes</h2>
 <div class="level2">
 
 </div>
-
-<h3 id="refdes">refdes</h3>
+<!-- EDIT22 SECTION "Symbol and Schematic Attributes" [10025-10069] -->
+<h3 class="sectionedit23" id="refdes">refdes</h3>
 <div class="level3">
 
 <p>
@@ -360,7 +360,7 @@ This attribute is used to specify the reference designator to a particular insta
 
 </div>
 
-<h4 id="refdesnamingrestrictions">refdes naming restrictions</h4>
+<h4 id="refdes_naming_restrictions">refdes naming restrictions</h4>
 <div class="level4">
 
 <p>
@@ -373,23 +373,23 @@ Specifically, <a href="geda-faq-gsch2pcb.html" class="wikilink1" title="geda-faq
 <ul>
 <li class="level1"><div class="li"> No spaces</div>
 </li>
-<li class="level1"><div class="li"> No hyphens. This might upset the M4 macro language potentially used to generate footprints. &quot;_&quot; is ok.</div>
+<li class="level1"><div class="li"> No hyphens. This might upset the M4 macro language potentially used to generate footprints. “_” is ok.</div>
 </li>
 <li class="level1"><div class="li"> Any lower case suffix is ignored. This is so you can, place four discrete NAND gates on the schematic called U1a, U1b, U1c and U1d. They will netlist into a single footprint named U1.</div>
 </li>
-<li class="level1"><div class="li"> Non-ASCII characters like üöäß will not print in pcb</div>
+<li class="level1"><div class="li"> Non-<abbr title="American Standard Code for Information Interchange">ASCII</abbr> characters like üöäß will not print in pcb</div>
 </li>
 </ul>
 
 </div>
 
-<h4 id="refdesnamingconventions">refdes naming conventions</h4>
+<h4 id="refdes_naming_conventions">refdes naming conventions</h4>
 <div class="level4">
 
 <p>
 There is a convention of the reference designator used for each kind of component. Here are some of them (substitute a cardinal value for &lt;n&gt;):
 </p>
-<div class="table sectionedit2"><table class="inline">
+<div class="table sectionedit24"><table class="inline">
 	<thead>
 	<tr class="row0">
 		<th class="col0"> Prefix </th><th class="col1"> Component type</th>
@@ -450,10 +450,10 @@ There is a convention of the reference designator used for each kind of componen
 		<td class="col0 leftalign"> X&lt;n&gt;   </td><td class="col1">Crystal</td>
 	</tr>
 </table></div>
-<!-- EDIT2 TABLE [11405-11830] -->
+<!-- EDIT24 TABLE [11405-11830] -->
 </div>
-
-<h3 id="slot">slot</h3>
+<!-- EDIT23 SECTION "refdes" [10070-11831] -->
+<h3 class="sectionedit25" id="slot">slot</h3>
 <div class="level3">
 
 <p>
@@ -461,8 +461,8 @@ This attribute is used to specify a slot for a slotted component. It should be a
 </p>
 
 </div>
-
-<h3 id="net">net</h3>
+<!-- EDIT25 SECTION "slot" [11832-12129] -->
+<h3 class="sectionedit26" id="net">net</h3>
 <div class="level3">
 
 <p>
@@ -470,8 +470,8 @@ The <strong>net</strong>= attribute is used to create power/ground and arbitrary
 </p>
 
 </div>
-
-<h3 id="value">value</h3>
+<!-- EDIT26 SECTION "net" [12130-12536] -->
+<h3 class="sectionedit27" id="value">value</h3>
 <div class="level3">
 
 <p>
@@ -483,8 +483,8 @@ Used mainly in the spice backend netlister to specify the value of the various e
 </p>
 
 </div>
-
-<h3 id="symversion">symversion</h3>
+<!-- EDIT27 SECTION "value" [12537-12762] -->
+<h3 class="sectionedit28" id="symversion">symversion</h3>
 <div class="level3">
 
 <p>
@@ -539,22 +539,22 @@ attribute manually to instantiated symbols in a schematic.<br/>
 </p>
 
 </div>
-
-<h3 id="dist-license">dist-license</h3>
+<!-- EDIT28 SECTION "symversion" [12763-14739] -->
+<h3 class="sectionedit29" id="dist-license">dist-license</h3>
 <div class="level3">
 
 <p>
-The <strong>dist-license</strong> attribute is used to specify the redistribution license for the symbol or schematic.  It should be the name of a known license.  Some examples values are:  GPL, GPL version 2 only, GPL version 3 only, public domain, Apache version 2, Modified BSD, X11, etc.  <br/>
+The <strong>dist-license</strong> attribute is used to specify the redistribution license for the symbol or schematic.  It should be the name of a known license.  Some examples values are:  <abbr title="GNU General Public License">GPL</abbr>, <abbr title="GNU General Public License">GPL</abbr> version 2 only, <abbr title="GNU General Public License">GPL</abbr> version 3 only, public domain, Apache version 2, Modified BSD, X11, etc.  <br/>
 
 <br/>
 
-For a list of licenses see: FSF License List and
-OSI License List
+For a list of licenses see: <a href="http://www.gnu.org/philosophy/license-list.html" class="urlextern" title="http://www.gnu.org/philosophy/license-list.html" rel="nofollow">FSF License List</a> and
+<a href="http://www.opensource.org/licenses/category" class="urlextern" title="http://www.opensource.org/licenses/category" rel="nofollow">OSI License List</a>
 </p>
 
 </div>
-
-<h3 id="use-license">use-license</h3>
+<!-- EDIT29 SECTION "dist-license" [14740-15219] -->
+<h3 class="sectionedit30" id="use-license">use-license</h3>
 <div class="level3">
 
 <p>
@@ -562,17 +562,17 @@ The <strong>use-license</strong> attribute is used to specify the license for ho
 
 <br/>
 
-FIXME put a better list of examples here.
+<img src="images/smileys/fixme.gif" align="middle" alt="FIXME" /> put a better list of examples here.
 </p>
 
 </div>
-
-<h2 id="obsoleteattributes">Obsolete Attributes</h2>
+<!-- EDIT30 SECTION "use-license" [15220-15519] -->
+<h2 class="sectionedit31" id="obsolete_attributes">Obsolete Attributes</h2>
 <div class="level2">
 
 </div>
-
-<h3 id="uref">uref</h3>
+<!-- EDIT31 SECTION "Obsolete Attributes" [15520-15551] -->
+<h3 class="sectionedit32" id="uref">uref</h3>
 <div class="level3">
 
 <p>
@@ -580,8 +580,8 @@ The <strong>uref</strong>= attribute is obsolete and cannot not be used. It was 
 </p>
 
 </div>
-
-<h3 id="name">name</h3>
+<!-- EDIT32 SECTION "uref" [15552-15687] -->
+<h3 class="sectionedit33" id="name">name</h3>
 <div class="level3">
 
 <p>
@@ -589,8 +589,8 @@ The <strong>name</strong>= attribute should not be attached or appear in any sym
 </p>
 
 </div>
-
-<h3 id="label">label</h3>
+<!-- EDIT33 SECTION "name" [15688-15841] -->
+<h3 class="sectionedit34" id="label">label</h3>
 <div class="level3">
 
 <p>
@@ -598,8 +598,8 @@ The <strong>label</strong>= attribute is obsolete and cannot be used. It was use
 </p>
 
 </div>
-
-<h3 id="pin">pin#</h3>
+<!-- EDIT34 SECTION "label" [15842-16057] -->
+<h3 class="sectionedit35" id="pin">pin#</h3>
 <div class="level3">
 
 <p>
@@ -607,8 +607,8 @@ The <strong>pin#</strong>=# attribute is obsolete and cannot be used. It was use
 </p>
 
 </div>
-
-<h3 id="slot1">slot#</h3>
+<!-- EDIT35 SECTION "pin#" [16058-16266] -->
+<h3 class="sectionedit36" id="slot1">slot#</h3>
 <div class="level3">
 
 <p>
@@ -616,8 +616,8 @@ The <strong>slot#</strong>=# attribute is obsolete and cannot be used. It was us
 </p>
 
 </div>
-
-<h3 id="type">type</h3>
+<!-- EDIT36 SECTION "slot#" [16267-16452] -->
+<h3 class="sectionedit37" id="type">type</h3>
 <div class="level3">
 
 <p>
@@ -625,8 +625,8 @@ The <strong>type</strong>= attribute is obsolete and cannot be used. It was used
 </p>
 
 </div>
-
-<h3 id="email">email</h3>
+<!-- EDIT37 SECTION "type" [16453-16625] -->
+<h3 class="sectionedit38" id="email">email</h3>
 <div class="level3">
 
 <p>
@@ -634,10 +634,10 @@ The information in this attribute has been merged with <a href="#author" title="
 </p>
 
 </div>
-
-<h2 id="documentrevisionhistory">Document Revision History</h2>
+<!-- EDIT38 SECTION "email" [16626-16710] -->
+<h2 class="sectionedit39" id="document_revision_history">Document Revision History</h2>
 <div class="level2">
-<div class="table sectionedit3"><table class="inline">
+<div class="table sectionedit40"><table class="inline">
 	<tr class="row0">
 		<td class="col0">July 14th, 2002</td><td class="col1">Created attributes.tex from attributes.txt.</td>
 	</tr>
@@ -666,7 +666,7 @@ The information in this attribute has been merged with <a href="#author" title="
 		<td class="col0">July 10th, 2007</td><td class="col1">Added dist-license= and use-license= attributes.</td>
 	</tr>
 </table></div>
-<!-- EDIT3 TABLE [16749-17288] -->
+<!-- EDIT40 TABLE [16749-17288] -->
 </div>
-</body>
+<!-- EDIT39 SECTION "Document Revision History" [16711-] --></body>
 </html>

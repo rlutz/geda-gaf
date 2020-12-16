@@ -87,7 +87,7 @@ static void
 version (void)
 {
   printf(_("gEDA/gaf %s (g%.7s)\n"
-"Copyright (C) 1998-2019 gEDA developers\n"
+"Copyright (C) 1998-2020 gEDA developers\n"
 "This is free software, and you are welcome to redistribute it under\n"
 "certain conditions. For details, see the file `COPYING', which is\n"
 "included in the gEDA distribution.\n"

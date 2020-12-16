@@ -14,11 +14,11 @@
 <strong>Statement of work:  Improving PCB&#039;s usability within the gEDA Suite framework</strong>
 </p>
 
-<h2 id="backgroundandmotivation">Background and motivation</h2>
+<h2 class="sectionedit1" id="background_and_motivation">Background and motivation</h2>
 <div class="level2">
 
 <p>
-The open-source layout tool PCB has been a member of the gEDA Project for many
+The open-source layout tool <a href="http://pcb.geda-project.org/" class="urlextern" title="http://pcb.geda-project.org/" rel="nofollow">PCB</a> has been a member of the gEDA Project for many
 years.  It is an essential part of the end-to-end design flow offered by the
 gEDA tool set.  That is, although gschem/gnetlist can (in principle) support
 many back-end PCB layout tools, the most advanced forward annotation tools
@@ -40,17 +40,17 @@ with reasonable solutions.   A list of the biggest issues includes:
 </li>
 </ul>
 <ul>
-<li class="level1 node"><div class="li"> <strong>GUI:</strong>  PCB&#039;s GUI shows its age.  It has the following infelicitous properties:</div>
+<li class="level1 node"><div class="li"> <strong><abbr title="Graphical User Interface">GUI</abbr>:</strong>  PCB&#039;s <abbr title="Graphical User Interface">GUI</abbr> shows its age.  It has the following infelicitous properties:</div>
 <ul>
-<li class="level2"><div class="li"> It uses a mixture of noun/verb and verb/noun actions.  (Modern GUI programs are noun/verb only.)</div>
+<li class="level2"><div class="li"> It uses a mixture of noun/verb and verb/noun actions.  (Modern <abbr title="Graphical User Interface">GUI</abbr> programs are noun/verb only.)</div>
 </li>
 <li class="level2"><div class="li"> Incomplete menu/button coverage of possible editing actions.  For example, arbitrary rotation and component refdes renumbering are available only through the pop-up command entry window.</div>
 </li>
-<li class="level2"><div class="li"> There is a lack of GUI controls for exact, CAD-like editing. Examples for these desirable actions: Give the position of an object by typing its coordinates. Rotate an object by a given angle. Move objects by an exact amount. Do a multi copy of objects.</div>
+<li class="level2"><div class="li"> There is a lack of <abbr title="Graphical User Interface">GUI</abbr> controls for exact, CAD-like editing. Examples for these desirable actions: Give the position of an object by typing its coordinates. Rotate an object by a given angle. Move objects by an exact amount. Do a multi copy of objects.</div>
 </li>
 <li class="level2"><div class="li"> Unlike many other graphical GUIs a dialog to edit properties of an object is missing in pcb. Properties to be edited might be layer, thickness, connected flag, polygon clearance, the net it belongs to, position, orientation, etc.</div>
 </li>
-<li class="level2"><div class="li"> Underlying the user interface, there is strong belief amongst PCB&#039;s developers that the supporting datastructures and methods are inadequate, and require upgrade as part of any GUI upgrade.</div>
+<li class="level2"><div class="li"> Underlying the user interface, there is strong belief amongst PCB&#039;s developers that the supporting datastructures and methods are inadequate, and require upgrade as part of any <abbr title="Graphical User Interface">GUI</abbr> upgrade.</div>
 </li>
 </ul>
 </li>
@@ -79,7 +79,7 @@ benefits to the gEDA Project:
 </li>
 </ul>
 <ul>
-<li class="level1"><div class="li"> <strong>Contribution:</strong>  More users implies more contributors.   In the context of the gEDA Project, this means not only software developers, but also people who will contribute schematic symbols, PCB footprints, utility scripts, and other collateral necessary to a thriving design environment.  (A strong focal point for contributors is -- and will remain -- the www.gedasymbols.org website.)</div>
+<li class="level1"><div class="li"> <strong>Contribution:</strong>  More users implies more contributors.   In the context of the gEDA Project, this means not only software developers, but also people who will contribute schematic symbols, PCB footprints, utility scripts, and other collateral necessary to a thriving design environment.  (A strong focal point for contributors is – and will remain – the <a href="http://www.gedasymbols.org" class="urlextern" title="http://www.gedasymbols.org" rel="nofollow">www.gedasymbols.org</a> website.)</div>
 </li>
 </ul>
 <ul>
@@ -95,8 +95,8 @@ engineer.
 </p>
 
 </div>
-
-<h2 id="statementofwork">Statement of work</h2>
+<!-- EDIT1 SECTION "Background and motivation" [86-4751] -->
+<h2 class="sectionedit2" id="statement_of_work">Statement of work</h2>
 <div class="level2">
 
 <p>
@@ -105,23 +105,23 @@ This section provides descriptions of what work is desired in each area of PCB&#
 <hr />
 
 </div>
-
-<h3 id="generalguidelines">General guidelines</h3>
+<!-- EDIT2 SECTION "Statement of work" [4752-5141] -->
+<h3 class="sectionedit3" id="general_guidelines">General guidelines</h3>
 <div class="level3">
 
 </div>
 
-<h4 id="gtkhid">GTK HID</h4>
+<h4 id="gtk_hid">GTK HID</h4>
 <div class="level4">
 
 <p>
-PCB supports several HIDs.  The HID is the interface layer which the user interacts with.  The two major HIDs provided for interactive use are based upon 1) the GTK GUI widget set, and 2) The X/Motif GUI widget set.  <strong>The work called out for this project shall be targeted at the GTK HID.</strong>  The reason for this is simple:  The rest of gEDA uses GTK.  A primary goal the renovation work in PCB is to more tightly bind PCB into the entire gEDA workflow.  More to the point:  the gEDA tool chain should present a more uniform interface to the user.  Users expect to see the same “look and feel” in all the tools they use.
+PCB supports several HIDs.  The HID is the interface layer which the user interacts with.  The two major HIDs provided for interactive use are based upon 1) the GTK <abbr title="Graphical User Interface">GUI</abbr> widget set, and 2) The X/Motif <abbr title="Graphical User Interface">GUI</abbr> widget set.  <strong>The work called out for this project shall be targeted at the GTK HID.</strong>  The reason for this is simple:  The rest of gEDA uses GTK.  A primary goal the renovation work in PCB is to more tightly bind PCB into the entire gEDA workflow.  More to the point:  the gEDA tool chain should present a more uniform interface to the user.  Users expect to see the same “look and feel” in all the tools they use.
 However, any changes made as part of this work shall not break any feature present in any other HID, including the Motif HID.
 </p>
 
 </div>
 
-<h4 id="codeclarity">Code clarity</h4>
+<h4 id="code_clarity">Code clarity</h4>
 <div class="level4">
 
 <p>
@@ -158,7 +158,7 @@ Hooks for support on Windows systems are outside the scope of this project.  How
 
 </div>
 
-<h4 id="backwardscompatibility">Backwards compatibility</h4>
+<h4 id="backwards_compatibility">Backwards compatibility</h4>
 <div class="level4">
 
 <p>
@@ -169,8 +169,8 @@ of gsch2pcb).
 <hr />
 
 </div>
-
-<h3 id="forwardannotationupgrade">Forward annotation upgrade</h3>
+<!-- EDIT3 SECTION "General guidelines" [5142-7229] -->
+<h3 class="sectionedit4" id="forward_annotation_upgrade">Forward annotation upgrade</h3>
 <div class="level3">
 
 <p>
@@ -179,7 +179,7 @@ of gsch2pcb).
 
 </div>
 
-<h4 id="featuredescription">Feature description</h4>
+<h4 id="feature_description">Feature description</h4>
 <div class="level4">
 
 <p>
@@ -206,7 +206,7 @@ information is a required part of creating a PCB layout:
 </ul>
 
 <p>
-The scheme currently used by PCB is to read a file -- already in PCB format --
+The scheme currently used by PCB is to read a file – already in PCB format –
 containing the actual footprints embedded within it.  The netlist is read in
 using a separate step.
 </p>
@@ -246,7 +246,7 @@ determined by the developer and the architecture of PCB itself.
 
 </div>
 
-<h4 id="usecases">Use cases</h4>
+<h4 id="use_cases">Use cases</h4>
 <div class="level4">
 
 <p>
@@ -263,11 +263,11 @@ Once the forward annotation changes are complete, the following use cases should
 </li>
 <li class="level1"><div class="li"> The user starts PCB.</div>
 </li>
-<li class="level1"><div class="li"> He clicks “File -&gt; new PCB”.  A window pops up, providing a place to enter the new board&#039;s layer count and size.  The window may also provide a way to specify common board templates (PC-104, 3U Eurocard, etc.)</div>
+<li class="level1"><div class="li"> He clicks “File → new PCB”.  A window pops up, providing a place to enter the new board&#039;s layer count and size.  The window may also provide a way to specify common board templates (PC-104, 3U Eurocard, etc.)</div>
 </li>
 <li class="level1"><div class="li"> The new board is shown in PCB&#039;s main window as a white area on a darker background (as currently implemented).</div>
 </li>
-<li class="level1"><div class="li"> The user clicks “File -&gt; Import forward annotation file”.</div>
+<li class="level1"><div class="li"> The user clicks “File → Import forward annotation file”.</div>
 </li>
 <li class="level1"><div class="li"> A file selection window pops up.  The user clicks on his .pfa file and clicks OK.</div>
 </li>
@@ -289,7 +289,7 @@ Once the forward annotation changes are complete, the following use cases should
 </li>
 <li class="level1"><div class="li"> The user starts PCB (or re-activates an existing PCB session running in its window).</div>
 </li>
-<li class="level1"><div class="li"> The user clicks “File -&gt; Import forward annotation file”.</div>
+<li class="level1"><div class="li"> The user clicks “File → Import forward annotation file”.</div>
 </li>
 <li class="level1"><div class="li"> A file selection window pops up.  The user clicks on his .pfa file and clicks OK.</div>
 </li>
@@ -303,7 +303,7 @@ Once the forward annotation changes are complete, the following use cases should
 
 </div>
 
-<h4 id="otherideas">Other Ideas</h4>
+<h4 id="other_ideas">Other Ideas</h4>
 <div class="level4">
 <ul>
 <li class="level1"><div class="li"> Besides a menu option, there should be a toolbar button to sync changes</div>
@@ -316,7 +316,7 @@ Once the forward annotation changes are complete, the following use cases should
 
 </div>
 
-<h4 id="workrequired">Work required</h4>
+<h4 id="work_required">Work required</h4>
 <div class="level4">
 
 <p>
@@ -328,7 +328,7 @@ actions are already supported.  Therefore, this project involves:
 </li>
 <li class="level1"><div class="li"> Creating a method for reading in an action script.</div>
 </li>
-<li class="level1"><div class="li"> Integrating the new script-based forward annotation into PCB&#039;s GUI.</div>
+<li class="level1"><div class="li"> Integrating the new script-based forward annotation into PCB&#039;s <abbr title="Graphical User Interface">GUI</abbr>.</div>
 </li>
 <li class="level1"><div class="li"> Testing and bug cleanup.</div>
 </li>
@@ -336,8 +336,8 @@ actions are already supported.  Therefore, this project involves:
 <hr />
 
 </div>
-
-<h3 id="guimodernization">GUI modernization</h3>
+<!-- EDIT4 SECTION "Forward annotation upgrade" [7230-12503] -->
+<h3 class="sectionedit5" id="gui_modernization">GUI modernization</h3>
 <div class="level3">
 
 <p>
@@ -346,11 +346,11 @@ actions are already supported.  Therefore, this project involves:
 
 <p>
 The basic goal is to make the upgraded PCB behave exactly as an inexperienced
-user might expect, based upon his familiarity with modern GUI-based tools like
+user might expect, based upon his familiarity with modern <abbr title="Graphical User Interface">GUI</abbr>-based tools like
 OpenOffice.  This means:
 </p>
 <ul>
-<li class="level1"><div class="li"> PCB should support all the “normal” keystrokes which have become defacto standards for GUI programs.  Examples include &lt;ctrl&gt;-c for copy, &lt;ctrl&gt;-x for delete, etc.  PCB may continue to support the old key strokes to maintain backward compatibility for those who are already experienced with the program, but in the event that one of PCB&#039;s current keystrokes conflicts with the “defacto standard”, the defacto standard shall be implemented.</div>
+<li class="level1"><div class="li"> PCB should support all the “normal” keystrokes which have become defacto standards for <abbr title="Graphical User Interface">GUI</abbr> programs.  Examples include &lt;ctrl&gt;-c for copy, &lt;ctrl&gt;-x for delete, etc.  PCB may continue to support the old key strokes to maintain backward compatibility for those who are already experienced with the program, but in the event that one of PCB&#039;s current keystrokes conflicts with the “defacto standard”, the defacto standard shall be implemented.</div>
 </li>
 </ul>
 <ul>
@@ -429,7 +429,7 @@ If the selected object is text, then PCB should open up the text edit dialog box
 
 </div>
 
-<h4 id="selectionmodes">Selection modes</h4>
+<h4 id="selection_modes">Selection modes</h4>
 <div class="level4">
 
 <p>
@@ -452,7 +452,7 @@ The following selection modes must be supported:
 
 </div>
 
-<h4 id="workrequired1">Work required</h4>
+<h4 id="work_required1">Work required</h4>
 <div class="level4">
 
 <p>
@@ -465,9 +465,9 @@ This project involves:
 </li>
 <li class="level1"><div class="li"> Refactoring and upgrade of program internals to support selection modes.</div>
 </li>
-<li class="level1"><div class="li"> Implementation of GUI resource file which is read in upon program start to configure user interface.</div>
+<li class="level1"><div class="li"> Implementation of <abbr title="Graphical User Interface">GUI</abbr> resource file which is read in upon program start to configure user interface.</div>
 </li>
-<li class="level1"><div class="li"> GUI upgrade.  Specifically, hook up the callbacks to the menu items and buttons defined in the GUI resource file.</div>
+<li class="level1"><div class="li"> <abbr title="Graphical User Interface">GUI</abbr> upgrade.  Specifically, hook up the callbacks to the menu items and buttons defined in the <abbr title="Graphical User Interface">GUI</abbr> resource file.</div>
 </li>
 <li class="level1"><div class="li"> Testing and bug cleanup.</div>
 </li>
@@ -475,8 +475,8 @@ This project involves:
 <hr />
 
 </div>
-
-<h3 id="footprinteditorimplementation">Footprint editor implementation</h3>
+<!-- EDIT5 SECTION "GUI modernization" [12504-18439] -->
+<h3 class="sectionedit6" id="footprint_editor_implementation">Footprint editor implementation</h3>
 <div class="level3">
 
 <p>
@@ -505,14 +505,14 @@ Optionally, features involving editing footprints via the buffer will be removed
 There are two ways to invoke the footprint editor:
 </p>
 <ol>
-<li class="level1"><div class="li"> Create a new footprint.  In this case the user will have no object selected on the PCB drawing window.  He will then choose an option from the menu, like “tools -&gt; down footprint”.  This will place the user into the footprint editor, and the drawing area will be empty</div>
+<li class="level1"><div class="li"> Create a new footprint.  In this case the user will have no object selected on the PCB drawing window.  He will then choose an option from the menu, like “tools → down footprint”.  This will place the user into the footprint editor, and the drawing area will be empty</div>
 </li>
-<li class="level2"><div class="li"> Edit an existing footprint.  In this case, the user will select a footprint present on the board by clicking on it.  Then he will select an option from the menu, like “tools -&gt; down footprint”.  This will place the user into the footprint editor, and the drawing area will hold a copy of the selected footprint, ready for editing.</div>
+<li class="level2"><div class="li"> Edit an existing footprint.  In this case, the user will select a footprint present on the board by clicking on it.  Then he will select an option from the menu, like “tools → down footprint”.  This will place the user into the footprint editor, and the drawing area will hold a copy of the selected footprint, ready for editing.</div>
 </li>
 </ol>
 
 <p>
-As a third possibility, the user should be able to do “tools -&gt; create new footprint”, go into the editor, and then do “file -&gt; open” and select a footprint from the library to edit.
+As a third possibility, the user should be able to do “tools → create new footprint”, go into the editor, and then do “file → open” and select a footprint from the library to edit.
 </p>
 
 <p>
@@ -554,7 +554,7 @@ may not have write access to the library directories.
 
 <p>
 Therefore, when the user is done editing his footprint, there should be only
-one save action available under the file menu:  “file -&gt; save footprint as”.
+one save action available under the file menu:  “file → save footprint as”.
 This will call up the file save dialog, which will default to sticking the
 footprint in the current working directory (or the last directory he saved a
 footprint into during this session).  The user will then be required to browse
@@ -569,14 +569,14 @@ to his preferred save directory, and save the footprint there.
 <p>
 Once the footprint editing session is done, the user may leave the editor and
 return to his main PCB editing session.  This may be accomplished using a menu
-item like “tools -&gt; up to layout”.  If any unsaved changes remain in the
+item like “tools → up to layout”.  If any unsaved changes remain in the
 footprint, then the user should be prompted to either save or discard his
 changes before leaving the footprint editor.
 </p>
 
 </div>
 
-<h4 id="updatingafootprintplacedontheboard">Updating a footprint placed on the board</h4>
+<h4 id="updating_a_footprint_placed_on_the_board">Updating a footprint placed on the board</h4>
 <div class="level4">
 
 <p>
@@ -587,7 +587,7 @@ update a footprint already present on the PCB.  Here is the preferred method
 <ol>
 <li class="level1"><div class="li"> User selects footprint to update.</div>
 </li>
-<li class="level1"><div class="li"> From menu, user selects “tools -&gt; update footprint”.  A keystroke to start this action may also be provided.</div>
+<li class="level1"><div class="li"> From menu, user selects “tools → update footprint”.  A keystroke to start this action may also be provided.</div>
 </li>
 <li class="level1"><div class="li"> A pop-up window opens, giving the user the footprint browser (as described above).  The window will have has default footprint the name of the currently selected footprint.  </div>
 </li>
@@ -601,7 +601,7 @@ update a footprint already present on the PCB.  Here is the preferred method
 
 </div>
 
-<h4 id="workrequired2">Work required</h4>
+<h4 id="work_required2">Work required</h4>
 <div class="level4">
 
 <p>
@@ -612,7 +612,7 @@ This project involves:
 </li>
 <li class="level1"><div class="li"> Create footprint editing window (if the separate window approach is adopted).</div>
 </li>
-<li class="level1"><div class="li"> Integrate access to footprint editor into main PCB GUI.</div>
+<li class="level1"><div class="li"> Integrate access to footprint editor into main PCB <abbr title="Graphical User Interface">GUI</abbr>.</div>
 </li>
 <li class="level1"><div class="li"> Testing and bug cleanup.</div>
 </li>
@@ -620,13 +620,13 @@ This project involves:
 <hr />
 
 </div>
-
-<h3 id="upgradeoflayeranddesignobjects">Upgrade of layer and design objects</h3>
+<!-- EDIT6 SECTION "Footprint editor implementation" [18440-24028] -->
+<h3 class="sectionedit7" id="upgrade_of_layer_and_design_objects">Upgrade of layer and design objects</h3>
 <div class="level3">
 
 </div>
 
-<h4 id="featuredescription1">Feature Description</h4>
+<h4 id="feature_description1">Feature Description</h4>
 <div class="level4">
 
 <p>
@@ -660,7 +660,7 @@ upgrade.  Specific features required are:
 
 </div>
 
-<h4 id="workrequired3">Work required</h4>
+<h4 id="work_required3">Work required</h4>
 <div class="level4">
 
 <p>
@@ -681,13 +681,13 @@ This project involves:
 <hr />
 
 </div>
-
-<h3 id="designrulecheckingupgrade">Design Rule Checking Upgrade</h3>
+<!-- EDIT7 SECTION "Upgrade of layer and design objects" [24029-26054] -->
+<h3 class="sectionedit8" id="design_rule_checking_upgrade">Design Rule Checking Upgrade</h3>
 <div class="level3">
 
 </div>
 
-<h4 id="featuredescription2">Feature Description</h4>
+<h4 id="feature_description2">Feature Description</h4>
 <div class="level4">
 
 <p>
@@ -730,18 +730,18 @@ running in a thread.
 
 </div>
 
-<h4 id="usecases1">Use Cases</h4>
+<h4 id="use_cases1">Use Cases</h4>
 <div class="level4">
 
 <p>
 <strong>Manual DRC</strong>
 </p>
 <ol>
-<li class="level1"><div class="li"> The user runs DRC using either a hot-key or menu item. An unobtrusive DRC status indicator is displayed. Perhaps the phrase &quot;DRC Check&quot; in yellow text in the top bar.</div>
+<li class="level1"><div class="li"> The user runs DRC using either a hot-key or menu item. An unobtrusive DRC status indicator is displayed. Perhaps the phrase “DRC Check” in yellow text in the top bar.</div>
 </li>
 <li class="level1"><div class="li"> DRC violation marks are displayed on the DRC layer or on the PCB the layout.</div>
 </li>
-<li class="level1"><div class="li"> An unobtrusive DRC status indicator is displayed.  Perhaps the phrases &quot;DRC PASS&quot; in green text and &quot;DRC FAIL&quot; in red text in the top bar.</div>
+<li class="level1"><div class="li"> An unobtrusive DRC status indicator is displayed.  Perhaps the phrases “DRC PASS” in green text and “DRC FAIL” in red text in the top bar.</div>
 </li>
 <li class="level1"><div class="li"> If there are DRC failures the user can step to the next error manually or by using a hot-key. After changes are made the DRC can be run manually to verify the fix.</div>
 </li>
@@ -755,11 +755,11 @@ running in a thread.
 </li>
 <li class="level1"><div class="li"> The user enables automatic DRC mode.</div>
 </li>
-<li class="level1"><div class="li"> After the DRC idle period has elapsed DRC runs.  An unobtrusive DRC status indicator is displayed. Perhaps the phrase &quot;DRC Check&quot; in yellow text in the top bar.</div>
+<li class="level1"><div class="li"> After the DRC idle period has elapsed DRC runs.  An unobtrusive DRC status indicator is displayed. Perhaps the phrase “DRC Check” in yellow text in the top bar.</div>
 </li>
 <li class="level1"><div class="li"> DRC violation marks are displayed on the DRC layer or on the PCB layout.</div>
 </li>
-<li class="level1"><div class="li"> An unobtrusive DRC status indicator is displayed.  Perhaps the phrase &quot;DRC PASS&quot; in green text and &quot;DRC FAIL&quot; in red text in the top bar.</div>
+<li class="level1"><div class="li"> An unobtrusive DRC status indicator is displayed.  Perhaps the phrase “DRC PASS” in green text and “DRC FAIL” in red text in the top bar.</div>
 </li>
 <li class="level1"><div class="li"> If there are DRC failures the user can step to the next error manually or by using a hot-key. After changes are made the DRC can be run manually to verify the fix.</div>
 </li>
@@ -767,7 +767,7 @@ running in a thread.
 
 </div>
 
-<h4 id="workrequired4">Work required</h4>
+<h4 id="work_required4">Work required</h4>
 <div class="level4">
 
 <p>
@@ -778,7 +778,7 @@ This project involves:
 </li>
 <li class="level1"><div class="li"> Upgrade existing DRC checker with new DRC layer.</div>
 </li>
-<li class="level1"><div class="li"> Update GUI to use upgraded DRC checker.</div>
+<li class="level1"><div class="li"> Update <abbr title="Graphical User Interface">GUI</abbr> to use upgraded DRC checker.</div>
 </li>
 <li class="level1"><div class="li"> Testing and bug cleanup.</div>
 </li>
@@ -786,8 +786,8 @@ This project involves:
 <hr />
 
 </div>
-
-<h3 id="projectmilestonesdurationandbudgetestimates">Project milestones, duration, and budget estimates</h3>
+<!-- EDIT8 SECTION "Design Rule Checking Upgrade" [26055-29240] -->
+<h3 class="sectionedit9" id="project_milestones_duration_and_budget_estimates">Project milestones, duration, and budget estimates</h3>
 <div class="level3">
 
 <p>
@@ -802,7 +802,7 @@ validate these estimations and negotiate his own billing rate before he agrees t
 
 </div>
 
-<h4 id="forwardannotationupgrade1">Forward annotation upgrade</h4>
+<h4 id="forward_annotation_upgrade1">Forward annotation upgrade</h4>
 <div class="level4">
 <ol>
 <li class="level1"><div class="li"> Determine which actions remain to be scripted so that forward annotation of any board is possible using an action list.  (2 days).</div>
@@ -815,7 +815,7 @@ validate these estimations and negotiate his own billing rate before he agrees t
 </li>
 <li class="level1"><div class="li"> Creating a method for reading in an action script (2 days)</div>
 </li>
-<li class="level1"><div class="li"> Integrating the new script-based forward annotation into PCB&#039;s GUI (1 day)</div>
+<li class="level1"><div class="li"> Integrating the new script-based forward annotation into PCB&#039;s <abbr title="Graphical User Interface">GUI</abbr> (1 day)</div>
 </li>
 <li class="level1"><div class="li"> Testing and bug cleanup (5 days).</div>
 </li>
@@ -828,7 +828,7 @@ Cost: $6400
 
 </div>
 
-<h4 id="guimodernization1">GUI modernization</h4>
+<h4 id="gui_modernization1">GUI modernization</h4>
 <div class="level4">
 <ol>
 <li class="level1"><div class="li"> Refactoring and upgrade of program internals to support noun/verb actions (5 days)</div>
@@ -837,9 +837,9 @@ Cost: $6400
 </li>
 <li class="level1"><div class="li"> Refactoring and upgrade of program internals to support selection modes (5 days).</div>
 </li>
-<li class="level1"><div class="li"> Implementation of GUI resource file which is read in upon program start to configure user interface (3 days).</div>
+<li class="level1"><div class="li"> Implementation of <abbr title="Graphical User Interface">GUI</abbr> resource file which is read in upon program start to configure user interface (3 days).</div>
 </li>
-<li class="level1"><div class="li"> GUI upgrade.  Specifically, hook up the callbacks to the menu items and buttons defined in the GUI resource file (3 days).</div>
+<li class="level1"><div class="li"> <abbr title="Graphical User Interface">GUI</abbr> upgrade.  Specifically, hook up the callbacks to the menu items and buttons defined in the <abbr title="Graphical User Interface">GUI</abbr> resource file (3 days).</div>
 </li>
 <li class="level1"><div class="li"> Testing and bug cleanup (5 days).</div>
 </li>
@@ -852,14 +852,14 @@ Cost: $10400
 
 </div>
 
-<h4 id="footprinteditorimplementation1">Footprint editor implementation</h4>
+<h4 id="footprint_editor_implementation1">Footprint editor implementation</h4>
 <div class="level4">
 <ol>
 <li class="level1"><div class="li"> Create internal structures and methods needed to support a separate footprint editor (4 days).</div>
 </li>
 <li class="level1"><div class="li"> Create footprint editing window (if the separate window approach is adopted) (3 days).</div>
 </li>
-<li class="level1"><div class="li"> Integrate access to footprint editor into main PCB GUI (2 days).</div>
+<li class="level1"><div class="li"> Integrate access to footprint editor into main PCB <abbr title="Graphical User Interface">GUI</abbr> (2 days).</div>
 </li>
 <li class="level1"><div class="li"> Testing and bug cleanup (5 days).</div>
 </li>
@@ -872,7 +872,7 @@ Cost: $5600
 
 </div>
 
-<h4 id="layerdesignobjectupgrade">Layer/design object upgrade</h4>
+<h4 id="layer_design_object_upgrade">Layer/design object upgrade</h4>
 <div class="level4">
 <ol>
 <li class="level1"><div class="li"> Upgrade internal structures and methods to enable full layer support (5 days).</div>
@@ -894,14 +894,14 @@ Cost: $8000
 
 </div>
 
-<h4 id="designrulecheckingupgrade1">Design Rule Checking Upgrade</h4>
+<h4 id="design_rule_checking_upgrade1">Design Rule Checking Upgrade</h4>
 <div class="level4">
 <ol>
 <li class="level1"><div class="li"> Implementation of DRC layer (part of work called out in “DRC Upgrade” section) (0 days, assuming layer upgrade is complete).</div>
 </li>
 <li class="level1"><div class="li"> Upgrade existing DRC checker with new DRC layer (3 days).</div>
 </li>
-<li class="level1"><div class="li"> Update GUI to use upgraded DRC checker (2 days).</div>
+<li class="level1"><div class="li"> Update <abbr title="Graphical User Interface">GUI</abbr> to use upgraded DRC checker (2 days).</div>
 </li>
 <li class="level1"><div class="li"> Testing and bug cleanup (5 days).</div>
 </li>
@@ -913,5 +913,5 @@ Cost: $4000
 </p>
 
 </div>
-</body>
+<!-- EDIT9 SECTION "Project milestones, duration, and budget estimates" [29241-] --></body>
 </html>

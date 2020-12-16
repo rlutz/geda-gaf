@@ -1516,6 +1516,9 @@ do_instance(FILE *fp)
   extension = 9999;
   x = 0;
   y = 0;
+  orientation = 0;
+  angle = 0;
+  mirror = 0;
 
   /* Instance doesn't necessarily have to have the LIB:NAME convention, so */
   /* read this in as a full string and parse later */
@@ -1612,6 +1615,7 @@ set_orientation(int *angle, int *mirror, int orientation)
   case 6:  /* 0 rotation, 1 mirror */
     *angle = 180;
     *mirror = 1;
+    break;
   case 7:  /* 270 rotation, 1 mirror */
     *angle = 90;
     *mirror = 1;

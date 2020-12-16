@@ -1,7 +1,7 @@
 /* gEDA - GPL Electronic Design Automation
  * libgeda - gEDA's library
  * Copyright (C) 1998-2010 Ales Hvezda
- * Copyright (C) 1998-2019 gEDA Contributors (see ChangeLog for details)
+ * Copyright (C) 1998-2020 gEDA Contributors (see ChangeLog for details)
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -199,9 +199,9 @@ void s_slot_update_object (TOPLEVEL *toplevel, OBJECT *object)
       g_list_free (attributes);
 
       if (o_pinnum_attrib != NULL) {
-        o_text_set_string (toplevel,
-                           o_pinnum_attrib,
-                           g_strdup_printf ("pinnumber=%s", current_pin));
+        gchar *buf = g_strdup_printf ("pinnumber=%s", current_pin);
+        o_text_set_string (toplevel, o_pinnum_attrib, buf);
+        g_free (buf);
       }
 
       pin_counter++;

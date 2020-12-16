@@ -117,14 +117,19 @@ def read_file(f, name, format, log = None,
             # it if necessary.
             try:
                 return gaf.clib.lookup_symbol(basename)
-            except ValueError:
+            except gaf.clib.NotFoundError:
                 if fallback_available:
                     log.warn(
                         _("symbol \"%s\" not found in library") % basename)
                 else:
                     log.error(
                         _("symbol \"%s\" not found in library") % basename)
-                # fallthrough
+            except gaf.clib.DuplicateError:
+                log.error(
+                    _("multiple symbols \"%s\" found in library") % basename)
+            except ValueError:
+                log.error(
+                    _("error while loading symbol \"%s\"") % basename)
 
         if fallback_available:
             return None

@@ -14,23 +14,23 @@
 <em>Translations of this page are also available in the following languages:</em> <a href="geda-guile_scripting.ru.html" class="wikilink1" title="geda-guile_scripting.ru.html">Русский</a>.
 </p>
 
-<h2 id="guilescripting">Guile scripting</h2>
+<h2 class="sectionedit1" id="guile_scripting">Guile scripting</h2>
 <div class="level2">
 
 <p>
-gEDA/gaf uses Guile Scheme to provide Scheme scripting capabilities, and all of the features of Guile are available to use.  The <em>Guile Reference Manual</em> is available as an Info manual (<code>info guile</code> on most systems), or on the Guile website.
+gEDA/gaf uses <a href="http://www.gnu.org/s/guile/" class="urlextern" title="http://www.gnu.org/s/guile/" rel="nofollow">Guile Scheme</a> to provide Scheme scripting capabilities, and all of the features of Guile are available to use.  The <em>Guile Reference Manual</em> is available as an Info manual (<code>info guile</code> on most systems), or <a href="http://www.gnu.org/software/guile/docs/docs.html" class="urlextern" title="http://www.gnu.org/software/guile/docs/docs.html" rel="nofollow">on the Guile website</a>.
 </p>
 
 <p>
-A collection of modules is provided for accessing and modifying gEDA objects and pages, called the gEDA Scheme API.  The <em>gEDA Scheme Reference Manual</em> is also available as an Info manual (<code>info geda-scheme</code>).
+A collection of modules is provided for accessing and modifying gEDA objects and pages, called the gEDA Scheme <abbr title="Application Programming Interface">API</abbr>.  The <em>gEDA Scheme Reference Manual</em> is also available as an Info manual (<code>info geda-scheme</code>).
 </p>
 
 </div>
-
-<h3 id="tutorials">Tutorials</h3>
+<!-- EDIT1 SECTION "Guile scripting" [118-733] -->
+<h3 class="sectionedit2" id="tutorials">Tutorials</h3>
 <div class="level3">
 <ul>
-<li class="level1"><div class="li"> <a href="geda-gnetlistschemetutorial.html" class="wikilink2" title="geda-gnetlistschemetutorial.html">Scripting a gnetlist backend in scheme</a> (John Doty)</div>
+<li class="level1"><div class="li"> <a href="geda-gnetlist_scheme_tutorial.html" class="wikilink1" title="geda-gnetlist_scheme_tutorial.html">Scripting a gnetlist backend in scheme</a> (John Doty)</div>
 </li>
 </ul>
 
@@ -39,19 +39,19 @@ See also the <a href="geda-gschem_ug-extensions.html" class="wikilink1" title="g
 </p>
 
 </div>
-
-<h3 id="referencedocuments">Reference documents</h3>
+<!-- EDIT2 SECTION "Tutorials" [734-1091] -->
+<h3 class="sectionedit3" id="reference_documents">Reference documents</h3>
 <div class="level3">
 <ul>
-<li class="level1"><div class="li"> <a href="geda-gnetlistschemeprimitives.html" class="wikilink2" title="geda-gnetlistschemeprimitives.html">gnetlist Scheme primitives</a></div>
+<li class="level1"><div class="li"> <a href="geda-gnetlist_scheme_primitives.html" class="wikilink1" title="geda-gnetlist_scheme_primitives.html">gnetlist Scheme primitives</a></div>
 </li>
-<li class="level1"><div class="li"> <a href="geda-gschemrepl.html" class="wikilink2" title="geda-gschemrepl.html">Using REPL in gschem</a></div>
+<li class="level1"><div class="li"> <a href="geda-gschem_repl.html" class="wikilink1" title="geda-gschem_repl.html">Using REPL in gschem</a></div>
 </li>
 </ul>
 
 </div>
-
-<h3 id="scriptingexamples">Scripting examples</h3>
+<!-- EDIT3 SECTION "Reference documents" [1092-1198] -->
+<h3 class="sectionedit4" id="scripting_examples">Scripting examples</h3>
 <div class="level3">
 
 <p>
@@ -82,7 +82,7 @@ You can install them as well if you don&#039;t want to load them every time:
 
 </div>
 
-<h4 id="removingobjectswithspecificproperties">Removing objects with specific properties</h4>
+<h4 id="removing_objects_with_specific_properties">Removing objects with specific properties</h4>
 <div class="level4">
 
 <p>
@@ -90,7 +90,7 @@ For instance, let&#039;s remove all objects which are circles or arcs
 with zero radius:
 </p>
 <dl class="file">
-<dt><a href="/./doku.php?do=export_code&amp;id=:geda:guile_scripting.txt&amp;codeblock=2" title="Download Snippet" class="mediafile mf_scm">remove-objects.scm</a></dt>
+<dt><a href="/./_export/code/:geda:guile_scripting.txt?codeblock=2" title="Download Snippet" class="mediafile mf_scm">remove-objects.scm</a></dt>
 <dd><pre class="code file lisp"><span class="br0">&#40;</span>use-modules <span class="br0">&#40;</span>geda page<span class="br0">&#41;</span><span class="br0">&#41;</span>
 &nbsp;
 <span class="co1">; Checks if the OBJECT is a circle or an arc with zero radius</span>
@@ -111,7 +111,7 @@ remove, then we have to detach and remove all its attributes, too.
 The function below does exactly this.
 </p>
 <dl class="file">
-<dt><a href="/./doku.php?do=export_code&amp;id=:geda:guile_scripting.txt&amp;codeblock=3" title="Download Snippet" class="mediafile mf_scm">remove-components-with-attribs.scm</a></dt>
+<dt><a href="/./_export/code/:geda:guile_scripting.txt?codeblock=3" title="Download Snippet" class="mediafile mf_scm">remove-components-with-attribs.scm</a></dt>
 <dd><pre class="code file lisp"><span class="br0">&#40;</span>use-modules <span class="br0">&#40;</span>geda page<span class="br0">&#41;</span><span class="br0">&#41;</span>
 <span class="br0">&#40;</span>use-modules <span class="br0">&#40;</span>geda object<span class="br0">&#41;</span><span class="br0">&#41;</span>
 <span class="br0">&#40;</span>use-modules <span class="br0">&#40;</span>geda attrib<span class="br0">&#41;</span><span class="br0">&#41;</span>
@@ -140,7 +140,7 @@ After loading the file, hit <kbd>:</kbd> and enter, for example,
 
 </div>
 
-<h4 id="proceduresforinput-output">Procedures for input-output</h4>
+<h4 id="procedures_for_input-output">Procedures for input-output</h4>
 <div class="level4">
 
 <p>
@@ -148,13 +148,13 @@ The following script defines two procedures that can be used in
 <strong>gaf shell</strong> batch scripts:
 </p>
 <ul>
-<li class="level1"><div class="li"> <code>schematic-file-&gt;page</code></div>
+<li class="level1"><div class="li"> <code>schematic-file→page</code></div>
 </li>
-<li class="level1"><div class="li"> <code>page-&gt;schematic-file</code></div>
+<li class="level1"><div class="li"> <code>page→schematic-file</code></div>
 </li>
 </ul>
 <dl class="file">
-<dt><a href="/./doku.php?do=export_code&amp;id=:geda:guile_scripting.txt&amp;codeblock=5" title="Download Snippet" class="mediafile mf_scm">geda-io.scm</a></dt>
+<dt><a href="/./_export/code/:geda:guile_scripting.txt?codeblock=5" title="Download Snippet" class="mediafile mf_scm">geda-io.scm</a></dt>
 <dd><pre class="code file lisp"><span class="br0">&#40;</span>use-modules <span class="br0">&#40;</span>ice-<span class="nu0">9</span> lineio<span class="br0">&#41;</span><span class="br0">&#41;</span>
 <span class="br0">&#40;</span>use-modules <span class="br0">&#40;</span>geda page<span class="br0">&#41;</span><span class="br0">&#41;</span>
 &nbsp;
@@ -182,10 +182,10 @@ The following script defines two procedures that can be used in
 
 </div>
 
-<h4 id="copymoveandrotateobjects">Copy, move, and rotate objects</h4>
+<h4 id="copy_move_and_rotate_objects">Copy, move, and rotate objects</h4>
 <div class="level4">
 <dl class="file">
-<dt><a href="/./doku.php?do=export_code&amp;id=:geda:guile_scripting.txt&amp;codeblock=6" title="Download Snippet" class="mediafile mf_scm">move-and-rotate.scm</a></dt>
+<dt><a href="/./_export/code/:geda:guile_scripting.txt?codeblock=6" title="Download Snippet" class="mediafile mf_scm">move-and-rotate.scm</a></dt>
 <dd><pre class="code file lisp"><span class="co1">; Scripting example by vzh per request of Kai-Martin Knaak :-)</span>
 <span class="co1">; Use at your own risk.</span>
 &nbsp;
@@ -266,7 +266,7 @@ The following script defines two procedures that can be used in
 
 </div>
 
-<h4 id="groupattributeediting">Group attribute editing</h4>
+<h4 id="group_attribute_editing">Group attribute editing</h4>
 <div class="level4">
 
 <p>
@@ -275,7 +275,7 @@ want to rename them at once, e.g., if they were copy from another
 place.
 </p>
 <dl class="file">
-<dt><a href="/./doku.php?do=export_code&amp;id=:geda:guile_scripting.txt&amp;codeblock=7" title="Download Snippet" class="mediafile mf_">set-selected-attribs-value</a></dt>
+<dt><a href="/./_export/code/:geda:guile_scripting.txt?codeblock=7" title="Download Snippet" class="mediafile mf_">set-selected-attribs-value</a></dt>
 <dd><pre class="code file lisp"><span class="br0">&#40;</span>use-modules <span class="br0">&#40;</span>gschem selection<span class="br0">&#41;</span><span class="br0">&#41;</span>
 &nbsp;
 <span class="br0">&#40;</span>define <span class="br0">&#40;</span>set-selected-attribs-value<span class="sy0">!</span> <span class="kw1">value</span><span class="br0">&#41;</span>
@@ -295,7 +295,7 @@ Now, after renumbering them using <kbd>T</kbd> <kbd>U</kbd>, you
 copy them all and want to rename those copied resistors appending a suffix:
 </p>
 <dl class="file">
-<dt><a href="/./doku.php?do=export_code&amp;id=:geda:guile_scripting.txt&amp;codeblock=9" title="Download Snippet" class="mediafile mf_scm">append-selected-attribs-suffix.scm</a></dt>
+<dt><a href="/./_export/code/:geda:guile_scripting.txt?codeblock=9" title="Download Snippet" class="mediafile mf_scm">append-selected-attribs-suffix.scm</a></dt>
 <dd><pre class="code file lisp"><span class="br0">&#40;</span>use-modules <span class="br0">&#40;</span>gschem selection<span class="br0">&#41;</span><span class="br0">&#41;</span>
 &nbsp;
 <span class="br0">&#40;</span>define <span class="br0">&#40;</span>append-selected-attribs-suffix<span class="sy0">!</span> suffix<span class="br0">&#41;</span>
@@ -316,7 +316,7 @@ Usage of the procedure in <strong>gschem</strong>:
 Now, let&#039;s rename some other attributes by adding a prefix:
 </p>
 <dl class="file">
-<dt><a href="/./doku.php?do=export_code&amp;id=:geda:guile_scripting.txt&amp;codeblock=11" title="Download Snippet" class="mediafile mf_scm">append-selected-attribs-prefix.scm</a></dt>
+<dt><a href="/./_export/code/:geda:guile_scripting.txt?codeblock=11" title="Download Snippet" class="mediafile mf_scm">append-selected-attribs-prefix.scm</a></dt>
 <dd><pre class="code file lisp"><span class="br0">&#40;</span>use-modules <span class="br0">&#40;</span>gschem selection<span class="br0">&#41;</span><span class="br0">&#41;</span>
 &nbsp;
 <span class="br0">&#40;</span>define <span class="br0">&#40;</span>append-selected-attribs-prefix<span class="sy0">!</span> prefix<span class="br0">&#41;</span>
@@ -338,7 +338,7 @@ Usage of the procedure in <strong>gschem</strong>:
 Let&#039;s replace first letters of selected attribs with prefix:
 </p>
 <dl class="file">
-<dt><a href="/./doku.php?do=export_code&amp;id=:geda:guile_scripting.txt&amp;codeblock=13" title="Download Snippet" class="mediafile mf_scm">append-selected-attribs-prefix.scm</a></dt>
+<dt><a href="/./_export/code/:geda:guile_scripting.txt?codeblock=13" title="Download Snippet" class="mediafile mf_scm">append-selected-attribs-prefix.scm</a></dt>
 <dd><pre class="code file lisp"><span class="br0">&#40;</span>use-modules <span class="br0">&#40;</span>gschem selection<span class="br0">&#41;</span><span class="br0">&#41;</span>
 &nbsp;
 <span class="br0">&#40;</span>define <span class="br0">&#40;</span>replace-selected-attribs-prefix<span class="sy0">!</span> prefix<span class="br0">&#41;</span>
@@ -363,7 +363,7 @@ Let&#039;s rename selected <code>netname=</code> attributes increasing them by a
 fixed number:
 </p>
 <dl class="file">
-<dt><a href="/./doku.php?do=export_code&amp;id=:geda:guile_scripting.txt&amp;codeblock=15" title="Download Snippet" class="mediafile mf_scm">add-selected-attribs-number.scm</a></dt>
+<dt><a href="/./_export/code/:geda:guile_scripting.txt?codeblock=15" title="Download Snippet" class="mediafile mf_scm">add-selected-attribs-number.scm</a></dt>
 <dd><pre class="code file lisp"><span class="br0">&#40;</span>use-modules <span class="br0">&#40;</span>gschem selection<span class="br0">&#41;</span><span class="br0">&#41;</span>
 &nbsp;
 <span class="br0">&#40;</span>define <span class="br0">&#40;</span>add-selected-attribs-number<span class="sy0">!</span> number<span class="br0">&#41;</span>
@@ -383,11 +383,11 @@ Usage of the procedure in <strong>gschem</strong>:
 <pre class="code lisp"><span class="br0">&#40;</span>add-selected-attribs-number<span class="sy0">!</span> <span class="nu0">100</span><span class="br0">&#41;</span></pre>
 
 <p>
-We could set any function instead of &quot;+&quot; on the net number in this procedure.
+We could set any function instead of “+” on the net number in this procedure.
 For instance:
 </p>
 <dl class="file">
-<dt><a href="/./doku.php?do=export_code&amp;id=:geda:guile_scripting.txt&amp;codeblock=17" title="Download Snippet" class="mediafile mf_scm">use-another-func.scm</a></dt>
+<dt><a href="/./_export/code/:geda:guile_scripting.txt?codeblock=17" title="Download Snippet" class="mediafile mf_scm">use-another-func.scm</a></dt>
 <dd><pre class="code file lisp"><span class="br0">&#40;</span>use-modules <span class="br0">&#40;</span>gschem selection<span class="br0">&#41;</span><span class="br0">&#41;</span>
 &nbsp;
 <span class="br0">&#40;</span>define <span class="br0">&#40;</span>use-another-func<span class="sy0">!</span> func<span class="br0">&#41;</span>
@@ -411,7 +411,7 @@ Usage of the procedure in <strong>gschem</strong>:
 
 </div>
 
-<h4 id="movingobjectsusingarrows">Moving objects using arrows</h4>
+<h4 id="moving_objects_using_arrows">Moving objects using arrows</h4>
 <div class="level4">
 
 <p>
@@ -419,7 +419,7 @@ Let&#039;s define actions to move selected objects using
 <kbd>Shift</kbd> + arrow keys.
 </p>
 <dl class="file">
-<dt><a href="/./doku.php?do=export_code&amp;id=:geda:guile_scripting.txt&amp;codeblock=19" title="Download Snippet" class="mediafile mf_scm">arrow-move.scm</a></dt>
+<dt><a href="/./_export/code/:geda:guile_scripting.txt?codeblock=19" title="Download Snippet" class="mediafile mf_scm">arrow-move.scm</a></dt>
 <dd><pre class="code file lisp"><span class="br0">&#40;</span>use-modules <span class="br0">&#40;</span>gschem selection<span class="br0">&#41;</span><span class="br0">&#41;</span>
 &nbsp;
 <span class="co1">; Default offset to move</span>
@@ -456,7 +456,7 @@ nothing is selected the canvas is moved with arrow keys (without
 moved.
 </p>
 <dl class="file">
-<dt><a href="/./doku.php?do=export_code&amp;id=:geda:guile_scripting.txt&amp;codeblock=20" title="Download Snippet" class="mediafile mf_scm">arrow-move2.scm</a></dt>
+<dt><a href="/./_export/code/:geda:guile_scripting.txt?codeblock=20" title="Download Snippet" class="mediafile mf_scm">arrow-move2.scm</a></dt>
 <dd><pre class="code file lisp"><span class="br0">&#40;</span>use-modules <span class="br0">&#40;</span>gschem selection<span class="br0">&#41;</span><span class="br0">&#41;</span>
 &nbsp;
 <span class="co1">; Default offset to move</span>
@@ -498,5 +498,5 @@ moved.
 </dd></dl>
 
 </div>
-</body>
+<!-- EDIT4 SECTION "Scripting examples" [1199-] --></body>
 </html>

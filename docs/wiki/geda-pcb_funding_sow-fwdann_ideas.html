@@ -11,7 +11,7 @@
 <body>
 <a href=.>start</a>&nbsp;=>&nbsp;<a href=geda-pcb_funding_sow.html>pcb_funding_sow</a></br>
 
-<h1 id="pcbsowforwardannotationideascommentaryandexamplesfromusers">PCB SoW: Forward Annotation: Ideas, commentary, and examples from users</h1>
+<h1 class="sectionedit1" id="pcb_sowforward_annotationideas_commentary_and_examples_from_users">PCB SoW: Forward Annotation: Ideas, commentary, and examples from users</h1>
 <div class="level1">
 
 <p>
@@ -20,8 +20,8 @@ them here.  Ideas about the details behind the implementation, too.  Please refr
 </p>
 
 </div>
-
-<h2 id="djsimplementationideas">DJ&#039;s Implementation Ideas</h2>
+<!-- EDIT1 SECTION "PCB SoW: Forward Annotation: Ideas, commentary, and examples from users" [1-337] -->
+<h2 class="sectionedit2" id="dj_s_implementation_ideas">DJ&#039;s Implementation Ideas</h2>
 <div class="level2">
 
 <p>
@@ -32,7 +32,7 @@ This is what I&#039;m thinking for the forward annotation (gsch2pcb) design:
 The PCB has a list of schematics that it gets info from.  Do we need
 path support, or is full-paths (or relative to the pcb) ok?
 Wildcards?  Anyway, the list of schematics is stored in the .pcb file
-somehow.  The GUI needs a way to manage these, too.
+somehow.  The <abbr title="Graphical User Interface">GUI</abbr> needs a way to manage these, too.
 </p>
 
 <p>
@@ -50,13 +50,13 @@ vendor, vendor_part_number, etc.
 </p>
 
 <p>
-If the import is part of a &quot;new board&quot; step, we place the parts and
+If the import is part of a “new board” step, we place the parts and
 disperse them, optimize the rats nest, etc.  No problem there.
 </p>
 
 <p>
 What do we do with new elements if it&#039;s just an update?  Eventually,
-I&#039;d like to have some separate container for &quot;unplaced elements&quot; but I
+I&#039;d like to have some separate container for “unplaced elements” but I
 mean, what do we do for now?  I&#039;m wondering if disperse or autoplace
 is smart enough to do something useful if we place the parts and
 select them, on a partially laid out board.
@@ -64,7 +64,7 @@ select them, on a partially laid out board.
 
 <p>
 I think this is enough information in the .pcb file that we can get
-rid of gsch2pcb and the &quot;project&quot; file it uses.
+rid of gsch2pcb and the “project” file it uses.
 </p>
 
 <p>
@@ -74,5 +74,5 @@ reused/shared, boards generally can&#039;t.
 </p>
 
 </div>
-</body>
+<!-- EDIT2 SECTION "DJ's Implementation Ideas" [338-] --></body>
 </html>

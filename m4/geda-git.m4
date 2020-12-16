@@ -21,7 +21,7 @@ dnl Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 # Check if git is available, and which git to use.
 AC_DEFUN([AX_PROG_GIT],
 [
-  AC_PREREQ([2.60])dnl
+  AC_PREREQ([2.69])dnl
   AC_ARG_VAR([GIT], [Path to git executable])
   AC_CHECK_PROG([GIT], [git], [git], [no])
 ])dnl AX_PROG_GIT
@@ -29,7 +29,7 @@ AC_DEFUN([AX_PROG_GIT],
 # Check if the source directory is a git repository
 AC_DEFUN([AX_GIT_REPO],
 [
-  AC_PREREQ([2.60])dnl
+  AC_PREREQ([2.69])dnl
   AC_REQUIRE([AX_PROG_GIT])dnl
 
   HAVE_GIT_REPO=no

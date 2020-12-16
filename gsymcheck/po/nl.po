@@ -1,5 +1,5 @@
 # Dutch translation for the gEDA gsymcheck package.
-# Copyright (C) 2012-2019 gEDA Developers
+# Copyright (C) 2012-2020 gEDA Developers
 # This file is distributed under the same license as the gEDA gschem package.
 # Bert Timmerman <bert.timmerman@xs4all.nl>, 2012.
 #
@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: geda-gsymcheck\n"
 "Report-Msgid-Bugs-To: https://bugs.launchpad.net/geda\n"
-"POT-Creation-Date: 2019-10-08 20:20+0200\n"
+"POT-Creation-Date: 2020-12-16 18:12+0100\n"
 "PO-Revision-Date: 2014-08-31 22:48+0100\n"
 "Last-Translator: Bert Timmerman <bert.timmerman@xs4all.nl>\n"
 "Language-Team: gEDA Developers\n"

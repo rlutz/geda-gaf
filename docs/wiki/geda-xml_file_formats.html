@@ -10,7 +10,7 @@
 </head>
 <body>
 
-<h1 id="xmlfileformats">XML File Formats</h1>
+<h1 class="sectionedit1" id="xml_file_formats">XML File Formats</h1>
 <div class="level1">
 
 <p>
@@ -31,57 +31,94 @@ The concerns expressed there will hopefully be addressed as part of this effort 
 </p>
 
 <p>
-While the initial version of the schema has both a large and small format for gschem files, it is assumed that the smaller will progress further to reduce the amount of &quot;file bloat&quot; associated with putting the files in this format.
+While the initial version of the schema has both a large and small format for gschem files, it is assumed that the smaller will progress further to reduce the amount of “file bloat” associated with putting the files in this format.
 </p>
 
 <p>
-While there are plenty of arguments for and against XML, it does provide one key feature that can be difficult to implement in a custom file format, and that is unification of the different data types each gEDA program expects with minimal impact to the existing programs.  What this schema currently does is separately define gschem file formats and PCB file formats.  The part schema then allows for both of these to be combined into a &quot;part&quot; file without change thus allowing for &quot;heavy&quot; parts containing both symbols and PCB elements.  It will also allow for a project to be stored in a single archive file if the user so chooses.  It thus provides a kind of wrapper functionality that maintains internal structure formats.
+While there are plenty of arguments for and against XML, it does provide one key feature that can be difficult to implement in a custom file format, and that is unification of the different data types each gEDA program expects with minimal impact to the existing programs.  What this schema currently does is separately define gschem file formats and PCB file formats.  The part schema then allows for both of these to be combined into a “part” file without change thus allowing for “heavy” parts containing both symbols and PCB elements.  It will also allow for a project to be stored in a single archive file if the user so chooses.  It thus provides a kind of wrapper functionality that maintains internal structure formats.
 </p>
 
 <p>
-It also introduces file format validation making sure that the file is well-formed and also, using Schematron, makes sure that constraints on data in the file are checked.  This can be a real plus for managing parts like on gedasymbols.org when files can be &quot;easily&quot; validated for format and content on upload with some perl code.
+It also introduces file format validation making sure that the file is well-formed and also, using Schematron, makes sure that constraints on data in the file are checked.  This can be a real plus for managing parts like on gedasymbols.org when files can be “easily” validated for format and content on upload with some perl code.
 </p>
 
 <p>
-An initial git repository is at http:<em>github.com/oblivian/geda-xml/tree/master
+An initial git repository is at <a href="http://github.com/oblivian/geda-xml/tree/master" class="urlextern" title="http://github.com/oblivian/geda-xml/tree/master" rel="nofollow">http://github.com/oblivian/geda-xml/tree/master</a>
+</p>
 
+<p>
 Right now it provides schema for gschem symbol and schematic files, and a PCB file format (adapted from parse.y).
 The part/part.xsd schema is for combining the individual schemas into a part format capable of both regular and heavy parts.
+</p>
 
+<p>
 convert-symbol.pl (when it is done) will write a gschem symbol to the XML format.
 It also performs validation against the XML Schema itself and Schematron rules also stored in the schema files.
+</p>
 
-The XML Schema for gschem files provides for a &quot;lightweight&quot; file format that should allow for an overlay on the normal file reading routines in libgeda without modification.
+<p>
+The XML Schema for gschem files provides for a “lightweight” file format that should allow for an overlay on the normal file reading routines in libgeda without modification.
+</p>
 
+<p>
 So a line in gschem is represented as
+</p>
 
-&lt;gs:l p=&quot;200 800 200 200 3 0 0 0 -1 -1&quot; /&gt;
+<p>
+&lt;gs:l p=“200 800 200 200 3 0 0 0 -1 -1” /&gt;
+</p>
 
+<p>
 instead of
+</p>
 
+<p>
 L 200 800 200 200 3 0 0 0 -1 -1
+</p>
 
+<p>
 But the validation is handled by the XML parser rather than writing extra validation code.
+</p>
 
-The XML Schema makes sure the symbols are well-formed, and the Schematron makes sure the data is valid in the &quot;p&quot; attributes.
+<p>
+The XML Schema makes sure the symbols are well-formed, and the Schematron makes sure the data is valid in the “p” attributes.
+</p>
 
+<p>
 Work completed:
-  * XML Schema for gschem, PCB and .xpart file format.
+</p>
+<ul>
+<li class="level1"><div class="li"> XML Schema for gschem, PCB and .xpart file format.</div>
+</li>
+</ul>
+
+<p>
 Work that needs to be done to get this effort really started:
-  * Finish convert-symbol.pl.
-  * Write XSLT to convert &quot;xpart&quot; file back to .sym/.fp format.
+</p>
+<ul>
+<li class="level1"><div class="li"> Finish convert-symbol.pl.</div>
+</li>
+<li class="level1"><div class="li"> Write XSLT to convert “xpart” file back to .sym/.fp format.</div>
+</li>
+</ul>
 
+</div>
+<!-- EDIT1 SECTION "XML File Formats" [1-3523] -->
+<h1 class="sectionedit2" id="ip-xact">IP-Xact</h1>
+<div class="level1">
 
+<p>
+IP-Xact (IEEE-1685] is an industry standard xml schema for packaging and distributing IP and could be adopted by gEDA for internal use as well. Its main advantage is that it uses a component name that is guaranteed to be unique and will never have name collisions with any other IP-Xact components in the world. Each component has a four field identifier called the VLNV ( Vendor name, Library name, Component name and Version) Vendors use a <abbr title="Uniform Resource Locator">URL</abbr> that they own for their vendor name and no other IP-Xact file in the world will use that same name. 
+</p>
 
+<p>
+The vendor name can also be the <abbr title="Uniform Resource Locator">URL</abbr> where the IP repository is available for download. Instantiating a VLNV  with github.com, github username and user repo name not only identifies the repository but can automatically download it if it is not already in you local design environment.
+</p>
 
-====== IP-Xact ======
-IP-Xact (IEEE-1685] is an industry standard xml schema for packaging and distributing IP and could be adopted by gEDA for internal use as well. Its main advantage is that it uses a component name that is guaranteed to be unique and will never have name collisions with any other IP-Xact components in the world. Each component has a four field identifier called the VLNV ( Vendor name, Library name, Component name and Version) Vendors use a URL that they own for their vendor name and no other IP-Xact file in the world will use that same name. 
-
-The vendor name can also be the URL where the IP repository is available for download. Instantiating a VLNV  with github.com, github username and user repo name not only identifies the repository but can automatically download it if it is not already in you local design environment.
-
+<p>
 IP-Xact allows for the creation of a geda namespace and the addition of any geda specific extensions through the use of &lt;spirit:vendorExtensions&gt;
 </p>
 
 </div>
-</body>
+<!-- EDIT2 SECTION "IP-Xact" [3524-] --></body>
 </html>

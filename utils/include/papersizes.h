@@ -1,7 +1,7 @@
 /* gEDA - GPL Electronic Design Automation
  * utils - gEDA Utilities
  * Copyright (C) 1998-2010 Ales Hvezda
- * Copyright (C) 1998-2019 gEDA Contributors (see ChangeLog for details)
+ * Copyright (C) 1998-2020 gEDA Contributors (see ChangeLog for details)
  *
  * You should have received a copy of the GNU General Public License 
  * along with this program; if not, write to the * Free Software 

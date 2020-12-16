@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright (C) 2020 gEDA Contributors -->
+<!-- created by Roland Lutz -->
+<component type="desktop-application">
+  <id>org.geda_project.gschem</id>
+  <metadata_license>GFDL-1.3-or-later</metadata_license>
+  <name>gEDA Schematic Editor</name>
+  <summary>Create and edit electrical schematics and symbols</summary>
+  <description>
+    <p>gschem is a schematic capture application and is part of the
+    gEDA (GPL Electronic Design Automation) toolset.  It is used to
+    draw electronic schematics which describe the logical structure of
+    a circuit and can be exported via gnetlist into a variety of
+    formats for PCB layout and simulation.</p>
+    <p>The gEDA project has produced and continues working on a full
+    GPL'd suite and toolkit of Electronic Design Automation tools.
+    These tools are used for electrical circuit design, schematic
+    capture, simulation, prototyping, and production.  Currently, the
+    gEDA project offers a mature suite of free software applications
+    for electronics design, including schematic capture, attribute
+    management, bill of materials (BOM) generation, netlisting into
+    over 20 netlist formats, analog and digital simulation, and
+    printed circuit board (PCB) layout.</p>
+  </description>
+  <categories>
+    <category>Electronics</category>
+    <category>Engineering</category>
+  </categories>
+  <url type="homepage">http://geda-project.org/</url>
+  <url type="help">http://wiki.geda-project.org/</url>
+  <url type="bugtracker">https://bugs.launchpad.net/geda</url>
+  <launchable type="desktop-id">geda-gschem</launchable>
+  <provides>
+    <binary>gschem</binary>
+  </provides>
+  <mimetypes>
+    <mimetype>application/x-geda-schematic</mimetype>
+    <mimetype>application/x-geda-symbol</mimetype>
+  </mimetypes>
+  <project_group>gEDA</project_group>
+  <project_license>GPL-2.0-or-later</project_license>
+  <developer_name>The gEDA project</developer_name>
+  <screenshots>
+    <screenshot type="default">
+      <image type="source" width="1600" height="900">https://raw.githubusercontent.com/rlutz/geda-gaf/stable-1.10/gschem/data/screenshot-0.png</image>
+    </screenshot>
+    <screenshot>
+      <image type="source" width="1600" height="900">https://raw.githubusercontent.com/rlutz/geda-gaf/stable-1.10/gschem/data/screenshot-1.png</image>
+    </screenshot>
+  </screenshots>
+  <translation type="gettext">geda-gschem</translation>
+  <suggests>
+    <id>org.seul.geda.pcb</id>
+  </suggests>
+</component>

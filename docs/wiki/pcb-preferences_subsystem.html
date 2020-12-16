@@ -1,0 +1,547 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+  <title></title>
+  <link rel="stylesheet" media="screen" type="text/css" href="./style.css" />
+  <link rel="stylesheet" media="screen" type="text/css" href="./design.css" />
+  <link rel="stylesheet" media="print" type="text/css" href="./print.css" />
+
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+</head>
+<body>
+<a href=.>start</a></br>
+
+<p>
+Pre-existing systems:
+Presently there are a couple. GTK has one, there’s the one that loads command line arguments, and there’s also the menu system, which could be considered a preferences system.
+</p>
+
+<p>
+I’d like to centralize this system so that other parts of the code can take advantage of it.
+</p>
+
+<h4 id="requirements">Requirements</h4>
+<div class="level4">
+<ul>
+<li class="level1"><div class="li"> The system should be able to interact with specified preferences files. <br/>
+This allows subsystems to create their own if they want. It will also allow the user to specify such a file at startup.</div>
+</li>
+<li class="level1"><div class="li"> The system should manage the reading and writing of the files transparently. <br/>
+We don’t want developers to have to think too hard about how this works.</div>
+</li>
+<li class="level1"><div class="li"> The system should not put constraints on what can be contained by the preference. <br/>
+It should be allowed to be anything. Ultimately it’s a string when it’s stored and read, but it should be convertible into any data type.</div>
+</li>
+<li class="level1"><div class="li"> The system should be partitionable such that a subsystem may keep track of their own preferences without having to interact with the preferences of any other subsystem.</div>
+</li>
+</ul>
+
+<p>
+Secondarily:
+</p>
+<ul>
+<li class="level1"><div class="li"> The files should be human readable. <br/>
+There’s an interesting question here about locales…</div>
+</li>
+</ul>
+
+</div>
+
+<h4 id="architecture">Architecture</h4>
+<div class="level4">
+
+<p>
+The general assumption is that subsystems are going to have their own structures to store their preferences, for example the Settings structure in global.h. So, we&#039;re building this system around storing and loading data from other structure that already exist, as opposed to being a database for storing the actual preference data itself. This has some advantage over a database in that individual structures have unique memory locations and don&#039;t require lookups when trying to find a particular preference value. I imagine that we could work that out if we really needed to. But for now, I assume that this central preference structure exists.
+</p>
+
+<p>
+That means that our work here is essentially going to be to define framework the describes the preference metadata so that we can save and load it in a programmatic fashion. To that end, we&#039;re going to define data structures that don&#039;t hold the preference data itself, but describe it and have a pointer to the actual data so that we can retrieve and store it. Preference metadata consists of things like name, help text, and data type. 
+</p>
+
+<p>
+There are a number of standard data types, including int, double, and string, and we&#039;ll also include a forth data type “pointer” as essentially an “other”. This will allow the preference objects to be more complex structures.
+</p>
+
+<p>
+Ideally, we&#039;ll just be able to create a structure of metadata objects and say “save all of these to a file”, or “load all of the data from that file according to these specs”. To that end, we&#039;ll need a structure that we can iterate over. 
+</p>
+
+</div>
+
+<h4 id="process">Process</h4>
+<div class="level4">
+
+<p>
+One of the considerations here is separating the storage and application so that the methods can change. If we decide we&#039;d rather store preferences in an SQL database, we can do that without having to rewrite the whole system. We only have to write functions to load and save the key values pairs in the database.
+</p>
+
+<p>
+I&#039;m not too worried about the speed of these routines, so, it doesn&#039;t matter much if the lists are sorted. Reading, and writing preferences doesn&#039;t happen very often.
+</p>
+
+<p>
+We&#039;re going to go with a two step process. The read and write functions will take a pointer to a list of PreferenceItems. The readers and writers can interact explicitly with the data they are reading/writing and there&#039;s no need to build an intermediate list. This better supports the option for alternate storage formats.
+</p>
+<ul>
+<li class="level1"><div class="li"> load_preferences(file, preflist)</div>
+</li>
+</ul>
+<ol>
+<li class="level1"><div class="li"> open the preference store</div>
+</li>
+<li class="level1"><div class="li"> for each item in the store</div>
+</li>
+<li class="level1"><div class="li"> Look up the preference in the preflist</div>
+</li>
+<li class="level1"><div class="li"> get a reader: check for a reader in the structure and use it if it&#039;s there. Otherwise lookup the default reader for the preference type.</div>
+</li>
+<li class="level1"><div class="li"> apply the reader to set the preference</div>
+</li>
+</ol>
+<ul>
+<li class="level1"><div class="li"> save_preferences(preflist, file)</div>
+</li>
+</ul>
+
+<p>
+I&#039;d also like this process to work for command line arguments so that any preference stored in a file can also be specified on the command line.
+</p>
+
+</div>
+
+<h4 id="data_structures">Data Structures</h4>
+<div class="level4">
+
+<p>
+We&#039;re going to draw heavily on the work that&#039;s already been done with the preferences (HIDAttributes) in designing the data structures for this system. 
+</p>
+
+</div>
+
+<h5 id="preferencedefinition">PreferenceDefinition</h5>
+<div class="level5">
+
+<p>
+The primary data structure describes a preference item. 
+</p>
+<pre class="code c"><span class="coMULTI">/*! 
+ * \brief PreferenceDefinition data structure
+ */</span>
+<span class="kw4">typedef</span> <span class="kw4">struct</span>
+<span class="br0">&#123;</span>
+  <span class="coMULTI">/*! key that identifies the preference */</span>
+  <span class="kw4">char</span> <span class="sy0">*</span> key<span class="sy0">;</span> 
+  <span class="coMULTI">/*! Human readable name of the preference */</span>
+  <span class="kw4">char</span> <span class="sy0">*</span> name<span class="sy0">;</span>
+  <span class="coMULTI">/*! preference type identifier (enum) */</span>
+  <span class="kw4">int</span> type<span class="sy0">;</span>
+  <span class="coMULTI">/*! Text that describes what the preference influences */</span>
+  <span class="kw4">char</span> <span class="sy0">*</span> help_text<span class="sy0">;</span>
+  <span class="coMULTI">/*! Reader function that converts the value string into useful data */</span>
+  <span class="kw4">void</span> <span class="br0">&#40;</span><span class="sy0">*</span>reader<span class="br0">&#41;</span><span class="br0">&#40;</span><span class="kw4">char</span> <span class="sy0">*</span> index_str<span class="sy0">,</span> <span class="kw4">char</span> <span class="sy0">*</span> input_str<span class="sy0">,</span> <span class="kw4">void</span> <span class="sy0">*</span> ptr<span class="br0">&#41;</span><span class="sy0">;</span>
+  <span class="coMULTI">/*! Writer function that converts the value back into a string */</span>
+  <span class="kw4">void</span> <span class="br0">&#40;</span><span class="sy0">*</span>writer<span class="br0">&#41;</span><span class="br0">&#40;</span><span class="kw4">char</span> <span class="sy0">*</span> index_str<span class="sy0">,</span> <span class="kw4">void</span> <span class="sy0">*</span> ptr<span class="br0">&#41;</span><span class="sy0">;</span>
+  <span class="coMULTI">/*! data pointer passed to reader and writer */</span>
+  PreferenceValue <span class="sy0">*</span> ptr<span class="sy0">;</span>
+  <span class="coMULTI">/*! a value that can be used to initialize the preference; type defined as per above. */</span>
+  PreferenceValue default_val<span class="sy0">;</span>
+<span class="br0">&#125;</span> PreferenceDefinition<span class="sy0">;</span></pre>
+
+<p>
+There will be a number of “reader”/“writer” functions implemented by default to handle common data types like floats, ints, coords, etc. The data pointer will be passed to the reader and writer functions, and could contain anything. But it probably is a pointer to the variable to be set by the converted value from the PreferenceItem. Using function pointers like this allows for a lot of flexibility in how subsystems can use this code. The reader functions, for example, may also be responsible for notifying a <abbr title="Graphical User Interface">GUI</abbr> that the preference has been updated.
+</p>
+
+<p>
+Note: the default_val should initialize the value to something that is SAFE, i.e. something that will never, ever cause PCB to crash.
+</p>
+
+</div>
+
+<h5 id="preference_values">Preference Values</h5>
+<div class="level5">
+
+<p>
+My initial thought was to make this a void pointer so that it could be anything. The current PCB pref stuff uses a union structure for this instead, and I&#039;m wondering if that would be easier to work with. The union structure could have a “pointer” item in it that would allow for more complicated items to be allocated. This would keep the val with the structure in memory, which would be nice.
+</p>
+
+<p>
+The realization that I&#039;m having comes out of writing an object list copy function for a preference definition. If the data payload is a custom user defined object, then the copy function won&#039;t know how to make a copy of it. Normally the way it works is that when an object is added to a list, the list makes it&#039;s own copy. That way it doesn&#039;t have to worry about the user changing, or unallocating, the data. I&#039;ve been thinking for a while that I need a version of the list that assumes ownership of the data when it&#039;s added.
+</p>
+
+<p>
+One alternative might be to register preference types… and require a copy function to be defined for each type. This might be okay if I provide defaults for all the common types, but could be ornery if I require the user to do it.
+</p>
+
+<p>
+Another alternative might just be to provide a “pointer” type and say that if you&#039;re going to use a more complex structure, then the module that uses it has to provide it and make sure that it says allocated.
+</p>
+
+<p>
+For now I&#039;m going to go with the last option, because it does seem reasonable, and it also seems like the least work for now. Additionally, I think I&#039;m going to go with the union idea, as that gets rid of having to cast a ton of void pointers.
+</p>
+
+<p>
+Note that in the PreferenceDefinition structure, the val is actually a pointer. This has to be because this is actually a pointer to somewhere else in memory where the actual value of the preference is stored. Because it&#039;s a union, it effectively allows it to be basically a pointer to anything, and I can interpret it as such.
+</p>
+
+</div>
+
+<h5 id="preferencevalue">PreferenceValue</h5>
+<div class="level5">
+
+<p>
+Based on the previous discussion, we&#039;re now going to define a union type to handle these values. (This used to be PreferenceItem and held key, value, and type triples).
+</p>
+<pre class="code c"><span class="kw4">typedef</span> <span class="kw4">union</span>
+<span class="br0">&#123;</span>
+  <span class="coMULTI">/*! integer value */</span>
+  <span class="kw4">int</span> ival<span class="sy0">;</span>
+  <span class="coMULTI">/*! double value */</span>
+  <span class="kw4">double</span> dval<span class="sy0">;</span>
+  <span class="coMULTI">/*! string pointer */</span>
+  <span class="kw4">char</span> <span class="sy0">*</span> sptr<span class="sy0">;</span>
+  <span class="coMULTI">/*! void pointer */</span>
+  <span class="kw4">void</span> <span class="sy0">*</span> ptr<span class="sy0">;</span>
+<span class="br0">&#125;</span> PreferenceValue<span class="sy0">;</span></pre>
+
+</div>
+
+<h5 id="lists">Lists</h5>
+<div class="level5">
+
+<p>
+Presently, the intent is to use object_list for all of the lists.
+</p>
+
+</div>
+
+<h4 id="implementation_overview">Implementation Overview</h4>
+<div class="level4">
+
+<p>
+Preferences will be stored in a file as key/value pairs. An algorithm will read the file into a dictionary type structure, and then for every key it will look up that key in a “preferences registry”. The preferences registry will be a list of structures that include things like the name of the preference, some help text, default value, etc. and a pointer to a function that can be used to interpret the value string associated with the key. The function does its thing, and sets the destination variable with its value.
+</p>
+
+<p>
+To save preferences this works in just the reverse. There is also a “writer” function associated with preferences in the registry, and this is called to convert the data back into a string. We generate a series of key/value pairs that are then written to a text file.
+</p>
+
+<p>
+The key/value pair structures can be returned to the calling function to be retained for future inquiry. For example, maybe a plug-in chooses to store a preference in the main pcb preferences file. When pcb is initialized, if the plug-in isn&#039;t loaded yet, the preference will still be read and retained so that when the plug-in does load, the read value will be available to it for conversion.
+</p>
+
+<p>
+A python pseudo-code might look something like this:
+</p>
+<pre class="code python"><span class="kw1">def</span> load_preferences<span class="br0">&#40;</span>filename<span class="sy0">,</span> registry<span class="br0">&#41;</span>:
+  file_data <span class="sy0">=</span> read_pref_file<span class="br0">&#40;</span>filename<span class="br0">&#41;</span>
+  <span class="kw1">for</span> key<span class="sy0">,</span> value <span class="kw1">in</span> file_data:
+    <span class="kw1">if</span> key <span class="kw1">in</span> registry:
+      registry<span class="br0">&#91;</span>key<span class="br0">&#93;</span>.<span class="me1">reader</span><span class="br0">&#40;</span>key<span class="sy0">,</span> value<span class="sy0">,</span> registry<span class="br0">&#91;</span>key<span class="br0">&#93;</span>.<span class="me1">ptr</span><span class="br0">&#41;</span>
+&nbsp;
+  <span class="kw1">return</span> file_data
+&nbsp;
+<span class="kw1">def</span> save_preferences<span class="br0">&#40;</span>filename<span class="sy0">,</span> registry<span class="br0">&#41;</span>:
+  file_data <span class="sy0">=</span> <span class="br0">&#91;</span><span class="br0">&#93;</span>
+  <span class="kw1">for</span> key <span class="kw1">in</span> registry:
+    file_data.<span class="me1">append</span><span class="br0">&#40;</span><span class="br0">&#91;</span>key<span class="sy0">,</span> registry<span class="br0">&#91;</span>key<span class="br0">&#93;</span>.<span class="me1">writer</span><span class="br0">&#40;</span>key<span class="sy0">,</span> registry<span class="br0">&#91;</span>key<span class="br0">&#93;</span>.<span class="me1">ptr</span><span class="br0">&#41;</span><span class="br0">&#93;</span><span class="br0">&#41;</span>
+&nbsp;
+  write_pref_file<span class="br0">&#40;</span>file_data<span class="br0">&#41;</span>
+  <span class="kw1">return</span> <span class="kw2">len</span><span class="br0">&#40;</span>file_data<span class="br0">&#41;</span></pre>
+
+<p>
+(why is it always so much easier in python?)
+</p>
+
+</div>
+
+<h4 id="functions">Functions</h4>
+<div class="level4">
+
+<p>
+There are a number of key functions here: load_preferences, save_preferences, readers, and writers. Note that the file IO is being deliberately kept separate so that the actual file format is independent. Also, this allows data from a single file to be scanned more than once against different preference registries. We saw some pseudo-code for the load_preferences and save_preferences above (although it should have used apply_preferences and collect_preferences instead of spelling it out). So let&#039;s think about some of the others, again in pseudo-code (python…).
+</p>
+<pre class="code python"><span class="kw1">def</span> load_preferences<span class="br0">&#40;</span>filename<span class="sy0">,</span> pref_list<span class="br0">&#41;</span>:
+  <span class="kw1">with</span> <span class="kw2">open</span><span class="br0">&#40;</span>filename<span class="sy0">,</span> r<span class="br0">&#41;</span> <span class="kw1">as</span> f:
+    f.<span class="me1">seek</span><span class="br0">&#40;</span>-<span class="nu0">1</span><span class="br0">&#41;</span> <span class="co1"># seek to the end</span>
+    flen <span class="sy0">=</span> f.<span class="me1">tell</span><span class="br0">&#40;</span><span class="br0">&#41;</span>
+    r.<span class="me1">rewind</span><span class="br0">&#40;</span><span class="br0">&#41;</span>
+    file_data <span class="sy0">=</span> f.<span class="me1">read</span><span class="br0">&#40;</span>flen<span class="br0">&#41;</span>
+&nbsp;
+  <span class="co1"># make sure to add a null at the end so file_data[flen] is a null char.</span>
+&nbsp;
+  <span class="co1"># find all the new lines</span>
+  lines <span class="sy0">=</span> <span class="br0">&#91;</span><span class="nu0">0</span><span class="br0">&#93;</span>
+  <span class="kw1">for</span> i <span class="kw1">in</span> <span class="kw2">range</span><span class="br0">&#40;</span>flen<span class="br0">&#41;</span>:
+    c <span class="sy0">=</span> data<span class="br0">&#91;</span>i<span class="br0">&#93;</span>
+    <span class="kw1">if</span> c <span class="sy0">==</span> <span class="st0">&quot;<span class="es0">\n</span>&quot;</span>:
+      data<span class="br0">&#91;</span>i<span class="br0">&#93;</span> <span class="sy0">=</span> <span class="st0">'<span class="es0">\0</span>'</span>
+      <span class="kw1">if</span> i + <span class="nu0">1</span> <span class="sy0">&lt;</span> flen:  <span class="co1"># more data in file</span>
+        lines.<span class="me1">append</span><span class="br0">&#40;</span>i+<span class="nu0">1</span><span class="br0">&#41;</span>
+&nbsp;
+  keys <span class="sy0">=</span> <span class="br0">&#91;</span><span class="br0">&#93;</span>
+  <span class="kw1">for</span> l <span class="kw1">in</span> lines:
+    <span class="co1"># ignore lines that start with &quot;#&quot;</span>
+    <span class="kw1">if</span> data<span class="br0">&#91;</span>l<span class="br0">&#93;</span> <span class="sy0">==</span> <span class="st0">&quot;#&quot;</span>: <span class="kw1">continue</span>
+    <span class="co1"># ignore leading whitespace</span>
+    i <span class="sy0">=</span> l
+    <span class="kw1">while</span> i <span class="sy0">&lt;</span> flen:
+      <span class="kw1">if</span> data<span class="br0">&#91;</span>l<span class="br0">&#93;</span> <span class="kw1">in</span> <span class="br0">&#91;</span><span class="st0">&quot; &quot;</span><span class="sy0">,</span> <span class="st0">&quot;<span class="es0">\t</span>&quot;</span><span class="br0">&#93;</span>:
+        i++
+&nbsp;
+      <span class="kw1">else</span>:
+        keys.<span class="me1">append</span><span class="br0">&#91;</span>l<span class="br0">&#93;</span>
+        <span class="kw1">break</span>
+&nbsp;
+  <span class="kw1">if</span> <span class="kw2">len</span><span class="br0">&#40;</span>keys<span class="br0">&#41;</span> <span class="sy0">==</span> <span class="nu0">0</span>: <span class="kw1">return</span>
+&nbsp;
+  values <span class="sy0">=</span> <span class="br0">&#91;</span><span class="br0">&#93;</span>
+  <span class="kw1">for</span> k <span class="kw1">in</span> keys:
+    i <span class="sy0">=</span> k
+    <span class="kw1">while</span> i <span class="sy0">=&lt;</span> flen:
+      c <span class="sy0">=</span> data<span class="br0">&#91;</span>i<span class="br0">&#93;</span>
+      <span class="kw1">if</span> <span class="br0">&#40;</span>c <span class="sy0">==</span> <span class="st0">'<span class="es0">\0</span>'</span><span class="br0">&#41;</span> <span class="kw1">or</span> <span class="br0">&#40;</span>i <span class="sy0">==</span> flen-<span class="nu0">1</span><span class="br0">&#41;</span>:
+        <span class="co1"># no value for this key</span>
+        <span class="co1"># point it at the key? At a null?</span>
+        values.<span class="me1">append</span><span class="br0">&#40;</span>i<span class="br0">&#41;</span>
+        <span class="kw1">break</span>
+&nbsp;
+      <span class="kw1">elif</span> c <span class="kw1">in</span> <span class="br0">&#91;</span><span class="st0">&quot; &quot;</span><span class="sy0">,</span> <span class="st0">&quot;<span class="es0">\t</span>&quot;</span><span class="br0">&#93;</span>:
+        data<span class="br0">&#91;</span>i<span class="br0">&#93;</span> <span class="sy0">=</span> <span class="st0">'<span class="es0">\0</span>'</span>
+        <span class="kw1">if</span> i + <span class="nu0">1</span> <span class="sy0">&lt;</span> flen:
+          values.<span class="me1">append</span><span class="br0">&#40;</span>i+<span class="nu0">1</span><span class="br0">&#41;</span>
+        <span class="kw1">break</span>
+&nbsp;
+      i++
+&nbsp;</pre>
+
+</div>
+
+<h4 id="file_format">File Format</h4>
+<div class="level4">
+<ul>
+<li class="level1"><div class="li"> The file should contain 1 preference per line.</div>
+</li>
+<li class="level1"><div class="li"> First word on the line (everything up to the first white space) is the name of the preference (key).</div>
+</li>
+<li class="level1"><div class="li"> Everything after the first word is the value of the preference.</div>
+</li>
+<li class="level1"><div class="li"> “#” should indicate a comment and the line should be ignored.<br/>
+Should I allow hashes in the middle of a line, or should everything after a hash be a comment? Colors are often specified with hashes in front, so, that might make it awkward. For now it will only be lines starting with hashes that are treated as comments.</div>
+</li>
+</ul>
+
+<p>
+Using lines seems like the natural thing to do, but this precludes multi-line strings. Perhaps that’s okay? I’m going to go with that for now.
+</p>
+
+<p>
+Example:
+</p>
+<pre class="code"># gtk preferences
+gtk-layer1-color #FF0000
+# snapping preferences
+snap-line-radius 42
+# drc preferences
+drc-linewidth-min 8 mil</pre>
+
+<p>
+The above would create a list with three key value pairs:
+</p>
+<div class="table sectionedit1"><table class="inline">
+	<thead>
+	<tr class="row0">
+		<th class="col0"> Key </th><th class="col1"> Value </th>
+	</tr>
+	</thead>
+	<tr class="row1">
+		<td class="col0 leftalign"> gtk-layer1-color  </td><td class="col1"> #FF0000 </td>
+	</tr>
+	<tr class="row2">
+		<td class="col0 leftalign"> snap-line-radius  </td><td class="col1"> 42 </td>
+	</tr>
+	<tr class="row3">
+		<td class="col0"> drc-linewidth-min </td><td class="col1"> 8 mil </td>
+	</tr>
+</table></div>
+<!-- EDIT1 TABLE [12761-12865] -->
+</div>
+
+<h4 id="thoughts_on_processing">Thoughts on processing</h4>
+<div class="level4">
+
+<p>
+I’ve also considered if there should be some type of hierarchical structure. Like for example, subsystems could register prefixes like “gtk-” with the system, and then the system passes them the preferences with that prefix. With the function calling system, I don’t think this is necessary. Although it is a good idea for subsystems to use such a prefix to make editing the files easier.
+</p>
+
+</div>
+
+<h4 id="thoughts_on_implementation">Thoughts on implementation</h4>
+<div class="level4">
+
+<p>
+The pointer is probably often going to be the item that should be populated with the preference value, but doesn’t have to be. It could be the general preferences structure, for example, if there’s more than one parameter that needs to be updated.
+</p>
+
+<p>
+Implement several “default” handlers: pref_float, pref_integer, pref_double, pref_coord… etc that take the preference value, convert into whatever type, and then assign. Similarly several default “writers” will be needed.
+</p>
+
+<p>
+Then we’ll create an object list of these preference items. It will have to be initialized early in the startup process, before processing the preference related command line arguments.
+</p>
+
+<p>
+There will be a function for reading a preferences file, and a function for writing a preferences file.
+</p>
+<pre class="code c"><span class="kw4">void</span> read_pref_file <span class="br0">&#40;</span><span class="kw4">char</span> <span class="sy0">*</span> fname<span class="br0">&#41;</span>
+<span class="br0">&#123;</span>
+FILE <span class="sy0">*</span> fp<span class="sy0">;</span>
+<span class="coMULTI">/* open the file for reading */</span>
+<span class="br0">&#125;</span></pre>
+<pre class="code c"><span class="coMULTI">/* void pref_float (char * index_str, char * input_str, void *ptr) 
+ * This function takes an input string, converts it to a float, and assigns it to ptr.
+ * Return type is void only because I haven’t figured out what to do with it, or to remind you 
+ * that you have to set the value with the function. */</span>
+<span class="kw4">void</span> pref_float <span class="br0">&#40;</span>index_str<span class="sy0">,</span> input_str<span class="sy0">,</span> ptr<span class="br0">&#41;</span>
+<span class="br0">&#123;</span>
+  <span class="coMULTI">/* this function doesn’t care about index_str */</span>
+  <span class="kw4">float</span> fval <span class="sy0">=</span> <span class="nu0">0</span><span class="sy0">,</span> <span class="sy0">*</span>fptr<span class="sy0">=</span><span class="nu0">0</span><span class="sy0">;</span>
+  fptr <span class="sy0">=</span> <span class="br0">&#40;</span><span class="kw4">float</span><span class="sy0">*</span><span class="br0">&#41;</span> ptr<span class="sy0">;</span> <span class="coMULTI">/* cast the pointer as a float */</span>
+  fval <span class="sy0">=</span> <a href="http://www.opengroup.org/onlinepubs/009695399/functions/atof.html"><span class="kw3">atof</span></a><span class="br0">&#40;</span>input_str<span class="br0">&#41;</span><span class="sy0">;</span> <span class="coMULTI">/* do the ascii to float conversion*/</span>
+  <span class="coMULTI">/* do any checking to see if it worked? */</span>
+  <span class="sy0">*</span>fptr <span class="sy0">=</span> fval<span class="sy0">;</span>
+  <span class="coMULTI">/* return 0; */</span>
+<span class="br0">&#125;</span></pre>
+<pre class="code c"><span class="coMULTI">/* char * float_pref(index_str, float fval) 
+ * This function takes an input float and converts it to a string for storage in a preferences file.
+ * The caller owns the string memory that the result is stored in.
+ * Should the float be a pointer to a float, or the float value itself?
+*/</span>
+<span class="kw4">char</span> <span class="sy0">*</span> float_pref <span class="br0">&#40;</span>index_str<span class="sy0">,</span> <span class="kw4">float</span> fval<span class="br0">&#41;</span>
+<span class="br0">&#123;</span>
+  <span class="kw4">char</span> tstr<span class="br0">&#91;</span><span class="nu0">128</span><span class="br0">&#93;</span><span class="sy0">;</span> <span class="coMULTI">/* This ought to be big enough for anything we’re going to realistically throw at it. */</span>
+  <span class="kw4">char</span> <span class="sy0">*</span> fstr<span class="sy0">;</span>
+  <span class="kw4">int</span> len <span class="sy0">=</span> <span class="nu0">0</span><span class="sy0">;</span>
+  len <span class="sy0">=</span> <a href="http://www.opengroup.org/onlinepubs/009695399/functions/sprintf.html"><span class="kw3">sprintf</span></a><span class="br0">&#40;</span>fstr<span class="sy0">,</span> “<span class="sy0">%</span>f”<span class="sy0">,</span> fval<span class="br0">&#41;</span><span class="sy0">;</span>
+  fstr <span class="sy0">=</span> <a href="http://www.opengroup.org/onlinepubs/009695399/functions/malloc.html"><span class="kw3">malloc</span></a><span class="br0">&#40;</span>len<span class="sy0">+</span><span class="nu0">1</span><span class="br0">&#41;</span><span class="sy0">;</span> <span class="coMULTI">/* allocate a buffer that’s exactly the right size */</span>
+  <a href="http://www.opengroup.org/onlinepubs/009695399/functions/strncpy.html"><span class="kw3">strncpy</span></a><span class="br0">&#40;</span>fstr<span class="sy0">,</span> tstr<span class="sy0">,</span> len<span class="br0">&#41;</span><span class="sy0">;</span> <span class="coMULTI">/* copy the new string into it */</span>
+  fstr<span class="br0">&#91;</span>len<span class="br0">&#93;</span> <span class="sy0">=</span> ‘\<span class="nu0">0</span>’<span class="sy0">;</span>
+  <span class="kw1">return</span> fstr<span class="sy0">;</span>
+<span class="br0">&#125;</span></pre>
+
+</div>
+
+<h4 id="questions">Questions</h4>
+<div class="level4">
+<ul>
+<li class="level1"><div class="li"> If a user loads a new preferences file, does it need to notify anything that this happened? <br/>
+Presently, with preferences, values are updated immediately. This means that all preferences need to be such that changing them at any given moment doesn’t lead to disaster. However, this model also provides the flexibility that, if there isn’t such a preference, it can specify its own handler function which could take care of any of the necessary tasks to enact the change.</div>
+</li>
+<li class="level1"><div class="li"> Should I try to use the glib class structure and create an actual manager object</div>
+</li>
+<li class="level1"><div class="li"> When collecting preferences, do we collect everything, or only things that aren&#039;t the same as the default?</div>
+</li>
+<li class="level1"><div class="li"> I&#039;ve made an implicit assumption here that the preference keys are strings. Maybe I shouldn&#039;t? They could just be integers…</div>
+</li>
+</ul>
+
+</div>
+
+<h3 class="sectionedit2" id="old_stuff">Old stuff</h3>
+<div class="level3">
+
+</div>
+
+<h5 id="original_idea">Original Idea</h5>
+<div class="level5">
+
+<p>
+Originally, I was going to do it this way… but this is just extra work. So, I&#039;m ditching the intermediate step.
+I&#039;m breaking the preferences process into four steps:
+</p>
+<ol>
+<li class="level1"><div class="li"> Read the preferences file and create a list of key value pairs (preference items) <br/>
+pilist = ppm_read_pref_file(fname); <br/>
+This returns a list of PreferenceItem objects that contains the keys and values read out of the specified file.</div>
+</li>
+<li class="level1"><div class="li"> Apply preferences to the PCB data structures <br/>
+ppm_apply_preferences(pdlist, pilist); <br/>
+This iterates over the PreferenceItems in pilist. For each item it looks up the key in a preference definition list, pdlist, and calls the function associated with that preference definition.</div>
+</li>
+<li class="level1"><div class="li"> Collect preferences from PCB data structures <br/>
+pilist = ppm_collect_preferences(pdlist); <br/>
+This goes through the preferences definitions in pdlist and creates a set of key value pairs, pilist, that can be stored in the text file.</div>
+</li>
+<li class="level1"><div class="li"> Write the preference data to a file. <br/>
+ppm_write_pref_file(pilist); <br/>
+Store the preferences in a file.</div>
+</li>
+</ol>
+
+</div>
+
+<h5 id="new_idea">New Idea</h5>
+<div class="level5">
+
+</div>
+<!-- EDIT2 SECTION "Old stuff" [16404-17501] -->
+<h2 class="sectionedit3" id="development_blog">Development Blog</h2>
+<div class="level2">
+
+<p>
+I&#039;m starting this because I&#039;m having trouble remembering where I am and what I&#039;ve done between development sessions.
+</p>
+
+<p>
+At this point, I&#039;ve written data converters for ints, doubles, and strings. I&#039;ve also written tests for them, so, I know they&#039;re working the way I think they should.
+</p>
+
+</div>
+
+<h5 id="tasks">Tasks</h5>
+<div class="level5">
+<ul>
+<li class="level1"><div class="li"> Read function</div>
+</li>
+</ul>
+
+<p>
+= 20201108 =
+</p>
+
+<p>
+Today I managed to get a the function for writing preference files written, and a simple test that uses it.
+</p>
+
+<p>
+One note: when I initially wrote the test, I did something like this (abbreviated):
+</p>
+<pre class="code c"><span class="kw4">int</span> intval<span class="sy0">;</span>
+<span class="kw4">char</span> charvals<span class="br0">&#91;</span><span class="br0">&#93;</span> <span class="sy0">=</span> <span class="st0">&quot;Preference string&quot;</span><span class="sy0">;</span>
+PreferenceDefinition intpref <span class="sy0">=</span> <span class="br0">&#123;</span>.<span class="me1">key</span> <span class="sy0">=</span> <span class="st0">&quot;integer&quot;</span><span class="sy0">,</span> .<span class="me1">val</span> <span class="sy0">=</span> <span class="sy0">&amp;</span>intval<span class="br0">&#125;</span><span class="sy0">;</span>
+PreferenceDefinition strpref <span class="sy0">=</span> <span class="br0">&#123;</span>.<span class="me1">key</span> <span class="sy0">=</span> <span class="st0">&quot;string&quot;</span><span class="sy0">,</span> .<span class="me1">val</span> <span class="sy0">=</span> <span class="sy0">&amp;</span>charvals<span class="br0">&#125;</span><span class="sy0">;</span></pre>
+
+<p>
+However, this doesn&#039;t work. The val field of the strpref ended up equaling the address of charvals, whereas I needed it to be a double pointer. This makes me wonder what I ought to do here. If preferences are stored in a struct like
+</p>
+<pre class="code c"><span class="kw4">typedef</span> <span class="kw4">struct</span> <span class="br0">&#123;</span>
+  <span class="kw4">char</span> <span class="sy0">*</span> charvals<span class="sy0">;</span>
+<span class="br0">&#125;</span> Pref<span class="sy0">;</span></pre>
+
+<p>
+Then I have a pointer to point to. However, if the preferences are stored as “global” variables, then I just get the address of the string, and I don&#039;t have a container to point to. I wonder if I need to have some sort of accommodation for that?
+</p>
+
+<p>
+= 202201115 =
+</p>
+
+<p>
+I&#039;m working today on the function that reads the files. I&#039;ve looked at the current file format and it is pretty much “key = value”. So, I think I&#039;m going to allow that format also. That way I don&#039;t have to deal with trying to figure out how to get everyone&#039;s preferences converted to the new format. This means that I have to implement non-white-space delimiters, but I don&#039;t think that will be too hard. It also provides the developers with another option for delimiters. 
+</p>
+
+</div>
+<!-- EDIT3 SECTION "Development Blog" [17502-] --></body>
+</html>

@@ -14,7 +14,7 @@
 <em>Translations of this page are also available in the following languages:</em> <a href="geda-format_translation.ru.html" class="wikilink1" title="geda-format_translation.ru.html">Русский</a>.
 </p>
 
-<h1 id="fileformattranslation">File format translation</h1>
+<h1 class="sectionedit1" id="file_format_translation">File format translation</h1>
 <div class="level1">
 
 <p>
@@ -22,8 +22,8 @@ We need a universal translator system that can translate in all directions betwe
 </p>
 
 </div>
-
-<h2 id="scope">Scope</h2>
+<!-- EDIT1 SECTION "File format translation" [121-345] -->
+<h2 class="sectionedit2" id="scope">Scope</h2>
 <div class="level2">
 
 <p>
@@ -59,8 +59,8 @@ There needs to be a way to merge changes from any target/source without messing 
 </p>
 
 </div>
-
-<h3 id="tooltypesneedingsupport">Tool types needing support</h3>
+<!-- EDIT2 SECTION "Scope" [346-1634] -->
+<h3 class="sectionedit3" id="tool_types_needing_support">Tool types needing support</h3>
 <div class="level3">
 <ul>
 <li class="level1"><div class="li"> schematic</div>
@@ -72,8 +72,8 @@ There needs to be a way to merge changes from any target/source without messing 
 </ul>
 
 </div>
-
-<h3 id="gedatools">gEDA tools</h3>
+<!-- EDIT3 SECTION "Tool types needing support" [1635-1712] -->
+<h3 class="sectionedit4" id="geda_tools">gEDA tools</h3>
 <div class="level3">
 
 <p>
@@ -91,8 +91,8 @@ Lossless round trip is required, so archival storage can use the intermediate fo
 </ul>
 
 </div>
-
-<h3 id="otherfreetoolsthatshouldbewellsupported">Other free tools that should be well supported</h3>
+<!-- EDIT4 SECTION "gEDA tools" [1713-1869] -->
+<h3 class="sectionedit5" id="other_free_tools_that_should_be_well_supported">Other free tools that should be well supported</h3>
 <div class="level3">
 
 <p>
@@ -116,8 +116,8 @@ These tools are free, too.  The standard needs to support them on an equal basis
 </ul>
 
 </div>
-
-<h3 id="non-freeimportandexport">Non-free import and export</h3>
+<!-- EDIT5 SECTION "Other free tools that should be well supported" [1870-2100] -->
+<h3 class="sectionedit6" id="non-free_import_and_export">Non-free import and export</h3>
 <div class="level3">
 
 <p>
@@ -135,8 +135,8 @@ Support for these will allow gEDA tools to play nice with the commercial world. 
 </ul>
 
 </div>
-
-<h3 id="gedamissingfunctionality">gEDA missing functionality</h3>
+<!-- EDIT6 SECTION "Non-free import and export" [2101-2413] -->
+<h3 class="sectionedit7" id="geda_missing_functionality">gEDA missing functionality</h3>
 <div class="level3">
 
 <p>
@@ -156,8 +156,8 @@ Hopefully having a translator system will provide a seed so these can be done.
 </ul>
 
 </div>
-
-<h3 id="explicitlynotsupported">Explicitly not supported</h3>
+<!-- EDIT7 SECTION "gEDA missing functionality" [2414-2748] -->
+<h3 class="sectionedit8" id="explicitly_not_supported">Explicitly not supported</h3>
 <div class="level3">
 <ul>
 <li class="level1"><div class="li"> Plotting</div>
@@ -169,8 +169,8 @@ Hopefully having a translator system will provide a seed so these can be done.
 </ul>
 
 </div>
-
-<h2 id="concepts">Concepts</h2>
+<!-- EDIT8 SECTION "Explicitly not supported" [2749-2834] -->
+<h2 class="sectionedit9" id="concepts">Concepts</h2>
 <div class="level2">
 
 <p>
@@ -194,8 +194,8 @@ All contenders for possible formats must support a loss round-trip to any other.
 </p>
 
 </div>
-
-<h3 id="somepossibleformats">Some possible formats</h3>
+<!-- EDIT9 SECTION "Concepts" [2835-3419] -->
+<h3 class="sectionedit10" id="some_possible_formats">Some possible formats</h3>
 <div class="level3">
 
 </div>
@@ -244,8 +244,8 @@ XML is not really a format but a syntax.  A good format can easily be made based
 </p>
 
 </div>
-
-<h3 id="representationofphysicalplacement">Representation of physical placement</h3>
+<!-- EDIT10 SECTION "Some possible formats" [3420-4644] -->
+<h3 class="sectionedit11" id="representation_of_physical_placement">Representation of physical placement</h3>
 <div class="level3">
 
 <p>
@@ -273,8 +273,8 @@ Ideas:
 </ul>
 
 </div>
-
-<h2 id="applications">Applications</h2>
+<!-- EDIT11 SECTION "Representation of physical placement" [4645-5602] -->
+<h2 class="sectionedit12" id="applications">Applications</h2>
 <div class="level2">
 
 <p>
@@ -282,7 +282,7 @@ Choosing the Verilog format as one possibility.
 </p>
 
 <p>
-The unit of encapsulation is the &quot;module&quot;:
+The unit of encapsulation is the “module”:
 </p>
 <pre class="code">module my-module(connections);
 // contents
@@ -300,26 +300,26 @@ Example:
 resistor #(.r(1k)) r234 (.p(b), .n(c));</pre>
 
 <p>
-&quot;r&quot; is the name of an attribute.  &quot;1k&quot; is the value (a string).
+“r” is the name of an attribute.  “1k” is the value (a string).
 </p>
 
 <p>
-In the first example, connections are determined by order.  In the second, they are mapped by name.  Node &quot;b&quot; connects to pin &quot;p&quot; and node &quot;c&quot; connects to pin &quot;n&quot;.
+In the first example, connections are determined by order.  In the second, they are mapped by name.  Node “b” connects to pin “p” and node “c” connects to pin “n”.
 </p>
 
 <p>
-A &quot;net&quot; is also an object.
+A “net” is also an object.
 </p>
 
 <p>
-In the above example, both connect to node b directly.  In a schematic representation the connection would not be direct, but through a &quot;net&quot;
+In the above example, both connect to node b directly.  In a schematic representation the connection would not be direct, but through a “net”
 </p>
 <pre class="code">resistor #(.r(1k)) r123 (.p(a1), .n(b1));
 resistor #(.r(1k)) r125 (.p(b2), .n(c2));
 net b (.1(b1), .2(b2));</pre>
 
 <p>
-The name of the net is &quot;b&quot;.  It has no attributes.
+The name of the net is “b”.  It has no attributes.
 </p>
 
 <p>
@@ -360,5 +360,5 @@ endmodule</pre>
 endmodule</pre>
 
 </div>
-</body>
+<!-- EDIT12 SECTION "Applications" [5603-] --></body>
 </html>

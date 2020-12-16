@@ -14,11 +14,11 @@
 <em>Vertalingen van de pagina zijn beschikbaar in de volgende talen:</em> <a href="geda-bug_triage_guide.html" class="wikilink1" title="geda-bug_triage_guide.html">English</a>, <a href="geda-bug_triage_guide.ru.html" class="wikilink1" title="geda-bug_triage_guide.ru.html">Русский</a>.
 </p>
 
-<h1 id="gedagafandpcbfoutverzoekomkenmerkentriagegids">gEDA/gaf and PCB Fout/Verzoek om kenmerken Triage Gids</h1>
+<h1 class="sectionedit1" id="geda_gaf_and_pcb_fout_verzoek_om_kenmerken_triage_gids">gEDA/gaf and PCB Fout/Verzoek om kenmerken Triage Gids</h1>
 <div class="level1">
 
 <p>
-gEDA/gaf en PCB gebruiken Launchpad voor het volgen van fouten en verzoeken om kenmerken - de gEDA pagina is  hier en die van PCB  hier.
+gEDA/gaf en PCB gebruiken <a href="http://launchpad.net" class="urlextern" title="http://launchpad.net" rel="nofollow">Launchpad</a> voor het volgen van fouten en verzoeken om kenmerken - de gEDA pagina is <a href="http://bugs.launchpad.net/geda" class="urlextern" title="http://bugs.launchpad.net/geda" rel="nofollow"> hier</a> en die van PCB <a href="http://bugs.launchpad.net/pcb" class="urlextern" title="http://bugs.launchpad.net/pcb" rel="nofollow"> hier</a>.
 </p>
 
 <p>
@@ -26,53 +26,93 @@ Nieuw gerapporteerde fouten en verzoeken om nieuwe kenmerken moeten periodiek wo
 </p>
 
 <p>
-Eenieder die wil helpen om fouten te triëren voor het project, vraag een lidmaatschap aan bij een van de geda-bugs teams voor gEDA/gaf en/of PCB.
+Eenieder die wil helpen om fouten te triëren voor het project, vraag een lidmaatschap aan bij een van de geda-bugs teams voor <a href="https://launchpad.net/~geda-bugs/+join" class="urlextern" title="https://launchpad.net/~geda-bugs/+join" rel="nofollow">gEDA/gaf</a> en/of <a href="https://launchpad.net/~pcb-bugs/+join" class="urlextern" title="https://launchpad.net/~pcb-bugs/+join" rel="nofollow">PCB</a>.
 </p>
 
 </div>
-
-<h2 id="triagevanfouten">Triage van fouten</h2>
+<!-- EDIT1 SECTION "gEDA/gaf and PCB Fout/Verzoek om kenmerken Triage Gids" [141-902] -->
+<h2 class="sectionedit2" id="triage_van_fouten">Triage van fouten</h2>
 <div class="level2">
 <ol>
 <li class="level1 node"><div class="li"> Kies een fout van</div>
 <ul>
-<li class="level2"><div class="li"> https:<em>launchpad.net/geda/+bugs?search=Search&amp;field.status=New
-    * https:</em>launchpad.net/pcb/+bugs?search=Search&amp;field.status=New</div>
+<li class="level2"><div class="li"> <a href="https://launchpad.net/geda/+bugs?search=Search&amp;field.status=New" class="urlextern" title="https://launchpad.net/geda/+bugs?search=Search&amp;field.status=New" rel="nofollow">https://launchpad.net/geda/+bugs?search=Search&amp;field.status=New</a></div>
+</li>
+<li class="level2"><div class="li"> <a href="https://launchpad.net/pcb/+bugs?search=Search&amp;field.status=New" class="urlextern" title="https://launchpad.net/pcb/+bugs?search=Search&amp;field.status=New" rel="nofollow">https://launchpad.net/pcb/+bugs?search=Search&amp;field.status=New</a></div>
 </li>
 </ul>
 </li>
-<li class="level1 node"><div class="li"> Verkrijg &quot;git HEAD&quot; of het pakket dat de fout bevat (als je het niet al hebt) en probeer vast te stellen of de fout nog steeds aanwezig is of niet. (http:<em>git.geda-project.org)
-  - Als de fout nog aanwezig is, verander de status van &quot;New&quot; naar &quot;Confirmed&quot;
-    * Als, en alleen als, er een goede testcasus is ingezonden die de fout reproduceert (of je hebt een testcasus gemaakt en ingezonden als deel van de triage), kun je de status naar &quot;Triaged&quot; zetten
-    *  </em><strong>Opmerking:</strong> het is geen goede stijl om jouw eigen foutrapporten aan te merken als &quot;Confirmed&quot;.<em>
-  - Als de fout afwezig is, maak dan een opmerking en zet de status op een van de volgende:
-    * &quot;Invalid&quot;, als je er van overtuihd bent dat de fout er niet is of verkeerd gerapporteerd.
-      * Als de fout gemerkt is met &quot;sf-patches&quot; dan niet afsluiten met &quot;Invalid&quot;. Als de patch niet kan of mag geaccepteerd worden, merk de fout dan als &quot;WontFix&quot;.
-    * &quot;Fix Committed&quot;, als je er van overtuigd bent dat er een oplossing in de git repository aanwezig is sinds de laatste uitgave (release versie);
-    * &quot;Fix Released&quot;, als je er van overtuigd bent dat er een oplossing in een uitgave (release versie) aanwezig is;
-    * &quot;Incomplete&quot;, als je de reporteur een vraag wil stellen voor een antwoord dat nodig is om het foutrapport goed te kunnen beoordelen.
-  - Als de fout jou persoonlijk beinvloed, klik dan op de link &quot;This bug affects 1 person. Does this bug affect you?&quot; onder de titel van het foutrapport, die aangeeft hoeveel personen er last van hebben.
-  - Als je met e-mails op de hoogte wil blijven van veranderingen in het foutrapport, klik dan op &quot;Subscribe&quot; in de rechter kolom van het scherm.
-
-===== Triage van Kenmerk Verzoeken =====
-</em>Er zijn twee actieve lijsten voor verzoeken voor Kenmerk verzoeken (sinds 02-2016):<em>
-  * Launch Pad:
-     - Kies een kenmerk verzoek request van
-       * https:</em>launchpad.net/geda/+bugs?search=Search&amp;field.status=New</div>
+<li class="level1"><div class="li"> Verkrijg “git HEAD” of het pakket dat de fout bevat (als je het niet al hebt) en probeer vast te stellen of de fout nog steeds aanwezig is of niet. (<a href="http://git.geda-project.org" class="urlextern" title="http://git.geda-project.org" rel="nofollow">http://git.geda-project.org</a>)</div>
+</li>
+<li class="level1 node"><div class="li"> Als de fout nog aanwezig is, verander de status van “New” naar “Confirmed”</div>
 <ul>
-<li class="level3"><div class="li"> https:<em>launchpad.net/pcb/+bugs?search=Search&amp;field.status=New
-     - Als dit hier al niet op staat, zet de Importance op &quot;Wishlist&quot;
-     - Als je het eens bent met het kenmerk verzoek, selecteer de &quot;Bug affects me&quot; optie. Dit geeft ons een kans om de populariteit van het verzoek te volgen.
-     - Een ontwikkelaar die voldoende bekend is met de ontwerpissues zal de Status veranderen van &quot;New&quot; naar &quot;Confirmed&quot;, &quot;WontFix&quot; of &quot;Opinion&quot;.
-  * Geda/PCB Project Wiki:
-     - &quot;Wish List&quot; aan de onderzijde van deze pagina:
-       * http://wiki.geda-project.org/pcb:roadmap
-</div>
+<li class="level2"><div class="li"> Als, en alleen als, er een goede testcasus is ingezonden die de fout reproduceert (of je hebt een testcasus gemaakt en ingezonden als deel van de triage), kun je de status naar “Triaged” zetten</div>
+</li>
+<li class="level2"><div class="li">  <em><strong>Opmerking:</strong> het is geen goede stijl om jouw eigen foutrapporten aan te merken als “Confirmed”.</em></div>
 </li>
 </ul>
+</li>
+<li class="level1 node"><div class="li"> Als de fout afwezig is, maak dan een opmerking en zet de status op een van de volgende:</div>
+<ul>
+<li class="level2 node"><div class="li"> “Invalid”, als je er van overtuihd bent dat de fout er niet is of verkeerd gerapporteerd.</div>
+<ul>
+<li class="level3"><div class="li"> Als de fout gemerkt is met “sf-patches” dan niet afsluiten met “Invalid”. Als de patch niet kan of mag geaccepteerd worden, merk de fout dan als “WontFix”.</div>
+</li>
+</ul>
+</li>
+<li class="level2"><div class="li"> “Fix Committed”, als je er van overtuigd bent dat er een oplossing in de git repository aanwezig is sinds de laatste uitgave (release versie);</div>
+</li>
+<li class="level2"><div class="li"> “Fix Released”, als je er van overtuigd bent dat er een oplossing in een uitgave (release versie) aanwezig is;</div>
+</li>
+<li class="level2"><div class="li"> “Incomplete”, als je de reporteur een vraag wil stellen voor een antwoord dat nodig is om het foutrapport goed te kunnen beoordelen.</div>
+</li>
+</ul>
+</li>
+<li class="level1"><div class="li"> Als de fout jou persoonlijk beinvloed, klik dan op de link “This bug affects 1 person. Does this bug affect you?” onder de titel van het foutrapport, die aangeeft hoeveel personen er last van hebben.</div>
+</li>
+<li class="level1"><div class="li"> Als je met e-mails op de hoogte wil blijven van veranderingen in het foutrapport, klik dan op “Subscribe” in de rechter kolom van het scherm.</div>
 </li>
 </ol>
 
 </div>
-</body>
+<!-- EDIT2 SECTION "Triage van fouten" [903-2772] -->
+<h2 class="sectionedit3" id="triage_van_kenmerk_verzoeken">Triage van Kenmerk Verzoeken</h2>
+<div class="level2">
+
+<p>
+<em>Er zijn twee actieve lijsten voor verzoeken voor Kenmerk verzoeken (sinds 02-2016):</em>
+</p>
+<ul>
+<li class="level1 node"><div class="li"> Launch Pad:</div>
+<ol>
+<li class="level2 node"><div class="li"> Kies een kenmerk verzoek request van</div>
+<ul>
+<li class="level3"><div class="li"> <a href="https://launchpad.net/geda/+bugs?search=Search&amp;field.status=New" class="urlextern" title="https://launchpad.net/geda/+bugs?search=Search&amp;field.status=New" rel="nofollow">https://launchpad.net/geda/+bugs?search=Search&amp;field.status=New</a></div>
+</li>
+<li class="level3"><div class="li"> <a href="https://launchpad.net/pcb/+bugs?search=Search&amp;field.status=New" class="urlextern" title="https://launchpad.net/pcb/+bugs?search=Search&amp;field.status=New" rel="nofollow">https://launchpad.net/pcb/+bugs?search=Search&amp;field.status=New</a></div>
+</li>
+</ul>
+</li>
+<li class="level2"><div class="li"> Als dit hier al niet op staat, zet de Importance op “Wishlist”</div>
+</li>
+<li class="level2"><div class="li"> Als je het eens bent met het kenmerk verzoek, selecteer de “Bug affects me” optie. Dit geeft ons een kans om de populariteit van het verzoek te volgen.</div>
+</li>
+<li class="level2"><div class="li"> Een ontwikkelaar die voldoende bekend is met de ontwerpissues zal de Status veranderen van “New” naar “Confirmed”, “WontFix” of “Opinion”.</div>
+</li>
+</ol>
+</li>
+<li class="level1 node"><div class="li"> Geda/PCB Project Wiki:</div>
+<ol>
+<li class="level2 node"><div class="li"> “Wish List” aan de onderzijde van deze pagina:</div>
+<ul>
+<li class="level3"><div class="li"> <a href="http://wiki.geda-project.org/pcb:roadmap" class="urlextern" title="http://wiki.geda-project.org/pcb:roadmap" rel="nofollow">http://wiki.geda-project.org/pcb:roadmap</a></div>
+</li>
+</ul>
+</li>
+</ol>
+</li>
+</ul>
+
+</div>
+<!-- EDIT3 SECTION "Triage van Kenmerk Verzoeken" [2773-] --></body>
 </html>

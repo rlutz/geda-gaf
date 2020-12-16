@@ -21,7 +21,7 @@ dnl Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 # Adds the argument to GCC_CFLAGS if the compiler is GCC.
 AC_DEFUN([AX_GCC_FLAGS],
 [
-  AC_PREREQ([2.60])dnl
+  AC_PREREQ([2.69])dnl
   AC_REQUIRE([AC_PROG_CC])dnl
 
   if test "X$GCC" = "Xyes"; then

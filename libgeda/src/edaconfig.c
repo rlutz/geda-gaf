@@ -1,6 +1,6 @@
 /* gEDA - GPL Electronic Design Automation
  * libgeda - gEDA's Library
- * Copyright (C) 2011-2019 gEDA Contributors (see ChangeLog for details)
+ * Copyright (C) 2011-2020 gEDA Contributors (see ChangeLog for details)
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -139,9 +139,7 @@ eda_config_class_init (EdaConfigClass *klass)
 static void
 eda_config_init (EdaConfig *config)
 {
-  config->priv = G_TYPE_INSTANCE_GET_PRIVATE (config,
-                                              EDA_TYPE_CONFIG,
-                                              EdaConfigPrivate);
+  config->priv = eda_config_get_instance_private (config);
 
   config->priv->parent = NULL;
   config->priv->keyfile = g_key_file_new ();
@@ -523,15 +521,17 @@ eda_config_get_context_for_file (GFile *path)
     g_once_init_leave (&initialized, 1);
   }
 
-  if (path == NULL) {
+  if (path != NULL) {
+    g_return_val_if_fail (G_IS_FILE (path), NULL);
+
+    /* Find the project root, and the corresponding configuration
+     * filename. */
+    root = find_project_root (path);
+  } else {
     path = g_file_new_for_path (".");
+    root = find_project_root (path);
+    g_object_unref (path);
   }
-
-  g_return_val_if_fail (G_IS_FILE (path), NULL);
-
-  /* Find the project root, and the corresponding configuration
-   * filename. */
-  root = find_project_root (path);
   file = g_file_get_child (root, LOCAL_CONFIG_NAME);
 
   /* If there's already a context available for this file, return

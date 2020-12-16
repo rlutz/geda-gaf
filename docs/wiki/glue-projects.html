@@ -10,7 +10,7 @@
 </head>
 <body>
 
-<h3 id="generalglueandrelatedgafprojects">General, &quot;glue&quot; and related gaf projects</h3>
+<h3 class="sectionedit1" id="general_glue_and_related_gaf_projects">General, &quot;glue&quot; and related gaf projects</h3>
 <div class="level3">
 
 <p>
@@ -19,7 +19,7 @@ These projects make the others work together as a system.
 
 </div>
 
-<h5 id="autogenerationoffabdrawingwithembeddedfabnotes">Autogeneration of fab drawing with embedded fab notes</h5>
+<h5 id="autogeneration_of_fab_drawing_with_embedded_fab_notes">Autogeneration of fab drawing with embedded fab notes</h5>
 <div class="level5">
 
 <p>
@@ -32,11 +32,11 @@ Difficulty: 2
 
 </div>
 
-<h5 id="createcomprehensivetestsuiteforentiregedasuite">Create comprehensive test suite for entire gEDA Suite</h5>
+<h5 id="create_comprehensive_test_suite_for_entire_geda_suite">Create comprehensive test suite for entire gEDA Suite</h5>
 <div class="level5">
 
 <p>
-This project encompasses the functionality of the entire gEDA PCB design flow. You would develop a test framework for as much of these tools as possible. This likely means creating a large regression test suite. Some examples are sets of layouts (using PCB) that just barely pass and just barely fail each of the different DRC checks, generate BOM&#039;s, x-y files, generate gerbers and maybe use gerbv to do a graphical xor against a &quot;golden&quot; file. For gnetlist, reference netlists that have been placed into some canonical form should be generated from gschem schematics (.sch files).
+This project encompasses the functionality of the entire gEDA PCB design flow. You would develop a test framework for as much of these tools as possible. This likely means creating a large regression test suite. Some examples are sets of layouts (using PCB) that just barely pass and just barely fail each of the different DRC checks, generate BOM&#039;s, x-y files, generate gerbers and maybe use gerbv to do a graphical xor against a “golden” file. For gnetlist, reference netlists that have been placed into some canonical form should be generated from gschem schematics (.sch files).
 </p>
 
 <p>
@@ -49,11 +49,11 @@ Difficulty = 3
 
 </div>
 
-<h5 id="usabilityimprovementsforngspicegnucap">Usability improvements for ngspice/Gnucap</h5>
+<h5 id="usability_improvements_for_ngspice_gnucap">Usability improvements for ngspice/Gnucap</h5>
 <div class="level5">
 
 <p>
-Ngspice and Gnucap are the gEDA Project&#039;s analog circuit simulators. They are both command-line tools, meaning that you type commands into a shell-like program at a prompt. However, some popular commercial simulators support easy simulation and analysis directly from within a schematic capture GUI. This method of working is particularly well suited to newbies.
+Ngspice and Gnucap are the gEDA Project&#039;s analog circuit simulators. They are both command-line tools, meaning that you type commands into a shell-like program at a prompt. However, some popular commercial simulators support easy simulation and analysis directly from within a schematic capture <abbr title="Graphical User Interface">GUI</abbr>. This method of working is particularly well suited to newbies.
 </p>
 
 <p>
@@ -73,7 +73,7 @@ The simulation runs and the postprocessing may be in an extra program that is tr
 </p>
 
 <p>
-This project involves tightening the link between gschem and the back-end simulation programs. This might be done using some type of IPC, such as DBUS. Indeed, a preliminary DBUS implementation for gschem &lt;-&gt; PCB already exists; the student might leverage the DBUS work for this project.
+This project involves tightening the link between gschem and the back-end simulation programs. This might be done using some type of IPC, such as DBUS. Indeed, a preliminary DBUS implementation for gschem ↔ PCB already exists; the student might leverage the DBUS work for this project.
 </p>
 
 <p>
@@ -82,7 +82,7 @@ Difficulty = 3
 
 </div>
 
-<h5 id="gschempartsmanagerorpartsdatabase">Gschem parts manager or parts database</h5>
+<h5 id="gschem_parts_manager_or_parts_database">Gschem parts manager or parts database</h5>
 <div class="level5">
 
 <p>
@@ -99,15 +99,15 @@ Difficulty = 4
 
 </div>
 
-<h5 id="gnetlistgnetmansupportforhierarchy">Gnetlist/gnetman support for hierarchy</h5>
+<h5 id="gnetlist_gnetman_support_for_hierarchy">Gnetlist/gnetman support for hierarchy</h5>
 <div class="level5">
 
 <p>
-The goal of this project is to create a scalable, professional-grade netlister. The project might involve re-writing gnetlist to enable hierarchical designs, or might involve upgrading &quot;gnetman&quot; to incorporate scripted back-ends. The upgrade would be done with an eye towards scalability. Ideally, highly capable and efficient internal data structures and methods for accessing the netlist database should be used. Then a scheme/guile API provided for an external script engine. (It may be beneficial to use swig to allow easy interfacing to multiple scripting languages.) The idea is to produce a netlister capable of handling large, hierarchical designs while still allowing users to write their own netlisters for their favorite netlist format (as gnetlist does now).
+The goal of this project is to create a scalable, professional-grade netlister. The project might involve re-writing gnetlist to enable hierarchical designs, or might involve upgrading “gnetman” to incorporate scripted back-ends. The upgrade would be done with an eye towards scalability. Ideally, highly capable and efficient internal data structures and methods for accessing the netlist database should be used. Then a scheme/guile <abbr title="Application Programming Interface">API</abbr> provided for an external script engine. (It may be beneficial to use swig to allow easy interfacing to multiple scripting languages.) The idea is to produce a netlister capable of handling large, hierarchical designs while still allowing users to write their own netlisters for their favorite netlist format (as gnetlist does now).
 </p>
 
 <p>
-Gnetman is probably the logical starting point since the database was designed by someone with a lot of experience in EDA, and it uses datadraw which is a proven high power CASE tool. However, the student may take whatever approach he wishes, but should provide a strong argument that his approach makes sense before starting coding. In any event, It will be important to provide a compatibility API for the existing backends while providing a more high power and flexible API for new backends and improvements of the old ones.
+Gnetman is probably the logical starting point since the database was designed by someone with a lot of experience in EDA, and it uses datadraw which is a proven high power CASE tool. However, the student may take whatever approach he wishes, but should provide a strong argument that his approach makes sense before starting coding. In any event, It will be important to provide a compatibility <abbr title="Application Programming Interface">API</abbr> for the existing backends while providing a more high power and flexible <abbr title="Application Programming Interface">API</abbr> for new backends and improvements of the old ones.
 </p>
 
 <p>
@@ -116,11 +116,11 @@ Difficulty = 3
 
 </div>
 
-<h5 id="languagetranslatormainprogram">Language translator main program</h5>
+<h5 id="language_translator_main_program">Language translator main program</h5>
 <div class="level5">
 
 <p>
-The goal of this project is to write a driver file format translation, particularly for import and export of foreign formats.  A start already exists with gnucap language plugins.  It would be sort of like the existing &quot;gnetlist&quot; but be universal and able to translate in both directions.
+The goal of this project is to write a driver file format translation, particularly for import and export of foreign formats.  A start already exists with gnucap language plugins.  It would be sort of like the existing “gnetlist” but be universal and able to translate in both directions.
 </p>
 
 <p>
@@ -133,11 +133,11 @@ Difficulty = 1
 
 </div>
 
-<h5 id="netlistfileimportexport">Netlist file import / export</h5>
+<h5 id="netlist_file_import_export">Netlist file import / export</h5>
 <div class="level5">
 
 <p>
-After we have the &quot;translator main program&quot;, above, we need plugins for the formats to import and export.  Gnucap already has support for Spice, Spectre, and Verilog, as plugins.  These plugins can be used with the system, and as examples of how others can be written.  The plugin needs to translate in both directions.
+After we have the “translator main program”, above, we need plugins for the formats to import and export.  Gnucap already has support for Spice, Spectre, and Verilog, as plugins.  These plugins can be used with the system, and as examples of how others can be written.  The plugin needs to translate in both directions.
 </p>
 
 <p>
@@ -145,7 +145,7 @@ Obvious formats needed by the gEDA system are gschem, PCB, and Gerber.
 </p>
 
 <p>
-Foreign formats needed, to provide a migration path between gEDA and other flows, include kicad, oregano, orcad, QUCS, LTspice, ....
+Foreign formats needed, to provide a migration path between gEDA and other flows, include kicad, oregano, orcad, QUCS, LTspice, ….
 </p>
 
 <p>

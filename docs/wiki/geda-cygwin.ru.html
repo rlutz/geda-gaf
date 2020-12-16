@@ -14,7 +14,7 @@
 <em>Эта страница доступна также на следующих языках:</em> <a href="geda-cygwin.html" class="wikilink1" title="geda-cygwin.html">English</a>
 </p>
 
-<h1 id="установкаgedagafвwindowsспомощьюcygwin">Установка gEDA/gaf в Windows с помощью Cygwin</h1>
+<h1 class="sectionedit1" id="установка_geda_gaf_в_windows_с_помощью_cygwin">Установка gEDA/gaf в Windows с помощью Cygwin</h1>
 <div class="level1">
 
 <p>
@@ -25,89 +25,110 @@
 </p>
 
 </div>
-
-<h2 id="инструкции">Инструкции</h2>
+<!-- EDIT1 SECTION "Установка gEDA/gaf в Windows с помощью Cygwin" [115-543] -->
+<h2 class="sectionedit2" id="инструкции">Инструкции</h2>
 <div class="level2">
 
 <p>
 <strong>1. Загрузите и запустите setup.exe с веб-страницы cygwin:</strong>
-http:<em>www.cygwin.com.
+<a href="http://www.cygwin.com" class="urlextern" title="http://www.cygwin.com" rel="nofollow">http://www.cygwin.com</a>.
+</p>
 
+<p>
 В диалоговом окне выбора пакетов выберите следующие пакеты:
+</p>
 
+<p>
 (Подсказка: нажмите один раз кнопку <strong><em>View</em></strong>, чтобы вывести список в
 алфавитном порядке)
+</p>
+<pre class="code">atk-devel
+crypt
+file
+gcc
+gtk2-x11-devel
+guile-devel
+libgmp-devel
+libtool1.5
+make
+pango-devel
+patchutils
+pcre-devel
+pcre-doc
+pkg-config
+xorg-x11-devel
+xorg-x11-fscl
+xterm</pre>
 
-  atk-devel
-  crypt
-  file
-  gcc
-  gtk2-x11-devel
-  guile-devel
-  libgmp-devel
-  libtool1.5
-  make
-  pango-devel
-  patchutils
-  pcre-devel
-  pcre-doc
-  pkg-config
-  xorg-x11-devel
-  xorg-x11-fscl
-  xterm
-
+<p>
 <strong>2. Добавьте следующие строки в свой .bash_profile:</strong>
+</p>
+<pre class="code">export LD_LIBRARY_PATH=$HOME/geda/lib:$LD_LIBRARY_PATH
+export PATH=$HOME/geda/bin:$PATH
+export PKG_CONFIG_PATH=$HOME/geda/lib/pkgconfig:$PKG_CONFIG_PATH</pre>
 
-  export LD_LIBRARY_PATH=$HOME/geda/lib:$LD_LIBRARY_PATH
-  export PATH=$HOME/geda/bin:$PATH
-  export PKG_CONFIG_PATH=$HOME/geda/lib/pkgconfig:$PKG_CONFIG_PATH
-
+<p>
 Обновите своё окружение:
-  $ source .bash_profile
+</p>
+<pre class="code">$ source .bash_profile</pre>
 
-<strong>3. Перейдите на страницу загрузки исходных текстов программ gEDA.</strong>
+<p>
+<strong>3. Перейдите на <a href="http://www.geda.seul.org/sources.html" class="urlextern" title="http://www.geda.seul.org/sources.html" rel="nofollow">страницу загрузки исходных текстов программ gEDA</a>.</strong>
+</p>
 
+<p>
 Из группы gEDA/gaf загрузите <strong>только</strong> те пакеты, версии которых обозначены
 в виде дат. Необходимые зависимости уже были установлены в шаге 1.  Однако,
 если вы не установили или не собрали пакет <strong>libstroke</strong>, не забудьте
 добавить в строку <code>opts=</code> ключ
-&lt;code&gt;
---disable-stroke
-&lt;/code&gt;
-Добавьте в строку <code>opts=</code> в </em><code>Makefile</code><em> следующие ключи:
-&lt;code&gt;
---disable-update-mime-database --disable-update-desktop-database --disable-nls
-&lt;/code&gt;
+</p>
+<pre class="code">--disable-stroke</pre>
 
+<p>
+Добавьте в строку <code>opts=</code> в <em><code>Makefile</code></em> следующие ключи:
+</p>
+<pre class="code">--disable-update-mime-database --disable-update-desktop-database --disable-nls</pre>
+
+<p>
 <strong>4. Перейдите к каталогу загрузки и введите:</strong>
-  $ make open
-  $ make install
-  ( ...терпение... )
+</p>
+<pre class="code">$ make open
+$ make install
+( ...терпение... )</pre>
 
+<p>
 <strong>5. Теперь, чтобы документация правильно отображалась из меню справки gschem:</strong>
+</p>
 
+<p>
 Установите местоположение исполняемых файлов вашего браузера и программы
-просмотра PDF и сделайте на них ссылки в </em><code>/usr/bin</code><em>. Например:
-  $ ln -s &quot;c:\Program Files\Internet Explorer\iexplore.exe&quot; /usr/bin/iexplore
-  $ ln -s &quot;c:\Program Files\Firefox\firefox.exe&quot; /usr/bin/firefox
-  $ ln -s &quot;c:\Program Files\Adobe\Acrobat 7.0\Reader\AcroRd32.exe&quot; /usr/bin/acroread
+просмотра PDF и сделайте на них ссылки в <em><code>/usr/bin</code></em>. Например:
+</p>
+<pre class="code">$ ln -s &quot;c:\Program Files\Internet Explorer\iexplore.exe&quot; /usr/bin/iexplore
+$ ln -s &quot;c:\Program Files\Firefox\firefox.exe&quot; /usr/bin/firefox
+$ ln -s &quot;c:\Program Files\Adobe\Acrobat 7.0\Reader\AcroRd32.exe&quot; /usr/bin/acroread</pre>
 
+<p>
 Попробуйте:
-  $ iexplore
-  ( появляется Microsoft Internet Explorer )
-  $ firefox
-  ( появляется Firefox, если он установлен )
-  $ acroread
-  ( появляется Adobe Acrobat Reader )
-  $ gschemdoc -m
-  ( появляется документация gEDA )
+</p>
+<pre class="code">$ iexplore
+( появляется Microsoft Internet Explorer )
+$ firefox
+( появляется Firefox, если он установлен )
+$ acroread
+( появляется Adobe Acrobat Reader )
+$ gschemdoc -m
+( появляется документация gEDA )</pre>
 
+<p>
 <strong>6. Наконец, запустите X-сервер</strong>
-  $ startx
+</p>
+<pre class="code">$ startx</pre>
 
+<p>
 Наслаждайтесь!
 </p>
 
 </div>
-</body>
+<!-- EDIT2 SECTION "Инструкции" [544-] --></body>
 </html>

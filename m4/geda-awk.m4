@@ -21,7 +21,7 @@ dnl Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 
 AC_DEFUN([AX_PROG_AWK],
 [
-  AC_PREREQ([2.60])dnl
+  AC_PREREQ([2.69])dnl
   AC_PROVIDE([AC_PROG_AWK])dnl
   AC_ARG_VAR([AWK], [Path to awk executable])
   AC_PATH_PROGS([AWK], [mawk gawk nawk awk], [no])
@@ -34,7 +34,7 @@ path.])
 dnl AX_AWK_IFELSE (PROGRAM, INPUT, [ACTION-IF-TRUE], [ACTION-IF-FALSE])
 AC_DEFUN([AX_AWK_IFELSE],
 [
-  AC_PREREQ([2.60])dnl
+  AC_PREREQ([2.69])dnl
   AC_REQUIRE([AC_PROG_AWK])dnl
   cat > conftest.awk <<EOF
 [#]line __oline__ "configure"
@@ -62,7 +62,7 @@ $4])
 dnl Check for some miscellaneous Awk features used by gEDA.
 AC_DEFUN([AX_AWK_FEATURES],
 [
-  AC_PREREQ([2.60])dnl
+  AC_PREREQ([2.69])dnl
   AC_REQUIRE([AC_PROG_AWK])dnl
 
   AC_MSG_CHECKING([whether $AWK has gsub])

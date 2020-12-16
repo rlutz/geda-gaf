@@ -12,11 +12,11 @@
 <a href=.>start</a>&nbsp;=>&nbsp;<a href=geda-gnetlist_ug.html>gnetlist_ug</a></br>
 <div class="table sectionedit1"><table class="inline">
 	<tr class="row0">
-		<td class="col0 leftalign"> &lt;&lt; <a href="geda-gnetlist_ug-input_output_files.html" class="wikilink1" title="geda-gnetlist_ug-input_output_files.html">Input &amp; output files</a>  </td><td class="col1 centeralign">  <strong><a href="geda-gnetlist_ug.html" class="wikilink1" title="geda-gnetlist_ug.html">gEDA gnetlist User Guide</a></strong>     </td><td class="col2 rightalign">  <a href="geda-gnetlist_ug-basic_netlisting.html" class="wikilink1" title="geda-gnetlist_ug-basic_netlisting.html">Basic netlisting</a> &gt;&gt; </td>
+		<td class="col0 leftalign"> « <a href="geda-gnetlist_ug-input_output_files.html" class="wikilink1" title="geda-gnetlist_ug-input_output_files.html">Input &amp; output files</a>  </td><td class="col1 centeralign">  <strong><a href="geda-gnetlist_ug.html" class="wikilink1" title="geda-gnetlist_ug.html">gEDA gnetlist User Guide</a></strong>     </td><td class="col2 rightalign">  <a href="geda-gnetlist_ug-basic_netlisting.html" class="wikilink1" title="geda-gnetlist_ug-basic_netlisting.html">Basic netlisting</a> » </td>
 	</tr>
 </table></div>
 <!-- EDIT1 TABLE [1-187] -->
-<h2 id="netlistbackends">Netlist backends</h2>
+<h2 class="sectionedit2" id="netlist_backends">Netlist backends</h2>
 <div class="level2">
 
 <p>
@@ -30,11 +30,11 @@ Normally, gnetlist generates a netlist in two steps.
 </ol>
 
 <p>
-Most backends are used to write out electrical connectivity information in a machine-readable format for use by other tools.  For example, the &quot;liquidpcb&quot; backend is used to generate a netlist to use when designing a circuit board with LiquidPCB, and the &quot;spice-sdb&quot; backend is often used to create netlists for use with the SPICE simulator.
+Most backends are used to write out electrical connectivity information in a machine-readable format for use by other tools.  For example, the “liquidpcb” backend is used to generate a netlist to use when designing a circuit board with <a href="http://www.liquidpcb.org/" class="urlextern" title="http://www.liquidpcb.org/" rel="nofollow">LiquidPCB</a>, and the “spice-sdb” backend is often used to create netlists for use with the SPICE simulator.
 </p>
 
 <p>
-Backends may have other uses, however.  For example, the &quot;bom2&quot; backend is used for generating a list of components used (a &quot;Bill of Materials&quot;), and the &quot;drc2&quot; backend carries out &quot;design rule checking&quot; (i.e. checking a design for commonly-made errors and potential problems).
+Backends may have other uses, however.  For example, the “bom2” backend is used for generating a list of components used (a “Bill of Materials”), and the “drc2” backend carries out “design rule checking” (i.e. checking a design for commonly-made errors and potential problems).
 </p>
 
 <p>
@@ -43,18 +43,18 @@ A summary of all the netlist backends distributed with gnetlist is provided in t
 <div class="notetip">If none of the distributed backends do what you need, you can write and install your own! For more information, see the <a href="geda-gnetlist_scheme_tutorial.html" class="wikilink1" title="geda-gnetlist_scheme_tutorial.html">Scripting a gnetlist backend in Scheme</a> tutorial.
 </div>
 </div>
-
-<h3 id="specifyingabackend">Specifying a backend</h3>
+<!-- EDIT2 SECTION "Netlist backends" [189-1522] -->
+<h3 class="sectionedit3" id="specifying_a_backend">Specifying a backend</h3>
 <div class="level3">
 
 <p>
-Use the <code>-g</code> option to indicate which backend you would like gnetlist to run.  For example, to run the &quot;bom2&quot; backend:
+Use the <code>-g</code> option to indicate which backend you would like gnetlist to run.  For example, to run the “bom2” backend:
 </p>
 <pre class="code">gnetlist -g bom2</pre>
 
 </div>
-
-<h3 id="listingbackends">Listing backends</h3>
+<!-- EDIT3 SECTION "Specifying a backend" [1523-1709] -->
+<h3 class="sectionedit4" id="listing_backends">Listing backends</h3>
 <div class="level3">
 
 <p>
@@ -67,8 +67,8 @@ This will print a list of all the backends that gnetlist can find.
 </p>
 
 </div>
-
-<h3 id="interactivemode">Interactive mode</h3>
+<!-- EDIT4 SECTION "Listing backends" [1710-1938] -->
+<h3 class="sectionedit5" id="interactive_mode">Interactive mode</h3>
 <div class="level3">
 
 <p>
@@ -76,5 +76,5 @@ An alternative to running a backend is to use <em>interactive mode</em>.  When t
 </p>
 
 </div>
-</body>
+<!-- EDIT5 SECTION "Interactive mode" [1939-] --></body>
 </html>

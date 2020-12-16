@@ -23,7 +23,7 @@ dnl Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 # FIXME All of this should be done at runtime.
 AC_DEFUN([AX_PCB_DIRS],
 [
-  AC_PREREQ([2.60])dnl
+  AC_PREREQ([2.69])dnl
 
   # Check what prefix to use for PCB footprint libraries
   AC_MSG_CHECKING([where to look for PCB footprints])

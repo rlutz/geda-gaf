@@ -10,7 +10,7 @@
 </head>
 <body>
 
-<h1 id="overview">Overview</h1>
+<h1 class="sectionedit1" id="overview">Overview</h1>
 <div class="level1">
 
 <p>
@@ -18,8 +18,8 @@ As stated in <a href="libgeda3.html" class="wikilink1" title="libgeda3.html">lib
 </p>
 
 </div>
-
-<h1 id="descriptionoftheneedsinanelectricalcadsystem">Description of the needs in an Electrical CAD system</h1>
+<!-- EDIT1 SECTION "Overview" [1-296] -->
+<h1 class="sectionedit2" id="description_of_the_needs_in_an_electrical_cad_system">Description of the needs in an Electrical CAD system</h1>
 <div class="level1">
 
 <p>
@@ -45,7 +45,7 @@ The basic primitives used in the graphical artwork are:
 </ul>
 
 <p>
-These basic shapes can have attributes modifying how they are drawn in the screen: dashed or dotted lines, filled or unfilled shapes,... , and can be grouped into a composed object (this object is drawn as a combination of one or more basic primitives). The graphical representation of a composed object is a symbol.
+These basic shapes can have attributes modifying how they are drawn in the screen: dashed or dotted lines, filled or unfilled shapes,… , and can be grouped into a composed object (this object is drawn as a combination of one or more basic primitives). The graphical representation of a composed object is a symbol.
 </p>
 
 <p>
@@ -70,16 +70,16 @@ One common way is to draw a circuit defining some ports (where it is going to co
 </p>
 
 <p>
-Finally, but not less important, every object described can have properties attached, describing the nature of the component, its attributes, or other representations (simulation models, graphical representation for PCB design,...).
+Finally, but not less important, every object described can have properties attached, describing the nature of the component, its attributes, or other representations (simulation models, graphical representation for PCB design,…).
 </p>
 
 </div>
-
-<h1 id="objectbaseddesign">Object based design</h1>
+<!-- EDIT2 SECTION "Description of the needs in an Electrical CAD system" [297-2701] -->
+<h1 class="sectionedit3" id="object_based_design">Object based design</h1>
 <div class="level1">
 
 <p>
-Despite its title, this is not a section talking about Object Oriented Programming. :-)
+Despite its title, this is not a section talking about Object Oriented Programming. <img src="images/smileys/icon_smile.gif" align="middle" alt=":-)" />
 </p>
 
 <p>
@@ -87,16 +87,16 @@ It is a known fact that all schematics are graphical representations of componen
 </p>
 
 <p>
-One of the current issues with libgeda is that the schematic program itself, and hence the developers, should take care of all the drawing stuff associated with schematics. Plus, there are drawing transforms, like moving, rotating, mirroring, etc... This is very time consuming for the developer, and the results are not always the best.
+One of the current issues with libgeda is that the schematic program itself, and hence the developers, should take care of all the drawing stuff associated with schematics. Plus, there are drawing transforms, like moving, rotating, mirroring, etc… This is very time consuming for the developer, and the results are not always the best.
 </p>
 
 <p>
 This was fine at the moment when it was born, but technology is continuously evolving. 
-Today there are more advanced widgets that take care of all the object drawing, and lets the applications concentrate on what they should do. This kind of widgets are called &quot;canvas&quot;.
+Today there are more advanced widgets that take care of all the object drawing, and lets the applications concentrate on what they should do. This kind of widgets are called “canvas”.
 </p>
 
 <p>
-Let&#039;s take a look at one of them: goocanvas. There are no screenshots, no official webpage, but don&#039;t be scared and look further. Download it and take a look at the documentation into the &quot;doc&quot; directory. You can also compile a demo, but you will need GTK 2.10 (for goocanvas version greater than 0.4), or GTK2.8 (goocanvas 0.4). I can tell you that the demo of the last version (0.8 at this moment) is quite impressive. If you have time, try it!. It is worth!.
+Let&#039;s take a look at one of them: <a href="http://sourceforge.net/projects/goocanvas" class="urlextern" title="http://sourceforge.net/projects/goocanvas" rel="nofollow">goocanvas</a>. There are no screenshots, no official webpage, but don&#039;t be scared and look further. Download it and take a look at the documentation into the “doc” directory. You can also compile a demo, but you will need GTK 2.10 (for goocanvas version greater than 0.4), or GTK2.8 (goocanvas 0.4). I can tell you that the demo of the last version (0.8 at this moment) is quite impressive. If you have time, try it!. It is worth!.
 </p>
 
 <p>
@@ -113,7 +113,7 @@ Basically what it provides is:
 </li>
 <li class="level1"><div class="li"> Uses cairo, already in GTK. This can be a drawback for some people, but if you have problems with cairo, it&#039;s likely you are going to have problems with the current gschem when GTK complete the transition into cairo.</div>
 </li>
-<li class="level1"><div class="li"> Built-in drawing transforms (rotating, scaling, moving,...).</div>
+<li class="level1"><div class="li"> Built-in drawing transforms (rotating, scaling, moving,…).</div>
 </li>
 <li class="level1"><div class="li"> Full international text support without creating a new font. This is something true with some programs using a custom font: if you want it to support your language, you have to create the font for your special characters. (This is the case of the current gschem).</div>
 </li>
@@ -134,8 +134,8 @@ So the proposal is to base all the geda objects on the objects supplied by the c
 </p>
 
 </div>
-
-<h1 id="gedaobjects">geda objects</h1>
+<!-- EDIT3 SECTION "Object based design" [2702-5463] -->
+<h1 class="sectionedit4" id="geda_objects">geda objects</h1>
 <div class="level1">
 
 <p>
@@ -196,7 +196,7 @@ No object naming is required, although it is already supported by default: you c
 </p>
 
 <p>
-Example: a 7400 symbol, with a footprint attribute &quot;DIP-16&quot;, and reference designator &quot;U1&quot; would look as:
+Example: a 7400 symbol, with a footprint attribute “DIP-16”, and reference designator “U1” would look as:
 </p>
 <pre class="code">GedaObject
  |- views
@@ -207,8 +207,8 @@ Example: a 7400 symbol, with a footprint attribute &quot;DIP-16&quot;, and refer
  v    v     </pre>
 
 </div>
-
-<h1 id="integrationwithcurrentcode">Integration with current code</h1>
+<!-- EDIT4 SECTION "geda objects" [5464-7610] -->
+<h1 class="sectionedit5" id="integration_with_current_code">Integration with current code</h1>
 <div class="level1">
 
 <p>
@@ -220,8 +220,8 @@ All canvas specific code can be hidden by a common interface or a runtime plugin
 </p>
 
 </div>
-
-<h1 id="comments">Comments?</h1>
+<!-- EDIT5 SECTION "Integration with current code" [7611-7959] -->
+<h1 class="sectionedit6" id="comments">Comments?</h1>
 <div class="level1">
 
 <p>
@@ -237,11 +237,11 @@ Hi. I think a canvas could be the right way to go with gschem, however we should
 </p>
 
 <p>
-We can write a wrapper between libgeda and the canvas for actual rendering. It looks (superficially) that this is possible with goocanvas. The two basic cases are &quot;compound&quot; gEDA objects which map to groups of other objects (like complex objects, the current font implementation etc.), and gEDA objects which map to primitives like lines and arcs.
+We can write a wrapper between libgeda and the canvas for actual rendering. It looks (superficially) that this is possible with goocanvas. The two basic cases are “compound” gEDA objects which map to groups of other objects (like complex objects, the current font implementation etc.), and gEDA objects which map to primitives like lines and arcs.
 </p>
 
 <p>
-I think some of the important design decisions to make now involve defining the API for object / design database manipulation, and what signals and hooks we might expose to other code. I&#039;d start by considering starting with basic &quot;translate, rotate, mirror, ....&quot; operations like libgeda has now, and then explore signals notifying that an object has changed.
+I think some of the important design decisions to make now involve defining the <abbr title="Application Programming Interface">API</abbr> for object / design database manipulation, and what signals and hooks we might expose to other code. I&#039;d start by considering starting with basic “translate, rotate, mirror, ….” operations like libgeda has now, and then explore signals notifying that an object has changed.
 </p>
 
 <p>
@@ -249,5 +249,5 @@ I think some of the important design decisions to make now involve defining the 
 </p>
 
 </div>
-</body>
+<!-- EDIT6 SECTION "Comments?" [7960-] --></body>
 </html>

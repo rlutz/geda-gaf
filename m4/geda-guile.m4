@@ -21,7 +21,7 @@ dnl Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 
 AC_DEFUN([AX_CHECK_GUILE],
 [
-  AC_PREREQ([2.60])dnl
+  AC_PREREQ([2.69])dnl
 
   # First check for the libguile library
   # ------------------------------------
@@ -34,9 +34,9 @@ AC_DEFUN([AX_CHECK_GUILE],
   GUILE_MIN_MINOR=`echo ${GUILE_MIN_VER} | sed -e 's;[[^\.]]*\.;;' -e 's;\..*;;g'`
   GUILE_MIN_TEENY=`echo ${GUILE_MIN_VER} | sed -e 's;.*\.;;'`
 
-  PKG_CHECK_MODULES(GUILE, [guile-2.0 >= $GUILE_MIN_VER],
-                           [GUILE_PKG_NAME=guile-2.0],
-                           [AC_MSG_ERROR([you need at least version ${GUILE_MIN_VER} of guile])])
+  PKG_CHECK_MODULES(GUILE, [guile-2.2 >= $GUILE_MIN_VER],
+                           [GUILE_PKG_NAME=guile-2.2],
+                           [AC_MSG_ERROR([you need Guile 2.2 (at least version ${GUILE_MIN_VER})])])
 
   AC_SUBST([GUILE_PKG_NAME])
 

@@ -1,5 +1,5 @@
 # Russian translation for gEDA gnetlist-legacy
-# Copyright (c) 2014-2019 gEDA Developers
+# Copyright (c) 2014-2020 gEDA Developers
 # Copyright (c) Vladimir Zhbanov <vzhbanov@gmail.com>, 2014.
 #
 # This file is distributed under the same license as the gEDA gnetlist-legacy package.
@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: geda gnetlist-legacy\n"
 "Report-Msgid-Bugs-To: https://bugs.launchpad.net/geda\n"
-"POT-Creation-Date: 2019-10-08 20:20+0200\n"
+"POT-Creation-Date: 2020-12-16 18:12+0100\n"
 "PO-Revision-Date: 2014-05-20 08:55+0400\n"
 "Last-Translator: Vladimir Zhbanov <vzhbanov@gmail.com>\n"
 "Language-Team: gEDA Developers\n"
@@ -173,7 +173,7 @@ msgstr ""
 #, c-format
 msgid ""
 "gEDA %s (g%.7s)\n"
-"Copyright (C) 1998-2019 gEDA developers\n"
+"Copyright (C) 1998-2020 gEDA developers\n"
 "This is free software, and you are welcome to redistribute it under\n"
 "certain conditions. For details, see the file `COPYING', which is\n"
 "included in the gEDA distribution.\n"

@@ -1,7 +1,7 @@
 /* gEDA - GPL Electronic Design Automation
  * gschem - gEDA Schematic Capture
  * Copyright (C) 1998-2010 Ales Hvezda
- * Copyright (C) 1998-2019 gEDA Contributors (see ChangeLog for details)
+ * Copyright (C) 1998-2020 gEDA Contributors (see ChangeLog for details)
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -345,6 +345,7 @@ x_window_save_geometry (GschemToplevel *w_current)
                           "gschem.window-geometry", "height", height);
     }
   }
+  g_free (window_state);
 
   /* save torn-off menus */
   if (w_current->menubar != NULL)
@@ -451,6 +452,7 @@ x_window_restore_geometry (GschemToplevel *w_current)
     gtk_window_fullscreen (GTK_WINDOW (w_current->main_window));
   else if (window_state != NULL && strcmp (window_state, "maximized") == 0)
     gtk_window_maximize (GTK_WINDOW (w_current->main_window));
+  g_free (window_state);
 
   /* defer restoring torn-off menus until main window is shown */
   g_signal_connect_swapped (
@@ -1112,7 +1114,7 @@ void x_window_close(GschemToplevel *w_current)
 
   /* just closed last window, so quit */
   if (last_window) {
-    gschem_quit();
+    gtk_main_quit();
   }
 }
 

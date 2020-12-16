@@ -1,7 +1,7 @@
 /* gEDA - GPL Electronic Design Automation
  * libgeda - gEDA's library
  * Copyright (C) 1998-2010 Ales Hvezda
- * Copyright (C) 1998-2019 gEDA Contributors (see ChangeLog for details)
+ * Copyright (C) 1998-2020 gEDA Contributors (see ChangeLog for details)
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -461,7 +461,6 @@ int f_save(TOPLEVEL *toplevel, PAGE *page, const char *filename, GError **err)
     page->saved_since_first_loaded = 1;
 
     /* Reset the last saved timer */
-    g_get_current_time (&page->last_load_or_save_time);
     page->ops_since_last_backup = 0;
     page->do_autosave_backup = 0;
 

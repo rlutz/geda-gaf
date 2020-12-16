@@ -21,7 +21,7 @@ dnl Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 # Check where gEDA data and configuration should be stored.
 AC_DEFUN([AX_DATA_DIRS],
 [
-  AC_PREREQ([2.60])dnl
+  AC_PREREQ([2.69])dnl
 
   # Check where to install ordinary data files (e.g. symbols and
   # gnetlist backends)

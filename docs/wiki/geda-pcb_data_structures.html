@@ -10,7 +10,7 @@
 </head>
 <body>
 
-<h2 id="pcbtype">PCBType</h2>
+<h2 class="sectionedit1" id="pcbtype">PCBType</h2>
 <div class="level2">
 
 <p>
@@ -22,12 +22,12 @@ PCBType contain all the general information used in the program and it contains 
 </p>
 
 <p>
-<a href="media/devel_intro/structpcbtype_graph.png" class="media" target="_blank" title="devel_intro:structpcbtype_graph.png">devel_intro:structpcbtype_graph.png</a>
+<a href="media/devel_intro/structpcbtype_graph.png" class="media" target="_blank" title="devel_intro:structpcbtype_graph.png"><img src="media/devel_intro/structpcbtype_graph.png" class="media" alt="" /></a>
 </p>
 
 </div>
-
-<h2 id="datatype">DataType</h2>
+<!-- EDIT1 SECTION "PCBType" [1-206] -->
+<h2 class="sectionedit2" id="datatype">DataType</h2>
 <div class="level2">
 
 <p>
@@ -37,7 +37,7 @@ The DataType contains the actual data that defines our printed circuit board.
 <p>
 DataType is what&#039;s stored in the Buffers when you do cut/paste.
 </p>
-<div class="table sectionedit1"><table class="inline">
+<div class="table sectionedit3"><table class="inline">
 	<thead>
 	<tr class="row0">
 		<th class="col0">Data Fields </th><th class="col1" colspan="2"> </th>
@@ -92,15 +92,15 @@ DataType is what&#039;s stored in the Buffers when you do cut/paste.
 		<td class="col0">int</td><td class="col1">polyClip</td><td class="col2"> </td>
 	</tr>
 </table></div>
-<!-- EDIT1 TABLE [373-875] -->
+<!-- EDIT3 TABLE [373-875] -->
 <p>
 The actual data is stored in the <a href="geda-pcb_developer_introduction.html#glist" class="wikilink1" title="geda-pcb_developer_introduction.html">GList</a> data elements. The rest is there for administrative purposes, to keep track of it all.
 Here I like to specially mention the rtree_t* data members. Although they have an administrative character the <a href="geda-pcb_developer_introduction.html#r-tree" class="wikilink1" title="geda-pcb_developer_introduction.html">R-TREE</a> data structure is heavily used in the PCB program.
 </p>
 
 </div>
-
-<h2 id="glist">GList</h2>
+<!-- EDIT2 SECTION "DataType" [207-1247] -->
+<h2 class="sectionedit4" id="glist">GList</h2>
 <div class="level2">
 <pre class="code c"><span class="kw4">struct</span> GList <span class="br0">&#123;</span>
   gpointer data<span class="sy0">;</span>
@@ -115,7 +115,7 @@ The GList struct is used for each element in a doubly-linked list.
 <p>
 Members:
 </p>
-<div class="table sectionedit2"><table class="inline">
+<div class="table sectionedit5"><table class="inline">
 	<tr class="row0">
 		<td class="col0">gpointer data</td><td class="col1">holds the element&#039;s data , which can be a pointer to any kind of data.</td>
 	</tr>
@@ -126,9 +126,9 @@ Members:
 		<td class="col0">GList *prev;</td><td class="col1">contains the link to the previous element in the list</td>
 	</tr>
 </table></div>
-<!-- EDIT2 TABLE [1429-1648] -->
+<!-- EDIT5 TABLE [1429-1648] -->
 <p>
-gpointer =&gt;
+gpointer ⇒
 </p>
 <pre class="code c"><span class="kw4">typedef</span> <span class="kw4">void</span><span class="sy0">*</span> gpointer<span class="sy0">;</span></pre>
 
@@ -137,13 +137,13 @@ An untyped pointer. <code>gpointer</code> looks better and is easier to use than
 </p>
 
 </div>
-
-<h2 id="r-tree">R-TREE</h2>
+<!-- EDIT4 SECTION "GList" [1248-1787] -->
+<h2 class="sectionedit6" id="r-tree">R-TREE</h2>
 <div class="level2">
 
 <p>
 From Wikipedia:
-The key idea of the r-tree data structure is to group nearby objects and represent them with their minimum bounding rectangle in the next higher level of the tree; the &quot;R&quot; in R-tree is for rectangle. Since all objects lie within this bounding rectangle, a query that does not intersect the bounding rectangle also cannot intersect any of the contained objects. At the leaf level, each rectangle describes a single object; at higher levels the aggregation of an increasing number of objects. This can also be seen as an increasingly coarse approximation of the data set.
+The key idea of the r-tree data structure is to group nearby objects and represent them with their minimum bounding rectangle in the next higher level of the tree; the “R” in R-tree is for rectangle. Since all objects lie within this bounding rectangle, a query that does not intersect the bounding rectangle also cannot intersect any of the contained objects. At the leaf level, each rectangle describes a single object; at higher levels the aggregation of an increasing number of objects. This can also be seen as an increasingly coarse approximation of the data set.
 </p>
 
 <p>
@@ -151,7 +151,7 @@ A general r-tree will look like this:
 </p>
 
 <p>
-<a href="media/devel_intro/rtree.png" class="media" target="_blank" title="devel_intro:rtree.png">devel_intro:rtree.png</a>
+<a href="media/devel_intro/rtree.png" class="media" target="_blank" title="devel_intro:rtree.png"><img src="media/devel_intro/rtree.png" class="media" alt="" /></a>
 </p>
 
 <p>
@@ -163,17 +163,17 @@ The rtree data structure PCB uses is:
 </p>
 
 <p>
-<a href="media/devel_intro/structrtree.png" class="media" target="_blank" title="devel_intro:structrtree.png">devel_intro:structrtree.png</a>
+<a href="media/devel_intro/structrtree.png" class="media" target="_blank" title="devel_intro:structrtree.png"><img src="media/devel_intro/structrtree.png" class="media" alt="" /></a>
 </p>
 
 <p>
 The r-tree data structure hold a copy of the where&#039;s what data. Meaning that it holds a list of every item on our canvas arranged in successively smaller boxes.
-<a href="media/devel_intro/rtreepicture.png" class="media" target="_blank" title="devel_intro:rtreepicture.png">devel_intro:rtreepicture.png</a>
+<a href="media/devel_intro/rtreepicture.png" class="media" target="_blank" title="devel_intro:rtreepicture.png"><img src="media/devel_intro/rtreepicture.png" class="media" alt="" /></a>
 </p>
 
 </div>
-
-<h2 id="object_list">object_list</h2>
+<!-- EDIT6 SECTION "R-TREE" [1788-2776] -->
+<h2 class="sectionedit7" id="object_list">object_list</h2>
 <div class="level2">
 
 <p>
@@ -197,7 +197,7 @@ Some objects are more complex than just a block of data. For example, an object 
 </p>
 
 <p>
-The clear function should take care of &quot;zeroing out&quot; an object. If the object owns other bits of memory, the clear function should free them. It should essentially make the object blank.
+The clear function should take care of “zeroing out” an object. If the object owns other bits of memory, the clear function should free them. It should essentially make the object blank.
 </p>
 
 <p>
@@ -209,5 +209,5 @@ I&#039;ll eventually put some examples here, but for now, have a look at the uni
 </p>
 
 </div>
-</body>
+<!-- EDIT7 SECTION "object_list" [2777-] --></body>
 </html>

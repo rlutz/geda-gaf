@@ -15,12 +15,12 @@
 <a href="geda-circuit_simulation_improvements.html" class="wikilink1" title="geda-circuit_simulation_improvements.html">English</a>
 </p>
 
-<h1 id="усовершенствованиемоделированияработыэлектрическихсхемвgschem">Усовершенствование моделирования работы электрических схем в gschem</h1>
+<h1 class="sectionedit1" id="усовершенствование_моделирования_работы_электрических_схем_в_gschem">Усовершенствование моделирования работы электрических схем в gschem</h1>
 <div class="level1">
 
 </div>
-
-<h2 id="обоснование">Обоснование</h2>
+<!-- EDIT1 SECTION "Усовершенствование моделирования работы электрических схем в gschem" [140-277] -->
+<h2 class="sectionedit2" id="обоснование">Обоснование</h2>
 <div class="level2">
 
 <p>
@@ -47,22 +47,22 @@
 вышеуказанных проблем:
 </p>
 <ul>
-<li class="level1"><div class="li"> gspiceui</div>
+<li class="level1"><div class="li"> <a href="http://www.geda.seul.org/tools/gspiceui/index.html" class="urlextern" title="http://www.geda.seul.org/tools/gspiceui/index.html" rel="nofollow">gspiceui</a></div>
 </li>
-<li class="level1"><div class="li"> kjwaves</div>
+<li class="level1"><div class="li"> <a href="http://www.comefly.us/" class="urlextern" title="http://www.comefly.us/" rel="nofollow">kjwaves</a></div>
 </li>
-<li class="level1"><div class="li"> easyspice</div>
+<li class="level1"><div class="li"> <a href="http://easy-spice.sourceforge.net/" class="urlextern" title="http://easy-spice.sourceforge.net/" rel="nofollow">easyspice</a></div>
 </li>
 </ul>
 
 <p>
-Все оболочки имеют одну проблему --- в них нельзя указать соединение, данные
+Все оболочки имеют одну проблему — в них нельзя указать соединение, данные
 которого хотелось бы увидеть. Нужно знать имя соединения для узла.
 </p>
 
 </div>
-
-<h2 id="набросокпроекта">Набросок проекта</h2>
+<!-- EDIT2 SECTION "Обоснование" [278-1682] -->
+<h2 class="sectionedit3" id="набросок_проекта">Набросок проекта</h2>
 <div class="level2">
 
 <p>
@@ -72,8 +72,8 @@
 </p>
 
 </div>
-
-<h3 id="измерительныеприборы">Измерительные приборы</h3>
+<!-- EDIT3 SECTION "Набросок проекта" [1683-2056] -->
+<h3 class="sectionedit4" id="измерительные_приборы">Измерительные приборы</h3>
 <div class="level3">
 
 <p>
@@ -88,8 +88,8 @@
 </p>
 
 </div>
-
-<h3 id="источникитокаинапряжения">Источники тока и напряжения</h3>
+<!-- EDIT4 SECTION "Измерительные приборы" [2057-3943] -->
+<h3 class="sectionedit5" id="источники_тока_и_напряжения">Источники тока и напряжения</h3>
 <div class="level3">
 
 <p>
@@ -113,8 +113,8 @@
 </p>
 
 </div>
-
-<h3 id="моделирование">Моделирование</h3>
+<!-- EDIT5 SECTION "Источники тока и напряжения" [3944-5166] -->
+<h3 class="sectionedit6" id="моделирование">Моделирование</h3>
 <div class="level3">
 
 <p>
@@ -126,13 +126,13 @@
 Все параметры, определяющие один вид моделирования сохраняются как атрибуты, прикреплённые к данному объекту:
 </p>
 <ul>
-<li class="level1"><div class="li"> вид анализа (dc, ac, tran,...);</div>
+<li class="level1"><div class="li"> вид анализа (dc, ac, tran,…);</div>
 </li>
 <li class="level1"><div class="li"> параметры программы моделирования;</div>
 </li>
 <li class="level1"><div class="li"> программа моделирования? (можем ли мы запускать моделирование для одной и той же схемы в двух программах моделирования сразу?);</div>
 </li>
-<li class="level1"><div class="li"> параметры для моделирования (глобальные параметры, температура, ...).</div>
+<li class="level1"><div class="li"> параметры для моделирования (глобальные параметры, температура, …).</div>
 </li>
 </ul>
 <pre class="code">v 20061020 1
@@ -172,8 +172,8 @@ global_param2=???
 </p>
 
 </div>
-
-<h3 id="созданиедиалоговогоокнадлямоделированиявнутриgschem">Создание диалогового окна для моделирования внутри gschem</h3>
+<!-- EDIT6 SECTION "Моделирование" [5167-7498] -->
+<h3 class="sectionedit7" id="создание_диалогового_окна_для_моделирования_внутри_gschem">Создание диалогового окна для моделирования внутри gschem</h3>
 <div class="level3">
 
 <p>
@@ -184,13 +184,13 @@ global_param2=???
 </li>
 <li class="level1"><div class="li"> В нём должны быть иконки для добавления измерителей.</div>
 </li>
-<li class="level1"><div class="li"> Оно могло бы содержать кнопки для большинства общих символов: резистора, конденсатора, катушки индуктивности, диода, ... [R,C,L,D,M,E,F,G,H..]</div>
+<li class="level1"><div class="li"> Оно могло бы содержать кнопки для большинства общих символов: резистора, конденсатора, катушки индуктивности, диода, … [R,C,L,D,M,E,F,G,H..]</div>
 </li>
 <li class="level1"><div class="li"> Оно могло бы содержать несколько диалоговых элементов для настройки SPICE.</div>
 </li>
 <li class="level1"><div class="li"> Оно могло бы содержать кнопки моделирования и закрытия.</div>
 </li>
-<li class="level1"><div class="li"> Несколько добавочных кнопок, таких как, например: копировать моделирование, удалить моделирование, общие параметры...</div>
+<li class="level1"><div class="li"> Несколько добавочных кнопок, таких как, например: копировать моделирование, удалить моделирование, общие параметры…</div>
 </li>
 </ul>
 
@@ -205,8 +205,8 @@ global_param2=???
 </p>
 
 </div>
-
-<h3 id="диалоговоеокнопараметров">Диалоговое окно параметров</h3>
+<!-- EDIT7 SECTION "Создание диалогового окна для моделирования внутри gschem" [7499-9249] -->
+<h3 class="sectionedit8" id="диалоговое_окно_параметров">Диалоговое окно параметров</h3>
 <div class="level3">
 
 <p>
@@ -226,8 +226,8 @@ global_param2=???
 </ul>
 
 </div>
-
-<h3 id="запускмоделирования">Запуск моделирования</h3>
+<!-- EDIT8 SECTION "Диалоговое окно параметров" [9250-10475] -->
+<h3 class="sectionedit9" id="запуск_моделирования">Запуск моделирования</h3>
 <div class="level3">
 
 <p>
@@ -240,7 +240,7 @@ global_param2=???
 </li>
 <li class="level1"><div class="li"> создание файлов моделирования и включение туда списка соединений (можно ли это сделать тоже с помощью <strong>gnetlist</strong>?);</div>
 </li>
-<li class="level1"><div class="li"> выполнение скрипта запуска моделирования (<strong>guile</strong>, <strong>sh</strong>, ...).</div>
+<li class="level1"><div class="li"> выполнение скрипта запуска моделирования (<strong>guile</strong>, <strong>sh</strong>, …).</div>
 </li>
 </ul>
 
@@ -250,16 +250,16 @@ global_param2=???
 </p>
 
 </div>
-
-<h2 id="приложение">Приложение</h2>
+<!-- EDIT9 SECTION "Запуск моделирования" [10476-11417] -->
+<h2 class="sectionedit10" id="приложение">Приложение</h2>
 <div class="level2">
 
 </div>
-
-<h3 id="символизмерителянапряженияэскиз">Символ измерителя напряжения (эскиз)</h3>
+<!-- EDIT10 SECTION "Приложение" [11418-11450] -->
+<h3 class="sectionedit11" id="символ_измерителя_напряжения_эскиз">Символ измерителя напряжения (эскиз)</h3>
 <div class="level3">
 <dl class="code">
-<dt><a href="/./doku.php?do=export_code&amp;id=:geda:circuit_simulation_improvements.ru.txt&amp;codeblock=1" title="Download Snippet" class="mediafile mf_sym">voltage_probe.sym</a></dt>
+<dt><a href="/./_export/code/:geda:circuit_simulation_improvements.ru.txt?codeblock=1" title="Download Snippet" class="mediafile mf_sym">voltage_probe.sym</a></dt>
 <dd><pre class="code gschem-symbol">v 20061020 1
 P 0 0 200 200 1 0 0
 {
@@ -286,11 +286,11 @@ value=DC 0A</pre>
 </dd></dl>
 
 </div>
-
-<h3 id="символизмерителятокаэскиз">Символ измерителя тока (эскиз)</h3>
+<!-- EDIT11 SECTION "Символ измерителя напряжения (эскиз)" [11451-12009] -->
+<h3 class="sectionedit12" id="символ_измерителя_тока_эскиз">Символ измерителя тока (эскиз)</h3>
 <div class="level3">
 <dl class="code">
-<dt><a href="/./doku.php?do=export_code&amp;id=:geda:circuit_simulation_improvements.ru.txt&amp;codeblock=2" title="Download Snippet" class="mediafile mf_sym">current_probe.sym</a></dt>
+<dt><a href="/./_export/code/:geda:circuit_simulation_improvements.ru.txt?codeblock=2" title="Download Snippet" class="mediafile mf_sym">current_probe.sym</a></dt>
 <dd><pre class="code gschem-symbol">v 20061020 1
 P 0 200 150 200 1 0 0
 {
@@ -327,11 +327,11 @@ value=DC 0V</pre>
 </dd></dl>
 
 </div>
-
-<h3 id="ещёодинсимволизмерителятокаэскизкоторыйиспользуетkurtpeters">Ещё один символ измерителя тока (эскиз), который использует Kurt Peters</h3>
+<!-- EDIT12 SECTION "Символ измерителя тока (эскиз)" [12010-12735] -->
+<h3 class="sectionedit13" id="ещё_один_символ_измерителя_тока_эскиз_который_использует_kurt_peters">Ещё один символ измерителя тока (эскиз), который использует Kurt Peters</h3>
 <div class="level3">
 <dl class="code">
-<dt><a href="/./doku.php?do=export_code&amp;id=:geda:circuit_simulation_improvements.ru.txt&amp;codeblock=3" title="Download Snippet" class="mediafile mf_sym">ammeter.sym</a></dt>
+<dt><a href="/./_export/code/:geda:circuit_simulation_improvements.ru.txt?codeblock=3" title="Download Snippet" class="mediafile mf_sym">ammeter.sym</a></dt>
 <dd><pre class="code gschem-symbol">v 20061020 1
 T 700 650 8 10 1 1 0 0 1
 refdes=VAM?
@@ -377,5 +377,5 @@ L 100 700 100 800 3 0 0 0 -1 -1</pre>
 </dd></dl>
 
 </div>
-</body>
+<!-- EDIT13 SECTION "Ещё один символ измерителя тока (эскиз), который использует Kurt Peters" [12736-] --></body>
 </html>

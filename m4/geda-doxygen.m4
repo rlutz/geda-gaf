@@ -21,7 +21,7 @@ dnl Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 # Check if doxygen documentation is requested, and if so, find doxygen program.
 AC_DEFUN([AX_OPTION_DOXYGEN],
 [
-  AC_PREREQ([2.60])dnl
+  AC_PREREQ([2.69])dnl
   AC_ARG_VAR([DOXYGEN], [Path to doxygen executable])
 
   # Check if the user enabled Doxygen

@@ -21,7 +21,7 @@ dnl Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 # Check where KDE data should be installed (needed for KDE 3)
 AC_DEFUN([AX_OPTION_KDE3_DATA],
 [
-  AC_PREREQ([2.60])dnl
+  AC_PREREQ([2.69])dnl
   AC_MSG_CHECKING([whether to install KDE 3 desktop files])
 
   AC_ARG_WITH([kdedatadir],
@@ -55,7 +55,7 @@ AC_DEFUN([AX_OPTION_KDE3_DATA],
 # Check where XDG data should be installed
 AC_DEFUN([AX_OPTION_XDG_DATA],
 [
-  AC_PREREQ([2.60])dnl
+  AC_PREREQ([2.69])dnl
 
   dnl Complain if icon-theme-installer is missing
   AC_REQUIRE_AUX_FILE([icon-theme-installer])
@@ -80,7 +80,7 @@ AC_DEFUN([AX_OPTION_XDG_DATA],
 # update-mime-database program.
 AC_DEFUN([AX_OPTION_XDG_DB],
 [
-  AC_PREREQ([2.60])dnl
+  AC_PREREQ([2.69])dnl
   AC_ARG_VAR([UPDATE_MIME_DATABASE], [Path to update-mime-database executable])
   AC_ARG_VAR([UPDATE_DESKTOP_DATABASE], [Path to update-desktop-database executable])
 

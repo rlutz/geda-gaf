@@ -1,6 +1,6 @@
 ;; gEDA - GPL Electronic Design Automation
 ;; gschem - gEDA Schematic Capture - Scheme API
-;; Copyright (C) 2015-2019 gEDA Contributors
+;; Copyright (C) 2015-2020 gEDA Contributors
 ;;
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by

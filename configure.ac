@@ -8,8 +8,8 @@ dnl directory.
 # Set up configuration system
 #####################################################################
 
-AC_INIT([gEDA/gaf], [1.10.0], [https://bugs.launchpad.net/geda], [geda-gaf])
-AC_PREREQ([2.60])
+AC_INIT([gEDA/gaf], [1.10.1], [https://bugs.launchpad.net/geda], [geda-gaf])
+AC_PREREQ([2.69])
 
 AC_CONFIG_SRCDIR([libgeda/src/libgeda.c])
 AC_CONFIG_AUX_DIR([build-tools])
@@ -25,7 +25,7 @@ AC_GNU_SOURCE # FIXME for some reason this is needed?
 # Do version number magic
 #####################################################################
 
-AX_GIT_VERSION([20191008])
+AX_GIT_VERSION([20201216])
 
 # This is used for keeping the ChangeLog files up-to-date
 AC_SUBST([CHANGELOG_BASE], [1.0-20070526])
@@ -72,7 +72,7 @@ AC_PATH_PROGS([M4], [gm4 m4], [m4])
 
 AM_NLS
 AM_GNU_GETTEXT([external])
-AM_GNU_GETTEXT_VERSION([0.18])
+AM_GNU_GETTEXT_VERSION([0.19])
 AX_DESKTOP_I18N
 
 #####################################################################
@@ -81,30 +81,32 @@ AX_DESKTOP_I18N
 
 PKG_PROG_PKG_CONFIG
 
-AX_CHECK_GUILE([2.0.10])
+AX_CHECK_GUILE([2.2.4])
 
-PKG_CHECK_MODULES(GLIB, [glib-2.0 >= 2.41.1], ,
-  AC_MSG_ERROR([GLib 2.20.0 or later is required.]))
+PKG_CHECK_MODULES(GLIB, [glib-2.0 >= 2.58.3], ,
+  AC_MSG_ERROR([GLib 2.58.3 or later is required.]))
 
-PKG_CHECK_MODULES(GIO, [gio-2.0 >= 2.20.0], ,
-  AC_MSG_ERROR([GIO 2.20.0 or later is required.]))
+PKG_CHECK_MODULES(GIO, [gio-2.0 >= 2.58.3], ,
+  AC_MSG_ERROR([GIO 2.58.3 or later is required.]))
 
-PKG_CHECK_MODULES(GTK, [gtk+-2.0 >= 2.18.0], ,
-  AC_MSG_ERROR([GTK+ 2.18.0 or later is required.]))
+PKG_CHECK_MODULES(GTK, [gtk+-2.0 >= 2.24.32], ,
+  AC_MSG_ERROR([GTK+ 2.24.32 or later is required.]))
+GTK_CFLAGS=`echo "$GTK_CFLAGS" | sed "s/-I\\(@<:@^ @:>@*gtk\\)/-isystem\\1/g"`
 
-PKG_CHECK_MODULES(GDK, [gdk-2.0 >= 2.18.0], ,
-  AC_MSG_ERROR([GDK 2.18.0 or later is required.]))
+PKG_CHECK_MODULES(GDK, [gdk-2.0 >= 2.24.32], ,
+  AC_MSG_ERROR([GDK 2.24.32 or later is required.]))
+GDK_CFLAGS=`echo "$GDK_CFLAGS" | sed "s/-I\\(@<:@^ @:>@*gtk\\)/-isystem\\1/g"`
 
-PKG_CHECK_MODULES(GDK_PIXBUF, [gdk-pixbuf-2.0 >= 2.18.0], ,
-  AC_MSG_ERROR([GDK_PIXBUF 2.18.0 or later is required.]))
+PKG_CHECK_MODULES(GDK_PIXBUF, [gdk-pixbuf-2.0 >= 2.38.1], ,
+  AC_MSG_ERROR([GDK_PIXBUF 2.38.1 or later is required.]))
 
 AX_CHECK_CAIRO
 
-PKG_CHECK_MODULES(PANGOCAIRO, [pangocairo >= 0.26], ,
-  AC_MSG_ERROR([PANGOCAIRO 0.26 or later is required.]))
+PKG_CHECK_MODULES(PANGOCAIRO, [pangocairo >= 1.42.3], ,
+  AC_MSG_ERROR([PANGOCAIRO 1.42.3 or later is required.]))
 
-PKG_CHECK_MODULES(PANGO, [pango >= 1.23.0], ,
-  AC_MSG_ERROR([PANGO 1.23.0 or later is required.]))
+PKG_CHECK_MODULES(PANGO, [pango >= 1.42.3], ,
+  AC_MSG_ERROR([PANGO 1.42.3 or later is required.]))
 
 #####################################################################
 # Header files & particular functions
@@ -184,9 +186,9 @@ AX_DATA_DIRS
 # Where should PCB footprints be searched for?
 AX_PCB_DIRS
 # Set up libgeda with the correct ld version number
-AX_LIBGEDA([46:0:0])
+AX_LIBGEDA([47:0:0])
 # Set up libgedacairo with the correct ld version number
-AX_LIBGEDACAIRO([1:2:0])
+AX_LIBGEDACAIRO([1:3:0])
 
 #####################################################################
 # Recurse into Xorn configuration

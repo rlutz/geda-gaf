@@ -1,7 +1,7 @@
 /* gEDA - GPL Electronic Design Automation
  * gschem - gEDA Schematic Capture
  * Copyright (C) 1998-2010 Ales Hvezda
- * Copyright (C) 1998-2019 gEDA Contributors (see ChangeLog for details)
+ * Copyright (C) 1998-2020 gEDA Contributors (see ChangeLog for details)
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -197,7 +197,8 @@ apply_tag_cb (GtkTextBuffer *buffer, GtkTextTag *tag,
     gschem_dockable_present (GSCHEM_DOCKABLE (dockable));
   g_free (tag_name);
 
-  gtk_text_view_scroll_to_iter (dockable->viewer, end, 0.0, TRUE, 0.0, 1.0);
+  if (gtk_widget_get_realized (GTK_WIDGET (dockable->viewer)))
+    gtk_text_view_scroll_to_iter (dockable->viewer, end, 0.0, TRUE, 0.0, 1.0);
 }
 
 
@@ -310,7 +311,6 @@ create_widget (GschemDockable *parent)
                     dockable);
 
   gtk_text_buffer_get_end_iter (klass->buffer, &iter);
-  gtk_text_view_scroll_to_iter (dockable->viewer, &iter, 0.0, TRUE, 0.0, 1.0);
 
   gtk_widget_show_all (scrolled);
   return scrolled;

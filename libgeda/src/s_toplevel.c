@@ -2,7 +2,7 @@
  * libgeda - gEDA's library
  * Copyright (C) 1998, 1999, 2000 Kazu Hirata / Ales Hvezda
  * Copyright (C) 1998-2010 Ales Hvezda
- * Copyright (C) 1998-2019 gEDA Contributors (see ChangeLog for details)
+ * Copyright (C) 1998-2020 gEDA Contributors (see ChangeLog for details)
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by

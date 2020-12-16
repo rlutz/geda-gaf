@@ -47,15 +47,15 @@ def assert_read(data, messages, **kwds):
 
 ### general ###
 
+assert_read("", [
+])
 assert_read("""
 """, [
-    '1: error: read garbage',
-    '2: error: file is lacking pin orientation information'
+    '1: error: read garbage'
 ])
 assert_read("""v
 """, [
-    '1: error: failed to parse version string',
-    '2: error: file is lacking pin orientation information'
+    '1: error: failed to parse version string'
 ])
 
 ### arc objects ###
@@ -235,6 +235,12 @@ N 0 0 100 100 -1
 assert_read("""v 20150930 2
 P 0 0 100 100 1 0 0
 """, [
+])
+
+assert_read("""P 0 0 100 100 1
+""", [
+    '1: warning: pin does not have the whichone field set--verify and correct manually!',
+    '2: error: file is lacking pin orientation information'
 ])
 
 assert_read("""v 20150930 2

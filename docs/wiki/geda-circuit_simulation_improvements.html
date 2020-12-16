@@ -14,12 +14,12 @@
 <em>Translations of this page are also available in the following languages:</em> <a href="geda-circuit_simulation_improvements.ru.html" class="wikilink1" title="geda-circuit_simulation_improvements.ru.html">Русский</a>.
 </p>
 
-<h1 id="circuitsimulationimprovementsingschem">Circuit simulation improvements in gschem</h1>
+<h1 class="sectionedit1" id="circuit_simulation_improvements_in_gschem">Circuit simulation improvements in gschem</h1>
 <div class="level1">
 
 </div>
-
-<h2 id="rationale">Rationale</h2>
+<!-- EDIT1 SECTION "Circuit simulation improvements in gschem" [134-190] -->
+<h2 class="sectionedit2" id="rationale">Rationale</h2>
 <div class="level2">
 
 <p>
@@ -42,11 +42,11 @@ The simulation runs and the postprocessing may be in an external program that is
 There are some graphical frontends around but they can&#039;t solve all of the above problems
 </p>
 <ul>
-<li class="level1"><div class="li"> gspiceui</div>
+<li class="level1"><div class="li"> <a href="http://www.geda.seul.org/tools/gspiceui/index.html" class="urlextern" title="http://www.geda.seul.org/tools/gspiceui/index.html" rel="nofollow">gspiceui</a></div>
 </li>
-<li class="level1"><div class="li"> kjwaves</div>
+<li class="level1"><div class="li"> <a href="http://www.comefly.us/" class="urlextern" title="http://www.comefly.us/" rel="nofollow">kjwaves</a></div>
 </li>
-<li class="level1"><div class="li"> easyspice</div>
+<li class="level1"><div class="li"> <a href="http://easy-spice.sourceforge.net/" class="urlextern" title="http://easy-spice.sourceforge.net/" rel="nofollow">easyspice</a></div>
 </li>
 </ul>
 
@@ -55,8 +55,8 @@ All frontends have the problem that you can not point to the net you&#039;d like
 </p>
 
 </div>
-
-<h2 id="draft">Draft</h2>
+<!-- EDIT2 SECTION "Rationale" [191-987] -->
+<h2 class="sectionedit3" id="draft">Draft</h2>
 <div class="level2">
 
 <p>
@@ -64,13 +64,13 @@ Let&#039;s assume we only want to make tiny changes to gschem and libgeda so tha
 </p>
 
 </div>
-
-<h3 id="theprobes">The probes</h3>
+<!-- EDIT3 SECTION "Draft" [988-1137] -->
+<h3 class="sectionedit4" id="the_probes">The probes</h3>
 <div class="level3">
 
 <p>
 <strong>Current probes</strong> can be ordinary dc voltage sources with 0V. The easy way to insert that probe would be a symbol with two pins like an normal ampere meter.
-If we&#039;d like to set a current probe to an end of a pin we need a netlister that detects that current probe and replaces it with our &quot;ampere meter&quot;.
+If we&#039;d like to set a current probe to an end of a pin we need a netlister that detects that current probe and replaces it with our “ampere meter”.
 If we use a voltage source as an ampere meter the netlister does not need to know the netnames inside the schematic. All 0V voltage sources with a special device name are current probes.
 </p>
 
@@ -80,13 +80,13 @@ Like above a voltage source could be a special (graphical) symbol that is detect
 </p>
 
 </div>
-
-<h3 id="voltageandcurrentsources">Voltage and current sources</h3>
+<!-- EDIT4 SECTION "The probes" [1138-2013] -->
+<h3 class="sectionedit5" id="voltage_and_current_sources">Voltage and current sources</h3>
 <div class="level3">
 
 <p>
-Specifying the parameters of sources is not that easy. Currently they are stored inside the &quot;value&quot; attribute of the symbol.
-e.g. &quot;value=pulse 0 1 10n 10n 100n 1u 2u&quot;. These settings needs to match the spice attributes &quot;pulse(V1 V2 TD TR TF PW PER)&quot;.
+Specifying the parameters of sources is not that easy. Currently they are stored inside the “value” attribute of the symbol.
+e.g. “value=pulse 0 1 10n 10n 100n 1u 2u”. These settings needs to match the spice attributes “pulse(V1 V2 TD TR TF PW PER)”.
 </p>
 
 <p>
@@ -98,8 +98,8 @@ A modified edit attribute (<kbd>E</kbd><kbd>E</kbd>) command could take care of 
 </p>
 
 </div>
-
-<h3 id="thesimulations">The simulations</h3>
+<!-- EDIT5 SECTION "Voltage and current sources" [2014-2635] -->
+<h3 class="sectionedit6" id="the_simulations">The simulations</h3>
 <div class="level3">
 
 <p>
@@ -107,17 +107,17 @@ How can we store a simulation inside gschem.
 </p>
 
 <p>
-To store one simulation we can use a symbol with the device name &quot;SIMULATION&quot;.
+To store one simulation we can use a symbol with the device name “SIMULATION”.
 All options that define one simulation are stored as attributes attached to that object.
 </p>
 <ul>
-<li class="level1"><div class="li"> kind of simulation (dc, ac, tran, ...)</div>
+<li class="level1"><div class="li"> kind of simulation (dc, ac, tran, …)</div>
 </li>
 <li class="level1"><div class="li"> simulator options</div>
 </li>
 <li class="level1"><div class="li"> the simulator? (can we run the same circuit with two simulators in one step?)</div>
 </li>
-<li class="level1"><div class="li"> simulation parameters (global parameters, temperature, ...)</div>
+<li class="level1"><div class="li"> simulation parameters (global parameters, temperature, …)</div>
 </li>
 </ul>
 <pre class="code">v 20061020 1
@@ -141,7 +141,7 @@ There may be many simulation objects inside a single schematic.
 </p>
 
 <p>
-To store additional libraries we can either use an include card or using a &quot;LIBRARY&quot; symbol that contains all libraries either as:
+To store additional libraries we can either use an include card or using a “LIBRARY” symbol that contains all libraries either as:
 </p>
 <ul>
 <li class="level1"><div class="li"> a multiline attribute</div>
@@ -156,8 +156,8 @@ global and user libs may be specified by a gafrc or a new spicerc configuration 
 </p>
 
 </div>
-
-<h3 id="creatingasimulationdialoginsidegschem">Creating a simulation dialog inside gschem</h3>
+<!-- EDIT6 SECTION "The simulations" [2636-3883] -->
+<h3 class="sectionedit7" id="creating_a_simulation_dialog_inside_gschem">Creating a simulation dialog inside gschem</h3>
 <div class="level3">
 
 <p>
@@ -168,13 +168,13 @@ Lets assume anything we need to add simulation support to gschem is a single dia
 </li>
 <li class="level1"><div class="li"> It would have some icons to add the probes.</div>
 </li>
-<li class="level1"><div class="li"> It may have buttons for the most common symbols: resistor, capacitor, inductor, diode, ... [R,C,L,D,M,E,F,G,H..]</div>
+<li class="level1"><div class="li"> It may have buttons for the most common symbols: resistor, capacitor, inductor, diode, … [R,C,L,D,M,E,F,G,H..]</div>
 </li>
 <li class="level1"><div class="li"> It would have some dialog elements to do the spice settings</div>
 </li>
 <li class="level1"><div class="li"> It would have a simulate and a close button</div>
 </li>
-<li class="level1"><div class="li"> Some additional buttons like: Copy simulation, Remove simulation, general options...</div>
+<li class="level1"><div class="li"> Some additional buttons like: Copy simulation, Remove simulation, general options…</div>
 </li>
 </ul>
 
@@ -187,8 +187,8 @@ When changing the settings the attributes of the associated simulation object ar
 </p>
 
 </div>
-
-<h3 id="theoptiondialog">The option dialog</h3>
+<!-- EDIT7 SECTION "Creating a simulation dialog inside gschem" [3884-4714] -->
+<h3 class="sectionedit8" id="the_option_dialog">The option dialog</h3>
 <div class="level3">
 
 <p>
@@ -208,8 +208,8 @@ The probes that we have placed can be used to tell the simulator the variables t
 </ul>
 
 </div>
-
-<h3 id="invokingthesimulation">Invoking the simulation</h3>
+<!-- EDIT8 SECTION "The option dialog" [4715-5282] -->
+<h3 class="sectionedit9" id="invoking_the_simulation">Invoking the simulation</h3>
 <div class="level3">
 
 <p>
@@ -222,7 +222,7 @@ The simulation button of the dialog should lead to the following actions:
 </li>
 <li class="level1"><div class="li"> create simulation files and include the netlist (can this be done with gnetlist too?)</div>
 </li>
-<li class="level1"><div class="li"> execute the simulation startup script (guile, sh, ...)</div>
+<li class="level1"><div class="li"> execute the simulation startup script (guile, sh, …)</div>
 </li>
 </ul>
 
@@ -231,16 +231,16 @@ That startup script may even call a scheduler that can take lots of large simula
 </p>
 
 </div>
-
-<h2 id="appendix">Appendix</h2>
+<!-- EDIT9 SECTION "Invoking the simulation" [5283-5727] -->
+<h2 class="sectionedit10" id="appendix">Appendix</h2>
 <div class="level2">
 
 </div>
-
-<h3 id="avoltageprobesymboldraft">A voltage probe symbol (draft)</h3>
+<!-- EDIT10 SECTION "Appendix" [5728-5748] -->
+<h3 class="sectionedit11" id="a_voltage_probe_symbol_draft">A voltage probe symbol (draft)</h3>
 <div class="level3">
 <dl class="code">
-<dt><a href="/./doku.php?do=export_code&amp;id=:geda:circuit_simulation_improvements.txt&amp;codeblock=1" title="Download Snippet" class="mediafile mf_sym">voltage_probe.sym</a></dt>
+<dt><a href="/./_export/code/:geda:circuit_simulation_improvements.txt?codeblock=1" title="Download Snippet" class="mediafile mf_sym">voltage_probe.sym</a></dt>
 <dd><pre class="code gschem-symbol">v 20061020 1
 P 0 0 200 200 1 0 0
 {
@@ -267,11 +267,11 @@ value=DC 0A</pre>
 </dd></dl>
 
 </div>
-
-<h3 id="acurrentprobesymboldraft">A current probe symbol (draft)</h3>
+<!-- EDIT11 SECTION "A voltage probe symbol (draft)" [5749-6270] -->
+<h3 class="sectionedit12" id="a_current_probe_symbol_draft">A current probe symbol (draft)</h3>
 <div class="level3">
 <dl class="code">
-<dt><a href="/./doku.php?do=export_code&amp;id=:geda:circuit_simulation_improvements.txt&amp;codeblock=2" title="Download Snippet" class="mediafile mf_sym">current_probe.sym</a></dt>
+<dt><a href="/./_export/code/:geda:circuit_simulation_improvements.txt?codeblock=2" title="Download Snippet" class="mediafile mf_sym">current_probe.sym</a></dt>
 <dd><pre class="code gschem-symbol">v 20061020 1
 P 0 200 150 200 1 0 0
 {
@@ -308,11 +308,11 @@ value=DC 0V</pre>
 </dd></dl>
 
 </div>
-
-<h3 id="anothercurrentprobesymbolusedbykurtpeters">Another current probe symbol used by Kurt Peters</h3>
+<!-- EDIT12 SECTION "A current probe symbol (draft)" [6271-6971] -->
+<h3 class="sectionedit13" id="another_current_probe_symbol_used_by_kurt_peters">Another current probe symbol used by Kurt Peters</h3>
 <div class="level3">
 <dl class="code">
-<dt><a href="/./doku.php?do=export_code&amp;id=:geda:circuit_simulation_improvements.txt&amp;codeblock=3" title="Download Snippet" class="mediafile mf_sym">ammeter.sym</a></dt>
+<dt><a href="/./_export/code/:geda:circuit_simulation_improvements.txt?codeblock=3" title="Download Snippet" class="mediafile mf_sym">ammeter.sym</a></dt>
 <dd><pre class="code gschem-symbol">v 20061020 1
 T 700 650 8 10 1 1 0 0 1
 refdes=VAM?
@@ -358,5 +358,5 @@ L 100 700 100 800 3 0 0 0 -1 -1</pre>
 </dd></dl>
 
 </div>
-</body>
+<!-- EDIT13 SECTION "Another current probe symbol used by Kurt Peters" [6972-] --></body>
 </html>

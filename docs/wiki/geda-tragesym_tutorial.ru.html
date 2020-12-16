@@ -15,12 +15,12 @@
 <a href="geda-tragesym_tutorial.html" class="wikilink1" title="geda-tragesym_tutorial.html">English</a>, <a href="geda-tragesym_tutorial.fr.html" class="wikilink1" title="geda-tragesym_tutorial.fr.html">Français</a>.
 </p>
 
-<h1 id="быстроеилёгкоесозданиесимволовgschemспомощьюtragesymипрограммыработысэлектроннымитаблицами">Быстрое и лёгкое создание символов gschem с помощью tragesym и программы работы с электронными таблицами</h1>
+<h1 class="sectionedit1" id="быстрое_и_лёгкое_создание_символов_gschem_с_помощью_tragesym_и_программы_работы_с_электронными_таблицами">Быстрое и лёгкое создание символов gschem с помощью tragesym и программы работы с электронными таблицами</h1>
 <div class="level1">
 
 <p>
 Создание <a href="geda-glossary.ru.html#символ" class="wikilink1" title="geda-glossary.ru.html">символов</a> для
-<a href="geda-glossary.ru.html#принципиальнаясхема" class="wikilink1" title="geda-glossary.ru.html">принципиальных схем</a> отнимает очень
+<a href="geda-glossary.ru.html#принципиальная_схема" class="wikilink1" title="geda-glossary.ru.html">принципиальных схем</a> отнимает очень
 много времени, чревато ошибками и вообще неимоверно мучительно. К счастью,
 <strong>gschem</strong> использует открытый текстовый формат файлов, легко поддающийся
 скриптовой обработке. В этом кратком руководстве приводится описание того,
@@ -29,8 +29,8 @@
 </p>
 
 </div>
-
-<h2 id="необходимыешаги">Необходимые шаги</h2>
+<!-- EDIT1 SECTION "Быстрое и лёгкое создание символов gschem с помощью tragesym и программы работы с электронными таблицами" [163-1191] -->
+<h2 class="sectionedit2" id="необходимые_шаги">Необходимые шаги</h2>
 <div class="level2">
 <ul>
 <li class="level1"><div class="li"> Шаг 1: Открытие файла шаблона <strong>tragesym</strong></div>
@@ -50,25 +50,25 @@
 </ul>
 
 </div>
-
-<h2 id="шаг1открытиефайлашаблонаtragesym">Шаг 1: Открытие файла шаблона tragesym</h2>
+<!-- EDIT2 SECTION "Необходимые шаги" [1192-1980] -->
+<h2 class="sectionedit3" id="шаг_1открытие_файла_шаблона_tragesym">Шаг 1: Открытие файла шаблона tragesym</h2>
 <div class="level2">
 
 <p>
-В <strong>tragesym</strong> входят два файла-шаблона. Один --- в <a href="media/tragesym/template2.txt.src" class="media" target="_blank" title="tragesym:template2.txt.src">текстовом варианте</a>, второй --- в виде <a href="media/tragesym/template2.ods" class="media" target="_blank" title="tragesym:template2.ods">электронной таблицы OpenOffice</a>. Также их можно найти в пакете gEDA-утилит (<em><code>utils/examples/tragesym/template.src</code></em> и <em><code>utils/examples/tragesym/template.ods</code></em>).
-Если вы предпочитаете другую программу работы с электронными таблицами, например <strong>gnumerik</strong> или <strong>kspread</strong>, то просто создайте свой собственный шаблон из текстового шаблона.  Единственное различие между текстовым шаблоном и шаблоном в виде электронной таблицы --- синтаксис пар «ключ-значение» в разделах <code>[options]</code> и <code>[geda_attr]</code>. В текстовом файле они разделены знаком равенства (<code>ключ=значение</code>), в электронной таблице значение находится во втором столбце (что даёт разделитель в виде знака табуляции при экспорте).
+В <strong>tragesym</strong> входят два файла-шаблона. Один — в <a href="media/tragesym/template2.txt.src" class="media" target="_blank" title="tragesym:template2.txt.src">текстовом варианте</a>, второй — в виде <a href="media/tragesym/template2.ods" class="media" target="_blank" title="tragesym:template2.ods">электронной таблицы OpenOffice</a>. Также их можно найти в пакете gEDA-утилит (<em><code>utils/examples/tragesym/template.src</code></em> и <em><code>utils/examples/tragesym/template.ods</code></em>).
+Если вы предпочитаете другую программу работы с электронными таблицами, например <strong>gnumerik</strong> или <strong>kspread</strong>, то просто создайте свой собственный шаблон из текстового шаблона.  Единственное различие между текстовым шаблоном и шаблоном в виде электронной таблицы — синтаксис пар «ключ-значение» в разделах <code>[options]</code> и <code>[geda_attr]</code>. В текстовом файле они разделены знаком равенства (<code>ключ=значение</code>), в электронной таблице значение находится во втором столбце (что даёт разделитель в виде знака табуляции при экспорте).
 </p>
 
 </div>
-
-<h2 id="шаг2загрузкаспецификацииустройстваипоискцоколёвкисперечнемвыводов">Шаг 2: Загрузка спецификации устройства и поиск цоколёвки с перечнем выводов</h2>
+<!-- EDIT3 SECTION "Шаг 1: Открытие файла шаблона tragesym" [1981-3401] -->
+<h2 class="sectionedit4" id="шаг_2загрузка_спецификации_устройства_и_поиск_цоколёвки_с_перечнем_выводов">Шаг 2: Загрузка спецификации устройства и поиск цоколёвки с перечнем выводов</h2>
 <div class="level2">
 
 <p>
 В данном примере мы создадим символ для <em>Philips Semiconductor PCA9555
 16-bit IIC IO port</em>. Описание продукта и спецификация доступны на сайте
 Philips:
-http://www-us.semiconductors.philips.com/cgi-bin/pldb/pip/pca9555.html.
+<a href="http://www-us.semiconductors.philips.com/cgi-bin/pldb/pip/pca9555.html" class="urlextern" title="http://www-us.semiconductors.philips.com/cgi-bin/pldb/pip/pca9555.html" rel="nofollow">http://www-us.semiconductors.philips.com/cgi-bin/pldb/pip/pca9555.html</a>.
 Загрузите спецификацию и откройте её в программе просмотра PDF, которая
 позволяет копировать текст из pdf-файла, такой как <strong>kpdf</strong> или
 <strong>acroread</strong>.  Пролистайте страницы, пока не найдёте
@@ -76,8 +76,8 @@ http://www-us.semiconductors.philips.com/cgi-bin/pldb/pip/pca9555.html.
 </p>
 
 <p>
-<a href="media/tragesym/kpdf_pinconfiguration.png" class="media" target="_blank" title="tragesym:kpdf_pinconfiguration.png">kpdf_pinconfiguration.png</a>
-<a href="media/tragesym/acroread_selectiontable.png" class="media" target="_blank" title="tragesym:acroread_selectiontable.png">acroread_selectiontable.png</a>
+<a href="media/tragesym/kpdf_pinconfiguration.png" class="media" target="_blank" title="tragesym:kpdf_pinconfiguration.png"><img src="media/tragesym/kpdf_pinconfiguration.png" class="media" title="kpdf_pinconfiguration.png" alt="kpdf_pinconfiguration.png" /></a>
+<a href="media/tragesym/acroread_selectiontable.png" class="media" target="_blank" title="tragesym:acroread_selectiontable.png"><img src="media/tragesym/acroread_selectiontable.png" class="media" title="acroread_selectiontable.png" alt="acroread_selectiontable.png" /></a>
 </p>
 
 <p>
@@ -88,8 +88,8 @@ http://www-us.semiconductors.philips.com/cgi-bin/pldb/pip/pca9555.html.
 </p>
 
 </div>
-
-<h2 id="шаг3копированиеперечнявыводоввредакториегообработка">Шаг 3: Копирование перечня выводов в редактор и его обработка</h2>
+<!-- EDIT4 SECTION "Шаг 2: Загрузка спецификации устройства и поиск цоколёвки с перечнем выводов" [3402-4800] -->
+<h2 class="sectionedit5" id="шаг_3копирование_перечня_выводов_в_редактор_и_его_обработка">Шаг 3: Копирование перечня выводов в редактор и его обработка</h2>
 <div class="level2">
 
 <p>
@@ -104,9 +104,9 @@ http://www-us.semiconductors.philips.com/cgi-bin/pldb/pip/pca9555.html.
 </p>
 
 <p>
-<a href="media/tragesym/xemacs_rawselection.png" class="media" target="_blank" title="tragesym:xemacs_rawselection.png">xemacs_rawselection.png</a>
-<a href="media/tragesym/xemacs_modifiedselection.png" class="media" target="_blank" title="tragesym:xemacs_modifiedselection.png">xemacs_modifiedselection.png</a>
-<a href="media/tragesym/ooo_selection.png" class="media" target="_blank" title="tragesym:ooo_selection.png">ooo_selection.png</a>
+<a href="media/tragesym/xemacs_rawselection.png" class="media" target="_blank" title="tragesym:xemacs_rawselection.png"><img src="media/tragesym/xemacs_rawselection.png" class="media" title="xemacs_rawselection.png" alt="xemacs_rawselection.png" /></a>
+<a href="media/tragesym/xemacs_modifiedselection.png" class="media" target="_blank" title="tragesym:xemacs_modifiedselection.png"><img src="media/tragesym/xemacs_modifiedselection.png" class="media" title="xemacs_modifiedselection.png" alt="xemacs_modifiedselection.png" /></a>
+<a href="media/tragesym/ooo_selection.png" class="media" target="_blank" title="tragesym:ooo_selection.png"><img src="media/tragesym/ooo_selection.png" class="media" title="ooo_selection.png" alt="ooo_selection.png" /></a>
 </p>
 
 <p>
@@ -121,9 +121,9 @@ http://www-us.semiconductors.philips.com/cgi-bin/pldb/pip/pca9555.html.
 </li>
 <li class="level2"><div class="li"> вставка прямоугольного выделения после вывода 12;</div>
 </li>
-<li class="level2"><div class="li"> сортировка строк (<strong>xemacs</strong> это умеет ;-) )</div>
+<li class="level2"><div class="li"> сортировка строк (<strong>xemacs</strong> это умеет <img src="images/smileys/icon_wink.gif" align="middle" alt=";-)" /> )</div>
 </li>
-<li class="level2"><div class="li"> удаление или исправление строк с номерами 2,3,... Их части оказались в разных строках. Номера выводов можно легко воссоздать позже;</div>
+<li class="level2"><div class="li"> удаление или исправление строк с номерами 2,3,… Их части оказались в разных строках. Номера выводов можно легко воссоздать позже;</div>
 </li>
 <li class="level2"><div class="li"> замещение пробелов символами табуляции (нет особой нужды, если используется <strong>OpenOffice</strong>);</div>
 </li>
@@ -134,8 +134,8 @@ http://www-us.semiconductors.philips.com/cgi-bin/pldb/pip/pca9555.html.
 </ul>
 
 </div>
-
-<h2 id="шаг4добавлениенедостающихданныхвэлектроннуютаблицу">Шаг 4: Добавление недостающих данных в электронную таблицу</h2>
+<!-- EDIT5 SECTION "Шаг 3: Копирование перечня выводов в редактор и его обработка" [4801-7456] -->
+<h2 class="sectionedit6" id="шаг_4добавление_недостающих_данных_в_электронную_таблицу">Шаг 4: Добавление недостающих данных в электронную таблицу</h2>
 <div class="level2">
 
 <p>
@@ -146,7 +146,7 @@ http://www-us.semiconductors.philips.com/cgi-bin/pldb/pip/pca9555.html.
 </p>
 
 <p>
-<a href="media/tragesym/ooo_rearanged.png" class="media" target="_blank" title="tragesym:ooo_rearanged.png">ooo_rearanged.png</a>
+<a href="media/tragesym/ooo_rearanged.png" class="media" target="_blank" title="tragesym:ooo_rearanged.png"><img src="media/tragesym/ooo_rearanged.png" class="media" title="ooo_rearanged.png" alt="ooo_rearanged.png" /></a>
 </p>
 
 <p>
@@ -160,29 +160,29 @@ http://www-us.semiconductors.philips.com/cgi-bin/pldb/pip/pca9555.html.
 </p>
 
 <p>
-<a href="media/tragesym/kpdf_pindescription.png" class="media" target="_blank" title="tragesym:kpdf_pindescription.png">kpdf_pindescription.png</a>
+<a href="media/tragesym/kpdf_pindescription.png" class="media" target="_blank" title="tragesym:kpdf_pindescription.png"><img src="media/tragesym/kpdf_pindescription.png" class="media" title="kpdf_pindescription.png" alt="kpdf_pindescription.png" /></a>
 </p>
 
 <p>
 В соответствии с этой таблицей изменяем следующее (см. результат ниже):
 </p>
 <ul>
-<li class="level1"><div class="li"> вывод 1 --- выход, мы хотим иметь признаки отрицания --- кружок у вывода и черту над его меткой;</div>
+<li class="level1"><div class="li"> вывод 1 — выход, мы хотим иметь признаки отрицания — кружок у вывода и черту над его меткой;</div>
 </li>
-<li class="level1"><div class="li"> A1 -- A3 --- входы, изменяем тип и перемещаем их на левую сторону;</div>
+<li class="level1"><div class="li"> A1 – A3 — входы, изменяем тип и перемещаем их на левую сторону;</div>
 </li>
-<li class="level1"><div class="li"> устанавливаем выводу SCL тип &quot;in&quot; (вход) и перемещаем SCL и SDA также влево;</div>
+<li class="level1"><div class="li"> устанавливаем выводу SCL тип “in” (вход) и перемещаем SCL и SDA также влево;</div>
 </li>
 <li class="level1"><div class="li"> изменяем тип выводов питания VSS и VDD и добавляем имена соединений. Мы используем более привычные GND и Vcc.</div>
 </li>
 </ul>
 
 <p>
-<strong>Примечание:</strong> если одна из меток ваших выводов имеет внутри обратную косую черту &quot;\&quot;, её необходимо заменить управляющей последовательностью &quot;\\&quot;.
+<strong>Примечание:</strong> если одна из меток ваших выводов имеет внутри обратную косую черту “\”, её необходимо заменить управляющей последовательностью “\\”.
 </p>
 
 <p>
-<a href="media/tragesym/ooo_changedpins.png" class="media" target="_blank" title="tragesym:ooo_changedpins.png">ooo_changedpins.png</a>
+<a href="media/tragesym/ooo_changedpins.png" class="media" target="_blank" title="tragesym:ooo_changedpins.png"><img src="media/tragesym/ooo_changedpins.png" class="media" title="ooo_changedpins.png" alt="ooo_changedpins.png" /></a>
 </p>
 
 <p>
@@ -191,12 +191,12 @@ http://www-us.semiconductors.philips.com/cgi-bin/pldb/pip/pca9555.html.
 </p>
 
 <p>
-<a href="media/tragesym/ooo_attributes.png" class="media" target="_blank" title="tragesym:ooo_attributes.png">ooo_attributes.png</a>
+<a href="media/tragesym/ooo_attributes.png" class="media" target="_blank" title="tragesym:ooo_attributes.png"><img src="media/tragesym/ooo_attributes.png" class="media" title="ooo_attributes.png" alt="ooo_attributes.png" /></a>
 </p>
 
 </div>
-
-<h2 id="шаг5экспортэлектроннойтаблицывотдельныйтекстовыйфайл">Шаг 5: Экспорт электронной таблицы в отдельный текстовый файл</h2>
+<!-- EDIT6 SECTION "Шаг 4: Добавление недостающих данных в электронную таблицу" [7457-9824] -->
+<h2 class="sectionedit7" id="шаг_5экспорт_электронной_таблицы_в_отдельный_текстовый_файл">Шаг 5: Экспорт электронной таблицы в отдельный текстовый файл</h2>
 <div class="level2">
 
 <p>
@@ -206,12 +206,12 @@ http://www-us.semiconductors.philips.com/cgi-bin/pldb/pip/pca9555.html.
 </p>
 
 </div>
-
-<h2 id="шаг6запускtragesymдлясозданиясимвола">Шаг 6: Запуск tragesym для создания символа</h2>
+<!-- EDIT7 SECTION "Шаг 5: Экспорт электронной таблицы в отдельный текстовый файл" [9825-10315] -->
+<h2 class="sectionedit8" id="шаг_6запуск_tragesym_для_создания_символа">Шаг 6: Запуск tragesym для создания символа</h2>
 <div class="level2">
 
 <p>
-Запустите <strong>tragesym</strong> в оболочке<sup><a href="#fn__28" id="fnt__28" class="fn_top">28)</a></sup>:
+Запустите <strong>tragesym</strong> в оболочке<sup><a href="#fn__29" id="fnt__29" class="fn_top">29)</a></sup>:
 </p>
 <pre class="code">werner@werner-amd64:~/Desktop/tragesym_tutorial&gt; tragesym pca555.src</pre>
 
@@ -226,8 +226,8 @@ pca555.sch
 </p>
 
 </div>
-
-<h2 id="шаг7проверкарезультатавgschemинебольшаядоводка">Шаг 7: Проверка результата в gschem и небольшая доводка</h2>
+<!-- EDIT8 SECTION "Шаг 6: Запуск tragesym для создания символа" [10316-11053] -->
+<h2 class="sectionedit9" id="шаг_7проверка_результата_в_gschem_и_небольшая_доводка">Шаг 7: Проверка результата в gschem и небольшая доводка</h2>
 <div class="level2">
 
 <p>
@@ -237,14 +237,14 @@ pca555.sch
 
 <p>
 Разрешив скрытый текст (нажав «en» или выбрав из меню
-<strong><em>Правка-&gt;Показать/скрыть невидимый текст</em></strong>), можно увидеть
+<strong><em>Правка→Показать/скрыть невидимый текст</em></strong>), можно увидеть
 сгенерированный символ полностью. Вовсе не обязательно что-либо менять, но
 небольшая перестановка выводов может немного улучшить вид символа.
 </p>
 
 <p>
-<a href="media/tragesym/gschem_showhidden.png" class="media" target="_blank" title="tragesym:gschem_showhidden.png">gschem_showhidden.png</a>
-<a href="media/tragesym/gschem_finished.png" class="media" target="_blank" title="tragesym:gschem_finished.png">gschem_finished.png</a>
+<a href="media/tragesym/gschem_showhidden.png" class="media" target="_blank" title="tragesym:gschem_showhidden.png"><img src="media/tragesym/gschem_showhidden.png" class="media" title="gschem_showhidden.png" alt="gschem_showhidden.png" /></a>
+<a href="media/tragesym/gschem_finished.png" class="media" target="_blank" title="tragesym:gschem_finished.png"><img src="media/tragesym/gschem_finished.png" class="media" title="gschem_finished.png" alt="gschem_finished.png" /></a>
 </p>
 
 <p>
@@ -254,8 +254,8 @@ pca555.sch
 </p>
 
 </div>
-
-<h2 id="заключение">Заключение</h2>
+<!-- EDIT9 SECTION "Шаг 7: Проверка результата в gschem и небольшая доводка" [11054-12190] -->
+<h2 class="sectionedit10" id="заключение">Заключение</h2>
 <div class="level2">
 
 <p>
@@ -265,21 +265,21 @@ pca555.sch
 </p>
 
 </div>
-
-<h2 id="благодарности">Благодарности</h2>
+<!-- EDIT10 SECTION "Заключение" [12191-12534] -->
+<h2 class="sectionedit11" id="благодарности">Благодарности</h2>
 <div class="level2">
 
 <p>
 Большое спасибо &lt;Russ.Dill(AT)asu.edu&gt;, который написал первую версию
 настоящего руководства. Эту версию можно найти на странице
-http://www-mdp.eng.cam.ac.uk/web/CD/engapps/geda/geda-doc/tutorials/tragesym/tragesym.html.
+<a href="http://www-mdp.eng.cam.ac.uk/web/CD/engapps/geda/geda-doc/tutorials/tragesym/tragesym.html" class="urlextern" title="http://www-mdp.eng.cam.ac.uk/web/CD/engapps/geda/geda-doc/tutorials/tragesym/tragesym.html" rel="nofollow">http://www-mdp.eng.cam.ac.uk/web/CD/engapps/geda/geda-doc/tutorials/tragesym/tragesym.html</a>.
 </p>
 
 </div>
-<div class="footnotes">
-<div class="fn"><sup><a href="#fnt__28" id="fn__28" class="fn_bot">28)</a></sup> 
+<!-- EDIT11 SECTION "Благодарности" [12535-] --><div class="footnotes">
+<div class="fn"><sup><a href="#fnt__29" id="fn__29" class="fn_bot">29)</a></sup> 
 <div class="content">Автор использует для символа расширение
-<em><code>.sch</code></em>, на самом деле принято использовать <em><code>.sym</code></em>. --- <em>Прим.
+<em><code>.sch</code></em>, на самом деле принято использовать <em><code>.sym</code></em>. — <em>Прим.
 перев.</em></div></div>
 </div>
 </body>

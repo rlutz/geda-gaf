@@ -14,12 +14,12 @@
 <em>Translations of this page are also available in the following languages:</em> <a href="geda-faq-gnetlist.fr.html" class="wikilink1" title="geda-faq-gnetlist.fr.html">Français</a>, <a href="geda-faq-gnetlist.ru.html" class="wikilink1" title="geda-faq-gnetlist.ru.html">Русский</a>.
 </p>
 
-<h1 id="gnetlist">Gnetlist</h1>
+<h1 class="sectionedit1" id="gnetlist">Gnetlist</h1>
 <div class="level1">
 
 </div>
-
-<h1 id="billofmaterialsbomgeneration">Bill of Materials (BOM) Generation</h1>
+<!-- EDIT1 SECTION "Gnetlist" [146-173] -->
+<h1 class="sectionedit2" id="bill_of_materials_bom_generation">Bill of Materials (BOM) Generation</h1>
 <div class="level1">
 
 <p>
@@ -48,7 +48,7 @@ Each of the backends lists and sorts the parts in different ways in an ascii fil
 <div class="level4">
 
 <p>
-The bom backend needs to read an attribs file (see above). The list produced by &quot;-g bom&quot; will contain as many lines as there are components. Columns are seperated by tab characters. Lines are not sorted.
+The bom backend needs to read an attribs file (see above). The list produced by “-g bom” will contain as many lines as there are components. Columns are seperated by tab characters. Lines are not sorted.
 </p>
 
 </div>
@@ -57,7 +57,7 @@ The bom backend needs to read an attribs file (see above). The list produced by 
 <div class="level4">
 
 <p>
-The bom2 backend also needs to read an attribs file. With &quot;-g bom2&quot; the refdeses of all components with the same value will be collected into a single line. Columns are seperated by colons. Different items in the same column are seperated by a komma character.
+The bom2 backend also needs to read an attribs file. With “-g bom2” the refdeses of all components with the same value will be collected into a single line. Columns are seperated by colons. Different items in the same column are seperated by a komma character.
 </p>
 
 </div>
@@ -66,7 +66,7 @@ The bom2 backend also needs to read an attribs file. With &quot;-g bom2&quot; th
 <div class="level4">
 
 <p>
-A list produced by the partlist1 backend gives a line for each and every component. Lines are sorted alphabetically by refdes. Columns are &quot;refdes&quot;, &quot;device&quot;, &quot;value&quot;, &quot;footprint&quot; and &quot;quantity&quot;. Since every line contains just one part, the quantity is always &quot;1&quot;.
+A list produced by the partlist1 backend gives a line for each and every component. Lines are sorted alphabetically by refdes. Columns are “refdes”, “device”, “value”, “footprint” and “quantity”. Since every line contains just one part, the quantity is always “1”.
 </p>
 
 </div>
@@ -88,13 +88,13 @@ The backend partslist3 assembles all parts with the same value in a single line,
 </p>
 
 </div>
-
-<h1 id="designrulecheckdrc">Design Rule Check (DRC)</h1>
+<!-- EDIT2 SECTION "Bill of Materials (BOM) Generation" [174-2102] -->
+<h1 class="sectionedit3" id="design_rule_check_drc">Design Rule Check (DRC)</h1>
 <div class="level1">
 
 </div>
-
-<h2 id="howdoicheckmyschematics">How do I check my schematics?</h2>
+<!-- EDIT3 SECTION "Design Rule Check (DRC)" [2103-2140] -->
+<h2 class="sectionedit4" id="how_do_i_check_my_schematics">How do I check my schematics?</h2>
 <div class="level2">
 
 <p>
@@ -111,8 +111,8 @@ With this command, the DRC output is written into the file “MyDesign.drc”. Y
 </p>
 
 </div>
-
-<h2 id="howdoiseethedrcoutputinthescreenwithoutwritingtoafile">How do I see the DRC output in the screen, without writing to a file?</h2>
+<!-- EDIT4 SECTION "How do I check my schematics?" [2141-2645] -->
+<h2 class="sectionedit5" id="how_do_i_see_the_drc_output_in_the_screen_without_writing_to_a_file">How do I see the DRC output in the screen, without writing to a file?</h2>
 <div class="level2">
 
 <p>
@@ -125,8 +125,8 @@ This way, you will see the DRC output directly in your screen.
 </p>
 
 </div>
-
-<h2 id="iwanttodisablesomeoftheschematicdrccheckshowcanidoit">I want to disable some of the schematic DRC checks. How can I do it?</h2>
+<!-- EDIT5 SECTION "How do I see the DRC output in the screen, without writing to a file?" [2646-2889] -->
+<h2 class="sectionedit6" id="i_want_to_disable_some_of_the_schematic_drc_checks_how_can_i_do_it">I want to disable some of the schematic DRC checks. How can I do it?</h2>
 <div class="level2">
 
 <p>
@@ -179,8 +179,8 @@ With this command, the DRC output is written into the file “MyDesign.drc”. Y
 </p>
 
 </div>
-
-<h2 id="caniincludethedrccheckingintoamakefileandstopwhenerrorsorwarningsarefound">Can I include the DRC checking into a Makefile and stop when errors or warnings are found?</h2>
+<!-- EDIT6 SECTION "I want to disable some of the schematic DRC checks. How can I do it?" [2890-4718] -->
+<h2 class="sectionedit7" id="can_i_include_the_drc_checking_into_a_makefile_and_stop_when_errors_or_warnings_are_found">Can I include the DRC checking into a Makefile and stop when errors or warnings are found?</h2>
 <div class="level2">
 
 <p>
@@ -201,8 +201,8 @@ If not, please use the above example and adapt it to your own workflow.
 </p>
 
 </div>
-
-<h2 id="therearesomewarningsinmydesignimawareofcaniignorethewarningsinthereturnvalue">There are some warnings in my design I&#039;m aware of. Can I ignore the warnings in the return value?</h2>
+<!-- EDIT7 SECTION "Can I include the DRC checking into a Makefile and stop when errors or warnings are found?" [4719-5396] -->
+<h2 class="sectionedit8" id="there_are_some_warnings_in_my_design_i_m_aware_of_can_i_ignore_the_warnings_in_the_return_value">There are some warnings in my design I&#039;m aware of. Can I ignore the warnings in the return value?</h2>
 <div class="level2">
 
 <p>
@@ -215,13 +215,13 @@ Do this with caution! You will be missing all the warnings!
 </p>
 
 </div>
-
-<h1 id="gnetlistbuildrun-timeproblems">Gnetlist build/run-time problems</h1>
+<!-- EDIT8 SECTION "There are some warnings in my design I'm aware of. Can I ignore the warnings in the return value?" [5397-5707] -->
+<h1 class="sectionedit9" id="gnetlist_build_run-time_problems">Gnetlist build/run-time problems</h1>
 <div class="level1">
 
 </div>
-
-<h2 id="igetaparenthesismismatcherrorwhenrunninggnetlistwhatsup">I get a &quot;parenthesis mismatch&quot; error when running gnetlist.  What&#039;s up?</h2>
+<!-- EDIT9 SECTION "Gnetlist build/run-time problems" [5708-5755] -->
+<h2 class="sectionedit10" id="i_get_a_parenthesis_mismatch_error_when_running_gnetlist_what_s_up">I get a &quot;parenthesis mismatch&quot; error when running gnetlist.  What&#039;s up?</h2>
 <div class="level2">
 
 <p>
@@ -252,8 +252,8 @@ This is a bug in guile-1.8.X.  The gEDA developers are working on a fix.  Meanwh
 </p>
 
 </div>
-
-<h2 id="thegnetlistbombackenddoesnotworkwhatiswrong">The gnetlist bom backend does not work. What is wrong?</h2>
+<!-- EDIT10 SECTION "I get a parenthesis mismatch error when running gnetlist.  What's up?" [5756-7022] -->
+<h2 class="sectionedit11" id="the_gnetlist_bom_backend_does_not_work_what_is_wrong">The gnetlist bom backend does not work. What is wrong?</h2>
 <div class="level2">
 
 <p>
@@ -275,12 +275,12 @@ then you need to create a file called “attribs” in the current directory whi
 value</pre>
 
 <p>
-For information about BOM generation see <a href="#billofmaterialsbomgeneration" title=":geda:faq-gnetlist.txt ↵" class="wikilink1">above</a>.
+For information about BOM generation see <a href="#bill_of_materials_bom_generation" title=":geda:faq-gnetlist.txt ↵" class="wikilink1">above</a>.
 </p>
 
 </div>
-
-<h2 id="somegnetlistbackendsoverflowthestackhowdoisolvethis">Some gnetlist backends overflow the stack. How do I solve this?</h2>
+<!-- EDIT11 SECTION "The gnetlist bom backend does not work. What is wrong?" [7023-7631] -->
+<h2 class="sectionedit12" id="some_gnetlist_backends_overflow_the_stack_how_do_i_solve_this">Some gnetlist backends overflow the stack. How do I solve this?</h2>
 <div class="level2">
 
 <p>
@@ -299,8 +299,8 @@ If this does not work, then edit the appropriate backend (usually named: gnet-ba
 </p>
 
 </div>
-
-<h2 id="gnetlisthascreatedanetlistwithduplicatepins">gnetlist has created a netlist with duplicate pins!?</h2>
+<!-- EDIT12 SECTION "Some gnetlist backends overflow the stack. How do I solve this?" [7632-8427] -->
+<h2 class="sectionedit13" id="gnetlist_has_created_a_netlist_with_duplicate_pins">gnetlist has created a netlist with duplicate pins!?</h2>
 <div class="level2">
 
 <p>
@@ -314,7 +314,7 @@ What has happened is gnetlist (really libgeda) created two nets instead of one. 
 </p>
 
 <p>
-<a href="media/geda/ambiguous1.png" class="media" target="_blank" title="geda:ambiguous1.png">geda:ambiguous1.png</a>
+<a href="media/geda/ambiguous1.png" class="media" target="_blank" title="geda:ambiguous1.png"><img src="media/geda/ambiguous1.png" class="media" alt="" /></a>
 </p>
 
 <p>
@@ -322,9 +322,9 @@ The developers are debating whether or not this is a bug in gnetlist, but for no
 </p>
 
 <p>
-<a href="media/geda/ambiguous1_fixed.png" class="media" target="_blank" title="geda:ambiguous1_fixed.png">geda:ambiguous1_fixed.png</a>
+<a href="media/geda/ambiguous1_fixed.png" class="media" target="_blank" title="geda:ambiguous1_fixed.png"><img src="media/geda/ambiguous1_fixed.png" class="media" alt="" /></a>
 </p>
 
 </div>
-</body>
+<!-- EDIT13 SECTION "gnetlist has created a netlist with duplicate pins!?" [8428-] --></body>
 </html>

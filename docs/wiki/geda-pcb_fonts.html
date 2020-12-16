@@ -10,7 +10,7 @@
 </head>
 <body>
 
-<h1 id="fonts">Fonts</h1>
+<h1 class="sectionedit1" id="fonts">Fonts</h1>
 <div class="level1">
 
 <p>
@@ -18,17 +18,17 @@ A font system has been implemented in the git branch home/cparker/font_fun. This
 </p>
 
 <p>
-<a href="media/geda/pcbwithmultifonts.png" class="media" target="_blank" title="geda:pcbwithmultifonts.png">geda:pcbwithmultifonts.png</a>
+<a href="media/geda/pcbwithmultifonts.png" class="media" target="_blank" title="geda:pcbwithmultifonts.png"><img src="media/geda/pcbwithmultifonts.png" class="media" alt="" width="600" /></a>
 </p>
 
 </div>
-
-<h1 id="usage">Usage</h1>
+<!-- EDIT1 SECTION "Fonts" [1-678] -->
+<h1 class="sectionedit2" id="usage">Usage</h1>
 <div class="level1">
 
 </div>
-
-<h2 id="gettingthefeaturebranch">Getting the Feature Branch</h2>
+<!-- EDIT2 SECTION "Usage" [679-696] -->
+<h2 class="sectionedit3" id="getting_the_feature_branch">Getting the Feature Branch</h2>
 <div class="level2">
 
 <p>
@@ -41,8 +41,8 @@ reconfigure if necessary and build. Then, run pcb by executing the pcbtest.sh sc
 </p>
 
 </div>
-
-<h2 id="fontsettings">Font Settings</h2>
+<!-- EDIT3 SECTION "Getting the Feature Branch" [697-1086] -->
+<h2 class="sectionedit4" id="font_settings">Font Settings</h2>
 <div class="level2">
 
 <p>
@@ -50,21 +50,21 @@ All font settings can be viewed and edited from the Fonts tab in the preferences
 </p>
 
 <p>
-<a href="media/geda/fontprefswindow.png" class="media" target="_blank" title="geda:fontprefswindow.png">geda:fontprefswindow.png</a>
+<a href="media/geda/fontprefswindow.png" class="media" target="_blank" title="geda:fontprefswindow.png"><img src="media/geda/fontprefswindow.png" class="media" alt="" width="600" /></a>
 </p>
 
 <p>
 There are three font related options that can be configured:
 </p>
 <ul>
-<li class="level1"><div class="li"> <strong>&quot;Save font data in files&quot;</strong><br/>
+<li class="level1"><div class="li"> <strong>“Save font data in files”</strong><br/>
 When enabled, this will save the font of text objects in saved design files. If disabled, it will not, and the design will be backwards compatible with older versions of pcb.</div>
 </li>
-<li class="level1"><div class="li"> <strong>&quot;Save current system font as symbols in pcb files (old format).&quot;</strong><br/>
-This option is only available when &quot;Save font data in files&quot; is disabled. This option does exactly what it says. This is how you can save a font in a design file that is compatible with older versions of pcb.</div>
+<li class="level1"><div class="li"> <strong>“Save current system font as symbols in pcb files (old format).”</strong><br/>
+This option is only available when “Save font data in files” is disabled. This option does exactly what it says. This is how you can save a font in a design file that is compatible with older versions of pcb.</div>
 </li>
-<li class="level1"><div class="li"> <strong>&quot;Embed used fonts in pcb files&quot;</strong><br/>
-This option is only available when &quot;Save font data in files&quot; is enabled. This option will store the font information of every font used in the design into the saved pcb file. This makes the pcb file portable to other systems that may not have the same fonts installed, or a different version of a font installed.</div>
+<li class="level1"><div class="li"> <strong>“Embed used fonts in pcb files”</strong><br/>
+This option is only available when “Save font data in files” is enabled. This option will store the font information of every font used in the design into the saved pcb file. This makes the pcb file portable to other systems that may not have the same fonts installed, or a different version of a font installed.</div>
 </li>
 </ul>
 
@@ -86,8 +86,8 @@ The fonts can also be manipulated by executing <a href="geda-pcb_fonts.html#acti
 </p>
 
 </div>
-
-<h2 id="fontlibraries">Font Libraries</h2>
+<!-- EDIT4 SECTION "Font Settings" [1087-3117] -->
+<h2 class="sectionedit5" id="font_libraries">Font Libraries</h2>
 <div class="level2">
 
 <p>
@@ -103,8 +103,8 @@ This library contains the fonts that are stored in the pcb file of the current d
 </ul>
 
 </div>
-
-<h2 id="changingfonts">Changing Fonts</h2>
+<!-- EDIT5 SECTION "Font Libraries" [3118-4087] -->
+<h2 class="sectionedit6" id="changing_fonts">Changing Fonts</h2>
 <div class="level2">
 
 <p>
@@ -117,12 +117,12 @@ Fonts can be easily changed using the Fonts tab in the preferences window:
 </li>
 <li class="level1"><div class="li"> In the main window, select the text objects to which the font should be assigned.</div>
 </li>
-<li class="level1"><div class="li"> Click the &quot;Change Selected&quot; button to assign the new font to the text objects.</div>
+<li class="level1"><div class="li"> Click the “Change Selected” button to assign the new font to the text objects.</div>
 </li>
 </ul>
 
 <p>
-Alternatively, all text in a design can have a font assigned by using the &quot;Change All&quot; button.
+Alternatively, all text in a design can have a font assigned by using the “Change All” button.
 </p>
 
 <p>
@@ -130,8 +130,8 @@ Note that these methods will only change the font of discrete text objects. Refe
 </p>
 
 </div>
-
-<h2 id="compatibilitywitholderversionsofpcb">Compatibility with Older Versions of PCB</h2>
+<!-- EDIT6 SECTION "Changing Fonts" [4088-4865] -->
+<h2 class="sectionedit7" id="compatibility_with_older_versions_of_pcb">Compatibility with Older Versions of PCB</h2>
 <div class="level2">
 
 <p>
@@ -143,8 +143,8 @@ If you load an existing design that has symbols stored in the design, the symbol
 </p>
 
 </div>
-
-<h1 id="implementation">Implementation</h1>
+<!-- EDIT7 SECTION "Compatibility with Older Versions of PCB" [4866-5774] -->
+<h1 class="sectionedit8" id="implementation">Implementation</h1>
 <div class="level1">
 
 <p>
@@ -152,13 +152,13 @@ The font system is implemented using a few data structures and several actions.
 </p>
 
 </div>
-
-<h2 id="datastructures">Data Structures</h2>
+<!-- EDIT8 SECTION "Implementation" [5775-5882] -->
+<h2 class="sectionedit9" id="data_structures">Data Structures</h2>
 <div class="level2">
 
 </div>
-
-<h3 id="fonttype">Font Type</h3>
+<!-- EDIT9 SECTION "Data Structures" [5883-5908] -->
+<h3 class="sectionedit10" id="font_type">Font Type</h3>
 <div class="level3">
 
 <p>
@@ -180,8 +180,8 @@ The MaxHeight and MaxWidth parameters are set by the SetFontInfo function that&#
 </p>
 
 </div>
-
-<h3 id="fontlibraries1">Font Libraries</h3>
+<!-- EDIT10 SECTION "Font Type" [5909-6547] -->
+<h3 class="sectionedit11" id="font_libraries1">Font Libraries</h3>
 <div class="level3">
 
 <p>
@@ -190,7 +190,7 @@ The two font libraries (system and embedded) are both implemented as GLib GSList
 
 </div>
 
-<h4 id="findingfonts">Finding Fonts</h4>
+<h4 id="finding_fonts">Finding Fonts</h4>
 <div class="level4">
 
 <p>
@@ -202,8 +202,8 @@ A second function, FindFont, is available for searching. This function searches 
 </p>
 
 </div>
-
-<h3 id="fontfileformat">Font File Format</h3>
+<!-- EDIT11 SECTION "Font Libraries" [6548-7909] -->
+<h3 class="sectionedit12" id="font_file_format">Font File Format</h3>
 <div class="level3">
 
 <p>
@@ -222,7 +222,7 @@ Symbol(&#039;!&#039; 12)
 ) # end font</pre>
 
 <p>
-The &quot;# end font&quot; is just for reference and is not required.
+The “# end font” is just for reference and is not required.
 </p>
 
 <p>
@@ -230,13 +230,13 @@ A font file can have one or more fonts defined in succession.
 </p>
 
 </div>
-
-<h3 id="pcbfileformatchanges">PCB File Format Changes</h3>
+<!-- EDIT12 SECTION "Font File Format" [7910-8494] -->
+<h3 class="sectionedit13" id="pcb_file_format_changes">PCB File Format Changes</h3>
 <div class="level3">
 
 </div>
 
-<h4 id="embeddedfontsyntax">Embedded Font Syntax</h4>
+<h4 id="embedded_font_syntax">Embedded Font Syntax</h4>
 <div class="level4">
 
 <p>
@@ -249,7 +249,7 @@ The Font directive can also be included without symbols. If it appears this way,
 
 </div>
 
-<h4 id="textsyntax">Text Syntax</h4>
+<h4 id="text_syntax">Text Syntax</h4>
 <div class="level4">
 
 <p>
@@ -269,13 +269,13 @@ There is also an addition to the text syntax. It&#039;s labeled in <code>parse_y
 </pre>
 
 </div>
-
-<h2 id="actions">Actions</h2>
+<!-- EDIT13 SECTION "PCB File Format Changes" [8495-9881] -->
+<h2 class="sectionedit14" id="actions">Actions</h2>
 <div class="level2">
 
 </div>
-
-<h3 id="changefont">Change Font</h3>
+<!-- EDIT14 SECTION "Actions" [9882-9899] -->
+<h3 class="sectionedit15" id="change_font">Change Font</h3>
 <div class="level3">
 
 <p>
@@ -321,8 +321,8 @@ Change the PCB font.</div>
 
 </div>
 </div>
-
-<h3 id="loadfont">Load Font</h3>
+<!-- EDIT15 SECTION "Change Font" [9900-11225] -->
+<h3 class="sectionedit16" id="load_font">Load Font</h3>
 <div class="level3">
 
 <p>
@@ -352,8 +352,8 @@ A note on the LoadFont function: the ParseFont function is still used, however, 
 </p>
 
 </div>
-
-<h3 id="unloadfont">Unload Font</h3>
+<!-- EDIT16 SECTION "Load Font" [11226-12683] -->
+<h3 class="sectionedit17" id="unload_font">Unload Font</h3>
 <div class="level3">
 
 <p>
@@ -381,12 +381,12 @@ The Unload Font Action will also not allow the Default font to be unloaded, and 
 </p>
 
 <p>
-A note about the UnloadFont function. All of the sanity checking is performed in the Action, not in the function, because there are things that the system should be able to do that the user shouldn&#039;t. For example, the UnloadFont function is capable of unloading fonts from either the system library or the embedded library. This is to facilitate the closing of designs and the of the program. UnloadFont can be called with the font name &quot;<code>all</code>&quot; which will enter a loop that will unload every font in the library.
+A note about the UnloadFont function. All of the sanity checking is performed in the Action, not in the function, because there are things that the system should be able to do that the user shouldn&#039;t. For example, the UnloadFont function is capable of unloading fonts from either the system library or the embedded library. This is to facilitate the closing of designs and the of the program. UnloadFont can be called with the font name “<code>all</code>” which will enter a loop that will unload every font in the library.
 </p>
 
 </div>
-
-<h3 id="listfonts">List Fonts</h3>
+<!-- EDIT17 SECTION "Unload Font" [12684-14023] -->
+<h3 class="sectionedit18" id="list_fonts">List Fonts</h3>
 <div class="level3">
 
 <p>
@@ -416,13 +416,13 @@ Possible future upgrades/expansions for this or a similar function:
 </ul>
 
 </div>
-
-<h2 id="processes">Processes</h2>
+<!-- EDIT18 SECTION "List Fonts" [14024-14905] -->
+<h2 class="sectionedit19" id="processes">Processes</h2>
 <div class="level2">
 
 </div>
-
-<h3 id="startupshutdown">Startup/Shutdown</h3>
+<!-- EDIT19 SECTION "Processes" [14906-14925] -->
+<h3 class="sectionedit20" id="startup_shutdown">Startup/Shutdown</h3>
 <div class="level3">
 
 <p>
@@ -433,7 +433,7 @@ When PCB starts up the font system has several command line options that are pro
 The path(s) in which to search for font files</div>
 </li>
 <li class="level1"><div class="li"> <code>font-file</code><br/>
-The file name of the &quot;Default&quot; font. This is loaded first to ensure that there is always at least one font in the system.</div>
+The file name of the “Default” font. This is loaded first to ensure that there is always at least one font in the system.</div>
 </li>
 <li class="level1"><div class="li"> <code>save-font-data</code><br/>
 Save font information in pcb files. This is required in order for fonts to persist across saves. It will save the name of the font with the text object in the file. This option does not cause the fonts themselves to be included in the file (the <code>embed-font</code> option has that effect). Disabling this option will make the saved files backwards compatible with older versions of pcb.</div>
@@ -451,8 +451,8 @@ The font system is initialized in the <code>settings_post_process</code> functio
 </p>
 
 </div>
-
-<h3 id="fileload">File Load</h3>
+<!-- EDIT20 SECTION "Startup/Shutdown" [14926-16483] -->
+<h3 class="sectionedit21" id="file_load">File Load</h3>
 <div class="level3">
 
 <p>
@@ -461,12 +461,12 @@ The loading of a pcb file has two parts: 1. the actual reading of data from the 
 
 </div>
 
-<h4 id="readingdatafromfilesintodatastructures">Reading Data From Files Into Data Structures</h4>
+<h4 id="reading_data_from_files_into_data_structures">Reading Data From Files Into Data Structures</h4>
 <div class="level4">
 
 </div>
 
-<h5 id="fontdata">Font Data</h5>
+<h5 id="font_data">Font Data</h5>
 <div class="level5">
 
 <p>
@@ -475,7 +475,7 @@ Font data is required to be located after style data and before object data in t
 
 </div>
 
-<h5 id="textdata">Text Data</h5>
+<h5 id="text_data">Text Data</h5>
 <div class="level5">
 
 <p>
@@ -484,7 +484,7 @@ When text data is read from the file, it will either use the standard format, in
 
 </div>
 
-<h5 id="elementdata">Element Data</h5>
+<h5 id="element_data">Element Data</h5>
 <div class="level5">
 
 <p>
@@ -493,16 +493,16 @@ The format of element data in pcb files doesn&#039;t presently include font info
 
 </div>
 
-<h4 id="postloadingpolicy">Post Loading Policy</h4>
+<h4 id="post_loading_policy">Post Loading Policy</h4>
 <div class="level4">
 
 <p>
-The policy defines how to handle objects that need fonts but were not assigned one during load. This is the magic that will hopefully make pcb &quot;do the right thing&quot; when loading older versions of pcb files.
+The policy defines how to handle objects that need fonts but were not assigned one during load. This is the magic that will hopefully make pcb “do the right thing” when loading older versions of pcb files.
 </p>
 
 </div>
 
-<h5 id="systemfontanddefaultfontname">System Font and Default Font Name</h5>
+<h5 id="system_font_and_default_font_name">System Font and Default Font Name</h5>
 <div class="level5">
 
 <p>
@@ -511,7 +511,7 @@ The first (font related) thing pcb tries to do after loading all the data from a
 
 </div>
 
-<h5 id="textdata1">Text Data</h5>
+<h5 id="text_data1">Text Data</h5>
 <div class="level5">
 
 <p>
@@ -519,13 +519,13 @@ After loading all data,
 </p>
 
 </div>
-
-<h3 id="filesave">File Save</h3>
+<!-- EDIT21 SECTION "File Load" [16484-20056] -->
+<h3 class="sectionedit22" id="file_save">File Save</h3>
 <div class="level3">
 
 </div>
-
-<h2 id="todolist">To Do List</h2>
+<!-- EDIT22 SECTION "File Save" [20057-20074] -->
+<h2 class="sectionedit23" id="to_do_list">To Do List</h2>
 <div class="level2">
 
 <p>
@@ -554,10 +554,10 @@ These are tasks and ideas related to the font subsystem that still need to be do
 </li>
 <li class="level1"><div class="li"> Save font(s) to a file</div>
 </li>
-<li class="level1"><div class="li"> &quot;Font mode&quot; saving of fonts to font files.</div>
+<li class="level1"><div class="li"> “Font mode” saving of fonts to font files.</div>
 </li>
 </ul>
 
 </div>
-</body>
+<!-- EDIT23 SECTION "To Do List" [20075-] --></body>
 </html>

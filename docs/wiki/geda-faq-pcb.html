@@ -14,21 +14,21 @@
 <em>Translations of this page are also available in the following languages:</em> <a href="geda-faq-pcb.ru.html" class="wikilink1" title="geda-faq-pcb.ru.html">Русский</a>.
 </p>
 
-<h2 id="pcbfaq">pcb FAQ</h2>
+<h2 class="sectionedit1" id="pcb_faq">pcb FAQ</h2>
 <div class="level2">
 
 </div>
-
-<h3 id="whatispcb">What is pcb ?</h3>
+<!-- EDIT1 SECTION "pcb FAQ" [110-130] -->
+<h3 class="sectionedit2" id="what_is_pcb">What is pcb ?</h3>
 <div class="level3">
 
 <p>
-&quot;pcb&quot; is software to help you draw (&quot;lay out&quot;) the wires for a custom &quot;printed wire board&quot; (&quot;PCB&quot;).
+“pcb” is software to help you draw (“lay out”) the wires for a custom “printed wire board” (“PCB”).
 </p>
 
 </div>
-
-<h3 id="howdoiinstallpcb">How do I install pcb?</h3>
+<!-- EDIT2 SECTION "What is pcb ?" [131-256] -->
+<h3 class="sectionedit3" id="how_do_i_install_pcb">How do I install pcb?</h3>
 <div class="level3">
 
 <p>
@@ -36,77 +36,93 @@ See <a href="geda-installation.html" class="wikilink1" title="geda-installation.
 </p>
 
 </div>
-
-<h3 id="howdoilearnmoreaboutpcb">How do I learn more about PCB?</h3>
+<!-- EDIT3 SECTION "How do I install pcb?" [257-316] -->
+<h3 class="sectionedit4" id="how_do_i_learn_more_about_pcb">How do I learn more about PCB?</h3>
 <div class="level3">
 <ul>
-<li class="level1"><div class="li"> http://www.delorie.com/pcb/docs/</div>
+<li class="level1"><div class="li"> <a href="http://www.delorie.com/pcb/docs/" class="urlextern" title="http://www.delorie.com/pcb/docs/" rel="nofollow">http://www.delorie.com/pcb/docs/</a></div>
 </li>
-<li class="level1"><div class="li"> FIXME: <em>more needed</em></div>
+<li class="level1"><div class="li"> <img src="images/smileys/fixme.gif" align="middle" alt="FIXME" />: <em>more needed</em></div>
 </li>
 </ul>
 
 </div>
-
-<h3 id="howmanylayersdoespcbsupport">How many layers does PCB support?</h3>
+<!-- EDIT4 SECTION "How do I learn more about PCB?" [317-426] -->
+<h3 class="sectionedit5" id="how_many_layers_does_pcb_support">How many layers does PCB support?</h3>
 <div class="level3">
 
 <p>
-&quot;Out-of-the-box&quot;, pcb supports 16 copper layers.  It has been patched by some users to support more, however.
+“Out-of-the-box”, pcb supports 16 copper layers.  It has been patched by some users to support more, however.
 </p>
 
 </div>
-
-<h3 id="isittruethatpcbhasnowaytomakeamechanicallayertoshowthephysicaloutlineoftheboardanditsdimensions">Is it true that pcb has no way to make a &quot;mechanical layer&quot; to show the physical outline of the board and its dimensions ?</h3>
+<!-- EDIT5 SECTION "How many layers does PCB support?" [427-583] -->
+<h3 class="sectionedit6" id="is_it_true_that_pcb_has_no_way_to_make_a_mechanical_layer_to_show_the_physical_outline_of_the_board_and_its_dimensions">Is it true that pcb has no way to make a &quot;mechanical layer&quot; to show the physical outline of the board and its dimensions ?</h3>
 <div class="level3">
 
 <p>
-No. Lines on a layer with layer name <code>outline</code> will be interpreted as physical edges of the board. Also see <a href="geda-pcb_tips.html#how_do_i_make_a_board_outline_to_go_with_my_gerbers_to_the_board_maker" class="wikilink1" title="geda-pcb_tips.html">this note</a> in the more comprehensive <a href="geda-pcbtips.html" class="wikilink2" title="geda-pcbtips.html">PCB tips</a>
+No. Lines on a layer with layer name <code>outline</code> will be interpreted as physical edges of the board. Also see <a href="geda-pcb_tips.html#how_do_i_make_a_board_outline_to_go_with_my_gerbers_to_the_board_maker" class="wikilink1" title="geda-pcb_tips.html">this note</a> in the more comprehensive <a href="geda-pcb_tips.html" class="wikilink1" title="geda-pcb_tips.html">PCB tips</a>
 </p>
 
 </div>
-
-<h3 id="howdoidesignapcb">How do I design a PCB?</h3>
+<!-- EDIT6 SECTION "Is it true that pcb has no way to make a mechanical layer to show the physical outline of the board and its dimensions ?" [584-970] -->
+<h3 class="sectionedit7" id="how_do_i_design_a_pcb">How do I design a PCB?</h3>
 <div class="level3">
 
 <p>
-This is well beyond the scope of this FAQ.
+This is well beyond the scope of this <abbr title="Frequently Asked Questions">FAQ</abbr>.
 There are a few tips at
 </p>
 <ul>
-<li class="level1"><div class="li"> <a href="https://www.google.com/search?q=Printed%20circuit%20board&amp;btnI=lucky" class="interwiki iw_go" title="https://www.google.com/search?q=Printed%20circuit%20board&amp;btnI=lucky">Printed circuit board</a></div>
+<li class="level1"><div class="li"> <a href="https://en.wikipedia.org/wiki/Printed circuit board" class="interwiki iw_wp" title="https://en.wikipedia.org/wiki/Printed circuit board">Printed circuit board</a></div>
 </li>
-<li class="level1"><div class="li"> http:<em>en.wikibooks.org/wiki/Practical_Electronics/PCB_Layout
-
-==== Yes, but how do I design a PCB with pcb? ====
-Generally, you start with a schematic, run gsch2pcb to generate the netlist.
-See <a href="geda-faq-gsch2pcb.html" class="wikilink1" title="geda-faq-gsch2pcb.html">FAQ-gsch2pcb</a>. Then you might go through the <a href="geda-gsch2pcbtutorial.html" class="wikilink2" title="geda-gsch2pcbtutorial.html">gsch2pcb tutorial</a>
-
-Then you ... Hey, did you know about the PCB manual, the <a href="geda-pcbtips.html" class="wikilink2" title="geda-pcbtips.html">PCB tips</a>, and the <a href="geda-pcb-quickreference.html" class="wikilink2" title="geda-pcb-quickreference.html">PCB-quick reference</a>?
-
-==== What about footprints? ====
-See <a href="geda-pcbfootprints.html" class="wikilink2" title="geda-pcbfootprints.html">PCB footprints</a>.
-
-There are also some unofficial gEDA footprints at Open Circuits http:</em>opencircuits.com/PCB_Footprints.</div>
+<li class="level1"><div class="li"> <a href="http://en.wikibooks.org/wiki/Practical_Electronics/PCB_Layout" class="urlextern" title="http://en.wikibooks.org/wiki/Practical_Electronics/PCB_Layout" rel="nofollow">http://en.wikibooks.org/wiki/Practical_Electronics/PCB_Layout</a></div>
 </li>
 </ul>
 
 </div>
-
-<h3 id="ihadahardtimetofindinfoonpcbdueitsambigousnamewhydontyourenametheapp">I had a hard time to find info on pcb due its ambigous name. Why don&#039;t you rename the app?</h3>
+<!-- EDIT7 SECTION "How do I design a PCB?" [971-1170] -->
+<h3 class="sectionedit8" id="yes_but_how_do_i_design_a_pcb_with_pcb">Yes, but how do I design a PCB with pcb?</h3>
 <div class="level3">
 
 <p>
-The application is a fairly old project, with roots way back in the era of <a href="https://www.google.com/search?q=Atari&amp;btnI=lucky" class="interwiki iw_go" title="https://www.google.com/search?q=Atari&amp;btnI=lucky">Atari home computers</a>. Its name has always been &quot;pcb&quot;. The current developers have no intention to break that tradition.
+Generally, you start with a schematic, run gsch2pcb to generate the netlist.
+See <a href="geda-faq-gsch2pcb.html" class="wikilink1" title="geda-faq-gsch2pcb.html">FAQ-gsch2pcb</a>. Then you might go through the <a href="geda-gsch2pcb_tutorial.html" class="wikilink1" title="geda-gsch2pcb_tutorial.html">gsch2pcb tutorial</a>
+</p>
+
+<p>
+Then you … Hey, did you know about the <a href="http://pcb.geda-project.org/pcb-cvs/pcb.html" class="urlextern" title="http://pcb.geda-project.org/pcb-cvs/pcb.html" rel="nofollow">PCB manual</a>, the <a href="geda-pcb_tips.html" class="wikilink1" title="geda-pcb_tips.html">PCB tips</a>, and the <a href="geda-pcb-quick_reference.html" class="wikilink1" title="geda-pcb-quick_reference.html">PCB-quick reference</a>?
 </p>
 
 </div>
-
-<h3 id="isthereanyrelationbetweenthegedapcbandtheopencircuitdesignpcb">Is there any relation between the gEDA PCB and the opencircuitdesign PCB?</h3>
+<!-- EDIT8 SECTION "Yes, but how do I design a PCB with pcb?" [1171-1527] -->
+<h3 class="sectionedit9" id="what_about_footprints">What about footprints?</h3>
 <div class="level3">
 
 <p>
-<a href="geda-faq-pcb.html" class="wikilink1" title="geda-faq-pcb.html"> gEDA PCB</a> and  opencircuitdesign PCB ?
+See <a href="geda-pcb_footprints.html" class="wikilink1" title="geda-pcb_footprints.html">PCB footprints</a>.
+</p>
+
+<p>
+There are also some unofficial gEDA footprints at Open Circuits <a href="http://opencircuits.com/PCB_Footprints" class="urlextern" title="http://opencircuits.com/PCB_Footprints" rel="nofollow">http://opencircuits.com/PCB_Footprints</a>.
+</p>
+
+</div>
+<!-- EDIT9 SECTION "What about footprints?" [1528-1690] -->
+<h3 class="sectionedit10" id="i_had_a_hard_time_to_find_info_on_pcb_due_its_ambigous_name_why_don_t_you_rename_the_app">I had a hard time to find info on pcb due its ambigous name. Why don&#039;t you rename the app?</h3>
+<div class="level3">
+
+<p>
+The application is a fairly old project, with roots way back in the era of <a href="https://en.wikipedia.org/wiki/Atari" class="interwiki iw_wp" title="https://en.wikipedia.org/wiki/Atari">Atari home computers</a>. Its name has always been “pcb”. The current developers have no intention to break that tradition.
+</p>
+
+</div>
+<!-- EDIT10 SECTION "I had a hard time to find info on pcb due its ambigous name. Why don't you rename the app?" [1691-2001] -->
+<h3 class="sectionedit11" id="is_there_any_relation_between_the_geda_pcb_and_the_opencircuitdesign_pcb">Is there any relation between the gEDA PCB and the opencircuitdesign PCB?</h3>
+<div class="level3">
+
+<p>
+<a href="geda-faq-pcb.html" class="wikilink1" title="geda-faq-pcb.html"> gEDA PCB</a> and <a href="http://opencircuitdesign.com/pcb/" class="urlextern" title="http://opencircuitdesign.com/pcb/" rel="nofollow"> opencircuitdesign PCB</a> ?
 </p>
 
 <p>
@@ -114,5 +130,5 @@ Same thing, different generations.
 </p>
 
 </div>
-</body>
+<!-- EDIT11 SECTION "Is there any relation between the gEDA PCB and the opencircuitdesign PCB?" [2002-] --></body>
 </html>

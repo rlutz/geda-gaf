@@ -20,23 +20,19 @@ dnl Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 
 AC_DEFUN([AX_CHECK_CAIRO],
 [
-  AC_PREREQ([2.60])dnl
+  AC_PREREQ([2.69])dnl
 
   # In Cairo >= 1.10, need to check for Cairo PDF/SVG/PS/PNG support
   # separately.
-  PKG_CHECK_MODULES([CAIRO], [cairo >= 1.10], [CAIRO=yes], [CAIRO=no])
-  if test "$CAIRO" = "yes"; then
-    PKG_CHECK_MODULES([CAIRO_PNG], [cairo-png >= 1.10], ,
-      AC_MSG_ERROR([Cairo PNG support 1.10.0 or later is required.]))
-    PKG_CHECK_MODULES([CAIRO_PDF], [cairo-pdf >= 1.10], ,
-      AC_MSG_ERROR([Cairo PDF support 1.10.0 or later is required.]))
-    PKG_CHECK_MODULES([CAIRO_PS], [cairo-ps >= 1.10], ,
-      AC_MSG_ERROR([Cairo PostScript support 1.10.0 or later is required.]))
-    PKG_CHECK_MODULES([CAIRO_SVG], [cairo-svg >= 1.10], ,
-      AC_MSG_ERROR([Cairo SVG support 1.10.0 or later is required.]))
-  else
-    PKG_CHECK_MODULES([CAIRO], [cairo >= 1.8], [],
-      AC_MSG_ERROR([Cairo 1.8.0 or later is required.]))
-  fi
+  PKG_CHECK_MODULES([CAIRO], [cairo >= 1.16.0], [],
+    AC_MSG_ERROR([Cairo 1.16.0 or later is required.]))
+  PKG_CHECK_MODULES([CAIRO_PNG], [cairo-png >= 1.16.0], ,
+    AC_MSG_ERROR([Cairo PNG support 1.16.0 or later is required.]))
+  PKG_CHECK_MODULES([CAIRO_PDF], [cairo-pdf >= 1.16.0], ,
+    AC_MSG_ERROR([Cairo PDF support 1.16.0 or later is required.]))
+  PKG_CHECK_MODULES([CAIRO_PS], [cairo-ps >= 1.16.0], ,
+    AC_MSG_ERROR([Cairo PostScript support 1.16.0 or later is required.]))
+  PKG_CHECK_MODULES([CAIRO_SVG], [cairo-svg >= 1.16.0], ,
+    AC_MSG_ERROR([Cairo SVG support 1.16.0 or later is required.]))
 
 ])dnl AX_CHECK_CAIRO

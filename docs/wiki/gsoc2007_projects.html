@@ -10,11 +10,11 @@
 </head>
 <body>
 
-<h3 id="gedagsocprojectideas">gEDA GSoC Project Ideas</h3>
+<h3 class="sectionedit1" id="geda_gsoc_project_ideas">gEDA GSoC Project Ideas</h3>
 <div class="level3">
 
 <p>
-This page contains various ideas for projects. You can use these as fodder for creating your application to Google. Also, if you have your own idea, feel free to share it with the gEDA developers -- they might like it more than any project on this list!
+This page contains various ideas for projects. You can use these as fodder for creating your application to Google. Also, if you have your own idea, feel free to share it with the gEDA developers – they might like it more than any project on this list!
 </p>
 
 <p>
@@ -22,7 +22,7 @@ Note that some of these projects are too small by themselves to be stand-alone p
 </p>
 
 <p>
-The vast majority of gEDA Suite programs are written in either C or C++. However, a whole range of scripting languages are used including scheme (guile), perl, python, bourne shell, tcl/tk, and others. GUI toolkit use is also fairly broad including GTK+ (this is the primary toolkit of most of the programs), Lesstif, WxWidgets, and others. We are pretty much open to using most languages or GUI toolkits for new programs, however some of the projects listed below will require knowledge of a specific language and/or GUI toolkit (as they are well established programs).
+The vast majority of gEDA Suite programs are written in either C or C++. However, a whole range of scripting languages are used including scheme (guile), perl, python, bourne shell, tcl/tk, and others. <abbr title="Graphical User Interface">GUI</abbr> toolkit use is also fairly broad including GTK+ (this is the primary toolkit of most of the programs), Lesstif, WxWidgets, and others. We are pretty much open to using most languages or <abbr title="Graphical User Interface">GUI</abbr> toolkits for new programs, however some of the projects listed below will require knowledge of a specific language and/or <abbr title="Graphical User Interface">GUI</abbr> toolkit (as they are well established programs).
 </p>
 
 <p>
@@ -30,19 +30,19 @@ Please visit the gEDA Project&#039;s main GSoC page for more info (including con
 </p>
 
 </div>
-
-<h3 id="projectmanager">Project manager</h3>
+<!-- EDIT1 SECTION "gEDA GSoC Project Ideas" [1-1671] -->
+<h3 class="sectionedit2" id="project_manager">Project manager</h3>
 <div class="level3">
 
 <p>
-gEDA needs a new, top-level project manager. Using this tool, A user would type &quot;geda&quot; at the command line (or push a button on his desktop manager), and this program would start a GUI which would provide easy, user-friendly access to all design tools. The project manager would implement (at least) the following functionalities:
+gEDA needs a new, top-level project manager. Using this tool, A user would type “geda” at the command line (or push a button on his desktop manager), and this program would start a <abbr title="Graphical User Interface">GUI</abbr> which would provide easy, user-friendly access to all design tools. The project manager would implement (at least) the following functionalities:
 </p>
 <ul>
 <li class="level1"><div class="li"> Menu items or buttons to run various gEDA programs like gschem, gattrib, gsch2pcb, PCB, gerbv, ngspice, Gnucap, etc.</div>
 </li>
 <li class="level2"><div class="li"> Manage resource files (i.e. the project manager allows you to edit and write gafrc, gsch2pcb project file, spinit, etc.</div>
 </li>
-<li class="level2"><div class="li"> Enable creation of project archives -- i.e. using garchive, but using an intelligent method to gather &amp; archive the symbols &amp; footprints used in the project.</div>
+<li class="level2"><div class="li"> Enable creation of project archives – i.e. using garchive, but using an intelligent method to gather &amp; archive the symbols &amp; footprints used in the project.</div>
 </li>
 <li class="level2"><div class="li"> Perhaps implement some type of lockfiles, or at least some enforcement of the design flow (good for newbies).</div>
 </li>
@@ -57,8 +57,8 @@ Difficulty = 4
 </p>
 
 </div>
-
-<h3 id="improvehandlingofnon-copperlayersinpcb">Improve handling of non-copper layers in pcb</h3>
+<!-- EDIT2 SECTION "Project manager" [1672-2777] -->
+<h3 class="sectionedit3" id="improve_handling_of_non-copper_layers_in_pcb">Improve handling of non-copper layers in pcb</h3>
 <div class="level3">
 
 <p>
@@ -70,12 +70,12 @@ Difficulty = 2
 </p>
 
 </div>
-
-<h3 id="gerbertopcbconverter">Gerber to PCB converter</h3>
+<!-- EDIT3 SECTION "Improve handling of non-copper layers in pcb" [2778-3234] -->
+<h3 class="sectionedit4" id="gerber_to_pcb_converter">Gerber to PCB converter</h3>
 <div class="level3">
 
 <p>
-In this project, the student would create a program which reads a Gerber file, and creates an output file which is a metal layer or footprint editable by PCB. This might be a Perl or Python script. Such a program is very desirable since it gives users the ability to edit legacy designs -- i.e. those for which they only have Gerbers.
+In this project, the student would create a program which reads a Gerber file, and creates an output file which is a metal layer or footprint editable by PCB. This might be a Perl or Python script. Such a program is very desirable since it gives users the ability to edit legacy designs – i.e. those for which they only have Gerbers.
 </p>
 
 <p>
@@ -83,12 +83,12 @@ Difficulty = 3
 </p>
 
 </div>
-
-<h3 id="usabilityimprovementsforngspicegnucap">Usability improvements for ngspice/Gnucap</h3>
+<!-- EDIT4 SECTION "Gerber to PCB converter" [3235-3621] -->
+<h3 class="sectionedit5" id="usability_improvements_for_ngspice_gnucap">Usability improvements for ngspice/Gnucap</h3>
 <div class="level3">
 
 <p>
-Ngspice and Gnucap are the gEDA Project&#039;s analog circuit simulators. They are both command-line tools, meaning that you type commands into a shell-like program at a prompt. However, some popular commercial simulators support easy simulation and analysis directly from within a schematic capture GUI. This method of working is particularly well suited to newbies.
+Ngspice and Gnucap are the gEDA Project&#039;s analog circuit simulators. They are both command-line tools, meaning that you type commands into a shell-like program at a prompt. However, some popular commercial simulators support easy simulation and analysis directly from within a schematic capture <abbr title="Graphical User Interface">GUI</abbr>. This method of working is particularly well suited to newbies.
 </p>
 
 <p>
@@ -108,7 +108,7 @@ The simulation runs and the postprocessing may be in an extra program that is tr
 </p>
 
 <p>
-This project involves tightening the link between gschem and the back-end simulation programs. This might be done using some type of IPC, such as DBUS. Indeed, a preliminary DBUS implementation for gschem &lt;-&gt; PCB already exists; the student might leverage the DBUS work for this project.
+This project involves tightening the link between gschem and the back-end simulation programs. This might be done using some type of IPC, such as DBUS. Indeed, a preliminary DBUS implementation for gschem ↔ PCB already exists; the student might leverage the DBUS work for this project.
 </p>
 
 <p>
@@ -116,8 +116,8 @@ Difficulty = 3
 </p>
 
 </div>
-
-<h3 id="partsmanager">Parts manager</h3>
+<!-- EDIT5 SECTION "Usability improvements for ngspice/Gnucap" [3622-4730] -->
+<h3 class="sectionedit6" id="parts_manager">Parts manager</h3>
 <div class="level3">
 
 <p>
@@ -133,16 +133,16 @@ Difficulty = 4
 </p>
 
 </div>
-
-<h3 id="gnetlistgnetmansupportforhierarchy">Gnetlist/gnetman support for hierarchy</h3>
+<!-- EDIT6 SECTION "Parts manager" [4731-5730] -->
+<h3 class="sectionedit7" id="gnetlist_gnetman_support_for_hierarchy">Gnetlist/gnetman support for hierarchy</h3>
 <div class="level3">
 
 <p>
-The goal of this project is to create a scalable, professional-grade netlister. The project might involve re-writing gnetlist to enable hierarchical designs, or might involve upgrading &quot;gnetman&quot; to incorporate scripted back-ends. The upgrade would be done with an eye towards scalability. Ideally, highly capable and efficient internal data structures and methods for accessing the netlist database should be used. Then a scheme/guile API provided for an external script engine. (It may be beneficial to use swig to allow easy interfacing to multiple scripting languages.) The idea is to produce a netlister capable of handling large, hierarchical designs while still allowing users to write their own netlisters for their favorite netlist format (as gnetlist does now).
+The goal of this project is to create a scalable, professional-grade netlister. The project might involve re-writing gnetlist to enable hierarchical designs, or might involve upgrading “gnetman” to incorporate scripted back-ends. The upgrade would be done with an eye towards scalability. Ideally, highly capable and efficient internal data structures and methods for accessing the netlist database should be used. Then a scheme/guile <abbr title="Application Programming Interface">API</abbr> provided for an external script engine. (It may be beneficial to use swig to allow easy interfacing to multiple scripting languages.) The idea is to produce a netlister capable of handling large, hierarchical designs while still allowing users to write their own netlisters for their favorite netlist format (as gnetlist does now).
 </p>
 
 <p>
-Gnetman is probably the logical starting point since the database was designed by someone with a lot of experience in EDA, and it uses datadraw which is a proven high power CASE tool. However, the student may take whatever approach he wishes, but should provide a strong argument that his approach makes sense before starting coding. In any event, It will be important to provide a compatibility API for the existing backends while providing a more high power and flexible API for new backends and improvements of the old ones.
+Gnetman is probably the logical starting point since the database was designed by someone with a lot of experience in EDA, and it uses datadraw which is a proven high power CASE tool. However, the student may take whatever approach he wishes, but should provide a strong argument that his approach makes sense before starting coding. In any event, It will be important to provide a compatibility <abbr title="Application Programming Interface">API</abbr> for the existing backends while providing a more high power and flexible <abbr title="Application Programming Interface">API</abbr> for new backends and improvements of the old ones.
 </p>
 
 <p>
@@ -150,8 +150,8 @@ Difficulty = 3
 </p>
 
 </div>
-
-<h3 id="libgedaapiformalization">Libgeda API formalization</h3>
+<!-- EDIT7 SECTION "Gnetlist/gnetman support for hierarchy" [5731-7097] -->
+<h3 class="sectionedit8" id="libgeda_api_formalization">Libgeda API formalization</h3>
 <div class="level3">
 
 <p>
@@ -163,8 +163,8 @@ Difficulty = 3
 </p>
 
 </div>
-
-<h3 id="recentlyloadedfilelistforgschemandorpcb">Recently loaded file list for gschem and/or pcb</h3>
+<!-- EDIT8 SECTION "Libgeda API formalization" [7098-7567] -->
+<h3 class="sectionedit9" id="recently_loaded_file_list_for_gschem_and_or_pcb">Recently loaded file list for gschem and/or pcb</h3>
 <div class="level3">
 
 <p>
@@ -176,8 +176,8 @@ Difficulty = 1
 </p>
 
 </div>
-
-<h3 id="rememberdialogsizeandpositions">Remember dialog size and positions</h3>
+<!-- EDIT9 SECTION "Recently loaded file list for gschem and/or pcb" [7568-7869] -->
+<h3 class="sectionedit10" id="remember_dialog_size_and_positions">Remember dialog size and positions</h3>
 <div class="level3">
 
 <p>
@@ -189,8 +189,8 @@ Difficulty = 1
 </p>
 
 </div>
-
-<h3 id="showhiddenattributesforselectedcomponents">Show hidden attributes for selected components</h3>
+<!-- EDIT10 SECTION "Remember dialog size and positions" [7870-8190] -->
+<h3 class="sectionedit11" id="show_hidden_attributes_for_selected_components">Show hidden attributes for selected components</h3>
 <div class="level3">
 
 <p>
@@ -202,8 +202,8 @@ Difficulty = 1
 </p>
 
 </div>
-
-<h3 id="constantsizedhandlesgrips">Constant sized handles/grips</h3>
+<!-- EDIT11 SECTION "Show hidden attributes for selected components" [8191-8518] -->
+<h3 class="sectionedit12" id="constant_sized_handles_grips">Constant sized handles/grips</h3>
 <div class="level3">
 
 <p>
@@ -215,12 +215,12 @@ Difficulty = 1
 </p>
 
 </div>
-
-<h3 id="automaticallyfillinglobalattributesingschem">Automatically fill in global attributes in gschem</h3>
+<!-- EDIT12 SECTION "Constant sized handles/grips" [8519-8936] -->
+<h3 class="sectionedit13" id="automatically_fill_in_global_attributes_in_gschem">Automatically fill in global attributes in gschem</h3>
 <div class="level3">
 
 <p>
-In gschem, implement a mechanism that would (when turned enabled) automatically fill in proper global attributes for the design. These attributes could be the date of the last modification, name of the project, author, number of sheets, etc...
+In gschem, implement a mechanism that would (when turned enabled) automatically fill in proper global attributes for the design. These attributes could be the date of the last modification, name of the project, author, number of sheets, etc…
 </p>
 
 <p>
@@ -228,8 +228,8 @@ Difficulty = 1 to 2
 </p>
 
 </div>
-
-<h3 id="visualfeedbackwhenpressingkeyboardaccelerators">Visual feedback when pressing keyboard accelerators</h3>
+<!-- EDIT13 SECTION "Automatically fill in global attributes in gschem" [8937-9263] -->
+<h3 class="sectionedit14" id="visual_feedback_when_pressing_keyboard_accelerators">Visual feedback when pressing keyboard accelerators</h3>
 <div class="level3">
 
 <p>
@@ -241,8 +241,8 @@ Difficulty = 1
 </p>
 
 </div>
-
-<h3 id="improveerrormessagesingschem">Improve error messages in gschem</h3>
+<!-- EDIT14 SECTION "Visual feedback when pressing keyboard accelerators" [9264-9646] -->
+<h3 class="sectionedit15" id="improve_error_messages_in_gschem">Improve error messages in gschem</h3>
 <div class="level3">
 
 <p>
@@ -254,8 +254,8 @@ Difficulty = 1
 </p>
 
 </div>
-
-<h3 id="globalsearchandreplace">Global search and replace</h3>
+<!-- EDIT15 SECTION "Improve error messages in gschem" [9647-9935] -->
+<h3 class="sectionedit16" id="global_search_and_replace">Global search and replace</h3>
 <div class="level3">
 
 <p>
@@ -267,8 +267,8 @@ Difficulty = 1 to 2
 </p>
 
 </div>
-
-<h3 id="visualfeedbackforattachedattributes">Visual feedback for attached attributes</h3>
+<!-- EDIT16 SECTION "Global search and replace" [9936-10213] -->
+<h3 class="sectionedit17" id="visual_feedback_for_attached_attributes">Visual feedback for attached attributes</h3>
 <div class="level3">
 
 <p>
@@ -280,8 +280,8 @@ Difficulty = 1 to 2
 </p>
 
 </div>
-
-<h3 id="schematicandsymbolmodes">Schematic and symbol modes</h3>
+<!-- EDIT17 SECTION "Visual feedback for attached attributes" [10214-10523] -->
+<h3 class="sectionedit18" id="schematic_and_symbol_modes">Schematic and symbol modes</h3>
 <div class="level3">
 
 <p>
@@ -293,8 +293,8 @@ Difficulty = 2 to 3
 </p>
 
 </div>
-
-<h3 id="movablesymbolorigin">Movable symbol origin</h3>
+<!-- EDIT18 SECTION "Schematic and symbol modes" [10524-10964] -->
+<h3 class="sectionedit19" id="movable_symbol_origin">Movable symbol origin</h3>
 <div class="level3">
 
 <p>
@@ -306,8 +306,8 @@ Difficulty = 2 to 3
 </p>
 
 </div>
-
-<h3 id="modifyinstantiatedsymbolsinaschematic">Modify instantiated symbols in a schematic</h3>
+<!-- EDIT19 SECTION "Movable symbol origin" [10965-11389] -->
+<h3 class="sectionedit20" id="modify_instantiated_symbols_in_a_schematic">Modify instantiated symbols in a schematic</h3>
 <div class="level3">
 
 <p>
@@ -319,8 +319,8 @@ Difficulty = 3 to 4
 </p>
 
 </div>
-
-<h3 id="finergridwhenmovingattributes">Finer grid when moving attributes</h3>
+<!-- EDIT20 SECTION "Modify instantiated symbols in a schematic" [11390-11747] -->
+<h3 class="sectionedit21" id="finer_grid_when_moving_attributes">Finer grid when moving attributes</h3>
 <div class="level3">
 
 <p>
@@ -332,12 +332,12 @@ Difficulty = 2
 </p>
 
 </div>
-
-<h3 id="frequentlyusedsymbolssidebar">Frequently used symbols sidebar</h3>
+<!-- EDIT21 SECTION "Finer grid when moving attributes" [11748-11876] -->
+<h3 class="sectionedit22" id="frequently_used_symbols_sidebar">Frequently used symbols sidebar</h3>
 <div class="level3">
 
 <p>
-Add a frequently used symbols sidebar to gschem that is dynamically loaded and/or can be preloaded from an rc file. Several people have asked for this since using the component selection dialog box can be time consuming for recently used/needed components. This is a GUI heavy project idea.
+Add a frequently used symbols sidebar to gschem that is dynamically loaded and/or can be preloaded from an rc file. Several people have asked for this since using the component selection dialog box can be time consuming for recently used/needed components. This is a <abbr title="Graphical User Interface">GUI</abbr> heavy project idea.
 </p>
 
 <p>
@@ -345,8 +345,8 @@ Difficulty = 3
 </p>
 
 </div>
-
-<h3 id="addmoretoolbarbuttons">Add more toolbar buttons</h3>
+<!-- EDIT22 SECTION "Frequently used symbols sidebar" [11877-12227] -->
+<h3 class="sectionedit23" id="add_more_toolbar_buttons">Add more toolbar buttons</h3>
 <div class="level3">
 
 <p>
@@ -378,8 +378,8 @@ Difficulty = 2 to 3
 </p>
 
 </div>
-
-<h3 id="filledpolygonobject">Filled polygon object</h3>
+<!-- EDIT23 SECTION "Add more toolbar buttons" [12228-12763] -->
+<h3 class="sectionedit24" id="filled_polygon_object">Filled polygon object</h3>
 <div class="level3">
 
 <p>
@@ -391,8 +391,8 @@ Difficulty = 2 to 3
 </p>
 
 </div>
-
-<h3 id="fixgedagafbugsandorimplementfeaturerequests">Fix gEDA/gaf bugs and/or implement feature requests</h3>
+<!-- EDIT24 SECTION "Filled polygon object" [12764-13032] -->
+<h3 class="sectionedit25" id="fix_geda_gaf_bugs_and_or_implement_feature_requests">Fix gEDA/gaf bugs and/or implement feature requests</h3>
 <div class="level3">
 
 <p>
@@ -408,8 +408,8 @@ Difficulty = various
 </p>
 
 </div>
-
-<h3 id="makegsch2pcbusesamesearchpathsaspcb">Make gsch2pcb use same search paths as PCB</h3>
+<!-- EDIT25 SECTION "Fix gEDA/gaf bugs and/or implement feature requests" [13033-13938] -->
+<h3 class="sectionedit26" id="make_gsch2pcb_use_same_search_paths_as_pcb">Make gsch2pcb use same search paths as PCB</h3>
 <div class="level3">
 
 <p>
@@ -417,7 +417,7 @@ Gsch2pcb is a key program in the gEDA Suite. It made it relatively easy to take 
 </p>
 
 <p>
-It would be more preferable for gsch2pcb to be able to query PCB through a well defined and stable API to find out the information it needs. In addition, rather than trying to duplicate PCB&#039;s mechanism for creating a new board and locating footprints, gsch2pcb should simply instruct PCB to peform these operations. The goal is to provide a stable interface between the tools and impose appropriate abstraction barriers in between.
+It would be more preferable for gsch2pcb to be able to query PCB through a well defined and stable <abbr title="Application Programming Interface">API</abbr> to find out the information it needs. In addition, rather than trying to duplicate PCB&#039;s mechanism for creating a new board and locating footprints, gsch2pcb should simply instruct PCB to peform these operations. The goal is to provide a stable interface between the tools and impose appropriate abstraction barriers in between.
 </p>
 
 <p>
@@ -425,12 +425,12 @@ Difficulty = 2
 </p>
 
 </div>
-
-<h3 id="verilogvhdlcodegeneratorsforicarusverilog">Verilog/VHDL code generator[s] for Icarus Verilog</h3>
+<!-- EDIT26 SECTION "Make gsch2pcb use same search paths as PCB" [13939-15164] -->
+<h3 class="sectionedit27" id="verilog_vhdl_code_generator_s_for_icarus_verilog">Verilog/VHDL code generator[s] for Icarus Verilog</h3>
 <div class="level3">
 
 <p>
-A Verilog code generator targets to emit simplified Verilog code. This has use as a Verilog &quot;reducer&quot; (or obfuscator) to translate verilog to more simplified forms. It can also be used to support other Verilog run time engines.
+A Verilog code generator targets to emit simplified Verilog code. This has use as a Verilog “reducer” (or obfuscator) to translate verilog to more simplified forms. It can also be used to support other Verilog run time engines.
 </p>
 
 <p>
@@ -457,11 +457,11 @@ Macros with Arguments
 
 <p>
 The Icarus Verilog preprocessor currently does not support macros with arguments. A good task would be to add support for arguments. This task would work entirely within the ivlpp program that does the preprocessing for the ivl core. It is written in C and bison and would be a good task for someone not an expert in Verilog or EE in general.
-Upgrading/resurrecting the analog waveform viewer &quot;gwave&quot;
+Upgrading/resurrecting the analog waveform viewer “gwave”
 </p>
 
 <p>
-In this project, you would work on improving and modernizing the analog waveform viewer &quot;gwave&quot;. Several improvements are desirable, including (but not limited to):
+In this project, you would work on improving and modernizing the analog waveform viewer “gwave”. Several improvements are desirable, including (but not limited to):
 </p>
 <ul>
 <li class="level1"><div class="li"> Remove requirement for guile-gtk (which is basically dead I as far as I can tell).</div>
@@ -485,12 +485,12 @@ Difficulty = 3
 </p>
 
 </div>
-
-<h3 id="createcomprehensivetestsuiteforentiregedasuite">Create comprehensive test suite for entire gEDA Suite</h3>
+<!-- EDIT27 SECTION "Verilog/VHDL code generator[s] for Icarus Verilog" [15165-17735] -->
+<h3 class="sectionedit28" id="create_comprehensive_test_suite_for_entire_geda_suite">Create comprehensive test suite for entire gEDA Suite</h3>
 <div class="level3">
 
 <p>
-This project encompasses the functionality of the entire gEDA PCB design flow. You would develop a test framework for as much of these tools as possible. This likely means creating a large regression test suite. Some examples are sets of layouts (using PCB) that just barely pass and just barely fail each of the different DRC checks, generate BOM&#039;s, x-y files, generate gerbers and maybe use gerbv to do a graphical xor against a &quot;golden&quot; file. For gnetlist, reference netlists that have been placed into some canonical form should be generated from gschem schematics (.sch files).
+This project encompasses the functionality of the entire gEDA PCB design flow. You would develop a test framework for as much of these tools as possible. This likely means creating a large regression test suite. Some examples are sets of layouts (using PCB) that just barely pass and just barely fail each of the different DRC checks, generate BOM&#039;s, x-y files, generate gerbers and maybe use gerbv to do a graphical xor against a “golden” file. For gnetlist, reference netlists that have been placed into some canonical form should be generated from gschem schematics (.sch files).
 </p>
 
 <p>
@@ -502,8 +502,8 @@ Difficulty = 3
 </p>
 
 </div>
-
-<h3 id="revivetclspiceaddreturncodetoanalysis">Revive TCLSpice, add return code to analysis</h3>
+<!-- EDIT28 SECTION "Create comprehensive test suite for entire gEDA Suite" [17736-18599] -->
+<h3 class="sectionedit29" id="revive_tclspice_add_return_code_to_analysis">Revive TCLSpice, add return code to analysis</h3>
 <div class="level3">
 
 <p>
@@ -519,8 +519,8 @@ Difficulty = 4
 </p>
 
 </div>
-
-<h3 id="pcbdrcinterfaceimprovements">PCB DRC interface improvements</h3>
+<!-- EDIT29 SECTION "Revive TCLSpice, add return code to analysis" [18600-19345] -->
+<h3 class="sectionedit30" id="pcb_drc_interface_improvements">PCB DRC interface improvements</h3>
 <div class="level3">
 
 <p>
@@ -532,8 +532,8 @@ Difficulty = 2
 </p>
 
 </div>
-
-<h3 id="addenhancementstogerbv">Add enhancements to gerbv.</h3>
+<!-- EDIT30 SECTION "PCB DRC interface improvements" [19346-19687] -->
+<h3 class="sectionedit31" id="add_enhancements_to_gerbv">Add enhancements to gerbv.</h3>
 <div class="level3">
 
 <p>
@@ -545,8 +545,8 @@ Difficulty = ?
 </p>
 
 </div>
-
-<h3 id="pcbautorouter">PCB Autorouter</h3>
+<!-- EDIT31 SECTION "Add enhancements to gerbv." [19688-19963] -->
+<h3 class="sectionedit32" id="pcb_autorouter">PCB Autorouter</h3>
 <div class="level3">
 
 <p>
@@ -558,8 +558,8 @@ Difficulty = 5
 </p>
 
 </div>
-
-<h3 id="improvedandformalizedmechanismforforwardbackwardannotation">Improved and formalized mechanism for forward/backward annotation</h3>
+<!-- EDIT32 SECTION "PCB Autorouter" [19964-20246] -->
+<h3 class="sectionedit33" id="improved_and_formalized_mechanism_for_forward_backward_annotation">Improved and formalized mechanism for forward/backward annotation</h3>
 <div class="level3">
 
 <p>
@@ -571,12 +571,12 @@ Difficulty = 3
 </p>
 
 </div>
-
-<h3 id="ipcfootprintcalculator">IPC Footprint Calculator</h3>
+<!-- EDIT33 SECTION "Improved and formalized mechanism for forward/backward annotation" [20247-20650] -->
+<h3 class="sectionedit34" id="ipc_footprint_calculator">IPC Footprint Calculator</h3>
 <div class="level3">
 
 <p>
-Build a footprint calculator that can take the IPC rules and produce a pcb footprint. Preferably write this in a way where the core program is independent of a gui so that you can script it for generating entire large families of footprints or hook it up to a GUI of choice (lesstif, gtk, maybe even cgi). Would require the purchase of IPC-7351 (approximately U.S.A. $100)and verifying that one is allowed to produce such a calculator.
+Build a footprint calculator that can take the IPC rules and produce a pcb footprint. Preferably write this in a way where the core program is independent of a gui so that you can script it for generating entire large families of footprints or hook it up to a <abbr title="Graphical User Interface">GUI</abbr> of choice (lesstif, gtk, maybe even cgi). Would require the purchase of IPC-7351 (approximately U.S.A. $100)and verifying that one is allowed to produce such a calculator.
 </p>
 
 <p>
@@ -584,5 +584,5 @@ Difficulty = 2
 </p>
 
 </div>
-</body>
+<!-- EDIT34 SECTION "IPC Footprint Calculator" [20651-] --></body>
 </html>

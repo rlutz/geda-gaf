@@ -12,11 +12,11 @@
 <a href=.>start</a>&nbsp;=>&nbsp;<a href=geda-gnetlist_ug.html>gnetlist_ug</a></br>
 <div class="table sectionedit1"><table class="inline">
 	<tr class="row0">
-		<td class="col0 leftalign"> &lt;&lt; <a href="geda-gnetlist_ug-implicitpins.html" class="wikilink2" title="geda-gnetlist_ug-implicitpins.html">Implicit pins</a>  </td><td class="col1 centeralign">  <strong><a href="geda-gnetlist_ug.html" class="wikilink1" title="geda-gnetlist_ug.html">gEDA gnetlist User Guide</a></strong>     </td><td class="col2 rightalign">  <a href="geda-gnetlist_ug-command_line.html" class="wikilink1" title="geda-gnetlist_ug-command_line.html">Command-line arguments</a> &gt;&gt; </td>
+		<td class="col0 leftalign"> « <a href="geda-gnetlist_ug-implicit_pins.html" class="wikilink1" title="geda-gnetlist_ug-implicit_pins.html">Implicit pins</a>  </td><td class="col1 centeralign">  <strong><a href="geda-gnetlist_ug.html" class="wikilink1" title="geda-gnetlist_ug.html">gEDA gnetlist User Guide</a></strong>     </td><td class="col2 rightalign">  <a href="geda-gnetlist_ug-command_line.html" class="wikilink1" title="geda-gnetlist_ug-command_line.html">Command-line arguments</a> » </td>
 	</tr>
 </table></div>
 <!-- EDIT1 TABLE [1-129] -->
-<h2 id="configuringgnetlist">Configuring gnetlist</h2>
+<h2 class="sectionedit2" id="configuring_gnetlist">Configuring gnetlist</h2>
 <div class="level2">
 
 <p>
@@ -50,35 +50,35 @@ There are a very large number of options that affect the way gnetlist works, and
 </p>
 
 </div>
-
-<h3 id="symbolandsourcelibraries">Symbol and source libraries</h3>
+<!-- EDIT2 SECTION "Configuring gnetlist" [131-1199] -->
+<h3 class="sectionedit3" id="symbol_and_source_libraries">Symbol and source libraries</h3>
 <div class="level3">
 
 <p>
-When using gnetlist, it is very important that your symbol and source libraries are set up correctly.  You will almost always want to put these settings in a suite configuration file (one of the &quot;<code>gafrc</code>&quot; files) so that the same libraries are used by gschem and gnetlist.  For an explanation of how to set up symbol and source libraries, see the <a href="geda-gschem_ug-config.html" class="wikilink1" title="geda-gschem_ug-config.html">gEDA gschem User Guide</a>.
+When using gnetlist, it is very important that your symbol and source libraries are set up correctly.  You will almost always want to put these settings in a suite configuration file (one of the “<code>gafrc</code>” files) so that the same libraries are used by gschem and gnetlist.  For an explanation of how to set up symbol and source libraries, see the <a href="geda-gschem_ug-config.html" class="wikilink1" title="geda-gschem_ug-config.html">gEDA gschem User Guide</a>.
 </p>
 
 </div>
-
-<h3 id="hierarchyprocessingoptions">Hierarchy processing options</h3>
+<!-- EDIT3 SECTION "Symbol and source libraries" [1200-1637] -->
+<h3 class="sectionedit4" id="hierarchy_processing_options">Hierarchy processing options</h3>
 <div class="level3">
 
 <p>
-When working with <a href="geda-gnetlist_ug-hierarchy.html" class="wikilink1" title="geda-gnetlist_ug-hierarchy.html">hierarchy</a>, gnetlist renames nets and components based on where in the hierarchy they occur.  You can configure how this &quot;mangling&quot; is carried out, and disable it if necessary.
+When working with <a href="geda-gnetlist_ug-hierarchy.html" class="wikilink1" title="geda-gnetlist_ug-hierarchy.html">hierarchy</a>, gnetlist renames nets and components based on where in the hierarchy they occur.  You can configure how this “mangling” is carried out, and disable it if necessary.
 </p>
 
 <p>
-By default, gnetlist appends names at each level of hierarchy together, using &quot;/&quot; as the separator (so the component &quot;U1&quot; in the subcircuit &quot;A3&quot; becomes &quot;A3/U1&quot;).  For component names (&quot;refdes&quot;), the <code>hierarchy-uref-order</code> and <code>hierarchy-uref-separator</code> functions can be used to change this.  For example, to change the &quot;refdes&quot; mangling to prepend names at each level with the separator &quot;:&quot;, you could use:
+By default, gnetlist appends names at each level of hierarchy together, using “/” as the separator (so the component “U1” in the subcircuit “A3” becomes “A3/U1”).  For component names (“refdes”), the <code>hierarchy-uref-order</code> and <code>hierarchy-uref-separator</code> functions can be used to change this.  For example, to change the “refdes” mangling to prepend names at each level with the separator “:”, you could use:
 </p>
 <pre class="code">(hierarchy-uref-order &quot;prepend&quot;)
 (hierarchy-uref-separator &quot;:&quot;)</pre>
 
 <p>
-Now &quot;U1&quot; in the subcircuit &quot;A3&quot; would be renamed to &quot;U1:A3&quot; by gnetlist.
+Now “U1” in the subcircuit “A3” would be renamed to “U1:A3” by gnetlist.
 </p>
 
 <p>
-The <code>hierarchy-uref-mangle</code> function can be used to turn off &quot;refdes&quot; mangling entirely:
+The <code>hierarchy-uref-mangle</code> function can be used to turn off “refdes” mangling entirely:
 </p>
 <pre class="code">(hierarchy-uref-mangle &quot;disabled&quot;)</pre>
 
@@ -87,12 +87,12 @@ This is very rarely a useful thing to do.
 </p>
 
 <p>
-Similar settings exist for net names set using the &quot;<code>netname=</code>&quot; attribute, and net names set using <a href="geda-gnetlist_ug-implicitpins.html" class="wikilink2" title="geda-gnetlist_ug-implicitpins.html">implicit pins</a> and the &quot;<code>net=</code>&quot; attribute.  
+Similar settings exist for net names set using the “<code>netname=</code>” attribute, and net names set using <a href="geda-gnetlist_ug-implicit_pins.html" class="wikilink1" title="geda-gnetlist_ug-implicit_pins.html">implicit pins</a> and the “<code>net=</code>” attribute.  
 </p>
 <ul>
-<li class="level1"><div class="li"> The <code>hierarchy-netname-order</code>, <code>hierarchy-netname-separator</code> and <code>hierarchy-netname-mangle</code> functions control &quot;<code>netname=</code>&quot; mangling.</div>
+<li class="level1"><div class="li"> The <code>hierarchy-netname-order</code>, <code>hierarchy-netname-separator</code> and <code>hierarchy-netname-mangle</code> functions control “<code>netname=</code>” mangling.</div>
 </li>
-<li class="level1"><div class="li"> The <code>hierarchy-netattrib-order</code>, <code>hierarchy-netattrib-separator</code> and <code>hierarchy-netattrib-mangle</code> functions control &quot;<code>net=</code>&quot; mangling.</div>
+<li class="level1"><div class="li"> The <code>hierarchy-netattrib-order</code>, <code>hierarchy-netattrib-separator</code> and <code>hierarchy-netattrib-mangle</code> functions control “<code>net=</code>” mangling.</div>
 </li>
 </ul>
 
@@ -102,8 +102,8 @@ It is sometimes useful to turn off hierarchy processing entirely.  You can do th
 <pre class="code">(hierarchy-traversal &quot;disabled&quot;)</pre>
 
 </div>
-
-<h3 id="automaticnetnaming">Automatic net naming</h3>
+<!-- EDIT4 SECTION "Hierarchy processing options" [1638-3241] -->
+<h3 class="sectionedit5" id="automatic_net_naming">Automatic net naming</h3>
 <div class="level3">
 
 <p>
@@ -112,9 +112,9 @@ You can control how gnetlist automatically names nets that are not named in the 
 <pre class="code">(unnamed-netname &quot;unnamed_net&quot;)</pre>
 
 <p>
-This would make gnetlist automatically give unnamed nets names of the form &quot;unnamed_net12345&quot;.
+This would make gnetlist automatically give unnamed nets names of the form “unnamed_net12345”.
 </p>
 
 </div>
-</body>
+<!-- EDIT5 SECTION "Automatic net naming" [3242-] --></body>
 </html>

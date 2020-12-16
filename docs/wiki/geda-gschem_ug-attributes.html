@@ -12,15 +12,15 @@
 <a href=.>start</a>&nbsp;=>&nbsp;<a href=geda-gschem_ug.html>gschem_ug</a></br>
 <div class="table sectionedit1"><table class="inline">
 	<tr class="row0">
-		<td class="col0 leftalign"> &lt;&lt; <a href="geda-gschem_ug-colors_styles.html" class="wikilink1" title="geda-gschem_ug-colors_styles.html">Colors and styles</a>  </td><td class="col1 centeralign">  <strong><a href="geda-gschem_ug.html" class="wikilink1" title="geda-gschem_ug.html">gEDA gschem User Guide</a></strong>  </td><td class="col2 rightalign">  <a href="geda-gschem_ug-slots.html" class="wikilink1" title="geda-gschem_ug-slots.html">Slots and slotting</a> &gt;&gt; </td>
+		<td class="col0 leftalign"> « <a href="geda-gschem_ug-colors_styles.html" class="wikilink1" title="geda-gschem_ug-colors_styles.html">Colors and styles</a>  </td><td class="col1 centeralign">  <strong><a href="geda-gschem_ug.html" class="wikilink1" title="geda-gschem_ug.html">gEDA gschem User Guide</a></strong>  </td><td class="col2 rightalign">  <a href="geda-gschem_ug-slots.html" class="wikilink1" title="geda-gschem_ug-slots.html">Slots and slotting</a> » </td>
 	</tr>
 </table></div>
 <!-- EDIT1 TABLE [1-129] -->
-<h2 id="attributes">Attributes</h2>
+<h2 class="sectionedit2" id="attributes">Attributes</h2>
 <div class="level2">
 
 <p>
-Both <a href="geda-gschem_ug-components.html" class="wikilink1" title="geda-gschem_ug-components.html">components</a> and <a href="geda-gschem_ug-pins_nets_buses.html" class="wikilink1" title="geda-gschem_ug-pins_nets_buses.html">pins, nets and buses</a> can have <em>attributes</em> attached to them.  Attributes are <a href="geda-gschem_ug-graphics.html#text" class="wikilink1" title="geda-gschem_ug-graphics.html">text</a> in the format &quot;<code>name=value</code>&quot;.  For example, nets can be named using a &quot;<code>netname=</code>&quot; attribute, and components can be named using a &quot;<code>refdes=</code>&quot; attribute.
+Both <a href="geda-gschem_ug-components.html" class="wikilink1" title="geda-gschem_ug-components.html">components</a> and <a href="geda-gschem_ug-pins_nets_buses.html" class="wikilink1" title="geda-gschem_ug-pins_nets_buses.html">pins, nets and buses</a> can have <em>attributes</em> attached to them.  Attributes are <a href="geda-gschem_ug-graphics.html#text" class="wikilink1" title="geda-gschem_ug-graphics.html">text</a> in the format “<code>name=value</code>”.  For example, nets can be named using a “<code>netname=</code>” attribute, and components can be named using a “<code>refdes=</code>” attribute.
 </p>
 
 <p>
@@ -33,37 +33,37 @@ In addition to the name and value, attributes have two visibility settings.  The
 </p>
 
 <p>
-There are two ways to add/edit attributes: editing them individually, or using the &quot;Edit Attributes&quot; window.
+There are two ways to add/edit attributes: editing them individually, or using the “Edit Attributes” window.
 </p>
 
 </div>
-
-<h3 id="editingindividualattributes">Editing individual attributes</h3>
+<!-- EDIT2 SECTION "Attributes" [131-1372] -->
+<h3 class="sectionedit3" id="editing_individual_attributes">Editing individual attributes</h3>
 <div class="level3">
 
 <p>
-To add a single attribute to a component, pin, net or bus, <a href="geda-gschem_ug-selecting.html" class="wikilink1" title="geda-gschem_ug-selecting.html">select</a> the target object and use <strong>Add→Attribute...</strong>.  This will display the &quot;Single Attribute Editor&quot; window.  Enter a name and value, and set the desired visibility settings, then click <strong>OK</strong> to add the attribute.  If you use <strong>Add→Attribute...</strong> without selecting any object, the created attribute will be floating.
+To add a single attribute to a component, pin, net or bus, <a href="geda-gschem_ug-selecting.html" class="wikilink1" title="geda-gschem_ug-selecting.html">select</a> the target object and use <strong>Add→Attribute…</strong>.  This will display the “Single Attribute Editor” window.  Enter a name and value, and set the desired visibility settings, then click <strong>OK</strong> to add the attribute.  If you use <strong>Add→Attribute…</strong> without selecting any object, the created attribute will be floating.
 </p>
 
 <p>
-To edit an individual attribute, select the attribute (not the object it&#039;s attached to) and use <strong>Edit→Edit...</strong> to display the &quot;Single Attribute Editor&quot; window again.  To update the attribute after making your changes, click <strong>OK</strong>.
+To edit an individual attribute, select the attribute (not the object it&#039;s attached to) and use <strong>Edit→Edit…</strong> to display the “Single Attribute Editor” window again.  To update the attribute after making your changes, click <strong>OK</strong>.
 </p>
 
 </div>
-
-<h3 id="editingmultipleattributes">Editing multiple attributes</h3>
+<!-- EDIT3 SECTION "Editing individual attributes" [1373-2049] -->
+<h3 class="sectionedit4" id="editing_multiple_attributes">Editing multiple attributes</h3>
 <div class="level3">
 
 <p>
-A more powerful alternative is to use the &quot;Edit Attributes&quot; window.  To display the window, select a component, net, pin or bus, and use <strong>Edit→Edit...</strong>.
+A more powerful alternative is to use the “Edit Attributes” window.  To display the window, select a component, net, pin or bus, and use <strong>Edit→Edit…</strong>.
 </p>
 
 <p>
-The &quot;Edit Attributes&quot; window is divided into two parts.  The upper part shows all of the attributes that are currently attached to the object, and the lower part allows you to add attributes in a similar fashion to the &quot;Single Attribute Editor&quot;.  The window automatically updates when the selected object changes.
+The “Edit Attributes” window is divided into two parts.  The upper part shows all of the attributes that are currently attached to the object, and the lower part allows you to add attributes in a similar fashion to the “Single Attribute Editor”.  The window automatically updates when the selected object changes.
 </p>
 
 <p>
-In the top part of the window, each row in the attribute list shows the name and value of an attribute, and its visibility settings (&quot;Vis?&quot; for overall visibility, and &quot;N&quot; and &quot;V&quot; for name and value visibility respectively).  Left-click the name or value of an attribute to edit it, and press <kbd>Enter</kbd> or move the focus to another field to save your changes.  To cancel your changes while editing the name or value of an attribute, press <kbd>Escape</kbd>.
+In the top part of the window, each row in the attribute list shows the name and value of an attribute, and its visibility settings (“Vis?” for overall visibility, and “N” and “V” for name and value visibility respectively).  Left-click the name or value of an attribute to edit it, and press <kbd>Enter</kbd> or move the focus to another field to save your changes.  To cancel your changes while editing the name or value of an attribute, press <kbd>Escape</kbd>.
 </p>
 
 <p>
@@ -75,8 +75,8 @@ If the <strong>Show inherited attributes</strong> checkbox is enabled, and a com
 </p>
 
 </div>
-
-<h3 id="bulkattributevisibilitychanges">Bulk attribute visibility changes</h3>
+<!-- EDIT4 SECTION "Editing multiple attributes" [2050-3468] -->
+<h3 class="sectionedit5" id="bulk_attribute_visibility_changes">Bulk attribute visibility changes</h3>
 <div class="level3">
 
 <p>
@@ -84,9 +84,9 @@ To change the visibility settings for several selected attributes at a time, use
 </p>
 
 <p>
-You can also change the visibility of all attributes that begin with a particular prefix using <strong>Attributes→Hide Specific Text...</strong> and <strong>Attributes→Show Specific Text...</strong>.  For example, you could enter &quot;refdes=R&quot; to hide all <code>refdes</code> attributes with values beginning with <code>R</code>.
+You can also change the visibility of all attributes that begin with a particular prefix using <strong>Attributes→Hide Specific Text…</strong> and <strong>Attributes→Show Specific Text…</strong>.  For example, you could enter “refdes=R” to hide all <code>refdes</code> attributes with values beginning with <code>R</code>.
 </p>
 
 </div>
-</body>
+<!-- EDIT5 SECTION "Bulk attribute visibility changes" [3469-] --></body>
 </html>

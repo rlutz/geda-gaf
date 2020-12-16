@@ -27,6 +27,7 @@ symbol_dirs = \
 	minicircuits \
 	misc \
 	national \
+	net-power \
 	opto \
 	philips \
 	pla \

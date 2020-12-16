@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: geda\n"
 "Report-Msgid-Bugs-To: https://bugs.launchpad.net/geda\n"
-"POT-Creation-Date: 2019-10-08 20:20+0200\n"
+"POT-Creation-Date: 2020-12-16 18:12+0100\n"
 "PO-Revision-Date: 2012-01-27 14:12+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: Danish <da@li.org>\n"
@@ -168,22 +168,22 @@ msgstr ""
 msgid "Could NOT set backup file [%s] readonly\n"
 msgstr ""
 
-#: libgeda/src/f_basic.c:472
+#: libgeda/src/f_basic.c:471
 #, c-format
 msgid "Failed to restore permissions on '%s': %s\n"
 msgstr ""
 
-#: libgeda/src/f_basic.c:477
+#: libgeda/src/f_basic.c:476
 #, c-format
 msgid "Failed to restore ownership on '%s': %s\n"
 msgstr ""
 
-#: libgeda/src/f_basic.c:487
+#: libgeda/src/f_basic.c:486
 #, c-format
 msgid "Could NOT save file: %s"
 msgstr ""
 
-#: libgeda/src/f_basic.c:734
+#: libgeda/src/f_basic.c:733
 #, c-format
 msgid "%s: %s"
 msgstr ""
@@ -728,27 +728,27 @@ msgstr ""
 msgid "Failed to descend hierarchy into '%s': %s\n"
 msgstr ""
 
-#: libgeda/src/s_page.c:217
+#: libgeda/src/s_page.c:216
 #, c-format
 msgid "s_page_delete: Can't get the real filename of %s."
 msgstr ""
 
-#: libgeda/src/s_page.c:228
+#: libgeda/src/s_page.c:227
 #, c-format
 msgid "s_page_delete: Unable to delete backup file %s."
 msgstr ""
 
-#: libgeda/src/s_page.c:403
+#: libgeda/src/s_page.c:402
 #, c-format
 msgid "Failed to change working directory to [%s]: %s\n"
 msgstr ""
 
-#: libgeda/src/s_page.c:506
+#: libgeda/src/s_page.c:505
 #, c-format
 msgid "Saved [%s]\n"
 msgstr ""
 
-#: libgeda/src/s_page.c:512
+#: libgeda/src/s_page.c:511
 #, c-format
 msgid "Could NOT save [%s]\n"
 msgstr ""
@@ -769,16 +769,16 @@ msgstr ""
 msgid "component missing pinseq= attribute\n"
 msgstr ""
 
-#: libgeda/src/edaconfig.c:659 libgeda/src/edaconfig.c:745
+#: libgeda/src/edaconfig.c:657 libgeda/src/edaconfig.c:743
 msgid "Undefined configuration filename"
 msgstr ""
 
-#: libgeda/src/edaconfig.c:1070 libgeda/src/edaconfig.c:1134
+#: libgeda/src/edaconfig.c:1068 libgeda/src/edaconfig.c:1132
 #, c-format
 msgid "Configuration does not have group '%s'"
 msgstr ""
 
-#: libgeda/src/edaconfig.c:1148
+#: libgeda/src/edaconfig.c:1146
 #, c-format
 msgid "Configuration does not have key '%s'"
 msgstr ""
@@ -935,11 +935,11 @@ msgstr ""
 msgid "Parse error: ~s"
 msgstr ""
 
-#: libgeda/src/edascmhookproxy.c:81
+#: libgeda/src/edascmhookproxy.c:79
 msgid "Scheme hook"
 msgstr ""
 
-#: libgeda/src/edascmhookproxy.c:82
+#: libgeda/src/edascmhookproxy.c:80
 msgid "The Scheme-level hook to proxy"
 msgstr ""
 
