@@ -8,6 +8,44 @@ This file documents important user-visible changes in gEDA/gaf.  For
 more information, please consult the `ChangeLog' file.
 
 
+Notable changes in gEDA/gaf 1.10.1
+==================================
+
+* Migrated to Guile 2.2.
+
+* Duplicate symbols in a library are now only considered an error if
+  one of the symbols has been referenced.
+
+* Fixed handling of packages and nets in multi-page subschematics.
+
+* gnetlist ignores the `--report-gui' option and falls back to console
+  output if the Python GTK bindings are missing.
+
+* Added power symbols based on the newer netname= convention to the
+  standard symbol library.
+
+* Moved visibility columns in the attribute editor to the left side.
+
+* When promoting an attribute manually in the attribute editor, the
+  new attribute is now visible by default.
+
+* After pasting objects, the newly-pasted objects are selected.
+
+* Page size and orientation can be changed in the print dialog.
+
+* Removed the option `bus-ripper-rotation'; both symmetric and
+  non-symmetric bus rippers are now placed correctly.
+
+* Fixed bugs:
+  - lp-1878401  Geda* Will Not Compile On Fedora 32
+  - lp-1853617  incorrectly placing the component attribute on the printout
+  - lp-1849621  Fix 'parentheses around assignment used as truth value' war...
+  - lp-1848838  Some Guile tests fail in geda 1.10.0
+  - lp-1848837  geda 1.10.0 fails to build
+  - lp-1783027  Install fails if INSTALL doesn't specify full path of insta...
+  ...and several more which never made it to the bugtracker.
+
+
 Notable changes in gEDA/gaf 1.10.0
 ==================================
 
