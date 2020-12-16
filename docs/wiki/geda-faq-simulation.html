@@ -14,21 +14,21 @@
 <em>Translations of this page are also available in the following languages:</em> <a href="geda-faq-simulation.fr.html" class="wikilink1" title="geda-faq-simulation.fr.html">Français</a>, <a href="geda-faq-simulation.ru.html" class="wikilink1" title="geda-faq-simulation.ru.html">Русский</a>.
 </p>
 
-<h1 id="simulation">Simulation</h1>
+<h1 class="sectionedit1" id="simulation">Simulation</h1>
 <div class="level1">
 
 </div>
-
-<h2 id="iwanttosimulatemyanalogcircuitdesignwhataremyoptions">I want to simulate my analog circuit design. What are my options?</h2>
+<!-- EDIT1 SECTION "Simulation" [150-175] -->
+<h2 class="sectionedit2" id="i_want_to_simulate_my_analog_circuit_design_what_are_my_options">I want to simulate my analog circuit design. What are my options?</h2>
 <div class="level2">
 
 <p>
 Within the canonical gEDA Suite apps there are two analog circuit simulators: ngspice and gnucap. In (slightly) more detail:
 </p>
 <ul>
-<li class="level1"><div class="li"> Ngspice is a port/clean-up of classical SPICE 3f5 to the GNU/Linux platform. It is fully functional, includes the XSpice extensions (such as SPICE 2 POLY constructs), and the CIDER framework.</div>
+<li class="level1"><div class="li"> <a href="http://ngspice.sourceforge.net/" class="urlextern" title="http://ngspice.sourceforge.net/" rel="nofollow">Ngspice</a> is a port/clean-up of classical SPICE 3f5 to the GNU/Linux platform. It is fully functional, includes the XSpice extensions (such as SPICE 2 POLY constructs), and the CIDER framework.</div>
 </li>
-<li class="level1"><div class="li"> Gnucap is a new circuit simulator written from the ground up. It offers the ability to perform event-driven – as well as continuous time – simulations. It is the work of Al Davis. If you wish to download it, make sure you grab the latest version, available through the &quot;development releases&quot; link on the gnucap website.</div>
+<li class="level1"><div class="li"> <a href="http://www.gnucap.org/" class="urlextern" title="http://www.gnucap.org/" rel="nofollow">Gnucap</a> is a new circuit simulator written from the ground up. It offers the ability to perform event-driven – as well as continuous time – simulations. It is the work of Al Davis. If you wish to download it, make sure you grab the latest version, available through the “development releases” link on the gnucap website.</div>
 </li>
 </ul>
 
@@ -37,16 +37,16 @@ Both are CLI (command line interface) programs, meaning that you interact with t
 </p>
 
 <p>
-If you prefer a graphical interface, the new gEDA app GSpiceUI provides a nice GUI front-end to drive the simulation programs. However, GSpiceUI is not a complete schematic-to-simulation-output simulator like LTSpice or PSpice. Rather, it just provides a GUI menu which helps you navigate the commands you need to perform your ngspice/gnucap simulation.
+If you prefer a graphical interface, the new gEDA app GSpiceUI provides a nice <abbr title="Graphical User Interface">GUI</abbr> front-end to drive the simulation programs. However, GSpiceUI is not a complete schematic-to-simulation-output simulator like LTSpice or PSpice. Rather, it just provides a <abbr title="Graphical User Interface">GUI</abbr> menu which helps you navigate the commands you need to perform your ngspice/gnucap simulation.
 </p>
 
 </div>
-
-<h2 id="whatabouttclspicewhatisitshouldiuseit">What about tclspice? What is it? Should I use it?</h2>
+<!-- EDIT2 SECTION "I want to simulate my analog circuit design. What are my options?" [176-1526] -->
+<h2 class="sectionedit3" id="what_about_tclspice_what_is_it_should_i_use_it">What about tclspice? What is it? Should I use it?</h2>
 <div class="level2">
 
 <p>
-Tclspice was a fork off the ngspice development path. It was begun in the 2002 timeframe. In principle, tclspice would export the SPICE command set to a TCL API, allowing you to embed SPICE analyses into a TCL program. This vision is certainly very attractive since TCL is a powerful scripting language – much more powerful than the scripting constructs available from within SPICE itself. Using TCL, one could imagine writing complex circuit optimizers, adding behavioral elements to a simulation, and finally gaining control over SPICE&#039;s graphical output.
+<a href="http://tclspice.sourceforge.net/" class="urlextern" title="http://tclspice.sourceforge.net/" rel="nofollow">Tclspice</a> was a fork off the ngspice development path. It was begun in the 2002 timeframe. In principle, tclspice would export the SPICE command set to a TCL <abbr title="Application Programming Interface">API</abbr>, allowing you to embed SPICE analyses into a TCL program. This vision is certainly very attractive since TCL is a powerful scripting language – much more powerful than the scripting constructs available from within SPICE itself. Using TCL, one could imagine writing complex circuit optimizers, adding behavioral elements to a simulation, and finally gaining control over SPICE&#039;s graphical output.
 </p>
 
 <p>
@@ -63,20 +63,20 @@ spice::plot Vout
 puts &quot;All done now!&quot;</pre>
 
 <p>
-Unfortunately, tclspice lacks certain important features, like providing you a return code which tells you whether your simulation actually worked or errored out instead. Also, the graphics functionality never seemed to work (at least for me ... and the developers admit that the graphics stink). Converting TCL variables to and from SPICE vectors never seemed to work – again at least for me. Finally, ngspice (at least) has a lot of memory leaks, making long simulation runs difficult. Therefore, tclspice doesn&#039;t meet the promise it originally held out: a convenient, scriptable way to drive SPICE simulations.
+Unfortunately, tclspice lacks certain important features, like providing you a return code which tells you whether your simulation actually worked or errored out instead. Also, the graphics functionality never seemed to work (at least for me … and the developers admit that the graphics stink). Converting TCL variables to and from SPICE vectors never seemed to work – again at least for me. Finally, ngspice (at least) has a lot of memory leaks, making long simulation runs difficult. Therefore, tclspice doesn&#039;t meet the promise it originally held out: a convenient, scriptable way to drive SPICE simulations.
 </p>
 
 <p>
-Development on tclspice effectively stopped in 2004. Perhaps some day somebody will pick it up again. In the meantime, the main ngspice development branch has picked up the tclspice features if you want them (they require separate configuration options), and the code is fresher.
+Development on tclspice effectively stopped in 2004. Perhaps some day somebody will pick it up again. In the meantime, the main <a href="http://ngspice.sourceforge.net/" class="urlextern" title="http://ngspice.sourceforge.net/" rel="nofollow">ngspice</a> development branch has picked up the tclspice features if you want them (they require separate configuration options), and the code is fresher.
 </p>
 
 </div>
-
-<h2 id="wherearethemodels">Where are the models?</h2>
+<!-- EDIT3 SECTION "What about tclspice? What is it? Should I use it?" [1527-3447] -->
+<h2 class="sectionedit4" id="where_are_the_models">Where are the models?</h2>
 <div class="level2">
 
 <p>
-There are only very few open source models made available by enthusiasts. This is why there is no extensive library of models included in the gnucap or ngspice package. If you rolled your own and feel like contributing to the project, this would be an excellent opportunity (hint, hint...).
+There are only very few open source models made available by enthusiasts. This is why there is no extensive library of models included in the gnucap or ngspice package. If you rolled your own and feel like contributing to the project, this would be an excellent opportunity (hint, hint…).
 </p>
 
 <p>
@@ -84,25 +84,25 @@ Although many manufacturers provide SPICE models free of charge, they keep the l
 </p>
 
 <p>
-Spicelib provides a way to receive models tweaked for gnucap and ngspice. It is a set of scripts that will fetch vendors&#039; models directly from the source, solving the redistribution problem. Then it will patch them for compatibility with gnucap and ngspice. You can download spicelib from http://www.h-renrew.de/h/spicelib/doc/index.html.
+Spicelib provides a way to receive models tweaked for gnucap and ngspice. It is a set of scripts that will fetch vendors&#039; models directly from the source, solving the redistribution problem. Then it will patch them for compatibility with gnucap and ngspice. You can download spicelib from <a href="http://www.h-renrew.de/h/spicelib/doc/index.html" class="urlextern" title="http://www.h-renrew.de/h/spicelib/doc/index.html" rel="nofollow">http://www.h-renrew.de/h/spicelib/doc/index.html</a>.
 </p>
 
 </div>
-
-<h2 id="isntthereanicegraphicalschematiccapturefrontendsoicanjustplacecomponentsandpressasimulatebutton">Isn&#039;t there a nice graphical (schematic capture) front end so I can just place components and press a &quot;simulate&quot; button?</h2>
+<!-- EDIT4 SECTION "Where are the models?" [3448-4511] -->
+<h2 class="sectionedit5" id="isn_t_there_a_nice_graphical_schematic_capture_front_end_so_i_can_just_place_components_and_press_a_simulate_button">Isn&#039;t there a nice graphical (schematic capture) front end so I can just place components and press a &quot;simulate&quot; button?</h2>
 <div class="level2">
 
 <p>
-No. The best you can do is use GSpiceUI.
+No. The best you can do is use <a href="http://www.geda.seul.org/tools/gspiceui/index.html" class="urlextern" title="http://www.geda.seul.org/tools/gspiceui/index.html" rel="nofollow">GSpiceUI</a>.
 </p>
 
 </div>
-
-<h2 id="howdoicreatemyschematictofacilitateanalogsimulation">How do I create my schematic to facilitate analog simulation?</h2>
+<!-- EDIT5 SECTION "Isn't there a nice graphical (schematic capture) front end so I can just place components and press a simulate button?" [4512-4741] -->
+<h2 class="sectionedit6" id="how_do_i_create_my_schematic_to_facilitate_analog_simulation">How do I create my schematic to facilitate analog simulation?</h2>
 <div class="level2">
 
 <p>
-The usual design path is &quot;gschem&quot; → &quot;gnetlist -g spice-sdb&quot; → [&quot;ngspice&quot; | &quot;gnucap&quot;]. You need to attach attributes to the components in your schematic to provide attributes needed by SPICE/Gnucap. You can also attach attributes using gattrib.
+The usual design path is “gschem” → “gnetlist -g spice-sdb” → [“ngspice” | “gnucap”]. You need to attach attributes to the components in your schematic to provide attributes needed by SPICE/Gnucap. You can also attach attributes using gattrib.
 </p>
 
 <p>
@@ -110,12 +110,12 @@ The <a href="geda-csygas.html" class="wikilink1" title="geda-csygas.html">Circui
 </p>
 
 <p>
-Some SPICE resources will help you understand how to use spice-sdb.
+Some <a href="http://www.brorson.com/gEDA/SPICE/" class="urlextern" title="http://www.brorson.com/gEDA/SPICE/" rel="nofollow">SPICE resources</a> will help you understand how to use spice-sdb.
 </p>
 
 </div>
-
-<h2 id="whichspicenetlisterbackendtognetlistshouldiusethereareseveralofthem">Which spice netlister backend to gnetlist should I use? There are several of them. . . .</h2>
+<!-- EDIT6 SECTION "How do I create my schematic to facilitate analog simulation?" [4742-5278] -->
+<h2 class="sectionedit7" id="which_spice_netlister_backend_to_gnetlist_should_i_use_there_are_several_of_them">Which spice netlister backend to gnetlist should I use? There are several of them. . . .</h2>
 <div class="level2">
 
 <p>
@@ -123,12 +123,12 @@ Use spice-sdb. It is by far the most advanced and feature rich. The others are t
 </p>
 
 </div>
-
-<h2 id="howaboutifiwanttousegnucapcaniusespice-sdbtocreatemygnucapnetlists">How about if I want to use gnucap, can I use spice-sdb to create my gnucap netlists?</h2>
+<!-- EDIT7 SECTION "Which spice netlister backend to gnetlist should I use? There are several of them. . . ." [5279-5617] -->
+<h2 class="sectionedit8" id="how_about_if_i_want_to_use_gnucap_can_i_use_spice-sdb_to_create_my_gnucap_netlists">How about if I want to use gnucap, can I use spice-sdb to create my gnucap netlists?</h2>
 <div class="level2">
 
 <p>
-Yes. Also, you can draw your schematic using gnucap directives available in the &quot;spice&quot; symbol directory.
+Yes. Also, you can draw your schematic using gnucap directives available in the “spice” symbol directory.
 </p>
 
 <p>
@@ -136,8 +136,8 @@ It is better to just draw the circuit, without directives, and run the simulator
 </p>
 
 </div>
-
-<h2 id="whynotreusemysimulationschematicforlayout">Why not reuse my simulation schematic for layout?</h2>
+<!-- EDIT8 SECTION "How about if I want to use gnucap, can I use spice-sdb to create my gnucap netlists?" [5618-5918] -->
+<h2 class="sectionedit9" id="why_not_reuse_my_simulation_schematic_for_layout">Why not reuse my simulation schematic for layout?</h2>
 <div class="level2">
 
 <p>
@@ -161,5 +161,5 @@ Personally, I tend to create SPICE models of only the critical analog sections o
 </p>
 
 </div>
-</body>
+<!-- EDIT9 SECTION "Why not reuse my simulation schematic for layout?" [5919-] --></body>
 </html>

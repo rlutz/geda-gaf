@@ -10,12 +10,12 @@
 </head>
 <body>
 
-<h3 id="gschemschematiccapturetool">Gschem schematic capture tool</h3>
+<h3 class="sectionedit1" id="gschem_schematic_capture_tool">Gschem schematic capture tool</h3>
 <div class="level3">
 
 </div>
 
-<h5 id="libgedaapiformalization">Libgeda API formalization</h5>
+<h5 id="libgeda_api_formalization">Libgeda API formalization</h5>
 <div class="level5">
 
 <p>
@@ -28,7 +28,7 @@ Difficulty = 3
 
 </div>
 
-<h5 id="showhiddenattributesforselectedcomponents">Show hidden attributes for selected components</h5>
+<h5 id="show_hidden_attributes_for_selected_components">Show hidden attributes for selected components</h5>
 <div class="level5">
 
 <p>
@@ -41,7 +41,7 @@ Difficulty = 1
 
 </div>
 
-<h5 id="constantsizedhandlesgrips">Constant sized handles/grips</h5>
+<h5 id="constant_sized_handles_grips">Constant sized handles/grips</h5>
 <div class="level5">
 
 <p>
@@ -54,11 +54,11 @@ Difficulty = 1
 
 </div>
 
-<h5 id="automaticallyfillinglobalattributesingschem">Automatically fill in global attributes in gschem</h5>
+<h5 id="automatically_fill_in_global_attributes_in_gschem">Automatically fill in global attributes in gschem</h5>
 <div class="level5">
 
 <p>
-In gschem, implement a mechanism that would (when turned enabled) automatically fill in proper global attributes for the design. These attributes could be the date of the last modification, name of the project, author, number of sheets, etc...
+In gschem, implement a mechanism that would (when turned enabled) automatically fill in proper global attributes for the design. These attributes could be the date of the last modification, name of the project, author, number of sheets, etc…
 </p>
 
 <p>
@@ -67,7 +67,7 @@ Difficulty = 1 to 2
 
 </div>
 
-<h5 id="improveerrormessagesingschem">Improve error messages in gschem</h5>
+<h5 id="improve_error_messages_in_gschem">Improve error messages in gschem</h5>
 <div class="level5">
 
 <p>
@@ -80,7 +80,7 @@ Difficulty = 1
 
 </div>
 
-<h5 id="globalsearchandreplace">Global search and replace</h5>
+<h5 id="global_search_and_replace">Global search and replace</h5>
 <div class="level5">
 
 <p>
@@ -93,7 +93,7 @@ Difficulty = 1 to 2
 
 </div>
 
-<h5 id="improvedandformalizedmechanismforforwardbackwardannotation">Improved and formalized mechanism for forward/backward annotation</h5>
+<h5 id="improved_and_formalized_mechanism_for_forward_backward_annotation">Improved and formalized mechanism for forward/backward annotation</h5>
 <div class="level5">
 
 <p>
@@ -106,7 +106,7 @@ Difficulty = 3
 
 </div>
 
-<h5 id="visualfeedbackforattachedattributes">Visual feedback for attached attributes</h5>
+<h5 id="visual_feedback_for_attached_attributes">Visual feedback for attached attributes</h5>
 <div class="level5">
 
 <p>
@@ -119,7 +119,7 @@ Difficulty = 1 to 2
 
 </div>
 
-<h5 id="schematicandsymbolmodes">Schematic and symbol modes</h5>
+<h5 id="schematic_and_symbol_modes">Schematic and symbol modes</h5>
 <div class="level5">
 
 <p>
@@ -132,7 +132,7 @@ Difficulty = 2 to 3
 
 </div>
 
-<h5 id="movablesymbolorigin">Movable symbol origin</h5>
+<h5 id="movable_symbol_origin">Movable symbol origin</h5>
 <div class="level5">
 
 <p>
@@ -145,7 +145,7 @@ Difficulty = 2 to 3
 
 </div>
 
-<h5 id="modifyinstantiatedsymbolsinaschematic">Modify instantiated symbols in a schematic</h5>
+<h5 id="modify_instantiated_symbols_in_a_schematic">Modify instantiated symbols in a schematic</h5>
 <div class="level5">
 
 <p>
@@ -158,7 +158,7 @@ Difficulty = 3 to 4
 
 </div>
 
-<h5 id="finergridwhenmovingattributes">Finer grid when moving attributes</h5>
+<h5 id="finer_grid_when_moving_attributes">Finer grid when moving attributes</h5>
 <div class="level5">
 
 <p>
@@ -171,7 +171,7 @@ Difficulty = 2
 
 </div>
 
-<h5 id="addmoretoolbarbuttons">Add more toolbar buttons</h5>
+<h5 id="add_more_toolbar_buttons">Add more toolbar buttons</h5>
 <div class="level5">
 
 <p>
@@ -204,15 +204,15 @@ Difficulty = 2 to 3
 
 </div>
 
-<h5 id="aninteractivesubsheetgenerator">An Interactive Sub Sheet Generator</h5>
+<h5 id="an_interactive_sub_sheet_generator">An Interactive Sub Sheet Generator</h5>
 <div class="level5">
 
 <p>
-In gschem hierarchical design is accomplished by symbols in the top sheet that represent sub sheets. Currently these sub sheet symbols and the sub sheet itself have to be created manually. The purpose of this project is to design and implement an interactive generator of such symbols and sub sheets. It should work both strategies of hierachical design, bottom-up and top-down. Top-down refers to the case where the  parent sheet is designed first and diverts into sub sheets. With bottom-up the sub sheets are designed first. The generator should accept user input on the number and the name of input and output signals. The generator may present a list of named net on the current sheet and let the user pick those that should link to the sub sheet. Power nets to be available on the sub sheet may be specified too. In case of a top-down approach the generator should additionally create a draft of the sub sheet with symbols for the in and out signals placed at some default position. The generator should integrate into the main GUI of gschem. 
+In gschem hierarchical design is accomplished by symbols in the top sheet that represent sub sheets. Currently these sub sheet symbols and the sub sheet itself have to be created manually. The purpose of this project is to design and implement an interactive generator of such symbols and sub sheets. It should work both strategies of hierachical design, bottom-up and top-down. Top-down refers to the case where the  parent sheet is designed first and diverts into sub sheets. With bottom-up the sub sheets are designed first. The generator should accept user input on the number and the name of input and output signals. The generator may present a list of named net on the current sheet and let the user pick those that should link to the sub sheet. Power nets to be available on the sub sheet may be specified too. In case of a top-down approach the generator should additionally create a draft of the sub sheet with symbols for the in and out signals placed at some default position. The generator should integrate into the main <abbr title="Graphical User Interface">GUI</abbr> of gschem. 
 </p>
 
 <p>
-Some work has already been done to deal with the bottom-up case. See the bash script geda_sch2sym in the bug tracker. This may be used as a starting point. However, a restart from scratch would be welcome too.
+Some work has already been done to deal with the bottom-up case. See <a href="https://bugs.launchpad.net/geda/+bug/698670" class="urlextern" title="https://bugs.launchpad.net/geda/+bug/698670" rel="nofollow">the bash script geda_sch2sym</a> in the bug tracker. This may be used as a starting point. However, a restart from scratch would be welcome too.
 </p>
 
 <p>

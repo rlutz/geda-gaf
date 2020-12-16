@@ -10,12 +10,12 @@
 </head>
 <body>
 
-<h1 id="symbolguide">Symbol guide</h1>
+<h1 class="sectionedit1" id="symbol_guide">Symbol guide</h1>
 <div class="level1">
 
 </div>
-
-<h2 id="general">General</h2>
+<!-- EDIT1 SECTION "Symbol guide" [1-28] -->
+<h2 class="sectionedit2" id="general">General</h2>
 <div class="level2">
 
 <p>
@@ -23,8 +23,8 @@ A symbol is a small gEDA file (typically with the file extension “<code>.sym</
 </p>
 
 </div>
-
-<h3 id="attributes">Attributes</h3>
+<!-- EDIT2 SECTION "General" [29-279] -->
+<h3 class="sectionedit3" id="attributes">Attributes</h3>
 <div class="level3">
 
 <p>
@@ -56,8 +56,8 @@ Attributes must not contain a space before or after the “=” sign, and the va
 </p>
 
 </div>
-
-<h2 id="symboltypes">Symbol types</h2>
+<!-- EDIT3 SECTION "Attributes" [280-2195] -->
+<h2 class="sectionedit4" id="symbol_types">Symbol types</h2>
 <div class="level2">
 
 <p>
@@ -65,8 +65,8 @@ There are different types of symbols which are treated differently by gEDA/gaf:
 </p>
 
 </div>
-
-<h3 id="regularsymbols">Regular symbols</h3>
+<!-- EDIT4 SECTION "Symbol types" [2196-2302] -->
+<h3 class="sectionedit5" id="regular_symbols">Regular symbols</h3>
 <div class="level3">
 
 <p>
@@ -120,7 +120,7 @@ If you have a package which contains multiple instances of the same functionalit
 
 </div>
 
-<h5 id="symbolsformechanicalparts">Symbols for mechanical parts</h5>
+<h5 id="symbols_for_mechanical_parts">Symbols for mechanical parts</h5>
 <div class="level5">
 
 <p>
@@ -132,8 +132,8 @@ Plated holes or other parts with electrical connectivity should have a pin that 
 </p>
 
 </div>
-
-<h3 id="subschematicsymbols">Subschematic symbols</h3>
+<!-- EDIT5 SECTION "Regular symbols" [2303-4965] -->
+<h3 class="sectionedit6" id="subschematic_symbols">Subschematic symbols</h3>
 <div class="level3">
 
 <p>
@@ -169,8 +169,8 @@ Recommended pin attributes:
 </ul>
 
 </div>
-
-<h3 id="powersymbols">Power symbols</h3>
+<!-- EDIT6 SECTION "Subschematic symbols" [4966-6247] -->
+<h3 class="sectionedit7" id="power_symbols">Power symbols</h3>
 <div class="level3">
 
 <p>
@@ -195,7 +195,7 @@ Recommended pin attributes:
 
 </div>
 
-<h5 id="old-stylepowersymbols">Old-style power symbols</h5>
+<h5 id="old-style_power_symbols">Old-style power symbols</h5>
 <div class="level5">
 
 <p>
@@ -207,8 +207,8 @@ For newer designs, power symbols with a <code>netname=</code> attribute are reco
 </p>
 
 </div>
-
-<h3 id="ioportsymbols">I/O port symbols</h3>
+<!-- EDIT7 SECTION "Power symbols" [6248-7057] -->
+<h3 class="sectionedit8" id="i_o_port_symbols">I/O port symbols</h3>
 <div class="level3">
 
 <p>
@@ -233,7 +233,7 @@ Recommended pin attributes:
 
 </div>
 
-<h5 id="old-styleioportsymbols">Old-style I/O port symbols</h5>
+<h5 id="old-style_i_o_port_symbols">Old-style I/O port symbols</h5>
 <div class="level5">
 
 <p>
@@ -245,8 +245,8 @@ For newer designs, port symbols with a <code>portname=</code> attribute are reco
 </p>
 
 </div>
-
-<h3 id="graphicalsymbols">Graphical symbols</h3>
+<!-- EDIT8 SECTION "I/O port symbols" [7058-7889] -->
+<h3 class="sectionedit9" id="graphical_symbols">Graphical symbols</h3>
 <div class="level3">
 
 <p>
@@ -274,13 +274,13 @@ Recommended pin attributes:
 </ul>
 
 </div>
-
-<h2 id="faq">FAQ</h2>
+<!-- EDIT9 SECTION "Graphical symbols" [7890-8872] -->
+<h2 class="sectionedit10" id="faq">FAQ</h2>
 <div class="level2">
 
 </div>
-
-<h3 id="howdoicreateatitleblocksymbol">How do I create a titleblock symbol?</h3>
+<!-- EDIT10 SECTION "FAQ" [8873-8889] -->
+<h3 class="sectionedit11" id="how_do_i_create_a_titleblock_symbol">How do I create a titleblock symbol?</h3>
 <div class="level3">
 
 <p>
@@ -292,8 +292,8 @@ If you plan to attach title, author, etc. as attributes, it makes sense to add p
 </p>
 
 </div>
-
-<h3 id="howdoicreateasymbolforamechanicalpart">How do I create a symbol for a mechanical part?</h3>
+<!-- EDIT11 SECTION "How do I create a titleblock symbol?" [8890-9418] -->
+<h3 class="sectionedit12" id="how_do_i_create_a_symbol_for_a_mechanical_part">How do I create a symbol for a mechanical part?</h3>
 <div class="level3">
 
 <p>
@@ -309,8 +309,8 @@ If the part has electrical connectivity (e.g. a plated hole), it should have a p
 </p>
 
 </div>
-
-<h3 id="howdoicreateanncsymbol">How do I create an NC symbol?</h3>
+<!-- EDIT12 SECTION "How do I create a symbol for a mechanical part?" [9419-10184] -->
+<h3 class="sectionedit13" id="how_do_i_create_an_nc_symbol">How do I create an NC symbol?</h3>
 <div class="level3">
 
 <p>
@@ -325,12 +325,12 @@ device=DRC_Directive
 value=NoConnection</pre>
 
 <p>
-The symbol should have exactly one pin.  You can avoid having to create multiple NC symbols for multiple directions by making the pin zero units long.  (If you are using gEDA/gaf up to version 1.9.2, there is no way to do this in the GUI; you&#039;ll have to edit the symbol file manually.)
+The symbol should have exactly one pin.  You can avoid having to create multiple NC symbols for multiple directions by making the pin zero units long.  (If you are using gEDA/gaf up to version 1.9.2, there is no way to do this in the <abbr title="Graphical User Interface">GUI</abbr>; you&#039;ll have to edit the symbol file manually.)
 </p>
 
 </div>
-
-<h3 id="howdoicreateadefaultjumpersymbol">How do I create a default jumper symbol?</h3>
+<!-- EDIT13 SECTION "How do I create an NC symbol?" [10185-11048] -->
+<h3 class="sectionedit14" id="how_do_i_create_a_default_jumper_symbol">How do I create a default jumper symbol?</h3>
 <div class="level3">
 
 <p>
@@ -346,5 +346,5 @@ If you don&#039;t want it to be listed in the BOM nor visible in the layout, set
 </p>
 
 </div>
-</body>
+<!-- EDIT14 SECTION "How do I create a default jumper symbol?" [11049-] --></body>
 </html>

@@ -10,13 +10,13 @@
 </head>
 <body>
 
-<h2 id="rootdirectorystructure">root Directory structure</h2>
+<h2 class="sectionedit1" id="root_directory_structure">root Directory structure</h2>
 <div class="level2">
 
 <p>
 This is the ~/pcb directory
 </p>
-<div class="table sectionedit1"><table class="inline">
+<div class="table sectionedit2"><table class="inline">
 	<tr class="row0">
 		<td class="col0"> </td><td class="col1 rightalign">  data</td><td class="col2">PCB layout and gerber icons and mime registration data</td>
 	</tr>
@@ -72,16 +72,16 @@ This is the ~/pcb directory
 		<td class="col0">*</td><td class="col1" colspan="2">This directory is no part of the git repository it is added by the <code>./autogen.sh</code> script</td>
 	</tr>
 </table></div>
-<!-- EDIT1 TABLE [68-1115] -->
+<!-- EDIT2 TABLE [68-1115] -->
 </div>
-
-<h2 id="srcdirectorystructure">src Directory structure</h2>
+<!-- EDIT1 SECTION "root Directory structure" [1-1117] -->
+<h2 class="sectionedit3" id="src_directory_structure">src Directory structure</h2>
 <div class="level2">
 
 <p>
 This is the ~/pcb/src directory
 </p>
-<div class="table sectionedit2"><table class="inline">
+<div class="table sectionedit4"><table class="inline">
 	<tr class="row0">
 		<td class="col0">src/hid</td><td class="col1"> </td><td class="col2">Human Interface Device layer. The basic idea is that every action outside the core is treated as a separate human interface device.</td>
 	</tr>
@@ -125,16 +125,16 @@ This is the ~/pcb/src directory
 		<td class="col0" colspan="3">src/icons</td>
 	</tr>
 </table></div>
-<!-- EDIT2 TABLE [1188-1970] -->
+<!-- EDIT4 TABLE [1188-1970] -->
 </div>
-
-<h2 id="srcdirectoryfilelist">src Directory file list</h2>
+<!-- EDIT3 SECTION "src Directory structure" [1118-1971] -->
+<h2 class="sectionedit5" id="src_directory_file_list">src Directory file list</h2>
 <div class="level2">
 
 <p>
 These are the files in the ~/pcb/src directory
 </p>
-<div class="table sectionedit3"><table class="inline">
+<div class="table sectionedit6"><table class="inline">
 	<thead>
 	<tr class="row0">
 		<th class="col0"> _*_ </th><th class="col1 leftalign">File  </th><th class="col2 leftalign">Short description  </th><th class="col3">Comment / Explanation </th>
@@ -180,13 +180,13 @@ See action.c for the other commands.</td>
 		<td class="col0"> </td><td class="col1">const.h</td><td class="col2 leftalign">global source constants  </td><td class="col3"> </td>
 	</tr>
 	<tr class="row12">
-		<td class="col0">D</td><td class="col1">copy.*</td><td class="col2 leftalign">functions used to copy pins, elements ...  </td><td class="col3"> </td>
+		<td class="col0">D</td><td class="col1">copy.*</td><td class="col2 leftalign">functions used to copy pins, elements …  </td><td class="col3"> </td>
 	</tr>
 	<tr class="row13">
-		<td class="col0">D</td><td class="col1">create.*</td><td class="col2 leftalign">functions used to create vias, pins ...  </td><td class="col3"> </td>
+		<td class="col0">D</td><td class="col1">create.*</td><td class="col2 leftalign">functions used to create vias, pins …  </td><td class="col3"> </td>
 	</tr>
 	<tr class="row14">
-		<td class="col0">H</td><td class="col1">crosshair.*</td><td class="col2 leftalign">crosshair stuff  </td><td class="col3">is for the board&#039;s crosshair; this handles (for example) grid snapping. This is *not* the same as the GUI&#039;s mouse cursor. For the GKT GUI the crosshair will follow the mouse if its over the board-space/canvas.</td>
+		<td class="col0">H</td><td class="col1">crosshair.*</td><td class="col2 leftalign">crosshair stuff  </td><td class="col3">is for the board&#039;s crosshair; this handles (for example) grid snapping. This is *not* the same as the <abbr title="Graphical User Interface">GUI</abbr>&#039;s mouse cursor. For the GKT <abbr title="Graphical User Interface">GUI</abbr> the crosshair will follow the mouse if its over the board-space/canvas.</td>
 	</tr>
 	<tr class="row15">
 		<td class="col0">C</td><td class="col1">data.*</td><td class="col2 leftalign">just defines common identifiers  </td><td class="col3"> </td>
@@ -204,7 +204,7 @@ If you&#039;re not interested in connecting to other programs just ignore the fi
 Fontmode.c is linked with this file.</td>
 	</tr>
 	<tr class="row19">
-		<td class="col0">D</td><td class="col1">djopt.*</td><td class="col2">optimize functions</td><td class="col3">is for the &quot;Connects-&gt;Optimize Routed Tracks&quot; functions.</td>
+		<td class="col0">D</td><td class="col1">djopt.*</td><td class="col2">optimize functions</td><td class="col3">is for the “Connects→Optimize Routed Tracks” functions.</td>
 	</tr>
 	<tr class="row20">
 		<td class="col0">C</td><td class="col1">dolists.h</td><td class="col2"> </td><td class="col3">REGISTER_*(a) macro in dolists.h will be expanded by the preprocessor to the actual calling of these functions.</td>
@@ -216,7 +216,7 @@ Fontmode.c is linked with this file.</td>
 		<td class="col0">H</td><td class="col1">drill.*</td><td class="col2 leftalign">functions to generate drill information  </td><td class="col3">is for generating drill report information.</td>
 	</tr>
 	<tr class="row23">
-		<td class="col0" rowspan="3">H</td><td class="col1">edif.*</td><td class="col2 leftalign">EDIF stands for Electronic Design Interchange Format.  </td><td class="col3" rowspan="3">These files are associated with only one action &quot;LoadFrom(Netlist)&quot;. This will call the function ImportNetlist() in file.c. If the first line of the netlist file contains &quot;edif&quot; it will use these files to parse the EDIF 2.0.0 formatted file. A little googling learns that the EDIF 2.0.0 file format was approved in March 1988. File format EDIF 4.0.0 was released in August 1996. The PCB documentation doesn&#039;t say anything about EDIF. <br/>
+		<td class="col0" rowspan="3">H</td><td class="col1">edif.*</td><td class="col2 leftalign">EDIF stands for Electronic Design Interchange Format.  </td><td class="col3" rowspan="3">These files are associated with only one action “LoadFrom(Netlist)”. This will call the function ImportNetlist() in file.c. If the first line of the netlist file contains “edif” it will use these files to parse the EDIF 2.0.0 formatted file. A little googling learns that the EDIF 2.0.0 file format was approved in March 1988. File format EDIF 4.0.0 was released in August 1996. The PCB documentation doesn&#039;t say anything about EDIF. <br/>
 The files are here to be backwards compatible, so we are able to read files generated many year ago. It doesn&#039;t hurt so just ignore it.</td>
 	</tr>
 	<tr class="row24">
@@ -229,13 +229,13 @@ The files are here to be backwards compatible, so we are able to read files gene
 		<td class="col0">C</td><td class="col1">error.*</td><td class="col2 leftalign">error and debug functions  </td><td class="col3"> </td>
 	</tr>
 	<tr class="row27">
-		<td class="col0">C</td><td class="col1">file.*</td><td class="col2 leftalign">file save, load, merge ... routines  </td><td class="col3"> </td>
+		<td class="col0">C</td><td class="col1">file.*</td><td class="col2 leftalign">file save, load, merge … routines  </td><td class="col3"> </td>
 	</tr>
 	<tr class="row28">
-		<td class="col0">D</td><td class="col1">find.*</td><td class="col2 leftalign">routines to find connections between pins, vias, lines...  </td><td class="col3"> </td>
+		<td class="col0">D</td><td class="col1">find.*</td><td class="col2 leftalign">routines to find connections between pins, vias, lines…  </td><td class="col3"> </td>
 	</tr>
 	<tr class="row29">
-		<td class="col0">C</td><td class="col1">flags.*</td><td class="col2 leftalign">routines to initialize and use flags  </td><td class="col3">flags.c functions are used by some of the HIDs to mark menu entries as &quot;checked&quot; vs &quot;unchecked&quot; when they refer to flags.  That&#039;s why they&#039;re registered, too, there&#039;s a list with ASCII names that hids can refer to.</td>
+		<td class="col0">C</td><td class="col1">flags.*</td><td class="col2 leftalign">routines to initialize and use flags  </td><td class="col3">flags.c functions are used by some of the HIDs to mark menu entries as “checked” vs “unchecked” when they refer to flags.  That&#039;s why they&#039;re registered, too, there&#039;s a list with <abbr title="American Standard Code for Information Interchange">ASCII</abbr> names that hids can refer to.</td>
 	</tr>
 	<tr class="row30">
 		<td class="col0">H</td><td class="col1">fontmode.c</td><td class="col2 leftalign">routines to edit the font in PCB  </td><td class="col3">There are two actions: <br/>
@@ -251,7 +251,7 @@ default_font is linked with this file.</td>
 Just ignore it.</td>
 	</tr>
 	<tr class="row33">
-		<td class="col0"> </td><td class="col1">gettext.h</td><td class="col2"> </td><td class="col3">Used if --enable-nls option is configured. Takes care of internationalization.</td>
+		<td class="col0"> </td><td class="col1">gettext.h</td><td class="col2"> </td><td class="col3">Used if –enable-nls option is configured. Takes care of internationalization.</td>
 	</tr>
 	<tr class="row34">
 		<td class="col0">C</td><td class="col1">global.h</td><td class="col2"> </td><td class="col3">The big include just about everything include file</td>
@@ -263,7 +263,7 @@ Just ignore it.</td>
 		<td class="col0">C</td><td class="col1">heap.*</td><td class="col2"> </td><td class="col3">The heap functions seem to be associated mainly with the two autorouters. Additionally the file polygon1.c makes use of a heap in one of its functions</td>
 	</tr>
 	<tr class="row37">
-		<td class="col0">H</td><td class="col1">hid_draw.h</td><td class="col2 leftalign">Low level drawing API.  </td><td class="col3"> </td>
+		<td class="col0">H</td><td class="col1">hid_draw.h</td><td class="col2 leftalign">Low level drawing <abbr title="Application Programming Interface">API</abbr>.  </td><td class="col3"> </td>
 	</tr>
 	<tr class="row38">
 		<td class="col0">H</td><td class="col1">hid.h</td><td class="col2 leftalign">Human Interface Device layer.  </td><td class="col3">This is one of the top files.<br/>
@@ -300,13 +300,13 @@ This is a good place to start looking if you want to know what&#039;s-what.</td>
 		<td class="col0">C</td><td class="col1">misc.*</td><td class="col2"> </td><td class="col3"> </td>
 	</tr>
 	<tr class="row49">
-		<td class="col0"> </td><td class="col1">mode_icon.data</td><td class="col2"> </td><td class="col3">Icons used in the GUI</td>
+		<td class="col0"> </td><td class="col1">mode_icon.data</td><td class="col2"> </td><td class="col3">Icons used in the <abbr title="Graphical User Interface">GUI</abbr></td>
 	</tr>
 	<tr class="row50">
-		<td class="col0">D</td><td class="col1">move.*</td><td class="col2 leftalign">functions used to move pins, elements ...  </td><td class="col3"> </td>
+		<td class="col0">D</td><td class="col1">move.*</td><td class="col2 leftalign">functions used to move pins, elements …  </td><td class="col3"> </td>
 	</tr>
 	<tr class="row51">
-		<td class="col0">C</td><td class="col1">mtspace.*</td><td class="col2 leftalign">implementation for &quot;empty space&quot; routines (needed for via-space tracking in the auto-router.  </td><td class="col3"> </td>
+		<td class="col0">C</td><td class="col1">mtspace.*</td><td class="col2 leftalign">implementation for “empty space” routines (needed for via-space tracking in the auto-router.  </td><td class="col3"> </td>
 	</tr>
 	<tr class="row52">
 		<td class="col0">C</td><td class="col1">mymem.*</td><td class="col2 leftalign">memory management functions  </td><td class="col3"> </td>
@@ -315,10 +315,10 @@ This is a good place to start looking if you want to know what&#039;s-what.</td>
 		<td class="col0">H</td><td class="col1">netlist.c</td><td class="col2"> </td><td class="col3"> </td>
 	</tr>
 	<tr class="row54">
-		<td class="col0" rowspan="2">C</td><td class="col1">parse_l.*</td><td class="col2 leftalign">lexical definitions to parse ASCII input of PCB and Element description  </td><td class="col3" rowspan="2">Parse an element file or layout file. This is either a footprint file or our PCB layout file</td>
+		<td class="col0" rowspan="2">C</td><td class="col1">parse_l.*</td><td class="col2 leftalign">lexical definitions to parse <abbr title="American Standard Code for Information Interchange">ASCII</abbr> input of PCB and Element description  </td><td class="col3" rowspan="2">Parse an element file or layout file. This is either a footprint file or our PCB layout file</td>
 	</tr>
 	<tr class="row55">
-		<td class="col0">parse_y.*</td><td class="col1 leftalign">grammar to parse ASCII input of PCB description  </td>
+		<td class="col0">parse_y.*</td><td class="col1 leftalign">grammar to parse <abbr title="American Standard Code for Information Interchange">ASCII</abbr> input of PCB description  </td>
 	</tr>
 	<tr class="row56">
 		<td class="col0">H</td><td class="col1">pcb-menu.res</td><td class="col2"> </td><td class="col3"> </td>
@@ -339,16 +339,16 @@ This is a good place to start looking if you want to know what&#039;s-what.</td>
 		<td class="col0">polygon.*</td><td class="col1 leftalign">special polygon editing routines  </td><td class="col2"> </td>
 	</tr>
 	<tr class="row62">
-		<td class="col0">H</td><td class="col1">print.*</td><td class="col2 leftalign">printing routines  </td><td class="col3">Looks like it is used to &quot;print&quot; the fabrication layer. print.c generates a layer to be used as a fabrication drawing. Whether the HID uses that or not (and what it does with it) is a Separate question.  At least, both ps and gerber need that layer. Since the layer is created in &quot;pcb unit space&quot; it&#039;s in the core.  HID things tend to happen in &quot;hid unit space&quot; instead.</td>
+		<td class="col0">H</td><td class="col1">print.*</td><td class="col2 leftalign">printing routines  </td><td class="col3">Looks like it is used to “print” the fabrication layer. print.c generates a layer to be used as a fabrication drawing. Whether the HID uses that or not (and what it does with it) is a Separate question.  At least, both ps and gerber need that layer. Since the layer is created in “pcb unit space” it&#039;s in the core.  HID things tend to happen in “hid unit space” instead.</td>
 	</tr>
 	<tr class="row63">
-		<td class="col0">H</td><td class="col1">puller.c</td><td class="col2 leftalign">PCB HID Project - Puller  </td><td class="col3">See http://www.delorie.com/pcb/puller for more information.</td>
+		<td class="col0">H</td><td class="col1">puller.c</td><td class="col2 leftalign">PCB HID Project - Puller  </td><td class="col3">See <a href="http://www.delorie.com/pcb/puller" class="urlextern" title="http://www.delorie.com/pcb/puller" rel="nofollow">http://www.delorie.com/pcb/puller</a> for more information.</td>
 	</tr>
 	<tr class="row64">
 		<td class="col0">H</td><td class="col1">rats.*</td><td class="col2 leftalign">rats nest routines  </td><td class="col3"> </td>
 	</tr>
 	<tr class="row65">
-		<td class="col0">D</td><td class="col1">remove.*</td><td class="col2 leftalign">functions used to remove vias, pins ...  </td><td class="col3"> </td>
+		<td class="col0">D</td><td class="col1">remove.*</td><td class="col2 leftalign">functions used to remove vias, pins …  </td><td class="col3"> </td>
 	</tr>
 	<tr class="row66">
 		<td class="col0">H</td><td class="col1">report.*</td><td class="col2 leftalign">Tell the user what he/she must know  </td><td class="col3">See PCB manual for the options.</td>
@@ -363,7 +363,7 @@ This is a good place to start looking if you want to know what&#039;s-what.</td>
 		<td class="col0">H</td><td class="col1">resource.h</td><td class="col2"> </td><td class="col3"> </td>
 	</tr>
 	<tr class="row70">
-		<td class="col0">D</td><td class="col1">rotate.*</td><td class="col2 leftalign">functions used to rotate pins, elements ...  </td><td class="col3"> </td>
+		<td class="col0">D</td><td class="col1">rotate.*</td><td class="col2 leftalign">functions used to rotate pins, elements …  </td><td class="col3"> </td>
 	</tr>
 	<tr class="row71">
 		<td class="col0">C</td><td class="col1">rtree.*</td><td class="col2 leftalign">r-tree functions  </td><td class="col3">a way to quickly find 2-D objects in a 2-D space</td>
@@ -399,7 +399,7 @@ This is a good place to start looking if you want to know what&#039;s-what.</td>
 		<td class="col0">H</td><td class="col1">vendor.*</td><td class="col2 leftalign">routines to generate vendor specific output  </td><td class="col3">vendor.c is used to load vendor-specific DRC rules and apply them.</td>
 	</tr>
 </table></div>
-<!-- EDIT3 TABLE [2057-10550] -->
+<!-- EDIT6 TABLE [2057-10550] -->
 <p>
 D = These files have there focus on the Data Functionality. They manipulate the <a href="geda-pcb_developer_introduction.html#pcbtype" class="wikilink1" title="geda-pcb_developer_introduction.html">PCBType</a> or <a href="geda-pcb_developer_introduction.html#datatype" class="wikilink1" title="geda-pcb_developer_introduction.html">DataType</a> structure.
 </p>
@@ -413,5 +413,5 @@ H = These files have there focus on the HID Functionality. They support the HID 
 </p>
 
 </div>
-</body>
+<!-- EDIT5 SECTION "src Directory file list" [1972-] --></body>
 </html>

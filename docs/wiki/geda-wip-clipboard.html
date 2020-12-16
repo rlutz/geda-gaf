@@ -10,7 +10,7 @@
 </head>
 <body>
 
-<h1 id="clipboardsupport">Clipboard Support</h1>
+<h1 class="sectionedit1" id="clipboard_support">Clipboard Support</h1>
 <div class="level1">
 
 <p>
@@ -18,8 +18,8 @@ Targetted for release in gEDA 1.8.0.
 </p>
 
 </div>
-
-<h3 id="introduction">Introduction</h3>
+<!-- EDIT1 SECTION "Clipboard Support" [1-71] -->
+<h3 class="sectionedit2" id="introduction">Introduction</h3>
 <div class="level3">
 
 <p>
@@ -39,26 +39,26 @@ It would be nice to be able to:
 </ol>
 
 <p>
-Consider the use case of &quot;I want this circuit in my OpenOffice presentation, let&#039;s try the obvious thing to get it there.&quot;
+Consider the use case of “I want this circuit in my OpenOffice presentation, let&#039;s try the obvious thing to get it there.”
 </p>
 
 </div>
-
-<h3 id="thexclipboard">The X clipboard</h3>
+<!-- EDIT2 SECTION "Introduction" [72-930] -->
+<h3 class="sectionedit3" id="the_x_clipboard">The X clipboard</h3>
 <div class="level3">
 
 <p>
-The X window system uses the arcane &quot;selection&quot; protocol for copy/paste between X client applications. By taking charge of a &quot;selection&quot;, an application is able to advertise a number of different datatypes, from which another application can request the most appropriate. Two selections are usually available:
+The X window system uses the arcane “selection” protocol for copy/paste between X client applications. By taking charge of a “selection”, an application is able to advertise a number of different datatypes, from which another application can request the most appropriate. Two selections are usually available:
 </p>
 <ol>
 <li class="level1"><div class="li"> The PRIMARY selection is customarily used to hold the last piece of text the user selected, and many programs paste its contents on middle-click.</div>
 </li>
-<li class="level1"><div class="li"> The CLIPBOARD selection is customarily used with an application&#039;s &quot;Copy&quot;, &quot;Cut&quot; and &quot;Paste&quot; actions.</div>
+<li class="level1"><div class="li"> The CLIPBOARD selection is customarily used with an application&#039;s “Copy”, “Cut” and “Paste” actions.</div>
 </li>
 </ol>
 
 <p>
-Many desktop environments (including GNOME and KDE) run a &quot;clipboard daemon&quot;, which copies the CLIPBOARD contents and makes it available even if the original application quits.
+Many desktop environments (including GNOME and KDE) run a “clipboard daemon”, which copies the CLIPBOARD contents and makes it available even if the original application quits.
 </p>
 
 <p>
@@ -66,8 +66,8 @@ Due to the primarily non-textual nature of schematic or symbol data, gschem shou
 </p>
 
 </div>
-
-<h3 id="thewindowsclipboard">The Windows clipboard</h3>
+<!-- EDIT3 SECTION "The X clipboard" [931-1845] -->
+<h3 class="sectionedit4" id="the_windows_clipboard">The Windows clipboard</h3>
 <div class="level3">
 
 <p>
@@ -75,25 +75,25 @@ Research needed.
 </p>
 
 </div>
-
-<h3 id="gtkclipboardapi">GTK clipboard API</h3>
+<!-- EDIT4 SECTION "The Windows clipboard" [1846-1896] -->
+<h3 class="sectionedit5" id="gtk_clipboard_api">GTK clipboard API</h3>
 <div class="level3">
 
 <p>
-The Gimp Toolkit used by gschem&#039;s GUI provides APIs for manipulating the X selection (see the GTK manual). Since gschem already links against GTK, and the GTK clipboard API is considerably simpler than using low-level X library calls (as well as being more portable), gschem should make use of it.
+The Gimp Toolkit used by gschem&#039;s <abbr title="Graphical User Interface">GUI</abbr> provides APIs for manipulating the X selection (see <a href="https://developer.gnome.org/gtk2/2.24/gtk2-Clipboards.html" class="urlextern" title="https://developer.gnome.org/gtk2/2.24/gtk2-Clipboards.html" rel="nofollow">the GTK manual</a>). Since gschem already links against GTK, and the GTK clipboard <abbr title="Application Programming Interface">API</abbr> is considerably simpler than using low-level X library calls (as well as being more portable), gschem should make use of it.
 </p>
 
 </div>
-
-<h3 id="buffersingschem">Buffers in gschem</h3>
+<!-- EDIT5 SECTION "GTK clipboard API" [1897-2287] -->
+<h3 class="sectionedit6" id="buffers_in_gschem">Buffers in gschem</h3>
 <div class="level3">
 
 <p>
-gschem currently uses &quot;buffers&quot; to store cut or copied objects for pasting. A buffer is simply a GList of OBJECTs.
+gschem currently uses “buffers” to store cut or copied objects for pasting. A buffer is simply a GList of OBJECTs.
 </p>
 
 <p>
-When a set of selected items is &quot;copied&quot;:
+When a set of selected items is “copied”:
 </p>
 <ol>
 <li class="level1"><div class="li"> Any existing items in the buffer are freed (the GList and OBJECTS destroyed).</div>
@@ -103,7 +103,7 @@ When a set of selected items is &quot;copied&quot;:
 </ol>
 
 <p>
-When a set of selected items is &quot;cut&quot;:
+When a set of selected items is “cut”:
 </p>
 <ol>
 <li class="level1"><div class="li"> The copying procedure is followed.</div>
@@ -113,7 +113,7 @@ When a set of selected items is &quot;cut&quot;:
 </ol>
 
 <p>
-When a set of selected items is &quot;pasted&quot;:
+When a set of selected items is “pasted”:
 </p>
 <ol>
 <li class="level1"><div class="li"> All the items in the buffer are copied into the schematic or symbol&#039;s GList, with an appropriate translation applied.</div>
@@ -121,25 +121,25 @@ When a set of selected items is &quot;pasted&quot;:
 </ol>
 
 </div>
-
-<h3 id="clipboarddatatypes">Clipboard data types</h3>
+<!-- EDIT6 SECTION "Buffers in gschem" [2288-2907] -->
+<h3 class="sectionedit7" id="clipboard_data_types">Clipboard data types</h3>
 <div class="level3">
 
 </div>
 
-<h4 id="schematicsymboldata">Schematic/symbol data</h4>
+<h4 id="schematic_symbol_data">Schematic/symbol data</h4>
 <div class="level4">
 
 <p>
- Implemented in 1.5.2+.
+<a href="http://git.geda-project.org/geda-gaf/commit/?id=6a07d737a32a816f43e1f061409a10e616d7aa2a" class="urlextern" title="http://git.geda-project.org/geda-gaf/commit/?id=6a07d737a32a816f43e1f061409a10e616d7aa2a" rel="nofollow"> Implemented in 1.5.2+</a>.
 </p>
 
 <p>
-On &quot;copy to clipboard&quot;, gschem copies the selected objects to <code>GSCHEM_TOPLEVEL-&gt;clipboard_buffer</code>, gets control of the CLIPBOARD selection, and advertises <code>application/x-geda-schematic</code> data. On receiving a request, gschem uses <code>o_save_buffer()</code> to convert the selected objects to gEDA&#039;s on-disk schematic format for transmission.
+On “copy to clipboard”, gschem copies the selected objects to <code>GSCHEM_TOPLEVEL→clipboard_buffer</code>, gets control of the CLIPBOARD selection, and advertises <code>application/x-geda-schematic</code> data. On receiving a request, gschem uses <code>o_save_buffer()</code> to convert the selected objects to gEDA&#039;s on-disk schematic format for transmission.
 </p>
 
 <p>
-On &quot;paste from clipboard&quot;, gschem looks to see if the current owner of the CLIPBOARD selection is advertising <code>application/x-geda-schematic</code> data. If so, gschem requests the data, and uses <code>o_read_buffer()</code> to convert it to an object list, which it then enters the paste mode for.
+On “paste from clipboard”, gschem looks to see if the current owner of the CLIPBOARD selection is advertising <code>application/x-geda-schematic</code> data. If so, gschem requests the data, and uses <code>o_read_buffer()</code> to convert it to an object list, which it then enters the paste mode for.
 </p>
 
 <p>
@@ -147,9 +147,9 @@ To simplify the implementation, the first schematic data buffer is currently use
 </p>
 
 <p>
-For the time being, it is assumed destination gschem instance has its library set up correctly -- i.e. no changes made to the embedding status of the data being sent before serialisation.
+For the time being, it is assumed destination gschem instance has its library set up correctly – i.e. no changes made to the embedding status of the data being sent before serialisation.
 </p>
 
 </div>
-</body>
+<!-- EDIT7 SECTION "Clipboard data types" [2908-] --></body>
 </html>

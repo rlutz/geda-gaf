@@ -14,12 +14,12 @@
 <em>Translations of this page are also available in the following languages:</em> <a href="geda-devel-tips.ru.html" class="wikilink1" title="geda-devel-tips.ru.html">Русский</a>.
 </p>
 
-<h1 id="gedadevelopertipstricksandhints">gEDA Developer Tips, tricks and hints</h1>
+<h1 class="sectionedit1" id="geda_developer_tips_tricks_and_hints">gEDA Developer Tips, tricks and hints</h1>
 <div class="level1">
 
 </div>
-
-<h2 id="datastructureofaschematic">Data Structure of a Schematic</h2>
+<!-- EDIT1 SECTION "gEDA Developer Tips, tricks and hints" [113-166] -->
+<h2 class="sectionedit2" id="data_structure_of_a_schematic">Data Structure of a Schematic</h2>
 <div class="level2">
 
 <p>
@@ -27,24 +27,24 @@ Internally, a schematic in gaf is implemented by number of doubly linked lists. 
 </p>
 
 <p>
-An overview of the data structure of a schematic can be retrieved here. The sketch was drawn in 2005 by Stuart Brorson.
+An overview of the data structure of a schematic can be retrieved <a href="http://www.brorson.com/gEDA/gEDA_Structures_20050108.pdf" class="urlextern" title="http://www.brorson.com/gEDA/gEDA_Structures_20050108.pdf" rel="nofollow">here</a>. The sketch was drawn in 2005 by Stuart Brorson.
 </p>
 
 </div>
-
-<h2 id="doxygencommentsandstyles">Doxygen Comments and Styles</h2>
+<!-- EDIT2 SECTION "Data Structure of a Schematic" [167-612] -->
+<h2 class="sectionedit3" id="doxygen_comments_and_styles">Doxygen Comments and Styles</h2>
 <div class="level2">
 
 <p>
-<strong>Doxygen</strong> is a tool which extracts API documentation from comments in the source code. Markup can be placed in the comments, which is then extracted and rendered to HTML or LaTeX by Doxygen. This allows e.g. one function to link to another related function, and permits arguments and return values to have documentation associated with them.
+<strong>Doxygen</strong> is a tool which extracts <abbr title="Application Programming Interface">API</abbr> documentation from comments in the source code. Markup can be placed in the comments, which is then extracted and rendered to <abbr title="HyperText Markup Language">HTML</abbr> or LaTeX by Doxygen. This allows e.g. one function to link to another related function, and permits arguments and return values to have documentation associated with them.
 </p>
 
 <p>
-Some sections of the gaf source have already been doxyfied. Currently, this includes libgeda, gschem, gnetlist, gsymcheck and gattrib. The Makefile in the <em>docs</em> dir of these tools contains a target &quot;doxygen&quot;. Alternatively, you can browse the output of doxygen online on this site, made available by Bert Timmerman.
+Some sections of the gaf source have already been doxyfied. Currently, this includes libgeda, gschem, gnetlist, gsymcheck and gattrib. The Makefile in the <em>docs</em> dir of these tools contains a target “doxygen”. Alternatively, you can browse the output of doxygen online <a href="http://www.xs4all.nl/~ljh4timm/gaf/dox.html" class="urlextern" title="http://www.xs4all.nl/~ljh4timm/gaf/dox.html" rel="nofollow">on this site</a>, made available by Bert Timmerman.
 </p>
 
 <p>
-If you want to see Doxygen&#039;s ideas on how to format documentation see the Doxygen website. The individual commands are documented here. There is also a very handy Doxygen quick reference card.
+If you want to see Doxygen&#039;s ideas on how to format documentation see the <a href="http://www.stack.nl/~dimitri/doxygen/docblocks.html" class="urlextern" title="http://www.stack.nl/~dimitri/doxygen/docblocks.html" rel="nofollow">Doxygen website</a>. The individual commands are documented <a href="http://www.stack.nl/~dimitri/doxygen/commands.html" class="urlextern" title="http://www.stack.nl/~dimitri/doxygen/commands.html" rel="nofollow">here</a>. There is also a very handy Doxygen <a href="http://www.digilife.be/quickreferences/QRC/Doxygen Quick Reference.pdf" class="urlextern" title="http://www.digilife.be/quickreferences/QRC/Doxygen Quick Reference.pdf" rel="nofollow">quick reference card</a>.
 </p>
 
 <p>
@@ -52,8 +52,8 @@ The following sections provide an introduction on how gschem and libgeda are cus
 </p>
 
 </div>
-
-<h3 id="documentingfiles">Documenting Files</h3>
+<!-- EDIT3 SECTION "Doxygen Comments and Styles" [613-1951] -->
+<h3 class="sectionedit4" id="documenting_files">Documenting Files</h3>
 <div class="level3">
 
 <p>
@@ -66,8 +66,8 @@ When starting a new file, you obviously need to have the normal GNU license text
    */</span></pre>
 
 </div>
-
-<h3 id="documentingvariablesdefinestypedefs">Documenting Variables/Defines/Typedefs</h3>
+<!-- EDIT4 SECTION "Documenting Files" [1952-2417] -->
+<h3 class="sectionedit5" id="documenting_variables_defines_typedefs">Documenting Variables/Defines/Typedefs</h3>
 <div class="level3">
 
 <p>
@@ -77,12 +77,12 @@ Global variables in a file can be documented using the <strong>\var</strong> com
   <span class="kw4">typedef</span> <span class="kw2">enum</span> <span class="br0">&#123;</span>FILLING_HOLLOW<span class="sy0">,</span> FILLING_FILL<span class="sy0">,</span> FILLING_MESH<span class="sy0">,</span> FILLING_HATCH<span class="sy0">,</span> FILLING_VOID<span class="br0">&#125;</span> OBJECT_FILLING<span class="sy0">;</span></pre>
 
 </div>
-
-<h3 id="documentingfunctions">Documenting Functions</h3>
+<!-- EDIT5 SECTION "Documenting Variables/Defines/Typedefs" [2418-2808] -->
+<h3 class="sectionedit6" id="documenting_functions">Documenting Functions</h3>
 <div class="level3">
 
 <p>
-Functions can be documented in the same way as Variables, etc... Just use a comment block above the function it is documenting and use a <strong>\brief</strong> command to
+Functions can be documented in the same way as Variables, etc… Just use a comment block above the function it is documenting and use a <strong>\brief</strong> command to
 start it.
 </p>
 
@@ -101,8 +101,8 @@ Also <strong>\param</strong> commands are used with the [in] or [out] attributes
    */</span></pre>
 
 </div>
-
-<h3 id="structuredocumentation">Structure Documentation</h3>
+<!-- EDIT6 SECTION "Documenting Functions" [2809-3696] -->
+<h3 class="sectionedit7" id="structure_documentation">Structure Documentation</h3>
 <div class="level3">
 
 <p>
@@ -126,8 +126,8 @@ Structures are documented the same as in the previous sections.  Note that comme
   <span class="br0">&#125;</span><span class="sy0">;</span></pre>
 
 </div>
-
-<h3 id="bugtodocommands">Bug/Todo Commands</h3>
+<!-- EDIT7 SECTION "Structure Documentation" [3697-4778] -->
+<h3 class="sectionedit8" id="bug_todo_commands">Bug/Todo Commands</h3>
 <div class="level3">
 
 <p>
@@ -135,17 +135,17 @@ Structures are documented the same as in the previous sections.  Note that comme
 </p>
 
 </div>
-
-<h2 id="dialogsdesignandbehaviour">Dialogs: Design and Behaviour</h2>
+<!-- EDIT8 SECTION "Bug/Todo Commands" [4779-5076] -->
+<h2 class="sectionedit9" id="dialogsdesign_and_behaviour">Dialogs: Design and Behaviour</h2>
 <div class="level2">
 
 </div>
-
-<h3 id="dialogdesign">Dialog Design</h3>
+<!-- EDIT9 SECTION "Dialogs: Design and Behaviour" [5077-5121] -->
+<h3 class="sectionedit10" id="dialog_design">Dialog Design</h3>
 <div class="level3">
 
 <p>
-There&#039;s a nice document from the gnome guys called  Gnome HIG.
+There&#039;s a nice document from the gnome guys called <a href="http://library.gnome.org/devel/hig-book/" class="urlextern" title="http://library.gnome.org/devel/hig-book/" rel="nofollow"> Gnome HIG</a>.
 There are several suggestions on how to design dialogs and how they should behave.
 </p>
 
@@ -153,7 +153,7 @@ There are several suggestions on how to design dialogs and how they should behav
 <strong> The dialog design is mostly a matter of taste:</strong>
 </p>
 <ul>
-<li class="level1"><div class="li"> alignment of elements. See  Window Layout</div>
+<li class="level1"><div class="li"> alignment of elements. See <a href="http://library.gnome.org/devel/hig-book/nightly/windows.html.en" class="urlextern" title="http://library.gnome.org/devel/hig-book/nightly/windows.html.en" rel="nofollow"> Window Layout</a></div>
 </li>
 <li class="level1"><div class="li"> right alignment of dialog buttons</div>
 </li>
@@ -168,8 +168,8 @@ There are several suggestions on how to design dialogs and how they should behav
 </ul>
 
 </div>
-
-<h3 id="modalornonmodaldialogs">Modal or Nonmodal dialogs</h3>
+<!-- EDIT10 SECTION "Dialog Design" [5122-5741] -->
+<h3 class="sectionedit11" id="modal_or_nonmodal_dialogs">Modal or Nonmodal dialogs</h3>
 <div class="level3">
 
 <p>
@@ -187,13 +187,13 @@ A modal dialog is not OK if there is a lot of user interaction with the dialog. 
 </p>
 
 </div>
-
-<h3 id="wheretoplacethedialog">Where to place the dialog</h3>
+<!-- EDIT11 SECTION "Modal or Nonmodal dialogs" [5742-6271] -->
+<h3 class="sectionedit12" id="where_to_place_the_dialog">Where to place the dialog</h3>
 <div class="level3">
 
 <p>
 A dialog can be put on different places in on the screen.
-A list of possible places can be found in the  GtkReference
+A list of possible places can be found in the <a href="http://library.gnome.org/devel/gtk/unstable/gtk3-Standard-Enumerations.html#GtkWindowPosition" class="urlextern" title="http://library.gnome.org/devel/gtk/unstable/gtk3-Standard-Enumerations.html#GtkWindowPosition" rel="nofollow"> GtkReference</a>
 </p>
 
 <p>
@@ -202,17 +202,17 @@ The Gnome HID does not say anything about that topic.
 </p>
 
 <p>
-The default setting is GTK_WIN_POS_NONE for GtkWindow see  GtkWindow.
-The default for GtkDialog is GTK_WIN_POS_CENTER_ON_PARENT ( taken from the GtkDialog source).
+The default setting is GTK_WIN_POS_NONE for GtkWindow see <a href="http://developer.gnome.org/doc/API/2.0/gtk/GtkWindow.html#GtkWindow--window-position" class="urlextern" title="http://developer.gnome.org/doc/API/2.0/gtk/GtkWindow.html#GtkWindow--window-position" rel="nofollow"> GtkWindow</a>.
+The default for GtkDialog is GTK_WIN_POS_CENTER_ON_PARENT (<a href="http://git.gnome.org/browse/gtk+/tree/gtk/gtkdialog.c" class="urlextern" title="http://git.gnome.org/browse/gtk+/tree/gtk/gtkdialog.c" rel="nofollow"> taken from the GtkDialog source</a>).
 </p>
 
 </div>
-
-<h3 id="placingdialogsinfrontoftheirparentwindow">Placing dialogs in front of their parent window</h3>
+<!-- EDIT12 SECTION "Where to place the dialog" [6272-7020] -->
+<h3 class="sectionedit13" id="placing_dialogs_in_front_of_their_parent_window">Placing dialogs in front of their parent window</h3>
 <div class="level3">
 
 <p>
-Most of the dialogs are placed in front of their parent window using the transient_for property (see.  GtkReference). This property should be set for all modal dialogs.
+Most of the dialogs are placed in front of their parent window using the transient_for property (see. <a href="http://developer.gnome.org/doc/API/2.0/gtk/GtkWindow.html#gtk-window-set-transient-for" class="urlextern" title="http://developer.gnome.org/doc/API/2.0/gtk/GtkWindow.html#gtk-window-set-transient-for" rel="nofollow"> GtkReference</a>). This property should be set for all modal dialogs.
 </p>
 
 <p>
@@ -232,13 +232,13 @@ If dialogs are flickering at 100% CPU load, then disable that setting.
 <span class="br0">&#40;</span>raise-dialog-boxes-on-expose <span class="st0">&quot;disabled&quot;</span><span class="br0">&#41;</span></pre>
 
 </div>
-
-<h3 id="buttonorderindialogs">Button order in dialogs</h3>
+<!-- EDIT13 SECTION "Placing dialogs in front of their parent window" [7021-8105] -->
+<h3 class="sectionedit14" id="button_order_in_dialogs">Button order in dialogs</h3>
 <div class="level3">
 
 <p>
 Button order at the bottom of the dialog depends on which operating system the user is using.
-GTK handles this automatically, but requires the developers set the alternative button order. For more information, check the GTK documentation here.
+GTK handles this automatically, but requires the developers set the alternative button order. For more information, check the GTK documentation <a href="http://library.gnome.org/devel/gtk/unstable/GtkDialog.html#gtk-dialog-set-alternative-button-order" class="urlextern" title="http://library.gnome.org/devel/gtk/unstable/GtkDialog.html#gtk-dialog-set-alternative-button-order" rel="nofollow">here</a>.
 </p>
 
 <p>
@@ -257,12 +257,12 @@ This should be done for every new dialog created, before running it.
 </p>
 
 </div>
-
-<h3 id="dialogdesignofthecurrentdialogs">Dialog design of the current dialogs</h3>
+<!-- EDIT14 SECTION "Button order in dialogs" [8106-8908] -->
+<h3 class="sectionedit15" id="dialog_design_of_the_current_dialogs">Dialog design of the current dialogs</h3>
 <div class="level3">
 
 <p>
-<a href="media/devel_tips/dialog_picture.png" class="media" target="_blank" title="devel_tips:dialog_picture.png">devel_tips:dialog_picture.png</a>
+<a href="media/devel_tips/dialog_picture.png" class="media" target="_blank" title="devel_tips:dialog_picture.png"><img src="media/devel_tips/dialog_picture.png" class="media" alt="" /></a>
 </p>
 <ul>
 <li class="level1"><div class="li"> There is some space around the whole dialog (<em>DIALOG_BORDER_SPACING</em>).</div>
@@ -274,8 +274,8 @@ This should be done for every new dialog created, before running it.
 </ul>
 
 </div>
-
-<h3 id="sourcetemplateforsimpledialogs">Source template for simple dialogs</h3>
+<!-- EDIT15 SECTION "Dialog design of the current dialogs" [8909-9272] -->
+<h3 class="sectionedit16" id="source_template_for_simple_dialogs">Source template for simple dialogs</h3>
 <div class="level3">
 
 <p>
@@ -408,8 +408,8 @@ The response function for such a dialog may look like this:
 <span class="br0">&#125;</span></pre>
 
 </div>
-
-<h3 id="currentdialogissuesingschem">Current Dialog Issues in Gschem</h3>
+<!-- EDIT16 SECTION "Source template for simple dialogs" [9273-14361] -->
+<h3 class="sectionedit17" id="current_dialog_issues_in_gschem">Current Dialog Issues in Gschem</h3>
 <div class="level3">
 <ul>
 <li class="level1"><div class="li"> every dialog has it&#039;s own design</div>
@@ -428,7 +428,7 @@ The response function for such a dialog may look like this:
 
 </div>
 
-<h5 id="printdialog">Print Dialog</h5>
+<h5 id="print_dialog">Print Dialog</h5>
 <div class="level5">
 <ul>
 <li class="level1"><div class="li"> change design?</div>
@@ -437,7 +437,7 @@ The response function for such a dialog may look like this:
 
 </div>
 
-<h5 id="writeimage">Write Image</h5>
+<h5 id="write_image">Write Image</h5>
 <div class="level5">
 <ul>
 <li class="level1"><div class="li"> In the fileselect dialog the default filename is missing if the file does not exist</div>
@@ -448,7 +448,7 @@ The response function for such a dialog may look like this:
 
 </div>
 
-<h5 id="executescript">Execute Script</h5>
+<h5 id="execute_script">Execute Script</h5>
 <div class="level5">
 <ul>
 <li class="level1"><div class="li"></div>
@@ -457,7 +457,7 @@ The response function for such a dialog may look like this:
 
 </div>
 
-<h5 id="edittext">Edit Text</h5>
+<h5 id="edit_text">Edit Text</h5>
 <div class="level5">
 <ul>
 <li class="level1"><div class="li"> some missing keyboard shortcuts</div>
@@ -466,13 +466,13 @@ The response function for such a dialog may look like this:
 </li>
 <li class="level1"><div class="li"> maybe add some color pixbufs for the color</div>
 </li>
-<li class="level1"><div class="li"> maybe replace the text alignment with nine ratio buttons, toggle buttons with icons or ...</div>
+<li class="level1"><div class="li"> maybe replace the text alignment with nine ratio buttons, toggle buttons with icons or …</div>
 </li>
 </ul>
 
 </div>
 
-<h5 id="colordialog">Color Dialog</h5>
+<h5 id="color_dialog">Color Dialog</h5>
 <div class="level5">
 <ul>
 <li class="level1"><div class="li"> maybe add some color pixbufs for the color</div>
@@ -481,7 +481,7 @@ The response function for such a dialog may look like this:
 
 </div>
 
-<h5 id="linewidthandtype">Line Width and Type</h5>
+<h5 id="line_width_and_type">Line Width and Type</h5>
 <div class="level5">
 <ul>
 <li class="level1"><div class="li"> keyboard shortcuts missing</div>
@@ -492,7 +492,7 @@ The response function for such a dialog may look like this:
 
 </div>
 
-<h5 id="filltype">Fill Type</h5>
+<h5 id="fill_type">Fill Type</h5>
 <div class="level5">
 <ul>
 <li class="level1"><div class="li"> keyboard shortcuts missing</div>
@@ -503,7 +503,7 @@ The response function for such a dialog may look like this:
 
 </div>
 
-<h5 id="translatesymbol">Translate Symbol</h5>
+<h5 id="translate_symbol">Translate Symbol</h5>
 <div class="level5">
 <ul>
 <li class="level1"><div class="li"></div>
@@ -512,18 +512,18 @@ The response function for such a dialog may look like this:
 
 </div>
 
-<h5 id="pagemanager">Page Manager</h5>
+<h5 id="page_manager">Page Manager</h5>
 <div class="level5">
 <ul>
 <li class="level1"><div class="li"> wrong button order? Depends on whether you think the refresh button is the main action button or just an extra button.</div>
 </li>
-<li class="level1"><div class="li"> Maybe the &quot;Return&quot; key should trigger Refresh</div>
+<li class="level1"><div class="li"> Maybe the “Return” key should trigger Refresh</div>
 </li>
 </ul>
 
 </div>
 
-<h5 id="componentselector">Component Selector</h5>
+<h5 id="component_selector">Component Selector</h5>
 <div class="level5">
 <ul>
 <li class="level1"><div class="li"> strange edit widget when typing and the tree is selected (It&#039;s a search helper widget, disable it?!)</div>
@@ -532,7 +532,7 @@ The response function for such a dialog may look like this:
 
 </div>
 
-<h5 id="singleattributeditor">Single Attribut Editor</h5>
+<h5 id="single_attribut_editor">Single Attribut Editor</h5>
 <div class="level5">
 <ul>
 <li class="level1 node"><div class="li"> when multiple elements are selected and you call edit (ee) there are a few problems:</div>
@@ -547,7 +547,7 @@ The response function for such a dialog may look like this:
 
 </div>
 
-<h5 id="multiattributeeditor">Multi Attribute Editor</h5>
+<h5 id="multi_attribute_editor">Multi Attribute Editor</h5>
 <div class="level5">
 <ul>
 <li class="level1"><div class="li"></div>
@@ -556,7 +556,7 @@ The response function for such a dialog may look like this:
 
 </div>
 
-<h5 id="addtext">Add Text</h5>
+<h5 id="add_text">Add Text</h5>
 <div class="level5">
 <ul>
 <li class="level1"><div class="li"></div>
@@ -565,12 +565,12 @@ The response function for such a dialog may look like this:
 
 </div>
 
-<h5 id="arcparams">Arc Params</h5>
+<h5 id="arc_params">Arc Params</h5>
 <div class="level5">
 <ul>
 <li class="level1"><div class="li"> add the diameter to the dialog, but select the start angle entry (increment = grid)</div>
 </li>
-<li class="level1"><div class="li"> let &quot;ee&quot; call that dialog if only a single arc is selected</div>
+<li class="level1"><div class="li"> let “ee” call that dialog if only a single arc is selected</div>
 </li>
 <li class="level1"><div class="li"> maybe add a section label</div>
 </li>
@@ -578,7 +578,7 @@ The response function for such a dialog may look like this:
 
 </div>
 
-<h5 id="insertpicture">Insert Picture</h5>
+<h5 id="insert_picture">Insert Picture</h5>
 <div class="level5">
 <ul>
 <li class="level1"><div class="li"></div>
@@ -587,7 +587,7 @@ The response function for such a dialog may look like this:
 
 </div>
 
-<h5 id="picturereplace">Picture Replace</h5>
+<h5 id="picture_replace">Picture Replace</h5>
 <div class="level5">
 <ul>
 <li class="level1"><div class="li"> the new picture uses the aspect ratio of the old picture</div>
@@ -598,18 +598,18 @@ The response function for such a dialog may look like this:
 
 </div>
 
-<h5 id="findtext">Find Text</h5>
+<h5 id="find_text">Find Text</h5>
 <div class="level5">
 <ul>
-<li class="level1"><div class="li"> manipulates the mouse pointer (maybe the zooming code is the culprit). Just press &quot;Return&quot; to trigger a FindNext</div>
+<li class="level1"><div class="li"> manipulates the mouse pointer (maybe the zooming code is the culprit). Just press “Return” to trigger a FindNext</div>
 </li>
 <li class="level1"><div class="li"> if you select hierarchy and the found text is in a different schematic, then the filename in the title is not updated</div>
 </li>
-<li class="level1"><div class="li"> maybe add an option: &quot;Select all matching text objects&quot;, disable hierarchy for that feature!</div>
+<li class="level1"><div class="li"> maybe add an option: “Select all matching text objects”, disable hierarchy for that feature!</div>
 </li>
-<li class="level1"><div class="li"> FIXME gschem hangs if you use that dialog with hierarchical schematics that have dependancy loops (e.g. the autonumber test schematics)</div>
+<li class="level1"><div class="li"> <img src="images/smileys/fixme.gif" align="middle" alt="FIXME" /> gschem hangs if you use that dialog with hierarchical schematics that have dependancy loops (e.g. the autonumber test schematics)</div>
 </li>
-<li class="level1"><div class="li"> add an option &quot;search for visible text only&quot;</div>
+<li class="level1"><div class="li"> add an option “search for visible text only”</div>
 </li>
 <li class="level1"><div class="li"> maybe use regular expressions instead of the substring for the searchtext</div>
 </li>
@@ -617,7 +617,7 @@ The response function for such a dialog may look like this:
 
 </div>
 
-<h5 id="hidetext">Hide Text</h5>
+<h5 id="hide_text">Hide Text</h5>
 <div class="level5">
 <ul>
 <li class="level1"><div class="li"> use regular expressions instead of starting substring</div>
@@ -626,36 +626,27 @@ The response function for such a dialog may look like this:
 
 </div>
 
-<h5 id="showtext">Show Text</h5>
+<h5 id="show_text">Show Text</h5>
 <div class="level5">
 <ul>
 <li class="level1"><div class="li"> use regular expressions instead of starting substring</div>
 </li>
-<li class="level1"><div class="li"> Maybe merge that dialog together with the &quot;Hide Text&quot; dialog</div>
+<li class="level1"><div class="li"> Maybe merge that dialog together with the “Hide Text” dialog</div>
 </li>
 </ul>
 
 </div>
 
-<h5 id="autonumbertext">Autonumber Text</h5>
+<h5 id="autonumber_text">Autonumber Text</h5>
 <div class="level5">
 <ul>
-<li class="level1"><div class="li"> Maybe disable the skip option if the renumber scope is &quot;selection&quot;. The other skip options (Page and Hierarchy) are really stupid.</div>
+<li class="level1"><div class="li"> Maybe disable the skip option if the renumber scope is “selection”. The other skip options (Page and Hierarchy) are really stupid.</div>
 </li>
 </ul>
 
 </div>
 
-<h5 id="textsize">Text Size</h5>
-<div class="level5">
-<ul>
-<li class="level1"><div class="li"></div>
-</li>
-</ul>
-
-</div>
-
-<h5 id="snapgridspacing">Snap Grid Spacing</h5>
+<h5 id="text_size">Text Size</h5>
 <div class="level5">
 <ul>
 <li class="level1"><div class="li"></div>
@@ -664,7 +655,16 @@ The response function for such a dialog may look like this:
 
 </div>
 
-<h5 id="coorddialog">Coord Dialog</h5>
+<h5 id="snap_grid_spacing">Snap Grid Spacing</h5>
+<div class="level5">
+<ul>
+<li class="level1"><div class="li"></div>
+</li>
+</ul>
+
+</div>
+
+<h5 id="coord_dialog">Coord Dialog</h5>
 <div class="level5">
 <ul>
 <li class="level1"><div class="li"> maybe move the world coordinates to the main window status bar</div>
@@ -673,7 +673,7 @@ The response function for such a dialog may look like this:
 
 </div>
 
-<h5 id="aboutdialog">About Dialog</h5>
+<h5 id="about_dialog">About Dialog</h5>
 <div class="level5">
 <ul>
 <li class="level1"><div class="li"></div>
@@ -690,5 +690,5 @@ The response function for such a dialog may look like this:
 </ul>
 
 </div>
-</body>
+<!-- EDIT17 SECTION "Current Dialog Issues in Gschem" [14362-] --></body>
 </html>

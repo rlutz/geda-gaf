@@ -10,16 +10,16 @@
 </head>
 <body>
 
-<h1 id="pcbplugins">pcb Plugins</h1>
+<h1 class="sectionedit1" id="pcb_plugins">pcb Plugins</h1>
 <div class="level1">
 
 <p>
-pcb has a plug-in mechanism that allows developers to add or modify its functionality. Plugins can add pcb actions, hook into the GUI HIDs, create new exporters, and more. For a tutorial on the basics of writing and installing a pluging, see the hello world example on the <a href="geda-pcb_developer_introduction_2.html" class="wikilink1" title="geda-pcb_developer_introduction_2.html"> pcb Developer Introduction</a> page. This page will discuss how plugins interact with the pcb system.
+pcb has a plug-in mechanism that allows developers to add or modify its functionality. Plugins can add pcb actions, hook into the <abbr title="Graphical User Interface">GUI</abbr> HIDs, create new exporters, and more. For a tutorial on the basics of writing and installing a pluging, see the hello world example on the <a href="geda-pcb_developer_introduction_2.html" class="wikilink1" title="geda-pcb_developer_introduction_2.html"> pcb Developer Introduction</a> page. This page will discuss how plugins interact with the pcb system.
 </p>
 
 </div>
-
-<h2 id="pluginmechanics">Plugin Mechanics</h2>
+<!-- EDIT1 SECTION "pcb Plugins" [1-435] -->
+<h2 class="sectionedit2" id="plugin_mechanics">Plugin Mechanics</h2>
 <div class="level2">
 
 <p>
@@ -27,31 +27,31 @@ pcb plugins are essentially shared libraries that pcb will load at run-time. Bec
 </p>
 
 <p>
-At runtime, pcb scans several directories for .so/.dll files (see src/common/hidinit.c:hid_load_dir). These include the exec prefix and the users personal preferences directory (~/.pcb). The exec_prefix is currently reserved for system plugins. Inside the personal pref directory should be a directory called &quot;plugins&quot;. User plugins should be located in this directory.
+At runtime, pcb scans several directories for .so/.dll files (see src/common/hidinit.c:hid_load_dir). These include the exec prefix and the users personal preferences directory (~/.pcb). The exec_prefix is currently reserved for system plugins. Inside the personal pref directory should be a directory called “plugins”. User plugins should be located in this directory.
 </p>
 
 <p>
-If pcb finds a .so/.dll file, it opens it and looks for a couple of symbols: &quot;hid_&lt;file basename&gt;_init&quot; and &quot;pcb_plugin_init&quot;. If it finds one, it executes it as a function. These functions are responsible for registering the code they represent with pcb.
+If pcb finds a .so/.dll file, it opens it and looks for a couple of symbols: “hid_&lt;file basename&gt;_init” and “pcb_plugin_init”. If it finds one, it executes it as a function. These functions are responsible for registering the code they represent with pcb.
 </p>
 
 </div>
-
-<h3 id="registration">Registration</h3>
+<!-- EDIT2 SECTION "Plugin Mechanics" [436-1429] -->
+<h3 class="sectionedit3" id="registration">Registration</h3>
 <div class="level3">
 
 </div>
-
-<h3 id="hidstructures">HID Structures</h3>
+<!-- EDIT3 SECTION "Registration" [1430-1451] -->
+<h3 class="sectionedit4" id="hid_structures">HID Structures</h3>
 <div class="level3">
 
 </div>
-
-<h2 id="pluginresources">Plugin Resources</h2>
+<!-- EDIT4 SECTION "HID Structures" [1452-1476] -->
+<h2 class="sectionedit5" id="plugin_resources">Plugin Resources</h2>
 <div class="level2">
 
 </div>
-
-<h3 id="handyplugintemplate">Handy Plugin Template</h3>
+<!-- EDIT5 SECTION "Plugin Resources" [1477-1503] -->
+<h3 class="sectionedit6" id="handy_plugin_template">Handy Plugin Template</h3>
 <div class="level3">
 
 <p>
@@ -59,43 +59,43 @@ If pcb finds a .so/.dll file, it opens it and looks for a couple of symbols: &qu
 </p>
 
 </div>
-
-<h3 id="pluginrepositories">Plugin Repositories</h3>
+<!-- EDIT6 SECTION "Handy Plugin Template" [1504-1574] -->
+<h3 class="sectionedit7" id="plugin_repositories">Plugin Repositories</h3>
 <div class="level3">
 
 <p>
-https://github.com/bert/pcb-plugins
+<a href="https://github.com/bert/pcb-plugins" class="urlextern" title="https://github.com/bert/pcb-plugins" rel="nofollow">https://github.com/bert/pcb-plugins</a>
 </p>
 
 <p>
-https://ljh4timm.home.xs4all.nl/gaf/dox_pcb-plugins/index.html
+<a href="https://ljh4timm.home.xs4all.nl/gaf/dox_pcb-plugins/index.html" class="urlextern" title="https://ljh4timm.home.xs4all.nl/gaf/dox_pcb-plugins/index.html" rel="nofollow">https://ljh4timm.home.xs4all.nl/gaf/dox_pcb-plugins/index.html</a>
 </p>
 
 </div>
-
-<h3 id="listofplugins">List of Plugins</h3>
+<!-- EDIT7 SECTION "Plugin Repositories" [1575-1712] -->
+<h3 class="sectionedit8" id="list_of_plugins">List of Plugins</h3>
 <div class="level3">
 <ul>
-<li class="level1"><div class="li">  Polygon Stitcher, by DJ</div>
+<li class="level1"><div class="li"> <a href="http://www.delorie.com/pcb/polystitch.c" class="urlextern" title="http://www.delorie.com/pcb/polystitch.c" rel="nofollow"> Polygon Stitcher</a>, by DJ</div>
 </li>
-<li class="level1"><div class="li">  Ben Mode photos for the PNG hid, by DJ</div>
+<li class="level1"><div class="li"> <a href="http://www.delorie.com/pcb/ben-mode/" class="urlextern" title="http://www.delorie.com/pcb/ben-mode/" rel="nofollow"> Ben Mode</a> photos for the PNG hid, by DJ</div>
 </li>
-<li class="level1"><div class="li">  Find Rat, by DJ</div>
+<li class="level1"><div class="li"> <a href="http://www.delorie.com/pcb/findrat.c" class="urlextern" title="http://www.delorie.com/pcb/findrat.c" rel="nofollow"> Find Rat</a>, by DJ</div>
 </li>
-<li class="level1"><div class="li">  Board Flip, by DJ</div>
+<li class="level1"><div class="li"> <a href="http://www.delorie.com/pcb/boardflip.c" class="urlextern" title="http://www.delorie.com/pcb/boardflip.c" rel="nofollow"> Board Flip</a>, by DJ</div>
 </li>
-<li class="level1"><div class="li">  Renumber Block, by DJ</div>
+<li class="level1"><div class="li"> <a href="http://www.delorie.com/pcb/renumberblock.c" class="urlextern" title="http://www.delorie.com/pcb/renumberblock.c" rel="nofollow"> Renumber Block</a>, by DJ</div>
 </li>
-<li class="level1"><div class="li">  Teardrops, by DJ</div>
+<li class="level1"><div class="li"> <a href="http://www.delorie.com/pcb/teardrops/" class="urlextern" title="http://www.delorie.com/pcb/teardrops/" rel="nofollow"> Teardrops</a>, by DJ</div>
 </li>
-<li class="level1"><div class="li"> https://github.com/bert/pcb-plugins git repo with many plugins</div>
+<li class="level1"><div class="li"> <a href="https://github.com/bert/pcb-plugins" class="urlextern" title="https://github.com/bert/pcb-plugins" rel="nofollow">https://github.com/bert/pcb-plugins</a> git repo with many plugins</div>
 </li>
-<li class="level1"><div class="li">  sed rename, by bgamari</div>
+<li class="level1"><div class="li"> <a href="https://github.com/bgamari/pcb-sedrename" class="urlextern" title="https://github.com/bgamari/pcb-sedrename" rel="nofollow"> sed rename</a>, by bgamari</div>
 </li>
 <li class="level1"><div class="li"> <a href="media/pcb/plugin_debug_window.tar.gz" class="media" target="_blank" title="pcb:plugin_debug_window.tar.gz"> Debug Window</a>, by Chad Parker</div>
 </li>
 </ul>
 
 </div>
-</body>
+<!-- EDIT8 SECTION "List of Plugins" [1713-] --></body>
 </html>

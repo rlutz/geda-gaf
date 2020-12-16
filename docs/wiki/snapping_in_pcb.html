@@ -18,21 +18,21 @@ This page attempts to document the snapping system in pcb.
 The snapping system is what takes the location of the cursor (the arrow representing the position of the mouse on the screen) and translates it into the coordinates on the board where actions take place. For example, the snapping system currently restricts the position of the crosshair to the closest grid point to the cursor. If you move the cursor near a pin or a pad, the snapping system positions the crosshair at the center of that pin or pad.
 </p>
 
-<h2 id="currentsystem">Current System</h2>
+<h2 class="sectionedit1" id="current_system">Current System</h2>
 <div class="level2">
 
 </div>
-
-<h3 id="behavior">Behavior</h3>
+<!-- EDIT1 SECTION "Current System" [512-539] -->
+<h3 class="sectionedit2" id="behavior">Behavior</h3>
 <div class="level3">
 
 <p>
-The snapping system in pcb is always active, and cannot be disabled. The snapping order... will be documented the next time I edit this page!
+The snapping system in pcb is always active, and cannot be disabled. The snapping order… will be documented the next time I edit this page!
 </p>
 
 </div>
-
-<h3 id="implementation">Implementation</h3>
+<!-- EDIT2 SECTION "Behavior" [540-702] -->
+<h3 class="sectionedit3" id="implementation">Implementation</h3>
 <div class="level3">
 
 <p>
@@ -45,8 +45,8 @@ There is a series of functions that implement snapping.
 </p>
 
 </div>
-
-<h2 id="proposedsystem">Proposed System</h2>
+<!-- EDIT3 SECTION "Implementation" [703-1017] -->
+<h2 class="sectionedit4" id="proposed_system">Proposed System</h2>
 <div class="level2">
 
 <p>
@@ -54,8 +54,8 @@ Implemented in the home/cparker/snapping_overhaul branch.
 </p>
 
 </div>
-
-<h3 id="overview">Overview</h3>
+<!-- EDIT4 SECTION "Proposed System" [1018-1104] -->
+<h3 class="sectionedit5" id="overview">Overview</h3>
 <div class="level3">
 
 <p>
@@ -67,8 +67,8 @@ MoveCrosshairAbsolute calculates the new crosshair position by checking for snap
 </p>
 
 </div>
-
-<h3 id="details">Details</h3>
+<!-- EDIT5 SECTION "Overview" [1105-2322] -->
+<h3 class="sectionedit6" id="details">Details</h3>
 <div class="level3">
 
 <p>
@@ -88,7 +88,7 @@ There are three new types in snap.[c,h]:
 </ul>
 
 <p>
-Snapping occurs by iterating through SnapSpecType objects in a SnapListType. Each SnapSpecType object has a &quot;search&quot; function pointer that calls a function to look for the the object type associated with that particular SnapSpecType. These functions are presently defined in crosshair.c. So, for example, there is a SnapSpecType object associated with pins and pads called pin_pad_snap. It has a function associated with it called snap_to_pins_pads that calls SearchObjectByLocation to look for and pins or pads under the cursor, and decide if there is a valid snapping target. If there is, it passes that back to the calling function (as an object, not a pointer).
+Snapping occurs by iterating through SnapSpecType objects in a SnapListType. Each SnapSpecType object has a “search” function pointer that calls a function to look for the the object type associated with that particular SnapSpecType. These functions are presently defined in crosshair.c. So, for example, there is a SnapSpecType object associated with pins and pads called pin_pad_snap. It has a function associated with it called snap_to_pins_pads that calls SearchObjectByLocation to look for and pins or pads under the cursor, and decide if there is a valid snapping target. If there is, it passes that back to the calling function (as an object, not a pointer).
 </p>
 
 <p>
@@ -110,8 +110,8 @@ Both of the crosshair items are implemented as pointers so that they can be chan
 </p>
 
 </div>
-
-<h3 id="datastructures">Data Structures</h3>
+<!-- EDIT6 SECTION "Details" [2323-4417] -->
+<h3 class="sectionedit7" id="data_structures">Data Structures</h3>
 <div class="level3">
 
 <p>
@@ -161,7 +161,7 @@ These are all defined in crosshair.c, although eventually if we&#039;re ever suc
 </p>
 
 <p>
-<code>SnapSpecTypes</code> can be created using the <code>snap_spec_new</code> function which takes the name and priority of the spec, or by the <code>snap_spec_copy</code> function which takes a pointer to another <code>SnapSpecType</code>.
+<code>SnapSpecTypes</code> can be created using the <code>snap_<abbr title="specification">spec</abbr>_new</code> function which takes the name and priority of the <abbr title="specification">spec</abbr>, or by the <code>snap_<abbr title="specification">spec</abbr>_copy</code> function which takes a pointer to another <code>SnapSpecType</code>.
 </p>
 
 </div>
@@ -187,7 +187,7 @@ There are two additional functions associated with SnapLists. <code>snap_list_li
 
 </div>
 
-<h4 id="crosshairintegration">Crosshair Integration</h4>
+<h4 id="crosshair_integration">Crosshair Integration</h4>
 <div class="level4">
 
 <p>
@@ -207,8 +207,8 @@ One thing to note: there is a feature, I think it&#039;s called &#039;Auto Enfor
 </p>
 
 </div>
-
-<h3 id="addingsnaps">Adding Snaps</h3>
+<!-- EDIT7 SECTION "Data Structures" [4418-9176] -->
+<h3 class="sectionedit8" id="adding_snaps">Adding Snaps</h3>
 <div class="level3">
 
 <p>
@@ -245,7 +245,7 @@ snap_to_elements<span class="br0">&#40;</span>Coord x<span class="sy0">,</span> 
 <span class="br0">&#125;</span></pre>
 
 <p>
-Break it down! (In my head that sounded like M.C. Hammer...) First, search the specified location for an element. If one was found (obj_type is a bit vector in which only one bit should be set for the corresponding type, and ELEMENT_TYPE is a mask with that bit), grab the coordinates of the mark, update the data in the snap, mark the snap as valid, and return the snap.
+Break it down! (In my head that sounded like M.C. Hammer…) First, search the specified location for an element. If one was found (obj_type is a bit vector in which only one bit should be set for the corresponding type, and ELEMENT_TYPE is a mask with that bit), grab the coordinates of the mark, update the data in the snap, mark the snap as valid, and return the snap.
 </p>
 
 <p>
@@ -269,7 +269,7 @@ Finally, all that&#039;s left to do is register our new snap in the snap list. F
 Change that to point to your new snap definition. Your resulting code should look something like this:
 </p>
 <dl class="code">
-<dt><a href="/./doku.php?do=export_code&amp;id=:snapping_in_pcb.txt&amp;codeblock=3" title="Download Snippet" class="mediafile mf_c">snap_plugin.c</a></dt>
+<dt><a href="/./_export/code/:snapping_in_pcb.txt?codeblock=3" title="Download Snippet" class="mediafile mf_c">snap_plugin.c</a></dt>
 <dd><pre class="code C"><span class="co1">//</span>
 <span class="co1">//  snap_plugin.c</span>
 <span class="co1">//  </span>
@@ -337,8 +337,8 @@ Congrats! You&#039;ve extended pcb with a new snap. You could do something simil
 </p>
 
 </div>
-
-<h2 id="discussion">Discussion</h2>
+<!-- EDIT8 SECTION "Adding Snaps" [9177-14502] -->
+<h2 class="sectionedit9" id="discussion">Discussion</h2>
 <div class="level2">
 
 <p>
@@ -347,11 +347,11 @@ This section is for ideas and discussion regarding things related to the snappin
 
 </div>
 
-<h5 id="whodoesthesnapping">Who Does the Snapping</h5>
+<h5 id="who_does_the_snapping">Who Does the Snapping</h5>
 <div class="level5">
 
 <p>
-Regarding the crosshair integration, there is a question in my mind about algorithm. Should the crosshair be responsible for the snapping? Presently the procedure is...
+Regarding the crosshair integration, there is a question in my mind about algorithm. Should the crosshair be responsible for the snapping? Presently the procedure is…
 </p>
 <ul>
 <li class="level1"><div class="li"> the mouse is moved </div>
@@ -382,20 +382,20 @@ Perhaps is should be that the HID calls the snapping, and the crosshair just goe
 
 </div>
 
-<h5 id="needtoknow">Need to Know</h5>
+<h5 id="need_to_know">Need to Know</h5>
 <div class="level5">
 
 <p>
-One thing I&#039;m on the fence about is if the snapping functions should get a pointer to the SnapSpecType they were called from. Presently, the functions answer the question: &quot;is there something of this type under the cursor that can be snapped to?&quot;. To answer that question, the SnapSpecType data isn&#039;t required, and so presently it&#039;s not provided. However, if this were to become more sophisticated in the future, it might become necessary.
+One thing I&#039;m on the fence about is if the snapping functions should get a pointer to the SnapSpecType they were called from. Presently, the functions answer the question: “is there something of this type under the cursor that can be snapped to?”. To answer that question, the SnapSpecType data isn&#039;t required, and so presently it&#039;s not provided. However, if this were to become more sophisticated in the future, it might become necessary.
 </p>
 
 </div>
 
-<h5 id="snappingmodifiers">Snapping Modifiers</h5>
+<h5 id="snapping_modifiers">Snapping Modifiers</h5>
 <div class="level5">
 
 <p>
-A very nice feature would be if the user could press a mod key to change the snapping behavior. Perhaps the cursor only snaps to grid points normally, and then starts snapping to everything else when &quot;alt&quot; is held.
+A very nice feature would be if the user could press a mod key to change the snapping behavior. Perhaps the cursor only snaps to grid points normally, and then starts snapping to everything else when “alt” is held.
 </p>
 
 <p>
@@ -421,7 +421,7 @@ I&#039;m currently experimenting with this in the home/cparker/mod_snapping_plug
 
 </div>
 
-<h5 id="snappingandlayers">Snapping and Layers</h5>
+<h5 id="snapping_and_layers">Snapping and Layers</h5>
 <div class="level5">
 
 <p>
@@ -437,8 +437,8 @@ How do I keep track of which layers I&#039;m searching? Do I pass pointers? Laye
 </p>
 
 </div>
-
-<h2 id="todolist">TODO List</h2>
+<!-- EDIT9 SECTION "Discussion" [14503-18092] -->
+<h2 class="sectionedit10" id="todo_list">TODO List</h2>
 <div class="level2">
 <ul>
 <li class="level1"><div class="li"> rebase the code off of the object_list instead of using dedicated list types.</div>
@@ -451,7 +451,7 @@ How do I keep track of which layers I&#039;m searching? Do I pass pointers? Laye
 </li>
 <li class="level1"><div class="li"> snapping preferences saving</div>
 </li>
-<li class="level1"><div class="li"> sub-snaps? (lines, line endpoints, midpoints... )</div>
+<li class="level1"><div class="li"> sub-snaps? (lines, line endpoints, midpoints… )</div>
 </li>
 <li class="level1"><div class="li"> lesstif config page</div>
 </li>
@@ -460,8 +460,8 @@ How do I keep track of which layers I&#039;m searching? Do I pass pointers? Laye
 </ul>
 
 </div>
-
-<h2 id="currentworkinprogress">Current Work In Progress</h2>
+<!-- EDIT10 SECTION "TODO List" [18093-18453] -->
+<h2 class="sectionedit11" id="current_work_in_progress">Current Work In Progress</h2>
 <div class="level2">
 
 <p>
@@ -473,14 +473,14 @@ The snapping code needs to know about layers. We want to be able to search for t
 </p>
 
 </div>
-
-<h2 id="relatedpages">Related Pages</h2>
+<!-- EDIT11 SECTION "Current Work In Progress" [18454-18691] -->
+<h2 class="sectionedit12" id="related_pages">Related Pages</h2>
 <div class="level2">
 <ul>
-<li class="level1"><div class="li"> <a href="pcbcrosshair.html" class="wikilink2" title="pcbcrosshair.html">PCB Crosshair</a></div>
+<li class="level1"><div class="li"> <a href="pcb_crosshair.html" class="wikilink1" title="pcb_crosshair.html">PCB Crosshair</a></div>
 </li>
 </ul>
 
 </div>
-</body>
+<!-- EDIT12 SECTION "Related Pages" [18692-] --></body>
 </html>

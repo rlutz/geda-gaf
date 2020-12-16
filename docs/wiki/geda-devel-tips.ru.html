@@ -14,17 +14,17 @@
 <em>Эта страница доступна также на следующих языках:</em> <a href="geda-devel-tips.html" class="wikilink1" title="geda-devel-tips.html">English</a>
 </p>
 
-<h1 id="советыподсказкиихитростидляразработчиковgeda">Советы, подсказки и хитрости для разработчиков gEDA</h1>
+<h1 class="sectionedit1" id="советы_подсказки_и_хитрости_для_разработчиков_geda">Советы, подсказки и хитрости для разработчиков gEDA</h1>
 <div class="level1">
 
 </div>
-
-<h2 id="структураданныхсхемы">Структура данных схемы</h2>
+<!-- EDIT1 SECTION "Советы, подсказки и хитрости для разработчиков gEDA" [119-226] -->
+<h2 class="sectionedit2" id="структура_данных_схемы">Структура данных схемы</h2>
 <div class="level2">
 
 <p>
 Внутри gaf схема представляется набором
-двусвязных списков.
+<a href="http://ru.wikipedia.org/wiki/Связный_список" class="urlextern" title="http://ru.wikipedia.org/wiki/Связный_список" rel="nofollow">двусвязных списков</a>.
 Центральным типом связи в списках является OBJECT. Он может быть
 представлением какого-нибудь символа, строки текста, графического примитива,
 соединения или атрибута.
@@ -32,17 +32,17 @@
 
 <p>
 Обзор структуры данных схемы можно найти
-здесь. Этот
+<a href="http://www.brorson.com/gEDA/gEDA_Structures_20050108.pdf" class="urlextern" title="http://www.brorson.com/gEDA/gEDA_Structures_20050108.pdf" rel="nofollow">здесь</a>. Этот
 набросок сделан Стюартом Брорсоном (Stuart Brorson) в 2005 году.
 </p>
 
 </div>
-
-<h2 id="комментарииистилиdoxygen">Комментарии и стили Doxygen</h2>
+<!-- EDIT2 SECTION "Структура данных схемы" [227-1019] -->
+<h2 class="sectionedit3" id="комментарии_и_стили_doxygen">Комментарии и стили Doxygen</h2>
 <div class="level2">
 
 <p>
-<strong>Doxygen</strong> представляет собой утилиту для извлечения документации по API из комментариев в исходном коде. В комментариях может указываться разметка, которая впоследствии может быть преобразована программой Doxygen в код HTML или LaTeX. Это позволяет, к примеру, одной функции сослаться на другую, связанную с ней, а также даёт возможность приводить документацию об аргументах и возвращаемых значениях.
+<strong>Doxygen</strong> представляет собой утилиту для извлечения документации по <abbr title="Application Programming Interface">API</abbr> из комментариев в исходном коде. В комментариях может указываться разметка, которая впоследствии может быть преобразована программой Doxygen в код <abbr title="HyperText Markup Language">HTML</abbr> или LaTeX. Это позволяет, к примеру, одной функции сослаться на другую, связанную с ней, а также даёт возможность приводить документацию об аргументах и возвращаемых значениях.
 </p>
 
 <p>
@@ -50,18 +50,20 @@
 <strong>doxygen</strong>. Сейчас сюда входят libgeda, gschem, gnetlist, gsymcheck и
 gattrib.  Файлы Makefile этих утилит в каталоге <em><code>docs</code></em> содержат цель
 «doxygen».  Или же вывод doxygen можно посмотреть
-на этой странице,
+<a href="http://www.xs4all.nl/~ljh4timm/gaf/dox.html" class="urlextern" title="http://www.xs4all.nl/~ljh4timm/gaf/dox.html" rel="nofollow">на этой странице</a>,
 подготовленной Бертом Тиммерманом (Bert Timmerman).
 </p>
 
 <p>
 Если вы хотите узнать заложенные в Doxygen идеи о том, как надо
 форматировать документацию, см.
-веб-сайт Doxygen.
+<a href="http://www.stack.nl/~dimitri/doxygen/docblocks.html" class="urlextern" title="http://www.stack.nl/~dimitri/doxygen/docblocks.html" rel="nofollow">веб-сайт Doxygen</a>.
 Отдельные команды документированы
-здесь. По Doxygen
+<a href="http://www.stack.nl/~dimitri/doxygen/commands.html" class="urlextern" title="http://www.stack.nl/~dimitri/doxygen/commands.html" rel="nofollow">здесь</a>. По Doxygen
 есть также несколько очень удобных
-кратких справочных страниц.
+<a href="http://www.digilife.be/quickreferences/QRC/Doxygen Quick
+Reference.pdf" class="urlextern" title="http://www.digilife.be/quickreferences/QRC/Doxygen Quick
+Reference.pdf" rel="nofollow">кратких справочных страниц</a>.
 </p>
 
 <p>
@@ -72,12 +74,12 @@ gattrib.  Файлы Makefile этих утилит в каталоге <em><cod
 </p>
 
 </div>
-
-<h3 id="документированиефайлов">Документирование файлов</h3>
+<!-- EDIT3 SECTION "Комментарии и стили Doxygen" [1020-3363] -->
+<h3 class="sectionedit4" id="документирование_файлов">Документирование файлов</h3>
 <div class="level3">
 
 <p>
-При создании нового файла в нём, очевидно, должен быть обычный текст лицензии GNU. После лицензии нужно включить комментарий о файле с описанием того, для чего этот файл, и с любым другим текстом, относящимся ко всему файлу как целому<sup><a href="#fn__21" id="fnt__21" class="fn_top">21)</a></sup>.
+При создании нового файла в нём, очевидно, должен быть обычный текст лицензии GNU. После лицензии нужно включить комментарий о файле с описанием того, для чего этот файл, и с любым другим текстом, относящимся ко всему файлу как целому<sup><a href="#fn__22" id="fnt__22" class="fn_top">22)</a></sup>.
 </p>
 <pre class="code c">  <span class="coMULTI">/*! \file &lt;filename.ext&gt;
       \brief Здесь краткое изложение того, для чего этот файл...
@@ -86,8 +88,8 @@ gattrib.  Файлы Makefile этих утилит в каталоге <em><cod
    */</span></pre>
 
 </div>
-
-<h3 id="документированиепеременныхопределенийописанийтипов">Документирование переменных/определений/описаний типов</h3>
+<!-- EDIT4 SECTION "Документирование файлов" [3364-4296] -->
+<h3 class="sectionedit5" id="документирование_переменных_определений_описаний_типов">Документирование переменных/определений/описаний типов</h3>
 <div class="level3">
 
 <p>
@@ -99,8 +101,8 @@ gattrib.  Файлы Makefile этих утилит в каталоге <em><cod
   <span class="kw4">typedef</span> <span class="kw2">enum</span> <span class="br0">&#123;</span>FILLING_HOLLOW<span class="sy0">,</span> FILLING_FILL<span class="sy0">,</span> FILLING_MESH<span class="sy0">,</span> FILLING_HATCH<span class="sy0">,</span> FILLING_VOID<span class="br0">&#125;</span> OBJECT_FILLING<span class="sy0">;</span></pre>
 
 </div>
-
-<h3 id="документированиефункций">Документирование функций</h3>
+<!-- EDIT5 SECTION "Документирование переменных/определений/описаний типов" [4297-4887] -->
+<h3 class="sectionedit6" id="документирование_функций">Документирование функций</h3>
 <div class="level3">
 
 <p>
@@ -126,8 +128,8 @@ gattrib.  Файлы Makefile этих утилит в каталоге <em><cod
    */</span></pre>
 
 </div>
-
-<h3 id="документированиеструктур">Документирование структур</h3>
+<!-- EDIT6 SECTION "Документирование функций" [4888-6111] -->
+<h3 class="sectionedit7" id="документирование_структур">Документирование структур</h3>
 <div class="level3">
 
 <p>
@@ -156,8 +158,8 @@ gattrib.  Файлы Makefile этих утилит в каталоге <em><cod
   <span class="br0">&#125;</span><span class="sy0">;</span></pre>
 
 </div>
-
-<h3 id="командыbugtodo">Команды Bug/Todo</h3>
+<!-- EDIT7 SECTION "Документирование структур" [6112-7573] -->
+<h3 class="sectionedit8" id="команды_bug_todo">Команды Bug/Todo</h3>
 <div class="level3">
 
 <p>
@@ -165,27 +167,27 @@ gattrib.  Файлы Makefile этих утилит в каталоге <em><cod
 </p>
 
 </div>
-
-<h2 id="диалоговыеокнадизайниповедение">Диалоговые окна: дизайн и поведение</h2>
+<!-- EDIT8 SECTION "Команды Bug/Todo" [7574-8140] -->
+<h2 class="sectionedit9" id="диалоговые_окнадизайн_и_поведение">Диалоговые окна: дизайн и поведение</h2>
 <div class="level2">
 
 </div>
-
-<h3 id="созданиедиалоговыхокон">Создание диалоговых окон</h3>
+<!-- EDIT9 SECTION "Диалоговые окна: дизайн и поведение" [8141-8221] -->
+<h3 class="sectionedit10" id="создание_диалоговых_окон">Создание диалоговых окон</h3>
 <div class="level3">
 
 <p>
 Есть прекрасный документ от ребят из gnome под названием
- Gnome HIG.  Насчёт дизайна
+<a href="http://library.gnome.org/devel/hig-book/" class="urlextern" title="http://library.gnome.org/devel/hig-book/" rel="nofollow"> Gnome HIG</a>.  Насчёт дизайна
 диалоговых окон и насчёт того, как они должны себя вести, предложений
 несколько.
 </p>
 
 <p>
-<strong>Дизайн диалоговых окон --- это, в общем-то, дело вкуса:</strong>
+<strong>Дизайн диалоговых окон — это, в общем-то, дело вкуса:</strong>
 </p>
 <ul>
-<li class="level1"><div class="li"> выравнивание элементов. См.  Window Layout</div>
+<li class="level1"><div class="li"> выравнивание элементов. См. <a href="http://library.gnome.org/devel/hig-book/nightly/windows.html.en" class="urlextern" title="http://library.gnome.org/devel/hig-book/nightly/windows.html.en" rel="nofollow"> Window Layout</a></div>
 </li>
 <li class="level1"><div class="li"> правое выравнивание кнопок диалога</div>
 </li>
@@ -200,8 +202,8 @@ gattrib.  Файлы Makefile этих утилит в каталоге <em><cod
 </ul>
 
 </div>
-
-<h3 id="модальныеинемодальныедиалоговыеокна">Модальные и немодальные диалоговые окна</h3>
+<!-- EDIT10 SECTION "Создание диалоговых окон" [8222-9301] -->
+<h3 class="sectionedit11" id="модальные_и_немодальные_диалоговые_окна">Модальные и немодальные диалоговые окна</h3>
 <div class="level3">
 
 <p>
@@ -220,18 +222,18 @@ gattrib.  Файлы Makefile этих утилит в каталоге <em><cod
 
 <p>
 Модальное окно не подходит, если пользователь много взаимодействует с этим
-окном. Хороший пример --- выбор компонентов.
+окном. Хороший пример — выбор компонентов.
 </p>
 
 </div>
-
-<h3 id="гдеразмещатьдиалоговоеокно">Где размещать диалоговое окно</h3>
+<!-- EDIT11 SECTION "Модальные и немодальные диалоговые окна" [9302-10370] -->
+<h3 class="sectionedit12" id="где_размещать_диалоговое_окно">Где размещать диалоговое окно</h3>
 <div class="level3">
 
 <p>
 Диалоговое окно можно поместить в различные места экрана.  Список возможных
 мест можно найти в
- GtkReference
+<a href="http://library.gnome.org/devel/gtk/unstable/gtk3-Standard-Enumerations.html#GtkWindowPosition" class="urlextern" title="http://library.gnome.org/devel/gtk/unstable/gtk3-Standard-Enumerations.html#GtkWindowPosition" rel="nofollow"> GtkReference</a>
 </p>
 
 <p>
@@ -241,21 +243,21 @@ gattrib.  Файлы Makefile этих утилит в каталоге <em><cod
 </p>
 
 <p>
-Настройкой по умолчанию для GtkWindow является GTK_WIN_POS_NONE, см.  GtkWindow.  Настройкой по умолчанию для GtkDialog является
+Настройкой по умолчанию для GtkWindow является GTK_WIN_POS_NONE, см. <a href="http://developer.gnome.org/doc/API/2.0/gtk/GtkWindow.html#GtkWindow--window-position" class="urlextern" title="http://developer.gnome.org/doc/API/2.0/gtk/GtkWindow.html#GtkWindow--window-position" rel="nofollow"> GtkWindow</a>.  Настройкой по умолчанию для GtkDialog является
 GTK_WIN_POS_CENTER_ON_PARENT
-( taken from the
-GtkDialog source).
+(<a href="http://git.gnome.org/browse/gtk+/tree/gtk/gtkdialog.c" class="urlextern" title="http://git.gnome.org/browse/gtk+/tree/gtk/gtkdialog.c" rel="nofollow"> taken from the
+GtkDialog source</a>).
 </p>
 
 </div>
-
-<h3 id="помещениедиалоговыхоконпередихродительскимиокнами">Помещение диалоговых окон перед их родительскими окнами</h3>
+<!-- EDIT12 SECTION "Где размещать диалоговое окно" [10371-11426] -->
+<h3 class="sectionedit13" id="помещение_диалоговых_окон_перед_их_родительскими_окнами">Помещение диалоговых окон перед их родительскими окнами</h3>
 <div class="level3">
 
 <p>
 Большинство диалоговых окон размещается перед их родительскими окнами с
 помощью свойства transient_for (см.
- GtkReference). Это свойство должно быть установлено для всех модальных
+<a href="http://developer.gnome.org/doc/API/2.0/gtk/GtkWindow.html#gtk-window-set-transient-for" class="urlextern" title="http://developer.gnome.org/doc/API/2.0/gtk/GtkWindow.html#gtk-window-set-transient-for" rel="nofollow"> GtkReference</a>). Это свойство должно быть установлено для всех модальных
 диалоговых окон.
 </p>
 
@@ -280,8 +282,8 @@ GtkDialog source).
 <span class="br0">&#40;</span>raise-dialog-boxes-on-expose <span class="st0">&quot;disabled&quot;</span><span class="br0">&#41;</span></pre>
 
 </div>
-
-<h3 id="порядоккнопоквдиалоговыхокнах">Порядок кнопок в диалоговых окнах</h3>
+<!-- EDIT13 SECTION "Помещение диалоговых окон перед их родительскими окнами" [11427-13280] -->
+<h3 class="sectionedit14" id="порядок_кнопок_в_диалоговых_окнах">Порядок кнопок в диалоговых окнах</h3>
 <div class="level3">
 
 <p>
@@ -289,7 +291,7 @@ GtkDialog source).
 системы.  GTK обрабатывает это автоматически, но требует, чтобы разработчики
 установили альтернативный порядок кнопок. Более подробно об этом написано в
 документации по GTK
-здесь.
+<a href="http://library.gnome.org/devel/gtk/unstable/GtkDialog.html#gtk-dialog-set-alternative-button-order" class="urlextern" title="http://library.gnome.org/devel/gtk/unstable/GtkDialog.html#gtk-dialog-set-alternative-button-order" rel="nofollow">здесь</a>.
 </p>
 
 <p>
@@ -309,12 +311,12 @@ gtk_dialog_set_alternative_button_order<span class="br0">&#40;</span>GTK_DIALOG<
 </p>
 
 </div>
-
-<h3 id="дизайнтекущихдиалогов">Дизайн текущих диалогов</h3>
+<!-- EDIT14 SECTION "Порядок кнопок в диалоговых окнах" [13281-14570] -->
+<h3 class="sectionedit15" id="дизайн_текущих_диалогов">Дизайн текущих диалогов</h3>
 <div class="level3">
 
 <p>
-<a href="media/devel_tips/dialog_picture.png" class="media" target="_blank" title="devel_tips:dialog_picture.png">devel_tips:dialog_picture.png</a>
+<a href="media/devel_tips/dialog_picture.png" class="media" target="_blank" title="devel_tips:dialog_picture.png"><img src="media/devel_tips/dialog_picture.png" class="media" alt="" /></a>
 </p>
 <ul>
 <li class="level1"><div class="li"> Вокруг всего окна есть некоторое пространство (<em>DIALOG_BORDER_SPACING</em>).</div>
@@ -326,8 +328,8 @@ gtk_dialog_set_alternative_button_order<span class="br0">&#40;</span>GTK_DIALOG<
 </ul>
 
 </div>
-
-<h3 id="шаблонисходногокодадляпростыхдиалоговыхокон">Шаблон исходного кода для простых диалоговых окон</h3>
+<!-- EDIT15 SECTION "Дизайн текущих диалогов" [14571-15122] -->
+<h3 class="sectionedit16" id="шаблон_исходного_кода_для_простых_диалоговых_окон">Шаблон исходного кода для простых диалоговых окон</h3>
 <div class="level3">
 
 <p>
@@ -462,8 +464,8 @@ gtk_dialog_set_alternative_button_order<span class="br0">&#40;</span>GTK_DIALOG<
 <span class="br0">&#125;</span></pre>
 
 </div>
-
-<h3 id="текущиепроблемысдиалоговымиокнамивgschem">Текущие проблемы с диалоговыми окнами в gschem</h3>
+<!-- EDIT16 SECTION "Шаблон исходного кода для простых диалоговых окон" [15123-22207] -->
+<h3 class="sectionedit17" id="текущие_проблемы_с_диалоговыми_окнами_в_gschem">Текущие проблемы с диалоговыми окнами в gschem</h3>
 <div class="level3">
 <ul>
 <li class="level1"><div class="li"> у каждого диалогового окна свой собственный дизайн</div>
@@ -482,7 +484,7 @@ gtk_dialog_set_alternative_button_order<span class="br0">&#40;</span>GTK_DIALOG<
 
 </div>
 
-<h5 id="диалоговоеокнопечати">Диалоговое окно печати</h5>
+<h5 id="диалоговое_окно_печати">Диалоговое окно печати</h5>
 <div class="level5">
 <ul>
 <li class="level1"><div class="li"> Изменить дизайн?</div>
@@ -491,7 +493,7 @@ gtk_dialog_set_alternative_button_order<span class="br0">&#40;</span>GTK_DIALOG<
 
 </div>
 
-<h5 id="сохранениеизображений">Сохранение изображений</h5>
+<h5 id="сохранение_изображений">Сохранение изображений</h5>
 <div class="level5">
 <ul>
 <li class="level1"><div class="li"> В окне выбора файла отсутствует имя файла по умолчанию, если файл не существует</div>
@@ -502,7 +504,7 @@ gtk_dialog_set_alternative_button_order<span class="br0">&#40;</span>GTK_DIALOG<
 
 </div>
 
-<h5 id="выполнитьскрипт">Выполнить скрипт</h5>
+<h5 id="выполнить_скрипт">Выполнить скрипт</h5>
 <div class="level5">
 <ul>
 <li class="level1"><div class="li"></div>
@@ -511,7 +513,7 @@ gtk_dialog_set_alternative_button_order<span class="br0">&#40;</span>GTK_DIALOG<
 
 </div>
 
-<h5 id="правкатекста">Правка текста</h5>
+<h5 id="правка_текста">Правка текста</h5>
 <div class="level5">
 <ul>
 <li class="level1"><div class="li"> отсутствует несколько сочетаний клавиш</div>
@@ -520,13 +522,13 @@ gtk_dialog_set_alternative_button_order<span class="br0">&#40;</span>GTK_DIALOG<
 </li>
 <li class="level1"><div class="li"> может быть добавить несколько цветных pixbuf для выбора цвета</div>
 </li>
-<li class="level1"><div class="li"> может быть заменить выравнивание текста девятью селективными кнопками, переключать кнопки с иконками или ...</div>
+<li class="level1"><div class="li"> может быть заменить выравнивание текста девятью селективными кнопками, переключать кнопки с иконками или …</div>
 </li>
 </ul>
 
 </div>
 
-<h5 id="правкацвета">Правка цвета</h5>
+<h5 id="правка_цвета">Правка цвета</h5>
 <div class="level5">
 <ul>
 <li class="level1"><div class="li"> может быть добавить несколько цветных pixbuf для выбора цвета</div>
@@ -535,7 +537,7 @@ gtk_dialog_set_alternative_button_order<span class="br0">&#40;</span>GTK_DIALOG<
 
 </div>
 
-<h5 id="свойствалинии">Свойства линии</h5>
+<h5 id="свойства_линии">Свойства линии</h5>
 <div class="level5">
 <ul>
 <li class="level1"><div class="li"> отсутствуют «горячие клавиши»</div>
@@ -546,7 +548,7 @@ gtk_dialog_set_alternative_button_order<span class="br0">&#40;</span>GTK_DIALOG<
 
 </div>
 
-<h5 id="типзаполнения">Тип заполнения</h5>
+<h5 id="тип_заполнения">Тип заполнения</h5>
 <div class="level5">
 <ul>
 <li class="level1"><div class="li"> отсутствуют «горячие клавиши»</div>
@@ -557,7 +559,7 @@ gtk_dialog_set_alternative_button_order<span class="br0">&#40;</span>GTK_DIALOG<
 
 </div>
 
-<h5 id="смещениесимвола">Смещение символа</h5>
+<h5 id="смещение_символа">Смещение символа</h5>
 <div class="level5">
 <ul>
 <li class="level1"><div class="li"></div>
@@ -566,7 +568,7 @@ gtk_dialog_set_alternative_button_order<span class="br0">&#40;</span>GTK_DIALOG<
 
 </div>
 
-<h5 id="менеджерстраниц">Менеджер страниц</h5>
+<h5 id="менеджер_страниц">Менеджер страниц</h5>
 <div class="level5">
 <ul>
 <li class="level1"><div class="li"> неправильный порядок кнопок? Зависит от того, считаете ли вы кнопку обновления основной действующей кнопкой или просто дополнительной кнопкой</div>
@@ -577,16 +579,16 @@ gtk_dialog_set_alternative_button_order<span class="br0">&#40;</span>GTK_DIALOG<
 
 </div>
 
-<h5 id="выборкомпонентов">Выбор компонентов</h5>
+<h5 id="выбор_компонентов">Выбор компонентов</h5>
 <div class="level5">
 <ul>
-<li class="level1"><div class="li"> странный виджет редактирования, когда производится набор текста при выделенном дереве (этот виджет --- помощник в поиске, запретить его?!)</div>
+<li class="level1"><div class="li"> странный виджет редактирования, когда производится набор текста при выделенном дереве (этот виджет — помощник в поиске, запретить его?!)</div>
 </li>
 </ul>
 
 </div>
 
-<h5 id="редакторатрибута">Редактор атрибута</h5>
+<h5 id="редактор_атрибута">Редактор атрибута</h5>
 <div class="level5">
 <ul>
 <li class="level1 node"><div class="li"> некоторые проблемы при выделении нескольких элементов и вызове функции редактирования (ee):</div>
@@ -601,7 +603,7 @@ gtk_dialog_set_alternative_button_order<span class="br0">&#40;</span>GTK_DIALOG<
 
 </div>
 
-<h5 id="правкаатрибутов">Правка атрибутов</h5>
+<h5 id="правка_атрибутов">Правка атрибутов</h5>
 <div class="level5">
 <ul>
 <li class="level1"><div class="li"></div>
@@ -610,7 +612,7 @@ gtk_dialog_set_alternative_button_order<span class="br0">&#40;</span>GTK_DIALOG<
 
 </div>
 
-<h5 id="вводтекста">Ввод текста</h5>
+<h5 id="ввод_текста">Ввод текста</h5>
 <div class="level5">
 <ul>
 <li class="level1"><div class="li"></div>
@@ -619,7 +621,7 @@ gtk_dialog_set_alternative_button_order<span class="br0">&#40;</span>GTK_DIALOG<
 
 </div>
 
-<h5 id="параметрыдуги">Параметры дуги</h5>
+<h5 id="параметры_дуги">Параметры дуги</h5>
 <div class="level5">
 <ul>
 <li class="level1"><div class="li"> Добавить в диалоговое окно диаметр, но выбирать поле ввода начального угла (increment = grid)</div>
@@ -632,7 +634,7 @@ gtk_dialog_set_alternative_button_order<span class="br0">&#40;</span>GTK_DIALOG<
 
 </div>
 
-<h5 id="вставкаизображения">Вставка изображения</h5>
+<h5 id="вставка_изображения">Вставка изображения</h5>
 <div class="level5">
 <ul>
 <li class="level1"><div class="li"></div>
@@ -641,7 +643,7 @@ gtk_dialog_set_alternative_button_order<span class="br0">&#40;</span>GTK_DIALOG<
 
 </div>
 
-<h5 id="заменаизображения">Замена изображения</h5>
+<h5 id="замена_изображения">Замена изображения</h5>
 <div class="level5">
 <ul>
 <li class="level1"><div class="li"> новое изображение использует отношение сторон старого</div>
@@ -652,7 +654,7 @@ gtk_dialog_set_alternative_button_order<span class="br0">&#40;</span>GTK_DIALOG<
 
 </div>
 
-<h5 id="найтитекст">Найти текст...</h5>
+<h5 id="найти_текст">Найти текст...</h5>
 <div class="level5">
 <ul>
 <li class="level1"><div class="li"> манипулирует указателем мыши (может быть виновником является код изменения масштаба). Просто нажать «Return» чтобы вызвать FindNext (найти следующий)</div>
@@ -661,7 +663,7 @@ gtk_dialog_set_alternative_button_order<span class="br0">&#40;</span>GTK_DIALOG<
 </li>
 <li class="level1"><div class="li"> может быть добавить опцию: «Выделить все соответствующие выражению текстовые объекты», запретить иерархию для этого случая!</div>
 </li>
-<li class="level1"><div class="li"> FIXME gschem виснет, если это диалоговое окно используется с иерархической схемой, в которой есть циклические зависимости (например, автонумерация тестовой схемы)</div>
+<li class="level1"><div class="li"> <img src="images/smileys/fixme.gif" align="middle" alt="FIXME" /> gschem виснет, если это диалоговое окно используется с иерархической схемой, в которой есть циклические зависимости (например, автонумерация тестовой схемы)</div>
 </li>
 <li class="level1"><div class="li"> добавить опцию «поиск только в видимом тексте»</div>
 </li>
@@ -671,7 +673,7 @@ gtk_dialog_set_alternative_button_order<span class="br0">&#40;</span>GTK_DIALOG<
 
 </div>
 
-<h5 id="скрытьтекст">Скрыть текст...</h5>
+<h5 id="скрыть_текст">Скрыть текст...</h5>
 <div class="level5">
 <ul>
 <li class="level1"><div class="li"> использовать регулярные выражения вместо начала строки</div>
@@ -680,12 +682,12 @@ gtk_dialog_set_alternative_button_order<span class="br0">&#40;</span>GTK_DIALOG<
 
 </div>
 
-<h5 id="показатьтекст">Показать текст...</h5>
+<h5 id="показать_текст">Показать текст...</h5>
 <div class="level5">
 <ul>
 <li class="level1"><div class="li"> использовать регулярные выражения вместо начала строки</div>
 </li>
-<li class="level1"><div class="li"> может быть объединить это окно с окном «Скрыть текст...»</div>
+<li class="level1"><div class="li"> может быть объединить это окно с окном «Скрыть текст…»</div>
 </li>
 </ul>
 
@@ -700,7 +702,7 @@ gtk_dialog_set_alternative_button_order<span class="br0">&#40;</span>GTK_DIALOG<
 
 </div>
 
-<h5 id="размертекста">Размер текста</h5>
+<h5 id="размер_текста">Размер текста</h5>
 <div class="level5">
 <ul>
 <li class="level1"><div class="li"></div>
@@ -709,7 +711,7 @@ gtk_dialog_set_alternative_button_order<span class="br0">&#40;</span>GTK_DIALOG<
 
 </div>
 
-<h5 id="шагсеткипривязки">Шаг сетки привязки...</h5>
+<h5 id="шаг_сетки_привязки">Шаг сетки привязки...</h5>
 <div class="level5">
 <ul>
 <li class="level1"><div class="li"></div>
@@ -718,7 +720,7 @@ gtk_dialog_set_alternative_button_order<span class="br0">&#40;</span>GTK_DIALOG<
 
 </div>
 
-<h5 id="окнокоординат">Окно координат...</h5>
+<h5 id="окно_координат">Окно координат...</h5>
 <div class="level5">
 <ul>
 <li class="level1"><div class="li"> может быть перенести координаты всей рабочей области в панель состояния основного окна?</div>
@@ -727,7 +729,7 @@ gtk_dialog_set_alternative_button_order<span class="br0">&#40;</span>GTK_DIALOG<
 
 </div>
 
-<h5 id="окноопрограмме">Окно О программе</h5>
+<h5 id="окно_о_программе">Окно О программе</h5>
 <div class="level5">
 <ul>
 <li class="level1"><div class="li"></div>
@@ -736,7 +738,7 @@ gtk_dialog_set_alternative_button_order<span class="br0">&#40;</span>GTK_DIALOG<
 
 </div>
 
-<h5 id="горячиеклавиши">Горячие клавиши</h5>
+<h5 id="горячие_клавиши">Горячие клавиши</h5>
 <div class="level5">
 <ul>
 <li class="level1"><div class="li"></div>
@@ -744,9 +746,9 @@ gtk_dialog_set_alternative_button_order<span class="br0">&#40;</span>GTK_DIALOG<
 </ul>
 
 </div>
-<div class="footnotes">
-<div class="fn"><sup><a href="#fnt__21" id="fn__21" class="fn_bot">21)</a></sup> 
-<div class="content">Здесь и далее в коде всё конечно же должно быть по-английски. --- <em>Прим. перев.</em> </div></div>
+<!-- EDIT17 SECTION "Текущие проблемы с диалоговыми окнами в gschem" [22208-] --><div class="footnotes">
+<div class="fn"><sup><a href="#fnt__22" id="fn__22" class="fn_bot">22)</a></sup> 
+<div class="content">Здесь и далее в коде всё конечно же должно быть по-английски. — <em>Прим. перев.</em> </div></div>
 </div>
 </body>
 </html>

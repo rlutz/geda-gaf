@@ -10,47 +10,47 @@
 </head>
 <body>
 
-<h1 id="gettingstartedwithxorn">Getting started with Xorn</h1>
+<h1 class="sectionedit1" id="getting_started_with_xorn">Getting started with Xorn</h1>
 <div class="level1">
 
 <p>
-1. Make sure that, in addition to the usual gEDA build dependencies, a C++ compiler (preferably <code>g++</code>) and Python 2.7 (including the development headers) are installed on your system.
+1. First, make sure that you have the latest version of gEDA/gaf installed (version 1.10.0 or later).  When invoking the Python interpreter directly from a non-standard prefix, you have to add the correct PYTHONPATH (see below): either the subdirectory <code>built-packages</code> in the build tree, or the appropriate <code>site-packages</code> directory in the installation.
 </p>
 
 <p>
-2. Pull the latest gEDA sources, re-run <code>./autogen.sh</code>, and configure and build the package as usual.  If you prefer downloading a tarball, you can pick up the Xorn sources from here.  In either case, you don&#039;t need to install the package (but you can if you prefer to).
+2. <em>(no longer applicable)</em>
 </p>
 
 </div>
-
-<h2 id="xornasacommand-lineutility">Xorn as a command-line utility</h2>
+<!-- EDIT1 SECTION "Getting started with Xorn" [1-432] -->
+<h2 class="sectionedit2" id="xorn_as_a_command-line_utility">Xorn as a command-line utility</h2>
 <div class="level2">
 
 <p>
-3a. Invoke the &quot;<code>xorn</code>&quot; executable with the option &quot;<code>--help</code>&quot; to see a list of subcommands:
+3a. Invoke the “<code>xorn</code>” executable with the option “<code>--help</code>” to see a list of subcommands:
 </p>
 <pre class="code">  xorn/src/command/xorn --help</pre>
 
 <p>
-(or &quot;<code>src/command/xorn --help</code>&quot; if you downloaded the Xorn tarball, or just &quot;<code>xorn --help</code>&quot; if you installed Xorn to your <code>PATH</code>)
+(or “<code>src/command/xorn --help</code>” if you downloaded the Xorn tarball, or just “<code>xorn --help</code>” if you installed Xorn to your <code>PATH</code>)
 </p>
 
 <p>
-3b. Run the subcommand &quot;<code>xorn netlist</code>&quot; with the options &quot;<code>--help</code>&quot; and &quot;<code>--list-backends</code>&quot; to print a list of options and available backends.
+3b. Run the subcommand “<code>xorn netlist</code>” with the options “<code>--help</code>” and “<code>--list-backends</code>” to print a list of options and available backends.
 </p>
 <pre class="code">  xorn/src/command/xorn netlist --help
   xorn/src/command/xorn netlist --list-backends</pre>
 
 <p>
-3c. Process a schematic with &quot;<code>xorn netlist</code>&quot; (using the &quot;<code>PCB</code>&quot; backend as an example):
+3c. Process a schematic with “<code>xorn netlist</code>” (using the “<code>PCB</code>” backend as an example):
 </p>
 <pre class="code">  xorn/src/command/xorn netlist \
     --symbol-library-search=/usr/share/gEDA/sym \
     -g PCB some-schematic.sch</pre>
 
 </div>
-
-<h2 id="interactingwithxorninacprogram">Interacting with Xorn in a C program</h2>
+<!-- EDIT2 SECTION "Xorn as a command-line utility" [433-1221] -->
+<h2 class="sectionedit3" id="interacting_with_xorn_in_a_c_program">Interacting with Xorn in a C program</h2>
 <div class="level2">
 
 <p>
@@ -97,20 +97,20 @@
   1 object(s)</pre>
 
 <p>
-If you are using a separate build directory, replace &quot;<code>-I xorn/include</code>&quot; with the path to the subdirectory &quot;<code>xorn/include</code>&quot; in the source directory.
+If you are using a separate build directory, replace “<code>-I xorn/include</code>” with the path to the subdirectory “<code>xorn/include</code>” in the source directory.
 </p>
 
 <p>
-For more information, see the libxornstorage API documentation (overview).
+For more information, see the <a href="http://hedmen.org/xorn/doc/api/html/xornstorage_8h.html" class="urlextern" title="http://hedmen.org/xorn/doc/api/html/xornstorage_8h.html" rel="nofollow">libxornstorage API documentation</a> (<a href="http://hedmen.org/xorn/doc/api/html/storage.html" class="urlextern" title="http://hedmen.org/xorn/doc/api/html/storage.html" rel="nofollow">overview</a>).
 </p>
 
 </div>
-
-<h2 id="usingxornasalibrary">Using Xorn as a library</h2>
+<!-- EDIT3 SECTION "Interacting with Xorn in a C program" [1222-2685] -->
+<h2 class="sectionedit4" id="using_xorn_as_a_library">Using Xorn as a library</h2>
 <div class="level2">
 
 <p>
-5. Run the Python 2.7 interpreter with the subdirectory &quot;<code>xorn/built-packages</code>&quot; added to the environment variable &quot;<code>PYTHONPATH</code>&quot;.
+5. Run the Python 2.7 interpreter with the subdirectory “<code>xorn/built-packages</code>” added to the environment variable “<code>PYTHONPATH</code>”.
 </p>
 <pre class="code">  $ PYTHONPATH=xorn/built-packages python2.7
   Python 2.7.9 (default, Mar  1 2015, 18:22:53)
@@ -119,7 +119,7 @@ For more information, see the libxornstorage API documentation (overview).
   &gt;&gt;&gt;</pre>
 
 <p>
-Import the module &quot;<code>xorn.storage</code>&quot; and experiment a bit with the API.  Here is how to perform the operations equivalent to the C program above:
+Import the module “<code>xorn.storage</code>” and experiment a bit with the <abbr title="Application Programming Interface">API</abbr>.  Here is how to perform the operations equivalent to the C program above:
 </p>
 <pre class="code">  &gt;&gt;&gt; import xorn.storage
   &gt;&gt;&gt; rev = xorn.storage.Revision()
@@ -131,7 +131,7 @@ Import the module &quot;<code>xorn.storage</code>&quot; and experiment a bit wit
   [&lt;xorn.storage.Object object at ...&gt;]</pre>
 
 <p>
-Import the module &quot;<code>xorn.geda.read</code>&quot; and load a schematic or symbol file:
+Import the module “<code>xorn.geda.read</code>” and load a schematic or symbol file:
 </p>
 <pre class="code">  &gt;&gt;&gt; import xorn.geda.read
   &gt;&gt;&gt; rev = xorn.geda.read.read(
@@ -147,7 +147,7 @@ Import the module &quot;<code>xorn.geda.read</code>&quot; and load a schematic o
   class=DISCRETE</pre>
 
 <p>
-For more information, see the API documentation of xorn.storage and xorn.geda.
+For more information, see the <abbr title="Application Programming Interface">API</abbr> documentation of <a href="http://hedmen.org/xorn/doc/api/html/namespacexorn_1_1storage.html" class="urlextern" title="http://hedmen.org/xorn/doc/api/html/namespacexorn_1_1storage.html" rel="nofollow">xorn.storage</a> and <a href="http://hedmen.org/xorn/doc/api/html/namespacexorn_1_1geda.html" class="urlextern" title="http://hedmen.org/xorn/doc/api/html/namespacexorn_1_1geda.html" rel="nofollow">xorn.geda</a>.
 </p>
 
 <p>
@@ -174,12 +174,12 @@ For more information, see the API documentation of xorn.storage and xorn.geda.
   class=DISCRETE</pre>
 
 </div>
-
-<h2 id="writingcustomnetlistbackends">Writing custom netlist backends</h2>
+<!-- EDIT4 SECTION "Using Xorn as a library" [2686-4757] -->
+<h2 class="sectionedit5" id="writing_custom_netlist_backends">Writing custom netlist backends</h2>
 <div class="level2">
 
 <p>
-7. Invoke &quot;<code>xorn netlist</code>&quot; on your schematic as above, but instead of specifying a netlist backend, use the option &quot;<code>-i</code>&quot;:
+7. Invoke “<code>xorn netlist</code>” on your schematic as above, but instead of specifying a netlist backend, use the option “<code>-i</code>”:
 </p>
 <pre class="code">  $ xorn/src/command/xorn netlist \
       --symbol-library-search=/usr/share/gEDA/sym \
@@ -191,7 +191,7 @@ For more information, see the API documentation of xorn.storage and xorn.geda.
   &gt;&gt;&gt;</pre>
 
 <p>
-This option causes &quot;<code>xorn netlist</code>&quot; to enter interactive mode.  You are now in an interactive Python interpreter session, just like above, but have the additional global variable &quot;<code>netlist</code>&quot; available which contains the netlist&#039;s contents.
+This option causes “<code>xorn netlist</code>” to enter interactive mode.  You are now in an interactive Python interpreter session, just like above, but have the additional global variable “<code>netlist</code>” available which contains the netlist&#039;s contents.
 </p>
 <pre class="code">  &gt;&gt;&gt; netlist
   &lt;xorn.geda.netlist.netlist.Netlist instance at ...&gt;
@@ -228,7 +228,7 @@ This option causes &quot;<code>xorn netlist</code>&quot; to enter interactive mo
   &#039;GND&#039;</pre>
 
 <p>
-8. Write a Python module whose name starts with &quot;<code>gnet_</code>&quot; and which contains a function &quot;<code>run(f, netlist)</code>&quot;.  Use this module as a netlist backend:
+8. Write a Python module whose name starts with “<code>gnet_</code>” and which contains a function “<code>run(f, netlist)</code>”.  Use this module as a netlist backend:
 </p>
 <pre class="code">  $ cat &gt; gnet_count.py
   def run(f, netlist):
@@ -242,5 +242,5 @@ This option causes &quot;<code>xorn netlist</code>&quot; to enter interactive mo
   4 nets found</pre>
 
 </div>
-</body>
+<!-- EDIT5 SECTION "Writing custom netlist backends" [4758-] --></body>
 </html>

@@ -11,18 +11,18 @@
 <body>
 
 <p>
-This page will serve to document the design rule checker. This is presently documented &quot;as-is&quot;.
+This page will serve to document the design rule checker. This is presently documented “as-is”.
 </p>
 
 <p>
-For work tasks, see the LaunchPad blueprint.
+For work tasks, see the <a href="https://blueprints.launchpad.net/pcb/+spec/drc" class="urlextern" title="https://blueprints.launchpad.net/pcb/+spec/drc" rel="nofollow">LaunchPad blueprint</a>.
 </p>
 
 <p>
 The DRC code makes extensive use of the <a href="pcb-connection_lookup.html" class="wikilink1" title="pcb-connection_lookup.html"> &quot;connection lookup&quot;</a> code.
 </p>
 
-<h2 id="drcviolations">DRC Violations</h2>
+<h2 class="sectionedit1" id="drc_violations">DRC Violations</h2>
 <div class="level2">
 <ul>
 <li class="level1"><div class="li"> Line/arc/silk width is too thin</div>
@@ -52,8 +52,8 @@ The DRC code makes extensive use of the <a href="pcb-connection_lookup.html" cla
 </ul>
 
 </div>
-
-<h2 id="process">Process</h2>
+<!-- EDIT1 SECTION "DRC Violations" [290-683] -->
+<h2 class="sectionedit2" id="process">Process</h2>
 <div class="level2">
 
 <p>
@@ -66,35 +66,35 @@ Executing the DRC() action will wipe out the selected, found, and DRC flags on m
 <ol>
 <li class="level1"><div class="li"> Execute the DRC() action.</div>
 </li>
-<li class="level1"><div class="li"> Generate the &quot;DRC doesn&#039;t catch everything&quot; warning.</div>
+<li class="level1"><div class="li"> Generate the “DRC doesn&#039;t catch everything” warning.</div>
 </li>
 <li class="level1"><div class="li"> Save layer state and turn on all layers.</div>
 </li>
-<li class="level1"><div class="li"> Clear the FOUNDFLAG, DRCFLAG, and SELECTEDFLAG on all objects. DRC uses these flags to find errors. After clearing all the flags, the undo serial number is incremented. When we&#039;re done, we&#039;ll clear all the flags again, and execute an &quot;undo&quot; to restore the state.</div>
+<li class="level1"><div class="li"> Clear the FOUNDFLAG, DRCFLAG, and SELECTEDFLAG on all objects. DRC uses these flags to find errors. After clearing all the flags, the undo serial number is incremented. When we&#039;re done, we&#039;ll clear all the flags again, and execute an “undo” to restore the state.</div>
 </li>
-<li class="level1"><div class="li"> InitConnectionLookup -- This resets all of the lists that are used for building the connectivity map.</div>
+<li class="level1"><div class="li"> InitConnectionLookup – This resets all of the lists that are used for building the connectivity map.</div>
 </li>
-<li class="level1 node"><div class="li"> Use DRCFind to check for &quot;insufficient overlap&quot; and &quot;insufficient clearance&quot; in copper objects.</div>
+<li class="level1 node"><div class="li"> Use DRCFind to check for “insufficient overlap” and “insufficient clearance” in copper objects.</div>
 <ol>
 <li class="level2"><div class="li"> For every element pin, pad, and via, execute DRCFind. DRCFind builds a connection list starting from the given pin/pad/via four times using the <a href="pcb-connection_lookup.html" class="wikilink1" title="pcb-connection_lookup.html"> &quot;connection lookup&quot;</a> code.</div>
 </li>
 <li class="level2 node"><div class="li"> Check for insufficient overlap:</div>
 <ol>
-<li class="level3"><div class="li"> Apply a global bloat of value &quot;Shrink&quot;, and build a connection list, with global drc set to false. This will set the DRCFLAG and SELECTEDFLAG on every object that is touching the given pin/pad/via.</div>
+<li class="level3"><div class="li"> Apply a global bloat of value “Shrink”, and build a connection list, with global drc set to false. This will set the DRCFLAG and SELECTEDFLAG on every object that is touching the given pin/pad/via.</div>
 </li>
-<li class="level3"><div class="li"> Apply a global bloat of value 0, and build a connection list with global &quot;drc&quot; set to true.</div>
+<li class="level3"><div class="li"> Apply a global bloat of value 0, and build a connection list with global “drc” set to true.</div>
 </li>
-<li class="level3"><div class="li"> With &quot;drc&quot; set to true, the add_object_to_list function will exit with a return status when it finds something that doesn&#039;t have the SELECTEDFLAG set. &quot;Thing&quot; is set to the new object.</div>
+<li class="level3"><div class="li"> With “drc” set to true, the add_object_to_list function will exit with a return status when it finds something that doesn&#039;t have the SELECTEDFLAG set. “Thing” is set to the new object.</div>
 </li>
 <li class="level3"><div class="li"> This status propagates back up, and the connection lookup is terminated early.</div>
 </li>
-<li class="level3"><div class="li"> A drc_violation is created that includes the &quot;Thing&quot; object.</div>
+<li class="level3"><div class="li"> A drc_violation is created that includes the “Thing” object.</div>
 </li>
 </ol>
 </li>
 <li class="level2 node"><div class="li"> Check for insufficient clearance:</div>
 <ol>
-<li class="level3"><div class="li"> Do the same routine as above, except starting with a global bloat of 0, and using a bloat of &quot;Bloat&quot; for the second run through.</div>
+<li class="level3"><div class="li"> Do the same routine as above, except starting with a global bloat of 0, and using a bloat of “Bloat” for the second run through.</div>
 </li>
 </ol>
 </li>
@@ -135,13 +135,13 @@ Executing the DRC() action will wipe out the selected, found, and DRC flags on m
 </ol>
 
 </div>
-
-<h2 id="todolist">To Do List</h2>
+<!-- EDIT2 SECTION "Process" [684-3245] -->
+<h2 class="sectionedit3" id="to_do_list">To Do List</h2>
 <div class="level2">
 
 </div>
-
-<h3 id="newdrcviolations">New DRC Violations</h3>
+<!-- EDIT3 SECTION "To Do List" [3246-3266] -->
+<h3 class="sectionedit4" id="new_drc_violations">New DRC Violations</h3>
 <div class="level3">
 
 <p>
@@ -165,8 +165,8 @@ Some useful DRC violations to add:
 </ul>
 
 </div>
-
-<h3 id="drctests">DRC tests</h3>
+<!-- EDIT4 SECTION "New DRC Violations" [3267-3607] -->
+<h3 class="sectionedit5" id="drc_tests">DRC tests</h3>
 <div class="level3">
 
 <p>
@@ -181,13 +181,13 @@ This is to describe ways of testing the DRC code, not things the DRC should chec
 </li>
 <li class="level1"><div class="li"> Generate LaTeX output for the DRC report (wishlist!)</div>
 </li>
-<li class="level1"><div class="li"> Figure out what else uses the &quot;ConnectionLookup&quot; code and write tests so that we don&#039;t break anything else as we&#039;re reworking the DRC</div>
+<li class="level1"><div class="li"> Figure out what else uses the “ConnectionLookup” code and write tests so that we don&#039;t break anything else as we&#039;re reworking the DRC</div>
 </li>
 </ul>
 
 </div>
 
-<h4 id="additionaltestcases">Additional test cases</h4>
+<h4 id="additional_test_cases">Additional test cases</h4>
 <div class="level4">
 
 <p>
@@ -205,38 +205,38 @@ The end point condition is frequently tested for, and a separate test is called 
 </ul>
 
 </div>
-
-<h3 id="drcbackendwork">DRC backend work</h3>
+<!-- EDIT5 SECTION "DRC tests" [3608-4751] -->
+<h3 class="sectionedit6" id="drc_backend_work">DRC backend work</h3>
 <div class="level3">
 <ul>
-<li class="level1 node"><div class="li"> Separate the DRC code from the &quot;ConnectionLookup&quot; code.<br/>
+<li class="level1 node"><div class="li"> Separate the DRC code from the “ConnectionLookup” code.<br/>
 This is mostly complete, however, there are a few reasons why this is not going to completely happen for a while. </div>
 <ul>
-<li class="level2"><div class="li"> The global &quot;drc&quot; variable is going to be difficult to get rid of, since we do want the code to do certain things during a DRC check that we otherwise might not. </div>
+<li class="level2"><div class="li"> The global “drc” variable is going to be difficult to get rid of, since we do want the code to do certain things during a DRC check that we otherwise might not. </div>
 </li>
 <li class="level2"><div class="li"> The global bloat parameter is also going to be tough to get rid of completely. I think what should happen, is that the DRC should generate a list of connected objects, then bloat/shrink all of them as appropriate, and then run the lookup code again. The lookup code shouldn&#039;t need to know anything about bloating things. However, because of the way the lists are generated (separate lists for every type for every layer!) it will be some work to actually do this.</div>
 </li>
 </ul>
 </li>
-<li class="level1"><div class="li"> Get rid of the &quot;drc&quot;, &quot;User&quot;, and &quot;AndDraw&quot; parameters. (Still trying to figure out what the implications of this would be)</div>
+<li class="level1"><div class="li"> Get rid of the “drc”, “User”, and “AndDraw” parameters. (Still trying to figure out what the implications of this would be)</div>
 </li>
 <li class="level1"><div class="li"> Factor all of the different DRC tests into separate functions so that they can be executed individually.</div>
 </li>
 <li class="level1"><div class="li"> Parameterize the DRC functions, and use those parameters to generate the pane in the preferences widnow.</div>
 </li>
-<li class="level1"><div class="li"> Have DRC functions operate on &quot;DataType&quot; objects so that you can selectively apply the DRC to, say, the objects in the buffer</div>
+<li class="level1"><div class="li"> Have DRC functions operate on “DataType” objects so that you can selectively apply the DRC to, say, the objects in the buffer</div>
 </li>
 <li class="level1"><div class="li"> Work through more of Peter C&#039;s work to see how much of it we should incorporate (home/cparker/peterc_drc, he has quite a bit of good stuff here, but I&#039;d like to include it intelligently instead of just picking the commits.)</div>
 </li>
 <li class="level1"><div class="li"> Write functions to compute the distance between objects.</div>
 </li>
-<li class="level1"><div class="li"> Put the testing into a background thread so that the GUI is still responsive while the test is executing</div>
+<li class="level1"><div class="li"> Put the testing into a background thread so that the <abbr title="Graphical User Interface">GUI</abbr> is still responsive while the test is executing</div>
 </li>
 </ul>
 
 </div>
-
-<h3 id="onlinedrc">Online DRC</h3>
+<!-- EDIT6 SECTION "DRC backend work" [4752-6466] -->
+<h3 class="sectionedit7" id="online_drc">Online DRC</h3>
 <div class="level3">
 
 <p>
@@ -248,8 +248,8 @@ Right now this functionality exists only for lines and is present in the line.c 
 </p>
 
 </div>
-
-<h3 id="multi-clearance">Multi-clearance</h3>
+<!-- EDIT7 SECTION "Online DRC" [6467-6743] -->
+<h3 class="sectionedit8" id="multi-clearance">Multi-clearance</h3>
 <div class="level3">
 
 <p>
@@ -257,8 +257,8 @@ One of the primary hurdles with implementing multi-clearance DRC, or, different 
 </p>
 
 </div>
-
-<h3 id="drcinterface">DRC interface</h3>
+<!-- EDIT8 SECTION "Multi-clearance" [6744-7225] -->
+<h3 class="sectionedit9" id="drc_interface">DRC interface</h3>
 <div class="level3">
 <ul>
 <li class="level1"><div class="li"> Create a DRC panel in the preferences window that allows for adjusting settings (possibly with image descriptions of the violations) and running specific tests individually. This will require that parameterization in the back-end work to be finished first.</div>
@@ -266,21 +266,19 @@ One of the primary hurdles with implementing multi-clearance DRC, or, different 
 </ul>
 
 </div>
-
-<h3 id="drcbugs">DRC bugs</h3>
+<!-- EDIT9 SECTION "DRC interface" [7226-7509] -->
+<h3 class="sectionedit10" id="drc_bugs">DRC bugs</h3>
 <div class="level3">
 <ul>
-<li class="level1"><div class="li"> Highlight both offending objects instead of just one (done: 4.2.0)</div>
-</li>
-<li class="level1"><div class="li"> Find more than one &quot;insufficient overlap&quot; or &quot;insufficient gap&quot; per pin/pad/via <br/>
+<li class="level1"><div class="li"> Find more than one “insufficient overlap” or “insufficient gap” per pin/pad/via <br/>
 The insufficient overlap case cannot propagate, due to the nature of how it works, however, the insufficient gap one can, and it does now as of the 4.2.0 release.</div>
 </li>
-<li class="level1"><div class="li"> Check for duplicate DRC errors before appending a new one (can happen if more than one pin is connected to an object) (done: 4.2.0)</div>
-</li>
 <li class="level1"><div class="li"> On MacOS the images in the DRC window of the GTK HID are garbled</div>
+</li>
+<li class="level1"><div class="li"> The pixmap renderer (gtk) should consider the size of the violation when deciding what area to render for the preview image.</div>
 </li>
 </ul>
 
 </div>
-</body>
+<!-- EDIT10 SECTION "DRC bugs" [7510-] --></body>
 </html>

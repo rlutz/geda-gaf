@@ -14,7 +14,7 @@
 <em>Translations of this page are also available in the following languages:</em> <a href="geda-fedora_rpm_installation.ru.html" class="wikilink1" title="geda-fedora_rpm_installation.ru.html">Русский</a>.
 </p>
 
-<h1 id="installinggedarpmpackagesonfedora">Installing gEDA rpm packages on Fedora</h1>
+<h1 class="sectionedit1" id="installing_geda_rpm_packages_on_fedora">Installing gEDA rpm packages on Fedora</h1>
 <div class="level1">
 
 <p>
@@ -22,12 +22,12 @@ gEDA/gaf applications are available in the default Fedora repositories.  The Fed
 </p>
 
 </div>
-
-<h3 id="installingfromfedorarepositories">Installing from Fedora repositories</h3>
+<!-- EDIT1 SECTION "Installing gEDA rpm packages on Fedora" [126-308] -->
+<h3 class="sectionedit2" id="installing_from_fedora_repositories">Installing from Fedora repositories</h3>
 <div class="level3">
 
 <p>
-It is recommended to install gEDA/gaf releases on Fedora using <code>yum</code> or <code>pirut</code>. Pirut (listed in the menu as &quot;Add/Remove Software&quot;) is a graphical interface for <code>yum</code>.
+It is recommended to install gEDA/gaf releases on Fedora using <code>yum</code> or <code>pirut</code>. Pirut (listed in the menu as “Add/Remove Software”) is a graphical interface for <code>yum</code>.
 </p>
 <pre class="code">yum install geda\* pcb gerbv</pre>
 
@@ -36,22 +36,22 @@ Note: you have to be root (<code>su -</code>) to install packages.
 </p>
 
 <p>
-Each gEDA/gaf release takes one to two days to be packaged up and synchronised with the Fedora mirrors.  If a release seems to be missing, you could file a bug report (Request for Enhancement, RFE) on Fedora&#039;s bugzilla asking them to update gEDA/gaf for you.
+Each gEDA/gaf release takes one to two days to be packaged up and synchronised with the Fedora mirrors.  If a release seems to be missing, you could file a bug report (Request for Enhancement, RFE) on <a href="http://bugzilla.redhat.com" class="urlextern" title="http://bugzilla.redhat.com" rel="nofollow">Fedora&#039;s bugzilla</a> asking them to update gEDA/gaf for you.
 </p>
 
 <p>
 You can follow:
 </p>
 <ul>
-<li class="level1"><div class="li"> the releases on Chitlesh Goorah&#039;s blog, or</div>
+<li class="level1"><div class="li"> the releases on <a href="http://clunixchit.blogspot.com" class="urlextern" title="http://clunixchit.blogspot.com" rel="nofollow">Chitlesh Goorah&#039;s blog</a>, or</div>
 </li>
-<li class="level1"><div class="li"> the gEDA/gaf build times on Fedora&#039;s build system</div>
+<li class="level1"><div class="li"> the gEDA/gaf build times on <a href="http://koji.fedoraproject.org/koji/builds?userID=159" class="urlextern" title="http://koji.fedoraproject.org/koji/builds?userID=159" rel="nofollow">Fedora&#039;s build system</a></div>
 </li>
 </ul>
 
 </div>
-
-<h3 id="compileityourself">Compile it yourself</h3>
+<!-- EDIT2 SECTION "Installing from Fedora repositories" [309-1123] -->
+<h3 class="sectionedit3" id="compile_it_yourself">Compile it yourself</h3>
 <div class="level3">
 
 <p>
@@ -60,12 +60,12 @@ If you want to get their hands dirty by building gEDA/gaf on Fedora, you will ne
 <pre class="code">yum install libstroke-devel groff autoconf gtk2-devel gd-devel gettext-devel guile-devel</pre>
 
 </div>
-
-<h3 id="rebuildyourownrpms">Rebuild your own RPMs</h3>
+<!-- EDIT3 SECTION "Compile it yourself" [1124-1435] -->
+<h3 class="sectionedit4" id="rebuild_your_own_rpms">Rebuild your own RPMs</h3>
 <div class="level3">
 
 <p>
-The Fedora Project provides simple tools for anyone to rebuild RPMs from SRPMs. An SRPM contains the upstream sources, the spec file and the patches required (if any).
+The Fedora Project provides simple tools for anyone to rebuild RPMs from SRPMs. An SRPM contains the upstream sources, the <abbr title="specification">spec</abbr> file and the patches required (if any).
 </p>
 
 <p>
@@ -75,7 +75,7 @@ To be able to build RPMs, you will need a build platform, which does <strong>NOT
 
 </div>
 
-<h4 id="buildplatform">Build Platform</h4>
+<h4 id="build_platform">Build Platform</h4>
 <div class="level4">
 
 <p>
@@ -89,7 +89,7 @@ You will see a <code>rpmbuild</code> folder in your <code>$HOME</code> directory
 
 </div>
 
-<h4 id="howtogetsrpms">How to get SRPMs</h4>
+<h4 id="how_to_get_srpms">How to get SRPMs</h4>
 <div class="level4">
 
 <p>
@@ -111,7 +111,7 @@ Once the download is complete the package can be found under the current directo
 </p>
 
 <p>
-The spec file, upstream sources and distribution patches can be extracted from the SRPM using:
+The <abbr title="specification">spec</abbr> file, upstream sources and distribution patches can be extracted from the SRPM using:
 </p>
 <pre class="code">rpm -ivh geda-gaf-%{version}-%{dist}.src.rpm</pre>
 
@@ -123,7 +123,7 @@ The spec file, upstream sources and distribution patches can be extracted from t
 You will see
 </p>
 <ul>
-<li class="level1"><div class="li"> spec files will be installed in rpmbuild/SPECS</div>
+<li class="level1"><div class="li"> <abbr title="specification">spec</abbr> files will be installed in rpmbuild/SPECS</div>
 </li>
 <li class="level1"><div class="li"> sources, patches and desktop files will be installed in rpmbuild/SOURCES</div>
 </li>
@@ -131,7 +131,7 @@ You will see
 
 </div>
 
-<h4 id="buildingnewrpmsfromnewsources">Building new RPMS from new sources</h4>
+<h4 id="building_new_rpms_from_new_sources">Building new RPMS from new sources</h4>
 <div class="level4">
 
 <p>
@@ -140,7 +140,7 @@ First:
 <ol>
 <li class="level1"><div class="li"> Download your new sources, as described in the previous section.</div>
 </li>
-<li class="level1 node"><div class="li"> Edit the rpmbuild/SPECS/%{name}.spec</div>
+<li class="level1 node"><div class="li"> Edit the rpmbuild/SPECS/%{name}.<abbr title="specification">spec</abbr></div>
 <ol>
 <li class="level2"><div class="li"> Edit version tag</div>
 </li>
@@ -163,5 +163,5 @@ The successfully built RPMS will be found in <code>$HOME/rpmbuild/RPMS/</code>, 
 </p>
 
 </div>
-</body>
+<!-- EDIT4 SECTION "Rebuild your own RPMs" [1436-] --></body>
 </html>

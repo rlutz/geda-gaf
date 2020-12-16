@@ -15,7 +15,7 @@
 <a href="geda-fedora_rpm_installation.html" class="wikilink1" title="geda-fedora_rpm_installation.html">English</a>
 </p>
 
-<h1 id="установкаrpm-пакетовgedaвfedora">Установка rpm-пакетов gEDA в Fedora</h1>
+<h1 class="sectionedit1" id="установка_rpm-пакетов_geda_в_fedora">Установка rpm-пакетов gEDA в Fedora</h1>
 <div class="level1">
 
 <p>
@@ -24,14 +24,14 @@ Fedora.  Пакеты для Fedora поддерживает <em>Chitlesh Goorah
 </p>
 
 </div>
-
-<h3 id="установкаизрепозиториевдистрибутиваfedora">Установка из репозиториев дистрибутива Fedora</h3>
+<!-- EDIT1 SECTION "Установка rpm-пакетов gEDA в Fedora" [132-405] -->
+<h3 class="sectionedit2" id="установка_из_репозиториев_дистрибутива_fedora">Установка из репозиториев дистрибутива Fedora</h3>
 <div class="level3">
 
 <p>
 Выпуски gEDA/gaf в Fedora рекомендуется устанавливать с помощью <strong>yum</strong> или
 <strong>pirut</strong>. <strong>pirut</strong> (обозначенный в меню как <strong><em>Добавить/Удалить
-программы</em></strong>) --- это графический интерфейс для <strong>yum</strong>.
+программы</em></strong>) — это графический интерфейс для <strong>yum</strong>.
 </p>
 <pre class="code">yum install geda\* pcb gerbv</pre>
 
@@ -43,8 +43,8 @@ Fedora.  Пакеты для Fedora поддерживает <em>Chitlesh Goorah
 Пакетирование и синхронизация с зеркалами Fedora для каждого выпуска
 gEDA/gaf занимает от одного до двух дней. Если кажется, что выпуск
 отсутствует, можно заполнить отчёт об ошибке (запрос на улучшение,
-RFE<sup><a href="#fn__27" id="fnt__27" class="fn_top">27)</a></sup>) на странице
-Fedora&#039;s bugzilla с просьбой обновить для вас
+RFE<sup><a href="#fn__28" id="fnt__28" class="fn_top">28)</a></sup>) на странице
+<a href="http://bugzilla.redhat.com" class="urlextern" title="http://bugzilla.redhat.com" rel="nofollow">Fedora&#039;s bugzilla</a> с просьбой обновить для вас
 gEDA/gaf.
 </p>
 
@@ -52,15 +52,15 @@ gEDA/gaf.
 Вы можете отслеживать:
 </p>
 <ul>
-<li class="level1"><div class="li"> выпуски в блоге Chitlesh Goorah или</div>
+<li class="level1"><div class="li"> выпуски в <a href="http://clunixchit.blogspot.com" class="urlextern" title="http://clunixchit.blogspot.com" rel="nofollow">блоге Chitlesh Goorah</a> или</div>
 </li>
-<li class="level1"><div class="li"> времена сборки gEDA/gaf в системе сборки Fedora</div>
+<li class="level1"><div class="li"> времена сборки gEDA/gaf в <a href="http://koji.fedoraproject.org/koji/builds?userID=159" class="urlextern" title="http://koji.fedoraproject.org/koji/builds?userID=159" rel="nofollow">системе сборки Fedora</a></div>
 </li>
 </ul>
 
 </div>
-
-<h3 id="самостоятельноекомпилирование">Самостоятельное компилирование</h3>
+<!-- EDIT2 SECTION "Установка из репозиториев дистрибутива Fedora" [406-1761] -->
+<h3 class="sectionedit3" id="самостоятельное_компилирование">Самостоятельное компилирование</h3>
 <div class="level3">
 
 <p>
@@ -71,14 +71,14 @@ gEDA/gaf. Их можно установить с помощью <strong>yum</st
 <pre class="code">yum install libstroke-devel groff autoconf gtk2-devel gd-devel gettext-devel guile-devel</pre>
 
 </div>
-
-<h3 id="пересборкасвоихсобственныхrpm-пакетов">Пересборка своих собственных RPM-пакетов</h3>
+<!-- EDIT3 SECTION "Самостоятельное компилирование" [1762-2243] -->
+<h3 class="sectionedit4" id="пересборка_своих_собственных_rpm-пакетов">Пересборка своих собственных RPM-пакетов</h3>
 <div class="level3">
 
 <p>
 Проект Fedora предоставляет простые средства для пересборки любых
 RPM-пакетов из SRPM-пакетов. SRPM содержит версии исходных текстов программ
-от разработчиков, spec-файл и необходимые заплаты (если они вообще есть).
+от разработчиков, <abbr title="specification">spec</abbr>-файл и необходимые заплаты (если они вообще есть).
 </p>
 
 <p>
@@ -90,7 +90,7 @@ RPM-пакетов из SRPM-пакетов. SRPM содержит версии 
 
 </div>
 
-<h4 id="сборочнаяплатформа">Сборочная платформа</h4>
+<h4 id="сборочная_платформа">Сборочная платформа</h4>
 <div class="level4">
 
 <p>
@@ -105,7 +105,7 @@ RPM-пакетов из SRPM-пакетов. SRPM содержит версии 
 
 </div>
 
-<h4 id="какполучитьsrpm-пакеты">Как получить SRPM-пакеты</h4>
+<h4 id="как_получить_srpm-пакеты">Как получить SRPM-пакеты</h4>
 <div class="level4">
 
 <p>
@@ -126,14 +126,14 @@ Fedora предоставляет SRPM для каждого пакета дис
 
 <p>
 Как только загрузка закончена, в текущем каталоге можно будет найти пакет
-<em><code>geda-gaf-%{version}-%{dist}.src.rpm</code></em>, где <code>%{version}</code> --- текущая
-версия пакета gEDA/gaf в Fedora, а <code>%{dist}</code> --- текущая версия Fedora.
+<em><code>geda-gaf-%{version}-%{dist}.src.rpm</code></em>, где <code>%{version}</code> — текущая
+версия пакета gEDA/gaf в Fedora, а <code>%{dist}</code> — текущая версия Fedora.
 Например, SRPM gEDA/gaf для Fedora 14 называется
 <em><code>geda-gaf-1.6.1-1.fc14.src.rpm</code></em>.
 </p>
 
 <p>
-spec-файл, исходные тексты программ разработчиков и патчи для дистрибутива
+<abbr title="specification">spec</abbr>-файл, исходные тексты программ разработчиков и патчи для дистрибутива
 можно извлечь из SRPM с помощью:
 </p>
 <pre class="code">rpm -ivh geda-gaf-%{version}-%{dist}.src.rpm</pre>
@@ -146,7 +146,7 @@ spec-файл, исходные тексты программ разработч
 Вы увидите, что
 </p>
 <ul>
-<li class="level1"><div class="li"> spec-файлы будут установлены в <em><code>rpmbuild/SPECS</code></em></div>
+<li class="level1"><div class="li"> <abbr title="specification">spec</abbr>-файлы будут установлены в <em><code>rpmbuild/SPECS</code></em></div>
 </li>
 <li class="level1"><div class="li"> исходные тексты, патчи и файлы рабочего стола будут установлены в <em><code>rpmbuild/SOURCES</code></em></div>
 </li>
@@ -154,7 +154,7 @@ spec-файл, исходные тексты программ разработч
 
 </div>
 
-<h4 id="сборкановыхrpm-пакетовизновыхисходныхтекстовпрограмм">Сборка новых RPM-пакетов из новых исходных текстов программ</h4>
+<h4 id="сборка_новых_rpm-пакетов_из_новых_исходных_текстов_программ">Сборка новых RPM-пакетов из новых исходных текстов программ</h4>
 <div class="level4">
 
 <p>
@@ -163,7 +163,7 @@ spec-файл, исходные тексты программ разработч
 <ol>
 <li class="level1"><div class="li"> Загрузите новые исходные тексты, как описано в предыдущем разделе.</div>
 </li>
-<li class="level1 node"><div class="li"> Отредактируйте <em><code>rpmbuild/SPECS/%{name}.spec</code></em></div>
+<li class="level1 node"><div class="li"> Отредактируйте <em><code>rpmbuild/SPECS/%{name}.<abbr title="specification">spec</abbr></code></em></div>
 <ol>
 <li class="level2"><div class="li"> Измените тег <code>version</code></div>
 </li>
@@ -183,12 +183,12 @@ rpmbuild -ba %{name}.spec</pre>
 
 <p>
 Успешно собранные RPM-пакеты можно найти в <em><code>$HOME/rpmbuild/RPMS/</code></em>, а
-соответствующие SRPM --- в <em><code>$HOME/rpmbuild/SRPMS</code></em>.
+соответствующие SRPM — в <em><code>$HOME/rpmbuild/SRPMS</code></em>.
 </p>
 
 </div>
-<div class="footnotes">
-<div class="fn"><sup><a href="#fnt__27" id="fn__27" class="fn_bot">27)</a></sup> 
+<!-- EDIT4 SECTION "Пересборка своих собственных RPM-пакетов" [2244-] --><div class="footnotes">
+<div class="fn"><sup><a href="#fnt__28" id="fn__28" class="fn_bot">28)</a></sup> 
 <div class="content">Request for Enhancement</div></div>
 </div>
 </body>

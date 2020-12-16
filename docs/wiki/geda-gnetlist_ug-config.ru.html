@@ -12,11 +12,11 @@
 <a href=.>start</a>&nbsp;=>&nbsp;<a href=geda-gnetlist_ug.html>gnetlist_ug</a></br>
 <div class="table sectionedit1"><table class="inline">
 	<tr class="row0">
-		<td class="col0 leftalign"> &lt;&lt; <a href="geda-gnetlist_ug-implicit_pins.ru.html" class="wikilink1" title="geda-gnetlist_ug-implicit_pins.ru.html">Неявные выводы</a>  </td><td class="col1 centeralign">  <strong><a href="geda-gnetlist_ug.ru.html" class="wikilink1" title="geda-gnetlist_ug.ru.html">Руководство пользователя gEDA gnetlist</a></strong>  </td><td class="col2 rightalign">  <a href="geda-gnetlist_ug-command_line.ru.html" class="wikilink1" title="geda-gnetlist_ug-command_line.ru.html">Аргументы командной строки</a> &gt;&gt; </td>
+		<td class="col0 leftalign"> « <a href="geda-gnetlist_ug-implicit_pins.ru.html" class="wikilink1" title="geda-gnetlist_ug-implicit_pins.ru.html">Неявные выводы</a>  </td><td class="col1 centeralign">  <strong><a href="geda-gnetlist_ug.ru.html" class="wikilink1" title="geda-gnetlist_ug.ru.html">Руководство пользователя gEDA gnetlist</a></strong>  </td><td class="col2 rightalign">  <a href="geda-gnetlist_ug-command_line.ru.html" class="wikilink1" title="geda-gnetlist_ug-command_line.ru.html">Аргументы командной строки</a> » </td>
 	</tr>
 </table></div>
 <!-- EDIT1 TABLE [1-228] -->
-<h2 id="настройкаgnetlist">Настройка gnetlist</h2>
+<h2 class="sectionedit2" id="настройка_gnetlist">Настройка gnetlist</h2>
 <div class="level2">
 
 <p>
@@ -24,23 +24,23 @@
 имеются:
 </p>
 <ol>
-<li class="level1"><div class="li"> <code>$PREFIX/share/gEDA/system-gafrc</code> --- файл системных настроек комплекта программ gEDA/gaf;</div>
+<li class="level1"><div class="li"> <code>$PREFIX/share/gEDA/system-gafrc</code> — файл системных настроек комплекта программ gEDA/gaf;</div>
 </li>
-<li class="level1"><div class="li"> <code>$HOME/.gEDA/gafrc</code> --- файл пользовательских настроек комплекта программ gEDA/gaf;</div>
+<li class="level1"><div class="li"> <code>$HOME/.gEDA/gafrc</code> — файл пользовательских настроек комплекта программ gEDA/gaf;</div>
 </li>
-<li class="level1"><div class="li"> <code>gafrc</code> --- файл настроек комплекта программ gEDA/gaf для текущего рабочего каталога;</div>
+<li class="level1"><div class="li"> <code>gafrc</code> — файл настроек комплекта программ gEDA/gaf для текущего рабочего каталога;</div>
 </li>
-<li class="level1"><div class="li"> <code>$PREFIX/share/gEDA/system-gnetlistrc</code> --- файл системных настроек gnetlist;</div>
+<li class="level1"><div class="li"> <code>$PREFIX/share/gEDA/system-gnetlistrc</code> — файл системных настроек gnetlist;</div>
 </li>
-<li class="level1"><div class="li"> <code>$HOME/.gEDA/gnetlistrc</code> --- файл пользовательских настроек gnetlist;</div>
+<li class="level1"><div class="li"> <code>$HOME/.gEDA/gnetlistrc</code> — файл пользовательских настроек gnetlist;</div>
 </li>
-<li class="level1"><div class="li"> <code>gnetlistrc</code> --- файл настроек gnetlist для текущего рабочего каталога.</div>
+<li class="level1"><div class="li"> <code>gnetlistrc</code> — файл настроек gnetlist для текущего рабочего каталога.</div>
 </li>
 </ol>
 
 <p>
-<code>$PREFIX</code> --- это основной каталог установки gnetlist (на большинстве
-систем --- <code>/usr</code>), а <code>$HOME</code> --- ваш домашний каталог.
+<code>$PREFIX</code> — это основной каталог установки gnetlist (на большинстве
+систем — <code>/usr</code>), а <code>$HOME</code> — ваш домашний каталог.
 </p>
 
 <p>
@@ -55,13 +55,13 @@
 входит в комплект установки gEDA/gaf.  
 </div>
 </div>
-
-<h3 id="библиотекисимволовиисходныхданных">Библиотеки символов и исходных данных</h3>
+<!-- EDIT2 SECTION "Настройка gnetlist" [230-2184] -->
+<h3 class="sectionedit3" id="библиотеки_символов_и_исходных_данных">Библиотеки символов и исходных данных</h3>
 <div class="level3">
 
 <p>
 При использовании gnetlist очень важно, чтобы библиотеки ваших символов и
-<a href="geda-glossary.ru.html#библиотекаисходныхданных" class="wikilink1" title="geda-glossary.ru.html">исходных данных</a> были
+<a href="geda-glossary.ru.html#библиотека_исходных_данных" class="wikilink1" title="geda-glossary.ru.html">исходных данных</a> были
 настроены корректно. Для того, чтобы и gschem, и gnetlist использовали одни
 и те же библиотеки, эти настройки почти всегда нужно добавлять в файл
 настроек всего комплекта gaf (в один из файлов «<code>gafrc</code>»).  Настройка
@@ -70,8 +70,8 @@
 </p>
 
 </div>
-
-<h3 id="настройкиобработкииерархическихсхем">Настройки обработки иерархических схем</h3>
+<!-- EDIT3 SECTION "Библиотеки символов и исходных данных" [2185-3061] -->
+<h3 class="sectionedit4" id="настройки_обработки_иерархических_схем">Настройки обработки иерархических схем</h3>
 <div class="level3">
 
 <p>
@@ -111,7 +111,7 @@
 <p>
 Похожие настройки есть для группы имён соединений, установленных с помощью
 атрибутов «<code>netname=</code>» и для группы имён соединений, использующих
-<a href="geda-gnetlist_ug-implicitpins.ru.html" class="wikilink2" title="geda-gnetlist_ug-implicitpins.ru.html">Неявные выводы</a> и атрибуты «<code>net=</code>».
+<a href="geda-gnetlist_ug-implicit_pins.ru.html" class="wikilink1" title="geda-gnetlist_ug-implicit_pins.ru.html">Неявные выводы</a> и атрибуты «<code>net=</code>».
 </p>
 <ul>
 <li class="level1"><div class="li"> Функции <code>hierarchy-netname-order</code>, <code>hierarchy-netname-separator</code> и <code>hierarchy-netname-mangle</code> управляют модификацией «<code>netname=</code>».</div>
@@ -127,8 +127,8 @@
 <pre class="code">(hierarchy-traversal &quot;disabled&quot;)</pre>
 
 </div>
-
-<h3 id="автоматическоеименованиесоединений">Автоматическое именование соединений</h3>
+<!-- EDIT4 SECTION "Настройки обработки иерархических схем" [3062-5938] -->
+<h3 class="sectionedit5" id="автоматическое_именование_соединений">Автоматическое именование соединений</h3>
 <div class="level3">
 
 <p>
@@ -140,10 +140,10 @@
 <pre class="code">(unnamed-netname &quot;unnamed_net&quot;)</pre>
 
 <p>
-Это приведёт к тому, что &quot;безымянным&quot; соединениям gnetlist будет
-автоматически назначать имена вида &quot;unnamed_net12345&quot;.
+Это приведёт к тому, что “безымянным” соединениям gnetlist будет
+автоматически назначать имена вида “unnamed_net12345”.
 </p>
 
 </div>
-</body>
+<!-- EDIT5 SECTION "Автоматическое именование соединений" [5939-] --></body>
 </html>

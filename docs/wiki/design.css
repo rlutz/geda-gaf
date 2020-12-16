@@ -8,8 +8,8 @@
 /* -------------- general elements --------------- */
 
 body {
-  font: 100% "Lucida Grande", Verdana, Lucida, Helvetica, Arial, sans-serif;
-  background-color: #f8f8f8;
+  font: 80% "Lucida Grande", Verdana, Lucida, Helvetica, Arial, sans-serif;
+  background-color: White;
   color: Black;
   margin: 0;
   padding: 0;
@@ -179,19 +179,19 @@ div.pagenav-next input.button {
 /* --------------- Links ------------------ */
 
 a {
-  color:#000000;
+  color:#436976;
   text-decoration:none;
 }
 a:hover {
   color:#000000;
-  text-decoration:none;
+  text-decoration:underline;
 }
 
 /* external link */
 a.urlextern{
     background: transparent url(images/link_icon.gif) 0px 1px no-repeat;
     padding: 1px 0px 1px 16px;
-    color:#0000BB;
+    color:#436976;
     text-decoration:none;
 }
 a.urlextern:visited {
@@ -251,9 +251,9 @@ a.mail:hover {
 }
 
 /* existing wikipage */
-a.wikilink1:link    { color:#0000BB; text-decoration:none }
-a.wikilink1:visited { color:Purple; text-decoration:none }
-a.wikilink1:hover   { color:#0000BB; text-decoration:underline }
+a.wikilink1:link    { color:#009900; text-decoration:none }
+a.wikilink1:visited { color:#009900; text-decoration:none }
+a.wikilink1:hover   { color:#009900; text-decoration:underline }
 
 /* not existing wikipage */
 a.wikilink2:link    { color:#FF3300; text-decoration:none }
@@ -463,8 +463,6 @@ div.toc {
   width: 200px;
   font-size: 80%;
   clear:both;
-  border: 1px solid #8cacbb;
-  background-color: #ffffff;
 }
 
 div.tocheader {
@@ -515,7 +513,7 @@ ul.toc li.clear {
 }
 
 a.toc {
-  color: #0000BB;
+  color: #436976;
   text-decoration:none;
 }
 

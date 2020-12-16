@@ -10,19 +10,19 @@
 </head>
 <body>
 
-<h1 id="gedasreleaseengineering">gEDA&#039;s Release Engineering</h1>
+<h1 class="sectionedit1" id="geda_s_release_engineering">gEDA&#039;s Release Engineering</h1>
 <div class="level1">
 
 </div>
-
-<h2 id="gedagafreleasecreationchecklist">gEDA/gaf Release Creation Checklist</h2>
+<!-- EDIT1 SECTION "gEDA's Release Engineering" [1-49] -->
+<h2 class="sectionedit2" id="geda_gaf_release_creation_checklist">gEDA/gaf Release Creation Checklist</h2>
 <div class="level2">
 
 <p>
 Here is a list of steps that are taken every time when creating a new gEDA/gaf release:
 </p>
 <ul>
-<li class="level1"><div class="li"> In the toplevel configure.ac file update the package version in the AC_INIT macro, the date in the AX_GIT_VERSION macro, and update shared library versions of the package libraries, currently <em>libgeda</em> (AX_LIBGEDA)  and <em>libgedacairo</em> (AX_LIBGEDACAIRO) (their <code>.so</code> versions should follow what is described in  Autobook&#039;s library versioning chapter).</div>
+<li class="level1"><div class="li"> In the toplevel configure.ac file update the package version in the AC_INIT macro, the date in the AX_GIT_VERSION macro, and update shared library versions of the package libraries, currently <em>libgeda</em> (AX_LIBGEDA)  and <em>libgedacairo</em> (AX_LIBGEDACAIRO) (their <code>.so</code> versions should follow what is described in <a href="http://sourceware.org/autobook/autobook/autobook_91.html" class="urlextern" title="http://sourceware.org/autobook/autobook/autobook_91.html" rel="nofollow"> Autobook&#039;s library versioning</a> chapter).</div>
 </li>
 <li class="level1"><div class="li"> Update the toplevel NEWS file with a summary of all the changes in the new release.  The NEWS file forms the basis for the release notes.</div>
 </li>
@@ -35,13 +35,13 @@ Here is a list of steps that are taken every time when creating a new gEDA/gaf r
 </li>
 <li class="level1"><div class="li"> Update all the versions and dates in the man pages (gschem.1, gnetlist.1, gsymcheck.1, grenum.1)</div>
 </li>
-<li class="level1"><div class="li"> Go into the wiki pages and update the &quot;gEDA/gaf File Format Document&quot; and add the release date to the version field.</div>
+<li class="level1"><div class="li"> Go into the wiki pages and update the “gEDA/gaf File Format Document” and add the release date to the version field.</div>
 </li>
 <li class="level1 node"><div class="li"> Update the wiki documentation snapshot (which is shipped with the release) by doing the following steps:</div>
 <ol>
-<li class="level2"><div class="li"> Get the wiki source files.  (For now you have to ask Ales to get them from the SEUL.org server; eventually this should be changed so they are available without asking anybody).  Put these files in some directory called &quot;wikisrc&quot;.  Also make an output directory called &quot;htmloutput&quot;</div>
+<li class="level2"><div class="li"> Get the wiki source files.  (For now you have to ask Ales to get them from the SEUL.org server; eventually this should be changed so they are available without asking anybody).  Put these files in some directory called “wikisrc”.  Also make an output directory called “htmloutput”</div>
 </li>
-<li class="level2"><div class="li"> Download a handy php-based package called &quot;offline-doku&quot;.  Latest version seems to be v0.1.1 and it was last seen at:  offline-doku .</div>
+<li class="level2"><div class="li"> Download a handy php-based package called “offline-doku”.  Latest version seems to be v0.1.1 and it was last seen at: <a href="http://sourceforge.net/projects/limb/files/" class="urlextern" title="http://sourceforge.net/projects/limb/files/" rel="nofollow"> offline-doku </a>.</div>
 </li>
 <li class="level2"><div class="li"> You might need to tweak/add the following line in offline-doku/make.php to make sure it has enough memory to operate: <pre class="code"> ini_set(&#039;memory_limit&#039;,&#039;256M&#039;);</pre>
 </div>
@@ -55,7 +55,7 @@ Here is a list of steps that are taken every time when creating a new gEDA/gaf r
 </li>
 <li class="level2"><div class="li"> Tar/copy the htmloutput directory into the gaf git directory docs/</div>
 </li>
-<li class="level2"><div class="li"> Move aside (do not delete yet) the current wiki directory to something like &quot;wikiold&quot;.  Rename the new htmloutput directory to &quot;wiki&quot;</div>
+<li class="level2"><div class="li"> Move aside (do not delete yet) the current wiki directory to something like “wikiold”.  Rename the new htmloutput directory to “wiki”</div>
 </li>
 <li class="level2"><div class="li"> Run: <pre class="code"> cp -f wikiold/design.css wiki </pre>
 </div>
@@ -140,5 +140,5 @@ and make sure it completes without any errors.  After this is complete you will 
 </ul>
 
 </div>
-</body>
+<!-- EDIT2 SECTION "gEDA/gaf Release Creation Checklist" [50-] --></body>
 </html>

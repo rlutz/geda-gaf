@@ -14,16 +14,16 @@
 <em>Translations of this page are also available in the following languages:</em> <a href="geda-faq.fr.html" class="wikilink1" title="geda-faq.fr.html">Français</a>, <a href="geda-faq.ru.html" class="wikilink1" title="geda-faq.ru.html">Русский</a>.
 </p>
 
-<h1 id="gedafaq">gEDA FAQ</h1>
+<h1 class="sectionedit1" id="geda_faq">gEDA FAQ</h1>
 <div class="level1">
 
 </div>
-
-<h2 id="whatisthegedaproject">What is the gEDA project?</h2>
+<!-- EDIT1 SECTION "gEDA FAQ" [128-152] -->
+<h2 class="sectionedit2" id="what_is_the_geda_project">What is the gEDA project?</h2>
 <div class="level2">
 
 <p>
-The gEDA project has produced and continues working on a full GPL&#039;d suite and toolkit of Electronic Design Automation tools. These tools are used for electrical circuit design, schematic capture, simulation, prototyping, and production. Currently, the gEDA project offers a mature suite of free software applications for electronics design, including schematic capture, attribute management, bill of materials (BOM) generation, netlisting into over 20 netlist formats, analog and digital simulation, and printed circuit board (PCB) layout.
+The gEDA project has produced and continues working on a full <abbr title="GNU General Public License">GPL</abbr>&#039;d suite and toolkit of Electronic Design Automation tools. These tools are used for electrical circuit design, schematic capture, simulation, prototyping, and production. Currently, the gEDA project offers a mature suite of free software applications for electronics design, including schematic capture, attribute management, bill of materials (BOM) generation, netlisting into over 20 netlist formats, analog and digital simulation, and printed circuit board (PCB) layout.
 </p>
 
 <p>
@@ -35,8 +35,8 @@ gEDA can be pronounced “gee-daahhh” (rhymes with cheetah) or “g-dahhh (sho
 </p>
 
 </div>
-
-<h2 id="whatisgedagafandhowdoesitrelatetogeda">What is gEDA/gaf and how does it relate to gEDA?</h2>
+<!-- EDIT2 SECTION "What is the gEDA project?" [153-1575] -->
+<h2 class="sectionedit3" id="what_is_geda_gaf_and_how_does_it_relate_to_geda">What is gEDA/gaf and how does it relate to gEDA?</h2>
 <div class="level2">
 
 <p>
@@ -53,137 +53,294 @@ gEDA can be pronounced “gee-daahhh” (rhymes with cheetah) or “g-dahhh (sho
 </li>
 <li class="level1"><div class="li"> libgeda: Libraries for gschem gnetlist and gsymcheck</div>
 </li>
-<li class="level1"><div class="li"> gsch2pcb: A tool to forward annotation from your schematic to layout using PCB</div>
+<li class="level1"><div class="li"> gsch2pcb: A tool to forward annotation from your schematic to layout using <a href="http://pcb.geda-project.org" class="urlextern" title="http://pcb.geda-project.org" rel="nofollow">PCB</a></div>
 </li>
 <li class="level1"><div class="li"> some minor utilities</div>
 </li>
 </ul>
 
 <p>
-The gEDA/gaf tools share a common file format (.sch) and also share a common link library (libgeda.so). The gEDA/gaf source distribution can be found on this website (http:<em>www.geda-project.org).
+The gEDA/gaf tools share a common file format (.sch) and also share a common link library (libgeda.so). The gEDA/gaf source distribution can be found on this website (<a href="http://www.geda-project.org" class="urlextern" title="http://www.geda-project.org" rel="nofollow">http://www.geda-project.org</a>).
+</p>
 
-Even though gaf is very much a part of gEDA, the gEDA name does not necessarily only apply to gaf – tools gathered under the “gEDA” moniker include many other programs. Indeed, gEDA refers to <strong>any</strong> GPL&#039;d EDA tool which decides to associate itself with the gEDA website/mailing list. Important examples of gEDA tools include the layout program PCB, the Verilog compiler Icarus Verilog, the analog circuit simulator gnucap, and the open-source SPICE simulator ngspice. Many other gEDA programs also exist.
+<p>
+Even though gaf is very much a part of gEDA, the gEDA name does not necessarily only apply to gaf – tools gathered under the “gEDA” moniker include many other programs. Indeed, gEDA refers to <strong>any</strong> <abbr title="GNU General Public License">GPL</abbr>&#039;d EDA tool which decides to associate itself with the gEDA website/mailing list. Important examples of gEDA tools include the layout program <a href="http://pcb.geda-project.org" class="urlextern" title="http://pcb.geda-project.org" rel="nofollow">PCB</a>, the Verilog compiler <a href="http://www.icarus.com/eda/verilog/" class="urlextern" title="http://www.icarus.com/eda/verilog/" rel="nofollow">Icarus Verilog</a>, the analog circuit simulator <a href="http://www.gnucap.org/" class="urlextern" title="http://www.gnucap.org/" rel="nofollow">gnucap</a>, and the open-source SPICE simulator <a href="http://www.ngspice.org/" class="urlextern" title="http://www.ngspice.org/" rel="nofollow">ngspice</a>. Many other gEDA programs also exist.
+</p>
 
-For historical reasons, on freshmeat gaf is known as the package “gEDA”.
+<p>
+For historical reasons, on <a href="http://freshmeat.net/" class="urlextern" title="http://freshmeat.net/" rel="nofollow">freshmeat</a> gaf is known as the package “gEDA”.
+</p>
 
+</div>
+<!-- EDIT3 SECTION "What is gEDA/gaf and how does it relate to gEDA?" [1576-3202] -->
+<h2 class="sectionedit4" id="what_is_the_geda_suite">What is the gEDA suite?</h2>
+<div class="level2">
 
-===== What is the gEDA suite? =====
+<p>
 The gEDA suite is the collection of all the various tools that are part of, associated with, or just plain work with the gEDA project’s software.  Currently the gEDA suite includes:
-  * Tools for schematic capture and netlisting:
-    * <a href="geda-gaf.html" class="wikilink1" title="geda-gaf.html">gEDA/gaf</a>
-  * Tools for digital and analog simulation:
-    * <a href="geda-documentation.html#spice" class="wikilink1" title="geda-documentation.html">spice</a> -- netlister for SPICE simulation
-    * <a href="geda-documentation.html#ngspice" class="wikilink1" title="geda-documentation.html">ngspice</a> -- SPICE simulation
-    * <a href="geda-documentation.html#gnucap" class="wikilink1" title="geda-documentation.html">gnucap</a> -- modern &quot;post-spice&quot; (and SPICE) analog and mixed signal circuit simulator
-    * <a href="geda-documentation.html#icarusverilog" class="wikilink1" title="geda-documentation.html">Icarus Verilog</a> – Verilog simulator
-    * <a href="geda-documentation.html#covered" class="wikilink1" title="geda-documentation.html">covered</a> -- Verilog Code Coverage Analyzer
-    * <a href="geda-documentation.html#gspiceui" class="wikilink1" title="geda-documentation.html">gspiceui</a> -- GUI front end for ngspice/gnucap
-    * Programs for <a href="geda-documentation.html#dataplottingandviewing" class="wikilink1" title="geda-documentation.html">data plotting and viewing</a>
-  * Tools for pcb layout and manufacturing:
-    * <a href="geda-documentation.html#pcb" class="wikilink1" title="geda-documentation.html">pcb</a> -- PCB layout
-    * <a href="geda-documentation.html#gerbv" class="wikilink1" title="geda-documentation.html">gerbv</a> -- Gerber viewer
-    * <a href="geda-documentation.html#wcalc" class="wikilink1" title="geda-documentation.html">wcalc</a> -- Transmission line and electromagnetic structure analysis
-    * <a href="geda-documentation.html#mcalc" class="wikilink1" title="geda-documentation.html">mcalc</a> -- Microstrip Analysis/Synthesis Calculator
-  * Libraries of symbols and footprints for all the above:
-    * http://www.gedasymbols.org/
+</p>
+<ul>
+<li class="level1 node"><div class="li"> Tools for schematic capture and netlisting:</div>
+<ul>
+<li class="level2"><div class="li"> <a href="geda-gaf.html" class="wikilink1" title="geda-gaf.html">gEDA/gaf</a></div>
+</li>
+</ul>
+</li>
+<li class="level1 node"><div class="li"> Tools for digital and analog simulation:</div>
+<ul>
+<li class="level2"><div class="li"> <a href="geda-documentation.html#spice" class="wikilink1" title="geda-documentation.html">spice</a> – netlister for SPICE simulation</div>
+</li>
+<li class="level2"><div class="li"> <a href="geda-documentation.html#ngspice" class="wikilink1" title="geda-documentation.html">ngspice</a> – SPICE simulation</div>
+</li>
+<li class="level2"><div class="li"> <a href="geda-documentation.html#gnucap" class="wikilink1" title="geda-documentation.html">gnucap</a> – modern “post-spice” (and SPICE) analog and mixed signal circuit simulator</div>
+</li>
+<li class="level2"><div class="li"> <a href="geda-documentation.html#icarus_verilog" class="wikilink1" title="geda-documentation.html">Icarus Verilog</a> – Verilog simulator</div>
+</li>
+<li class="level2"><div class="li"> <a href="geda-documentation.html#covered" class="wikilink1" title="geda-documentation.html">covered</a> – Verilog Code Coverage Analyzer</div>
+</li>
+<li class="level2"><div class="li"> <a href="geda-documentation.html#gspiceui" class="wikilink1" title="geda-documentation.html">gspiceui</a> – <abbr title="Graphical User Interface">GUI</abbr> front end for ngspice/gnucap</div>
+</li>
+<li class="level2"><div class="li"> Programs for <a href="geda-documentation.html#data_plotting_and_viewing" class="wikilink1" title="geda-documentation.html">data plotting and viewing</a></div>
+</li>
+</ul>
+</li>
+<li class="level1 node"><div class="li"> Tools for pcb layout and manufacturing:</div>
+<ul>
+<li class="level2"><div class="li"> <a href="geda-documentation.html#pcb" class="wikilink1" title="geda-documentation.html">pcb</a> – PCB layout</div>
+</li>
+<li class="level2"><div class="li"> <a href="geda-documentation.html#gerbv" class="wikilink1" title="geda-documentation.html">gerbv</a> – Gerber viewer</div>
+</li>
+<li class="level2"><div class="li"> <a href="geda-documentation.html#wcalc" class="wikilink1" title="geda-documentation.html">wcalc</a> – Transmission line and electromagnetic structure analysis</div>
+</li>
+<li class="level2"><div class="li"> <a href="geda-documentation.html#mcalc" class="wikilink1" title="geda-documentation.html">mcalc</a> – Microstrip Analysis/Synthesis Calculator</div>
+</li>
+</ul>
+</li>
+<li class="level1 node"><div class="li"> Libraries of symbols and footprints for all the above:</div>
+<ul>
+<li class="level2"><div class="li"> <a href="http://www.gedasymbols.org/" class="urlextern" title="http://www.gedasymbols.org/" rel="nofollow">http://www.gedasymbols.org/</a></div>
+</li>
+</ul>
+</li>
+</ul>
 
+</div>
+<!-- EDIT4 SECTION "What is the gEDA suite?" [3203-4477] -->
+<h2 class="sectionedit5" id="why_what_makes_geda_so_different_from_other_eda_tools">Why? What makes gEDA so different from other EDA tools?</h2>
+<div class="level2">
 
-===== Why? What makes gEDA so different from other EDA tools? =====
+<p>
 Tools in the gEDA suite and associated tools have the following characteristics:
-  * Free in the monetary sense (no cost).
-  * All the file formats and source code are available via the GPL license. This license grants specific rights to the authors and users of GPL&#039;d software.
-  * Independence from any one vendor. All gEDA tools come with full source. You may freely redistribute, change, improve and port the tools. You may also distribute your changes, if you follow the terms of the GPL.
-  * No mechanism is used to restrict the use of the tools (like making use of hard disk serial numbers or ethernet addresses to force the software to only run on one machine).
-  * No arbitrary, marketeering-driven limitations. Free versions of commercial tools usually include capricious limitations (i.e. limited design size, inability to print, inability to export netlists, etc.) which cripple the program, and force the serious user to buy the real tool. In contrast, the gEDA tools are fully-featured, and do not arbitrarily impose limits on design as a way of extracting money from you.
-  * Legacy design protection. Since the software will always be available, and can always be updated to work with updated operating systems or libraries, gEDA tool design files will always be viewable and editable.
-  * Open design flow. This means that the tools talk to each other via known and documented means (files / APIs). It is easy to replace a tool or augment the tools with something else if you so desire.  The gEDA suite is an EDA toolkit.  The individual pieces are loosely coupled and allow for end users to customize or replaces parts of the design flow.
-  * Stability - Bugs which cause crashes are investigated immediately and fixed as soon as possible.
-  * Minimize bloat and unnecessary features.
-  * Run on as many platforms as possible. For gEDA/gaf: GNU/Linux, various other Unix systems.
-  * Developed in an open (no secrets) fashion.
-  * Strive to be documented.
+</p>
+<ul>
+<li class="level1"><div class="li"> Free in the monetary sense (no cost).</div>
+</li>
+<li class="level1"><div class="li"> All the file formats and source code are available via the <abbr title="GNU General Public License">GPL</abbr> license. This license grants specific rights to the authors and users of <abbr title="GNU General Public License">GPL</abbr>&#039;d software.</div>
+</li>
+<li class="level1"><div class="li"> Independence from any one vendor. All gEDA tools come with full source. You may freely redistribute, change, improve and port the tools. You may also distribute your changes, if you follow the terms of the <abbr title="GNU General Public License">GPL</abbr>.</div>
+</li>
+<li class="level1"><div class="li"> No mechanism is used to restrict the use of the tools (like making use of hard disk serial numbers or ethernet addresses to force the software to only run on one machine).</div>
+</li>
+<li class="level1"><div class="li"> No arbitrary, marketeering-driven limitations. Free versions of commercial tools usually include capricious limitations (i.e. limited design size, inability to print, inability to export netlists, etc.) which cripple the program, and force the serious user to buy the real tool. In contrast, the gEDA tools are fully-featured, and do not arbitrarily impose limits on design as a way of extracting money from you.</div>
+</li>
+<li class="level1"><div class="li"> Legacy design protection. Since the software will always be available, and can always be updated to work with updated operating systems or libraries, gEDA tool design files will always be viewable and editable.</div>
+</li>
+<li class="level1"><div class="li"> Open design flow. This means that the tools talk to each other via known and documented means (files / APIs). It is easy to replace a tool or augment the tools with something else if you so desire.  The gEDA suite is an EDA toolkit.  The individual pieces are loosely coupled and allow for end users to customize or replaces parts of the design flow.</div>
+</li>
+<li class="level1"><div class="li"> Stability - Bugs which cause crashes are investigated immediately and fixed as soon as possible.</div>
+</li>
+<li class="level1"><div class="li"> Minimize bloat and unnecessary features.</div>
+</li>
+<li class="level1"><div class="li"> Run on as many platforms as possible. For gEDA/gaf: GNU/Linux, various other Unix systems.</div>
+</li>
+<li class="level1"><div class="li"> Developed in an open (no secrets) fashion.</div>
+</li>
+<li class="level1"><div class="li"> Strive to be documented.</div>
+</li>
+</ul>
 
+<p>
 gEDA may not have all the latest cutting edge features found in other packages and may be viewed sometimes as being on the trailing edge of EDA technology, but the tools are becoming useful to a lot of people for the above mentioned reasons.
+</p>
 
+</div>
+<!-- EDIT5 SECTION "Why? What makes gEDA so different from other EDA tools?" [4478-6764] -->
+<h2 class="sectionedit6" id="why_does_the_geda_suite_seem_like_a_collection_of_random_programs_and_not_a_single_integrated_application">Why does the gEDA Suite seem like a collection of random programs, and not a single integrated application?</h2>
+<div class="level2">
 
-===== Why does the gEDA Suite seem like a collection of random programs, and not a single integrated application? =====
+<p>
 The gEDA suite is indeed a confederacy of somewhat independent programs. This happened for reasons of history: Ales Hvezda started the gEDA project more or less on his own. The original vision was to produce an end-to-end software suite for creating PC boards so that robotics hobbiests could design their own boards. However, as the gEDA project progressed the large magnitude of this task became clear – and coding many of the proposed apps had not even begun!
+</p>
 
+<p>
 Meanwhile, other software developers – with their own independently written applications – found the gEDA project vision compelling. The authors of those applications joined Ales and contributed their programs to the gEDA project. Amongst the contributed projects was “pcb”, a ten year old (at that time) PCB layout program. With the contribution of “pcb”, gEDA’s originally planned layout tool “gpcb” was scuttled. At the same time, other developers contributed analog and digital simulators, waveform viewers, and so on.
+</p>
 
+<p>
 In this way the gEDA suite came together. It is not shared code, or a common user interface which distinguishes the gEDA suite. Rather, the shared vision of an open-source EDA environment is the thread which holds the project together. Today, the gEDA Suite is a collection of many different programs contributed by many different authors. The apps strive to work together, and usually succeed. But the separate beginnings of each program in the suite are still observable. Nonetheless, with a little work the various components of the suite are interoperable, and many people have completed quite complex board designs using the gEDA suite.
+</p>
 
+<p>
 In the end, the best way to think about the gEDA suite is as an EDA toolkit.  This toolkit approach gives the end user considerable control.  End users can modify or completely replaces parts of the design flow to suit their own requirements.
+</p>
 
-===== So which is better, a suite (i.e. confederacy) of programs or an integrated application? =====
+</div>
+<!-- EDIT6 SECTION "Why does the gEDA Suite seem like a collection of random programs, and not a single integrated application?" [6765-8779] -->
+<h2 class="sectionedit7" id="so_which_is_better_a_suite_ie_confederacy_of_programs_or_an_integrated_application">So which is better, a suite (i.e. confederacy) of programs or an integrated application?</h2>
+<div class="level2">
+
+<p>
 This is ultimately a matter of religion. I’ll summarize some of the pros and cons (as I see them) of each approach here.
+</p>
 
-==== Suite (confederacy) pros: ====
-  * You can use “best of breed” applications for each part of the design flow. That is, you can use the standard gEDA flow gschem → gsch2pcb → pcb to create a PC Board. However, if you think that the open-source application “pcb” stinks, you can use the flow gschem → gnetlist → Protel (for example). Recall that gnetlist can output more than twenty different netlist formats! Moreover, if you don’t like one component of the flow, you can write another tool to replace it. Now at this time it is true that only a single application generally exists to perform a particular task. However, this situation will likely change with time – witness the forking of the “pcb” project, the contributed netlister gnetman, as well as the HEC project. As a general rule, the suite approach offers the greatest freedom to the user.
-  * The design flow has a lot of natural breakpoints. These occur where one design tool completes its job and writes out a file (i.e. gschem writes out a .sch file, or gnetlist writes out a SPICE netlist). At this point, you can easily break into the flow and write scripts which process and/or munge the design data. For big, advanced designs, this is a real advantage to the “design suite” approach. This advantage may appeal only to the “power user”, but note its importance: professional-grade EDA suites (Synopsys, Xilinx) also work the same way.
-  * Usage of an applications suite can be automated using a Makefile, or even a Perl script. ASIC designers do this all the time with their design and synthesis tools. Some gEDA users have stated on the e-mail list that they do this too, and point to it as an important feature of the gEDA suite.
-==== Suite (confederacy) cons: ====
-  * More confusing to new users, since they don’t know the flow right off the bat. That is, they actually need to RTFM to know what tool to run next. Good documentation helps (that’s why you’re reading this), but documentation is always second choice behind developing an intuitive application interface.
-  * Different programs have different UI conventions. That is, menu organization, keyboard and mouse bindings are inconsistent. This can be uncomfortable even to those who are familiar with the programs.
-  * Since no assumptions are made about the design flow, schematic symbols are necessarily <a href="geda-faq-gschem.html#what_s_this_business_about_heavy_vs._light_symbols" class="wikilink1" title="geda-faq-gschem.html">light</a>. This forces the user to spend more time attaching e.g. footprint attributes to his design. Moreover, the user must spend more time actually researching which footprints to use.
-  * Some developers are more energetic than others, or have more free time. Therefore, some programs in a suite will be more developed (and less buggy) than others. Unfortunately, a single buggy program in a suite can unfairly taint a new user’s perception of the entire suite.
+</div>
+<!-- EDIT7 SECTION "So which is better, a suite (i.e. confederacy) of programs or an integrated application?" [8780-9004] -->
+<h3 class="sectionedit8" id="suite_confederacy_pros">Suite (confederacy) pros:</h3>
+<div class="level3">
+<ul>
+<li class="level1"><div class="li"> You can use “best of breed” applications for each part of the design flow. That is, you can use the standard gEDA flow gschem → gsch2pcb → pcb to create a PC Board. However, if you think that the open-source application “pcb” stinks, you can use the flow gschem → gnetlist → Protel (for example). Recall that gnetlist can output more than twenty different netlist formats! Moreover, if you don’t like one component of the flow, you can write another tool to replace it. Now at this time it is true that only a single application generally exists to perform a particular task. However, this situation will likely change with time – witness the forking of the “pcb” project, the contributed netlister <a href="http://www.viasic.com/opensource/" class="urlextern" title="http://www.viasic.com/opensource/" rel="nofollow">gnetman</a>, as well as the <a href="http://web.comhem.se/~u31829222/" class="urlextern" title="http://web.comhem.se/~u31829222/" rel="nofollow">HEC</a> project. As a general rule, the suite approach offers the greatest freedom to the user.</div>
+</li>
+<li class="level1"><div class="li"> The design flow has a lot of natural breakpoints. These occur where one design tool completes its job and writes out a file (i.e. gschem writes out a .sch file, or gnetlist writes out a SPICE netlist). At this point, you can easily break into the flow and write scripts which process and/or munge the design data. For big, advanced designs, this is a real advantage to the “design suite” approach. This advantage may appeal only to the “power user”, but note its importance: professional-grade EDA suites (Synopsys, Xilinx) also work the same way.</div>
+</li>
+<li class="level1"><div class="li"> Usage of an applications suite can be automated using a Makefile, or even a Perl script. ASIC designers do this all the time with their design and synthesis tools. Some gEDA users have stated on the e-mail list that they do this too, and point to it as an important feature of the gEDA suite.</div>
+</li>
+</ul>
 
-==== Monolithic application pros: ====
-  * A single, unified design environment is easier for new users to grasp.
-  * It is easier to harmonize UI conventions.
-  * Schematic capture symbols can be heavy, so less work is required in attaching attributes to each symbol in a schematic.
+</div>
+<!-- EDIT8 SECTION "Suite (confederacy) pros:" [9005-10815] -->
+<h3 class="sectionedit9" id="suite_confederacy_cons">Suite (confederacy) cons:</h3>
+<div class="level3">
+<ul>
+<li class="level1"><div class="li"> More confusing to new users, since they don’t know the flow right off the bat. That is, they actually need to <abbr title="Read The Fine Manual">RTFM</abbr> to know what tool to run next. Good documentation helps (that’s why you’re reading this), but documentation is always second choice behind developing an intuitive application interface.</div>
+</li>
+<li class="level1"><div class="li"> Different programs have different UI conventions. That is, menu organization, keyboard and mouse bindings are inconsistent. This can be uncomfortable even to those who are familiar with the programs.</div>
+</li>
+<li class="level1"><div class="li"> Since no assumptions are made about the design flow, schematic symbols are necessarily <a href="geda-faq-gschem.html#what_s_this_business_about_heavy_vs._light_symbols" class="wikilink1" title="geda-faq-gschem.html">light</a>. This forces the user to spend more time attaching e.g. footprint attributes to his design. Moreover, the user must spend more time actually researching which footprints to use.</div>
+</li>
+<li class="level1"><div class="li"> Some developers are more energetic than others, or have more free time. Therefore, some programs in a suite will be more developed (and less buggy) than others. Unfortunately, a single buggy program in a suite can unfairly taint a new user’s perception of the entire suite.</div>
+</li>
+</ul>
 
-==== Monolithic application cons: ====
-  * Not infinitely scalable. One developer can’t do everything, no matter how smart. Therefore, a monolithic app will never approach the size or power of a suite developed by a confederacy of programmers.
-  * Lack of choice. If the developer doesn’t like your way of doing things, you have no choice. Even if you submit patches to enable your way of performing a task, there is a chance the main developer will ignore or reject your patches. This is probably not an issue for newbies, but for “power users” it represents a problem.
-  * Risk. If the developer quits, the code becomes abandoned, and the users suffer. This effectively happened to the program XTrkCAD, a CAD program for designing model railroads. The author of this program quit developing it, but thankfully placed his stuff on Sourceforge so that the program wouldn’t simply disappear. Unfortunately, without the original developer’s involvement, the code languished. Patches contributed to the project went to /dev/null. Eventually, a coalition of concerned user/developers created a fork of the code to enable further development. However, work on the forked code has been piecemeal and sporadic. (Hopefully, this will change someday.) Meanwhile, for the ordinary user, the fact that the original developer quit represents a catastrophe.
+</div>
+<!-- EDIT9 SECTION "Suite (confederacy) cons:" [10816-11993] -->
+<h3 class="sectionedit10" id="monolithic_application_pros">Monolithic application pros:</h3>
+<div class="level3">
+<ul>
+<li class="level1"><div class="li"> A single, unified design environment is easier for new users to grasp.</div>
+</li>
+<li class="level1"><div class="li"> It is easier to harmonize UI conventions.</div>
+</li>
+<li class="level1"><div class="li"> Schematic capture symbols can be heavy, so less work is required in attaching attributes to each symbol in a schematic.</div>
+</li>
+</ul>
 
+</div>
+<!-- EDIT10 SECTION "Monolithic application pros:" [11994-12278] -->
+<h3 class="sectionedit11" id="monolithic_application_cons">Monolithic application cons:</h3>
+<div class="level3">
+<ul>
+<li class="level1"><div class="li"> Not infinitely scalable. One developer can’t do everything, no matter how smart. Therefore, a monolithic app will never approach the size or power of a suite developed by a confederacy of programmers.</div>
+</li>
+<li class="level1"><div class="li"> Lack of choice. If the developer doesn’t like your way of doing things, you have no choice. Even if you submit patches to enable your way of performing a task, there is a chance the main developer will ignore or reject your patches. This is probably not an issue for newbies, but for “power users” it represents a problem.</div>
+</li>
+<li class="level1"><div class="li"> Risk. If the developer quits, the code becomes abandoned, and the users suffer. This effectively happened to the program <a href="http://sourceforge.net/projects/xtrkcad" class="urlextern" title="http://sourceforge.net/projects/xtrkcad" rel="nofollow">XTrkCAD</a>, a CAD program for designing model railroads. The author of this program quit developing it, but thankfully placed his stuff on Sourceforge so that the program wouldn’t simply disappear. Unfortunately, without the original developer’s involvement, the code languished. Patches contributed to the project went to /dev/null. Eventually, a coalition of concerned user/developers created a <a href="http://xtrkcad-fork.sourceforge.net/" class="urlextern" title="http://xtrkcad-fork.sourceforge.net/" rel="nofollow">fork</a> of the code to enable further development. However, work on the forked code has been piecemeal and sporadic. (Hopefully, this will change someday.) Meanwhile, for the ordinary user, the fact that the original developer quit represents a catastrophe.</div>
+</li>
+</ul>
 
-===== Tool XXX is missing critical feature YYY!  What can I do? =====
+</div>
+<!-- EDIT11 SECTION "Monolithic application cons:" [12279-13722] -->
+<h2 class="sectionedit12" id="tool_xxx_is_missing_critical_feature_yyy_what_can_i_do">Tool XXX is missing critical feature YYY!  What can I do?</h2>
+<div class="level2">
+
+<p>
 Newbies sometimes show up on the gEDA mailing lists and flame the project for missing features, perceived bugs, and supppoesd UI quirks.  The gEDA developers are very interested in receiving constructive feedback and criticism, so we do welcome feature requests and bug reports.  But please keep in mind that the developers are full-time professional EEs or software engineers, and work on gEDA as an unpaid, fun hobby.  Unconstructive or ill-informed flames are not the way to get new features implemented.
+</p>
 
+<p>
 If you need a new feature implemented in one of the gEDA tools, here are your options:
+</p>
+<ul>
+<li class="level1"><div class="li"> Write it yourself.  The code is open and available for everybody to see, understand, and modify.  If you have implemented a new feature, please <a href="http://bugs.launchpad.net/geda" class="urlextern" title="http://bugs.launchpad.net/geda" rel="nofollow">submit your patches</a> to the project; chances are good that they will be incorporated into the main development branch.</div>
+</li>
+</ul>
+<ul>
+<li class="level1"><div class="li"> Ask politely on the gEDA e-mail lists. If your feature request is simple, or of interest to one of the developers, it&#039;s possible that somebody will implement your feature.  If it&#039;s more complicated, it&#039;s likely that the feature is already under discussion amongst the developers, but nobody has enough spare time to implement it. (You can also submit feature requests via the <a href="http://bugs.launchpad.net/geda" class="urlextern" title="http://bugs.launchpad.net/geda" rel="nofollow">Launchpad bug tracker.</a>) Please don&#039;t rant or flame on the e-mail lists, since you will likely be flamed right back and you won&#039;t get your feature either. Why waste your time?</div>
+</li>
+</ul>
+<ul>
+<li class="level1"><div class="li"> If the above possibilities don&#039;t work for you, hire an open-source developer to write the feature for you! It&#039;s amazing how often this possibility is ignored. People willing to pay $25,000 – $100,000 for commercial EDA tools will balk at paying a teen-age programming whiz $10/hr to re-create the same features in the gEDA Suite. Why? If you&#039;re an educator, consider hiring some students for a UROP project to work on gEDA. If you run a business, hire a teenager or somebody fresh out of school! And if you want seasoned help, you can (soon) turn to some of the main gEDA developers who do consulting.</div>
+</li>
+</ul>
 
-  * Write it yourself.  The code is open and available for everybody to see, understand, and modify.  If you have implemented a new feature, please submit your patches to the project; chances are good that they will be incorporated into the main development branch.
+</div>
+<!-- EDIT12 SECTION "Tool XXX is missing critical feature YYY!  What can I do?" [13723-15892] -->
+<h2 class="sectionedit13" id="what_license_does_geda_use">What license does gEDA use?</h2>
+<div class="level2">
 
-  * Ask politely on the gEDA e-mail lists. If your feature request is simple, or of interest to one of the developers, it&#039;s possible that somebody will implement your feature.  If it&#039;s more complicated, it&#039;s likely that the feature is already under discussion amongst the developers, but nobody has enough spare time to implement it. (You can also submit feature requests via the Launchpad bug tracker.) Please don&#039;t rant or flame on the e-mail lists, since you will likely be flamed right back and you won&#039;t get your feature either. Why waste your time?
+<p>
+All of the tools and associated files in gEDA will be released under the GNU General Public License version 2 (<abbr title="GNU General Public License">GPL</abbr>), from the Free Software Foundation.
+</p>
 
-  * If the above possibilities don&#039;t work for you, hire an open-source developer to write the feature for you! It&#039;s amazing how often this possibility is ignored. People willing to pay $25,000 -- $100,000 for commercial EDA tools will balk at paying a teen-age programming whiz $10/hr to re-create the same features in the gEDA Suite. Why? If you&#039;re an educator, consider hiring some students for a UROP project to work on gEDA. If you run a business, hire a teenager or somebody fresh out of school! And if you want seasoned help, you can (soon) turn to some of the main gEDA developers who do consulting.
-
-
-===== What license does gEDA use? =====
-All of the tools and associated files in gEDA will be released under the GNU General Public License version 2 (GPL), from the Free Software Foundation.
-
+<p>
 From the license:
+</p>
 
-&quot;When we speak of free software, we are referring to freedom, not price. Our General Public Licenses are designed to make sure that you have the freedom to distribute copies of free software (and charge for this service if you wish), that you receive source code or can get it if you want it, that you can change the software or use pieces of it in new free programs; and that you know you can do these things.&quot;
+<p>
+“When we speak of free software, we are referring to freedom, not price. Our General Public Licenses are designed to make sure that you have the freedom to distribute copies of free software (and charge for this service if you wish), that you receive source code or can get it if you want it, that you can change the software or use pieces of it in new free programs; and that you know you can do these things.”
+</p>
 
+<p>
 This cannot be stressed enough: <strong>gEDA is GPLed software</strong>. Therefore nothing proprietary can be distributed with gEDA like part libraries from proprietary EDA products. Conversion programs for proprietary libraries will be available, but any converted files which are part of a proprietary product must never find their way into gEDA. Contributed files must be GPLable (or be placed under another free license). Please keep this in mind if you wish to contribute something.
+</p>
 
-Even though the focus of gEDA is GPLed software, other software licenses are more than welcome to be mixed with the existing software, as long as they are compatible with the GPL.
+<p>
+Even though the focus of gEDA is GPLed software, other software licenses are more than welcome to be mixed with the existing software, as long as they are compatible with the <abbr title="GNU General Public License">GPL</abbr>.
+</p>
 
+<p>
 For more information about the license used by gEDA, please read the <a href="geda-license.html" class="wikilink1" title="geda-license.html"> licensing </a> page.
+</p>
 
+</div>
+<!-- EDIT13 SECTION "What license does gEDA use?" [15893-17283] -->
+<h2 class="sectionedit14" id="where_can_i_get_more_information_about_and_download_geda">Where can I get more information about and download gEDA?</h2>
+<div class="level2">
 
+<p>
+The official website is <a href="http://geda-project.org/" class="urlextern" title="http://geda-project.org/" rel="nofollow">gEDA Project</a>.
+</p>
 
-===== Where can I get more information about and download gEDA? =====
-The official website is gEDA Project.
-
+<p>
 There are several mailing lists. Please look at the <a href="geda-mailinglists.html" class="wikilink1" title="geda-mailinglists.html">mailing lists</a> page for how to subscribe and post.
+</p>
 
-You can download all the software from the download page.
+<p>
+You can download all the software from the <a href="http://geda-project.org/download.html" class="urlextern" title="http://geda-project.org/download.html" rel="nofollow">download</a> page.
+</p>
 
+<p>
 You can find the latest set of documentation on the top-level <a href="geda-documentation.html" class="wikilink1" title="geda-documentation.html">documentation</a> page.
+</p>
 
+</div>
+<!-- EDIT14 SECTION "Where can I get more information about and download gEDA?" [17284-17749] -->
+<h2 class="sectionedit15" id="okay_how_do_i_start_using_geda">Okay, how do I start using gEDA?</h2>
+<div class="level2">
 
-===== Okay, how do I start using gEDA? =====
+<p>
 The most important thing to do is to read and understand one or both of the tutorials available online:
-  * Bill Wilson’s excellent <a href="geda-gsch2pcb_tutorial.html" class="wikilink1" title="geda-gsch2pcb_tutorial.html">gschem -&gt; gsch2pcb -&gt; PCB</a> tutorial.
-  * DJ Delorie’s tutorial on pcb also covers basic usage of gschem.
+</p>
+<ul>
+<li class="level1"><div class="li"> Bill Wilson’s excellent <a href="geda-gsch2pcb_tutorial.html" class="wikilink1" title="geda-gsch2pcb_tutorial.html">gschem -&gt; gsch2pcb -&gt; PCB</a> tutorial.</div>
+</li>
+<li class="level1"><div class="li"> DJ Delorie’s <a href="http://www.delorie.com/pcb/docs/gs/gs.html" class="urlextern" title="http://www.delorie.com/pcb/docs/gs/gs.html" rel="nofollow">tutorial on pcb</a> also covers basic usage of gschem.</div>
+</li>
+</ul>
 
+<p>
 Also be sure to check out the other <a href="geda-documentation.html" class="wikilink1" title="geda-documentation.html">gEDA documentation</a>. An installation guide is contained in this Wiki, as is some general information about how to use the tools. Spend some time browsing, download the gEDA Suite, and try it out for yourself!
 </p>
 
 </div>
-</body>
+<!-- EDIT15 SECTION "Okay, how do I start using gEDA?" [17750-] --></body>
 </html>

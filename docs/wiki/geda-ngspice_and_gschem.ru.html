@@ -15,7 +15,7 @@
 <a href="geda-ngspice_and_gschem.html" class="wikilink1" title="geda-ngspice_and_gschem.html">English</a>
 </p>
 
-<h1 id="обзор">Обзор</h1>
+<h1 class="sectionedit1" id="обзор">Обзор</h1>
 <div class="level1">
 
 <p>
@@ -28,7 +28,7 @@
 подробную документацию по SPICE и gEDA можно найти на страницах:
 </p>
 <ul>
-<li class="level1"><div class="li"> ngspice</div>
+<li class="level1"><div class="li"> <a href="http://ngspice.sourceforge.net/index.html" class="urlextern" title="http://ngspice.sourceforge.net/index.html" rel="nofollow">ngspice</a></div>
 </li>
 <li class="level1"><div class="li"> <a href="geda-csygas.ru.html" class="wikilink1" title="geda-csygas.ru.html">gEDA и SPICE</a></div>
 </li>
@@ -45,8 +45,8 @@
 </p>
 
 </div>
-
-<h1 id="настройка">Настройка</h1>
+<!-- EDIT1 SECTION "Обзор" [127-1527] -->
+<h1 class="sectionedit2" id="настройка">Настройка</h1>
 <div class="level1">
 
 <p>
@@ -61,7 +61,7 @@
 </p>
 
 <p>
-<a href="media/geda/simple1.png" class="media" target="_blank" title="geda:simple1.png">geda:simple1.png</a>
+<a href="media/geda/simple1.png" class="media" target="_blank" title="geda:simple1.png"><img src="media/geda/simple1.png" class="media" alt="" /></a>
 </p>
 
 <p>
@@ -78,8 +78,8 @@
 </p>
 
 </div>
-
-<h1 id="добавимкое-чтодляspice">Добавим кое-что для SPICE</h1>
+<!-- EDIT2 SECTION "Настройка" [1528-3140] -->
+<h1 class="sectionedit3" id="добавим_кое-что_для_spice">Добавим кое-что для SPICE</h1>
 <div class="level1">
 
 <p>
@@ -90,32 +90,32 @@
 </p>
 
 <p>
-<a href="media/geda/schematicfinished2.png" class="media" target="_blank" title="geda:schematicfinished2.png"></a>
+<a href="media/geda/schematicfinished2.png" class="media" target="_blank" title="geda:schematicfinished2.png"><img src="media/geda/schematicfinished2.png" class="media" title="" alt="" /></a>
 </p>
 
 <p>
 Чтобы добавить входной сигнал, нужно выбрать его символ в меню компонентов
-<strong>SPICE simulation elements</strong> -&gt; <strong>vac-1.sym</strong>, и после вставки в схему
+<strong>SPICE simulation elements</strong> → <strong>vac-1.sym</strong>, и после вставки в схему
 отредактировать его свойства вот так:
 </p>
 
 <p>
-<a href="media/geda/dialogvac.png" class="media" target="_blank" title="geda:dialogvac.png"></a>
+<a href="media/geda/dialogvac.png" class="media" target="_blank" title="geda:dialogvac.png"><img src="media/geda/dialogvac.png" class="media" title="" alt="" /></a>
 </p>
 
 <p>
-Отметьте себе, что в атрибуте <code>value</code> --- строка для SPICE. Больше о
+Отметьте себе, что в атрибуте <code>value</code> — строка для SPICE. Больше о
 синтаксисе SPICE можно узнать, перейдя по вышеприведённым ссылкам.
 </p>
 
 <p>
 <em>Vcc</em> настраивается в целом так же, только в меню компонентов нужно
-выбрать <strong>SPICE simulation elements</strong> -&gt; <em><code>vdc-1.sym</code></em>. Свойства этого
+выбрать <strong>SPICE simulation elements</strong> → <em><code>vdc-1.sym</code></em>. Свойства этого
 символа нужно отредактировать вот так:
 </p>
 
 <p>
-<a href="media/geda/dialogvdc1.png" class="media" target="_blank" title="geda:dialogvdc1.png"></a>
+<a href="media/geda/dialogvdc1.png" class="media" target="_blank" title="geda:dialogvdc1.png"><img src="media/geda/dialogvdc1.png" class="media" title="" alt="" /></a>
 </p>
 
 <p>
@@ -123,8 +123,8 @@
 интересующего нас транзистора. Обычно модели можно найти на веб-сайтах
 производителей или в спецификации компонента, но для работы со своей любимой
 программой моделирования их может быть придётся изменить. Самый лёгкий путь
---- взять модель из библиотеки
- spicelib. В данном
+— взять модель из библиотеки
+<a href="http://www.h-renrew.de/h/spicelib/doc/index.html" class="urlextern" title="http://www.h-renrew.de/h/spicelib/doc/index.html" rel="nofollow"> spicelib</a>. В данном
 примере мы рассмотрим вездесущий 2N3904. Вот его модель:
 </p>
 <pre class="code">.model 2N3904   NPN(Is=6.734f Xti=3 Eg=1.11 Vaf=74.03 Bf=416.4 Ne=1.259
@@ -144,7 +144,7 @@
 </p>
 
 <p>
-<a href="media/geda/dialogtrans.png" class="media" target="_blank" title="geda:dialogtrans.png"></a>
+<a href="media/geda/dialogtrans.png" class="media" target="_blank" title="geda:dialogtrans.png"><img src="media/geda/dialogtrans.png" class="media" title="" alt="" /></a>
 </p>
 
 <p>
@@ -154,23 +154,23 @@
 </p>
 
 <p>
-<a href="media/geda/dialogmodel.png" class="media" target="_blank" title="geda:dialogmodel.png"></a>
+<a href="media/geda/dialogmodel.png" class="media" target="_blank" title="geda:dialogmodel.png"><img src="media/geda/dialogmodel.png" class="media" title="" alt="" /></a>
 </p>
 
 <p>
-Хорошо, нужно добавить ещё два символа. Первый --- это
+Хорошо, нужно добавить ещё два символа. Первый — это
 <em><code>spice-include-1.sym</code></em>, подключающий текстовый файл с описанием нужного
-вам вида SPICE-моделирования, а второй --- <em><code>spice-directive-1.sym</code></em>,
+вам вида SPICE-моделирования, а второй — <em><code>spice-directive-1.sym</code></em>,
 позволяющий добавлять дополнительные строки к этому файлу SPICE.  Свойства
 этих символов можно настроить следующим образом:
 </p>
 
 <p>
-<a href="media/geda/dialoginclude.png" class="media" target="_blank" title="geda:dialoginclude.png">geda:dialoginclude.png</a>
+<a href="media/geda/dialoginclude.png" class="media" target="_blank" title="geda:dialoginclude.png"><img src="media/geda/dialoginclude.png" class="media" alt="" /></a>
 </p>
 
 <p>
-<a href="media/geda/dialogdirective.png" class="media" target="_blank" title="geda:dialogdirective.png">geda:dialogdirective.png</a>
+<a href="media/geda/dialogdirective.png" class="media" target="_blank" title="geda:dialogdirective.png"><img src="media/geda/dialogdirective.png" class="media" alt="" /></a>
 </p>
 
 <p>
@@ -178,8 +178,8 @@
 </p>
 
 </div>
-
-<h1 id="моделирование">Моделирование</h1>
+<!-- EDIT3 SECTION "Добавим кое-что для SPICE" [3141-7501] -->
+<h1 class="sectionedit4" id="моделирование">Моделирование</h1>
 <div class="level1">
 
 <p>
@@ -197,8 +197,8 @@
 .print ac v(Vout) v(Vin)</pre>
 
 <p>
-Здесь задаётся <a href="geda-glossary.ru.html#частотныйанализ" class="wikilink1" title="geda-glossary.ru.html">частотный анализ</a> (<code>.AC</code>), в то время
-как строки для <a href="geda-glossary.ru.html#расчётстатическогорежима" class="wikilink1" title="geda-glossary.ru.html">расчёта режима
+Здесь задаётся <a href="geda-glossary.ru.html#частотный_анализ" class="wikilink1" title="geda-glossary.ru.html">частотный анализ</a> (<code>.AC</code>), в то время
+как строки для <a href="geda-glossary.ru.html#расчёт_статического_режима" class="wikilink1" title="geda-glossary.ru.html">расчёта режима
 по постоянному току</a> (<code>.DC</code>) закомментированы. Затем идёт вывод графиков
 <em>Vout</em> и <em>Vin</em>, а также печать их числовых значений. Как отмечено ранее,
 узнать о SPICE можно, перейдя по вышеприведённым ссылкам.
@@ -230,5 +230,5 @@
 </p>
 
 </div>
-</body>
+<!-- EDIT4 SECTION "Моделирование" [7502-] --></body>
 </html>

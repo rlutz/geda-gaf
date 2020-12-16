@@ -12,61 +12,61 @@
 <a href=.>start</a>&nbsp;=>&nbsp;<a href=geda-gschem_ug.html>gschem_ug</a></br>
 <div class="table sectionedit1"><table class="inline">
 	<tr class="row0">
-		<td class="col0 leftalign"> &lt;&lt; <a href="geda-gschem_ug-slots.html" class="wikilink1" title="geda-gschem_ug-slots.html">Slots and slotting</a>  </td><td class="col1 centeralign">  <strong><a href="geda-gschem_ug.html" class="wikilink1" title="geda-gschem_ug.html">gEDA gschem User Guide</a></strong>  </td><td class="col2 rightalign">  <a href="geda-gschem_ug-hierarchy.html" class="wikilink1" title="geda-gschem_ug-hierarchy.html">Hierarchy</a> &gt;&gt; </td>
+		<td class="col0 leftalign"> « <a href="geda-gschem_ug-slots.html" class="wikilink1" title="geda-gschem_ug-slots.html">Slots and slotting</a>  </td><td class="col1 centeralign">  <strong><a href="geda-gschem_ug.html" class="wikilink1" title="geda-gschem_ug.html">gEDA gschem User Guide</a></strong>  </td><td class="col2 rightalign">  <a href="geda-gschem_ug-hierarchy.html" class="wikilink1" title="geda-gschem_ug-hierarchy.html">Hierarchy</a> » </td>
 	</tr>
 </table></div>
 <!-- EDIT1 TABLE [1-107] -->
-<h2 id="autonumbering">Autonumbering</h2>
+<h2 class="sectionedit2" id="autonumbering">Autonumbering</h2>
 <div class="level2">
 
 <p>
-It is often useful to automatically number <a href="geda-gschem_ug-attributes.html" class="wikilink1" title="geda-gschem_ug-attributes.html">attributes</a> (for example, to set &quot;<code>pinseq=</code>&quot; attributes in bulk when editing a symbol, or to set components&#039; &quot;<code>refdes=</code>&quot; attributes for a large capacitor bank).  The autonumbering facility in gschem can be accessed with <strong>Attributes→Autonumber Text</strong>.
+It is often useful to automatically number <a href="geda-gschem_ug-attributes.html" class="wikilink1" title="geda-gschem_ug-attributes.html">attributes</a> (for example, to set “<code>pinseq=</code>” attributes in bulk when editing a symbol, or to set components&#039; “<code>refdes=</code>” attributes for a large capacitor bank).  The autonumbering facility in gschem can be accessed with <strong>Attributes→Autonumber Text</strong>.
 </p>
 
 <p>
-The &quot;Autonumber text&quot; window has two sections:
+The “Autonumber text” window has two sections:
 </p>
 <ul>
-<li class="level1"><div class="li"> The &quot;Scope&quot; section, at the top, is used to specify which attributes should be autonumbered.</div>
+<li class="level1"><div class="li"> The “Scope” section, at the top, is used to specify which attributes should be autonumbered.</div>
 </li>
-<li class="level1"><div class="li"> The &quot;Options&quot; section below controls how the numbering is carried out.</div>
+<li class="level1"><div class="li"> The “Options” section below controls how the numbering is carried out.</div>
 </li>
 </ul>
 
 </div>
-
-<h3 id="choosingattributestonumber">Choosing attributes to number</h3>
+<!-- EDIT2 SECTION "Autonumbering" [109-661] -->
+<h3 class="sectionedit3" id="choosing_attributes_to_number">Choosing attributes to number</h3>
 <div class="level3">
 
 <p>
-In the &quot;Search for&quot; field, you should enter the attribute pattern to search for. You can enter <em>wildcards</em> here: &quot;<code>*</code>&quot; matches any number of characters, and &quot;<code>?</code>&quot; matches any single character.  For example, if you enter &quot;<code>refdes=X*</code>&quot;, it will match components named &quot;<code>X1</code>&quot;, &quot;<code>X40</code>&quot;, &quot;<code>X302</code>&quot;, etc.
+In the “Search for” field, you should enter the attribute pattern to search for. You can enter <em>wildcards</em> here: “<code>*</code>” matches any number of characters, and “<code>?</code>” matches any single character.  For example, if you enter “<code>refdes=X*</code>”, it will match components named “<code>X1</code>”, “<code>X40</code>”, “<code>X302</code>”, etc.
 </p>
 
 <p>
-The &quot;Autonumber text in&quot; menu controls where autonumbering looks for attributes to modify.  If &quot;Selected objects&quot; is chosen, only the objects that are currently <a href="geda-gschem_ug-selecting.html" class="wikilink1" title="geda-gschem_ug-selecting.html">selected</a> will be changed; with &quot;Current page&quot;, the whole page will be autonumbered.  If &quot;Whole hierarchy&quot; is chosen, all open pages will be renumbered.
+The “Autonumber text in” menu controls where autonumbering looks for attributes to modify.  If “Selected objects” is chosen, only the objects that are currently <a href="geda-gschem_ug-selecting.html" class="wikilink1" title="geda-gschem_ug-selecting.html">selected</a> will be changed; with “Current page”, the whole page will be autonumbered.  If “Whole hierarchy” is chosen, all open pages will be renumbered.
 </p>
 
 <p>
-If some numbers are already in use, autonumbering will skip them.  You can control where autonumbering looks for numbers to skip using the &quot;Skip numbers found in&quot; menu, which has the same options as the &quot;Autonumber text in&quot; menu described above.
+If some numbers are already in use, autonumbering will skip them.  You can control where autonumbering looks for numbers to skip using the “Skip numbers found in” menu, which has the same options as the “Autonumber text in” menu described above.
 </p>
 
 <p>
-If &quot;Overwrite existing numbers&quot; is enabled, all attributes found that match the pattern given in the &quot;Search for&quot; field will be renumbered; otherwise, only those that aren&#039;t already numbered will be changed.
+If “Overwrite existing numbers” is enabled, all attributes found that match the pattern given in the “Search for” field will be renumbered; otherwise, only those that aren&#039;t already numbered will be changed.
 </p>
 
 </div>
-
-<h3 id="controllingnumberassignment">Controlling number assignment</h3>
+<!-- EDIT3 SECTION "Choosing attributes to number" [662-1799] -->
+<h3 class="sectionedit4" id="controlling_number_assignment">Controlling number assignment</h3>
 <div class="level3">
 
 <p>
-The &quot;Starting number&quot; sets the first number that autonumbering will try to assign.  For example, to renumber a page with component numbers <code>U100</code>, <code>R101</code>, etc., set the &quot;Starting number&quot; to 100. The &quot;Sort order&quot; controls what order autonumbering assigns numbers.
+The “Starting number” sets the first number that autonumbering will try to assign.  For example, to renumber a page with component numbers <code>U100</code>, <code>R101</code>, etc., set the “Starting number” to 100. The “Sort order” controls what order autonumbering assigns numbers.
 </p>
 
 <p>
-If the &quot;Remove numbers&quot; option is enabled, then attributes have their numbers reset to &quot;<code>?</code>&quot; (for example, &quot;<code>R10</code>&quot; becomes &quot;<code>R?</code>&quot;).
+If the “Remove numbers” option is enabled, then attributes have their numbers reset to “<code>?</code>” (for example, “<code>R10</code>” becomes “<code>R?</code>”).
 </p>
 
 </div>
-</body>
+<!-- EDIT4 SECTION "Controlling number assignment" [1800-] --></body>
 </html>

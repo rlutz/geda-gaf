@@ -12,13 +12,13 @@
 <a href=.>start</a>&nbsp;=>&nbsp;<a href=geda-gnetlist_ug.html>gnetlist_ug</a></br>
 <div class="table sectionedit1"><table class="inline">
 	<tr class="row0">
-		<td class="col0 leftalign"> &lt;&lt; <a href="geda-gnetlist_ug-running_gnetlist.html" class="wikilink1" title="geda-gnetlist_ug-running_gnetlist.html">Running gnetlist</a>  </td><td class="col1 centeralign">  <strong><a href="geda-gnetlist_ug.html" class="wikilink1" title="geda-gnetlist_ug.html">gEDA gnetlist User Guide</a></strong>     </td><td class="col2 rightalign">  <a href="geda-gnetlist_ug-netlist_backends.html" class="wikilink1" title="geda-gnetlist_ug-netlist_backends.html">Netlist backends</a> &gt;&gt; </td>
+		<td class="col0 leftalign"> « <a href="geda-gnetlist_ug-running_gnetlist.html" class="wikilink1" title="geda-gnetlist_ug-running_gnetlist.html">Running gnetlist</a>  </td><td class="col1 centeralign">  <strong><a href="geda-gnetlist_ug.html" class="wikilink1" title="geda-gnetlist_ug.html">gEDA gnetlist User Guide</a></strong>     </td><td class="col2 rightalign">  <a href="geda-gnetlist_ug-netlist_backends.html" class="wikilink1" title="geda-gnetlist_ug-netlist_backends.html">Netlist backends</a> » </td>
 	</tr>
 </table></div>
 <!-- EDIT1 TABLE [1-181] -->
 
 
-<h2 id="inputandoutputfiles">Input and output files</h2>
+<h2 class="sectionedit2" id="input_and_output_files">Input and output files</h2>
 <div class="level2">
 
 <p>
@@ -27,8 +27,8 @@ gnetlist takes one or more <em>schematic files</em> as input, and outputs the re
 <div class="notetip">Schematic files can be viewed and edited using the gEDA <em>schematic capture</em> application. For more information, see the  <a href="geda-gschem_ug.html" class="wikilink1" title="geda-gschem_ug.html">gEDA gschem User Guide</a>.
 </div>
 </div>
-
-<h3 id="schematicfiles">Schematic files</h3>
+<!-- EDIT2 SECTION "Input and output files" [194-539] -->
+<h3 class="sectionedit3" id="schematic_files">Schematic files</h3>
 <div class="level3">
 
 <p>
@@ -41,20 +41,20 @@ You can list any number of schematic files as input.  They will be merged togeth
 <pre class="code">gnetlist power-supply.sch motor-drive.sch</pre>
 
 <p>
-If you have a schematic which has a filename beginning with a hyphen (&quot;-&quot;), you should add the special option <code>--</code> after any options and before your list of input files.  This will make sure that none of your filenames get misinterpreted as options. For example:
+If you have a schematic which has a filename beginning with a hyphen (“-”), you should add the special option <code>--</code> after any options and before your list of input files.  This will make sure that none of your filenames get misinterpreted as options. For example:
 </p>
 <pre class="code">gnetlist -- -tricky-name.sch</pre>
 
 </div>
-
-<h3 id="outputfilename">Output filename</h3>
+<!-- EDIT3 SECTION "Schematic files" [540-1755] -->
+<h3 class="sectionedit4" id="output_filename">Output filename</h3>
 <div class="level3">
 
 <p>
-By default, gnetlist writes the netlist it generates to a file called &quot;output.net&quot;.  You can use the <code>-o</code> option to specify a different filename. For example, to output to a file called &quot;stepper.bom&quot;:
+By default, gnetlist writes the netlist it generates to a file called “output.net”.  You can use the <code>-o</code> option to specify a different filename. For example, to output to a file called “stepper.bom”:
 </p>
 <pre class="code">gnetlist -o stepper.bom</pre>
 
 </div>
-</body>
+<!-- EDIT4 SECTION "Output filename" [1756-] --></body>
 </html>

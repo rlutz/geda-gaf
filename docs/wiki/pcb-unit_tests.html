@@ -10,7 +10,7 @@
 </head>
 <body>
 
-<h2 id="unittestingframework">Unit Testing Framework</h2>
+<h2 class="sectionedit1" id="unit_testing_framework">Unit Testing Framework</h2>
 <div class="level2">
 
 <p>
@@ -18,26 +18,37 @@ I just figured this out, so, here&#039;s how it works, and I&#039;ll formalize t
 </p>
 
 <p>
-pcb uses the glib testing framework for unit tests: https:<em>developer.gnome.org/glib/stable/glib-Testing.html
+pcb uses the glib testing framework for unit tests: <a href="https://developer.gnome.org/glib/stable/glib-Testing.html" class="urlextern" title="https://developer.gnome.org/glib/stable/glib-Testing.html" rel="nofollow">https://developer.gnome.org/glib/stable/glib-Testing.html</a>
+</p>
 
+<p>
 Look at main-test.c for examples. 
+</p>
 
+<p>
 In the actual code, you can wrap the unit test stuff in:
+</p>
+<pre class="code">#ifdef PCB_UNIT_TEST
+#endif /* PCB_UNIT_TEST */</pre>
 
-&lt;code&gt;
-#ifdef PCB_UNIT_TEST
-#endif /* PCB_UNIT_TEST */
-&lt;/code&gt;
-
+<p>
 so that it doesn&#039;t bog things down when not testing. Does it really bog things down when not testing??
+</p>
 
-You need a &quot;&lt;x&gt;_register_tests&quot; function, and then how ever many functions you&#039;re going to use to execute your tests. Put prototypes in the header file. Include the header file in main-test.c, and add a call to the &quot;&lt;x&gt;_register_tests&quot; function in main.
+<p>
+You need a “&lt;x&gt;_register_tests” function, and then how ever many functions you&#039;re going to use to execute your tests. Put prototypes in the header file. Include the header file in main-test.c, and add a call to the “&lt;x&gt;_register_tests” function in main.
+</p>
 
+<p>
 In the register function, make a call to g_test_add_func to add whatever testing functions you want to call. It uses a /x/y naming convention, where x is the test module, and y are the individual tests.
+</p>
 
+<p>
 You have to add the source file to the list of files to be compiled for testing in Makefile.am. Look for the TEST_SRCS variable, and add your files there, in addition to adding them wherever else you need so that pcb compiles them.
+</p>
 
-Finally, you can rerun configure (to regen the makefiles), and execute &quot;make check&quot; from the build directory. This will build and execute the tests without necessarily building all of pcb. I&#039;m not sure if this runs the pcb level tests or not.
+<p>
+Finally, you can rerun configure (to regen the makefiles), and execute “make check” from the build directory. This will build and execute the tests without necessarily building all of pcb. I&#039;m not sure if this runs the pcb level tests or not.
 </p>
 
 </div>

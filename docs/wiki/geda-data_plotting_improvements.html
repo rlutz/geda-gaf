@@ -14,12 +14,12 @@
 <em>Translations of this page are also available in the following languages:</em> <a href="geda-data_plotting_improvements.ru.html" class="wikilink1" title="geda-data_plotting_improvements.ru.html">Русский</a>.
 </p>
 
-<h1 id="simulationdataplotting">Simulation Data Plotting</h1>
+<h1 class="sectionedit1" id="simulation_data_plotting">Simulation Data Plotting</h1>
 <div class="level1">
 
 </div>
-
-<h2 id="rationale">Rationale</h2>
+<!-- EDIT1 SECTION "Simulation Data Plotting" [129-169] -->
+<h2 class="sectionedit2" id="rationale">Rationale</h2>
 <div class="level2">
 
 <p>
@@ -27,17 +27,17 @@ This article discusses on how data plotting can be improved.
 There are various programs out there, each has it&#039;s own pros and cons:
 </p>
 <ul>
-<li class="level1"><div class="li">  gtkwave: a great viewer for digital simulation data</div>
+<li class="level1"><div class="li"> <a href="http://home.nc.rr.com/gtkwave/" class="urlextern" title="http://home.nc.rr.com/gtkwave/" rel="nofollow"> gtkwave</a>: a great viewer for digital simulation data</div>
 </li>
-<li class="level1"><div class="li">  gwave: analog waveform viewer</div>
+<li class="level1"><div class="li"> <a href="http://www.telltronics.org/software/gwave/" class="urlextern" title="http://www.telltronics.org/software/gwave/" rel="nofollow"> gwave</a>: analog waveform viewer</div>
 </li>
-<li class="level1"><div class="li">  KJWaves: simulation frontend with plotting window</div>
+<li class="level1"><div class="li"> <a href="http://sourceforge.net/projects/kjwaves" class="urlextern" title="http://sourceforge.net/projects/kjwaves" rel="nofollow"> KJWaves</a>: simulation frontend with plotting window</div>
 </li>
 <li class="level1"><div class="li"> buildin plotting functions in ngspice</div>
 </li>
-<li class="level1"><div class="li"> gnuplot / octave / scipy / ... or similar programs as postprocessing script languages</div>
+<li class="level1"><div class="li"> gnuplot / octave / scipy / … or similar programs as postprocessing script languages</div>
 </li>
-<li class="level1"><div class="li"> ...</div>
+<li class="level1"><div class="li"> …</div>
 </li>
 </ul>
 
@@ -45,23 +45,23 @@ There are various programs out there, each has it&#039;s own pros and cons:
 There have been various suggestions on the mailing lists about the feature a plotting program could have:
 </p>
 <ul>
-<li class="level1"><div class="li"> postprocessing: integrate, add, diff, fft, ...</div>
+<li class="level1"><div class="li"> postprocessing: integrate, add, diff, fft, …</div>
 </li>
-<li class="level1"><div class="li"> view, examine: cursors, multiple windows, ...</div>
+<li class="level1"><div class="li"> view, examine: cursors, multiple windows, …</div>
 </li>
-<li class="level1"><div class="li"> data import, file format: circuit simulation data (gnucap, spice, ...)  hdf5 , measured data from oscilloscopes, spectrum analysers, ...</div>
+<li class="level1"><div class="li"> data import, file format: circuit simulation data (gnucap, spice, …) <a href="http://www.hdfgroup.org/HDF5/" class="urlextern" title="http://www.hdfgroup.org/HDF5/" rel="nofollow"> hdf5 </a>, measured data from oscilloscopes, spectrum analysers, …</div>
 </li>
-<li class="level1"><div class="li"> data export, file format: hdf5, pictures (png, ps, ...), ascii</div>
+<li class="level1"><div class="li"> data export, file format: hdf5, pictures (png, ps, …), ascii</div>
 </li>
-<li class="level1"><div class="li"> communication backends: dbus, ...</div>
+<li class="level1"><div class="li"> communication backends: dbus, …</div>
 </li>
 <li class="level1"><div class="li"> extension/scripting language</div>
 </li>
 </ul>
 
 </div>
-
-<h2 id="draft1extendgtkwaves">Draft1: Extend gtkwaves</h2>
+<!-- EDIT2 SECTION "Rationale" [170-1261] -->
+<h2 class="sectionedit3" id="draft1extend_gtkwaves">Draft1: Extend gtkwaves</h2>
 <div class="level2">
 <ul>
 <li class="level1"><div class="li"> write some import functions for analog data</div>
@@ -69,12 +69,12 @@ There have been various suggestions on the mailing lists about the feature a plo
 </ul>
 
 </div>
-
-<h2 id="draft2improvegwave">Draft2: improve gwave</h2>
+<!-- EDIT3 SECTION "Draft1: Extend gtkwaves" [1262-1347] -->
+<h2 class="sectionedit4" id="draft2improve_gwave">Draft2: improve gwave</h2>
 <div class="level2">
 
 <p>
-gwave requires an old  guile-gtk for GTK1.2.
+gwave requires an old <a href="http://www.gnu.org/software/guile-gtk/" class="urlextern" title="http://www.gnu.org/software/guile-gtk/" rel="nofollow"> guile-gtk</a> for GTK1.2.
 </p>
 <ul>
 <li class="level1"><div class="li"> port gwave to guile-gtk2.0 for GTK2.x</div>
@@ -87,13 +87,13 @@ gwave requires an old  guile-gtk for GTK1.2.
 A rewrite of gwave:
 </p>
 <ul>
-<li class="level1"><div class="li"> gaw: http://www.rvq.fr/linux/gaw.php</div>
+<li class="level1"><div class="li"> gaw: <a href="http://www.rvq.fr/linux/gaw.php" class="urlextern" title="http://www.rvq.fr/linux/gaw.php" rel="nofollow">http://www.rvq.fr/linux/gaw.php</a></div>
 </li>
 </ul>
 
 </div>
-
-<h2 id="draft3searchforexistingdataexploringprograms">Draft3: Search for existing data exploring programs</h2>
+<!-- EDIT4 SECTION "Draft2: improve gwave" [1348-1672] -->
+<h2 class="sectionedit5" id="draft3search_for_existing_data_exploring_programs">Draft3: Search for existing data exploring programs</h2>
 <div class="level2">
 
 <p>
@@ -102,8 +102,8 @@ If yes, how can they be extended to work as a waveform viewer for the simulators
 </p>
 
 </div>
-
-<h2 id="draft4anewplottingapplication">Draft4: A new plotting application</h2>
+<!-- EDIT5 SECTION "Draft3: Search for existing data exploring programs" [1673-1919] -->
+<h2 class="sectionedit6" id="draft4a_new_plotting_application">Draft4: A new plotting application</h2>
 <div class="level2">
 
 <p>
@@ -111,15 +111,15 @@ Some vague notes on how a new plotting application could be written.
 This notes currently relate on python as programming language.
 </p>
 <ul>
-<li class="level1"><div class="li"> the GUI could be created with libglade</div>
+<li class="level1"><div class="li"> the <abbr title="Graphical User Interface">GUI</abbr> could be created with <a href="http://www.jamesh.id.au/software/libglade/" class="urlextern" title="http://www.jamesh.id.au/software/libglade/" rel="nofollow">libglade</a></div>
 </li>
-<li class="level1"><div class="li"> the data storage format could be  hdf5 , maybe together with pytables</div>
+<li class="level1"><div class="li"> the data storage format could be <a href="http://www.hdfgroup.org/HDF5/" class="urlextern" title="http://www.hdfgroup.org/HDF5/" rel="nofollow"> hdf5 </a>, maybe together with <a href="http://www.pytables.org/moin" class="urlextern" title="http://www.pytables.org/moin" rel="nofollow">pytables</a></div>
 </li>
-<li class="level1"><div class="li"> the plotting engine could be  matplotlib (png, ps export included)</div>
+<li class="level1"><div class="li"> the plotting engine could be <a href="http://matplotlib.sourceforge.net/" class="urlextern" title="http://matplotlib.sourceforge.net/" rel="nofollow"> matplotlib</a> (png, ps export included)</div>
 </li>
-<li class="level1"><div class="li"> postprocessing could be done with  scipy</div>
+<li class="level1"><div class="li"> postprocessing could be done with <a href="http://www.scipy.org" class="urlextern" title="http://www.scipy.org" rel="nofollow"> scipy</a></div>
 </li>
-<li class="level1"><div class="li"> the scripting language is python. Thus import filter to hdf5 can easily be written. Even an integrated python shell would be possible. Seen on  MayaVi 2</div>
+<li class="level1"><div class="li"> the scripting language is python. Thus import filter to hdf5 can easily be written. Even an integrated python shell would be possible. Seen on <a href="http://code.enthought.com/mayavi2-screenshot.shtml" class="urlextern" title="http://code.enthought.com/mayavi2-screenshot.shtml" rel="nofollow"> MayaVi 2</a></div>
 </li>
 </ul>
 
@@ -135,14 +135,14 @@ Disadvantage: This configuration has a huge rucksack of additional required pack
 There are now some programs out there, that use the python, numpy, matplotlib tool chain:
 </p>
 <ul>
-<li class="level1"><div class="li"> oscopy: http://repo.or.cz/w/oscopy.git</div>
+<li class="level1"><div class="li"> oscopy: <a href="http://repo.or.cz/w/oscopy.git" class="urlextern" title="http://repo.or.cz/w/oscopy.git" rel="nofollow">http://repo.or.cz/w/oscopy.git</a></div>
 </li>
-<li class="level1"><div class="li"> dataplot: http://www.h-renrew.de/h/dataplot/dataplot.html, http://repo.or.cz/w/dataplot.git</div>
+<li class="level1"><div class="li"> dataplot: <a href="http://www.h-renrew.de/h/dataplot/dataplot.html" class="urlextern" title="http://www.h-renrew.de/h/dataplot/dataplot.html" rel="nofollow">http://www.h-renrew.de/h/dataplot/dataplot.html</a>, <a href="http://repo.or.cz/w/dataplot.git" class="urlextern" title="http://repo.or.cz/w/dataplot.git" rel="nofollow">http://repo.or.cz/w/dataplot.git</a></div>
 </li>
-<li class="level1"><div class="li"> gsim: http://kiwiki.fmtnuni.sk/mediawiki/index.php/Description_of_gsim</div>
+<li class="level1"><div class="li"> gsim: <a href="http://kiwiki.fmtnuni.sk/mediawiki/index.php/Description_of_gsim" class="urlextern" title="http://kiwiki.fmtnuni.sk/mediawiki/index.php/Description_of_gsim" rel="nofollow">http://kiwiki.fmtnuni.sk/mediawiki/index.php/Description_of_gsim</a></div>
 </li>
 </ul>
 
 </div>
-</body>
+<!-- EDIT6 SECTION "Draft4: A new plotting application" [1920-] --></body>
 </html>

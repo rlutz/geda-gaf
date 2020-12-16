@@ -12,11 +12,11 @@
 <a href=.>start</a>&nbsp;=>&nbsp;<a href=geda-gschem_ug.html>gschem_ug</a></br>
 <div class="table sectionedit1"><table class="inline">
 	<tr class="row0">
-		<td class="col0 leftalign"> &lt;&lt; <a href="geda-gschem_ug-exporting.html" class="wikilink1" title="geda-gschem_ug-exporting.html">Exporting images</a>  </td><td class="col1 centeralign">  <strong><a href="geda-gschem_ug.html" class="wikilink1" title="geda-gschem_ug.html">gEDA gschem User Guide</a></strong>  </td><td class="col2 rightalign">  <a href="geda-gschem_ug-command_line.html" class="wikilink1" title="geda-gschem_ug-command_line.html">Command-line arguments</a> &gt;&gt; </td>
+		<td class="col0 leftalign"> « <a href="geda-gschem_ug-exporting.html" class="wikilink1" title="geda-gschem_ug-exporting.html">Exporting images</a>  </td><td class="col1 centeralign">  <strong><a href="geda-gschem_ug.html" class="wikilink1" title="geda-gschem_ug.html">gEDA gschem User Guide</a></strong>  </td><td class="col2 rightalign">  <a href="geda-gschem_ug-command_line.html" class="wikilink1" title="geda-gschem_ug-command_line.html">Command-line arguments</a> » </td>
 	</tr>
 </table></div>
 <!-- EDIT1 TABLE [1-135] -->
-<h2 id="configuringgschem">Configuring gschem</h2>
+<h2 class="sectionedit2" id="configuring_gschem">Configuring gschem</h2>
 <div class="level2">
 
 <p>
@@ -47,8 +47,8 @@ These files are scripts written in Scheme, and they are executed using a Scheme 
 <div class="noteclassic">There are a very large number of options that affect the way gschem works, and only the most commonly-used are listed here. For a full list, see the <code>system-gschemrc</code> installed with gEDA.
 </div>
 </div>
-
-<h3 id="settingcolors">Setting colors</h3>
+<!-- EDIT2 SECTION "Configuring gschem" [137-1237] -->
+<h3 class="sectionedit3" id="setting_colors">Setting colors</h3>
 <div class="level3">
 
 <p>
@@ -78,8 +78,8 @@ Color settings should be placed in a gschem configuration file.
 </p>
 
 </div>
-
-<h3 id="keybindings">Key bindings</h3>
+<!-- EDIT3 SECTION "Setting colors" [1238-2359] -->
+<h3 class="sectionedit4" id="key_bindings">Key bindings</h3>
 <div class="level3">
 
 <p>
@@ -87,7 +87,7 @@ A gschem <a href="geda-gschem_ug-editing_actions.html" class="wikilink1" title="
 </p>
 
 <p>
-Each keystroke is defined using a string consisting of a non-modifier key name, prefixed by zero or more modifiers surrounded by angle brackets (&quot;<code>&lt;</code>&quot; and &quot;<code>&gt;</code>&quot;). The supported modifiers are <code>&lt;Control&gt;</code>, <code>&lt;Shift&gt;</code>, <code>&lt;Alt&gt;</code>, <code>&lt;Super&gt;</code>, <code>&lt;Hyper&gt;</code> and <code>&lt;Meta&gt;</code> (these are not available on all keyboards).
+Each keystroke is defined using a string consisting of a non-modifier key name, prefixed by zero or more modifiers surrounded by angle brackets (“<code>&lt;</code>” and “<code>&gt;</code>”). The supported modifiers are <code>&lt;Control&gt;</code>, <code>&lt;Shift&gt;</code>, <code>&lt;Alt&gt;</code>, <code>&lt;Super&gt;</code>, <code>&lt;Hyper&gt;</code> and <code>&lt;Meta&gt;</code> (these are not available on all keyboards).
 </p>
 <div class="noteimportant">Although key bindings will be displayed in gschem using internationalised key names, you must use the English names in the configuration files.
 </div>
@@ -99,13 +99,13 @@ A key sequence is a string containing two or more keystrokes separated by spaces
 Some examples:
 </p>
 <ul>
-<li class="level1"><div class="li"> To bind the &quot;New Window&quot; command to a typed <kbd>F</kbd> followed by an <kbd>N</kbd>: <pre class="code">(global-set-key &quot;F N&quot; &#039;file-new-window)</pre>
+<li class="level1"><div class="li"> To bind the “New Window” command to a typed <kbd>F</kbd> followed by an <kbd>N</kbd>: <pre class="code">(global-set-key &quot;F N&quot; &#039;file-new-window)</pre>
 </div>
 </li>
-<li class="level1"><div class="li"> To run the &quot;Deselect All&quot; command when the <kbd>Ctrl</kbd> and <kbd>Shift</kbd> keys are held down and an <kbd>A</kbd> is typed: <pre class="code">(global-set-key &quot;&lt;Control&gt;&lt;Shift&gt;A&quot; &#039;edit-deselect)</pre>
+<li class="level1"><div class="li"> To run the “Deselect All” command when the <kbd>Ctrl</kbd> and <kbd>Shift</kbd> keys are held down and an <kbd>A</kbd> is typed: <pre class="code">(global-set-key &quot;&lt;Control&gt;&lt;Shift&gt;A&quot; &#039;edit-deselect)</pre>
 </div>
 </li>
-<li class="level1"><div class="li"> To display the &quot;Snap Size&quot; dialog box when <kbd>O</kbd> is typed, followed by <kbd>S</kbd> typed with the <kbd>Shift</kbd> key held down: <pre class="code">(global-set-key &quot;O &lt;Shift&gt;S&quot; &#039;options-snapsize)</pre>
+<li class="level1"><div class="li"> To display the “Snap Size” dialog box when <kbd>O</kbd> is typed, followed by <kbd>S</kbd> typed with the <kbd>Shift</kbd> key held down: <pre class="code">(global-set-key &quot;O &lt;Shift&gt;S&quot; &#039;options-snapsize)</pre>
 </div>
 </li>
 </ul>
@@ -115,12 +115,12 @@ Key settings should be placed in a gschem configuration file.
 </p>
 
 </div>
-
-<h3 id="symbolandsourcelibraries">Symbol and source libraries</h3>
+<!-- EDIT4 SECTION "Key bindings" [2360-3764] -->
+<h3 class="sectionedit5" id="symbol_and_source_libraries">Symbol and source libraries</h3>
 <div class="level3">
 
 <p>
-The <code>component-library</code> function is used to add symbol libraries to the <a href="geda-gschem_ug-components.html" class="wikilink1" title="geda-gschem_ug-components.html">&quot;Select Component...&quot; window</a>.  A symbol library is a directory that contains symbol (&quot;<code>.sym</code>&quot;) files.  To add a directory as a symbol library, add the following to your configuration file:
+The <code>component-library</code> function is used to add symbol libraries to the <a href="geda-gschem_ug-components.html" class="wikilink1" title="geda-gschem_ug-components.html">&quot;Select Component...&quot; window</a>.  A symbol library is a directory that contains symbol (“<code>.sym</code>”) files.  To add a directory as a symbol library, add the following to your configuration file:
 </p>
 <pre class="code">(component-library &quot;/path/to/mysymbols&quot;)</pre>
 
@@ -135,7 +135,7 @@ To add all subdirectories of a particular directory as symbol libraries, use <co
 <pre class="code">(component-library-search &quot;/path/to/mysymbollibs/&quot;)</pre>
 
 <p>
-This will (recursively) look for directories that contain symbols below the specified path, and add them to the &quot;Select Component...&quot; window.
+This will (recursively) look for directories that contain symbols below the specified path, and add them to the “Select Component…” window.
 </p>
 
 <p>
@@ -147,5 +147,5 @@ Library settings should be placed in a gEDA/gaf suite configuration file, so tha
 </p>
 
 </div>
-</body>
+<!-- EDIT5 SECTION "Symbol and source libraries" [3765-] --></body>
 </html>

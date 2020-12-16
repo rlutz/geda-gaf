@@ -14,7 +14,7 @@
 <em>Translations of this page are also available in the following languages:</em> <a href="wiki-dokuvimki.ru.html" class="wikilink1" title="wiki-dokuvimki.ru.html">Русский</a>
 </p>
 
-<h1 id="usingvimtoeditgedawikipages">Using Vim to edit gEDA wiki pages</h1>
+<h1 class="sectionedit1" id="using_vim_to_edit_geda_wiki_pages">Using Vim to edit gEDA wiki pages</h1>
 <div class="level1">
 
 <p>
@@ -32,28 +32,24 @@ You can install DokuVimKi as follows:
 </li>
 <li class="level1"><div class="li"> To use <strong><code>:h dokuvimki</code></strong> to open DokuVimKi help you can generate Vim help tags for it using <strong><code>:helptags ~/.vim/doc/</code></strong> in Vim.</div>
 </li>
-<li class="level1"><div class="li"> You can optionally use another dokuwiki syntax file. I use one from http://github.com/nblock/vim-dokuwiki.git.</div>
+<li class="level1"><div class="li"> You can optionally use another dokuwiki syntax file. I use one from <a href="http://github.com/nblock/vim-dokuwiki.git" class="urlextern" title="http://github.com/nblock/vim-dokuwiki.git" rel="nofollow">http://github.com/nblock/vim-dokuwiki.git</a>.</div>
 </li>
 <li class="level1"><div class="li"> To install DokuVimKi you need to have <strong>xmlrpclib</strong> installed on your system. It has probably been already installed as part of python installation. You can check this using: <pre class="code">  locate xmlrpclib </pre>
 
 <p>
- See https:<em>www.dokuwiki.org/devel:xmlrpc for more information on this.
-  - You also need to install <strong>dokuwikixmlrpc</strong>. Download and install the latest version:&lt;code&gt;
-  git clone git:</em>github.com/chimeric/dokuwikixmlrpc
+ See <a href="https://www.dokuwiki.org/devel:xmlrpc" class="urlextern" title="https://www.dokuwiki.org/devel:xmlrpc" rel="nofollow">https://www.dokuwiki.org/devel:xmlrpc</a> for more information on this.
 </p>
 </div>
 </li>
-</ol>
-
-<p>
+<li class="level1"><div class="li"> You also need to install <strong>dokuwikixmlrpc</strong>. Download and install the latest version:<pre class="code">  git clone git://github.com/chimeric/dokuwikixmlrpc
   cd dokuwikixmlrpc
-</p>
-<pre class="code">sudo python setup.py install</pre>
+  sudo python setup.py install</pre>
 
 <p>
-&lt;/code&gt; See the Python documentation for more information about installing python modules.
+ See the <a href="http://docs.python.org/install/index.html" class="urlextern" title="http://docs.python.org/install/index.html" rel="nofollow">Python documentation</a> for more information about installing python modules.
 </p>
-<ol>
+</div>
+</li>
 <li class="level1"><div class="li"> Then to set up DokuVimKi for gEDA you need to add some strings into your <em><code>~/.vimrc</code></em> file: <pre class="code vim"><span class="kw1">let</span> g<span class="sy0">:</span>DokuVimKi_USER = <span class="st0">&quot;your_wiki_login_name&quot;</span>
 <span class="kw1">let</span> g<span class="sy0">:</span>DokuVimKi_PASS = <span class="st0">&quot;YOUR_WIKI_PASSWORD&quot;</span>
 <span class="kw1">let</span> g<span class="sy0">:</span>DokuVimKi_URL = <span class="st0">&quot;http://wiki.geda-project.org/lib/exe/xmlrpc.php&quot;</span><span class="co1">
@@ -82,5 +78,5 @@ Dokuwiki editing in Vim!
 
 
 </div>
-</body>
+<!-- EDIT1 SECTION "Using Vim to edit gEDA wiki pages" [110-] --></body>
 </html>

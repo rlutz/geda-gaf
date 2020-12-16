@@ -10,7 +10,7 @@
 </head>
 <body>
 
-<h1 id="gedagaf">gEDA/gaf</h1>
+<h1 class="sectionedit1" id="geda_gaf">gEDA/gaf</h1>
 <div class="level1">
 
 <p>
@@ -19,8 +19,8 @@ part of gEDA/gaf (gschem and friends).
 </p>
 
 </div>
-
-<h2 id="schematiccapture">Schematic capture</h2>
+<!-- EDIT1 SECTION "gEDA/gaf" [1-128] -->
+<h2 class="sectionedit2" id="schematic_capture">Schematic capture</h2>
 <div class="level2">
 
 <p>
@@ -31,8 +31,8 @@ for more information on the program.
 </p>
 
 </div>
-
-<h2 id="netlisting">Netlisting</h2>
+<!-- EDIT2 SECTION "Schematic capture" [129-394] -->
+<h2 class="sectionedit3" id="netlisting">Netlisting</h2>
 <div class="level2">
 
 <p>
@@ -44,8 +44,8 @@ the program.
 </p>
 
 </div>
-
-<h2 id="attributeediting">Attribute editing</h2>
+<!-- EDIT3 SECTION "Netlisting" [395-673] -->
+<h2 class="sectionedit4" id="attribute_editing">Attribute editing</h2>
 <div class="level2">
 
 <p>
@@ -62,8 +62,8 @@ gEDA/gaf.
 </p>
 
 </div>
-
-<h2 id="utilities">Utilities</h2>
+<!-- EDIT4 SECTION "Attribute editing" [674-1055] -->
+<h2 class="sectionedit5" id="utilities">Utilities</h2>
 <div class="level2">
 
 <p>
@@ -77,8 +77,8 @@ information on them:
 </ul>
 
 </div>
-
-<h3 id="utilitiesforschematics">Utilities for schematics</h3>
+<!-- EDIT5 SECTION "Utilities" [1056-1487] -->
+<h3 class="sectionedit6" id="utilities_for_schematics">Utilities for schematics</h3>
 <div class="level3">
 <ul>
 <li class="level1"><div class="li"> <strong>refdes_renum</strong>(1) is a utility for renumbering reference designators in gschem schematic files.</div>
@@ -92,8 +92,8 @@ information on them:
 </ul>
 
 </div>
-
-<h3 id="utilitiesforsymbols">Utilities for symbols</h3>
+<!-- EDIT6 SECTION "Utilities for schematics" [1488-2278] -->
+<h3 class="sectionedit7" id="utilities_for_symbols">Utilities for symbols</h3>
 <div class="level3">
 <ul>
 <li class="level1"><div class="li"> <strong>gsymcheck</strong>(1) is the symbol checker for the gEDA/gaf system. Give it a symbol file and it will go through and verify that the symbol will work in gschem and friends.</div>
@@ -102,13 +102,13 @@ information on them:
 </li>
 <li class="level1"><div class="li"> <strong>gmk_sym</strong>(1) is a program to create rectangular symbols for gschem from a file composed of comma separated lines.</div>
 </li>
-<li class="level1"><div class="li"> <strong>tragesym</strong>(1) is a small python script that creates gschem symbols out of structured textfiles. The aim of this script is to make it easier (and faster) to create symbols for gschem. See the <a href="geda-tragesymtutorial.html" class="wikilink2" title="geda-tragesymtutorial.html">tragesym tutorial</a> and README in the distribution.</div>
+<li class="level1"><div class="li"> <strong>tragesym</strong>(1) is a small python script that creates gschem symbols out of structured textfiles. The aim of this script is to make it easier (and faster) to create symbols for gschem. See the <a href="geda-tragesym_tutorial.html" class="wikilink1" title="geda-tragesym_tutorial.html">tragesym tutorial</a> and README in the distribution.</div>
 </li>
 </ul>
 
 </div>
-
-<h3 id="toolstofacilitatenetlisting">Tools to facilitate netlisting</h3>
+<!-- EDIT7 SECTION "Utilities for symbols" [2279-3045] -->
+<h3 class="sectionedit8" id="tools_to_facilitate_netlisting">Tools to facilitate netlisting</h3>
 <div class="level3">
 <ul>
 <li class="level1"><div class="li"> <strong>gsch2pcb</strong>(1) is a frontend to gnetlist(1) which aids in creating and updating pcb(1) printed circuit board layouts based on a set of electronic schematics created with gschem(1). See also <a href="geda-gsch2pcb_tutorial.html" class="wikilink1" title="geda-gsch2pcb_tutorial.html">Bill Wilson&#039;s gsch2pcb tutorial</a>. Modern pcb also has an import function which uses import from gnetlist directly.</div>
@@ -118,8 +118,8 @@ information on them:
 </ul>
 
 </div>
-
-<h3 id="utilitiesforprintingandgraphicaloutput">Utilities for printing and graphical output</h3>
+<!-- EDIT8 SECTION "Tools to facilitate netlisting" [3046-3663] -->
+<h3 class="sectionedit9" id="utilities_for_printing_and_graphical_output">Utilities for printing and graphical output</h3>
 <div class="level3">
 <ul>
 <li class="level1"><div class="li"> <strong>schdiff</strong>(1) is a graphical diff tool for gschem(1) schematics. It uses ImageMagick(1) and is most useful when combined with a revision control system (such as Git, Mercurial, and Subversion) so it can compare two revisions of the same file, review changes, etc.</div>
@@ -129,38 +129,38 @@ information on them:
 </ul>
 
 </div>
-
-<h3 id="formatconversiontools">Format conversion tools</h3>
+<!-- EDIT9 SECTION "Utilities for printing and graphical output" [3664-4189] -->
+<h3 class="sectionedit10" id="format_conversion_tools">Format conversion tools</h3>
 <div class="level3">
 <ul>
 <li class="level1"><div class="li"> <strong>convert_sym</strong>(1) converts a Viewlogic symbol/schematic to gEDA gschem format; there is also <strong>convert_sym.awk</strong> with almost the same functionality.</div>
 </li>
 <li class="level1"><div class="li"> <strong>smash_megafile</strong>(1) is a utility that takes a Viewlogic megafile and extracts its contents into a directory, where each element of the library will be represented with one file.</div>
 </li>
-<li class="level1"><div class="li"> <strong>olib</strong>(1) is a simple automated converter from OrCAD v4 ASCII parts library to gEDA symbols.</div>
+<li class="level1"><div class="li"> <strong>olib</strong>(1) is a simple automated converter from OrCAD v4 <abbr title="American Standard Code for Information Interchange">ASCII</abbr> parts library to gEDA symbols.</div>
 </li>
 <li class="level1"><div class="li"> Sarlacc is an OrCAD to gEDA format converter. It consists of <strong>sarlacc_schem</strong>(1) and <strong>sarlacc_sym</strong>(1). The first utility written in C converts OrCAD schematic files (in 16-bit format) to gEDA format. The second is a Perl script which converts OrCAD text libraries to gEDA components.</div>
 </li>
 </ul>
 
 </div>
-
-<h3 id="toolsforinteractionwithotherprograms">Tools for interaction with other programs</h3>
+<!-- EDIT10 SECTION "Format conversion tools" [4190-4952] -->
+<h3 class="sectionedit11" id="tools_for_interaction_with_other_programs">Tools for interaction with other programs</h3>
 <div class="level3">
 <ul>
-<li class="level1"><div class="li"> <strong>gxyrs</strong>(1) is a program written in Perl to batch process XYRS files. XYRS files are usually generated by PCB design programs, and are used by board assemblers.</div>
+<li class="level1"><div class="li"> <strong>gxyrs</strong>(1) is a program written in Perl to batch process XYRS files. XYRS files are usually generated by <a href="http://pcb.geda-project.org" class="urlextern" title="http://pcb.geda-project.org" rel="nofollow">PCB</a> design programs, and are used by board assemblers.</div>
 </li>
-<li class="level1"><div class="li"> <strong>sw2asc</strong>(1) is a utility which converts a SWITCAP2 output file into ASCII data files that other tools can read. See the <a href="geda-ssan.html" class="wikilink1" title="geda-ssan.html">gEDA/gaf Switcap Symbols and Netlister</a> for more information on the program.</div>
+<li class="level1"><div class="li"> <strong>sw2asc</strong>(1) is a utility which converts a SWITCAP2 output file into <abbr title="American Standard Code for Information Interchange">ASCII</abbr> data files that other tools can read. See the <a href="geda-ssan.html" class="wikilink1" title="geda-ssan.html">gEDA/gaf Switcap Symbols and Netlister</a> for more information on the program.</div>
 </li>
 <li class="level1"><div class="li"> <strong>pads_backannotate</strong>(1) is a Perl program which backannotates changes from Pads PowerPCB board layouts to gschem(1) schematics. See the <a href="geda-fbabgapp.html" class="wikilink1" title="geda-fbabgapp.html">Forward/Backward Annotation Between gEDA and Pads PowerPCB</a> document for more information.</div>
 </li>
-<li class="level1"><div class="li"> <strong>pcb_backannotate</strong>(1) is a program written in Perl which reads an engineering change order (ECO) files generated by the PCB program and backannotates the requested changes to a gschem(1) schematics. See the PCB manual for a complete description of the ECO file format.</div>
+<li class="level1"><div class="li"> <strong>pcb_backannotate</strong>(1) is a program written in Perl which reads an engineering change order (ECO) files generated by the <a href="http://pcb.geda-project.org" class="urlextern" title="http://pcb.geda-project.org" rel="nofollow">PCB</a> program and backannotates the requested changes to a gschem(1) schematics. See the <a href="http://pcb.geda-project.org/manual.html" class="urlextern" title="http://pcb.geda-project.org/manual.html" rel="nofollow">PCB manual</a> for a complete description of the ECO file format.</div>
 </li>
 </ul>
 
 </div>
-
-<h3 id="updateutilities">Update utilities</h3>
+<!-- EDIT11 SECTION "Tools for interaction with other programs" [4953-6019] -->
+<h3 class="sectionedit12" id="update_utilities">Update utilities</h3>
 <div class="level3">
 
 <p>
@@ -172,8 +172,8 @@ These are utilities for schematics and symbols for support of old schematic file
 </ul>
 
 </div>
-
-<h2 id="symbols">Symbols</h2>
+<!-- EDIT12 SECTION "Update utilities" [6020-6369] -->
+<h2 class="sectionedit13" id="symbols">Symbols</h2>
 <div class="level2">
 
 <p>
@@ -182,13 +182,13 @@ physical components used in electronic circuits. Initial gEDA
 installation provides you with default symbols contributed by many
 users. See also the <a href="geda-gschem_symbol_creation.html" class="wikilink1" title="geda-gschem_symbol_creation.html">gEDA/gaf Symbol
 Creation document</a> on how to create your own symbols and
-http://gedasymbols.org to find already available symbols
+<a href="http://gedasymbols.org" class="urlextern" title="http://gedasymbols.org" rel="nofollow">http://gedasymbols.org</a> to find already available symbols
 shared by other gEDA users.
 </p>
 
 </div>
-
-<h2 id="libraries">Libraries</h2>
+<!-- EDIT13 SECTION "Symbols" [6370-6795] -->
+<h2 class="sectionedit14" id="libraries">Libraries</h2>
 <div class="level2">
 <ul>
 <li class="level1"><div class="li"> <strong>libgeda</strong> is a main gEDA library of functions for manipulating gEDA schematics and symbols which is used by many of the above mentioned programs and utilities. See the gEDA Scheme Reference Manual (<em>info geda-scheme</em>) for more information on the library.</div>
@@ -198,8 +198,8 @@ shared by other gEDA users.
 </ul>
 
 </div>
-
-<h2 id="examplesandotherdocumentation">Examples and other documentation</h2>
+<!-- EDIT14 SECTION "Libraries" [6796-7363] -->
+<h2 class="sectionedit15" id="examples_and_other_documentation">Examples and other documentation</h2>
 <div class="level2">
 
 <p>
@@ -209,5 +209,5 @@ distribution.
 </p>
 
 </div>
-</body>
+<!-- EDIT15 SECTION "Examples and other documentation" [7364-] --></body>
 </html>

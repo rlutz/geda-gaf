@@ -10,7 +10,7 @@
 </head>
 <body>
 
-<h2 id="buildsystem">Build system</h2>
+<h2 class="sectionedit1" id="build_system">Build system</h2>
 <div class="level2">
 
 <p>
@@ -18,17 +18,17 @@ You must have a working build system before you even can think about hacking the
 
 Try building the sources from git before you try anything else.<br/>
 
-The wiki page http://wiki.geda-project.org/geda:developer shows the git command to get the geda-gaf repository. We are talking about pcb here.<br/>
+The wiki page <a href="http://wiki.geda-project.org/geda:developer" class="urlextern" title="http://wiki.geda-project.org/geda:developer" rel="nofollow">http://wiki.geda-project.org/geda:developer</a> shows the git command to get the geda-gaf repository. We are talking about pcb here.<br/>
 For pcb we need to do:
 </p>
 <pre class="code">git clone git://git.geda-project.org/pcb.git</pre>
 
 <p>
-For the other repositories take a look at http://git.geda-project.org/
+For the other repositories take a look at <a href="http://git.geda-project.org/" class="urlextern" title="http://git.geda-project.org/" rel="nofollow">http://git.geda-project.org/</a>
 </p>
 
 <p>
-Next get your build system working. http://wiki.geda-project.org/geda:gaf_building_git_version
+Next get your build system working. <a href="http://wiki.geda-project.org/geda:gaf_building_git_version" class="urlextern" title="http://wiki.geda-project.org/geda:gaf_building_git_version" rel="nofollow">http://wiki.geda-project.org/geda:gaf_building_git_version</a>
 </p>
 
 <p>
@@ -43,7 +43,7 @@ Generally just run:
 <pre class="code">./autogen.sh</pre>
 
 <p>
-and the scary part is over ;-)
+and the scary part is over <img src="images/smileys/icon_wink.gif" align="middle" alt=";-)" />
 </p>
 
 <p>
@@ -57,23 +57,23 @@ The autogen.sh script is usually only needed once, after a git clone or if a fil
 </p>
 
 <p>
-For more information on the AutoTools take a look at: https://www.gnu.org/software/automake/manual/html_node/Autotools-Introduction.html
+For more information on the AutoTools take a look at: <a href="https://www.gnu.org/software/automake/manual/html_node/Autotools-Introduction.html" class="urlextern" title="https://www.gnu.org/software/automake/manual/html_node/Autotools-Introduction.html" rel="nofollow">https://www.gnu.org/software/automake/manual/html_node/Autotools-Introduction.html</a>
 </p>
 
 <p>
-If you want to know more about git take a look at: https://git-scm.com/docs/gittutorial
+If you want to know more about git take a look at: <a href="https://git-scm.com/docs/gittutorial" class="urlextern" title="https://git-scm.com/docs/gittutorial" rel="nofollow">https://git-scm.com/docs/gittutorial</a>
 </p>
 
 </div>
-
-<h2 id="dependencies">Dependencies</h2>
+<!-- EDIT1 SECTION "Build system" [1-1392] -->
+<h2 class="sectionedit2" id="dependencies">Dependencies</h2>
 <div class="level2">
 
 <p>
 PCB is a open source program and it uses open source libraries and tools to do what it does.
-Doing a <code>repoquery --requires pcb</code> on my Fedora 20 system show the following dependencies:
+Doing a <code>repoquery –requires pcb</code> on my Fedora 20 system show the following dependencies:
 </p>
-<div class="table sectionedit1"><table class="inline">
+<div class="table sectionedit3"><table class="inline">
 	<tr class="row0">
 		<td class="col0 rightalign">  perl</td><td class="col1 rightalign">  libdl.so.2()</td><td class="col2 rightalign">  libm.so.6(GLIBC_2.2.5)</td>
 	</tr>
@@ -123,7 +123,7 @@ Doing a <code>repoquery --requires pcb</code> on my Fedora 20 system show the fo
 		<td class="col0 rightalign">  libdbus-1.so.3()</td><td class="col1 rightalign">  libm.so.6()</td><td class="col2"> </td>
 	</tr>
 </table></div>
-<!-- EDIT1 TABLE [1606-2557] -->
+<!-- EDIT3 TABLE [1606-2557] -->
 </div>
-</body>
+<!-- EDIT2 SECTION "Dependencies" [1393-] --></body>
 </html>

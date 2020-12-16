@@ -14,12 +14,12 @@
 <em>Эта страница доступна также на следующих языках:</em> <a href="geda-gschem_repl.html" class="wikilink1" title="geda-gschem_repl.html">English</a>
 </p>
 
-<h1 id="использованиеreplвgschem">Использование REPL в gschem</h1>
+<h1 class="sectionedit1" id="использование_repl_в_gschem">Использование REPL в gschem</h1>
 <div class="level1">
 
 </div>
-
-<h2 id="встроенныеграфическиефункцииreplвgschem">Встроенные графические функции REPL в gschem</h2>
+<!-- EDIT1 SECTION "Использование REPL в gschem" [120-175] -->
+<h2 class="sectionedit2" id="встроенные_графические_функции_repl_в_gschem">Встроенные графические функции REPL в gschem</h2>
 <div class="level2">
 
 <p>
@@ -30,8 +30,8 @@
 </p>
 
 </div>
-
-<h2 id="replвфоновомтерминале">REPL в фоновом терминале</h2>
+<!-- EDIT2 SECTION "Встроенные графические функции REPL в gschem" [176-635] -->
+<h2 class="sectionedit3" id="repl_в_фоновом_терминале">REPL в фоновом терминале</h2>
 <div class="level2">
 
 <p>
@@ -55,8 +55,8 @@
 (activate-readline)</pre>
 
 </div>
-
-<h2 id="внешнийграфическийrepl">Внешний графический REPL</h2>
+<!-- EDIT3 SECTION "REPL в фоновом терминале" [636-1610] -->
+<h2 class="sectionedit4" id="внешний_графический_repl">Внешний графический REPL</h2>
 <div class="level2">
 
 <p>
@@ -70,8 +70,8 @@ REPL, необходима библиотека работы с REPL из про
 (guile-gtk-repl)</pre>
 
 </div>
-
-<h2 id="replвлюбомтерминале">REPL в любом терминале</h2>
+<!-- EDIT4 SECTION "Внешний графический REPL" [1611-2219] -->
+<h2 class="sectionedit5" id="repl_в_любом_терминале">REPL в любом терминале</h2>
 <div class="level2">
 
 <p>
@@ -91,30 +91,33 @@ REPL, необходима библиотека работы с REPL из про
 
 <p>
 При открытии порта учтите соображения по безопасности, указанные здесь
-https:<em>lists.gnu.org/archive/html/guile-devel/2010-10/msg00044.html.
+<a href="https://lists.gnu.org/archive/html/guile-devel/2010-10/msg00044.html" class="urlextern" title="https://lists.gnu.org/archive/html/guile-devel/2010-10/msg00044.html" rel="nofollow">https://lists.gnu.org/archive/html/guile-devel/2010-10/msg00044.html</a>.
+</p>
 
+<p>
 Дальше необходимо просто подключиться к нему любой программой,
 которая может работать с сокетом, например, используя <strong>telnet</strong>,
 <strong>netcat</strong> или другую программу. Примеры использования <strong>telnet</strong>:
-&lt;code&gt;
-$ telnet localhost 37146
-&lt;/code&gt;
+</p>
+<pre class="code">$ telnet localhost 37146</pre>
 
+<p>
 Пример использования <strong>netcat</strong>:
+</p>
+<pre class="code">$ nc localhost 37146</pre>
 
-&lt;code&gt;
-$ nc localhost 37146
-&lt;/code&gt;
+<p>
+В этом случае интерфейс <em>readline</em> работать не будет.
+</p>
 
-В этом случае интерфейс </em>readline<em> работать не будет.
-
+<p>
 Пользователи <strong>Emacs</strong> для работы с REPL могут использовать чудесное
-окружение </em>Geiser<em>.
+окружение <em>Geiser</em>.
 Для этого нужно установить данный пакет, запустить сервер REPL в
 gschem и подключиться к нему в <strong>Emacs</strong> с помощью <kbd>M</kbd>+<kbd>X</kbd>
 <strong><code>connect-to-guile</code></strong>.
 </p>
 
 </div>
-</body>
+<!-- EDIT5 SECTION "REPL в любом терминале" [2220-] --></body>
 </html>
