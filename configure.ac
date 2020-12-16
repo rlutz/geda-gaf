@@ -8,7 +8,7 @@ dnl directory.
 # Set up configuration system
 #####################################################################
 
-AC_INIT([gEDA/gaf], [1.10.0], [https://bugs.launchpad.net/geda], [geda-gaf])
+AC_INIT([gEDA/gaf], [1.10.1], [https://bugs.launchpad.net/geda], [geda-gaf])
 AC_PREREQ([2.69])
 
 AC_CONFIG_SRCDIR([libgeda/src/libgeda.c])
@@ -25,7 +25,7 @@ AC_GNU_SOURCE # FIXME for some reason this is needed?
 # Do version number magic
 #####################################################################
 
-AX_GIT_VERSION([20191008])
+AX_GIT_VERSION([20201216])
 
 # This is used for keeping the ChangeLog files up-to-date
 AC_SUBST([CHANGELOG_BASE], [1.0-20070526])
@@ -186,9 +186,9 @@ AX_DATA_DIRS
 # Where should PCB footprints be searched for?
 AX_PCB_DIRS
 # Set up libgeda with the correct ld version number
-AX_LIBGEDA([46:0:0])
+AX_LIBGEDA([47:0:0])
 # Set up libgedacairo with the correct ld version number
-AX_LIBGEDACAIRO([1:2:0])
+AX_LIBGEDACAIRO([1:3:0])
 
 #####################################################################
 # Recurse into Xorn configuration
