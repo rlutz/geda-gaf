@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: geda-gaf\n"
 "Report-Msgid-Bugs-To: https://bugs.launchpad.net/geda\n"
-"POT-Creation-Date: 2019-10-08 20:20+0200\n"
+"POT-Creation-Date: 2020-12-16 18:12+0100\n"
 "PO-Revision-Date: 2014-08-31 20:24+0100\n"
 "Last-Translator: Bert Timmerman <bert.timmerman@xs4all.nl>\n"
 "Language-Team: gEDA developers\n"
@@ -152,17 +152,17 @@ msgstr ""
 msgid "ERROR: You may only specify a single configuration store.\n"
 msgstr "FOUT: U mag alleen een enkele configuratie opslag specificeren.\n"
 
-#: gaf/config.c:157
+#: gaf/config.c:158
 #, c-format
 msgid "WARNING: Could not load '%s': %s.\n"
 msgstr "WAARSCHUWING: Kan '%s': %s niet laden.\n"
 
-#: gaf/config.c:169
+#: gaf/config.c:170
 #, c-format
 msgid "ERROR: You must specify both configuration group and key.\n"
 msgstr "FOUT: U moet beide configuratie groep en sleutel specificeren.\n"
 
-#: gaf/config.c:181 gaf/config.c:195 gaf/export.c:316
+#: gaf/config.c:182 gaf/config.c:196 gaf/export.c:316
 #, c-format
 msgid "ERROR: %s.\n"
 msgstr "FOUT: %s.\n"

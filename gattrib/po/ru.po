@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: geda gattrib\n"
 "Report-Msgid-Bugs-To: https://bugs.launchpad.net/geda\n"
-"POT-Creation-Date: 2019-10-08 20:20+0200\n"
+"POT-Creation-Date: 2020-12-16 18:12+0100\n"
 "PO-Revision-Date: 2014-03-08 20:49+0400\n"
 "Last-Translator: Vladimir Zhbanov <vzhbanov@gmail.com>\n"
 "Language-Team: gEDA developers <geda-dev@seul.org>\n"
@@ -55,7 +55,7 @@ msgstr ""
 msgid "Couldn't find file [%s]\n"
 msgstr "Не удалось найти файл «%s»\n"
 
-#: gattrib/src/g_rc.c:70
+#: gattrib/src/g_rc.c:69
 #, c-format
 msgid ""
 "You are running gEDA/gaf version [%s%s.%s],\n"

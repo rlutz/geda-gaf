@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gaf_ru\n"
 "Report-Msgid-Bugs-To: https://bugs.launchpad.net/geda\n"
-"POT-Creation-Date: 2019-10-08 20:20+0200\n"
+"POT-Creation-Date: 2020-12-16 18:12+0100\n"
 "PO-Revision-Date: 2014-03-08 20:49+0400\n"
 "Last-Translator: Vladimir Zhbanov <vzhbanov@gmail.com>\n"
 "Language-Team: geda-user@delorie.com\n"
@@ -154,17 +154,17 @@ msgstr ""
 msgid "ERROR: You may only specify a single configuration store.\n"
 msgstr "ОШИБКА: можно указать только одно хранилище настроек.\n"
 
-#: gaf/config.c:157
+#: gaf/config.c:158
 #, c-format
 msgid "WARNING: Could not load '%s': %s.\n"
 msgstr "ВНИМАНИЕ: не удалось загрузить «%s»: %s.\n"
 
-#: gaf/config.c:169
+#: gaf/config.c:170
 #, c-format
 msgid "ERROR: You must specify both configuration group and key.\n"
 msgstr "ОШИБКА: необходимо указать и группу настроек, и ключевое слово.\n"
 
-#: gaf/config.c:181 gaf/config.c:195 gaf/export.c:316
+#: gaf/config.c:182 gaf/config.c:196 gaf/export.c:316
 #, c-format
 msgid "ERROR: %s.\n"
 msgstr "ОШИБКА: %s.\n"
