@@ -17,6 +17,25 @@
 #include "module.h"
 
 
+SCM scm_procedure_or_name(SCM proc)
+{
+#if SCM_MINOR_VERSION < 2
+	return proc;
+#else
+	return scm_procedure_name(proc);
+#endif
+}
+
+SCM scm_frame_procedure_or_name(SCM frame)
+{
+#if SCM_MINOR_VERSION < 2
+	return scm_frame_procedure(frame);
+#else
+	return scm_frame_procedure_name(frame);
+#endif
+}
+
+
 struct call_data {
 	SCM proc;
 	PyObject *args;
