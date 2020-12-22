@@ -8,6 +8,12 @@ This file documents important user-visible changes in gEDA/gaf.  For
 more information, please consult the `ChangeLog' file.
 
 
+Notable changes in gEDA/gaf 1.10.2
+==================================
+
+* Re-added support for Guile 2.0 and some older library versions
+
+
 Notable changes in gEDA/gaf 1.10.1
 ==================================
 
