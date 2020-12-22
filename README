@@ -98,8 +98,8 @@ In order to compile gEDA from the distributed source archives, you
 You *must* also have the following libraries installed, including
 their development files:
 
- - Guile 2.2 ("GNU's Ubiquitous Intelligent Language for Extensions")
-   >= 2.2.4 <https://www.gnu.org/software/guile/>
+ - Guile 2.x ("GNU's Ubiquitous Intelligent Language for Extensions")
+   >= 2.0.10 <https://www.gnu.org/software/guile/>
 
  - GLib 2.0 >= 2.41.1 <https://www.gtk.org/>
 
