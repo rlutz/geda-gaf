@@ -83,30 +83,30 @@ PKG_PROG_PKG_CONFIG
 
 AX_CHECK_GUILE([2.0.10])
 
-PKG_CHECK_MODULES(GLIB, [glib-2.0 >= 2.58.3], ,
-  AC_MSG_ERROR([GLib 2.58.3 or later is required.]))
+PKG_CHECK_MODULES(GLIB, [glib-2.0 >= 2.41.1], ,
+  AC_MSG_ERROR([GLib 2.41.1 or later is required.]))
 
-PKG_CHECK_MODULES(GIO, [gio-2.0 >= 2.58.3], ,
-  AC_MSG_ERROR([GIO 2.58.3 or later is required.]))
+PKG_CHECK_MODULES(GIO, [gio-2.0 >= 2.20.0], ,
+  AC_MSG_ERROR([GIO 2.20.0 or later is required.]))
 
-PKG_CHECK_MODULES(GTK, [gtk+-2.0 >= 2.24.32], ,
-  AC_MSG_ERROR([GTK+ 2.24.32 or later is required.]))
+PKG_CHECK_MODULES(GTK, [gtk+-2.0 >= 2.18.0], ,
+  AC_MSG_ERROR([GTK+ 2.18.0 or later is required.]))
 GTK_CFLAGS=`echo "$GTK_CFLAGS" | sed "s/-I\\(@<:@^ @:>@*gtk\\)/-isystem\\1/g"`
 
-PKG_CHECK_MODULES(GDK, [gdk-2.0 >= 2.24.32], ,
-  AC_MSG_ERROR([GDK 2.24.32 or later is required.]))
+PKG_CHECK_MODULES(GDK, [gdk-2.0 >= 2.18.0], ,
+  AC_MSG_ERROR([GDK 2.18.0 or later is required.]))
 GDK_CFLAGS=`echo "$GDK_CFLAGS" | sed "s/-I\\(@<:@^ @:>@*gtk\\)/-isystem\\1/g"`
 
-PKG_CHECK_MODULES(GDK_PIXBUF, [gdk-pixbuf-2.0 >= 2.38.1], ,
-  AC_MSG_ERROR([GDK_PIXBUF 2.38.1 or later is required.]))
+PKG_CHECK_MODULES(GDK_PIXBUF, [gdk-pixbuf-2.0 >= 2.18.0], ,
+  AC_MSG_ERROR([GDK_PIXBUF 2.18.0 or later is required.]))
 
 AX_CHECK_CAIRO
 
-PKG_CHECK_MODULES(PANGOCAIRO, [pangocairo >= 1.42.3], ,
-  AC_MSG_ERROR([PANGOCAIRO 1.42.3 or later is required.]))
+PKG_CHECK_MODULES(PANGOCAIRO, [pangocairo >= 0.26], ,
+  AC_MSG_ERROR([PANGOCAIRO 0.26 or later is required.]))
 
-PKG_CHECK_MODULES(PANGO, [pango >= 1.42.3], ,
-  AC_MSG_ERROR([PANGO 1.42.3 or later is required.]))
+PKG_CHECK_MODULES(PANGO, [pango >= 1.23.0], ,
+  AC_MSG_ERROR([PANGO 1.23.0 or later is required.]))
 
 #####################################################################
 # Header files & particular functions

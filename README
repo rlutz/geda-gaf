@@ -101,15 +101,15 @@ their development files:
  - Guile 2.2 ("GNU's Ubiquitous Intelligent Language for Extensions")
    >= 2.2.4 <https://www.gnu.org/software/guile/>
 
- - GLib 2.0 >= 2.58.3 <https://www.gtk.org/>
+ - GLib 2.0 >= 2.41.1 <https://www.gtk.org/>
 
- - GTK+ 2.0 (the Gimp Toolkit) >= 2.24.32 <https://www.gtk.org/>
+ - GTK+ 2.0 (the Gimp Toolkit) >= 2.18.0 <https://www.gtk.org/>
 
- - GDK Pixbuf 2.0 >= 2.38.1 <https://www.gtk.org/>
+ - GDK Pixbuf 2.0 >= 2.18.0 <https://www.gtk.org/>
 
- - Pango >= 1.42.3 <https://pango.gnome.org/>
+ - Pango >= 1.23.0 <https://pango.gnome.org/>
 
- - Cairo >= 1.16.0 <https://cairographics.org/>
+ - Cairo >= 1.8.0 <https://cairographics.org/>
 
  - CPython 2.7 >= 2.7.16 <https://www.python.org/downloads/>
 
