@@ -29,6 +29,9 @@ extern PyTypeObject ProcedureType;
 extern PyObject *guile_error;
 extern SCM gsubr_alist;
 
+SCM scm_procedure_or_name(SCM proc);
+SCM scm_frame_procedure_or_name(SCM frame);
+
 SCM py2scm(PyObject *value);
 PyObject *scm2py(SCM value);
 

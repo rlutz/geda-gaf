@@ -64,7 +64,7 @@ static SCM call_callable(SCM scm_args)
 {
 	SCM stack = scm_make_stack(SCM_BOOL_T, SCM_EOL);
 	SCM frame = scm_stack_ref(stack, scm_from_int(0));
-	SCM name = scm_frame_procedure_name(frame);
+	SCM name = scm_frame_procedure_or_name(frame);
 	PyObject *callable = scm_to_pointer(scm_assq_ref(gsubr_alist, name));
 
 	scm_dynwind_begin(0);
@@ -151,7 +151,7 @@ SCM py2scm(PyObject *value)
 		SCM gsubr = scm_c_make_gsubr(name, 0, 0, 1, &call_callable);
 		Py_INCREF(value);
 		SCM ptr = scm_from_pointer(value, (void (*)(void *))Py_DecRef);
-		gsubr_alist = scm_acons(scm_procedure_name(gsubr), ptr,
+		gsubr_alist = scm_acons(scm_procedure_or_name(gsubr), ptr,
 					gsubr_alist);
 		return gsubr;
 	}
