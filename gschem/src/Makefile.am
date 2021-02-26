@@ -152,12 +152,12 @@ am__v_SNARF_1 =
 	$(AM_V_SNARF)CPP="$(CPP)" $(GUILE_SNARF) -o $@ $< $(snarf_cpp_opts)
 
 actions.decl.x: actions.decl.h actions.c Makefile
-	$(AM_V_GEN)$(CPP) -I$(srcdir) -c $< | \
+	$(AM_V_GEN)$(CPP) -I$(srcdir) -c actions.decl.h | \
 	  sed -e '/^.*KEEP_LINE /!d' -e 's/^.*KEEP_LINE //' > $@.tmp && \
 	mv $@.tmp $@
 
 actions.init.x: actions.init.c actions.c Makefile
-	$(AM_V_GEN)$(CPP) -I$(srcdir) -c $< | \
+	$(AM_V_GEN)$(CPP) -I$(srcdir) -c actions.init.c | \
 	  sed -e '/^.*KEEP_LINE /!d' -e 's/^.*KEEP_LINE //' > $@.tmp && \
 	mv $@.tmp $@
 
