@@ -386,7 +386,7 @@ gschem_page_view_get_page_geometry (GschemPageView *view)
 
   geometry = g_hash_table_lookup (view->geometry_table, page);
 
-  window = gtk_widget_get_window (GTK_WIDGET(view));
+  window = gtk_widget_get_window (GTK_WIDGET (view));
   g_return_val_if_fail (window != NULL, NULL);
   screen_width = gdk_window_get_width (GDK_WINDOW (window));
   screen_height = gdk_window_get_height (GDK_WINDOW (window));
