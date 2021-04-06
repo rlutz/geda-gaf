@@ -388,8 +388,8 @@ gschem_page_view_get_page_geometry (GschemPageView *view)
 
   window = gtk_widget_get_window (GTK_WIDGET (view));
   g_return_val_if_fail (window != NULL, NULL);
-  screen_width = gdk_window_get_width (GDK_WINDOW (window));
-  screen_height = gdk_window_get_height (GDK_WINDOW (window));
+  screen_width = gdk_window_get_width (window);
+  screen_height = gdk_window_get_height (window);
 
   if (geometry == NULL) {
     geometry = gschem_page_geometry_new_with_values (screen_width,
