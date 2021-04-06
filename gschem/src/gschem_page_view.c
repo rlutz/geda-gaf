@@ -373,6 +373,7 @@ gschem_page_view_get_page_geometry (GschemPageView *view)
 {
   PAGE *page = NULL;
   GschemPageGeometry *geometry = NULL;
+  GdkWindow *window = NULL;
   int screen_width;
   int screen_height;
 
@@ -385,8 +386,10 @@ gschem_page_view_get_page_geometry (GschemPageView *view)
 
   geometry = g_hash_table_lookup (view->geometry_table, page);
 
-  /* \todo The following line is deprecated in GDK 2.24 */
-  gdk_drawable_get_size (GTK_WIDGET (view)->window, &screen_width, &screen_height);
+  window = gtk_widget_get_window (GTK_WIDGET (view));
+  g_return_val_if_fail (window != NULL, NULL);
+  screen_width = gdk_window_get_width (window);
+  screen_height = gdk_window_get_height (window);
 
   if (geometry == NULL) {
     geometry = gschem_page_geometry_new_with_values (screen_width,
