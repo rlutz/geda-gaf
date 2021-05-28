@@ -557,13 +557,13 @@ set_selection_adapter (GschemObjectPropertiesDockable *dialog, GschemSelectionAd
                               "notify::pin-type",
                               G_CALLBACK (update_pin_type_widget),
                               dialog);
-  }
 
-  update_cap_style_widget (dialog);
-  update_fill_type_widget (dialog);
-  update_line_type_widget (dialog);
-  update_object_color_widget (dialog);
-  update_pin_type_widget (dialog);
+    update_cap_style_widget (dialog);
+    update_fill_type_widget (dialog);
+    update_line_type_widget (dialog);
+    update_object_color_widget (dialog);
+    update_pin_type_widget (dialog);
+  }
 }
 
 
