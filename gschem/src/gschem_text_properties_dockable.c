@@ -435,12 +435,12 @@ set_selection_adapter (GschemTextPropertiesDockable *widget, GschemSelectionAdap
                               "notify::text-string",
                               G_CALLBACK (update_text_content_widget),
                               widget);
-  }
 
-  update_text_alignment_widget (widget);
-  update_text_color_widget (widget);
-  update_text_rotation_widget (widget);
-  update_text_content_widget (widget);
+    update_text_alignment_widget (widget);
+    update_text_color_widget (widget);
+    update_text_rotation_widget (widget);
+    update_text_content_widget (widget);
+  }
 }
 
 
