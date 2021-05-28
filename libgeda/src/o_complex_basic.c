@@ -518,7 +518,9 @@ static void create_placeholder(TOPLEVEL * toplevel, OBJECT * new_node, int x, in
     g_free(not_found_text);
 
     /* figure out where to put the hazard triangle */
-    world_get_text_bounds (toplevel, new_prim_obj, &left, &top, &right, &bottom);
+    if (!world_get_text_bounds (toplevel, new_prim_obj,
+                                &left, &top, &right, &bottom))
+      left = top = right = bottom = 0;
     x_offset = (right - left) / 4;
     y_offset = bottom - top + 100;  /* 100 is just an additional offset */
 

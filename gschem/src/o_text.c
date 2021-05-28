@@ -81,10 +81,12 @@ int o_text_get_rendered_bounds (void *user_data, OBJECT *o_current,
   cairo_destroy (cr);
 
   /* Round bounds to nearest integer */
-  *min_x = lrint (fmin (l, r));
-  *min_y = lrint (fmin (t, b));
-  *max_x = lrint (fmax (l, r));
-  *max_y = lrint (fmax (t, b));
+  if (result) {
+    *min_x = lrint (fmin (l, r));
+    *min_y = lrint (fmin (t, b));
+    *max_x = lrint (fmax (l, r));
+    *max_y = lrint (fmax (t, b));
+  }
 
   return result;
 }
