@@ -85,9 +85,10 @@ OBJECT *s_basic_init_object(OBJECT *new_node, int type, char const *name)
 
   new_node->conn_list = NULL;
 
+  new_node->complex_embedded = FALSE;
   new_node->complex_basename = NULL;
   new_node->parent = NULL;
-		
+
   /* Setup the color */
   new_node->color = DEFAULT_COLOR;
   new_node->dont_redraw = FALSE;
@@ -102,12 +103,17 @@ OBJECT *s_basic_init_object(OBJECT *new_node, int type, char const *name)
   new_node->line_width = 0;
   new_node->line_space = 0;
   new_node->line_length = 0;
+
+  new_node->fill_type = FILLING_HOLLOW;
   new_node->fill_width = 0;
   new_node->fill_angle1 = 0;
   new_node->fill_angle2 = 0;
   new_node->fill_pitch1 = 0;
   new_node->fill_pitch2 = 0;
-	
+
+  new_node->font_text_size = 0;
+  new_node->font_prim_objs = NULL;
+
   new_node->attribs = NULL;
   new_node->attached_to = NULL;
   new_node->copied_to = NULL;
