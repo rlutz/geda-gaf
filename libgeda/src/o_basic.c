@@ -99,6 +99,13 @@ void o_set_line_options(TOPLEVEL *toplevel, OBJECT *o_current,
 
   /* do some error checking / correcting */
   switch(type) {
+    default:
+      s_log_message (_("Found invalid line type [ %d %d %d ], "
+                       "resetting to default\n"),
+                     type, length, space);
+      type = TYPE_SOLID;
+      /* fallthrough */
+
     case(TYPE_SOLID):
       length = -1;
       space = -1;
@@ -118,9 +125,6 @@ void o_set_line_options(TOPLEVEL *toplevel, OBJECT *o_current,
       if (space < 1) {
         space = 100;
       }
-    break;
-    default:
-
     break;
   }
 
@@ -232,9 +236,15 @@ void o_set_fill_options(TOPLEVEL *toplevel, OBJECT *o_current,
       pitch2 = -1;
       break;
 
+    default:
+      s_log_message (_("Found invalid fill type [ %d %d %d %d %d %d ], "
+                       "resetting to default\n"),
+                     type, width, angle1, pitch1, angle2, pitch2);
+      type = FILLING_HOLLOW;
+      /* fallthrough */
+
     case(FILLING_HOLLOW):
     case(FILLING_FILL):
-    default:
       width = -1;
       angle1 = -1;
       pitch1 = -1;
