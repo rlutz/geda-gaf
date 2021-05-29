@@ -77,13 +77,13 @@ typedef enum { F_OPEN_RC           = 1,
 } FOpenFlags;
 
 /*! \brief line end style for an open line of an object */
-typedef enum {END_NONE, END_SQUARE, END_ROUND, END_VOID} OBJECT_END;
+typedef enum {END_NONE, END_SQUARE, END_ROUND} OBJECT_END;
 
 /*! \brief line style of lines, rect, circles, arcs */
-typedef enum {TYPE_SOLID, TYPE_DOTTED, TYPE_DASHED, TYPE_CENTER, TYPE_PHANTOM, TYPE_ERASE} OBJECT_TYPE;
+typedef enum {TYPE_SOLID, TYPE_DOTTED, TYPE_DASHED, TYPE_CENTER, TYPE_PHANTOM} OBJECT_TYPE;
 
 /*! \brief fill style of objects like cirle, rect, path */
-typedef enum {FILLING_HOLLOW, FILLING_FILL, FILLING_MESH, FILLING_HATCH, FILLING_VOID} OBJECT_FILLING;
+typedef enum {FILLING_HOLLOW, FILLING_FILL, FILLING_MESH, FILLING_HATCH} OBJECT_FILLING;
 
 struct st_line {
   int x[2];

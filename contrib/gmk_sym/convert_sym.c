@@ -77,9 +77,9 @@ extern int optind;
 /* gEDA style enumerators */
 typedef enum {END_NONE, END_SQUARE, END_ROUND} OBJECT_END;
 typedef enum {TYPE_SOLID, TYPE_DOTTED, TYPE_DASHED, TYPE_CENTER,
-              TYPE_PHANTOM, TYPE_ERASE} OBJECT_TYPE;
-typedef enum {FILLING_HOLLOW, FILLING_FILL, FILLING_MESH, FILLING_HATCH,
-              FILLING_VOID} OBJECT_FILLING;
+              TYPE_PHANTOM} OBJECT_TYPE;
+typedef enum {FILLING_HOLLOW, FILLING_FILL, FILLING_MESH, FILLING_HATCH}
+              OBJECT_FILLING;
 typedef enum {NORMAL_PIN, BUS_PIN} OBJECT_PINTYPE;
 
 /* Viewdraw Colours
