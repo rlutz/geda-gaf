@@ -346,7 +346,8 @@ class Netlist:
             if component.blueprint.refdes is not None:
                 component.refdes = refdes_mangle_func(
                     component.blueprint.refdes,
-                    component.sheet.namespace)
+                    None if flat_package_namespace
+                         else component.sheet.namespace)
 
         # assign package refdes
         for package in self.packages:
