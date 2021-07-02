@@ -96,7 +96,7 @@ def repackage(netlist, refdes_func):
         if netlist.flat_package_namespace:
             namespace = None
         else:
-            namespace = component.sheet.instantiating_component
+            namespace = component.sheet.namespace
 
         try:
             package = pkg_dict[namespace, new_refdes]

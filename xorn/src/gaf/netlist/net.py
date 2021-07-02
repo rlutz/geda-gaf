@@ -118,7 +118,7 @@ def postproc_instances(netlist, flat_namespace, prefer_netname_attribute,
                 if flat_namespace[from_netattrib]:
                     net_name = None, net_name
                 else:
-                    net_name = sheet.instantiating_component, net_name
+                    net_name = sheet.namespace, net_name
 
                 try:
                     net = net_dict[net_name]
@@ -228,8 +228,7 @@ def postproc_instances(netlist, flat_namespace, prefer_netname_attribute,
                 if flat_namespace[False]:
                     net_name = None, net_name
                 else:
-                    net_name = component.sheet.instantiating_component, \
-                               net_name
+                    net_name = component.sheet.namespace, net_name
 
             net.namespace, net.unmangled_name = net_name
             net.unnamed_counter = unnamed_counter

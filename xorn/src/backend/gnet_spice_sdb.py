@@ -976,6 +976,8 @@ def write_netlist(f, file_info_list, ls):
             pass  # do nothing for subcircuit declaration.
         elif device == 'spice-IO':
             pass # do nothing for SPICE IO pins.
+        elif device == 'spice-title':
+            pass # do nothing for spice title blocks
         elif device == 'SPICE-ccvs':
             spice_common.write_ccvs(f, package)
         elif device == 'SPICE-cccs':
@@ -1200,6 +1202,17 @@ def run(f, netlist, args):
         # Otherwise it's a regular schematic.  Write out command line
         # followed by comments in file header.
         debug_spew("found normal type schematic\n")
+
+        # If the schematic contains a spice-title device and the value
+        # attribute is a string, use that as the title of the spice netlist
+        for package in reversed(packages):
+            if package.get_attribute('device', None) == 'spice-title':
+                title = package.get_attribute('value', None)
+                if title is None:
+                    continue
+                f.write(title + '\n')
+                break
+
         f.write('* %s\n' % ' '.join(sys.argv))
         write_top_header(f)
 

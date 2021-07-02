@@ -49,6 +49,15 @@ class Sheet:
         if instantiating_component is not None:
             instantiating_component.subsheets.append(self)
 
+        # prefix which is attached to all component and net names
+        # found in this schematic
+        next_parent = self.instantiating_component
+        namespace_parts = []
+        while next_parent is not None:
+            namespace_parts.insert(0, next_parent.blueprint.refdes)
+            next_parent = next_parent.sheet.instantiating_component
+        self.namespace = tuple(namespace_parts)
+
         # Starting internal netlist creation
 
         for net_blueprint in self.blueprint.nets:
