@@ -1,3 +1,10 @@
+July 2021
+=========
+
+- Fixed merging package and net names across multiple subsheets
+  instantiated by separate components of one package
+
+
 December 2020
 =============
 

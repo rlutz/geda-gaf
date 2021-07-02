@@ -170,8 +170,9 @@ class Netlist:
                 for value in component.get_attributes('source'):
                     for filename in value.split(','):
                         if filename.startswith(' '):
-                            warn(_("leading spaces in source names "
-                                   "are deprecated"))
+                            component.warn(
+                                _("leading spaces in source names "
+                                  "are deprecated"))
                             filename = filename.lstrip(' ')
 
                         full_filename = \
@@ -346,7 +347,8 @@ class Netlist:
             if component.blueprint.refdes is not None:
                 component.refdes = refdes_mangle_func(
                     component.blueprint.refdes,
-                    component.sheet.instantiating_component)
+                    None if flat_package_namespace
+                         else component.sheet.namespace)
 
         # assign package refdes
         for package in self.packages:
