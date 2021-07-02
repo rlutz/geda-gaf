@@ -117,19 +117,11 @@ def source_library_search(path):
 
 ## Construct component and net names for hierarchical schematics.
 
-def mangle(basename, component, separator0, order0, separator1, order1):
-    if component is None:
+def mangle(basename, hierarchy_tag, separator0, order0, separator1, order1):
+    if not hierarchy_tag:
         return basename
     if basename is None:
         return None
-
-    # prefix which is attached to all component and net names
-    # found in this schematic
-    hierarchy_tag = []
-    while component is not None:
-        hierarchy_tag.insert(0, component.blueprint.refdes)
-        component = component.sheet.instantiating_component
-    assert hierarchy_tag
 
     if order0 == PREPEND:
         hierarchy_tag.reverse()

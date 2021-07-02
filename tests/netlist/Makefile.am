@@ -56,6 +56,7 @@ TESTS = stack_1-geda.out \
 	regression/duplicate_port-geda.out \
 	regression/missing_pinseq-geda.out \
 	regression/multiple_sources-geda.out \
+	regression/multiple_sources_pkg-geda.out \
 	regression/named_unconnected_net-geda.out \
 	regression/override_netname-geda.out \
 	regression/refdes_promotion-geda.out \
@@ -525,6 +526,12 @@ testdata = \
 	regression/multiple_sources-symbols/sub.sym \
 	regression/multiple_sources-symbols/sym.sym \
 	regression/multiple_sources.sch \
+	regression/multiple_sources_pkg-sources/sub-0.sch \
+	regression/multiple_sources_pkg-sources/sub-1.sch \
+	regression/multiple_sources_pkg-symbols/io.sym \
+	regression/multiple_sources_pkg-symbols/sub.sym \
+	regression/multiple_sources_pkg-symbols/sym.sym \
+	regression/multiple_sources_pkg.sch \
 	regression/named_unconnected_net.sch \
 	regression/override_netname-symbols/component.sym \
 	regression/override_netname-symbols/power.sym \
