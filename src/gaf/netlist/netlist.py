@@ -170,8 +170,9 @@ class Netlist:
                 for value in component.get_attributes('source'):
                     for filename in value.split(','):
                         if filename.startswith(' '):
-                            warn(_("leading spaces in source names "
-                                   "are deprecated"))
+                            component.warn(
+                                _("leading spaces in source names "
+                                  "are deprecated"))
                             filename = filename.lstrip(' ')
 
                         full_filename = \
