@@ -300,10 +300,12 @@ export_text_rendered_bounds (void *user_data, OBJECT *object,
   double t, l, r, b;
   EdaRenderer *renderer = EDA_RENDERER (user_data);
   result = eda_renderer_get_user_bounds (renderer, object, &l, &t, &r, &b);
-  *left = lrint (fmin (l,r));
-  *top = lrint (fmin (t, b));
-  *right = lrint (fmax (l, r));
-  *bottom = lrint (fmax (t, b));
+  if (result) {
+    *left = lrint (fmin (l,r));
+    *top = lrint (fmin (t, b));
+    *right = lrint (fmax (l, r));
+    *bottom = lrint (fmax (t, b));
+  }
   return result;
 }
 
@@ -358,8 +360,9 @@ export_layout_page (PAGE *page, cairo_rectangle_t *extents, cairo_matrix_t *mtx)
   }
 
   /* Now calculate extents of objects within page */
-  world_get_object_glist_bounds (toplevel, s_page_objects (page),
-                                 &wx_min, &wy_min, &wx_max, &wy_max);
+  if (!world_get_object_glist_bounds (toplevel, s_page_objects (page),
+                                      &wx_min, &wy_min, &wx_max, &wy_max))
+    wx_min = wy_min = wx_max = wy_max = 0;
   w_width = wx_max - wx_min;
   w_height = wy_max - wy_min;
 
