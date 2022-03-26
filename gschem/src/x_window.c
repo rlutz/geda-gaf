@@ -436,8 +436,8 @@ x_window_restore_geometry (GschemToplevel *w_current)
   height = eda_config_get_int (eda_config_get_user_context (),
                                "gschem.window-geometry", "height", NULL);
   if (width <= 0 || height <= 0) {
-    width = 1200;
-    height = 900;
+    width = 1320;
+    height = 990;
   }
   g_object_set (w_current->main_window,
                 "default-width", width,
@@ -463,19 +463,19 @@ x_window_restore_geometry (GschemToplevel *w_current)
   dock_size = eda_config_get_int (eda_config_get_user_context (),
                                   "gschem.dock-geometry.left", "size", NULL);
   if (dock_size <= 0)
-    dock_size = 300;
+    dock_size = 330;
   gtk_widget_set_size_request (w_current->left_notebook, dock_size, 0);
 
   dock_size = eda_config_get_int (eda_config_get_user_context (),
                                   "gschem.dock-geometry.bottom", "size", NULL);
   if (dock_size <= 0)
-    dock_size = 150;
+    dock_size = 165;
   gtk_widget_set_size_request (w_current->bottom_notebook, 0, dock_size);
 
   dock_size = eda_config_get_int (eda_config_get_user_context (),
                                   "gschem.dock-geometry.right", "size", NULL);
   if (dock_size <= 0)
-    dock_size = 300;
+    dock_size = 330;
   gtk_widget_set_size_request (w_current->right_notebook, dock_size, 0);
 }
 
