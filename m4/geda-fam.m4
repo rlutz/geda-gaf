@@ -69,9 +69,9 @@ AS_HELP_STRING([--without-libfam],
 
     # Only continue without libfam if --without-libfam was specified.
     if test "X$HAVE_LIBFAM" = "Xno"; then
-      AC_MSG_ERROR([Neither libfam nor libgamin development files could
-be found.  Please ensure that the development files for either library
-are installed.
+      AC_MSG_ERROR([Neither libgamin nor libfam development files could
+be found.  Please ensure that the development files for either libgamin
+or libfam are installed.
 
 If you want to continue without File Alteration Monitor support, use
 the configuration option `--without-libfam'.])
