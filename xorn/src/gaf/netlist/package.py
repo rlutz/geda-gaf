@@ -301,6 +301,17 @@ def postproc_instances(netlist, flat_namespace):
                     nets.append(cpin.local_net.net)
             assert nets
             if len(nets) > 1:
+                # power pins don't need to be re-connected for each slot
+                has_connected_nets = False
+                for net in nets:
+                    if not net.is_unconnected_pin:
+                        has_connected_nets = True
+                        break
+                if has_connected_nets:
+                    nets = [net for net in nets if not net.is_unconnected_pin]
+                else:
+                    nets = nets[:1]
+            if len(nets) > 1:
                 ppin.error(_("multiple nets connected to pin: %s")
                            % _(" vs. ").join(_("\"%s\"") % net.name
                                              for net in nets))

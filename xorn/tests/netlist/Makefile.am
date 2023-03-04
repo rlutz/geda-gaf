@@ -61,6 +61,7 @@ TESTS = stack_1-geda.out \
 	regression/override_netname-geda.out \
 	regression/refdes_promotion-geda.out \
 	regression/transform_symbols-geda.out \
+	regression/unconnected_dupl_pin-geda.out \
 	regression/unnumbered_component-geda.out \
 	drc2/connected_noconnects-drc2.out \
 	drc2/duplicated_refdes-drc2.out \
@@ -540,6 +541,9 @@ testdata = \
 	regression/refdes_promotion.sch \
 	regression/transform_symbols-symbols/L.sym \
 	regression/transform_symbols.sch \
+	regression/unconnected_dupl_pin-symbols/component.sym \
+	regression/unconnected_dupl_pin-symbols/power.sym \
+	regression/unconnected_dupl_pin.sch \
 	regression/unnumbered_component-symbols/component.sym \
 	regression/unnumbered_component.sch \
 	stack_1.sch \

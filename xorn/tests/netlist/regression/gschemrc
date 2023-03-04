@@ -16,4 +16,5 @@
 (component-library "override_netname-symbols")
 (component-library "refdes_promotion-symbols")
 (component-library "transform_symbols-symbols")
+(component-library "unconnected_dupl_pin-symbols")
 (component-library "unnumbered_component-symbols")
