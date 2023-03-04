@@ -128,8 +128,9 @@ The following tools and libraries are *highly recommended*:
    package, netlisting errors are reported to the terminal where users
    probably won't see them. <http://www.pygtk.org/>
 
- - GNU `troff' (`groff') >= 1.22.4
-   <https://www.gnu.org/software/groff/>
+ - GNU `troff' (`groff') >= 1.22.4.  This is package `groff' in Debian;
+   the default `groff' executable provided by the package `groff-base'
+   is lacking HTML support.  <https://www.gnu.org/software/groff/>
 
  - The freedesktop.org MIME info database >= 1.10
    <https://freedesktop.org/wiki/Software/shared-mime-info/>
