@@ -1,4 +1,4 @@
-#! /usr/bin/env python
+#!/usr/bin/env python2.7
 #
 # Copyright (C) 2003 Stuart Brorson <sdb@cloud9.net>
 #
