@@ -961,7 +961,7 @@ SCM_DEFINE (set_config_x, "%set-config!", 4, 0, 0,
     int i = 0;
 
     if (scm_is_string (first_s)) {
-      gchar **value = g_new0 (gchar *, len);
+      gchar **value = g_new0 (gchar *, len + 1);	/* null-terminated! */
       scm_dynwind_unwind_handler ((void (*)(void *)) g_strfreev, value,
                                   SCM_F_WIND_EXPLICITLY);
       for (curr_s = value_s; !scm_is_null (curr_s); curr_s = scm_cdr (curr_s)) {
