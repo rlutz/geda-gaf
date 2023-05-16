@@ -40,5 +40,5 @@ AC_DEFUN([AX_PROG_GROFF],
   fi
 
   AM_CONDITIONAL([ENABLE_GROFF_HTML],
-                 [test "X$HAVE_GROFF_HTML" != Xno])
+                 [test "X$HAVE_GROFF_HTML" = Xyes])
 ])dnl AX_PROG_GROFF
